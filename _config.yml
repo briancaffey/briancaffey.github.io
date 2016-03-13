@@ -19,5 +19,5 @@ github_username:  briancaffey
 # Build settings
 markdown: kramdown
 
-gems:
-  - jekyll-assets
+#gems:
+#  - jekyll-assets
