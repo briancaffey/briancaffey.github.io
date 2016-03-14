@@ -2,7 +2,7 @@
 layout: post
 title:  "Up and running with Jekyll + GitHub Pages"
 date:   2016-03-12 17:19:08 -0500
-
+comments: true
 ---
 
 As a long-time WordPress user, I have decided try hosting my personal website with [GitHub Pages][github-pages] and [Jekyll][Jekyll-site]. 
