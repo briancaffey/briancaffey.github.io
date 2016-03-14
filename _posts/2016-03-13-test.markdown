@@ -1,8 +1,0 @@
----
-
-layout: post
-title: My new post
-date:   2016-03-13 17:19:08 -0500
----
-
-This is a test. 

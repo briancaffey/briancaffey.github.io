@@ -10,7 +10,7 @@ Here's a link to a PDF of [my resume]({{ site.url }}/static/JBC_2016.pdf).
 Work Experience
 ---------------
 
-*   **Sol Systems** (Washington, D.C.)
+*   **[Sol Systems](http://www.solsystems.com/)** (Washington, D.C.)
 
     *Independent Consultant*, July 2015 - September 2015
 
@@ -23,7 +23,7 @@ Work Experience
 	-   Developed financial models to forecast financial returns on energy storage projects  
 <br>
 
-*   **Magic, Inc.** (Mountain View, California)
+*   **[Magic, Inc.](https://getmagicnow.com)** (Mountain View, California)
 
     *Operations Manager*, March 2015 - June 2015
 
@@ -31,7 +31,7 @@ Work Experience
     -   Worked closely with CFO and operations team to manage banking, credit card accounts, contractor payments, fraud-detection and procurement  
 <br>
 
-*   **China Energy Storage Alliance (CNESA)** (Beijing, China)
+*   **[China Energy Storage Alliance (CNESA)](http://en.cnesa.org/)** (Beijing, China)
 
     *Research Manager*, February 2010 - March 2015
 
@@ -45,7 +45,7 @@ Work Experience
 	<br>
 <br>
 
-*   **Veritrust USA** (Bethesda, Maryland)
+*   **[Veritrust USA](http://www.veritrustusa.com/)** (Bethesda, Maryland)
 
     *Analyst*, August 2011 - February 2012
 
@@ -58,15 +58,15 @@ Work Experience
 Education
 ---------
 
-*   **General Assembly** (Washington, D.C.)
+*   **[General Assembly](https://generalassemb.ly/education/data-science)** (Washington, D.C.)
 	
-	*Data Science Certificate Candidate*, January 2015 - Present
+	*Data Science Certificate Candidate*, January 2016 - Present
 
 	-   11-week Python-based data science course aimed at understanding and implementing machine-learning techniques
 	-   Utilizing visualization, regression, natural language processing and machine learning methods on real data sets
 <br>
 <br>
-*   **Saint Mary's College of Maryland** 
+*   **[Saint Mary's College of Maryland](http://www.smcm.edu/)** (Saint Mary's City, Maryland)
 
     *B.A. in Mathematics and Chinese Language and Culture*, 2006 - 2010
 
