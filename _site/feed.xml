@@ -6,9 +6,71 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 14 Mar 2016 01:21:58 -0400</pubDate>
-    <lastBuildDate>Mon, 14 Mar 2016 01:21:58 -0400</lastBuildDate>
+    <pubDate>Mon, 14 Mar 2016 22:01:10 -0400</pubDate>
+    <lastBuildDate>Mon, 14 Mar 2016 22:01:10 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Including Jupyter Notebooks in Jekyll blog posts</title>
+        <description>&lt;p&gt;I’ve been looking for ways to incorporate Jupyter notebooks into my new blog. This post explains a process that I’ve come across, although there may be other ways to blog directly from iPython Notebooks.&lt;/p&gt;
+
+&lt;p&gt;This methods allows you to include styled cell input and output (including graphs, Data Frames, etc.)&lt;/p&gt;
+
+&lt;p&gt;When you have completed your iPython Notebook (&lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll_test.ipynb&lt;/code&gt; in this example), run the following command in your terminal to convert your &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll_test.ipynb&lt;/code&gt; file into Markdown:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ ipython nbconvert jekyll_test.ipynb --to markdown&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You can read more about converting iPython Notebooks &lt;a href=&quot;https://ipython.org/ipython-doc/3/notebook/nbconvert.html&quot;&gt;here&lt;/a&gt;. In your terminal you should see the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ ipython nbconvert jekyll_test.ipynb --to markdown
+[NbConvertApp] Converting notebook jekyll_test.ipynb to markdown
+[NbConvertApp] Support files will be in jekyll_test_files/
+[NbConvertApp] Making directory jekyll_test_files
+[NbConvertApp] Writing 286 bytes to jekyll_test.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This puts related image files from graphs into a new folder, &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll_test_files/&lt;/code&gt;, so you will have to make sure the path matches up. I have created a top-level folder named &lt;code class=&quot;highlighter-rouge&quot;&gt;ipynb&lt;/code&gt; to keep things orderly.&lt;/p&gt;
+
+&lt;p&gt;Next, copy the contents from the resulting Markdown folder into your blog post. I had to change the image file path so that images display properly.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;![png](jekyll_test_files/jekyll_test_2_1.png)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;I added &lt;code class=&quot;highlighter-rouge&quot;&gt;/ipynb/&lt;/code&gt; to the beginning of the path:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;![png](/ipynb/jekyll_test_files/jekyll_test_2_1.png)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;result&quot;&gt;Result&lt;/h1&gt;
+
+&lt;p&gt;Here is the result from a simple notebook that I used here:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;plt&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matplotlib&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inline&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[&amp;lt;matplotlib.lines.Line2D at 0x10dde4610&amp;gt;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/ipynb/jekyll_test_files/jekyll_test_2_1.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I hope you found this helpful, thanks for reading!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 14 Mar 2016 00:00:00 -0400</pubDate>
+        <link>/2016/03/14/ipynb-with-jekyll.html</link>
+        <guid isPermaLink="true">/2016/03/14/ipynb-with-jekyll.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Up and running with Jekyll + GitHub Pages</title>
