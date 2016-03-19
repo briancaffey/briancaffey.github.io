@@ -5,8 +5,7 @@ title: Resume
 
 ---
 
-Here's a link to a PDF of [my resume]({{ site.url }}/static/JBC_2016.pdf).
-
+Here's a link to a PDF of [my resume](/static/JBC_2016.pdf).
 
 Work Experience
 ---------------
