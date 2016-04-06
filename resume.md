@@ -11,9 +11,10 @@ Here's a link to a PDF of [my resumé](/static/JBC_2016.pdf).
 Work Experience
 ---------------
 
-*   **[Private Tutoring]** (Washington, D.C.)
+*   **Private Tutoring** (Washington, D.C.)
 
     *Independent Consultant*, July 2015 - Present
+    
     -	Established	private	tutoring practice
     -   Tutoring high school students in mathematics (Pre-Calculus,	AP Statistics, AP Calculus) and Mandarin Chinese
 
