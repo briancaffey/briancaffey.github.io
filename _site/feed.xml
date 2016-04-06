@@ -6,9 +6,112 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 18 Mar 2016 23:07:27 -0400</pubDate>
-    <lastBuildDate>Fri, 18 Mar 2016 23:07:27 -0400</lastBuildDate>
+    <pubDate>Wed, 06 Apr 2016 00:15:29 -0400</pubDate>
+    <lastBuildDate>Wed, 06 Apr 2016 00:15:29 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Simple twitter-bot with Python, Tweepy and Heroku</title>
+        <description>&lt;p&gt;This post provides a walk-through tutorial on setup a simple twitter-bot that can do just about anything. I recently set up a simple &lt;a href=&quot;https://twitter.com/tw_tt_r_b_t&quot;&gt;twitter-bot&lt;/a&gt; that generates random cellular automata at a regular intervals, and I plan on doing a lot more with the Twitter API and text data analysis.&lt;/p&gt;
+
+&lt;h2 id=&quot;tweepyhttpwwwtweepyorg&quot;&gt;&lt;a href=&quot;http://www.tweepy.org/&quot;&gt;Tweepy&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Tweepy is an easy-to-use Python library for accessing the Twitter API. There are several popular Python packages like Tweepy that serve as Twitter API wrappers, but I was only able to get my Twitterbot up and running with Tweepy.&lt;/p&gt;
+
+&lt;p&gt;Get started by installing Tweepy by running &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install tweepy&lt;/code&gt; in your command line. Next, let’s jump right into to a super-simple example of how to tweet with Tweepy.&lt;/p&gt;
+
+&lt;p&gt;While you test out your twitter-bot, you might want to use a throw-away Twitter account. To do this, you can make a new account associated with a new email address, or you can create an account that is linked to the same email address as your main Twitter account. When you enter your email information at the Sign Up page, add &lt;code class=&quot;highlighter-rouge&quot;&gt;+alias&lt;/code&gt; to the first part of your email address, right before the &lt;code class=&quot;highlighter-rouge&quot;&gt;@&lt;/code&gt;. Here’s an example:&lt;/p&gt;
+
+&lt;p&gt;If your email is &lt;code class=&quot;highlighter-rouge&quot;&gt;john_doe@gmail.com&lt;/code&gt;, you could enter &lt;code class=&quot;highlighter-rouge&quot;&gt;john_doe+twitter@gmail.com&lt;/code&gt;, and the sign up confirmation for this unique account will go to &lt;code class=&quot;highlighter-rouge&quot;&gt;john_doe@gmail.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Twitter requires that accounts accessing its API have a phone number associated with the account, so don’t skip this step in the sign up process.&lt;/p&gt;
+
+&lt;p&gt;While signed in to your new account, go to &lt;a href=&quot;https://apps.twitter.com/&quot;&gt;https://apps.twitter.com/&lt;/a&gt; and enter information for your new twitter-bot app.&lt;/p&gt;
+
+&lt;p&gt;On the following page, go over to the “Keys and Access Tokens” tab and copy the &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer Key (API Key)&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer Secret (API Secret)&lt;/code&gt;. Also, click the “Create my access token” button at the bottom of the page and copy the resulting &lt;code class=&quot;highlighter-rouge&quot;&gt;Access Token&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Access Token Secret&lt;/code&gt;. We will use these codes to make API requests on your own account’s behalf. Do not share your access token secret with anyone.&lt;/p&gt;
+
+&lt;p&gt;Open up your favorite text editor and create a new Python script called something like &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt;. Copy in the following code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;tweepy&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;CONSUMER_KEY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your key&#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CONSUMER_SECRET&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your secret&#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ACCESS_KEY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your access key&#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ACCESS_SECRET&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your access secret&#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tweepy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OAuthHandler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CONSUMER_KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CONSUMER_SECRET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_access_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ACCESS_KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ACCESS_SECRET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;api&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tweepy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;API&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;api&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sending my first tweet via Tweepy!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Navigate to the location of this script in your command line and run it with &lt;code class=&quot;highlighter-rouge&quot;&gt;$ python tweetbot.py&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now go over to your new Twitter account and check to see if your first tweet was sent successfully.&lt;/p&gt;
+
+&lt;p&gt;At this point there are already lots of interesting things you can do by simply passing strings into &lt;code class=&quot;highlighter-rouge&quot;&gt;api.update_status()&lt;/code&gt;. BeautifulSoup is a great tool for scraping information from the web that you can feed your twitter-bot.&lt;/p&gt;
+
+&lt;p&gt;With the simple script we can schedule regular tweets by adding a simple &lt;code class=&quot;highlighter-rouge&quot;&gt;while&lt;/code&gt; loop with a timer:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;tweet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scrape_some_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;api&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tweet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In this example, the &lt;code class=&quot;highlighter-rouge&quot;&gt;scrape_some_data()&lt;/code&gt; function would scrape some information and save it to the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;tweet&lt;/code&gt;. Next, &lt;code class=&quot;highlighter-rouge&quot;&gt;time.sleep(300)&lt;/code&gt; waits 5 minutes before the loop starts again. This makes sure that your twitter-bot doesn’t exceed the &lt;a href=&quot;https://dev.twitter.com/rest/public/rate-limiting&quot;&gt;Twitter API rate limit&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;herokuhttpswwwherokucom&quot;&gt;&lt;a href=&quot;https://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;At this point we have a functioning twitter-bot, but we have to keep a machine running our script around the clock for twitter-bot to operate continuously. One solution would to run this script on a Raspberry Pi. Another great solution that I will explore here is to deploy the twitter-bot on Heroku.&lt;/p&gt;
+
+&lt;p&gt;Heroku is a cloud platform based on a managed container system. Instead of on a Raspberry Pi, we will put your &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt; script (along with a few other simple files) on a dyno.  Dynos are isolated, virtualized Unix containers, that provide the environment required to run your application.&lt;/p&gt;
+
+&lt;p&gt;If this doesn’t make much sense, think of Heroku as dedicated virtual Linux machine in the cloud that you can use (for free) to run your twitter-bot. The following steps will show you how to get setup with Heroku on your computer.&lt;/p&gt;
+
+&lt;p&gt;Select “Python” from &lt;a href=&quot;https://devcenter.heroku.com/start&quot;&gt;https://devcenter.heroku.com/start&lt;/a&gt;. This tutorial shows you how to launch a basic Django app, but we will tweak it slightly in order to get our twitter-bot running.&lt;/p&gt;
+
+&lt;p&gt;First, download the Heroku Toolbelt (command line tools) and run &lt;code class=&quot;highlighter-rouge&quot;&gt;$ heroku login&lt;/code&gt;, then enter your Heroku account information. Download the sample web application and check out what files come with it.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ git clone https://github.com/heroku/python-getting-started.git
+$ cd python-getting-started
+$ ls
+Procfile		app.json		manage.py
+Procfile.windows	gettingstarted		requirements.txt
+README.md		hello			runtime.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt; file will give instructions to your dyno regarding what it should do. Take a look inside this file, and you will see &lt;code class=&quot;highlighter-rouge&quot;&gt;web: gunicorn gettingstarted.wsgi --log-file -&lt;/code&gt;. This indicates that the dyno will be making a website using the file &lt;code class=&quot;highlighter-rouge&quot;&gt;gettingstarted.wsgi&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Delete the contents of this file and copy in the following line: 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;worker: tweetbot.py&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This will tell our dyno that we want it to do a simple task: run &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt;. Next, check out &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt;. The contents of this file indicate the packages our Python script needs to run. For our twitter-bot, we only need the Tweepy package. To check which version of Tweepy you have on your computer, run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip freeze | grep tweepy&lt;/code&gt; in the terminal. Mine reads &lt;code class=&quot;highlighter-rouge&quot;&gt;tweepy==3.5.0&lt;/code&gt;. Copy &lt;code class=&quot;highlighter-rouge&quot;&gt;tweepy==3.5.0&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; and delete the other lines.&lt;/p&gt;
+
+&lt;p&gt;Next, we will create a place on Heroku where your twitter-bot will live. Run the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ heroku create
+Creating app... done, stack is cedar-14
+https://random-word-28487.herokuapp.com/ | https://git.heroku.com/random-word-28487.git
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Like Github, Heroku uses &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; to move files from your local machine to Heroku’s containers. Clear out the &lt;code class=&quot;highlighter-rouge&quot;&gt;python-getting-started&lt;/code&gt; file so that the only files inside are &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ git add .
+$ git commit -m &quot;initial commit&quot;
+$ git push heroku master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Pushing the files to Heroku with &lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push heroku master&lt;/code&gt; should create your twitter-bot program on Heroku and launch it into the Twitter-verse! To make sure everything is running smoothly, you can check out the log files on your Heroku Dashboard. There is lots you can do with Twitter and Tweepy, hopefully this tutorial has helped you understand the basics of how the Twitter API works and how to write a twitter-bot. Thanks for reading, and feel free to leave a comment!&lt;/p&gt;
+</description>
+        <pubDate>Tue, 05 Apr 2016 00:00:00 -0400</pubDate>
+        <link>/2016/04/05/twitter-bot-tutorial.html</link>
+        <guid isPermaLink="true">/2016/04/05/twitter-bot-tutorial.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Simple Jekyll tutorial with Github Pages</title>

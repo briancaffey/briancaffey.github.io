@@ -2,13 +2,20 @@
 
 layout: page
 title: Resume
+permalink: /resume
 
 ---
 
-Here's a link to a PDF of [my resume](/static/JBC_2016.pdf).
+Here's a link to a PDF of [my resumé](/static/JBC_2016.pdf).
 
 Work Experience
 ---------------
+
+*   **[Private Tutoring]** (Washington, D.C.)
+
+    *Independent Consultant*, July 2015 - Present
+    -	Established	private	tutoring practice
+    -   Tutoring high school students in mathematics (Pre-Calculus,	AP Statistics, AP Calculus) and Mandarin Chinese
 
 *   **[Sol Systems](http://www.solsystems.com/)** (Washington, D.C.)
 
@@ -50,7 +57,7 @@ Work Experience
     *Analyst*, August 2011 - February 2012
 
     -   Provided analytical, administrative and technological support for a private company that helps American homeowners manage the foreclosure process
-	-   Built an extensive database of relators and private foreclosure consultants to create an affiliate network
+	-   Built an extensive database of realtors and private foreclosure consultants to create an affiliate network
 	-   Used Salesforce to streamline sales, processing, accounting and automatic business reporting
 
 
@@ -60,7 +67,7 @@ Education
 
 *   **[General Assembly](https://generalassemb.ly/education/data-science)** (Washington, D.C.)
 	
-	*Data Science Certificate Candidate*, January 2016 - Present
+	*[Data Science Certificate Recipient](/static/Certificate-of-Completion.pdf)*, January 2016 - March 2016
 
 	-   11-week Python-based data science course aimed at understanding and implementing machine-learning techniques
 	-   Utilizing visualization, regression, natural language processing and machine learning methods on real data sets

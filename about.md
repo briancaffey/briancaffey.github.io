@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Contact
-permalink: /about/
+permalink: /contact
 ---
 
 <img src="../static/JBC_photo.jpg" width="200">  
