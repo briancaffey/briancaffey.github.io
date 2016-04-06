@@ -17,7 +17,7 @@ Work Experience
     
     -	Established	private	tutoring practice
     -   Tutoring high school students in mathematics (Pre-Calculus,	AP Statistics, AP Calculus) and Mandarin Chinese
-
+<br>
 *   **[Sol Systems](http://www.solsystems.com/)** (Washington, D.C.)
 
     *Independent Consultant*, July 2015 - September 2015
