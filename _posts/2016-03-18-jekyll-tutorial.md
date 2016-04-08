@@ -9,7 +9,7 @@ comments: true
 
 I'm absolutely loving my new Jekyll blog, but getting it setup wasn't that easy. Finding useful and accessible information on how everything works was very difficult. In the end, faithfully following tutorials and crashing around on Github resulted in this functional blog. 
 
-This post will provide a Jekyll blog setup tutorial assuming very little knowledge of the languages and technologies it is built on (Github, git, HTML, Markdown, Jekyll, Ruby). Casually surveying friends and colleagues, it seems that many people have heard of Github Pages, but haven't explored it for a number of reasons. Here is what I hope to accomplish:
+This post will provide a Jekyll blog setup tutorial assuming very little knowledge of the languages and technologies it is built on (Github, git, HTML, Markdown, Jekyll, Ruby, Liquid templates). Casually surveying friends and colleagues, it seems that many people have heard of Github Pages, but haven't explored it for a number of reasons. Here is what I hope to accomplish:
 
  - Help you get setup with everything you will need before you start building a Jekyll blog
  - Build a clean, professional site that let's you show off your resume, link to your social media accounts and build blog posts to catalog your ideas and share your opinions

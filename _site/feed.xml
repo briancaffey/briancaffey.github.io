@@ -6,13 +6,91 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 06 Apr 2016 00:21:13 -0400</pubDate>
-    <lastBuildDate>Wed, 06 Apr 2016 00:21:13 -0400</lastBuildDate>
+    <pubDate>Fri, 08 Apr 2016 15:19:20 -0400</pubDate>
+    <lastBuildDate>Fri, 08 Apr 2016 15:19:20 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
+        <title>Home media center meta-tutorial with miniDLNA, Raspberry Pi, Deluge and Apple TV</title>
+        <description>&lt;p&gt;For a few months now I have been enjoying a new home media system that I threw together with my Raspberry Pi. My setup allows me sit in my living room and stream downloaded content from my Raspberry Pi to my 4th Generation Apple TV in full 1080p resolution. The Raspberry Pi is a small, inexpensive stand-alone computer, but it can serve as a powerful media server, and I’ve been blown away by it’s consistent performance. Rather than write everything from scratch, I’ve gathered the tutorials I used when learning about how this and  sprkinled it with a few bits of knowledge that I hope you find helpful.&lt;/p&gt;
+
+&lt;p&gt;Here is quick overview of how my current system is setup:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Raspberry Pi Model 2 B with miniDLNA (media server), Deluge (for torrenting media), TorGuard (anonymous VPN service) and omxplayer (built-in Raspberry Pi media player for enjoying media right on the Raspberry Pi)&lt;/li&gt;
+  &lt;li&gt;Apple TV with VLC App (for streaming content from my network-connected Raspberry Pi via miniDLNA)&lt;/li&gt;
+  &lt;li&gt;iPhone/iPad with Creation 5 + Creation 2 Video Player (for streaming content from my Raspberry Pi to my mobile devices)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Here’s what you’ll need:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Raspberry Pi (Model 2 or 3)&lt;/li&gt;
+  &lt;li&gt;Wifi-connection&lt;/li&gt;
+  &lt;li&gt;Laptop (you will be SSHing into the Raspberry Pi and managing your torrent downloads through a web-browser interface on your laptop)&lt;/li&gt;
+  &lt;li&gt;Sufficiently large microSD card (mine is 64GB), large USB drive (I recommend 256GB) or external hard drive (1TB)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://torguard.net/aff.php?aff=1933&quot;&gt;TorGuard account&lt;/a&gt; (optional)&lt;/li&gt;
+  &lt;li&gt;AppleTV (optional)&lt;/li&gt;
+  &lt;li&gt;iPhone or iPad with Creation 5 and Creation 2 Video player app installed (optional)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;virtual-private-network-vpn&quot;&gt;Virtual Private Network (VPN)&lt;/h2&gt;
+
+&lt;p&gt;If you are planning on downloading Copyrighted content from a public tracker, you should be using a virtual private network (VNP). I have been using &lt;a href=&quot;https://torguard.net/aff.php?aff=1933&quot;&gt;TorGuard&lt;/a&gt; for about 6 months and have had excellent service, great download speeds and setup was fairly painless. However, there is plenty of perfectly legal content out there, check out &lt;a href=&quot;https://archive.org/index.php&quot;&gt;archive.org&lt;/a&gt; for lots of great free content.&lt;/p&gt;
+
+&lt;p&gt;Follow along with &lt;a href=&quot;https://torguard.net/knowledgebase.php?action=displayarticle&amp;amp;id=174&quot;&gt;this tutorial&lt;/a&gt; on how to get TorGuard running on your Raspberry Pi.&lt;/p&gt;
+
+&lt;h2 id=&quot;minidlna&quot;&gt;miniDLNA&lt;/h2&gt;
+
+&lt;p&gt;Next, we will install miniDLNA on your Raspberry Pi. miniDLNA stands for (mini) Digital Network Living Alliance and is a protocol that is used in many devices, including consoles, SmartTVs, and mobile devices. To do this, follow along with &lt;a href=&quot;http://www.instructables.com/id/Raspberry-Pi-Media-Server-MiniDLNA/&quot;&gt;this Instructables tutorial&lt;/a&gt;. Step 4 (Mounting the drive on startup) is not absolutely necessary but is a good idea if you will be using an external USB drive or external hard drive to store your content. I don’t have a dedicated USB stick that I use with miniDLNA, but it works just fine playing content from my 64GB microSD card.&lt;/p&gt;
+
+&lt;p&gt;Download Creation 5 and Creation 2 Video Player on your iPhone. These are free apps with very minimal advertising. Through the Creation 5 app, you should be able to select your miniDLNA server as a media source. You should then see your Music, Image and Video folders that you just configured.&lt;/p&gt;
+
+&lt;h2 id=&quot;bittorrent-client-deluge&quot;&gt;BitTorrent Client (Deluge)&lt;/h2&gt;
+
+&lt;p&gt;Now that you have your VPN and miniDLNA set up, you will want to try it out with some new content. I use Deluge, a BitTorrent client written in Python, but there are plenty of other great options out there. Deluge is fairly light-weight, so it works well with the Raspberry Pi. There are a number of ways that you can access Deluge, I prefer to use the Deluge WebUI. Here’s &lt;a href=&quot;http://www.howtogeek.com/142044/how-to-turn-a-raspberry-pi-into-an-always-on-bittorrent-box/&quot;&gt;one more tutorial&lt;/a&gt; from How-to Geek that talks about a few different ways to install and configure Deluge. I recommend jumping to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Setting up Deluge for WebUI Access&lt;/code&gt; section and running the three commands you will need to get started:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ sudo apt-get install deluged
+$ sudo apt-get install python-mako
+$ sudo apt-get install deluge-web
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This gets everything installed. To use Deluge, you will need to run two more commands:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ deluged
+$ deluge-web&amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;deluged&lt;/code&gt; runs the Deluge daemon (a background process; the &lt;code class=&quot;highlighter-rouge&quot;&gt;d&lt;/code&gt; at the end of &lt;code class=&quot;highlighter-rouge&quot;&gt;deluge&lt;/code&gt; signifies that it is a daemon) that will start Deluge. &lt;code class=&quot;highlighter-rouge&quot;&gt;deluge-web&amp;amp;&lt;/code&gt; starts that web interface that should be available at http://&lt;your raspberry=&quot;&quot; pi=&quot;&quot; ip=&quot;&quot; address=&quot;&quot;&gt;:8112. The `&amp;amp;` simply keeps the command line available for running other commands.&lt;/your&gt;&lt;/p&gt;
+
+&lt;p&gt;You can set Deluge to save downloaded files directly into your various miniDLNA folders, but you will need to restart miniDLNA with the following commands before they are visible on your network:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ sudo service minidlna restart
+$ sudo service minidlna force-reload
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now you should be able to see your content in media players that support miniDLNA.&lt;/p&gt;
+
+&lt;p&gt;Here are some additional resources for &lt;a href=&quot;https://help.ubuntu.com/community/MiniDLNA&quot;&gt;help with miniDLNA on Ubuntu.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Before you start downloading content, I would use use TorGuard’s &lt;a href=&quot;https://torguard.net/checkmytorrentipaddress.php&quot;&gt;Check My Torrent IP Address&lt;/a&gt; tool. This is a blank &lt;code class=&quot;highlighter-rouge&quot;&gt;.torrent&lt;/code&gt; file that you add to Deluge. In the torrent’s tracker information you can see the Public IP address that is listed on the public tracker. This would be the address that &lt;a href=&quot;https://en.wikipedia.org/wiki/Digital_Millennium_Copyright_Act&quot;&gt;Digital Millennium Copyright Act (DMCA)&lt;/a&gt; would report to your ISP if it was your public IP address, so make sure it is not &lt;a href=&quot;http://www.whatsmyip.org/&quot;&gt;your public IP address&lt;/a&gt; that you use in your home. You can select proxy IP address from a number of different countries in the TorGuard setup.&lt;/p&gt;
+
+&lt;h2 id=&quot;vlc-for-tvos&quot;&gt;VLC for tvOS&lt;/h2&gt;
+
+&lt;p&gt;VLC is a great media player, and you probably have it downloaded on your computer. You might not have know that VLC has an app for the Apple TV. This app supports the playback of media from miniDLNA servers like the one you just set up, so you can stream content directly from your Raspberry Pi onto your Apple TV through the VLC app. One thing to note, however, is that VLC for tvOS &lt;a href=&quot;https://forum.videolan.org/viewtopic.php?t=125032&quot;&gt;does not support AC3 audio encodings&lt;/a&gt;, but you should be good to go for almost any other audio/video format on the planet.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Using the Raspberry Pi certainly isn’t necessary for simply downloading torrents, but having it set as a dedicated machine for downloading content and playing back files is a lot of fun and works better than I would have guessed.I don’t like running torrents on my MacBook Air, and sometimes I like to use my laptop when I’m watching TV. I would usually have to plug in my laptop to my TV directly and mirror the laptop display onto my TV, but the solution I have eliminates this headache altogether. My setup is by no means perfect, but it gets the job done with a very tolerable amount of effort on my part. Let me know in the comments if you have any critiques or ideas for how to enhance the setup I have described here. Thanks, and good luck with setting up your own home media system.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 08 Apr 2016 00:00:00 -0400</pubDate>
+        <link>/2016/04/08/home-media-setup.html</link>
+        <guid isPermaLink="true">/2016/04/08/home-media-setup.html</guid>
+        
+        
+      </item>
+    
+      <item>
         <title>Simple twitter-bot with Python, Tweepy and Heroku</title>
-        <description>&lt;p&gt;This post provides a walk-through tutorial on setup a simple twitter-bot that can do just about anything. I recently set up a simple &lt;a href=&quot;https://twitter.com/tw_tt_r_b_t&quot;&gt;twitter-bot&lt;/a&gt; that generates random cellular automata at a regular intervals, and I plan on doing a lot more with the Twitter API and text data analysis.&lt;/p&gt;
+        <description>&lt;p&gt;This post provides a walk-through tutorial on how to setup a simple twitter-bot that can do just about anything. I recently set up a simple &lt;a href=&quot;https://twitter.com/tw_tt_r_b_t&quot;&gt;twitter-bot&lt;/a&gt; that generates random cellular automata at a regular intervals, and I plan on doing a lot more with the Twitter API and text data analysis.&lt;/p&gt;
 
 &lt;h2 id=&quot;tweepyhttpwwwtweepyorg&quot;&gt;&lt;a href=&quot;http://www.tweepy.org/&quot;&gt;Tweepy&lt;/a&gt;&lt;/h2&gt;
 
@@ -104,11 +182,17 @@ https://random-word-28487.herokuapp.com/ | https://git.heroku.com/random-word-28
 $ git commit -m &quot;initial commit&quot;
 $ git push heroku master
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Pushing the files to Heroku with &lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push heroku master&lt;/code&gt; should create your twitter-bot program on Heroku and launch it into the Twitter-verse! To make sure everything is running smoothly, you can check out the log files on your Heroku Dashboard. There is lots you can do with Twitter and Tweepy, hopefully this tutorial has helped you understand the basics of how the Twitter API works and how to write a twitter-bot. Thanks for reading, and feel free to leave a comment!&lt;/p&gt;
+&lt;p&gt;Pushing the files to Heroku with &lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push heroku master&lt;/code&gt; should create your twitter-bot program on Heroku and launch it into the Twitter-verse! To make sure everything is running smoothly, you can check out the log files on your Heroku Dashboard. There is lots you can do with Twitter and Tweepy, hopefully this tutorial has helped you understand the basics of how the Twitter API works and how to write your own twitter-bot. Thanks for reading, and feel free to leave a comment!&lt;/p&gt;
 </description>
         <pubDate>Tue, 05 Apr 2016 00:00:00 -0400</pubDate>
         <link>/2016/04/05/twitter-bot-tutorial.html</link>
         <guid isPermaLink="true">/2016/04/05/twitter-bot-tutorial.html</guid>
+        
+        <category>twitter,</category>
+        
+        <category>python,</category>
+        
+        <category>heroku</category>
         
         
       </item>
@@ -117,7 +201,7 @@ $ git push heroku master
         <title>Simple Jekyll tutorial with Github Pages</title>
         <description>&lt;p&gt;I’m absolutely loving my new Jekyll blog, but getting it setup wasn’t that easy. Finding useful and accessible information on how everything works was very difficult. In the end, faithfully following tutorials and crashing around on Github resulted in this functional blog.&lt;/p&gt;
 
-&lt;p&gt;This post will provide a Jekyll blog setup tutorial assuming very little knowledge of the languages and technologies it is built on (Github, git, HTML, Markdown, Jekyll, Ruby). Casually surveying friends and colleagues, it seems that many people have heard of Github Pages, but haven’t explored it for a number of reasons. Here is what I hope to accomplish:&lt;/p&gt;
+&lt;p&gt;This post will provide a Jekyll blog setup tutorial assuming very little knowledge of the languages and technologies it is built on (Github, git, HTML, Markdown, Jekyll, Ruby, Liquid templates). Casually surveying friends and colleagues, it seems that many people have heard of Github Pages, but haven’t explored it for a number of reasons. Here is what I hope to accomplish:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Help you get setup with everything you will need before you start building a Jekyll blog&lt;/li&gt;

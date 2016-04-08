@@ -4,10 +4,11 @@ layout: post
 title: Simple twitter-bot with Python, Tweepy and Heroku
 date: 2016-04-05
 comments: true
+tags: "twitter, python, heroku"
 
 ---
 
-This post provides a walk-through tutorial on setup a simple twitter-bot that can do just about anything. I recently set up a simple [twitter-bot](https://twitter.com/tw_tt_r_b_t) that generates random cellular automata at a regular intervals, and I plan on doing a lot more with the Twitter API and text data analysis. 
+This post provides a walk-through tutorial on how to setup a simple twitter-bot that can do just about anything. I recently set up a simple [twitter-bot](https://twitter.com/tw_tt_r_b_t) that generates random cellular automata at a regular intervals, and I plan on doing a lot more with the Twitter API and text data analysis. 
 
 [Tweepy](http://www.tweepy.org/)
 ---
@@ -104,4 +105,4 @@ $ git add .
 $ git commit -m "initial commit"
 $ git push heroku master
 ```
-Pushing the files to Heroku with `$ git push heroku master` should create your twitter-bot program on Heroku and launch it into the Twitter-verse! To make sure everything is running smoothly, you can check out the log files on your Heroku Dashboard. There is lots you can do with Twitter and Tweepy, hopefully this tutorial has helped you understand the basics of how the Twitter API works and how to write a twitter-bot. Thanks for reading, and feel free to leave a comment!
+Pushing the files to Heroku with `$ git push heroku master` should create your twitter-bot program on Heroku and launch it into the Twitter-verse! To make sure everything is running smoothly, you can check out the log files on your Heroku Dashboard. There is lots you can do with Twitter and Tweepy, hopefully this tutorial has helped you understand the basics of how the Twitter API works and how to write your own twitter-bot. Thanks for reading, and feel free to leave a comment!
