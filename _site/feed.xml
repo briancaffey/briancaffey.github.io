@@ -6,8 +6,8 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 08 Apr 2016 15:19:20 -0400</pubDate>
-    <lastBuildDate>Fri, 08 Apr 2016 15:19:20 -0400</lastBuildDate>
+    <pubDate>Fri, 08 Apr 2016 15:25:42 -0400</pubDate>
+    <lastBuildDate>Fri, 08 Apr 2016 15:25:42 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -81,9 +81,9 @@ $ sudo service minidlna force-reload
 &lt;p&gt;Using the Raspberry Pi certainly isn’t necessary for simply downloading torrents, but having it set as a dedicated machine for downloading content and playing back files is a lot of fun and works better than I would have guessed.I don’t like running torrents on my MacBook Air, and sometimes I like to use my laptop when I’m watching TV. I would usually have to plug in my laptop to my TV directly and mirror the laptop display onto my TV, but the solution I have eliminates this headache altogether. My setup is by no means perfect, but it gets the job done with a very tolerable amount of effort on my part. Let me know in the comments if you have any critiques or ideas for how to enhance the setup I have described here. Thanks, and good luck with setting up your own home media system.&lt;/p&gt;
 
 </description>
-        <pubDate>Fri, 08 Apr 2016 00:00:00 -0400</pubDate>
-        <link>/2016/04/08/home-media-setup.html</link>
-        <guid isPermaLink="true">/2016/04/08/home-media-setup.html</guid>
+        <pubDate>Thu, 07 Apr 2016 00:00:00 -0400</pubDate>
+        <link>/2016/04/07/home-media-setup.html</link>
+        <guid isPermaLink="true">/2016/04/07/home-media-setup.html</guid>
         
         
       </item>

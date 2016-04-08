@@ -1,7 +1,7 @@
 ---
 
 layout: post
-date: 2016-04-08
+date: 2016-04-07
 title: Home media center meta-tutorial with miniDLNA, Raspberry Pi, Deluge and Apple TV
 comments: true 
 
