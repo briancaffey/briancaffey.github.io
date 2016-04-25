@@ -3,8 +3,7 @@ layout: page
 title: Contact
 permalink: /contact
 ---
-
-<img src="../static/JBC_photo.jpg" width="200">  
+<img src="../static/JBC_photo.jpg" width="200">  	
 
 This is my work-in-progress Jekyll site with information about interesting things I have been getting up to recently. 
 

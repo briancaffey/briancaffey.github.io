@@ -6,6 +6,8 @@ permalink: /blog
 
 ---
 
+<h1 class="page-heading">Recent Posts</h1>
+
 <ul>
   {% for post in site.posts %}
   <li>

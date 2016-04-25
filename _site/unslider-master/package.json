@@ -1,0 +1,31 @@
+{
+  "name": "unslider",
+  "version": "2.0.3",
+  "description": "The simplest little slider.",
+  "styles": [
+    "dist/css/unslider.css",
+    "dist/css/unslider-dots.css"
+  ],
+  "main": "src/js/unslider.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idiot/unslider.git"
+  },
+  "keywords": [
+    "slider",
+    "jquery",
+    "unslider",
+    "carousel"
+  ],
+  "author": [
+    "Visual Idiot <iam@visualidiot.com>"
+  ],
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/idiot/unslider/issues"
+  },
+  "homepage": "https://github.com/idiot/unslider#readme",
+  "dependencies": {
+    "jquery": "^2.1.4"
+  }
+}

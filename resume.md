@@ -6,7 +6,7 @@ permalink: /resume
 
 ---
 
-Here's a link to a PDF of [my resumé](/static/JBC_2016.pdf).
+[View PDF](/static/JBC_2016.pdf).
 
 Work Experience
 ---------------
@@ -42,12 +42,11 @@ Work Experience
 
 *   **[China Energy Storage Alliance (CNESA)](http://en.cnesa.org/)** (Beijing, China)
 
-    *Research Manager*, February 2010 - March 2015
+    *Research Manager*, February 2012 - March 2015
 
     -   Coordinated the management and research for CNESA’s monthly bi-lingual publication of global trends in technologies, policies and applications of the energy storage industry; contributed to CNESA’s annual White Papers
 	-   Served as the primary contact between CNESA and international member companies and organizations
 	-   Represented CNESA as a guest author in industry publications and as an invited speaker at international conferences
-	Project and Policy Tracking
 	-   Maintained detailed databases with over 450 global energy storage projects and country-specific energy policies
 	-   Produced quarterly tracking reports for both project and policy developments
 	-   Conducted interviews, tracked and reported on the development of mainstream and emerging energy storage technologies at universities, research laboratories and private corporations
@@ -69,10 +68,10 @@ Education
 
 *   **[General Assembly](https://generalassemb.ly/education/data-science)** (Washington, D.C.)
 	
-	*[Data Science Certificate Recipient](/static/Certificate-of-Completion.pdf)*, January 2016 - March 2016
+	*[Data Science Certificate Recipient](/static/Certificate-of-Completion.pdf)*, January 2016 - April 2016
 
 	-   11-week Python-based data science course aimed at understanding and implementing machine-learning techniques
-	-   Utilizing visualization, regression, natural language processing and machine learning methods on real data sets
+	-   Utilizing visualization, regression, natural language processing and machine learning methods on large data sets
 <br>
 <br>
 *   **[Saint Mary's College of Maryland](http://www.smcm.edu/)** (Saint Mary's City, Maryland)
