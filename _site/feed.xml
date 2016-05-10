@@ -6,8 +6,8 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 09 May 2016 22:24:33 -0400</pubDate>
-    <lastBuildDate>Mon, 09 May 2016 22:24:33 -0400</lastBuildDate>
+    <pubDate>Mon, 09 May 2016 23:29:04 -0400</pubDate>
+    <lastBuildDate>Mon, 09 May 2016 23:29:04 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -26,17 +26,25 @@
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;p&gt;But the HTML returned by requests returned this:&lt;/p&gt;
+&lt;p&gt;But the HTML returned by Requests was just an empty unordered list:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;ul&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;target-class&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/ul&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;The view-source HTML was also missing the inner &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;li&amp;gt;&lt;/code&gt;’s I was hoping to scrape. But I was able see the HTML I wanted with the ‘Inspect’ function in Chrome Dev Tools. I later learned that there JS changing the DOM, but I was already on the search for how to scrape hidden web data and came across &lt;a href=&quot;http://phantomjs.org/&quot;&gt;PhantomJS&lt;/a&gt; on Stack Overflow.&lt;/p&gt;
+&lt;p&gt;The view-source HTML was also missing the inner &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;li&amp;gt;&lt;/code&gt;’s I was hoping to scrape. But I was able see the HTML I wanted with the ‘Inspect’ function in Chrome Dev Tools. I later learned that in this case there is (most likely) &lt;a href=&quot;http://stackoverflow.com/questions/15918402/information-not-visible-in-source-file-view&quot;&gt;JavaScript modifying the DOM&lt;/a&gt;, and that Dev Tools shows the &lt;em&gt;current state of the DOM&lt;/em&gt;, whereas the ‘view-source’ shows the HTML as it is when it is first loaded by the browser. A quick search for “how to scrape hidden web data” lead me to &lt;a href=&quot;http://phantomjs.org/&quot;&gt;PhantomJS&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;phantomjs&quot;&gt;PhantomJS&lt;/h2&gt;
 
-&lt;p&gt;While it seems there is a lot that PhantomJS can do, I was having trouble piecing together the simple task that I needed done: feed PhantomJS a URL and have it return the HTML inside a &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;div&amp;gt;&lt;/code&gt; element with a certain class and output the content to a text file.&lt;/p&gt;
+&lt;p&gt;Here’s a quick intro to PhantomJS:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;PhantomJS is a headless WebKit scriptable with a JavaScript API. It has fast and native support for various web standards: DOM handling, CSS selector, JSON, Canvas, and SVG.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So, unlike ‘view-source’, PhantomJS is a virtual, interactive browser.&lt;/p&gt;
+
+&lt;p&gt;While it seems there is a lot that PhantomJS can do (like testing), I was having trouble piecing together the simple task that I needed done: feed PhantomJS a URL and have it return the HTML inside a &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;div&amp;gt;&lt;/code&gt; element with a certain class and output the content to a text file.&lt;/p&gt;
 
 &lt;p&gt;Here’s the bash script that I came up with outlining the process:&lt;/p&gt;
 

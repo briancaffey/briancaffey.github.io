@@ -93,17 +93,25 @@
 
 </code></pre>
 </div>
-<p>But the HTML returned by requests returned this:</p>
+<p>But the HTML returned by Requests was just an empty unordered list:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"target-class"</span><span class="nt">&gt;&lt;/ul&gt;</span>
 </code></pre>
 </div>
 
-<p>The view-source HTML was also missing the inner <code class="highlighter-rouge">&lt;li&gt;</code>’s I was hoping to scrape. But I was able see the HTML I wanted with the ‘Inspect’ function in Chrome Dev Tools. I later learned that there JS changing the DOM, but I was already on the search for how to scrape hidden web data and came across <a href="http://phantomjs.org/">PhantomJS</a> on Stack Overflow.</p>
+<p>The view-source HTML was also missing the inner <code class="highlighter-rouge">&lt;li&gt;</code>’s I was hoping to scrape. But I was able see the HTML I wanted with the ‘Inspect’ function in Chrome Dev Tools. I later learned that in this case there is (most likely) <a href="http://stackoverflow.com/questions/15918402/information-not-visible-in-source-file-view">JavaScript modifying the DOM</a>, and that Dev Tools shows the <em>current state of the DOM</em>, whereas the ‘view-source’ shows the HTML as it is when it is first loaded by the browser. A quick search for “how to scrape hidden web data” lead me to <a href="http://phantomjs.org/">PhantomJS</a>.</p>
 
 <h2 id="phantomjs">PhantomJS</h2>
 
-<p>While it seems there is a lot that PhantomJS can do, I was having trouble piecing together the simple task that I needed done: feed PhantomJS a URL and have it return the HTML inside a <code class="highlighter-rouge">&lt;div&gt;</code> element with a certain class and output the content to a text file.</p>
+<p>Here’s a quick intro to PhantomJS:</p>
+
+<blockquote>
+  <p>PhantomJS is a headless WebKit scriptable with a JavaScript API. It has fast and native support for various web standards: DOM handling, CSS selector, JSON, Canvas, and SVG.</p>
+</blockquote>
+
+<p>So, unlike ‘view-source’, PhantomJS is a virtual, interactive browser.</p>
+
+<p>While it seems there is a lot that PhantomJS can do (like testing), I was having trouble piecing together the simple task that I needed done: feed PhantomJS a URL and have it return the HTML inside a <code class="highlighter-rouge">&lt;div&gt;</code> element with a certain class and output the content to a text file.</p>
 
 <p>Here’s the bash script that I came up with outlining the process:</p>
 

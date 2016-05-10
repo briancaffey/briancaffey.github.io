@@ -22,18 +22,24 @@ I was interested in getting links that were displayed in lists on a many pages w
 </ul>
 
 ```
-But the HTML returned by requests returned this: 
+But the HTML returned by Requests was just an empty unordered list: 
 
 ```html
 <ul class="target-class"></ul>
 ```
 
-The view-source HTML was also missing the inner `<li>`'s I was hoping to scrape. But I was able see the HTML I wanted with the 'Inspect' function in Chrome Dev Tools. I later learned that there JS changing the DOM, but I was already on the search for how to scrape hidden web data and came across [PhantomJS](http://phantomjs.org/) on Stack Overflow. 
+The view-source HTML was also missing the inner `<li>`'s I was hoping to scrape. But I was able see the HTML I wanted with the 'Inspect' function in Chrome Dev Tools. I later learned that in this case there is (most likely) [JavaScript modifying the DOM](http://stackoverflow.com/questions/15918402/information-not-visible-in-source-file-view), and that Dev Tools shows the *current state of the DOM*, whereas the 'view-source' shows the HTML as it is when it is first loaded by the browser. A quick search for "how to scrape hidden web data" lead me to [PhantomJS](http://phantomjs.org/). 
 
 PhantomJS
 ---
 
-While it seems there is a lot that PhantomJS can do, I was having trouble piecing together the simple task that I needed done: feed PhantomJS a URL and have it return the HTML inside a `<div>` element with a certain class and output the content to a text file. 
+Here's a quick intro to PhantomJS: 
+
+>PhantomJS is a headless WebKit scriptable with a JavaScript API. It has fast and native support for various web standards: DOM handling, CSS selector, JSON, Canvas, and SVG.
+
+So, unlike 'view-source', PhantomJS is a virtual, interactive browser.  
+
+While it seems there is a lot that PhantomJS can do (like testing), I was having trouble piecing together the simple task that I needed done: feed PhantomJS a URL and have it return the HTML inside a `<div>` element with a certain class and output the content to a text file. 
 
 Here's the bash script that I came up with outlining the process: 
 
