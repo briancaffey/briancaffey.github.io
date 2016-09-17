@@ -6,9 +6,123 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 09 May 2016 23:29:04 -0400</pubDate>
-    <lastBuildDate>Mon, 09 May 2016 23:29:04 -0400</lastBuildDate>
+    <pubDate>Sat, 17 Sep 2016 03:07:57 -0400</pubDate>
+    <lastBuildDate>Sat, 17 Sep 2016 03:07:57 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>D3.js on Jekyll</title>
+        <description>&lt;div&gt;
+&lt;style&gt;
+
+#subdivision {
+  position: auto;
+  top: 20px;
+  left: 20px;
+}
+
+#subdivision input {
+  position: auto;
+  width: 200px;
+}
+
+&lt;/style&gt;
+&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;http://bl.ocks.org/mbostock/raw/3057239/d3.geodesic.min.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;subdivision&quot;&gt;
+  &lt;input type=&quot;range&quot; min=&quot;1&quot; max=&quot;12&quot; value=&quot;8&quot; /&gt;
+  &lt;output name=&quot;subdivision&quot;&gt;&lt;/output&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+
+var width = 960,
+    height = 500;
+
+var velocity = [.010, .005],
+    t0 = Date.now();
+
+var projection = d3.geo.orthographic()
+    .scale(height / 2 - 10);
+
+var canvas = d3.select(&quot;body&quot;).append(&quot;canvas&quot;)
+    .attr(&quot;width&quot;, width)
+    .attr(&quot;height&quot;, height);
+
+var context = canvas.node().getContext(&quot;2d&quot;);
+
+context.strokeStyle = &quot;#000&quot;;
+context.lineWidth = .5;
+
+var faces;
+
+var output = d3.select(&quot;output&quot;);
+
+var input = d3.select(&quot;input&quot;)
+    .on(&quot;input&quot;, function() { geodesic(+this.value); })
+    .on(&quot;change&quot;, function() { geodesic(+this.value); })
+    .each(function() { geodesic(+this.value); });
+
+d3.timer(function() {
+  var time = Date.now() - t0;
+  projection.rotate([time * velocity[0], time * velocity[1]]);
+  redraw();
+});
+
+function redraw() {
+  context.clearRect(0, 0, width, height);
+
+  faces.forEach(function(d) {
+    d.polygon[0] = projection(d[0]);
+    d.polygon[1] = projection(d[1]);
+    d.polygon[2] = projection(d[2]);
+    if (d.visible = d.polygon.area() &gt; 0) {
+      context.fillStyle = d.fill;
+      context.beginPath();
+      drawTriangle(d.polygon);
+      context.fill();
+    }
+  });
+
+  context.beginPath();
+  faces.forEach(function(d) {
+    if (d.visible) {
+      drawTriangle(d.polygon);
+    }
+  });
+  context.stroke();
+}
+
+function drawTriangle(triangle) {
+  context.moveTo(triangle[0][0], triangle[0][1]);
+  context.lineTo(triangle[1][0], triangle[1][1]);
+  context.lineTo(triangle[2][0], triangle[2][1]);
+  context.closePath();
+}
+
+function geodesic(subdivision) {
+  output.text(subdivision);
+
+  faces = d3.geodesic.polygons(subdivision).map(function(d) {
+    d = d.coordinates[0];
+    d.pop(); // use an open polygon
+    d.fill = d3.hsl(d[0][0], 1, .5) + &quot;&quot;;
+    d.polygon = d3.geom.polygon(d.map(projection));
+    return d;
+  });
+
+  redraw();
+}
+
+&lt;/script&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Fri, 13 May 2016 00:00:00 -0400</pubDate>
+        <link>/2016/05/13/d3js-on-jekyll.html</link>
+        <guid isPermaLink="true">/2016/05/13/d3js-on-jekyll.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Scraping hidden web data with PhantomJS</title>

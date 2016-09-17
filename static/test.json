@@ -1,0 +1,13 @@
+{
+	"features": [{
+		"type": "Feature",
+		"geometry": {
+			"coordinates": [200, 100]
+		}
+	}, {
+		"type": "Feature",
+		"geometry": {
+			"coordinates": [200, 100]
+		}
+	}]
+}
