@@ -6,7 +6,10 @@ date: 2016-05-13
 comments: true
 
 ---
-<div>
+<div id="subdivision">
+  <input type="range" min="1" max="12" value="8">
+  <output name="subdivision"></output>
+</div>
 <style>
 
 #subdivision {
@@ -21,12 +24,11 @@ comments: true
 }
 
 </style>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://bl.ocks.org/mbostock/raw/3057239/d3.geodesic.min.js"></script>
-<div id="subdivision">
-  <input type="range" min="1" max="12" value="8">
-  <output name="subdivision"></output>
-</div>
+
+
 
 <script>
 
@@ -109,4 +111,3 @@ function geodesic(subdivision) {
 }
 
 </script>
-</div>

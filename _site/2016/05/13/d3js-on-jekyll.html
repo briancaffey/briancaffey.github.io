@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>D3.js on Jekyll</title>
-  <meta name="description" content="">
+  <meta name="description" content="    ">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="/2016/05/13/d3js-on-jekyll.html">
@@ -79,7 +79,10 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <div>
+    <div id="subdivision">
+  <input type="range" min="1" max="12" value="8" />
+  <output name="subdivision"></output>
+</div>
 <style>
 
 #subdivision {
@@ -94,12 +97,10 @@
 }
 
 </style>
+
 <script src="http://d3js.org/d3.v3.min.js"></script>
+
 <script src="http://bl.ocks.org/mbostock/raw/3057239/d3.geodesic.min.js"></script>
-<div id="subdivision">
-  <input type="range" min="1" max="12" value="8" />
-  <output name="subdivision"></output>
-</div>
 
 <script>
 
@@ -182,7 +183,7 @@ function geodesic(subdivision) {
 }
 
 </script>
-</div>
+
 
   </div>
 
