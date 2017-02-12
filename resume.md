@@ -6,30 +6,41 @@ permalink: /resume
 
 ---
 
-[View PDF](/static/JBC_2016.pdf).
+[View PDF](/static/James_Brian_Caffey_Resume_2017_2.pdf).
 
 Work Experience
 ---------------
 
+*   **[Capital Creative](http://briancaffey2010.wixsite.com/capital-websites/contact)** (Washington, D.C.)
+
+    *Freelance Technology Consulting, Web Design and 3D Modeling*, July 2015 - Present
+
+    -	Established private technology consultancy
+    -	Provide digital consulting services for D.C. area community organizations
+    -   Produce website tutorial video courses for niche community groups
+    -	Provide 3D architectural modeling services for residential and commercial clients using SketchUp
+    -	Build high-performance PCs for private clients
+<br>
+<br>
 *   **Private Tutoring** (Washington, D.C.)
 
-    *Independent Consultant*, July 2015 - Present
+    July 2015 - Present
 
-    -	Established	private	tutoring practice
-    -   Tutoring high school students in mathematics (Pre-Calculus,	AP Statistics, AP Calculus) and Mandarin Chinese
+    -	Established an independent private tutoring practice
+    -   Offer professional software training in MS Office and tutoring in high school mathematics
+    -	Offer 3D printing seminars covering assembly of open source printers and 3D printing software
 <br>
 <br>
 *   **[Sol Systems](http://www.solsystems.com/)** (Washington, D.C.)
 
     *Independent Consultant*, July 2015 - September 2015
 
-    -   Planned, researched and delivered an executive report that included energy storage market analysis and data analysis on the economics of battery storage projects
-    Market Analysis
+    -   Planned, researched and delivered an executive report including energy storage market analysis and economic analysis of battery storage project proposals
 	-   Synthesized leading industry reports on distributed energy storage to help management understand market opportunities
     -   Conducted research focused on distributed energy projects that combine solar photovoltaics and battery storage for commercial and industrial applications in California
-	Data Analysis
 	-   Used Python’s pandas and matplotlib libraries to conduct data exploration and visualization of electricity consumption data for municipal buildings in Washington, D.C.; used data to understand trends in peak electricity use
-	-   Developed financial models to forecast financial returns on energy storage projects  
+	-   Developed financial models to forecast financial returns on energy storage projects with [Energy Toolbase](https://www.energytoolbase.com/)
+<br>
 <br>
 
 *   **[Magic, Inc.](https://getmagicnow.com)** (Mountain View, California)
@@ -44,22 +55,21 @@ Work Experience
 
     *Research Manager*, February 2012 - March 2015
 
-    -   Coordinated the management and research for CNESA’s monthly bi-lingual publication of global trends in technologies, policies and applications of the energy storage industry; contributed to CNESA’s annual White Papers
-	-   Served as the primary contact between CNESA and international member companies and organizations
+    -   Coordinated research efforts for a monthly bi-lingual publication covering global trends of technologies, policies and applications in the energy storage industry; contributed to annual White Papers and quarterly market reports 
+	-   Served as the primary contact between CNESA and international member companies and organizations, provided bi-lingual interpretation for executive meetings 
 	-   Represented CNESA as a guest author in industry publications and as an invited speaker at international conferences
-	-   Maintained detailed databases with over 450 global energy storage projects and country-specific energy policies
-	-   Produced quarterly tracking reports for both project and policy developments
+	-   Maintained detailed databases of energy storage projects and country-specific energy policies
 	-   Conducted interviews, tracked and reported on the development of mainstream and emerging energy storage technologies at universities, research laboratories and private corporations
-	<br>
+<br>
 <br>
 
 *   **[Veritrust USA](http://www.veritrustusa.com/)** (Bethesda, Maryland)
 
     *Analyst*, August 2011 - February 2012
 
-    -   Provided analytical, administrative and technological support for a private company that helps American homeowners manage the foreclosure process
-	-   Built an extensive database of realtors and private foreclosure consultants to create an affiliate network
-	-   Used Salesforce to streamline sales, processing, accounting and automatic business reporting
+    -   Programmed MS Excel macros to model and forecast sales for a financial services company
+	-   Built an extensive database of realtors and private consultants to create an affiliate network
+	-   Used SalesForce to streamline sales, operations, accounting and business reporting
 
 
 
@@ -71,7 +81,7 @@ Education
 	*[Data Science Certificate Recipient](/static/Certificate-of-Completion.pdf)*, January 2016 - April 2016
 
 	-   11-week Python-based data science course aimed at understanding and implementing machine-learning techniques
-	-   Utilizing visualization, regression, natural language processing and machine learning methods on large data sets
+	-	Performed  visualization, regression, natural language processing and machine learning methods on large data sets
 <br>
 <br>
 *   **[Saint Mary's College of Maryland](http://www.smcm.edu/)** (Saint Mary's City, Maryland)
@@ -80,17 +90,22 @@ Education
 
     -   Coursework focused on Real Analysis and Abstract Algebra; served as a Teaching Assistant for an introductory-level course of advanced mathematics; additional coursework in Microeconomics 
 	-   One semester of advanced Chinese language courses at Fudan University in Shanghai as a St. Mary’s College Asia Study Abroad Scholarship recipient (sophomore year)
-	-   One semester of academic study at Peking University in Beijing with concurrent research internship at Financial Times, Beijing Bureau (senior year)
+	-   One semester of academic study at Peking University in Beijing with concurrent research internship at the Financial Times Beijing Bureau (senior year)
 	-   GPA: 3.88 (on a 4.0 scale); inducted into the Phi Beta Kappa Society; awarded Magna Cum Laude honors; Saint Mary’s Scholar and Dean’s List
 
 
-Skills
+Skills and Interests
 ------
 
-* Languages: Fluency in Mandarin Chinese; proficiency in French 
-* Python: Experienced with programming fundamentals and Python libraries for data science including NumPy, pandas, SciPy and Scikit-learn 
-* WordPress: Experienced in the development of simple WordPress websites with advanced plug-in integration 
-* Hobbies: Distance running, chess, classical guitar, Raspberry Pi and Arduino 
+* Languages: Fluency in written and spoken Mandarin Chinese; proficiency in French
+* Python: Experienced with Python programming and Python libraries for data science included in the Anaconda distribution including NumPy, pandas, SciPy, Scikit-learn and Natural Language Tool Kit (NLTK)
+* Web Skills: Experienced with PhantomJS for web automation and BeautifulSoup for web scraping, HTML, CSS, JavaScript, git
+* Operating Systems: Linux and bash scripting, Windows 10, OS X, Docker, virtual machines, virtual environments
+* Google SketchUp: 3D architectural modeling
+* Blender: 3D modeling, physics simulations and video editing
+* Video Production: Produced educational YouTube series for law students
+* 3D Printing: Experienced with Prusa i3 3D printers and CURA software
+* WordPress: Experienced in the development of WordPress websites with plug-ins 
 
 
 
