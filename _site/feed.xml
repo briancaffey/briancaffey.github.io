@@ -6,8 +6,8 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 12 Feb 2017 02:26:25 -0500</pubDate>
-    <lastBuildDate>Sun, 12 Feb 2017 02:26:25 -0500</lastBuildDate>
+    <pubDate>Mon, 13 Feb 2017 12:50:27 -0500</pubDate>
+    <lastBuildDate>Mon, 13 Feb 2017 12:50:27 -0500</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -364,7 +364,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;/img/hist.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/builds/hist.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The mean PC price is &lt;strong&gt;$1,292&lt;/strong&gt;. However, the price of PCs is not reflected accurately in &lt;code class=&quot;highlighter-rouge&quot;&gt;df.total&lt;/code&gt;. I noticed that some builds include multiple monitors while others don’t include any and some builders don’t include prices for components from their previous PC builds.&lt;/p&gt;
 
