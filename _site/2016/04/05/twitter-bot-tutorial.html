@@ -155,7 +155,7 @@ README.md		hello			runtime.txt
 <p>The <code class="highlighter-rouge">Procfile</code> file will give instructions to your dyno regarding what it should do. Take a look inside this file, and you will see <code class="highlighter-rouge">web: gunicorn gettingstarted.wsgi --log-file -</code>. This indicates that the dyno will be making a website using the file <code class="highlighter-rouge">gettingstarted.wsgi</code>.</p>
 
 <p>Delete the contents of this file and copy in the following line: 
-<code class="highlighter-rouge">worker: tweetbot.py</code>.</p>
+<code class="highlighter-rouge">worker: python tweetbot.py</code>.</p>
 
 <p>This will tell our dyno that we want it to do a simple task: run <code class="highlighter-rouge">tweetbot.py</code>. Next, check out <code class="highlighter-rouge">requirements.txt</code>. The contents of this file indicate the packages our Python script needs to run. For our twitter-bot, we only need the Tweepy package. To check which version of Tweepy you have on your computer, run <code class="highlighter-rouge">pip freeze | grep tweepy</code> in the terminal. Mine reads <code class="highlighter-rouge">tweepy==3.5.0</code>. Copy <code class="highlighter-rouge">tweepy==3.5.0</code> into <code class="highlighter-rouge">requirements.txt</code> and delete the other lines.</p>
 

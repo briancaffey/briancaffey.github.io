@@ -6,9 +6,614 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 13 Feb 2017 12:50:27 -0500</pubDate>
-    <lastBuildDate>Mon, 13 Feb 2017 12:50:27 -0500</lastBuildDate>
+    <pubDate>Fri, 03 Mar 2017 14:31:54 -0500</pubDate>
+    <lastBuildDate>Fri, 03 Mar 2017 14:31:54 -0500</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Related subreddit graph exploration with NetworkX</title>
+        <description>&lt;h1 id=&quot;graphing-subreddits&quot;&gt;Graphing Subreddits&lt;/h1&gt;
+
+&lt;p&gt;This notebook explores some basic concepts of graph theory. A few weeks ago I set up a script to scrape data from &lt;a href=&quot;reddit.com&quot;&gt;reddit.com&lt;/a&gt; with the goal of visualizing the network of related subreddits (forums on specific topics) and related data.&lt;/p&gt;
+
+&lt;p&gt;Reddit is home over 600,000 communities, known as subreddits, where people come to share information, opinions, links, etc. and discuss things in a open forum. Most subreddits display links to related subreddits. For example, /r/apple (the Apple subreddit) links to /r/iPhone, a subreddit all about the iPhone, and over a dozen other Apple-related subreddits.&lt;/p&gt;
+
+&lt;p&gt;If you visit reddit.com as a guest, you will see a list of popular subreddits. This list is located inside an &lt;code class=&quot;highlighter-rouge&quot;&gt;html&lt;/code&gt; tag called &lt;code class=&quot;highlighter-rouge&quot;&gt;drop-choices&lt;/code&gt;. Here it is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;selenium&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webdriver&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;re&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;np&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;bs4&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeautifulSoup&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webdriver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PhantomJS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;https://www.reddit.com/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;page_source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;utf-8&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeautifulSoup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;div&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;class&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;drop-choices&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;subs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;compile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;r&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/r&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/[&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;w.]+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;default_subreddits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;findall&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;defaults&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;default_subreddits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;[&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;](https://reddit.com&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;), &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Here are the elements of &lt;code class=&quot;highlighter-rouge&quot;&gt;default_subreddits&lt;/code&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;&lt;a href=&quot;https://reddit.com/r/LifeProTips/&quot;&gt;/r/LifeProTips/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/Futurology/&quot;&gt;/r/Futurology/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/OldSchoolCool/&quot;&gt;/r/OldSchoolCool/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/mildlyinteresting/&quot;&gt;/r/mildlyinteresting/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/askscience/&quot;&gt;/r/askscience/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/UpliftingNews/&quot;&gt;/r/UpliftingNews/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/aww/&quot;&gt;/r/aww/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/GetMotivated/&quot;&gt;/r/GetMotivated/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/personalfinance/&quot;&gt;/r/personalfinance/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/gadgets/&quot;&gt;/r/gadgets/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/science/&quot;&gt;/r/science/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/dataisbeautiful/&quot;&gt;/r/dataisbeautiful/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/DIY/&quot;&gt;/r/DIY/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/AskReddit/&quot;&gt;/r/AskReddit/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/space/&quot;&gt;/r/space/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/nosleep/&quot;&gt;/r/nosleep/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/Documentaries/&quot;&gt;/r/Documentaries/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/todayilearned/&quot;&gt;/r/todayilearned/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/television/&quot;&gt;/r/television/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/IAmA/&quot;&gt;/r/IAmA/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/Art/&quot;&gt;/r/Art/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/EarthPorn/&quot;&gt;/r/EarthPorn/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/books/&quot;&gt;/r/books/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/gifs/&quot;&gt;/r/gifs/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/Showerthoughts/&quot;&gt;/r/Showerthoughts/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/blog/&quot;&gt;/r/blog/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/news/&quot;&gt;/r/news/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/Jokes/&quot;&gt;/r/Jokes/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/TwoXChromosomes/&quot;&gt;/r/TwoXChromosomes/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/videos/&quot;&gt;/r/videos/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/philosophy/&quot;&gt;/r/philosophy/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/nottheonion/&quot;&gt;/r/nottheonion/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/explainlikeimfive/&quot;&gt;/r/explainlikeimfive/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/movies/&quot;&gt;/r/movies/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/Music/&quot;&gt;/r/Music/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/WritingPrompts/&quot;&gt;/r/WritingPrompts/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/worldnews/&quot;&gt;/r/worldnews/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/pics/&quot;&gt;/r/pics/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/history/&quot;&gt;/r/history/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/listentothis/&quot;&gt;/r/listentothis/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/sports/&quot;&gt;/r/sports/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/food/&quot;&gt;/r/food/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/creepy/&quot;&gt;/r/creepy/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/announcements/&quot;&gt;/r/announcements/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/gaming/&quot;&gt;/r/gaming/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/tifu/&quot;&gt;/r/tifu/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/funny/&quot;&gt;/r/funny/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/photoshopbattles/&quot;&gt;/r/photoshopbattles/&lt;/a&gt;,  &lt;a href=&quot;https://reddit.com/r/InternetIsBeautiful/&quot;&gt;/r/InternetIsBeautiful/&lt;/a&gt;,&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;My goal here is to see how many subreddits we can reach as we branch off of these “default” subreddits into their related subreddits.&lt;/p&gt;
+
+&lt;p&gt;First, we need to set up data structures to hold data for subreddits and their related subreddits. And we need to define an algorithm for collecting data.&lt;/p&gt;
+
+&lt;p&gt;Here’s an intrdoduction to graphs from &lt;a href=&quot;https://www.python.org/doc/essays/graphs/&quot;&gt;python.org&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Few programming languages provide direct support for graphs as a data type, and Python is no exception. However, graphs are easily built out of lists and dictionaries. For instance, here’s a simple graph (I can’t use drawings in these columns, so I write down the graph’s arcs):&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;A -&amp;gt; B
+A -&amp;gt; C
+B -&amp;gt; C
+B -&amp;gt; D
+C -&amp;gt; D
+D -&amp;gt; C
+E -&amp;gt; F
+F -&amp;gt; C 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This graph has six nodes (A-F) and eight arcs. It can be represented by the following Python data structure:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;graph =     {&#39;A&#39;: [&#39;B&#39;, &#39;C&#39;],
+             &#39;B&#39;: [&#39;C&#39;, &#39;D&#39;],
+             &#39;C&#39;: [&#39;D&#39;],
+             &#39;D&#39;: [&#39;C&#39;],
+             &#39;E&#39;: [&#39;F&#39;],
+             &#39;F&#39;: [&#39;C&#39;]}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;First let’s define how we would go only one branch deep into this graph (i.e. find the related subreddits for &lt;em&gt;only&lt;/em&gt; the default subreddits). To collect the data, I first looped through the default subreddits and save the html of each subreddit to its own text file. Here’s a script with comments:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#first we navigate to the correct folder where we will store the first level of related subreddits&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chdir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expanduser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;~/Documents/Projects/Data/Subreddits/one/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#next we instantiate the webdriver we will be using: PhantomJS&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webdriver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PhantomJS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#loop through the list of default subreddits&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;default_subreddits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#for each subreddit, we append the /r/subreddit path to the base URL (reddit.com)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;https://www.reddit.com&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#wait for two seconds&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#save the html of the loaded page to a variable: html&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;page_source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;utf-8&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#remove &#39;/r/&#39; from the subreddit name string&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#open a new file and give it the name of the subreddit we just scraped&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subreddit_html_file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;.txt&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;w+&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#write the html contents to the file&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subreddit_html_file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#clost the file&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subreddit_html_file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#print out the number and name of the subreddit we just scrapped to make sure things are working&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39; &#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next, we want to go through each file and extract the information we want. Here’s what we will be getting:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Number of subscribers&lt;/li&gt;
+  &lt;li&gt;Subreddit description&lt;/li&gt;
+  &lt;li&gt;Date created&lt;/li&gt;
+  &lt;li&gt;Related subreddits&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For this type of project, I prefer to loop through each page and creating several small dictionaries for each data point, then combine the small dictionaries into a large dictionary, and then append the dictionary to a list of dictionaries. Once I have looped through all of the pages, I can create a pandas DataFrame from the list of dictionaries. This allows me to easily manipulate the data. Here’s the script that I used to do this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#navigate to where the html files are stored (I moved them around a bit so it is not consistent with the script above)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chdir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;E://DATA/Subreddits/subreddits_html/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#generate a list of files that we will loop through&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;listdir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;E://DATA/Subreddits/subreddits_html/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#set up an empty list that we will append dictionaries to&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;dict_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#loop through the files&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#print out the name of the current file in the loop&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#open the file&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;file_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;r&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#read the file contents to a local variable&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#create a BeautifulSoup object that we will use to parse the HTML&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeautifulSoup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;lxml&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#get the subreddit name that we are working with (from the `file` variable)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subreddit_name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;/r/&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#put the name into a dictionary&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subreddit_name_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;subreddit&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#get number of subscribers&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;span&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;class&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;subscribers&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#if the number of subscribers is displayed on the page, then we find it and add it to a dictionary&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;subs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;span&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;class&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;subscribers&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;span&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;class&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;number&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;,&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;subs_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;subscribers&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)}&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#if the number of subscribers is not displayed on the page, then we set the number of subscribers in the dictionary to None&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;subs_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;subscribers&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#similar process for the description: if the description is displayed, get it and save it to desc&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#if it is not available, then desc will be set to `None`&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;div&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;class&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;md&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;div&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;class&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;md&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;desc_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;description&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;desc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#here we use regular expressions to find links anywhere on the page that have the structure: &quot;/r/something/&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;rel_subr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;re&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;compile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;r&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/r&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/[&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;w.]+&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#make a list of these links based on the &quot;/r/something/&quot; pattern&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;related_subreddits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rel_subr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;findall&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#save the list to a dictionary&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subreddits_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;related&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;related_subreddits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#same processes for recording the date that the subreddit was created: get the date from an HTML element, &lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;#then save it to a dictionary. There were two different formats available in the HTML so I grabbed both&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;span&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;attrs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;class&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;age&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
+        &lt;span class=&quot;n&quot;&gt;time1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;time&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;title&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;time2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;time&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;datetime&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#save the date to a dictionary&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;time_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;date1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;date2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#take all the dictionaries we just created and put them together into one big dictionary&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;dictionary&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subs_dict&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;desc_dict&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddits_dict&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit_name_dict&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time_dict&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;items&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;#append the big dictionary to the list that we defined right before the beginning of the loop&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;dict_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dictionary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#deconstruct the Beautiful Soup object (this can eat up memory very quickly, so it is very important when processing lots of data)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decompose&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    
+    &lt;span class=&quot;c&quot;&gt;#clost the file&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next, let’s save the results into a csv file. This let’s us load the results quickly without having to scrape everyting again. To do this we can use the pandas library.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;df0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DataFrame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dict_list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;At this point, we can go through the &lt;code class=&quot;highlighter-rouge&quot;&gt;related&lt;/code&gt; column in the DataFrame and put together a list of all the related subreddits. With this list, we can simply repeat the process over and over again. However, each time we start with a new list of subreddits, we want to make sure that they have not already been collected.&lt;/p&gt;
+
+&lt;p&gt;Next I will read in one DataFrame that represents related subreddits “three levels deep” relative to the default subreddits.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Default –&amp;gt; Related –&amp;gt; Related –&amp;gt; Related&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This DataFrame represents the collection of subreddits from all of these “layers” of the graph.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;master_df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_pickle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;pickle/master_df.p&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now we can do a quick visualization of the growth in number of subreddits since the website’s start in 2005.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;warnings&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;warnings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filterwarnings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;ignore&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matplotlib&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inline&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;plt&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;seaborn&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sns&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;np&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;master_df_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;notnull&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;master_df_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_datetime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;date1&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;list_of_dates&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_df_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort_values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;counts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list_of_dates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list_of_dates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;Number of subreddits over time&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;Date&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;Cummulative Count&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;savefig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expanduser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;~/Documents/GitHub/briancaffey.github.io/img/subreddit_graph/subreddits_count.png&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/subreddit_graph/subreddits_count.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;setting-up-a-graph-with-networkx&quot;&gt;Setting up a graph with NetworkX&lt;/h1&gt;
+
+&lt;p&gt;Next we can start to look at the collection of reddits and related subreddits as a graph. I will be using a Python package for network and graph analysis called &lt;a href=&quot;https://networkx.github.io&quot;&gt;NetworkX&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#Let&#39;s make sure that we have only unique entries in the dataframe.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_df_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;drop_duplicates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;subreddit&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;drop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;/r/track__subreddits_&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#here we define a dictionary where the keys are subreddits and the values are lists of related subreddits&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;related&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#NetworkX comes with the python Anaconda distribution&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;networkx&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;nx&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;G&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;G&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;from_dict_of_lists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#making the graph undirected takes all of the vertices between nodes and makes them bi-directional&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;G&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_undirected&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[&#39;/r/streetboarding&#39; &#39;/r/stephenking&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s test out some of the functions from NetworkX for graph analysis. First, let’s take the two randomly selected nodes defined above and test to see if there exists a path between them:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;has_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;True
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;shortest-path&quot;&gt;Shortest path&lt;/h1&gt;
+
+&lt;p&gt;Now let’s see (at least one of) the shortest path that exists between these nodes:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shortest_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[&#39;/r/streetboarding&#39;,
+ &#39;/r/freebord&#39;,
+ &#39;/r/adrenaline&#39;,
+ &#39;/r/imaginaryadrenaline&#39;,
+ &#39;/r/imaginarystephenking&#39;,
+ &#39;/r/stephenking&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s write a function that selects two random subreddits and then prints a shortest path if it exists:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;has_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shortest_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39; and &#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39; are joined by: &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;No path exists between &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39; and &#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;choices&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Here’s a collection of results from the &lt;code class=&quot;highlighter-rouge&quot;&gt;short_path&lt;/code&gt; function defined above that start to paint a picuture of the broad set of topics covered by reddit.com:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/personalizationadvice and /r/beautifulfemales are joined by: 
+[&#39;/r/personalizationadvice&#39;, &#39;/r/coloranalysis&#39;, &#39;/r/fashion&#39;, &#39;/r/redcarpet&#39;, &#39;/r/gentlemanboners&#39;, &#39;/r/beautifulfemales&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/caffeine and /r/shittyramen are joined by: 
+[&#39;/r/caffeine&#39;, &#39;/r/toast&#39;, &#39;/r/cooking&#39;, &#39;/r/ramen&#39;, &#39;/r/shittyramen&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/watchingcongress and /r/iwantthatonashirt are joined by: 
+[&#39;/r/watchingcongress&#39;, &#39;/r/stand&#39;, &#39;/r/snowden&#39;, &#39;/r/undelete&#39;, &#39;/r/trees&#39;, &#39;/r/iwantthatonashirt&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/asksciencediscussion and /r/dogsonhardwoodfloors are joined by: 
+[&#39;/r/asksciencediscussion&#39;, &#39;/r/badscience&#39;, &#39;/r/badlinguistics&#39;, &#39;/r/animalsbeingjerks&#39;, &#39;/r/startledcats&#39;, &#39;/r/dogsonhardwoodfloors&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/randommail and /r/mini are joined by: 
+[&#39;/r/randommail&#39;, &#39;/r/spiceexchange&#39;, &#39;/r/cameraswapping&#39;, &#39;/r/itookapicture&#39;, &#39;/r/carporn&#39;, &#39;/r/mini&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/catsinsinks and /r/nzmovies are joined by: 
+[&#39;/r/catsinsinks&#39;, &#39;/r/wetcats&#39;, &#39;/r/tinysubredditoftheday&#39;, &#39;/r/sheep&#39;, &#39;/r/nzmetahub&#39;, &#39;/r/nzmovies&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/thoriumreactor and /r/sailing are joined by: 
+[&#39;/r/thoriumreactor&#39;, &#39;/r/energy&#39;, &#39;/r/spev&#39;, &#39;/r/sailing&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/deathnote and /r/vegetarianism are joined by: 
+[&#39;/r/deathnote&#39;, &#39;/r/television&#39;, &#39;/r/netflixbestof&#39;, &#39;/r/naturefilms&#39;, &#39;/r/environment&#39;, &#39;/r/vegetarianism&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/mississippir4r and /r/mathematics are joined by: 
+[&#39;/r/mississippir4r&#39;, &#39;/r/mississippi&#39;, &#39;/r/prisonreform&#39;, &#39;/r/socialscience&#39;, &#39;/r/alltech&#39;, &#39;/r/mathematics&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/britainsgottalent and /r/irelandbaldwin are joined by: 
+[&#39;/r/britainsgottalent&#39;, &#39;/r/britishtv&#39;, &#39;/r/that70sshow&#39;, &#39;/r/mila_kunis&#39;, &#39;/r/christinaricci&#39;, &#39;/r/irelandbaldwin&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/the_donald and /r/ladybusiness are joined by: 
+[&#39;/r/the_donald&#39;, &#39;/r/shitliberalssay&#39;, &#39;/r/trollxchromosomes&#39;, &#39;/r/ladybusiness&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/selfharm and /r/medlabprofessionals are joined by: 
+[&#39;/r/selfharm&#39;, &#39;/r/adhd&#39;, &#39;/r/neuroimaging&#39;, &#39;/r/pharmacy&#39;, &#39;/r/medlabprofessionals&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/coverart and /r/phillycraftbeer are joined by: 
+[&#39;/r/coverart&#39;, &#39;/r/nostalgia&#39;, &#39;/r/upvotedbecausegirl&#39;, &#39;/r/wtf&#39;, &#39;/r/remindsmeofdf&#39;, &#39;/r/beer&#39;, &#39;/r/phillycraftbeer&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;short_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/hotguyswithlonghair and /r/castles are joined by: 
+[&#39;/r/hotguyswithlonghair&#39;, &#39;/r/majesticmanes&#39;, &#39;/r/ladyboners&#39;, &#39;/r/imaginaryladyboners&#39;, &#39;/r/imaginarycastles&#39;, &#39;/r/castles&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Taking a look &lt;a href=&quot;http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/unweighted.html?highlight=bidirectional_shortest_path&quot;&gt;under the hood&lt;/a&gt; of NetworkX and examining the algorith that finds the &lt;a href=&quot;http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/generic.html#shortest_path&quot;&gt;shortest path&lt;/a&gt; between any two nodes in a graph, we find that it simply boils down to:
+&lt;code class=&quot;highlighter-rouge&quot;&gt;
+def shortest_path(G, source=None, target=None, weight=None):
+    paths=nx.bidirectional_shortest_path(G,source,target)
+    return paths
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You can read more about the &lt;code class=&quot;highlighter-rouge&quot;&gt;bidirectional_shortest_path&lt;/code&gt; function &lt;a href=&quot;http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/unweighted.html?highlight=bidirectional_shortest_path&quot;&gt;here&lt;/a&gt; in the NetworkX documentation.&lt;/p&gt;
+
+&lt;p&gt;When I was first experimenting with graph algorithms, I had an interesting result using an algorithm intruduced &lt;a href=&quot;https://www.python.org/doc/essays/graphs/&quot;&gt;here&lt;/a&gt; in the Python documentation. Here’s the algorithm:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;find_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;has_key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;newpath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;find_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newpath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newpath&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The above algorthim uses a process called backtracking to exaustively try all possibilities until it returns a solution. It creates an interesting “random walk” through groups of related subreddits. Here’s the result of calling the above function on our graph (only 2 layers deep) with two random nodes: /r/persianrap and /r/nosleep:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;/r/persianrap /r/middleeasternmusic /r/arabic /r/arabs /r/libyancrisis /r/syriancivilwar /r/yemenicrisis /r/sinaiinsurgency /r/jihadinfocus /r/credibledefense /r/geopolitics /r/forgottennews /r/libyanconflict /r/menaconflicts /r/iran /r/iranianlgbt /r/zoroastrianism /r/kurdistan /r/rojava /r/anarchism /r/imaginarypolitics /r/imaginaryimmortals /r/imaginaryclerics /r/imaginarylakes /r/imaginaryaliens /r/imaginarygnomes /r/imaginaryladyboners /r/imaginaryturtleworlds /r/imaginarysunnydale /r/imaginarydwarves /r/imaginarywizards /r/imaginaryvikings /r/imaginarycolorscapes /r/imaginarysteampunk /r/imaginarytemples /r/imaginaryblueprints /r/comicbookart /r/imaginarytechnology /r/mtgporn /r/imaginaryoldkingdom /r/imaginaryfactories /r/imaginaryfederation /r/imaginarylovers /r/imaginarynarnia /r/imaginarydwellings /r/imaginaryscience /r/imaginarytaverns /r/imaginarybattlefields /r/cityporn /r/japanpics /r/nationalphotosubs /r/austriapics /r/southkoreapics /r/taiwanpics /r/ghanapics /r/kenyapics /r/norwaypics /r/vzlapics /r/perupics /r/antarcticapics /r/greatlakespics /r/lakeporn /r/pornoverlords /r/thingscutinhalfporn /r/manufacturing /r/cnc /r/askengineers /r/sciencesubreddits /r/math /r/simulate /r/cosmology /r/reddittothefuture /r/scifi /r/lost /r/the100books /r/the100 /r/theblacklist /r/nbc /r/dundermifflin /r/sonsofanarchy /r/twentyfour /r/banshee /r/hbo /r/siliconvalleyhbo /r/siliconvalley /r/california /r/tahoe /r/skiing /r/snowshoeing /r/xcountryskiing /r/wintergear /r/skijumping /r/winter /r/bigmountain /r/mountaineering /r/campingandhiking /r/earthporn /r/nature /r/birding /r/invasivespecies /r/zoology /r/entomology /r/rainforest /r/botany /r/wildlife /r/allscience /r/earthscience /r/energy /r/biomass /r/renewablenews /r/syngas /r/climatenews /r/composting /r/vermiculture /r/organicfarming /r/livestock /r/animalwelfare /r/randomactsofpetfood /r/animalreddits /r/cockatiel /r/catpics /r/tortoises /r/whales /r/cetacea /r/lifeaquatic /r/hrw /r/green_peace /r/environmental_policy /r/conservation /r/depthhub /r/indepthsports /r/deeperhubbeta /r/lectures /r/spacepolicy /r/skylon /r/ula /r/isro /r/engineteststands /r/jupiters /r/imaginarystarscapes /r/spacequestions /r/spaceflight /r/moon /r/dione /r/europa /r/oortcloud /r/dwarfplanetceres /r/saturn /r/asteroidbelt /r/mars /r/rhea /r/venus /r/astrophys /r/spacevideos /r/transhuman /r/timereddits /r/virtualreality /r/vive /r/oculus /r/learnvrdev /r/unity3d /r/gamedev /r/crowdfunding /r/crowdsourcing /r/mturk /r/swagbucks /r/beermoney /r/flipping /r/shoplifting /r/thriftstorehauls /r/dvdcollection /r/televisionposterporn /r/concertposterporn /r/movieposterporn /r/lv426 /r/predator /r/arnoldschwarzenegger /r/alanpartridge /r/americandad /r/timanderic /r/homemovies /r/gravityfalls /r/homestarrunner /r/telltale /r/thewalkingdeadgame /r/thewalkingdeadgifs /r/twdnomansland /r/heycarl /r/twdroadtosurvival /r/thewalkingdead /r/zombies /r/guns /r/swissguns /r/opencarry /r/libertarian /r/geolibertarianism /r/basicincome /r/basicincomeactivism /r/mhoc /r/modelaustralia /r/rmtk /r/thenetherlands /r/tokkiefeesboek /r/nujijinactie /r/ik_ihe /r/youirl /r/fite_me_irl /r/2meirl4meirl /r/depression /r/randomactsofcards /r/philately /r/coins /r/coins4sale /r/ancientcoins /r/ancientrome /r/flatblue /r/bestofwritingprompts /r/writingprompts /r/promptoftheday /r/flashfiction /r/keepwriting /r/getmotivated /r/mentors /r/favors /r/recordthis /r/videography /r/animation /r/3dsmax /r/computergraphics /r/cinema4d /r/design /r/ui_design /r/designjobs /r/heavymind /r/wtfart /r/alternativeart /r/imaginaryninjas /r/imaginaryruins /r/isometric /r/imaginaryislands /r/imaginaryverse /r/icandrawthat /r/caricatures /r/imaginaryneweden /r/imaginaryequestria /r/imaginaryaww /r/imaginarycyberpunk /r/chinafuturism /r/scifirealism /r/inegentlemanboners /r/imaginarywtf /r/imaginaryelementals /r/imaginarydinosaurs /r/dinosaurs /r/speculativeevolution /r/hybridanimals /r/photoshopbattles /r/cutouts /r/battleshops /r/graphic_design /r/visualization /r/statistics /r/oncourtanalytics /r/nbaanalytics /r/nba /r/pacers /r/atlantahawks /r/basketball /r/mavericks /r/fcdallas /r/theticket /r/dallasstars /r/bostonbruins /r/patriots /r/tennesseetitans /r/nashvillesounds /r/predators /r/flyers /r/hockeyfandom /r/caps /r/nhl /r/detroitredwings /r/sabres /r/floridapanthers /r/habs /r/montrealimpact /r/alouettes /r/cfl /r/stadiumporn /r/nfl /r/madden /r/eurobowl /r/fantasyfb /r/fantasyfootball /r/49ers /r/footballgamefilm /r/footballstrategy /r/cfb /r/collegebaseball /r/mlbdraft /r/baseball /r/cubs /r/cardinals /r/saintlouisfc /r/stlouisblues /r/stlouis /r/stlouisbiking /r/mobicycling /r/bicycling /r/vintage_bicycles /r/miamibiking /r/fatbike /r/cycling /r/strava /r/phillycycling /r/wheelbuild /r/bikewrench /r/velo /r/bikepolo /r/bicycletouring /r/bicyclingcirclejerk /r/bikecommuting /r/ukbike /r/leedscycling /r/londoncycling /r/fixedgearbicycle /r/cyclingfashion /r/peloton /r/mtb /r/climbingporn /r/adrenaline /r/motocross /r/bmxracing /r/wake /r/snowboardingnoobs /r/freebord /r/snowboarding /r/sledding /r/outdoors /r/soposts /r/cordcutters /r/netflixviavpn /r/hulu /r/firetv /r/netflixbestof /r/raisinghope /r/madmen /r/earthsgottalent /r/bobsburgers /r/fringe /r/louie /r/theoriginals /r/iansomerhalder /r/kat_graham /r/indianaevans /r/janelevy /r/gagegolightly /r/sarahhyland /r/starlets /r/ninadobrev /r/kathrynnewton /r/arielwinter /r/ashleygreene /r/gentlemanboners /r/bandporn /r/musicpics /r/listentomusic /r/listentonew /r/subraddits /r/dtipics /r/damnthatsinteresting /r/interestingasfuck /r/unexpected /r/wtf /r/weird /r/animalsbeingderps /r/animalsbeingconfused /r/humansbeingbros /r/hulpdiensten /r/askle /r/protectandserve /r/good_cop_free_donut /r/bad_cop_follow_up /r/amifreetogo /r/copwatch /r/puppycide /r/underreportednews /r/mediaquotes /r/savedyouaclick /r/news /r/neutralnews /r/ask_politics /r/politicalopinions /r/gunsarecool /r/renewableenergy /r/web_design /r/somebodymakethis /r/somethingimade /r/crafts /r/kidscrafts /r/daddit /r/formulafeeders /r/boobsandbottles /r/csectioncentral /r/predaddit /r/dadbloggers /r/mombloggers /r/cutekids /r/bigfeats /r/scienceparents /r/lv9hrvv /r/sahp /r/tryingforababy /r/waiting_to_try /r/pcos /r/infertility /r/birthparents /r/tfabchartstalkers /r/firsttimettc /r/cautiousbtb /r/ttchealthy /r/xxketo /r/ketoscience /r/ketogains /r/leangains /r/gettingshredded /r/bulkorcut /r/gainit /r/decidingtobebetter /r/zen /r/buddhism /r/astralprojection /r/spirituality /r/hinduism /r/yoga /r/veganfitness /r/posture /r/health /r/ukhealthcare /r/pharmacy /r/nursing /r/doctorswithoutborders /r/humanitarian /r/assistance /r/paranormalhelp /r/paranormal /r/333 /r/askparanormal /r/intelligence /r/blackhat /r/netsec /r/technology /r/newyorkfuturistparty /r/rad_decentralization /r/massachusettsfp /r/opensource /r/alabamafp /r/darknetplan /r/torrents /r/i2p /r/privacy /r/badgovnofreedom /r/censorship /r/governmentoppression /r/descentintotyranny /r/wikileaks /r/dncleaks /r/hillaryforprison /r/the_donald /r/shitredditsays /r/srsmythos /r/srstrees /r/entwives /r/lesbients /r/actuallesbians /r/lesbianromance /r/lesbianerotica /r/l4l /r/dyke /r/ladyladyboners /r/bisexual /r/bisexy /r/biwomen /r/pansexual /r/genderqueer /r/transspace /r/lgbtlibrary /r/lgbtnews /r/dixiequeer /r/lgbt /r/sex /r/helpmecope /r/bpd /r/rapecounseling /r/trueoffmychest /r/suicidewatch /r/bipolarsos /r/bipolar /r/mentalpod /r/adhd /r/hoarding /r/declutter /r/thrifty /r/tinyhouses /r/leanfire /r/lowcar /r/zerowaste /r/simpleliving /r/livingofftheland /r/hunting /r/animaltracking /r/survival /r/vedc /r/4x4 /r/classiccars /r/automotivetraining /r/autodetailing /r/cartalk /r/mercedes_benz /r/motorsports /r/rallycross /r/worldrallycross /r/blancpain /r/nascarhometracks /r/arcaracing /r/stadiumsupertrucks /r/hydroplanes /r/sailing /r/boatbuilding /r/woodworking /r/cottage_industry /r/farriers /r/blacksmith /r/bladesmith /r/knives /r/swissarmyknives /r/switzerland /r/bern /r/sanktgallen /r/liechtenstein /r/erasmus /r/de /r/germanpuns /r/schland /r/rvacka /r/sloensko /r/slovakia /r/belarus /r/andorra /r/europe /r/hungary /r/francophonie /r/thailand /r/vietnam /r/vietnampics /r/travel /r/geography /r/climate /r/drought /r/waterutilities /r/drylands /r/irrigation /r/water /r/onthewaterfront /r/wetlands /r/marinelife /r/ocean /r/seasteading /r/frontier_colonization /r/arcology /r/retrofuturism /r/goldenpath /r/politics /r/moderationtheory /r/wdp /r/outoftheloop /r/wherearetheynow /r/entertainment /r/portlandia /r/themichaeljfoxshow /r/backtothefuture /r/bladerunner /r/filmnoir /r/vintageladyboners /r/classicfilms /r/foreignmovies /r/britishfilms /r/canadianfilm /r/newjerseyfilm /r/newzealandfilm /r/newzealand /r/wellington /r/nzmetahub /r/newzealandhistory /r/scottishhistory /r/scots /r/scottishproblems /r/britishproblems /r/swedishproblems /r/pinsamt /r/sweden /r/svenskpolitik /r/arbetarrorelsen /r/socialism /r/shittydebatecommunism /r/shittysocialscience /r/shittyideasforadmins /r/shittytheoryofreddit /r/shittybuildingporn /r/shittylifeprotips /r/shittyshitredditsays /r/shittyquotesporn /r/shittyama /r/askashittyparent /r/shittyprogramming /r/shittyaskalawyer /r/badlegaladvice /r/badscience /r/badeconomics /r/badhistory /r/historicalrage /r/metarage /r/ragenovels /r/fffffffuuuuuuuuuuuu /r/gaaaaaaayyyyyyyyyyyy /r/lgbteens /r/needafriend /r/rant /r/showerthoughts /r/markmywords /r/calledit /r/futurewhatif /r/sportswhatif /r/alternatehistory /r/maps /r/xkcd /r/kerbalspaceprogram /r/spacesimgames /r/eve /r/scifigaming /r/masseffect /r/imaginarymasseffect /r/imaginaryvampires /r/imaginarytowers /r/imaginarybestof /r/pics /r/spaceporn /r/auroraporn /r/weatherporn /r/sfwpornnetwork /r/fwepp /r/shittyearthporn /r/shittyaskreddit /r/askashittyphilosopher /r/shittyaskhistory /r/shittysuboftheweek /r/shittyaskcooking /r/shittyhub /r/coolguides /r/trendingsubreddits /r/monkslookingatbeer /r/beerporn /r/beerwithaview /r/shittybeerwithaview /r/shittyfoodporn /r/enttreats /r/trees /r/eldertrees /r/vaporents /r/crainn /r/eirhub /r/fairepublicofireland /r/gaeltacht /r/westmeath /r/tipperary /r/limerick /r/kilkenny /r/ireland /r/irejobs /r/resumes /r/careerguidance /r/flatone /r/centralillinois /r/chicubs /r/whitesox /r/minnesotatwins /r/minnesotavikings /r/greenbaypackers /r/jaguars /r/miamidolphins /r/nflroundtable /r/detroitlions /r/forhonor /r/vikingstv /r/hannibaltv /r/thepathhulu /r/batesmotel /r/hannibal /r/hitchcock /r/silentmoviegifs /r/moviestunts /r/bollywoodrealism /r/indiamain /r/indianews /r/asia /r/oldindia /r/explorepakistan /r/churchporn /r/medievalporn /r/castles /r/historyporn /r/thewaywewere /r/1970s /r/classicmovietrailers /r/warmovies /r/moviecritic /r/trailers /r/liveaction /r/animedeals /r/dbz /r/toonami /r/regularshow /r/thelifeandtimesoftim /r/aquajail /r/modern_family /r/supernatural /r/mishacollins /r/jaredpadalecki /r/fandomnatural /r/fangirls /r/trollxgirlgamers /r/trollmedia /r/trollgaming /r/trollmua /r/justtrollxthings /r/trollxmoms /r/trollmeta /r/trollychromosome /r/oney /r/askwomen /r/okcupid /r/relationship_advice /r/help /r/bugs /r/redditdev /r/enhancement /r/yoursub /r/horrorreviewed /r/truecreepy /r/metatruereddit /r/truepolitics /r/truehub /r/truegaming /r/askgames /r/freegamesonandroid /r/androidapps /r/apphookup /r/browsemyreddit /r/findareddit /r/trap /r/naut /r/militaryfinance /r/army /r/militarystories /r/nationalguard /r/uscg /r/usa /r/murica /r/lonestar /r/whataburger /r/fastfood /r/cocacola /r/kelloggs /r/kellawwggs /r/awwducational /r/marinebiologygifs /r/biologygifs /r/chemicalreactiongifs /r/homechemistry /r/holdmybeaker /r/holdmybeer /r/movieoftheday /r/sharknado /r/syfy /r/killjoys /r/theexpanse /r/truedetective /r/boardwalkempire /r/mobcast /r/1920s /r/1960s /r/beatles /r/minimaluminiumalism /r/ghostsrights /r/botsrights /r/totallynotrobots /r/robotics /r/manna /r/singularity /r/futureporn /r/singularitarianism /r/automate /r/darkfuturology /r/controlproblem /r/aiethics /r/ainothuman /r/neuraljokes /r/3amjokes /r/mommajokes /r/antijokes /r/absolutelynotme_irl /r/toomeirlformeirl /r/meirl /r/tree_irl /r/fishpost /r/mod_irl /r/pics_irl /r/teleshits /r/bitstrips /r/stopbullyingcomics /r/animalsbeingjerks /r/surfinganimals /r/unorthocat /r/catsubs /r/stuffoncats /r/catsinbusinessattire /r/catsinsinks /r/catsonkeyboards /r/mechanicalkeyboards /r/hackedgadgets /r/techsupportmacgyver /r/techsupport /r/programming /r/algorithms /r/datamining /r/datasets /r/wordcloud /r/datavizrequests /r/funnycharts /r/mapporn /r/mapmaking /r/worldbuilding /r/scificoncepts /r/apocalypseporn /r/imaginaryjerk /r/braveryjerk /r/circlejerk /r/politicaldiscussion /r/politicalfactchecking /r/moderatepolitics /r/truereddit /r/malelifestyle /r/fitness /r/swimming /r/freediving /r/bikeshop /r/climbing /r/climbharder /r/bouldering /r/climbergirls /r/womenshredders /r/skatergirls /r/girlsurfers /r/kiteboarding /r/longboarding /r/streetboarding /r/letsgosnowboarding /r/spliddit /r/backcountry /r/wjdbbl2 /r/caving /r/nationalparks /r/parkrangers /r/thesca /r/searchandrescue /r/wildernessbackpacking /r/campinggear /r/flashlight /r/camping /r/yellowstone /r/wmnf /r/pacificcresttrail /r/cdt /r/ultralight /r/backpacking /r/travelpartners /r/adventures /r/libraryofshadows /r/shortscarystories /r/shortscarystoriesooc /r/nosleepooc /r/nosleep&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;centrality&quot;&gt;Centrality&lt;/h1&gt;
+
+&lt;p&gt;Centrality is anohter important topic in graph theory. Here’s a brief introduction to centrality from &lt;a href=&quot;https://en.wikipedia.org/wiki/Centrality&quot;&gt;Wikipedia&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;In graph theory and network analysis, indicators of centrality identify the most important vertices within a graph. Applications include identifying the most influential person(s) in a social network, key infrastructure nodes in the Internet or urban networks, and super-spreaders of disease.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;There are several different methods of measuring centrality in a graph. Here I use &lt;code class=&quot;highlighter-rouge&quot;&gt;eigenvector_centrality_numpy&lt;/code&gt;, a function included in NetworkX. It takes in a graph and returns a dictionary with graph nodes as keys and node centrality as values.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eigenvector_centrality_numpy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s see which subreddit has the highest centrality:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/imaginarybattlefields 0.0721530261127
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;True
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Since all of the centrality values are unique, we can look up nodes by their centrality values.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;subr_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;node&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;subr_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;node&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt;
+    
+&lt;span class=&quot;n&quot;&gt;sorted_subr_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;subr_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subr_list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/imaginarybattlefields /r/imaginarycityscapes /r/imaginarywastelands /r/imaginarywildlands /r/imaginaryleviathans /r/imaginarydragons /r/imaginarystarscapes /r/imaginarywesteros /r/imaginaryartifacts /r/imaginaryangels /r/imaginarymaps /r/imaginarybehemoths /r/imaginarydemons /r/imaginaryelves /r/imaginarycentaurs /r/imaginaryfuturewar /r/imaginarysoldiers /r/imaginaryhistory /r/imaginaryarmor /r/imaginarystarships /r/imaginarynetwork /r/imaginaryjedi /r/imaginarydinosaurs /r/imaginarysteampunk /r/imaginarycyberpunk /r/imaginaryarchers /r/imaginaryvehicles /r/imaginaryanime /r/imaginaryfallout /r/imaginaryastronauts /r/imaginarymusic /r/imaginaryfactories /r/imaginaryequestria /r/imaginarywarships /r/imaginaryazeroth /r/imaginaryarrakis /r/imaginarydisney /r/imaginarypolitics /r/imaginaryhorrors /r/imaginarywinterscapes /r/imaginaryseascapes /r/imaginarypirates /r/imaginarywarriors /r/imaginarymiddleearth /r/imaginarygallifrey /r/imaginarymechs /r/imaginarypropaganda /r/imaginarymerfolk /r/imaginaryvikings /r/imaginaryundead /r/imaginarybeasts /r/imaginarymutants /r/imaginaryruins /r/imaginarytamriel /r/imaginaryforests /r/imaginaryelementals /r/imaginaryskyscapes /r/imaginarymonuments /r/imaginarywaterfalls /r/imaginaryworlds /r/imaginarywizards /r/imaginaryinteriors /r/imaginaryhogwarts /r/imaginarytowers /r/imaginaryarchitecture /r/imaginaryweaponry /r/imaginarygaming /r/imaginarycastles /r/imaginaryrobotics /r/imaginarybooks /r/imaginarygnomes /r/imaginaryvillages /r/imaginarydeserts /r/imaginarywerewolves /r/imaginarydieselpunk /r/imaginaryvampires /r/imaginaryadrenaline /r/imaginarykanto /r/imaginarynatives /r/imaginaryrivers /r/imaginarytemples /r/imaginaryassassins /r/imaginaryvolcanoes /r/imaginaryclerics /r/imaginaryprisons /r/imaginarygiants /r/imaginarycowboys /r/imaginaryhumans /r/imaginarydwarves /r/imaginarycaves /r/imaginarytrolls /r/imaginarywalls /r/imaginarylakes /r/imaginarywitches /r/imaginaryorcs /r/imaginarycanyons /r/imaginaryasylums /r/imaginaryimmortals /r/imaginaryaliens /r/imaginarynobles /r/imaginaryspirits /r/imaginaryaetherpunk /r/imaginarytrees /r/imaginaryislands /r/imaginaryninjas /r/imaginaryscience /r/imaginarymountains /r/imaginaryknights /r/imaginarygoblins /r/imaginaryfaeries /r/imaginarygotham /r/imaginarycybernetics /r/imaginaryooo /r/imaginaryderelicts /r/imaginaryfood /r/imaginaryworldeaters /r/imaginarymindscapes /r/imaginaryaww /r/imaginarymarvel /r/imaginaryweather /r/imaginarynewnewyork /r/imaginaryspidey /r/imaginaryautumnscapes /r/imaginarywarhammer /r/imaginaryfeels /r/imaginarywitcher /r/imaginaryvessels /r/imaginarytaverns /r/imaginarybestof /r/imaginaryairships /r/imaginaryportals /r/imaginaryfashion /r/imaginarylovers /r/imaginarydc /r/imaginaryanimals /r/imaginaryhellscapes /r/imaginarycolorscapes /r/imaginarymonstergirls /r/imaginaryswamps /r/imaginarymythology /r/imaginaryscholars /r/imaginaryladyboners /r/imaginaryfuturism /r/imaginaryaviation /r/imaginarypathways /r/imaginarygatherings /r/imaginarybodyscapes /r/imaginaryoverwatch /r/imaginarydwellings /r/imaginarystephenking /r/specart /r/inegentlemanboners /r/comicbookart /r/imaginarymasseffect /r/imaginaryhalo /r/imaginaryjerk /r/backgroundart /r/futureporn /r/imaginarywallpapers /r/imaginaryfamilies /r/imaginarylibraries /r/imaginaryturtleworlds /r/imaginarydesigns /r/wallpapers /r/apocalypseporn /r/comicbookporn /r/isometric /r/imaginarybakerst /r/imaginaryverse /r/imaginarysunnydale /r/imaginaryfederation /r/imaginarysanctuary /r/starshipporn /r/imaginarystarcraft /r/imaginaryoldkingdom /r/imaginarynarnia /r/imaginarycybertron /r/gameworlds /r/imaginarycarnage /r/imaginaryboners /r/icandrawthat /r/imaginarycosmere /r/imaginaryaperture /r/armoredwomen /r/imaginarywtf /r/unusualart /r/imaginaryblueprints /r/alternativeart /r/sympatheticmonsters /r/adorabledragons /r/imaginarysummerscapes /r/imaginarygayboners /r/imaginarystash /r/artistoftheday /r/imaginaryglaciers /r/imaginaryhybrids /r/imaginaryadventurers /r/imaginarymetropolis /r/craftsoficeandfire /r/popartnouveau
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There seems to be a network of “imaginary” subreddits that have the highest centrality. The members of this network probably all link to themselves as well as many other subreddits as the “imaginary” topics span a wide range content. This network may be drowning out other nodes that would otherwise have a high centrality relative to the rest of the subreddits. It might be interesting to eliminate these nodes from the graph and recalculate centrality. Let’s look at the distribution of centrality values:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;centrality&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reverse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;Subreddit Centrality (top 1000)&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;Rank&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;Centrality&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;savefig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expanduser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;~/Documents/GitHub/briancaffey.github.io/img/subreddit_graph/centrality.png&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/subreddit_graph/centrality.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;connectedness&quot;&gt;Connectedness&lt;/h1&gt;
+
+&lt;p&gt;Let’s take a look at the graph as a whole. One thing I’m not sure of is whether or not the entire graph is connected. This means that any node can be reached from any other node. Since we constructed the graph from 49 unrelated nodes, it is possible that the graph is unconnected. This would mean that one or more of the default subreddits and its subreddits is not connected with the rest of the graph. In searching for the shortest path I did not come across any pairs of nodes that did not have a path between themselves. I wouldn’t be surprised if there are a handful of nodes that stand on their own.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#size of graph: nodes and edges (or, subreddits and connecting links)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Our graph has &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number_of_nodes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39; nodes and &#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number_of_edges&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39; edges.&#39;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Our graph has 29854 nodes and 149491 edges.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;True of False: our graph is connected... &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is_connected&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;!&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;True of False: our graph is connected... False!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Gc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connected_component_subgraphs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;The largest connected component subgraph has &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number_of_nodes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Gc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; nodes. &quot;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The largest connected component subgraph has 29840 nodes. 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There are 14 nodes that are not connected to the main connected component. Let’s list them.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_dict_of_lists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;G1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodelist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_dict_of_lists&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Gc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nodelist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())):&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/r/spacediscussions /r/wtfit.gif /r/space. /r/subreddit_graph /r/vidalia /r/listentothis. /r/history. /r/all. /r/ghostdriver /r/personalfinance. /r/toombscounty /r/gaming /r/science /r/books.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Some of the large communities on reddit include /r/books, /r/gaming and /r/science. These subreddits list related subreddits on separate wiki pages since there are many related subreddits for each one. They were most likely all captured in the subsequent levels of the graph, but they also did not link back to /r/science. Here’s an example:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;master_df_u&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;subreddit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;/r/physics&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;related&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[&#39;/r/physicsjokes&#39;, &#39;/r/gradadmissions&#39;, &#39;/r/homeworkhelp&#39;, &#39;/r/scienceimages&#39;, &#39;/r/askacademia&#39;, &#39;/r/physicsgifs&#39;, &#39;/r/physicsstudents&#39;, &#39;/r/gradschool&#39;, &#39;/r/askphysics&#39;, &#39;/r/physics&#39;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I’ve got some additional ideas to explore in another post on this topic, such as finding cliques and maximual cliques, and doing graph visualizations with D3.js. If you are interested in playing with the data, you can clone &lt;a href=&quot;https://github.com/briancaffey/reddit-graph-analysis&quot;&gt;my GitHub repo&lt;/a&gt; and load the pickled DataFrames like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_pickle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;pickle/master_df.p&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Fri, 03 Mar 2017 00:00:00 -0500</pubDate>
+        <link>/2017/03/03/graph_subreddit.html</link>
+        <guid isPermaLink="true">/2017/03/03/graph_subreddit.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>How to embed Bokeh plots in Jekyll blogs on GitHub Pages</title>
@@ -2873,7 +3478,7 @@ README.md		hello			runtime.txt
 &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt; file will give instructions to your dyno regarding what it should do. Take a look inside this file, and you will see &lt;code class=&quot;highlighter-rouge&quot;&gt;web: gunicorn gettingstarted.wsgi --log-file -&lt;/code&gt;. This indicates that the dyno will be making a website using the file &lt;code class=&quot;highlighter-rouge&quot;&gt;gettingstarted.wsgi&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Delete the contents of this file and copy in the following line: 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;worker: tweetbot.py&lt;/code&gt;.&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;worker: python tweetbot.py&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;This will tell our dyno that we want it to do a simple task: run &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt;. Next, check out &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt;. The contents of this file indicate the packages our Python script needs to run. For our twitter-bot, we only need the Tweepy package. To check which version of Tweepy you have on your computer, run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip freeze | grep tweepy&lt;/code&gt; in the terminal. Mine reads &lt;code class=&quot;highlighter-rouge&quot;&gt;tweepy==3.5.0&lt;/code&gt;. Copy &lt;code class=&quot;highlighter-rouge&quot;&gt;tweepy==3.5.0&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; and delete the other lines.&lt;/p&gt;
 
