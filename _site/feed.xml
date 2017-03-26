@@ -6,8 +6,8 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 08 Mar 2017 22:39:10 -0500</pubDate>
-    <lastBuildDate>Wed, 08 Mar 2017 22:39:10 -0500</lastBuildDate>
+    <pubDate>Sun, 26 Mar 2017 14:55:27 -0400</pubDate>
+    <lastBuildDate>Sun, 26 Mar 2017 14:55:27 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -844,6 +844,446 @@ def vote(request, question_id):
         <pubDate>Mon, 06 Mar 2017 00:00:00 -0500</pubDate>
         <link>/2017/03/06/django-poll-tutorial.html</link>
         <guid isPermaLink="true">/2017/03/06/django-poll-tutorial.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Setting up a Django app on Heroku</title>
+        <description>
+&lt;p&gt;This is a simple guide to setting up a Django project on Heroku.&lt;/p&gt;
+
+&lt;p&gt;The first step is to create a virutal environment in a new directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ mkdir proj &amp;amp;&amp;amp; cd proj
+$ virtualenv -p python3 .
+$ source bin/activate 
+(proj) $ mkdir src
+(proj) $ cd src
+(proj) $ pip install django==1.10.5
+(proj) $ django-admin.py startproject myproj . 
+(proj) $ ls
+myproj        manage.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This sets up a virtual environment and creates an empty Django project. The next step is to create a settings module.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ cd myproj
+(proj) $ mkdir settings &amp;amp;&amp;amp; cd settings
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we want to add &lt;code class=&quot;highlighter-rouge&quot;&gt;__init__.py&lt;/code&gt; to settings to make it a python module.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;src/myproj/settings/&lt;strong&gt;init&lt;/strong&gt;.py&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.base&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.production&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+	&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.local&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;except&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
+	&lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next we want to change the &lt;code class=&quot;highlighter-rouge&quot;&gt;BASE_DIR&lt;/code&gt; (base directory) in &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;settings.py&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Build paths inside the project like this: os.path.join(BASE_DIR, ...)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dirname&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;abspath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__file__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next we need to move &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; into the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings&lt;/code&gt; folder and rename it &lt;code class=&quot;highlighter-rouge&quot;&gt;base.py&lt;/code&gt; and then copy &lt;code class=&quot;highlighter-rouge&quot;&gt;base.py&lt;/code&gt; twice as &lt;code class=&quot;highlighter-rouge&quot;&gt;local.py&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;production.py&lt;/code&gt; these three files will live in &lt;code class=&quot;highlighter-rouge&quot;&gt;settings&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ mv settings.py settings
+(proj) $ cd settings
+(proj) $ mv settings.py base.py
+(proj) $ cp base.py local.py
+(proj) $ cp base.py production.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we need to install PostgreSQL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ pip install psycopg2
+(proj) $ pip install gunicorn dj-database-url
+(proj) $ pip install django-crispy-forms
+(proj) $ pip install pillow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;At this point we can check to see if everything installed correctly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ pip freeze
+appdirs==1.4.3
+dj-database-url==0.4.2
+Django==1.10.5
+django-crispy-forms==1.6.1
+gunicorn==19.7.1
+olefile==0.44
+packaging==16.8
+Pillow==4.0.0
+psycopg2==2.7.1
+pyparsing==2.2.0
+six==1.10.0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And then we can add these to a file in our base directory called &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ pip freeze &amp;gt; requirements.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we can run migrations and create a superuser:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ python manage.py migrate
+(proj) $ python manage.py createsuperuser
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we need to initialize our git repository and create &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ git init
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can put &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; in our base directory and add the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;myproj/settings/local.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We also want to ignore several other python-related files in our directory. An easy way to do this is to add python gitignore. This can be found &lt;a href=&quot;https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Next we can make our first commit:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ git add --all
+(proj) $ git commit -m &quot;initial commit&quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The next step involves setting up Heroku. First we need to create a &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt; in our base directory:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Procfile&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;web: gunicorn myproj.wsgi --log-file -
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next we can try to run Heroku locally, but first we need to add &lt;code class=&quot;highlighter-rouge&quot;&gt;0.0.0.0&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;ALLOWED_HOSTS&lt;/code&gt; in &lt;code class=&quot;highlighter-rouge&quot;&gt;production.py&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;base.py&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;local.py&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We should now see “It worked!” at &lt;code class=&quot;highlighter-rouge&quot;&gt;0.0.0.0:5000&lt;/code&gt;, which tells us that everything is working properly.&lt;/p&gt;
+
+&lt;p&gt;Next we need to create the project on Heroku:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ heroku login
+(proj) $ heroku create my-unique-project-name-123
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can see our project at &lt;code class=&quot;highlighter-rouge&quot;&gt;my-unique-project-name-123.herokuapp.com&lt;/code&gt;, and it should say &lt;code class=&quot;highlighter-rouge&quot;&gt;Heroku | Welcome to your new app!&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Next we will want to add &lt;code class=&quot;highlighter-rouge&quot;&gt;my-unique-project-name-123.herokuapp.com&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;ALLOWED_HOSTS&lt;/code&gt; in &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The very last step is to add the specific version of Python to a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;runtime.txt&lt;/code&gt; in our base directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ python -V
+Python 3.4.3
+(proj) $ echo &quot;python-3.4.3&quot; &amp;gt; runtime.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before we push to Heroku we need to change a setting on Heroku related to static files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ heroku config:set DISABLE_COLLECTSTATIC=1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can finally push the git repository to Heroku:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ git push heroku master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now if we go to our site on heroku we should see:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Not Found  
+
+The requested URL / was not found on this server.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There is a helpful guide on deploying Python and Django apps on Heroku’s website &lt;a href=&quot;https://devcenter.heroku.com/articles/deploying-python&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here’s an important excerpt regarding databases:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;For Django applications, a Heroku Postgres hobby-dev database is automatically provisioned. This populates the DATABASE_URL environment variable.
+No add-ons are automatically provisioned if a pure Python application is detected. If you need a SQL database for your app, add one explicitly:&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ heroku addons:create heroku-postgresql:hobby-dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So we need to run this command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;
+(proj) $ heroku addons:create heroku-postgresql:hobby-dev
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we need to access the terminal on our Heroku server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ heroku run bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we need to add database-related information to &lt;code class=&quot;highlighter-rouge&quot;&gt;production.py&lt;/code&gt; under the &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASES&lt;/code&gt; section:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;dj_database_url&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;db_from_env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dj_database_url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;default&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;db_from_env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now we can push to Heroku:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ git push heroku master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we can run our migrations:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ heroku run python manage.py makemigrations
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we can run &lt;code class=&quot;highlighter-rouge&quot;&gt;migrate&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;createsuperuser&lt;/code&gt; on our Heroku server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ heroku run python manage.py migrate &amp;amp;&amp;amp; heroku run python manage.py createsuperuser
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we should be able to login to the admin page with the account we just created, but CSS is still not working at this point. Here’s how we configure static files to get CSS to work:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ pip install whitenoise
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;whitenoise&lt;/code&gt; is needed so Heroku can run our static files.&lt;/p&gt;
+
+&lt;p&gt;Next we want to make sure to include &lt;code class=&quot;highlighter-rouge&quot;&gt;whitenoise&lt;/code&gt; in &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ pip freeze &amp;gt; requirements.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we need to add the following item to the list of &lt;code class=&quot;highlighter-rouge&quot;&gt;MIDDLEWARE&lt;/code&gt; components. This needs to be added to BOTH &lt;code class=&quot;highlighter-rouge&quot;&gt;production.py&lt;/code&gt; AND &lt;code class=&quot;highlighter-rouge&quot;&gt;base.py&lt;/code&gt; in order for the local files to show on both our heroku site and the locally served site with &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku local web&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;MIDDLEWARE = [
+[...]
+&#39;whitenoise.middleware.WhiteNoiseMiddleware&#39;,
+[...]
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next we have a few more items to add to our settings files:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;production.py&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;n&quot;&gt;STATICFILES_DIRS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;STATIC_ROOT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;live-static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;static-root&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;STATICFILES_STORAGE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;whitenoise.django.GzipManifestStaticFilesStorage&#39;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#STATIC_ROOT = &quot;/home/cfedeploy/webapps/cfehome_static_root/&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;MEDIA_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/media/&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;MEDIA_ROOT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;live-static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;media-root&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And we also need to add some files to our base directory that will hold our static files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ mkdir static
+(proj) $ echo &quot;body {color:#000;}&quot; &amp;gt; static/main.css
+(proj) $ mkdir live-static
+(proj) $ mkdir live-static/static-root
+(proj) $ mkdir live-static/media-root
+(proj) $ 
+(proj) $ 
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we also need to add the following to the end of &lt;code class=&quot;highlighter-rouge&quot;&gt;production.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;STATIC_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;/static/&#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;STATICFILES_DIRS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;STATIC_ROOT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;live-static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;static-root&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;STATICFILES_STORAGE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;whitenoise.django.GzipManifestStaticFilesStorage&#39;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#STATIC_ROOT = &quot;/home/cfedeploy/webapps/cfehome_static_root/&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;MEDIA_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/media/&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;MEDIA_ROOT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;live-static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;media-root&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;base.py&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;local.py&lt;/code&gt; should have the following:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;STATIC_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;/static/&#39;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;STATICFILES_DIRS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;STATIC_ROOT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;live-static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;static-root&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;MEDIA_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/media/&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;MEDIA_ROOT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;live-static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;media-root&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next we want to run &lt;code class=&quot;highlighter-rouge&quot;&gt;collectstatic&lt;/code&gt; locally:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ python manage.py collectstatic
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We also want to add a blank file to &lt;code class=&quot;highlighter-rouge&quot;&gt;live-static/media-root&lt;/code&gt; so that it becomes tracked in git:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ echo &quot;some text&quot; &amp;gt; live-static/media-root/blank.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we can commit these changes and push to Heroku, and check to see if the static files are working in the admin panel. We also want to set &lt;code class=&quot;highlighter-rouge&quot;&gt;DISABLE_COLLECTSTATIC&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ git add --all
+(proj) $ git commit -m &quot;added static files&quot;
+(proj) $ git push heroku master
+(proj) $ heroku config:set DISABLE_COLLECTSTATIC=0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now we should be able to see the admin panel with working CSS on both the live and local heroku sites.&lt;/p&gt;
+
+&lt;h1 id=&quot;adding-an-app-and-configuring-bootstrap&quot;&gt;Adding an app and configuring Bootstrap&lt;/h1&gt;
+
+&lt;p&gt;Now that everything seems to be working we can start building our app.&lt;/p&gt;
+
+&lt;p&gt;Let’s start by creating a new app:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ python manage.py startapp pages
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pages&lt;/code&gt; will be the name of an app that we create here.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code class=&quot;highlighter-rouge&quot;&gt;pages/views.py&lt;/code&gt; we can add a class-based view that will serve as the homepage:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.shortcuts&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.views.generic&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;View&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Create your views here.&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HomeView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;pages/home.html&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We then update &lt;code class=&quot;highlighter-rouge&quot;&gt;urls.py&lt;/code&gt; to include our new view:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.conf.urls&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;services.views&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HomeView&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;urlpatterns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;r&#39;^admin/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;site&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;r&#39;^$&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HomeView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as_view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;home&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Next we have to add &lt;code class=&quot;highlighter-rouge&quot;&gt;pages&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;INSTALLED_APPS&lt;/code&gt; in both &lt;code class=&quot;highlighter-rouge&quot;&gt;production.py&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;local.py&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Next we need to make some folders within our new &lt;code class=&quot;highlighter-rouge&quot;&gt;pages&lt;/code&gt; app:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ mkdir page/templates &amp;amp;&amp;amp; cd pages/templates
+(proj) $ mkdir pages
+(proj) $ touch home.html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then we need to add the following to &lt;code class=&quot;highlighter-rouge&quot;&gt;home.html&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{% extends &quot;base.html&quot; %}
+
+{% block content %}
+
+{% endblock content%}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next we need to update &lt;code class=&quot;highlighter-rouge&quot;&gt;DIR&lt;/code&gt; in &lt;code class=&quot;highlighter-rouge&quot;&gt;TEMPLATES&lt;/code&gt; in &lt;code class=&quot;highlighter-rouge&quot;&gt;base.py&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;local.py&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;production.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;&#39;DIRS&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;templates&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)],&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;Next we need to add a &lt;code class=&quot;highlighter-rouge&quot;&gt;templates&lt;/code&gt; folder to the root of our project:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;(proj) $ mkdir templates
+(proj) $ touch tempates/base.html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we can add a basic Bootstrap template to &lt;code class=&quot;highlighter-rouge&quot;&gt;base.html&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;http-equiv=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;X-UA-Compatible&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;IE=edge&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;viewport&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;width=device-width, initial-scale=1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;Bootstrap 101 Template&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+
+	&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Latest compiled and minified CSS --&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;integrity=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;crossorigin=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;anonymous&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+		&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Optional theme --&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;integrity=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;crossorigin=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;anonymous&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- WARNING: Respond.js doesn&#39;t work if you view the page via file:// --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!--[if lt IE 9]&amp;gt;
+      &amp;lt;script src=&quot;https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+      &amp;lt;script src=&quot;https://oss.maxcdn.com/respond/1.4.2/respond.min.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;![endif]--&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;h1&amp;gt;&lt;/span&gt;Hello, world!&lt;span class=&quot;nt&quot;&gt;&amp;lt;/h1&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- jQuery (necessary for Bootstrap&#39;s JavaScript plugins) --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Include all compiled plugins (below), or include individual files as needed --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Latest compiled and minified JavaScript --&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;integrity=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;crossorigin=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;anonymous&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This html was taken from &lt;a href=&quot;http://getbootstrap.com/getting-started/&quot;&gt;Bootstrap’s ‘Get Started’ page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now we can run &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku local web&lt;/code&gt; and confirm that we see “Hello, world!” from the Bootstrap template.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 04 Mar 2017 00:00:00 -0500</pubDate>
+        <link>/2017/03/04/settinging-up-django-with-heroku.html</link>
+        <guid isPermaLink="true">/2017/03/04/settinging-up-django-with-heroku.html</guid>
         
         
       </item>
@@ -5978,289 +6418,6 @@ $ git push heroku master
         <category>python,</category>
         
         <category>heroku</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Simple Jekyll tutorial with Github Pages</title>
-        <description>&lt;p&gt;I’m absolutely loving my new Jekyll blog, but getting it setup wasn’t that easy. Finding useful and accessible information on how everything works was very difficult. In the end, faithfully following tutorials and crashing around on Github resulted in this functional blog.&lt;/p&gt;
-
-&lt;p&gt;This post will provide a Jekyll blog setup tutorial assuming very little knowledge of the languages and technologies it is built on (Github, git, HTML, Markdown, Jekyll, Ruby, Liquid templates). Casually surveying friends and colleagues, it seems that many people have heard of Github Pages, but haven’t explored it for a number of reasons. Here is what I hope to accomplish:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Help you get setup with everything you will need before you start building a Jekyll blog&lt;/li&gt;
-  &lt;li&gt;Build a clean, professional site that let’s you show off your resume, link to your social media accounts and build blog posts to catalog your ideas and share your opinions&lt;/li&gt;
-  &lt;li&gt;Provide links to more in depth resources on the basics as well as links to more advanced topics&lt;/li&gt;
-  &lt;li&gt;(I’ve written this tutorial assuming you are using an Apple computer)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The first few steps are the easiest. So let’s jump right in!&lt;/p&gt;
-
-&lt;h2 id=&quot;step-1-github-pageshttpspagesgithubcom&quot;&gt;Step 1: &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;Check out the instructions that Github offers on their &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; site. If you don’t already have a Github account, &lt;a href=&quot;https://github.com/join&quot;&gt;get one first&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The username you choose on Github will be the first part of the URL that your site uses, but you can &lt;a href=&quot;https://help.github.com/articles/about-supported-custom-domains/&quot;&gt;change this later&lt;/a&gt;. For example, if your name is Art Vandelay and you select &lt;em&gt;artvandelay&lt;/em&gt; as your Github username, your site’s URL will be &lt;em&gt;artvandelay.github.io&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;As the Github pages guide instructs you to do, create a repository titled &lt;em&gt;username&lt;/em&gt;.github.io (where &lt;em&gt;username&lt;/em&gt; is your Github account name). You don’t need to initialize the repository with the ReadMe.md file. This step is very important and any variation in the name of this repository will not result in a successful Github Pages site.&lt;/p&gt;
-
-&lt;p&gt;Select “A terminal” when you see the question &lt;em&gt;“What git client are you using?”&lt;/em&gt; (it should already be selected). You may be asking yourself, “what is git?” For now, just think of it as a version control manager.&lt;/p&gt;
-
-&lt;p&gt;This next step is where I ran into a few difficulties, so I’m going to clarify a few things. Eventually, your newly created repository &lt;em&gt;username&lt;/em&gt;.github.io will house all of the files that will run your blog, including the HTML, CSS files, etc. What you need to do next is create a folder on your computer where you will keep a copy of all of your site’s files. You will use git to push files from this local folder on your computer to your repository that is ‘hosting’ your Jekyll site. We will talk about what “using git” means in just a bit.&lt;/p&gt;
-
-&lt;p&gt;I keep mine in a folder at the location &lt;code class=&quot;highlighter-rouge&quot;&gt;~/Github/briancaffey.github.io&lt;/code&gt; (where &lt;code class=&quot;highlighter-rouge&quot;&gt;~&lt;/code&gt; references my ‘Home’ folder). If you are not familiar with Github, read the next few paragraphs carefully before doing anything. The command listed in step 2 of the &lt;a href=&quot;https://pages.github.com/&quot;&gt;Github Pages&lt;/a&gt; instructions tells you to run the following command in your terminal:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ git clone https://github.com/username/username.github.io
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This will create a file named username.github.io &lt;em&gt;inside&lt;/em&gt; whatever folder you are currently in. Open up terminal and type in the following command, then press enter. (Don’t type the &lt;code class=&quot;highlighter-rouge&quot;&gt;$&lt;/code&gt;, just type &lt;code class=&quot;highlighter-rouge&quot;&gt;pwd&lt;/code&gt;; the &lt;code class=&quot;highlighter-rouge&quot;&gt;$&lt;/code&gt; signifies that you are in the terminal).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ pwd
-User/yourmaclogin/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You should see a file path, something like &lt;code class=&quot;highlighter-rouge&quot;&gt;Users/yourmaclogin&lt;/code&gt; on the following line. &lt;code class=&quot;highlighter-rouge&quot;&gt;pwd&lt;/code&gt; means “Print Working Directory”, and that’s just what you did. Your “working directory” is the directory you are “at” (sorry about the poor English, but this is the easiest way to communicate this idea).&lt;/p&gt;
-
-&lt;p&gt;So, you should choose the folder that you want to “clone” (copy) your empty &lt;em&gt;username&lt;/em&gt;.github.io repository into. We will learn two more commands that will help us “navigate” our file system.&lt;/p&gt;
-
-&lt;p&gt;Suppose you have a folder named &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; with the following files inside that folder: &lt;code class=&quot;highlighter-rouge&quot;&gt;sub1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;sub2&lt;/code&gt;. Inside &lt;code class=&quot;highlighter-rouge&quot;&gt;sub1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;sub2&lt;/code&gt;, suppose you have some text files: &lt;code class=&quot;highlighter-rouge&quot;&gt;sub1_example.txt&lt;/code&gt; inside the folder &lt;code class=&quot;highlighter-rouge&quot;&gt;sub1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;sub2_example.txt&lt;/code&gt; inside &lt;code class=&quot;highlighter-rouge&quot;&gt;sub2&lt;/code&gt;. If your current working directory is &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;, then we can list all of the file and folder that are directly inside of &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; with the following command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ ls
-sub1 sub2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ls&lt;/code&gt; is short for “list” and it simply lists files and folders that are directly inside a file. It won’t list either of the text files, because those are not directly inside of &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;, even though they technically are located “within” it.&lt;/p&gt;
-
-&lt;p&gt;In order to see these text files, you will need to change our working directory. You can do this with the “change directory” command that is conveniently called &lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ cd sub1
-$ ls 
-sub1_example.txt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Great! Now what about sub2? The &lt;code class=&quot;highlighter-rouge&quot;&gt;cd &amp;lt;folder&amp;gt;&lt;/code&gt; command takes us inside a folder that is in our working directory. It can also take us to the folder that &lt;em&gt;contains&lt;/em&gt; out working directory. Check out this example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ cd ..
-$ pwd 
-/main
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cd ..&lt;/code&gt; takes us from &lt;code class=&quot;highlighter-rouge&quot;&gt;sub1&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;. If you are not sure where you are, just run the &lt;code class=&quot;highlighter-rouge&quot;&gt;ls&lt;/code&gt; command and you can see the contents of your working directory.&lt;/p&gt;
-
-&lt;p&gt;Ok, once you have a handle on this, run the following command in the terminal. Be sure to replace &lt;em&gt;username&lt;/em&gt; with your actual Github username in both places, otherwise you will see an error. So go ahead and run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ git clone https://github.com/username/username.github.io
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This concludes the first step, let’s move on to Step 2: Jekyll.&lt;/p&gt;
-
-&lt;h2 id=&quot;step-2-jekyllhttpsjekyllrbcom&quot;&gt;Step 2: &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;So what exactly is Jekyll? Here an explanation from Jekyll’s &lt;a href=&quot;https://jekyllrb.com/docs/home/&quot;&gt;website&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;em&gt;Jekyll is a simple, blog-aware, static site generator. It takes a template directory containing raw text files in various formats, runs it through a converter (like Markdown) and our Liquid renderer, and spits out a complete, ready-to-publish static website suitable for serving with your favorite web server. Jekyll also happens to be the engine behind GitHub Pages, which means you can use Jekyll to host your project’s page, blog, or website from GitHub’s servers for free.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This explanation didn’t make much sense to me when I first attempted to make my Jekyll site, so let me try to explain it in another way. Jekyll is a system of folders and files that allow you to make simple web pages. When you put this system of folders and file system on Github, it generates a website that is absolutely free. Instead of writing HTML, you write content in template documents (Markdown files) that are automatically converted to beautiful HTML pages with mobile-friendly responsiveness.&lt;/p&gt;
-
-&lt;p&gt;Let’s go ahead with out website setup! Go back to Jekyll’s website and look at the very simple instructions they provide for quick-start installation, but don’t run them just yet!&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ gem install jekyll
-$ jekyll new my-awesome-site
-$ cd my-awesome-site
-$ jekyll serve
-# =&amp;gt; Now browse to http://localhost:4000
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We will be modifying these commands slightly to get our website up and running. The first command installs Jekyll onto your computer. Go ahead and do this, then navigate to your &lt;em&gt;username&lt;/em&gt;.github.io folder that you have cloned from Github in &lt;a href=&quot;#&quot;&gt;Step 1&lt;/a&gt;. Run the &lt;code class=&quot;highlighter-rouge&quot;&gt;pwd&lt;/code&gt; command to make sure you are in the correct working directory. The needs to be empty for this next step to work, so go ahead and run our &lt;code class=&quot;highlighter-rouge&quot;&gt;ls&lt;/code&gt; command to make sure that there is nothing inside.&lt;/p&gt;
-
-&lt;p&gt;At this point we are ready to install Jekyll! Run the following command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ jekyll new
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then run the &lt;code class=&quot;highlighter-rouge&quot;&gt;ls&lt;/code&gt; command and you should see the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ ls
-_config.yml	_layouts	_sass		css		index.html
-_includes	_posts		about.md	feed.xml
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You have installed Jekyll! At this point we can give it a test run! We are going to view our new website in our browser, but we will be running the site locally (i.e. it will not be available at &lt;em&gt;username&lt;/em&gt;.github.io).&lt;/p&gt;
-
-&lt;p&gt;The next command will start running our website:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ jekyll serve
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;After you run this command, several lines will be printed out in the terminal. Look for one that looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;Server address: http://127.0.0.1:4000/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This address may be different on your computer, so copy it exactly from your terminal and run it in your browser, or run &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:40001&lt;/code&gt; in your browser if that doesn’t work. You should see your website!&lt;/p&gt;
-
-&lt;p&gt;For now it is mostly filler content, but we will learn how to edit this content in the next few steps.&lt;/p&gt;
-
-&lt;h2 id=&quot;step-3-githubhttpsgithubcom&quot;&gt;Step 3: &lt;a href=&quot;https://github.com/&quot;&gt;Github&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;This next step will move your entire website onto the web and will make it available at &lt;em&gt;username&lt;/em&gt;.github.io.&lt;/p&gt;
-
-&lt;p&gt;Confirm you are still in you &lt;em&gt;username&lt;/em&gt;.github.io folder (&lt;code class=&quot;highlighter-rouge&quot;&gt;pwd&lt;/code&gt; command) and run the following commands:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ git init
-$ git add .
-$ git commit -m &quot;initial commit&quot;
-$ git push origin master
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You will have to enter your Github username and password for the last step to work. Now, if you did not get any error messages in your terminal after running the above commands, open up &lt;em&gt;username&lt;/em&gt;.github.io in your browser. You, and anyone with the link, should be able to see your website!&lt;/p&gt;
-
-&lt;p&gt;As you make changes and additions to the &lt;em&gt;username&lt;/em&gt;.github.io file system, you can repeat this step to refresh the content of your website.&lt;/p&gt;
-
-&lt;h2 id=&quot;step-4-making-pages-in-jekyll&quot;&gt;Step 4: Making Pages in Jekyll&lt;/h2&gt;
-
-&lt;p&gt;At this point, the first thing I wanted to do was to create both a simple “Contact” page and a “Resume” page. The process of creating pages is simple, but there are few tutorials that explain what the simple process is in its entirety. Here’s how I understand it:&lt;/p&gt;
-
-&lt;p&gt;Create a “top level” Markdown file in our &lt;em&gt;username&lt;/em&gt;.github.io folder. “Top level” means that it is directly inside our &lt;em&gt;username&lt;/em&gt;.github.io file and not in any subfolders. To create this folder, you will need a text editor. The number one search result for text editor in Google is &lt;a href=&quot;https://www.sublimetext.com/&quot;&gt;Sublime Text&lt;/a&gt;, which is the text editor that I prefer. You can open your entire &lt;em&gt;username&lt;/em&gt;.github.io folder with Sublime Text to easily move between files.&lt;/p&gt;
-
-&lt;p&gt;Let’s create a contact page first. Create a new file called &lt;code class=&quot;highlighter-rouge&quot;&gt;contact.md&lt;/code&gt;. The &lt;code class=&quot;highlighter-rouge&quot;&gt;.md&lt;/code&gt; stands for Markdown and it is the type of file that you will be working with the most in Jekyll. Add the following content to this file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Markdown&quot;&gt;---
-layout: page
-title: &quot;Contact&quot;
----
-Hi, my name is Art Vandelay. Welcome to my website! 
-Follow me on twitter at [@artvandelay](http://www.twitter.com)
-Connect with me on [LinkedIn](http://www.linkedin.com)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Save this file, and head back over to &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:4000&lt;/code&gt;, reload the page and check to see if your page was added to your site.&lt;/p&gt;
-
-&lt;p&gt;Our &lt;code class=&quot;highlighter-rouge&quot;&gt;contact.md&lt;/code&gt; file starts with something called Front Matter, enclosed between two &lt;code class=&quot;highlighter-rouge&quot;&gt;---&lt;/code&gt; bars. In this space, you specify the type of page you are creating. In this example, wrote &lt;code class=&quot;highlighter-rouge&quot;&gt;layout: page&lt;/code&gt; because this is a regular page. In the following examples, we will set the &lt;code class=&quot;highlighter-rouge&quot;&gt;layout&lt;/code&gt; variable to &lt;code class=&quot;highlighter-rouge&quot;&gt;post&lt;/code&gt; when we want to create a blog post.&lt;/p&gt;
-
-&lt;p&gt;Links are pretty easy to make in Markdown. Simply wrap the clickable link text you want displayed in brackets, immediately followed by the URL in parentheses. For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;[Google](http://www.google.com)&lt;/code&gt; would result in &lt;a href=&quot;http://www.google.com&quot;&gt;Google&lt;/a&gt;. Be sure to include &lt;code class=&quot;highlighter-rouge&quot;&gt;http://&lt;/code&gt; at the beginning of your links. If you don’t, it will create a link relative to the page. For example, &lt;code class=&quot;highlighter-rouge&quot;&gt;[Google](google.com)&lt;/code&gt; would result in &lt;code class=&quot;highlighter-rouge&quot;&gt;username.github.io/google.com&lt;/code&gt; which would not go anywhere.&lt;/p&gt;
-
-&lt;p&gt;For the next example, create a top-level folder in your &lt;em&gt;username&lt;/em&gt;.github.io folder called &lt;code class=&quot;highlighter-rouge&quot;&gt;docs&lt;/code&gt; (or some other name) where you will store static files like PDFs for your site. Now put your resume in it. Next, copy the following code into a new top-level file in your &lt;em&gt;username&lt;/em&gt;.github.io folder called &lt;code class=&quot;highlighter-rouge&quot;&gt;resume&lt;/code&gt; (not in the &lt;code class=&quot;highlighter-rouge&quot;&gt;docs&lt;/code&gt; folder you just created, we are making a page here just like we did with the “Contact” page).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Markdown&quot;&gt;---
-layout: page
-title: Resume
----
-Here&#39;s a link to a PDF of [my resume](/docs/my_resume.pdf).
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;At this point it would be good to introduce the simple and powerful formating that you can do with Markdown. Suppose you want to include the text of your resume in a neatly organized way below the download link for your resume as I have done for &lt;a href=&quot;/CV.html&quot;&gt;my Resume page&lt;/a&gt;. Markdown makes this very easy.&lt;/p&gt;
-
-&lt;p&gt;There are many ways to structure and organize content in Markdown, so I’ll show you how I did it and point you in the direction of some useful resources and cheat sheets. &lt;a href=&quot;https://raw.githubusercontent.com/briancaffey/briancaffey.github.io/master/CV.md&quot;&gt;Here&lt;/a&gt; is the Markdown file I used for my resume page, feel free to copy my exact formatting as I copied it from someone else! Also check out &lt;a href=&quot;http://assemble.io/docs/Cheatsheet-Markdown.html&quot;&gt;this Markdown cheat sheet&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;step-5-making-blog-posts-in-jekyll&quot;&gt;Step 5: Making blog posts in Jekyll&lt;/h2&gt;
-
-&lt;p&gt;Making blog posts in Jekyll is slightly different from making pages in Jekyll. There are a few things you need to do to create a blog post.&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Create a Markdown file with the following naming convention: YYYY-MM-DD-post-name.md&lt;/li&gt;
-  &lt;li&gt;In this file’s Front Matter, set the &lt;code class=&quot;highlighter-rouge&quot;&gt;layout&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;post&lt;/code&gt; by writing &lt;code class=&quot;highlighter-rouge&quot;&gt;layout: post&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Set the &lt;code class=&quot;highlighter-rouge&quot;&gt;date&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;title&lt;/code&gt; of the post in the Front Matter&lt;/li&gt;
-  &lt;li&gt;Place this file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; folder&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;You should see the blog post listed on your home page and your “Blog” page that comes pre-loaded with a new Jekyll site.&lt;/p&gt;
-
-&lt;p&gt;We will talk about how to change the layout of your sites homepage, pages and posts later on. The next step will show you how allow comments using Disqus on a per-post basis.&lt;/p&gt;
-
-&lt;h2 id=&quot;step-6-adding-comments-to-your-posts&quot;&gt;Step 6: Adding comments to your posts&lt;/h2&gt;
-
-&lt;p&gt;To enable comments on your blog, I recommend using a free and popular comment service called &lt;a href=&quot;https://disqus.com/home/&quot;&gt;Disqus&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;To enable comments with Disqus, we need to explore a new folder in our file system. In the &lt;code class=&quot;highlighter-rouge&quot;&gt;_includes&lt;/code&gt; folder you will find a number of files that are “snippets” of HTML code including &lt;code class=&quot;highlighter-rouge&quot;&gt;header.html&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;footer.html&lt;/code&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;_includes&lt;/code&gt; is a folder where you will keep reusable snippets of code that will want to include in many different places in your site.&lt;/p&gt;
-
-&lt;p&gt;Let’s make a code snippet titled &lt;code class=&quot;highlighter-rouge&quot;&gt;comments.html&lt;/code&gt;. In this file, add the following code:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;page.comments&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;endif&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Any code in between these two lines will be included if &lt;code class=&quot;highlighter-rouge&quot;&gt;pages.comments&lt;/code&gt; is set to &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;. You will set this variable value in the Front Matter as you create new posts. Next, add the following code between these two lines above:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!--&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Add&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Disqus&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;disqus_thread&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;cm&quot;&gt;/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;disqus_shortname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;YOUR_DISQUS_USERNAME&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// required: replace example with your forum shortname&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;disqus_identifier&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;{{ site.disqusid }}{{ page.url | replace:&#39;index.html&#39;,&#39;&#39; }}&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;cm&quot;&gt;/* * * DON&#39;T EDIT BELOW THIS LINE * * */&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dsq&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;script&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dsq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;text/javascript&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dsq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;dsq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;src&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;//&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;disqus_shortname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;.disqus.com/embed.js&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementsByTagName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;head&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementsByTagName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;body&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appendChild&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dsq&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;})();&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/script&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;noscript&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Please&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;enable&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JavaScript&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;view&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://disqus.com/?ref_noscript&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;comments&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;powered&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Disqus&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/a&amp;gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;noscript&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Pay attention to the line that reads:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;disqus_shortname&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;YOUR_DISQUS_USERNAME&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// required: replace example with your forum shortname&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;You will need to replace &lt;code class=&quot;highlighter-rouge&quot;&gt;YOUR_DISQUS_USERNAME&lt;/code&gt; with the name you have selected for your Disqus account. Be sure to enclose it in single quotes.&lt;/p&gt;
-
-&lt;p&gt;Next we have to learn how to include this code snippet into all posts. Look in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_layouts&lt;/code&gt; folder and open up the &lt;code class=&quot;highlighter-rouge&quot;&gt;post.html&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;p&gt;This is a template document that will determine the format of each blog post. When we specified &lt;code class=&quot;highlighter-rouge&quot;&gt;layout: page&lt;/code&gt; in the Front Matter of our Resume and Contact pages, this caused Jekyll to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;page.html&lt;/code&gt; layout. As I mentioned before, in our posts, we will specify &lt;code class=&quot;highlighter-rouge&quot;&gt;layout: post&lt;/code&gt; in the Front Matter of our posts to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;post.html&lt;/code&gt; template.&lt;/p&gt;
-
-&lt;p&gt;In this layout, we will add one line of code right before the last line of the &lt;code class=&quot;highlighter-rouge&quot;&gt;post.html&lt;/code&gt; layout template directly above the closing &lt;code&gt;&amp;lt;/article&amp;gt;&lt;/code&gt; tag:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;comments.html&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Now, let’s make a new blog post. Title it something like &lt;code class=&quot;highlighter-rouge&quot;&gt;2016-03-18-my-first-post.md&lt;/code&gt;. Let’s add Front Matter so Jekyll knows what to do with our post.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;---
-layout: post
-title: My First Post
-date: 2016-03-18
-comments: true
----
-This is the body of my first blog post on my Jekyll blog! I hope it gets some good comments!
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Great, now you should have a new blog post with Disqus comments enabled on it. You may not be getting a lot of comments on your articles, but you still could have lots of readers. The next section will cover how to add Google Analytics to our site so we can easily track visitors and page views.&lt;/p&gt;
-
-&lt;h2 id=&quot;step-7-adding-google-analytics-to-your-jekyll-blog&quot;&gt;Step 7: Adding Google Analytics to your Jekyll blog&lt;/h2&gt;
-
-&lt;p&gt;Now that we know how to include a short snippet of code in multiple pages on our blog, adding one more little snippet for Google to track page views will be very easy. If you don’t know about Google Analytics, it probably the most powerful tool for tracking visitors to your website. Google makes it very easy, and only requires that we include a short snippet of JavaScript on each page we want to track.&lt;/p&gt;
-
-&lt;p&gt;Let’s create another HTML snippet in our &lt;code class=&quot;highlighter-rouge&quot;&gt;_includes&lt;/code&gt; folder called &lt;code class=&quot;highlighter-rouge&quot;&gt;google-analytics.html&lt;/code&gt;. You are only going to put a tracking code that will be unique to your site. Head over to &lt;a href=&quot;http://analytics.google.com&quot;&gt;Google Analytics&lt;/a&gt; to get your tracking code. After filling out a few simple forms, you should get your tracking code. It should look something like this:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;GoogleAnalyticsObject&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arguments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)},&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementsByTagName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;async&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;parentNode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;insertBefore&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;})(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;script&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;//www.google-analytics.com/analytics.js&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;ga&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-  &lt;span class=&quot;nx&quot;&gt;ga&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;create&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;&amp;lt;YOUR_TRACKING_CODE&amp;gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;auto&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;nx&quot;&gt;ga&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;send&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;pageview&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Next we will need to insert this &lt;code class=&quot;highlighter-rouge&quot;&gt;google_analytics.html&lt;/code&gt; snippet each page of our site. Doing this is very easy, just add &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;google_analytics.html&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt; in between the opening &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;body&amp;gt;&lt;/code&gt; tags of the &lt;code class=&quot;highlighter-rouge&quot;&gt;default.html&lt;/code&gt; file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_layouts&lt;/code&gt; folder.&lt;/p&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I hope you have found this tutorial helpful. At times I probably over-explained things, and there may be some areas that need clarification, so I’ll add updates and create more posts in the future as I learn more about Jekyll myself.&lt;/p&gt;
-
-&lt;p&gt;My Jekyll blog is big experiment. It’s been both challenging and fun, but most of all I love the fact that it is totally free. I hope that anyone reading this post who wants to put together a Jekyll blog hosted with Github Pages has success in doing so. Please let me know in the comments if there are any areas that I should change, elaborate on or take out. Thanks!&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 17 Mar 2016 00:00:00 -0400</pubDate>
-        <link>/2016/03/17/jekyll-tutorial.html</link>
-        <guid isPermaLink="true">/2016/03/17/jekyll-tutorial.html</guid>
         
         
       </item>
