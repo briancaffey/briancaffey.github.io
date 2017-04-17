@@ -6,20 +6,17 @@ permalink: /resume
 
 ---
 
-[View PDF](/static/James_Brian_Caffey_Resume_2017_2.pdf).
-
 Work Experience
 ---------------
 
 *   **[Capital Creative](http://briancaffey2010.wixsite.com/capital-websites/contact)** (Washington, D.C.)
 
-    *Freelance Technology Consulting, Web Design and 3D Modeling*, July 2015 - Present
+    *Freelance Technology Consulting, Web Design*, July 2015 - Present
 
     -	Established private technology consultancy
     -	Provide digital consulting services for D.C. area community organizations
-    -   Produce website tutorial video courses for niche community groups
-    -	Provide 3D architectural modeling services for residential and commercial clients using SketchUp
-    -	Build high-performance PCs for private clients
+    - Produce website tutorial video courses for niche community groups
+
 <br>
 <br>
 *   **Private Tutoring** (Washington, D.C.)
@@ -55,40 +52,23 @@ Work Experience
 
     *Research Manager*, February 2012 - March 2015
 
-    -   Coordinated research efforts for a monthly bi-lingual publication covering global trends of technologies, policies and applications in the energy storage industry; contributed to annual White Papers and quarterly market reports 
-	-   Served as the primary contact between CNESA and international member companies and organizations, provided bi-lingual interpretation for executive meetings 
+    -   Coordinated research efforts for a monthly bi-lingual publication covering global trends of technologies, policies and applications in the energy storage industry; contributed to annual White Papers and quarterly market reports
+	-   Served as the primary contact between CNESA and international member companies and organizations, provided bi-lingual interpretation for executive meetings
 	-   Represented CNESA as a guest author in industry publications and as an invited speaker at international conferences
 	-   Maintained detailed databases of energy storage projects and country-specific energy policies
 	-   Conducted interviews, tracked and reported on the development of mainstream and emerging energy storage technologies at universities, research laboratories and private corporations
 <br>
 <br>
 
-*   **[Veritrust USA](http://www.veritrustusa.com/)** (Bethesda, Maryland)
-
-    *Analyst*, August 2011 - February 2012
-
-    -   Programmed MS Excel macros to model and forecast sales for a financial services company
-	-   Built an extensive database of realtors and private consultants to create an affiliate network
-	-   Used SalesForce to streamline sales, operations, accounting and business reporting
-
-
 
 Education
 ---------
 
-*   **[General Assembly](https://generalassemb.ly/education/data-science)** (Washington, D.C.)
-	
-	*[Data Science Certificate Recipient](/static/Certificate-of-Completion.pdf)*, January 2016 - April 2016
-
-	-   11-week Python-based data science course aimed at understanding and implementing machine-learning techniques
-	-	Performed  visualization, regression, natural language processing and machine learning methods on large data sets
-<br>
-<br>
 *   **[Saint Mary's College of Maryland](http://www.smcm.edu/)** (Saint Mary's City, Maryland)
 
     *B.A. in Mathematics and Chinese Language and Culture*, 2006 - 2010
 
-    -   Coursework focused on Real Analysis and Abstract Algebra; served as a Teaching Assistant for an introductory-level course of advanced mathematics; additional coursework in Microeconomics 
+    -   Coursework focused on Real Analysis and Abstract Algebra; served as a Teaching Assistant for an introductory-level course of advanced mathematics; additional coursework in Microeconomics
 	-   One semester of advanced Chinese language courses at Fudan University in Shanghai as a St. Mary’s College Asia Study Abroad Scholarship recipient (sophomore year)
 	-   One semester of academic study at Peking University in Beijing with concurrent research internship at the Financial Times Beijing Bureau (senior year)
 	-   GPA: 3.88 (on a 4.0 scale); inducted into the Phi Beta Kappa Society; awarded Magna Cum Laude honors; Saint Mary’s Scholar and Dean’s List
@@ -105,7 +85,4 @@ Skills and Interests
 * Blender: 3D modeling, physics simulations and video editing
 * Video Production: Produced educational YouTube series for law students
 * 3D Printing: Experienced with Prusa i3 3D printers and CURA software
-* WordPress: Experienced in the development of WordPress websites with plug-ins 
-
-
-
+* WordPress: Experienced in the development of WordPress websites with plug-ins
