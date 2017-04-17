@@ -17,8 +17,6 @@ Work Experience
     -	Provide digital consulting services for D.C. area community organizations
     - Produce website tutorial video courses for niche community groups
 
-<br>
-<br>
 *   **Private Tutoring** (Washington, D.C.)
 
     July 2015 - Present
