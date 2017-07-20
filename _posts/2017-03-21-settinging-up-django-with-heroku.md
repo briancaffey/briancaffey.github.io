@@ -10,21 +10,21 @@ comments: true
 {% raw %}
 This is a simple guide to setting up a Django project on Heroku.
 
-The first step is to create a virutal environment in a new directory: 
+The first step is to create a virutal environment in a new directory:
 
 ```terminal
 $ mkdir proj && cd proj
 $ virtualenv -p python3 .
-$ source bin/activate 
+$ source bin/activate
 (proj) $ mkdir src
 (proj) $ cd src
 (proj) $ pip install django==1.10.5
-(proj) $ django-admin.py startproject myproj . 
+(proj) $ django-admin.py startproject myproj .
 (proj) $ ls
 myproj        manage.py
 ```
 
-This sets up a virtual environment and creates an empty Django project. The next step is to create a settings module. 
+This sets up a virtual environment and creates an empty Django project. The next step is to create a settings module.
 
 
 ```terminal
@@ -43,7 +43,7 @@ from .production import *
 
 try:
 	from .local import *
-except: 
+except:
 	pass
 ```
 
@@ -51,14 +51,14 @@ Next we want to change the `BASE_DIR` (base directory) in `settings.py`:
 
 *settings.py*
 
-```python 
+```python
 [...]
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 [...]
 ```
 
-Next we need to move `settings.py` into the `settings` folder and rename it `base.py` and then copy `base.py` twice as `local.py` and `production.py` these three files will live in `settings`. 
+Next we need to move `settings.py` into the `settings` folder and rename it `base.py` and then copy `base.py` twice as `local.py` and `production.py` these three files will live in `settings`.
 
 ```terminal
 (proj) $ mv settings.py settings
@@ -70,7 +70,7 @@ Next we need to move `settings.py` into the `settings` folder and rename it `bas
 
 Next we need to install PostgreSQL:
 
-```terminal 
+```terminal
 (proj) $ pip install psycopg2
 (proj) $ pip install gunicorn dj-database-url
 (proj) $ pip install django-crispy-forms
@@ -118,7 +118,7 @@ We can put `.gitignore` in our base directory and add the following:
 myproj/settings/local.py
 ```
 
-We also want to ignore several other python-related files in our directory. An easy way to do this is to add python gitignore. This can be found [here](https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore). 
+We also want to ignore several other python-related files in our directory. An easy way to do this is to add python gitignore. This can be found [here](https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore).
 
 Next we can make our first commit:
 
@@ -127,7 +127,7 @@ Next we can make our first commit:
 (proj) $ git commit -m "initial commit"
 ```
 
-The next step involves setting up Heroku. First we need to create a `Procfile` in our base directory: 
+The next step involves setting up Heroku. First we need to create a `Procfile` in our base directory:
 
 *Procfile*
 
@@ -137,20 +137,20 @@ web: gunicorn myproj.wsgi --log-file -
 
 Next we can try to run Heroku locally, but first we need to add `0.0.0.0` to `ALLOWED_HOSTS` in `production.py`, `base.py` and `local.py`.
 
-We should now see "It worked!" at `0.0.0.0:5000`, which tells us that everything is working properly. 
+We should now see "It worked!" at `0.0.0.0:5000`, which tells us that everything is working properly.
 
-Next we need to create the project on Heroku: 
+Next we need to create the project on Heroku:
 
-```terminal 
+```terminal
 (proj) $ heroku login
 (proj) $ heroku create my-unique-project-name-123
 ```
 
 Now we can see our project at `my-unique-project-name-123.herokuapp.com`, and it should say `Heroku | Welcome to your new app!`
 
-Next we will want to add `my-unique-project-name-123.herokuapp.com` to `ALLOWED_HOSTS` in `settings.py`. 
+Next we will want to add `my-unique-project-name-123.herokuapp.com` to `ALLOWED_HOSTS` in `settings.py`.
 
-The very last step is to add the specific version of Python to a file called `runtime.txt` in our base directory: 
+The very last step is to add the specific version of Python to a file called `runtime.txt` in our base directory:
 
 ```terminal
 (proj) $ python -V
@@ -170,7 +170,7 @@ Now we can finally push the git repository to Heroku:
 (proj) $ git push heroku master
 ```
 
-Now if we go to our site on heroku we should see: 
+Now if we go to our site on heroku we should see:
 
 ```
 Not Found  
@@ -178,18 +178,18 @@ Not Found
 The requested URL / was not found on this server.
 ```
 
-There is a helpful guide on deploying Python and Django apps on Heroku's website [here](https://devcenter.heroku.com/articles/deploying-python). 
+There is a helpful guide on deploying Python and Django apps on Heroku's website [here](https://devcenter.heroku.com/articles/deploying-python).
 
-Here's an important excerpt regarding databases: 
+Here's an important excerpt regarding databases:
 
 > For Django applications, a Heroku Postgres hobby-dev database is automatically provisioned. This populates the DATABASE_URL environment variable.
 No add-ons are automatically provisioned if a pure Python application is detected. If you need a SQL database for your app, add one explicitly:
 
-```terminal 
+```terminal
 $ heroku addons:create heroku-postgresql:hobby-dev
 ```
 
-So we need to run this command: 
+So we need to run this command:
 
 ```terminal
 
@@ -198,13 +198,13 @@ So we need to run this command:
 ```
 
 
-Next we need to access the terminal on our Heroku server: 
+Next we need to access the terminal on our Heroku server:
 
-```terminal 
+```terminal
 (proj) $ heroku run bash
 ```
 
-Next we need to add database-related information to `production.py` under the `DATABASES` section: 
+Next we need to add database-related information to `production.py` under the `DATABASES` section:
 
 ```python
 [...]
@@ -227,27 +227,27 @@ Next we can run our migrations:
 (proj) $ heroku run python manage.py makemigrations
 ```
 
-Next we can run `migrate` and `createsuperuser` on our Heroku server: 
+Next we can run `migrate` and `createsuperuser` on our Heroku server:
 
-```terminal 
+```terminal
 (proj) $ heroku run python manage.py migrate && heroku run python manage.py createsuperuser
 ```
 
-Now we should be able to login to the admin page with the account we just created, but CSS is still not working at this point. Here's how we configure static files to get CSS to work: 
+Now we should be able to login to the admin page with the account we just created, but CSS is still not working at this point. Here's how we configure static files to get CSS to work:
 
 ```terminal
 (proj) $ pip install whitenoise
 ```
 
-`whitenoise` is needed so Heroku can run our static files. 
+`whitenoise` is needed so Heroku can run our static files.
 
-Next we want to make sure to include `whitenoise` in `requirements.txt`: 
+Next we want to make sure to include `whitenoise` in `requirements.txt`:
 
 ```terminal
 (proj) $ pip freeze > requirements.txt
 ```
 
-Next we need to add the following item to the list of `MIDDLEWARE` components. This needs to be added to BOTH `production.py` AND `base.py` in order for the local files to show on both our heroku site and the locally served site with `heroku local web`: 
+Next we need to add the following item to the list of `MIDDLEWARE` components. This needs to be added to BOTH `production.py` AND `base.py` in order for the local files to show on both our heroku site and the locally served site with `heroku local web`:
 
 ```text
 MIDDLEWARE = [
@@ -261,7 +261,7 @@ Next we have a few more items to add to our settings files:
 
 *production.py*
 
-```python 
+```python
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
@@ -279,7 +279,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "live-static", "media-root")
 
 ```
 
-And we also need to add some files to our base directory that will hold our static files: 
+And we also need to add some files to our base directory that will hold our static files:
 
 ```terminal
 (proj) $ mkdir static
@@ -287,14 +287,14 @@ And we also need to add some files to our base directory that will hold our stat
 (proj) $ mkdir live-static
 (proj) $ mkdir live-static/static-root
 (proj) $ mkdir live-static/media-root
-(proj) $ 
-(proj) $ 
+(proj) $
+(proj) $
 
 ```
 
-And we also need to add the following to the end of `production.py`: 
+And we also need to add the following to the end of `production.py`:
 
-```python 
+```python
 [...]
 STATIC_URL = '/static/'
 
@@ -313,7 +313,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "live-static", "media-root")
 ```
 
-`base.py` and `local.py` should have the following: 
+`base.py` and `local.py` should have the following:
 
 ```python
 STATIC_URL = '/static/'
@@ -329,7 +329,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "live-static", "media-root")
 ```
 
-Next we want to run `collectstatic` locally: 
+Next we want to run `collectstatic` locally:
 
 ```terminal
 (proj) $ python manage.py collectstatic
@@ -349,23 +349,23 @@ Next we can commit these changes and push to Heroku, and check to see if the sta
 (proj) $ git push heroku master
 (proj) $ heroku config:set DISABLE_COLLECTSTATIC=0
 ```
-Now we should be able to see the admin panel with working CSS on both the live and local heroku sites. 
+Now we should be able to see the admin panel with working CSS on both the live and local heroku sites.
 
 # Adding an app and configuring Bootstrap
 
-Now that everything seems to be working we can start building our app. 
+Now that everything seems to be working we can start building our app.
 
 Let's start by creating a new app:
 
-```terminal 
+```terminal
 (proj) $ python manage.py startapp pages
 ```
 
-`pages` will be the name of an app that we create here. 
+`pages` will be the name of an app that we create here.
 
-In `pages/views.py` we can add a class-based view that will serve as the homepage: 
+In `pages/views.py` we can add a class-based view that will serve as the homepage:
 
-```python 
+```python
 from django.shortcuts import render
 from django.views.generic import View
 # Create your views here.
@@ -378,7 +378,7 @@ class HomeView(View):
 
 We then update `urls.py` to include our new view:
 
-```python 
+```python
 from django.conf.urls import url
 from django.contrib import admin
 from services.views import HomeView
@@ -409,9 +409,9 @@ Then we need to add the following to `home.html`:
 {% endblock content%}
 ```
 
-Next we need to update `DIR` in `TEMPLATES` in `base.py`, `local.py` and `production.py`: 
+Next we need to update `DIR` in `TEMPLATES` in `base.py`, `local.py` and `production.py`:
 
-```python 
+```python
 [...]
 'DIRS': [os.path.join(BASE_DIR, 'templates')],
 [...]
@@ -461,7 +461,7 @@ Next we can add a basic Bootstrap template to `base.html`:
 </html>
 ```
 
-This html was taken from [Bootstrap's 'Get Started' page](http://getbootstrap.com/getting-started/). 
+This html was taken from [Bootstrap's 'Get Started' page](http://getbootstrap.com/getting-started/).
 
 Now we can run `heroku local web` and confirm that we see "Hello, world!" from the Bootstrap template.
 

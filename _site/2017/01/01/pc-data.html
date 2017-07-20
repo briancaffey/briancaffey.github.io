@@ -118,7 +118,7 @@
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/use/bin/env bash</span>
 <span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>seq 1 1125<span class="sb">`</span>;
-<span class="k">do 
+<span class="k">do
 	</span>phantomjs production.js <span class="s2">"https://pcpartpicker.com/builds/#page="</span><span class="nv">$i</span> &gt; pages/pages_<span class="nv">$i</span>.txt
 	<span class="nv">result</span><span class="o">=</span><span class="k">$(</span>python -c <span class="s2">"import random;print(random.uniform(2.1, 3.4))"</span><span class="k">)</span>
 	sleep <span class="nv">$result</span>
@@ -141,7 +141,7 @@
     <span class="n">html</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     <span class="n">links</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">"class"</span><span class="p">:</span><span class="s">"build-link"</span><span class="p">})</span>
-    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span> 
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span>
         <span class="n">all_links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="n">b</span><span class="o">.</span><span class="n">decompose</span><span class="p">()</span>
@@ -192,25 +192,25 @@
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
-    
+
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s">'builds/builds_html'</span><span class="p">)</span>    
 <span class="n">build_dict_list</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-    
-    <span class="k">try</span><span class="p">:</span> 
+
+    <span class="k">try</span><span class="p">:</span>
         <span class="n">a</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span>
         <span class="n">b</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 
         <span class="c">#Labels: Each build list has labels, for example: Video Card: GeForce GTX 1080</span>
         <span class="n">labels</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'ul'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">"class"</span><span class="p">:</span><span class="s">"parts"</span><span class="p">})</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">'p'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">"label"</span><span class="p">})</span>
-        
+
         <span class="c">#The number of labels varies between builds</span>
         <span class="c">#Some builds have multiple parts of the same type</span>
         <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">]</span>
-        
+
         <span class="c">#This will keep track of how many of each part there are</span>
         <span class="n">count</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cols</span><span class="p">))]</span>
 
@@ -255,7 +255,7 @@
         <span class="n">builder_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">"Builder"</span><span class="p">:</span><span class="n">build_name</span><span class="p">}</span>
         <span class="n">owner_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">"Owner"</span><span class="p">:</span><span class="n">builder_link</span><span class="p">}</span>
 
-        <span class="c">#Details: Details include clock speed, temperatures, date built, etc. </span>
+        <span class="c">#Details: Details include clock speed, temperatures, date built, etc.</span>
         <span class="c">#The process is similar to sraping the components, but there is no need to worry about duplicate parts</span>
         <span class="n">detail_vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">u" "</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s">u'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">"class"</span><span class="p">:</span><span class="s">"part-details"</span><span class="p">})</span> <span class="k">if</span> <span class="s">"</span><span class="se">\n</span><span class="s"> "</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
         <span class="n">details</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">"class"</span><span class="p">:</span><span class="s">"part-details"</span><span class="p">})</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'h4'</span><span class="p">)]</span>
@@ -267,14 +267,14 @@
 
         <span class="c">#Join all of the above dictionaries into a master build dictionary</span>
         <span class="n">master_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">build_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">+</span><span class="n">builder_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">+</span><span class="n">build_part_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">+</span><span class="n">detail_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">+</span><span class="n">total_price_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="o">+</span><span class="n">owner_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="o">+</span> <span class="n">description_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-        
+
         <span class="c">#Add the dictionary to build_dict_list defined above</span>
         <span class="n">build_dict_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">master_dict</span><span class="p">)</span>
-        
+
         <span class="c">#This is important for preventing memory leaks in bs4</span>
         <span class="n">b</span><span class="o">.</span><span class="n">decompose</span><span class="p">()</span>
         <span class="n">a</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    
+
     <span class="c">#Some builds have been deleted, even though the links are still listed, so we pass the build if there are any issues scraping data from it</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">pass</span>
@@ -456,7 +456,7 @@
     <span class="n">ratings_count</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'span'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">'itemprop'</span><span class="p">:</span><span class="s">'ratingCount'</span><span class="p">})</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">average_rating</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ratings_count</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">):</span>
         <span class="n">ratings_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">'average_rating'</span><span class="p">:</span><span class="n">average_rating</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'ratings_count'</span><span class="p">:</span><span class="n">ratings_count</span><span class="o">.</span><span class="n">text</span><span class="p">}</span>
-    
+
     <span class="c">#part name, kind and link</span>
     <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h4'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">'class'</span><span class="p">:</span><span class="s">'kind'</span><span class="p">})</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">kind</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'h4'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">'class'</span><span class="p">:</span><span class="s">'kind'</span><span class="p">})</span><span class="o">.</span><span class="n">text</span>
@@ -1610,7 +1610,7 @@ true latency = 13.5 nanoseconds
            <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
            <span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">,</span>
            <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-           <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span> 
+           <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -1720,7 +1720,7 @@ true latency = 13.5 nanoseconds
 
 <p><img src="/img/storage/storage_growth.png" alt="png" /></p>
 
-<p>Linear growth on a logarithmic scale corresponds to exponential growth on a linear scale, which is the basis of Moore’s Law. Hard drive disks follow a growth pattern similar to Moore’s Law called <a href="https://en.wikipedia.org/wiki/Mark_Kryder">Kryder’s Law</a>. 
+<p>Linear growth on a logarithmic scale corresponds to exponential growth on a linear scale, which is the basis of Moore’s Law. Hard drive disks follow a growth pattern similar to Moore’s Law called <a href="https://en.wikipedia.org/wiki/Mark_Kryder">Kryder’s Law</a>.
 Here is a scatter plot of storage drive sizes and prices:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">'whitegrid'</span><span class="p">)</span>
@@ -2051,7 +2051,7 @@ Here is a scatter plot of storage drive sizes and prices:</p>
     <span class="n">df</span><span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df1</span><span class="p">)</span>
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-    
+
 <span class="n">df</span><span class="p">[</span><span class="s">'five'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">'five'</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">5</span> <span class="k">else</span> <span class="s">'not'</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">Stars</span><span class="p">]</span>
 <span class="n">df</span><span class="p">[</span><span class="s">'label'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">five</span><span class="o">.</span><span class="nb">map</span><span class="p">({</span><span class="s">'not'</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span> <span class="s">'five'</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -2102,7 +2102,7 @@ Name: label, dtype: int64
 </div>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>Accuracy score: 0.723350253807
-Confusion Matrix: 
+Confusion Matrix:
 [[ 84  70]
  [ 39 201]]
 </code></pre>
@@ -2451,8 +2451,8 @@ Confusion Matrix:
 
           
           <li>
-            <a href="https://twitter.com/jamesbrianc"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
-</span><span class="username">jamesbrianc</span></a>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
 
           </li>
           
