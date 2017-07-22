@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Brian Caffey</title>
-  <meta name="description" content="Thanks for visiting my site, please take a minute to look around!
-">
+  <title>API Documentation</title>
+  <meta name="description" content="API Documentation">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/">
+  <link rel="canonical" href="/2017/07/20/api-documentation.html">
   <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
 </head>
 
@@ -76,129 +75,101 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Recent Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">API Documentation</h1>
+    <p class="post-meta"><time datetime="2017-07-20T00:00:00-04:00" itemprop="datePublished">Jul 20, 2017</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jul 22, 2017</span>
+  <div class="post-content" itemprop="articleBody">
+    <h1 id="api-documentation">API Documentation</h1>
 
-        <h2>
-          <a class="post-link" href="/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html">Posting JSON data to the Django REST Framework with AJAX</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jul 19, 2017</span>
+<p>Here is a description of the API endpoints under development for Lead.</p>
 
-        <h2>
-          <a class="post-link" href="/2017/07/19/different-ways-to-build-friend-models-in-django.html">Comparing different ways to build friend objects in Django</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 6, 2017</span>
+<ul>
+  <li><code class="highlighter-rouge">users/api</code></li>
+</ul>
 
-        <h2>
-          <a class="post-link" href="/2017/03/06/django-poll-tutorial.html">Django polling app tutorial</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 4, 2017</span>
+<p>This endpoint returns all users in the Lead Network. This endpoint requires the user to be authenticated. Here is a sample JSON response:</p>
 
-        <h2>
-          <a class="post-link" href="/2017/03/04/settinging-up-django-with-heroku.html">Setting up a Django app on Heroku</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 3, 2017</span>
+<pre><code class="language-JSON">[
+  {
+    "user":2,
+    "first_name":"Nancy",
+    "last_name":"Rubin",
+    "job_title":"CTO",
+    "current_company":"Ace Consulting",
+    "is_linkedin_connected":true,
+    "is_facebook_connected":true,
+    "bio":"Nancy Rubin join Ace Consulting as CTO in 2015 and has helped grow the engineering team form 10 to 100 employees.",
+    "photo_url":"http://loremflickr.com/320/240/woman",
+    "user_profile_url":"users/2",
+    "following":1,
+    "follows_requesting_user":0,
+    "follow_link":"users/2/connect/"
+  },
 
-        <h2>
-          <a class="post-link" href="/2017/03/03/graph_subreddit.html">Related subreddit graph exploration with NetworkX</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 23, 2017</span>
+    ...
 
-        <h2>
-          <a class="post-link" href="/2017/01/23/bokeh-plots-on-jekyll.html">How to embed Bokeh plots in Jekyll blogs on GitHub Pages</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 1, 2017</span>
+]
+</code></pre>
 
-        <h2>
-          <a class="post-link" href="/2017/01/01/pc-data.html">PCPartPicker data</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 13, 2016</span>
+<p>The fields <code class="highlighter-rouge">following</code> and <code class="highlighter-rouge">follows_requesting_user</code> return 1 if the requesting user follows the user or the user in the list follows the requesting user, and 0 if the opposite is true.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/05/13/d3js-on-jekyll.html">D3.js on Jekyll</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">May 9, 2016</span>
+<h3 id="to-do">To-do</h3>
 
-        <h2>
-          <a class="post-link" href="/2016/05/09/web-srcaping-with-phantomjs.html">Scraping hidden web data with PhantomJS</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 7, 2016</span>
+<p>I need rearrange the URL structure so it is <code class="highlighter-rouge">/v1/api/users</code>, and I will be changing the <code class="highlighter-rouge">following</code> and <code class="highlighter-rouge">follows_requesting_user</code> fields to be Boolean values instead of integers 0 and 1.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/04/07/home-media-setup.html">Home media center meta-tutorial with miniDLNA, Raspberry Pi, Deluge and Apple TV</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 5, 2016</span>
+<ul>
+  <li><code class="highlighter-rouge">/users/id/api</code></li>
+</ul>
 
-        <h2>
-          <a class="post-link" href="/2016/04/05/twitter-bot-tutorial.html">Simple twitter-bot with Python, Tweepy and Heroku</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 17, 2016</span>
+<p>Sample JSON response:</p>
 
-        <h2>
-          <a class="post-link" href="/2016/03/17/jekyll-tutorial.html">Simple Jekyll tutorial with Github Pages</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 14, 2016</span>
+<pre><code class="language-JSON">{
+  "user":2,
+  "first_name":"Nancy",
+  "last_name":"Rubin",
+  "job_title":"CTO",
+  "current_company":"Ace Consulting",
+  "is_linkedin_connected":true,
+  "is_facebook_connected":true,
+  "bio":"Nancy Rubin join Ace Consulting as CTO in 2015 and has helped grow the engineering team form 10 to 100 employees.",
+  "photo_url":"http://loremflickr.com/320/240/woman",
+  "user_profile_url":"users/2"
+}
+</code></pre>
 
-        <h2>
-          <a class="post-link" href="/2016/03/14/ipynb-with-jekyll.html">Including Jupyter Notebooks in Jekyll blog posts</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Mar 12, 2016</span>
+<p>This endpoint will display information about a given user.</p>
 
-        <h2>
-          <a class="post-link" href="/2016/03/12/welcome-to-jekyll.html">Up and running with Jekyll + GitHub Pages</a>
-        </h2>
-      </li>
-    
-  </ul>
+<h3 id="to-do-1">To-do</h3>
 
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+<ul>
+  <li>Add relevant permissions</li>
+  <li>Add data about relationship between the user and the requesting user (logged-in user)</li>
+</ul>
 
-</div>
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017/07/20/api-documentation.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
 
       </div>
     </div>

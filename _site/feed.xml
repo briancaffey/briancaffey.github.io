@@ -6,9 +6,267 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 20 Jul 2017 11:07:40 -0400</pubDate>
-    <lastBuildDate>Thu, 20 Jul 2017 11:07:40 -0400</lastBuildDate>
+    <pubDate>Sat, 22 Jul 2017 14:09:45 -0400</pubDate>
+    <lastBuildDate>Sat, 22 Jul 2017 14:09:45 -0400</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>Posting JSON data to the Django REST Framework with AJAX</title>
+        <description>
+&lt;p&gt;This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX function. After tracing down all of the error messages into the documentation for Django, Django REST Framework, jQuery and JavaScript and many Stack Overflow questions, I was finally able to see my “It worked!” alert pop up from the &lt;code class=&quot;highlighter-rouge&quot;&gt;success&lt;/code&gt; callback.&lt;/p&gt;
+
+&lt;h2 id=&quot;context&quot;&gt;Context&lt;/h2&gt;
+
+&lt;p&gt;This issue came up over the weekend while working on a JavaScript game I started several months ago. The game is a ‘&lt;a href=&quot;https://en.wikipedia.org/wiki/Dungeon_crawl&quot;&gt;dungeon crawler&lt;/a&gt;’ where the characters and environment are represented by Unicode emoji. In the initial version, you control a character who roams through a forest, slays a dragon that threatens a princess in distress, and then meet the King of the Land, hence the name of the game “King’s Encounter”. I wanted an easier way to design levels, and also wanted to let users create and share their own worlds and adventures.&lt;/p&gt;
+
+&lt;p&gt;The entire game state is stored in a JavaScript object. Here’s a simplified representation of the structure:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;game&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&quot;map&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,],&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;player&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,],&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,],&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The UI lets users manipulate the values of each row in the game state’s &lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt; property. The values of the row arrays are objects themselves, which contain information about which emoji they represent and how they interact with the player (for example, you can’t pass through a tree, so it has a &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;wall&#39;:true&lt;/code&gt; property).&lt;/p&gt;
+
+&lt;p&gt;I added a “Save Game” button, which when clicked would fire a POST or PUT request to create or update the user’s game design. On the homepage of my personal website I includes a simple AJAX POST, so I first copied it over as boilerplate code to modify.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-HTML&quot;&gt;$(&quot;#post-form&quot;).on(&#39;submit&#39;, function(event){
+  event.preventDefault();
+  var this_ = $(this)
+  var gb_endpoint = this_.attr(&quot;data-href&quot;)
+  $.ajax({
+    url: gb_endpoint,
+    type: &quot;POST&quot;,
+    data: { message : $(&quot;#post-text&quot;).val(),
+            csrfmiddlewaretoken: &#39;{{ csrf_token }}&#39;,
+            city: &quot;some city&quot;,
+            state: &quot;some state&quot;,
+    },
+    success: function(json){
+      $(&#39;#post-text&#39;).val(&#39;&#39;);
+      $(&#39;#post-form&#39;).blur();
+      var gb_num = $(&quot;#gb-num&quot;).text();
+      var new_gb_num = parseInt(gb_num) + 1
+      $(&quot;#gb-num&quot;).text(new_gb_num);
+
+
+      if (1 == 1){
+        var user = json.user
+        $(&#39;#guest-book-items&#39;).prepend(&#39;&amp;lt;div class=&quot;panel panel-success&quot;&amp;gt;&amp;lt;div class=&quot;panel-heading&quot;&amp;gt;From {% if user.is_authenticated %}{{ user }}{% else %}someone{% endif %} in the &#39; + json.city + &#39;, &#39; + json.state + &#39; area | just now&amp;lt;/div&amp;gt;&amp;lt;div class=&quot;panel-body&quot;&amp;gt;&#39; + json.message + &#39;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&#39;)
+      }
+    },
+  });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here’s the AJAX call that worked after lots of debugging:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-HTML&quot;&gt;$(&quot;#save-level&quot;).click(function(event){
+  event.preventDefault();
+  $.ajax({
+    type : &quot;POST&quot;,
+    url : &quot;/api/kings/save/&quot;,
+    csrfmiddlewaretoken: &quot;{{ csrf_token }}&quot;,
+    data : JSON.stringify({game:scene}),
+    headers: {
+      &#39;Accept&#39;: &#39;application/json&#39;,
+      &#39;Content-Type&#39;: &#39;application/json&#39;
+      },
+    success: function(){
+        alert(&quot;Saved! It worked.&quot;);
+      },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      alert(&quot;some error &quot; + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
+      }
+    });
+  });
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;django-rest-framework-settings-and-api-endpoints&quot;&gt;Django REST Framework settings and API endpoints&lt;/h2&gt;
+
+&lt;p&gt;Before I started writing the AJAX call, I looked in the Django REST Framework documentation for instructions on how to post JSON data. Here are the REST Framework settings I added to &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;REST_FRAMEWORK&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&#39;DEFAULT_RENDERER_CLASSES&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;rest_framework.renderers.JSONRenderer&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&#39;DEFAULT_PARSER_CLASSES&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;rest_framework.parsers.JSONParser&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I’m not sure if this was completely necessary, but I think the &lt;a href=&quot;http://www.django-rest-framework.org/api-guide/renderers/#jsonrenderer&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JSONRenderer&lt;/code&gt; helps with the serialization of Unicode data&lt;/a&gt;, since earlier attempts returned Unicode representation of emoji rather than the emoji themselves (e.g., U+1F600 instead of 😀).&lt;/p&gt;
+
+&lt;p&gt;I should also mention that I added a simple “Game” model in &lt;code class=&quot;highlighter-rouge&quot;&gt;models.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib.postgres.fields&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JSONField&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;models&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JSONField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next I added the views and serializers for the API endpoint (&lt;code class=&quot;highlighter-rouge&quot;&gt;/api/kings/save/&lt;/code&gt;) for the POST request:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;kings/api/views.py&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;..models&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.serializers&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GameSerializer&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.generics&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CreateAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# ListAPIView&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.views&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;APIView&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.response&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Response&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GameCreateAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;queryset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GameSerializer&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;perform_create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serializer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# class GameListAPIView(ListAPIView):&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#     queryset = Game.objects.all()&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#     serializer_class = GameSerializer&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;kings/api/serializers.py&lt;/em&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.serializers&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ModelSerializer&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serializers&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;..models&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GameSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ModelSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Meta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fields&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&#39;game&#39;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Writing this view was the first big hurdle. I was under the impression that the JSON data was to be accessed in &lt;code class=&quot;highlighter-rouge&quot;&gt;self.request.body&lt;/code&gt;. The error message said &lt;a href=&quot;https://github.com/encode/django-rest-framework/issues/2774&quot;&gt;You cannot access body after reading from request’s data stream&lt;/a&gt;, and there were some elaborate solutions that I didn’t think I would be able to implement.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.django-rest-framework.org/api-guide/requests/#request-parsing&quot;&gt;This topic&lt;/a&gt; in the DRF documentation describes the &lt;code class=&quot;highlighter-rouge&quot;&gt;.data&lt;/code&gt; method for parsing requests.&lt;/p&gt;
+
+&lt;h2 id=&quot;debugging-the-ajax-call-and-formatting-json-data&quot;&gt;Debugging the AJAX call and formatting JSON data&lt;/h2&gt;
+
+&lt;p&gt;The next important clue came from a footnote in this section about requests:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note: If a client sends malformed content, then accessing request.data may raise a ParseError. By default REST framework’s APIView class or @api_view decorator will catch the error and return a 400 Bad Request response.
+If a client sends a request with a content-type that cannot be parsed then a UnsupportedMediaType exception will be raised, which by default will be caught and return a 415 Unsupported Media Type response.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I resolved the &lt;code class=&quot;highlighter-rouge&quot;&gt;415&lt;/code&gt; error by adding the following to the AJAX call.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;headers: {
+  &#39;Accept&#39;: &#39;application/json&#39;,
+  &#39;Content-Type&#39;: &#39;application/json&#39;
+  },
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;One aspect of all of the debugging which was frustrating is that the sqlite3 database on my local environment does not support storing JSON data (as far as I know), so I committed and pushed code to my production server on Heroku (which uses PostgreSQL) for each step in the debug process. Eventually I realized that a &lt;code class=&quot;highlighter-rouge&quot;&gt;500&lt;/code&gt; server error on my local environment meant that everything was working correctly except for the very last step: saving the &lt;code class=&quot;highlighter-rouge&quot;&gt;Game&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;p&gt;At this point I thought I was pretty close. I could successfully POST data using the DRF web interface, and I got the following type of error messages (which were &lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP 400 Bad Request&lt;/code&gt;) when I tried to post malformed data:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;detail&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JSON parse error - Expecting value: line 2 column 13 (char 14)&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;To see what error message I was getting using AJAX, I found that jQuery makes the error message available in &lt;code class=&quot;highlighter-rouge&quot;&gt;XMLHttpRequest.responseText&lt;/code&gt;. I then added the following to the AJAX &lt;code class=&quot;highlighter-rouge&quot;&gt;error&lt;/code&gt; callback:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$.ajax({
+  ...
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+    alert(&quot;some error &quot; + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
+    }
+  });
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This error message was saying:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ValueError: Expecting value: line 1 column 1 (char 0)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This led me to believe that there was an issue with the &lt;code class=&quot;highlighter-rouge&quot;&gt;data&lt;/code&gt; attribute being passed into the AJAX call. It was particularly difficult to figure out how to write the JSONified version of JavaScript object. SO posts had many different ways, and I eventually found that the following worked:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$.ajax({
+  ...
+  data : JSON.stringify({game:scene}),
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Since I named the &lt;code class=&quot;highlighter-rouge&quot;&gt;JSONField()&lt;/code&gt; field in my Game model &lt;code class=&quot;highlighter-rouge&quot;&gt;game&lt;/code&gt;, I believe that &lt;code class=&quot;highlighter-rouge&quot;&gt;game&lt;/code&gt; needed to be the “main attribute” of the JSON in the POST request. &lt;code class=&quot;highlighter-rouge&quot;&gt;scene&lt;/code&gt; is the name of the variable that held the JavaScript object I wanted to send. &lt;code class=&quot;highlighter-rouge&quot;&gt;JSON.stringify()&lt;/code&gt; was a little confusing, and there was lots of confusion online about what it returns. Here’s the &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify&quot;&gt;MDN documentation&lt;/a&gt; that was helpful in figuring out &lt;code class=&quot;highlighter-rouge&quot;&gt;JSON.stringify()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;cross-site-request-forgery-issue-when-using-ajax-with-django&quot;&gt;Cross-site Request Forgery issue when using AJAX with Django&lt;/h2&gt;
+
+&lt;p&gt;At some point in all of this debugging I got a strange error message saying the CSRF Token was missing or incorrect. I had included &lt;code class=&quot;highlighter-rouge&quot;&gt;csrfmiddlewaretoken: &quot;{{ csrf_token }}&quot;,&lt;/code&gt; in the AJAX call, and it wasn’t an issue I had experienced with making my other POST request with AJAX. I found &lt;a href=&quot;https://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request&quot;&gt;this Stack Overflow answer&lt;/a&gt; with 143 votes and 90,322 views, and was pleased that the proposed solution worked just fine. It involves adding &lt;code class=&quot;highlighter-rouge&quot;&gt;$.ajaxSetup()&lt;/code&gt; before the AJAX call:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$.ajaxSetup({
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; document.cookie != &#39;&#39;) {
+                 var cookies = document.cookie.split(&#39;;&#39;);
+                 for (var i = 0; i &lt;span class=&quot;nt&quot;&gt;&amp;lt; cookies&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;
+                     &lt;span class=&quot;na&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;cookie =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;jQuery.trim(cookies[i]);&lt;/span&gt;
+                     &lt;span class=&quot;err&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Does&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;cookie&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;begin&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;we&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;want&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;?&lt;/span&gt;
+                     &lt;span class=&quot;na&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;cookie&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;substring&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&#39;=&#39;))&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;
+                         &lt;span class=&quot;na&quot;&gt;cookieValue =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;decodeURIComponent(cookie.substring(name.length&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;));&lt;/span&gt;
+                         &lt;span class=&quot;na&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt;
+                     &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
+                 &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
+             &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;cookieValue&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
+         &lt;span class=&quot;na&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(!(/^&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;http:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.*/.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;/^&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;https:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.*/.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)))&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;err&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Only&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;send&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;relative&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;URLs&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;locally&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;
+             &lt;span class=&quot;na&quot;&gt;xhr&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setRequestHeader&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&quot;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;X-CSRFToken&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&quot;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;getCookie&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&#39;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;csrftoken&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&#39;));&lt;/span&gt;
+         &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I won’t go into to much detail here, but you can read more about this issue which apparently also impacts Ruby on Rails as well. Here’s a &lt;a href=&quot;https://www.djangoproject.com/weblog/2011/feb/08/security/&quot;&gt;link to a security post on the Django Project blog&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Finally, I pressing the &lt;code class=&quot;highlighter-rouge&quot;&gt;Save Game&lt;/code&gt; button gave me the long-awaited succss message: &lt;code class=&quot;highlighter-rouge&quot;&gt;Saved! It worked.&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I still have quite a bit of work to do before the “level-building” feature is complete for this game. Hopefully there are not as many issues in retrieving JSON data stored in the database.&lt;/p&gt;
+
+&lt;p&gt;It would probably make more sense to build this type of game with a JS backend and a NoSQL database, but it is good to know that Django + DRF + PostgreSQL can handle this.&lt;/p&gt;
+
+&lt;p&gt;A live demo of the level-building is available here: &lt;a href=&quot;http://briancaffey.com/kings/kingsencounter/level_builder&quot;&gt;http://briancaffey.com/kings/kingsencounter/level_builder&lt;/a&gt;, and you can find a demo of the game here: &lt;a href=&quot;http://briancaffey.com/kings/kingsencounter/&quot;&gt;http://briancaffey.com/kings/kingsencounter/&lt;/a&gt;. Here’s what the game looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/kings_encounter.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you save your game, you can see the JSON in the list of all saved games using the DRF web UI: &lt;a href=&quot;http://briancaffey.com/api/kings/games/&quot;&gt;http://briancaffey.com/api/kings/games/&lt;/a&gt;. One of the very next things I need to do on the backend assign a unique URL to each &lt;code class=&quot;highlighter-rouge&quot;&gt;Game&lt;/code&gt; object and update that &lt;code class=&quot;highlighter-rouge&quot;&gt;Game&lt;/code&gt; model rather than creating new games with each request. This will involve something like &lt;code class=&quot;highlighter-rouge&quot;&gt;UpdateAPIView&lt;/code&gt; in the REST Framework.&lt;/p&gt;
+
+&lt;p&gt;Hopefully this article is helpful if you are struggling with making an AJAX POST request to DRF on the backend. Thanks for reading and feel free to leave a comment if you have any thoughts or questions or can point out something I can improve.&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 22 Jul 2017 00:00:00 -0400</pubDate>
+        <link>/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html</link>
+        <guid isPermaLink="true">/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Comparing different ways to build friend objects in Django</title>
@@ -4934,115 +5192,6 @@ $ sudo service minidlna force-reload
         <pubDate>Thu, 07 Apr 2016 00:00:00 -0400</pubDate>
         <link>/2016/04/07/home-media-setup.html</link>
         <guid isPermaLink="true">/2016/04/07/home-media-setup.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Simple twitter-bot with Python, Tweepy and Heroku</title>
-        <description>&lt;p&gt;This post provides a walk-through tutorial on how to setup a simple twitter-bot that can do just about anything. I recently set up a simple &lt;a href=&quot;https://twitter.com/tw_tt_r_b_t&quot;&gt;twitter-bot&lt;/a&gt; that generates random cellular automata at a regular intervals, and I plan on doing a lot more with the Twitter API and text data analysis.&lt;/p&gt;
-
-&lt;h2 id=&quot;tweepyhttpwwwtweepyorg&quot;&gt;&lt;a href=&quot;http://www.tweepy.org/&quot;&gt;Tweepy&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;Tweepy is an easy-to-use Python library for accessing the Twitter API. There are several popular Python packages like Tweepy that serve as Twitter API wrappers, but I was only able to get my Twitterbot up and running with Tweepy.&lt;/p&gt;
-
-&lt;p&gt;Get started by installing Tweepy by running &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install tweepy&lt;/code&gt; in your command line. Next, let’s jump right into to a super-simple example of how to tweet with Tweepy.&lt;/p&gt;
-
-&lt;p&gt;While you test out your twitter-bot, you might want to use a throw-away Twitter account. To do this, you can make a new account associated with a new email address, or you can create an account that is linked to the same email address as your main Twitter account. When you enter your email information at the Sign Up page, add &lt;code class=&quot;highlighter-rouge&quot;&gt;+alias&lt;/code&gt; to the first part of your email address, right before the &lt;code class=&quot;highlighter-rouge&quot;&gt;@&lt;/code&gt;. Here’s an example:&lt;/p&gt;
-
-&lt;p&gt;If your email is &lt;code class=&quot;highlighter-rouge&quot;&gt;john_doe@gmail.com&lt;/code&gt;, you could enter &lt;code class=&quot;highlighter-rouge&quot;&gt;john_doe+twitter@gmail.com&lt;/code&gt;, and the sign up confirmation for this unique account will go to &lt;code class=&quot;highlighter-rouge&quot;&gt;john_doe@gmail.com&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Twitter requires that accounts accessing its API have a phone number associated with the account, so don’t skip this step in the sign up process.&lt;/p&gt;
-
-&lt;p&gt;While signed in to your new account, go to &lt;a href=&quot;https://apps.twitter.com/&quot;&gt;https://apps.twitter.com/&lt;/a&gt; and enter information for your new twitter-bot app.&lt;/p&gt;
-
-&lt;p&gt;On the following page, go over to the “Keys and Access Tokens” tab and copy the &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer Key (API Key)&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer Secret (API Secret)&lt;/code&gt;. Also, click the “Create my access token” button at the bottom of the page and copy the resulting &lt;code class=&quot;highlighter-rouge&quot;&gt;Access Token&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Access Token Secret&lt;/code&gt;. We will use these codes to make API requests on your own account’s behalf. Do not share your access token secret with anyone.&lt;/p&gt;
-
-&lt;p&gt;Open up your favorite text editor and create a new Python script called something like &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt;. Copy in the following code:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;tweepy&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;CONSUMER_KEY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your key&#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;CONSUMER_SECRET&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your secret&#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ACCESS_KEY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your access key&#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ACCESS_SECRET&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;replace with your access secret&#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tweepy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;OAuthHandler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CONSUMER_KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CONSUMER_SECRET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_access_token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ACCESS_KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ACCESS_SECRET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;api&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tweepy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;API&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;api&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sending my first tweet via Tweepy!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Navigate to the location of this script in your command line and run it with &lt;code class=&quot;highlighter-rouge&quot;&gt;$ python tweetbot.py&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now go over to your new Twitter account and check to see if your first tweet was sent successfully.&lt;/p&gt;
-
-&lt;p&gt;At this point there are already lots of interesting things you can do by simply passing strings into &lt;code class=&quot;highlighter-rouge&quot;&gt;api.update_status()&lt;/code&gt;. BeautifulSoup is a great tool for scraping information from the web that you can feed your twitter-bot.&lt;/p&gt;
-
-&lt;p&gt;With the simple script we can schedule regular tweets by adding a simple &lt;code class=&quot;highlighter-rouge&quot;&gt;while&lt;/code&gt; loop with a timer:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;time&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;tweet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scrape_some_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;api&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update_status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tweet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;In this example, the &lt;code class=&quot;highlighter-rouge&quot;&gt;scrape_some_data()&lt;/code&gt; function would scrape some information and save it to the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;tweet&lt;/code&gt;. Next, &lt;code class=&quot;highlighter-rouge&quot;&gt;time.sleep(300)&lt;/code&gt; waits 5 minutes before the loop starts again. This makes sure that your twitter-bot doesn’t exceed the &lt;a href=&quot;https://dev.twitter.com/rest/public/rate-limiting&quot;&gt;Twitter API rate limit&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;herokuhttpswwwherokucom&quot;&gt;&lt;a href=&quot;https://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;At this point we have a functioning twitter-bot, but we have to keep a machine running our script around the clock for twitter-bot to operate continuously. One solution would to run this script on a Raspberry Pi. Another great solution that I will explore here is to deploy the twitter-bot on Heroku.&lt;/p&gt;
-
-&lt;p&gt;Heroku is a cloud platform based on a managed container system. Instead of on a Raspberry Pi, we will put your &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt; script (along with a few other simple files) on a dyno.  Dynos are isolated, virtualized Unix containers, that provide the environment required to run your application.&lt;/p&gt;
-
-&lt;p&gt;If this doesn’t make much sense, think of Heroku as dedicated virtual Linux machine in the cloud that you can use (for free) to run your twitter-bot. The following steps will show you how to get setup with Heroku on your computer.&lt;/p&gt;
-
-&lt;p&gt;Select “Python” from &lt;a href=&quot;https://devcenter.heroku.com/start&quot;&gt;https://devcenter.heroku.com/start&lt;/a&gt;. This tutorial shows you how to launch a basic Django app, but we will tweak it slightly in order to get our twitter-bot running.&lt;/p&gt;
-
-&lt;p&gt;First, download the Heroku Toolbelt (command line tools) and run &lt;code class=&quot;highlighter-rouge&quot;&gt;$ heroku login&lt;/code&gt;, then enter your Heroku account information. Download the sample web application and check out what files come with it.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ git clone https://github.com/heroku/python-getting-started.git
-$ cd python-getting-started
-$ ls
-Procfile		app.json		manage.py
-Procfile.windows	gettingstarted		requirements.txt
-README.md		hello			runtime.txt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt; file will give instructions to your dyno regarding what it should do. Take a look inside this file, and you will see &lt;code class=&quot;highlighter-rouge&quot;&gt;web: gunicorn gettingstarted.wsgi --log-file -&lt;/code&gt;. This indicates that the dyno will be making a website using the file &lt;code class=&quot;highlighter-rouge&quot;&gt;gettingstarted.wsgi&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Delete the contents of this file and copy in the following line: 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;worker: python tweetbot.py&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;This will tell our dyno that we want it to do a simple task: run &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt;. Next, check out &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt;. The contents of this file indicate the packages our Python script needs to run. For our twitter-bot, we only need the Tweepy package. To check which version of Tweepy you have on your computer, run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip freeze | grep tweepy&lt;/code&gt; in the terminal. Mine reads &lt;code class=&quot;highlighter-rouge&quot;&gt;tweepy==3.5.0&lt;/code&gt;. Copy &lt;code class=&quot;highlighter-rouge&quot;&gt;tweepy==3.5.0&lt;/code&gt; into &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; and delete the other lines.&lt;/p&gt;
-
-&lt;p&gt;Next, we will create a place on Heroku where your twitter-bot will live. Run the following command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ heroku create
-Creating app... done, stack is cedar-14
-https://random-word-28487.herokuapp.com/ | https://git.heroku.com/random-word-28487.git
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Like Github, Heroku uses &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt; to move files from your local machine to Heroku’s containers. Clear out the &lt;code class=&quot;highlighter-rouge&quot;&gt;python-getting-started&lt;/code&gt; file so that the only files inside are &lt;code class=&quot;highlighter-rouge&quot;&gt;tweetbot.py&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;requirements.txt&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Procfile&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-terminal&quot;&gt;$ git add .
-$ git commit -m &quot;initial commit&quot;
-$ git push heroku master
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Pushing the files to Heroku with &lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push heroku master&lt;/code&gt; should create your twitter-bot program on Heroku and launch it into the Twitter-verse! To make sure everything is running smoothly, you can check out the log files on your Heroku Dashboard. There is lots you can do with Twitter and Tweepy, hopefully this tutorial has helped you understand the basics of how the Twitter API works and how to write your own twitter-bot. Thanks for reading, and feel free to leave a comment!&lt;/p&gt;
-</description>
-        <pubDate>Tue, 05 Apr 2016 00:00:00 -0400</pubDate>
-        <link>/2016/04/05/twitter-bot-tutorial.html</link>
-        <guid isPermaLink="true">/2016/04/05/twitter-bot-tutorial.html</guid>
-        
-        <category>twitter,</category>
-        
-        <category>python,</category>
-        
-        <category>heroku</category>
         
         
       </item>
