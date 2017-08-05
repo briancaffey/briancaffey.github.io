@@ -7,8 +7,9 @@ comments: true
 
 ---
 
-{% raw %}
 This is a simple guide to setting up a Django project on Heroku.
+
+{% raw %}
 
 The first step is to create a virutal environment in a new directory:
 

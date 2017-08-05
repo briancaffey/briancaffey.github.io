@@ -543,5 +543,5 @@ I installed a custom theme called `numix`, and also installed the a set of "circ
 One other great tool for adding extensions to GNOME is `extensions.gnome.org`. To use this you need to download an extension for Firefox as well as a small package (it prompts you to do this on the website). Once both of these are installed, you can add extensions directly from Firefox. Two extensions that I added are `Dash to Dock` and `Dynamic top bar` for managing the icon dock and top bar. Another great extension is the `Removable drive menu`.
 
 ## Conclusion
-
+ 
 I am very happy with this VirtualBox setup. I still want to install Arch Linux on "bare metal", and I may do this with a spare SSD that I have. This

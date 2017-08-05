@@ -6,8 +6,11 @@ date: 2017-07-22
 comments: true
 
 ---
-{% raw %}
+
+
 This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery's AJAX function. After tracing down all of the error messages into the documentation for Django, Django REST Framework, jQuery and JavaScript and many Stack Overflow questions, I was finally able to see my "It worked!" alert pop up from the `success` callback.
+
+{% raw %}
 
 ## Context
 
@@ -253,5 +256,6 @@ A live demo of the level-building is available here: [http://briancaffey.com/kin
 If you save your game, you can see the JSON in the list of all saved games using the DRF web UI: [http://briancaffey.com/api/kings/games/](http://briancaffey.com/api/kings/games/). One of the very next things I need to do on the backend assign a unique URL to each `Game` object and update that `Game` model rather than creating new games with each request. This will involve something like `UpdateAPIView` in the REST Framework.
 
 Hopefully this article is helpful if you are struggling with making an AJAX POST request to DRF on the backend. Thanks for reading and feel free to leave a comment if you have any thoughts or questions or can point out something I can improve.
+
 
 {% endraw %}

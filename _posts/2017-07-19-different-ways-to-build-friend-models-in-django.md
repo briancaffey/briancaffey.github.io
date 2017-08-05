@@ -6,7 +6,7 @@ date: 2017-07-19
 comments: true
 
 ---
-{% raw %}
+
 This post will briefly explore two different methods of creating models in Django for friends, relationships, followers or connections on a social network. The first method is one I learned from [this youtube tutorial series](https://www.youtube.com/watch?v=IXJ46DitsIg&index=55&list=PLw02n0FEB3E3VSHjyYMcFadtQORvl1Ssj) by [Max Goodridge](https://github.com/maxg203) when I first started learning Django.
 
 ## 1st Method: **ManytoManyField** to store friends
@@ -254,5 +254,3 @@ if(document.getElementById('users-container')) {
 There is a lot you can do with Connection models. This models explored here are fairly simple "following" relationships. The following process does not require that the user being followed accepts the initiating users "follow". Since I am designing this for a small, invite-only social-network, it is ok to keep things relatively simple for now.
 
 The major difference between the first and second methods of building friendship/follower/connection models is that you can store more detailed information about each relationship. However, if we wanted to store data about the non-directional relationship between two people, we would have to make another model (perhaps with signals), or update the information in both Connection models (a -> b and b -> a).
-
-{% endraw %}

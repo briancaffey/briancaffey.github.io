@@ -10,8 +10,8 @@
   <meta name="description" content="Here’s a walkthrough of the tutorial on the Django website. I’ve included some of my own notes. This post is primarily for self reference.">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2017/03/06/django-poll-tutorial.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2017/03/06/django-poll-tutorial.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
   <script>
@@ -87,7 +87,7 @@
 
 <p>First, navigate to a folder where we will put the project, then make the project with:</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;django-admin startproject mysite
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;django-admin startproject mysite
 (py3) &gt;&gt;cd mysite
 (py3) &gt;&gt;tree
 .
@@ -100,10 +100,12 @@
 
 1 directory, 5 files
 </code></pre>
+</div>
 <p>Next we can start the server:</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;python manage.py runserver
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;python manage.py runserver
 </code></pre>
+</div>
 
 <blockquote>
   <p>Ignore the warning about unapplied database migrations for now; we’ll deal with the database shortly.</p>
@@ -111,7 +113,7 @@
 
 <p>Next we create an app called <code class="highlighter-rouge">polls</code>:</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;python manage.py startapp polls
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;python manage.py startapp polls
 (py3) &gt;&gt;cd polls
 (py3) &gt;&gt;tree
 .
@@ -126,12 +128,13 @@
 
 1 directory, 7 files
 </code></pre>
+</div>
 
 <p>Next we can write the first view for our app:</p>
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
 
 <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
@@ -141,7 +144,7 @@
 
 <p>This is the simplest view possible in Django. To call the view, we need to map it to a URL - and for this we need a URLconf. To create a URLconf in the polls directory, create a file called urls.py.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
 
@@ -153,7 +156,7 @@
 
 <p>The next step is to point the root URLconf at the polls.urls module. In mysite/urls.py, add an import for django.conf.urls.include and insert an include() in the urlpatterns list, so you have:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
 <span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 
 <span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
@@ -162,7 +165,7 @@
 <span class="p">]</span>
 </code></pre>
 </div>
-<p># Part 2</p>
+<h1 id="part-2">Part 2</h1>
 
 <p>This chapter covers databases and Django’s automatically-generated admin site.</p>
 
@@ -170,7 +173,7 @@
 
 <p>The migrate command looks at the INSTALLED_APPS setting and creates any necessary database tables according to the database settings in your mysite/settings.py file and the database migrations shipped with the app (we’ll cover those later).</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;python manage.py migrate
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;python manage.py migrate
 Operations to perform:
   Apply all migrations: admin, auth, contenttypes, sessions
 Running migrations:
@@ -188,6 +191,7 @@ Running migrations:
   Applying auth.0008_alter_user_username_max_length... OK
   Applying sessions.0001_initial... OK
 </code></pre>
+</div>
 
 <h2 id="creating-models">Creating models</h2>
 
@@ -195,7 +199,7 @@ Running migrations:
 
 <p><em>polls/models.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 
 <span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 	<span class="n">question_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
@@ -214,7 +218,7 @@ Running migrations:
 
 <p><em>mysite/settings.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
  <span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s">'django.contrib.admin'</span><span class="p">,</span>
     <span class="s">'django.contrib.auth'</span><span class="p">,</span>
@@ -230,13 +234,14 @@ Running migrations:
 
 <p>Now Django knows to include the polls app. Next, we can run the <code class="highlighter-rouge">makemigrations</code> command:</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;python manage.py makemigrations
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;python manage.py makemigrations
 Migrations for 'polls':
   polls/migrations/0001_initial.py:
     - Create model Choice
     - Create model Question
     - Add field question to choice
 </code></pre>
+</div>
 
 <p>By running makemigrations, you’re telling Django that you’ve made some changes to your models (in this case, you’ve made new ones) and that you’d like the changes to be stored as a migration.</p>
 
@@ -244,7 +249,7 @@ Migrations for 'polls':
 
 <p>There’s a command that will run the migrations for you and manage your database schema automatically - that’s called <code class="highlighter-rouge">migrate</code>, and we’ll come to it in a moment - but first, let’s see what SQL that migration would run. The <code class="highlighter-rouge">sqlmigrate</code> command takes migration names and returns their SQL:</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;python manage.py sqlmigrate polls 0001
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;python manage.py sqlmigrate polls 0001
 BEGIN;
 --
 -- Create model Choice
@@ -264,28 +269,31 @@ DROP TABLE "polls_choice__old";
 CREATE INDEX "polls_choice_7aa0f6ee" ON "polls_choice" ("question_id");
 COMMIT;
 </code></pre>
+</div>
 
 <p>The sqlmigrate command doesn’t actually run the migration on your database - it just prints it to the screen so that you can see what SQL Django thinks is required.</p>
 
 <p>Now we can run the <code class="highlighter-rouge">migrate</code> command:</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;python manage.py migrate
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;python manage.py migrate
 Operations to perform:
   Apply all migrations: admin, auth, contenttypes, polls, sessions
 Running migrations:
   Applying polls.0001_initial... OK
 </code></pre>
-<p>## Introducing the Django Admin</p>
+</div>
+<h2 id="introducing-the-django-admin">Introducing the Django Admin</h2>
 
 <p>First we’ll need to create a user who can login to the admin site. Run the following command:</p>
 
-<pre><code class="language-terminal">(py3) &gt;&gt;python manage.py createsuperuser
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(py3) &gt;&gt;python manage.py createsuperuser
 Username: brian
 Email address: [email@email.com]
 Password:
 Password (again):
 Superuser created successfully.
 </code></pre>
+</div>
 
 <p>Now we can access the admin portal at <code class="highlighter-rouge">localhost:8000/admin/</code></p>
 
@@ -293,7 +301,7 @@ Superuser created successfully.
 
 <p><em>polls/admin.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
 
@@ -337,7 +345,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
 	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">"You are looking at question </span><span class="si">%</span><span class="s">s."</span> <span class="o">%</span> <span class="n">question_id</span><span class="p">)</span>
 
@@ -354,7 +362,7 @@ Superuser created successfully.
 
 <p><em>polls/urls.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
 
@@ -376,7 +384,7 @@ Superuser created successfully.
 
 <p>When somebody requests a page from your website – say, “/polls/34/”, Django will load the mysite.urls Python module because it’s pointed to by the <code class="highlighter-rouge">ROOT_URLCONF</code> setting. It finds the variable named urlpatterns and traverses the regular expressions in order. After finding the match at ‘^polls/’, it strips off the matching text (“polls/”) and sends the remaining text – “34/” – to the ‘polls.urls’ URLconf for further processing. There it matches r’^(?P<question_id>[0-9]+)/$', resulting in a call to the detail() view like so:</question_id></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">detail</span><span class="p">(</span><span class="n">request</span><span class="o">=&lt;</span><span class="n">HttpRequest</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">question_id</span><span class="o">=</span><span class="s">'34'</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">detail</span><span class="p">(</span><span class="n">request</span><span class="o">=&lt;</span><span class="n">HttpRequest</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">question_id</span><span class="o">=</span><span class="s">'34'</span><span class="p">)</span>
 </code></pre>
 </div>
 
@@ -399,7 +407,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 	<span class="n">latest_question_list</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-pub_date'</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
 	<span class="n">output</span> <span class="o">=</span> <span class="s">','</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">q</span><span class="o">.</span><span class="n">question_text</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">latest_question_list</span><span class="p">])</span>
 	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
@@ -410,7 +418,7 @@ Superuser created successfully.
 
 <p><em>polls/templates/polls/index.html</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>{% if latest_question_list %}
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>{% if latest_question_list %}
 	<span class="nt">&lt;ul&gt;</span>
 		{% for question in latest_question_list %}
 			<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/polls/{{ question.id }}/"</span><span class="nt">&gt;</span>{{question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
@@ -426,7 +434,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
 <span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">loader</span>
 
@@ -447,7 +455,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
 
 <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
@@ -466,7 +474,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
 <span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
 	<span class="k">try</span><span class="p">:</span> 
@@ -482,17 +490,17 @@ Superuser created successfully.
 
 <p>For now we can write a simple template for <code class="highlighter-rouge">detail.html</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>{{ question }}
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>{{ question }}
 </code></pre>
 </div>
 
-<h2 id="another-shortcut-getobjector404">Another shortcut: <em>get_object_or_404()</em></h2>
+<h2 id="another-shortcut-get_object_or_404">Another shortcut: <em>get_object_or_404()</em></h2>
 
 <p>It’s a very common idiom to use get() and raise Http404 if the object doesn’t exist. Django provides a shortcut. Here’s the detail() view, rewritten:</p>
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
 <span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
 	<span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
@@ -509,7 +517,7 @@ Superuser created successfully.
 
 <p><em>polls/templates/polls/detail.html</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
 <span class="nt">&lt;ul&gt;</span>
 {% for choice in question.choice_set.all %}
 	<span class="nt">&lt;li&gt;</span>{{ choice.choice_text }}<span class="nt">&lt;/li&gt;</span>
@@ -524,19 +532,19 @@ Superuser created successfully.
 
 <p>In <code class="highlighter-rouge">polls/index.html</code> we used a hardcoded link:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/polls/{{ question.id }}/"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/polls/{{ question.id }}/"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
 </code></pre>
 </div>
 
 <p>It would be very challening to change this URL if we had many such templates. However, since you defined the name argument in the url() functions in the polls.urls module, you can remove a reliance on specific URL paths defined in your url configurations by using the {% url %} template tag:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'detail' question.id %}"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'detail' question.id %}"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
 </code></pre>
 </div>
 
 <p>The way this works is by looking up the URL definition as specified in the polls.urls module. Remember, we defined the name of <code class="highlighter-rouge">detail</code> in <code class="highlighter-rouge">urls.py</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="n">url</span><span class="p">(</span><span class="s">r'(?P&lt;question_id&gt;[0-9]+)/$'</span><span class="p">,</span> <span class="n">view</span><span class="o">.</span><span class="n">detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'detail'</span><span class="p">),</span>
 <span class="p">[</span><span class="o">...</span><span class="p">]</span>
 </code></pre>
@@ -548,7 +556,7 @@ Superuser created successfully.
 
 <p><em>polls/urls.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
 
@@ -573,7 +581,7 @@ Superuser created successfully.
 
 <p><em>polls/templates/polls/index.html</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'polls:detail' question.id %}"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'polls:detail' question.id %}"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
 </code></pre>
 </div>
 
@@ -585,7 +593,7 @@ Superuser created successfully.
 
 <p><em>polls/templates/polls/detail.html</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
 {% if error_message %}<span class="nt">&lt;p&gt;&lt;strong&gt;</span>{{ error_message }}<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>{% endif %}
 
 <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{% url 'polls:vote' question.id %}"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
@@ -608,7 +616,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
 
@@ -654,7 +662,7 @@ Superuser created successfully.
   <li>We are using the <code class="highlighter-rouge">reverse()</code> function in the <code class="highlighter-rouge">HttpResponseRedirect</code> constructor in this example. This function helps avoid having to hardcode a URL in the view function. It is given the name of the view that we want to pass control to and the variable portion of the URL pattern that points to that view. In this case, using the <code class="highlighter-rouge">URLconf</code> we set up in Tutorial 3, this <code class="highlighter-rouge">reverse()</code> call will return a string like:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>'/polls/3/results/'
+<div class="language-text highlighter-rouge"><pre class="highlight"><code>'/polls/3/results/'
 </code></pre>
 </div>
 
@@ -662,7 +670,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="k">def</span> <span class="nf">results</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
 	<span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'polls/results.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'question'</span><span class="p">:</span> <span class="n">question</span><span class="p">})</span>
@@ -674,7 +682,7 @@ Superuser created successfully.
 
 <p><em>polls/results.html</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
 
 <span class="nt">&lt;ul&gt;</span>
 {% for choice in question.choice_set.all %}
@@ -708,7 +716,7 @@ Superuser created successfully.
 
 <p><em>polls/urls.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
 
@@ -734,7 +742,7 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span>
 <span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
 <span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">generic</span>
 <span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
@@ -835,7 +843,7 @@ def vote(request, question_id):
 
 <p><em>polls/static/polls/style.css</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">li</span> <span class="nt">a</span> <span class="p">{</span>
+<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">li</span> <span class="nt">a</span> <span class="p">{</span>
 	<span class="nl">color</span><span class="p">:</span> <span class="no">green</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre>
@@ -843,7 +851,7 @@ def vote(request, question_id):
 
 <p>Next, add the following at the top of <code class="highlighter-rouge">polls/templates/polls/index.html</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>{% load static %}
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>{% load static %}
 
 <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">href=</span><span class="s">"{% static 'polls/style.css' %}"</span> <span class="nt">/&gt;</span> 
 </code></pre>
@@ -857,7 +865,7 @@ def vote(request, question_id):
 
 <p><em>polls/admin.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
 
@@ -876,7 +884,7 @@ def vote(request, question_id):
 
 <p><em>polls/admin.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
 
@@ -891,7 +899,7 @@ def vote(request, question_id):
 
 <p><em>polls/admin.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Choice</span><span class="p">,</span> <span class="n">Question</span>
 

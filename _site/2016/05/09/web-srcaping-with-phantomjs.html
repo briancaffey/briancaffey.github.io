@@ -10,8 +10,8 @@
   <meta name="description" content="This is a short description of how I’ve used PhantomJS to scrape “hidden data” from a website. PhantomJS is a browser sans browser. There’s no GUI, but you c...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2016/05/09/web-srcaping-with-phantomjs.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2016/05/09/web-srcaping-with-phantomjs.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
   <script>
@@ -89,7 +89,7 @@
 
 <p>I was interested in getting links that were displayed in lists on a many pages with URLs like <code class="highlighter-rouge">www.website.com/#page=1</code> with about 1,200 pages total. I started out using Python’s <a href="http://docs.python-requests.org/en/master/">Requests</a> library (HTTP for Humans), but I quickly found that the HTML I wanted wasn’t showing up. I expected to see the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"target-class"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"target-class"</span><span class="nt">&gt;</span>
 	<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/link1"</span><span class="nt">&gt;</span>Link1<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
 	<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/link2"</span><span class="nt">&gt;</span>Link2<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
 	<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/link3"</span><span class="nt">&gt;</span>Link3<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
@@ -99,7 +99,7 @@
 </div>
 <p>But the HTML returned by Requests was just an empty unordered list:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"target-class"</span><span class="nt">&gt;&lt;/ul&gt;</span>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"target-class"</span><span class="nt">&gt;&lt;/ul&gt;</span>
 </code></pre>
 </div>
 
@@ -119,7 +119,7 @@
 
 <p>Here’s the bash script that I came up with outlining the process:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/use/bin/env bash</span>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#!/use/bin/env bash</span>
 
 <span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>seq 1 1200<span class="sb">`</span>;
 <span class="k">do 
@@ -134,7 +134,7 @@
 
 <p>The the <code class="highlighter-rouge">scrape.js</code> argument is a JavaScript file with the instructions for accessing and returning the data I need. Here’s that file:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="s2">"use strict"</span><span class="p">;</span>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="s2">"use strict"</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'system'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webpage'</span><span class="p">).</span><span class="nx">create</span><span class="p">();</span>
@@ -162,7 +162,7 @@
 
 <p>Lastly, here’s the Python script with BeautifulSoup that returns a list of the relative URLs I wanted in the beginning:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s">'/Users/me/Documents/path/to/pages'</span><span class="p">)</span>

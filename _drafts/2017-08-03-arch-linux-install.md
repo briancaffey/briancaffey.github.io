@@ -544,4 +544,4 @@ One other great tool for adding extensions to GNOME is `extensions.gnome.org`. T
 
 ## Conclusion
 
-I am very happy with the VirtualBox setup. I still want to install Arch Linux on "bare metal", and I may do this with a spare SSD that I have. This
+I am very happy with this VirtualBox setup. I still want to install Arch Linux on "bare metal", and I may do this with a spare SSD that I have. This

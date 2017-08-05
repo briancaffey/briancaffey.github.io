@@ -10,8 +10,8 @@
   <meta name="description" content="This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX ...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
   <script>
@@ -83,8 +83,7 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    
-<p>This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX function. After tracing down all of the error messages into the documentation for Django, Django REST Framework, jQuery and JavaScript and many Stack Overflow questions, I was finally able to see my “It worked!” alert pop up from the <code class="highlighter-rouge">success</code> callback.</p>
+    <p>This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX function. After tracing down all of the error messages into the documentation for Django, Django REST Framework, jQuery and JavaScript and many Stack Overflow questions, I was finally able to see my “It worked!” alert pop up from the <code class="highlighter-rouge">success</code> callback.</p>
 
 <h2 id="context">Context</h2>
 
@@ -92,7 +91,7 @@
 
 <p>The entire game state is stored in a JavaScript object. Here’s a simplified representation of the structure:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">"map"</span><span class="p">:{</span>
     <span class="s2">"0"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
     <span class="s2">"1"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">player</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
@@ -161,7 +160,7 @@
 
 <p>Before I started writing the AJAX call, I looked in the Django REST Framework documentation for instructions on how to post JSON data. Here are the REST Framework settings I added to <code class="highlighter-rouge">settings.py</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">REST_FRAMEWORK</span> <span class="o">=</span> <span class="p">{</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">REST_FRAMEWORK</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">'DEFAULT_RENDERER_CLASSES'</span><span class="p">:</span> <span class="p">(</span>
         <span class="s">'rest_framework.renderers.JSONRenderer'</span><span class="p">,</span>
     <span class="p">),</span>
@@ -176,7 +175,7 @@
 
 <p>I should also mention that I added a simple “Game” model in <code class="highlighter-rouge">models.py</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib.postgres.fields</span> <span class="kn">import</span> <span class="n">JSONField</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib.postgres.fields</span> <span class="kn">import</span> <span class="n">JSONField</span>
 
 <span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">game</span> <span class="o">=</span> <span class="n">JSONField</span><span class="p">()</span>
@@ -187,7 +186,7 @@
 
 <p><em>kings/api/views.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
 <span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">GameSerializer</span>
 
 <span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">CreateAPIView</span><span class="p">,</span> <span class="c"># ListAPIView</span>
@@ -210,7 +209,7 @@
 
 <p><em>kings/api/serializers.py</em></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">ModelSerializer</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">ModelSerializer</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
 
@@ -239,7 +238,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>I resolved the <code class="highlighter-rouge">415</code> error by adding the following to the AJAX call.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>headers: {
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>headers: {
   'Accept': 'application/json',
   'Content-Type': 'application/json'
   },
@@ -250,7 +249,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>At this point I thought I was pretty close. I could successfully POST data using the DRF web interface, and I got the following type of error messages (which were <code class="highlighter-rouge">HTTP 400 Bad Request</code>) when I tried to post malformed data:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
     </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON parse error - Expecting value: line 2 column 13 (char 14)"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -258,7 +257,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>To see what error message I was getting using AJAX, I found that jQuery makes the error message available in <code class="highlighter-rouge">XMLHttpRequest.responseText</code>. I then added the following to the AJAX <code class="highlighter-rouge">error</code> callback:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$.ajax({
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>$.ajax({
   ...
   error: function(XMLHttpRequest, textStatus, errorThrown) {
     alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
@@ -275,7 +274,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>This led me to believe that there was an issue with the <code class="highlighter-rouge">data</code> attribute being passed into the AJAX call. It was particularly difficult to figure out how to write the JSONified version of JavaScript object. SO posts had many different ways, and I eventually found that the following worked:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$.ajax({
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>$.ajax({
   ...
   data : JSON.stringify({game:scene}),
 </code></pre>
@@ -287,7 +286,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>At some point in all of this debugging I got a strange error message saying the CSRF Token was missing or incorrect. I had included <code class="highlighter-rouge">csrfmiddlewaretoken: "{{ csrf_token }}",</code> in the AJAX call, and it wasn’t an issue I had experienced with making my other POST request with AJAX. I found <a href="https://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request">this Stack Overflow answer</a> with 143 votes and 90,322 views, and was pleased that the proposed solution worked just fine. It involves adding <code class="highlighter-rouge">$.ajaxSetup()</code> before the AJAX call:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$.ajaxSetup({
+<div class="language-html highlighter-rouge"><pre class="highlight"><code>$.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
              var cookieValue = null;

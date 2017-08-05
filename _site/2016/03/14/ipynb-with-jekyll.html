@@ -10,8 +10,8 @@
   <meta name="description" content="I’ve been looking for ways to incorporate Jupyter notebooks into my new blog. This post explains a process that I’ve come across, although there may be other...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2016/03/14/ipynb-with-jekyll.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2016/03/14/ipynb-with-jekyll.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
   <script>
@@ -93,12 +93,13 @@
 
 <p>You can read more about converting iPython Notebooks <a href="https://ipython.org/ipython-doc/3/notebook/nbconvert.html">here</a>. In your terminal you should see the following:</p>
 
-<pre><code class="language-terminal">$ ipython nbconvert jekyll_test.ipynb --to markdown
-[NbConvertApp] Converting notebook jekyll_test.ipynb to markdown
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">ipython</span><span class="kv"> nbconvert jekyll_test.ipynb --to markdown
+</span>[NbConvertApp] Converting notebook jekyll_test.ipynb to markdown
 [NbConvertApp] Support files will be in jekyll_test_files/
 [NbConvertApp] Making directory jekyll_test_files
 [NbConvertApp] Writing 286 bytes to jekyll_test.md
 </code></pre>
+</div>
 
 <p>This puts related image files from graphs into a new folder, <code class="highlighter-rouge">jekyll_test_files/</code>, so you will have to make sure the path matches up. I have created a top-level folder named <code class="highlighter-rouge">ipynb</code> to keep things orderly.</p>
 
@@ -114,17 +115,17 @@
 
 <p>Here is the result from a simple notebook that I used here:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 </code></pre>
 </div>
 

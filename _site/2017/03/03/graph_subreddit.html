@@ -10,8 +10,8 @@
   <meta name="description" content="Graphing Subreddits">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2017/03/03/graph_subreddit.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2017/03/03/graph_subreddit.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
   <script>
@@ -91,7 +91,7 @@
 
 <p>If you visit reddit.com as a guest, you will see a list of popular subreddits. This list is located inside an <code class="highlighter-rouge">html</code> tag called <code class="highlighter-rouge">drop-choices</code>. Here it is:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -99,7 +99,7 @@
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">PhantomJS</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">PhantomJS</span><span class="p">()</span>
 <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.reddit.com/'</span><span class="p">)</span>
 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
 <span class="n">html</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">page_source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
@@ -130,7 +130,7 @@
   <p>Few programming languages provide direct support for graphs as a data type, and Python is no exception. However, graphs are easily built out of lists and dictionaries. For instance, here’s a simple graph (I can’t use drawings in these columns, so I write down the graph’s arcs):</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>A -&gt; B
+<div class="language-text highlighter-rouge"><pre class="highlight"><code>A -&gt; B
 A -&gt; C
 B -&gt; C
 B -&gt; D
@@ -143,7 +143,7 @@ F -&gt; C
 
 <p>This graph has six nodes (A-F) and eight arcs. It can be represented by the following Python data structure:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>graph =     {'A': ['B', 'C'],
+<div class="language-text highlighter-rouge"><pre class="highlight"><code>graph =     {'A': ['B', 'C'],
              'B': ['C', 'D'],
              'C': ['D'],
              'D': ['C'],
@@ -154,7 +154,7 @@ F -&gt; C
 
 <p>First let’s define how we would go only one branch deep into this graph (i.e. find the related subreddits for <em>only</em> the default subreddits). To collect the data, I first looped through the default subreddits and save the html of each subreddit to its own text file. Here’s a script with comments:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#first we navigate to the correct folder where we will store the first level of related subreddits</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#first we navigate to the correct folder where we will store the first level of related subreddits</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">'~/Documents/Projects/Data/Subreddits/one/'</span><span class="p">))</span>
 
 <span class="c">#next we instantiate the webdriver we will be using: PhantomJS</span>
@@ -201,7 +201,7 @@ F -&gt; C
 
 <p>For this type of project, I prefer to loop through each page and creating several small dictionaries for each data point, then combine the small dictionaries into a large dictionary, and then append the dictionary to a list of dictionaries. Once I have looped through all of the pages, I can create a pandas DataFrame from the list of dictionaries. This allows me to easily manipulate the data. Here’s the script that I used to do this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#navigate to where the html files are stored (I moved them around a bit so it is not consistent with the script above)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#navigate to where the html files are stored (I moved them around a bit so it is not consistent with the script above)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s">'E://DATA/Subreddits/subreddits_html/'</span><span class="p">)</span>
 
 <span class="c">#generate a list of files that we will loop through</span>
@@ -280,7 +280,7 @@ F -&gt; C
 
 <p>Next, let’s save the results into a csv file. This let’s us load the results quickly without having to scrape everyting again. To do this we can use the pandas library.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="n">df0</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 </code></pre>
 </div>
@@ -293,14 +293,14 @@ F -&gt; C
 
 <p>This DataFrame represents the collection of subreddits from all of these “layers” of the graph.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="n">master_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s">'pickle/master_df.p'</span><span class="p">)</span>
 </code></pre>
 </div>
 
 <p>Now we can do a quick visualization of the growth in number of subreddits since the website’s start in 2005.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">warnings</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s">'ignore'</span><span class="p">)</span>
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
@@ -327,33 +327,33 @@ F -&gt; C
 
 <p>Next we can start to look at the collection of reddits and related subreddits as a graph. I will be using a Python package for network and graph analysis called <a href="https://networkx.github.io">NetworkX</a>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#Let's make sure that we have only unique entries in the dataframe.</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#Let's make sure that we have only unique entries in the dataframe.</span>
 <span class="n">master_df_u</span> <span class="o">=</span> <span class="n">master_df_</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s">'subreddit'</span><span class="p">)</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">master_df_u</span> <span class="o">=</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/track__subreddits_'</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">master_df_u</span> <span class="o">=</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/track__subreddits_'</span><span class="p">])</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#here we define a dictionary where the keys are subreddits and the values are lists of related subreddits</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#here we define a dictionary where the keys are subreddits and the values are lists of related subreddits</span>
 <span class="n">graph</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">related</span><span class="p">)}</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#NetworkX comes with the python Anaconda distribution</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#NetworkX comes with the python Anaconda distribution</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 <span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">from_dict_of_lists</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 <span class="c">#making the graph undirected takes all of the vertices between nodes and makes them bi-directional</span>
 <span class="n">G1</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">choice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">choice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">choice</span>
 </code></pre>
 </div>
@@ -364,7 +364,7 @@ F -&gt; C
 
 <p>Let’s test out some of the functions from NetworkX for graph analysis. First, let’s take the two randomly selected nodes defined above and test to see if there exists a path between them:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">has_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">has_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </code></pre>
 </div>
 
@@ -376,7 +376,7 @@ F -&gt; C
 
 <p>Now let’s see (at least one of) the shortest path that exists between these nodes:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </code></pre>
 </div>
 
@@ -391,7 +391,7 @@ F -&gt; C
 
 <p>Let’s write a function that selects two random subreddits and then prints a shortest path if it exists:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">short_path</span><span class="p">():</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">short_path</span><span class="p">():</span>
     <span class="n">choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nx</span><span class="o">.</span><span class="n">has_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -403,7 +403,7 @@ F -&gt; C
 
 <p>Here’s a collection of results from the <code class="highlighter-rouge">short_path</code> function defined above that start to paint a picuture of the broad set of topics covered by reddit.com:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -412,7 +412,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -421,7 +421,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -430,7 +430,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -439,7 +439,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -448,7 +448,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -457,7 +457,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -466,7 +466,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -475,7 +475,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -484,7 +484,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -493,7 +493,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -502,7 +502,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -511,7 +511,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -520,7 +520,7 @@ F -&gt; C
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
 </code></pre>
 </div>
 
@@ -529,18 +529,18 @@ F -&gt; C
 </code></pre>
 </div>
 
-<p>Taking a look <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/unweighted.html?highlight=bidirectional_shortest_path">under the hood</a> of NetworkX and examining the algorith that finds the <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/generic.html#shortest_path">shortest path</a> between any two nodes in a graph, we find that it simply boils down to:
-<code class="highlighter-rouge">
-def shortest_path(G, source=None, target=None, weight=None):
+<p>Taking a look <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/unweighted.html?highlight=bidirectional_shortest_path">under the hood</a> of NetworkX and examining the algorith that finds the <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/generic.html#shortest_path">shortest path</a> between any two nodes in a graph, we find that it simply boils down to:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>def shortest_path(G, source=None, target=None, weight=None):
     paths=nx.bidirectional_shortest_path(G,source,target)
     return paths
-</code></p>
+</code></pre>
+</div>
 
 <p>You can read more about the <code class="highlighter-rouge">bidirectional_shortest_path</code> function <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/unweighted.html?highlight=bidirectional_shortest_path">here</a> in the NetworkX documentation.</p>
 
 <p>When I was first experimenting with graph algorithms, I had an interesting result using an algorithm intruduced <a href="https://www.python.org/doc/essays/graphs/">here</a> in the Python documentation. Here’s the algorithm:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_path</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="p">[]):</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_path</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="p">[]):</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="n">end</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">path</span>
@@ -570,13 +570,13 @@ def shortest_path(G, source=None, target=None, weight=None):
 
 <p>There are several different methods of measuring centrality in a graph. Here I use <code class="highlighter-rouge">eigenvector_centrality_numpy</code>, a function included in NetworkX. It takes in a graph and returns a dictionary with graph nodes as keys and node centrality as values.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">eigenvector_centrality_numpy</span><span class="p">(</span><span class="n">G1</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">eigenvector_centrality_numpy</span><span class="p">(</span><span class="n">G1</span><span class="p">)</span>
 </code></pre>
 </div>
 
 <p>Let’s see which subreddit has the highest centrality:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">),</span> <span class="n">centrality</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">)]</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">),</span> <span class="n">centrality</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">)]</span>
 </code></pre>
 </div>
 
@@ -584,7 +584,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">len</span><span class="p">(</span><span class="n">centrality</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="nb">len</span><span class="p">(</span><span class="n">centrality</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
 </code></pre>
 </div>
 
@@ -594,7 +594,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 
 <p>Since all of the centrality values are unique, we can look up nodes by their centrality values.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">subr_list</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">subr_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">centrality</span><span class="p">:</span>
     <span class="n">subr_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">,</span> <span class="n">centrality</span><span class="p">[</span><span class="n">node</span><span class="p">]))</span>
     
@@ -602,7 +602,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subr_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">200</span><span class="p">]:</span> <span class="k">print</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subr_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">200</span><span class="p">]:</span> <span class="k">print</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
 </code></pre>
 </div>
 
@@ -612,7 +612,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 
 <p>There seems to be a network of “imaginary” subreddits that have the highest centrality. The members of this network probably all link to themselves as well as many other subreddits as the “imaginary” topics span a wide range content. This network may be drowning out other nodes that would otherwise have a high centrality relative to the rest of the subreddits. It might be interesting to eliminate these nodes from the graph and recalculate centrality. Let’s look at the distribution of centrality values:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">1000</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">1000</span><span class="p">])</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Subreddit Centrality (top 1000)'</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Rank'</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Centrality'</span><span class="p">)</span>
@@ -626,7 +626,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 
 <p>Let’s take a look at the graph as a whole. One thing I’m not sure of is whether or not the entire graph is connected. This means that any node can be reached from any other node. Since we constructed the graph from 49 unrelated nodes, it is possible that the graph is unconnected. This would mean that one or more of the default subreddits and its subreddits is not connected with the rest of the graph. In searching for the shortest path I did not come across any pairs of nodes that did not have a path between themselves. I wouldn’t be surprised if there are a handful of nodes that stand on their own.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#size of graph: nodes and edges (or, subreddits and connecting links)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#size of graph: nodes and edges (or, subreddits and connecting links)</span>
 <span class="k">print</span> <span class="s">"Our graph has "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">' nodes and '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">' edges.'</span> 
 </code></pre>
 </div>
@@ -635,7 +635,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">"True of False: our graph is connected... "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">'!'</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">"True of False: our graph is connected... "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">'!'</span>
 </code></pre>
 </div>
 
@@ -643,7 +643,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 </code></pre>
 </div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Gc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">connected_component_subgraphs</span><span class="p">(</span><span class="n">G1</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">Gc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">connected_component_subgraphs</span><span class="p">(</span><span class="n">G1</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
 <span class="k">print</span> <span class="s">"The largest connected component subgraph has "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">Gc</span><span class="p">))</span> <span class="o">+</span> <span class="s">" nodes. "</span> 
 </code></pre>
 </div>
@@ -654,7 +654,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 
 <p>There are 14 nodes that are not connected to the main connected component. Let’s list them.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span> <span class="k">print</span> <span class="n">x</span><span class="p">,</span> 
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span> <span class="k">print</span> <span class="n">x</span><span class="p">,</span> 
 </code></pre>
 </div>
 
@@ -664,7 +664,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 
 <p>Some of the large communities on reddit include /r/books, /r/gaming and /r/science. These subreddits list related subreddits on separate wiki pages since there are many related subreddits for each one. They were most likely all captured in the subsequent levels of the graph, but they also did not link back to /r/science. Here’s an example:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/physics'</span><span class="p">]</span><span class="o">.</span><span class="n">related</span><span class="p">:</span> <span class="k">print</span> <span class="n">x</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/physics'</span><span class="p">]</span><span class="o">.</span><span class="n">related</span><span class="p">:</span> <span class="k">print</span> <span class="n">x</span>
 </code></pre>
 </div>
 
@@ -674,7 +674,7 @@ def shortest_path(G, source=None, target=None, weight=None):
 
 <p>I’ve got some additional ideas to explore in another post on this topic, such as finding cliques and maximual cliques, and doing graph visualizations with D3.js. If you are interested in playing with the data, you can clone <a href="https://github.com/briancaffey/reddit-graph-analysis">my GitHub repo</a> and load the pickled DataFrames like this:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s">'pickle/master_df.p'</span><span class="p">)</span>
 </code></pre>
 </div>
