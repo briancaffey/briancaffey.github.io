@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 04 Aug 2017 21:37:27 -0400</pubDate>
-    <lastBuildDate>Fri, 04 Aug 2017 21:37:27 -0400</lastBuildDate>
+    <pubDate>Wed, 09 Aug 2017 07:50:26 +0000</pubDate>
+    <lastBuildDate>Wed, 09 Aug 2017 07:50:26 +0000</lastBuildDate>
     <generator>Jekyll v3.5.1</generator>
     
       <item>
@@ -550,7 +550,7 @@ error: target not found: xorg-server-utils
 
 &lt;p&gt;I am very happy with this VirtualBox setup. I still want to install Arch Linux on “bare metal”, and I may do this with a spare SSD that I have. This&lt;/p&gt;
 </description>
-        <pubDate>Thu, 03 Aug 2017 00:00:00 -0400</pubDate>
+        <pubDate>Thu, 03 Aug 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/08/03/arch-linux-installation-guide.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/08/03/arch-linux-installation-guide.html</guid>
         
@@ -807,7 +807,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 &lt;p&gt;Hopefully this article is helpful if you are struggling with making an AJAX POST request to DRF on the backend. Thanks for reading and feel free to leave a comment if you have any thoughts or questions or can point out something I can improve.&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 22 Jul 2017 00:00:00 -0400</pubDate>
+        <pubDate>Sat, 22 Jul 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html</guid>
         
@@ -1063,7 +1063,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 &lt;p&gt;The major difference between the first and second methods of building friendship/follower/connection models is that you can store more detailed information about each relationship. However, if we wanted to store data about the non-directional relationship between two people, we would have to make another model (perhaps with signals), or update the information in both Connection models (a -&amp;gt; b and b -&amp;gt; a).&lt;/p&gt;
 </description>
-        <pubDate>Wed, 19 Jul 2017 00:00:00 -0400</pubDate>
+        <pubDate>Wed, 19 Jul 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/07/19/different-ways-to-build-friend-models-in-django.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/07/19/different-ways-to-build-friend-models-in-django.html</guid>
         
@@ -1909,7 +1909,7 @@ def vote(request, question_id):
 &lt;p&gt;This tells Django: “Choice objects are edited on the Question admin page. By default, provide enough fields for 3 choices.”&lt;/p&gt;
 
 </description>
-        <pubDate>Mon, 06 Mar 2017 00:00:00 -0500</pubDate>
+        <pubDate>Mon, 06 Mar 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/03/06/django-poll-tutorial.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/03/06/django-poll-tutorial.html</guid>
         
@@ -2376,7 +2376,7 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 &lt;p&gt;Now we can run &lt;code class=&quot;highlighter-rouge&quot;&gt;heroku local web&lt;/code&gt; and confirm that we see “Hello, world!” from the Bootstrap template.&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 04 Mar 2017 00:00:00 -0500</pubDate>
+        <pubDate>Sat, 04 Mar 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/03/04/settinging-up-django-with-heroku.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/03/04/settinging-up-django-with-heroku.html</guid>
         
@@ -2981,7 +2981,7 @@ F -&amp;gt; C
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Fri, 03 Mar 2017 00:00:00 -0500</pubDate>
+        <pubDate>Fri, 03 Mar 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/03/03/graph_subreddit.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/03/03/graph_subreddit.html</guid>
         
@@ -3123,7 +3123,7 @@ F -&amp;gt; C
 
 &lt;p&gt;Bokeh is a powerful library and I’ll be trying to use it more in future projects.&lt;/p&gt;
 </description>
-        <pubDate>Mon, 23 Jan 2017 00:00:00 -0500</pubDate>
+        <pubDate>Mon, 23 Jan 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/01/23/bokeh-plots-on-jekyll.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/01/23/bokeh-plots-on-jekyll.html</guid>
         
@@ -5450,7 +5450,7 @@ Confusion Matrix:
   &lt;/tbody&gt;
 &lt;/table&gt;
 </description>
-        <pubDate>Sun, 01 Jan 2017 00:00:00 -0500</pubDate>
+        <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2017/01/01/pc-data.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/01/01/pc-data.html</guid>
         
@@ -5565,7 +5565,7 @@ function geodesic(subdivision) {
 &lt;/script&gt;
 
 </description>
-        <pubDate>Fri, 13 May 2016 00:00:00 -0400</pubDate>
+        <pubDate>Fri, 13 May 2016 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2016/05/13/d3js-on-jekyll.html</link>
         <guid isPermaLink="true">http://localhost:4000/2016/05/13/d3js-on-jekyll.html</guid>
         
@@ -5676,7 +5676,7 @@ function geodesic(subdivision) {
 
 &lt;p&gt;I also find it interesting that &lt;a href=&quot;https://twitter.com/ariyahidayat&quot;&gt;the guy&lt;/a&gt; who maintains PhantomJS works for &lt;a href=&quot;https://twitter.com/ariyahidayat&quot;&gt;a company&lt;/a&gt; that offers “&lt;a href=&quot;https://www.shapesecurity.com/documents/shape-about.pdf&quot;&gt;Botwall Services&lt;/a&gt;” for web and mobile applications to help clients answer the question: “How much of your traffic isn’t human?”&lt;/p&gt;
 </description>
-        <pubDate>Mon, 09 May 2016 00:00:00 -0400</pubDate>
+        <pubDate>Mon, 09 May 2016 00:00:00 +0000</pubDate>
         <link>http://localhost:4000/2016/05/09/web-srcaping-with-phantomjs.html</link>
         <guid isPermaLink="true">http://localhost:4000/2016/05/09/web-srcaping-with-phantomjs.html</guid>
         
