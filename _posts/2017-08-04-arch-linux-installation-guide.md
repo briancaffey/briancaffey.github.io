@@ -13,7 +13,11 @@ This post will be a comprehensive guide to installing Arch Linux. I will be inst
 
 I recommend that you download a BitTorrent client such as [Deluge](http://dev.deluge-torrent.org/wiki/Download), and then grab the ISO magnet link from [https://www.archlinux.org/download/](https://www.archlinux.org/download/). It should take just a few minutes to complete the download via BitTorrent.
 
-~If you are ~~using~~ a Mac to build the bootable drive, I have read that you can use the `dd` command. This didn't work for me. I referred to the Installation manual for Arch and found instructions for using Rufus, a Windows/Linux utility for burning ISO images to bootable media. The Arch Wiki has a highlighted note about using Rufus: ~
+If you are using a Mac to build the bootable drive, I have read that you can use the `dd` command. This didn't work for me.
+
+I found out that my 2011 MacBook Air is not capable of creating Windows 10 bootable media. Only the options for Windows 7 and 8 were available in Boot Camp Assistant (the Mac utility for installing Windows and creating bootable media). I also found that the latest MacBooks can't create bootable media. I was able to find another Mac that had the option for creating "Windows 7 or later", and this finally worked.
+
+Another solution that is probably much faster is using Rufus, a Windows/Linux utility for burning ISO images to bootable media. The Arch Wiki has a highlighted note about using Rufus:
 
 ```
 Note: Be sure to select DD mode or the image will be transferred incorrectly.
@@ -57,15 +61,19 @@ showconsolefont
 
 > fdisk is a dialogue-driven program for creation and manipulation of partition tables.
 
+This part of the guide will be similar for installation on virtual machines and regular installions (on harddrives in desktops and laptops). If you are installing on a physical machine that has other disks of similar size to your target disk, I recommend that you first remove all other drives so you don't accidentaly format partitions (I did this by accident, but luckily it was just my Windows Boot Partition and I was able to recover my Windows installation).
+
 We want to run fdisk and enter the device we want to work with as the first argument after the command:
 
 ```
 fdisk /dev/sda
 ```
 
+On your Virtual Machine it will most likely be **sda**, but on a physical machine it could vary slightly.
+
 #### Note about fdisk
 
-When installing Arch Linux on a disk that has Windows or Linux installed, you can delete the partitions on the drive (which is usually labeled `/dev/sda` or `/dev/sdb` or `/dev/sdc`). Run `lsblk` to determine which drive you want to format, then run `fdisk /dev/sdX` where `X` corresponds to the drive we will be using. You should be inside the fdisk menu. Press `d` to start deleting partitions. You may get some warnings about a partition containing some type of trace (such as ext4). This is fine. You can delete all of the partitions.
+When installing Arch Linux on a disk that has Windows or Linux installed (and you want delete the existing Windows or Linux completely to make room for a fresh Arch Linux istallation), you can delete the partitions on the drive (which is usually labeled `/dev/sda` or `/dev/sdb` or `/dev/sdc`). Run `lsblk` to determine which drive you want to format, then run `fdisk /dev/sdX` where `X` corresponds to the drive we will be using. You should be inside the fdisk menu. Press `d` to start deleting partitions. You may get some warnings about a partition containing some type of trace (such as ext4). This is fine. You can delete all of the partitions.
 
 ### Create a root partition
 
@@ -732,15 +740,55 @@ Here's a list of other helpful packages:
 
 - OBS (screen recording and streaming software)
 
-OBS took a little bit of configuring to get right. Out of the box, doing a screen capture showed just a black screen. Here's how we can fix that:
+OBS took a little bit of configuring to get right. Out of the box, doing a screen capture showed just a black screen. I think the solution is to install `obs-studio-git` and then reboot your computer.
 
 - Dropbox
 
-I'll talk about more packages in the next section for doing development work on Arch Linux that require some extra work for permissions and configuration.
+```
+yaourt -S dropbox
+```
+
+Run the following command:
+
+```
+dropbox
+```
+
+And then follow the dialogue to sign into your Dropbox account. You will see a Dropbox folder in the File Manager.
 
 - Google Drive
 
+You can get access to Google Drive by going into:
 
+```
+Settings > Online Accounts > Google
+```
+
+If you have `Files` set to `ON`, you will find your Google Drive Folder in the side bar of the File Viewer. Clicking on the icon mounts your Google Drive and gives you access to the files.
+
+- hexchat (IRC client)
+
+Internet Relay Chat (IRC) is an easy way to start talking to people in real-time about any topic you can think of. Hexchat is a popular GUI client for IRC. Here is how to install hexchat:
+
+```
+sudo pacman -S hexchat
+```
+
+Once you have installed hexchat, you will want to register a nickname. [This article](https://freenode.net/kb/answer/registration) says that the steps for registering a nickname are to:
+
+Send the following message to `freenode` (replace `some_password` with a secure password of your choice and `youremail@example.com` with your email address):
+
+```
+/msg NickServ REGISTER some_password youremail@example.com
+```
+
+After you send this message, check your email and you will see instructions to confirm your email that look like this:
+
+```
+/msg NickServ VERIFY REGISTER <your_name> <some_code_they_give_you>
+```
+
+This should confirm your nickname. Now you can start chatting on channels. Press `Alt + S`, and then `J`, and then type the name of the channel you want to join.
 
 ## Setting Up Development Tools
 
@@ -751,6 +799,8 @@ My preferred text editor is Atom:
 ```
 sudo pacman -S atom
 ```
+
+Spell checker didn't seem to be working for me, and this seems to be a [known issue](https://github.com/atom/spell-check/issues/129), so I recommend you install the `atom/spell-checker` package if you like to use atom and want spell checking.
 
 The Arch Linux installation also came with an interesting editor called `Builder` which seems pretty interesting as well.
 
@@ -770,7 +820,7 @@ You will see a message that says:
    1) virtualbox-host-dkms 2) virtualbox-host-modules-arch
 ```
 
-Select option 2, continue the installation process and then reboot.
+**Select option 2, continue the installation process and then reboot.**
 
 ### Quick note on deluge
 
@@ -784,9 +834,62 @@ Now grab a torrent link or file for an OS you want to download and add it to Del
 
 When it is finished we can launch VirtualBox and create a virtual machine with our ISO.
 
+### Languages and Input Sources
+
+Here is how to add support for Chinese characters and also Chinese pinyin input:
+
+```
+yaourt -S adobe-source-han-sans-cn-fonts
+```
+
+This will make Chinese characters visible. In order to type Chinese using the pinyin input method, run the following commands:
+
+```
+sudo pacman -S ibus
+sudo pacman -S ibus-libpinyin
+```
+
+Next you can go into:
+```
+Settings > Region & Language > Input Source > + > Other
+```
+Select Chinese (Intelligent Pin Yin) from the list and you should see a language menu in the top bar. At this point I was able to see both English and Chinese in Language menu in the top bar, but the Chinese pinyin only worked after rebooting.
+
+### Spotify
+
+Get some tunes going with the Spotfy app. It is not officially supported, but it seems to work alright. Facebook login did not work for me. You can create a new account with your existing email like this:
+
+```
+youremail+spotify@email.com
+```
+
+Using my main email to sign up for a new account didn't work because that email was linked to the Facebook login.
+
+```
+yaourt -S spotify
+```
+
+### Word Processing (Libre Office)
+
+Libre Office is an open-source Office Suite similar in functionality to Microsoft Word.
+
+```
+sudo pacman -S libreoffice-fresh
+```
+
+You can also install any language packs you may need for Libre Office:
+
+```
+yaourt -S libreoffice-fresh-zh-CN
+```
+
+### Sign up for the Arch Wiki
+
+The best way to ask for help is to ask the community. You should sign up for the Arch Wiki and post any questions you have after doing research and trying a few different solutions. The more detailed you are in your post, the better help you will get.
+
 ### npm and node.js
 
-Here's [a helpful article](https://docs.npmjs.com/getting-started/fixing-npm-permissions) that is important to following when setting up npm and node.js. Be very careful as some of the steps can completely mess up permissions on your entire system.
+Here's [a helpful article](https://docs.npmjs.com/getting-started/fixing-npm-permissions) that is important to following when setting up npm and node.js. Be very careful here as some of the steps can completely mess up permissions on your entire system.
 
 Here's a walkthrough of the steps to get `npm` setup correctly.
 
@@ -835,10 +938,35 @@ npm install -g jshint
 
 This should install the package with no errors.
 
+## Ruby and Jekyll
+
+I use Jekyll for my personal site and blog, which is a static site generator written in Ruby. To start using Jekyll we need to install a ruby gem, and to install the gem we will need to first install ruby. Here is the [ruby page from the Arch Wiki](https://wiki.archlinux.org/index.php/ruby).
+
+```
+sudo pacman -S ruby
+```
+
+Next we can install the Jekyll gem:
+
+```
+gem install jekyll bundler
+```
+
+It should say something like "20 gems installed" if everything was successful. You can read more about Jekyll [here](https://jekyllrb.com/).
+
+For now I will not be installing RVM (Ruby Version Manager), but the Arch Wiki has good notes on how this can be installed.
+
+Before we use the Jekyll gem, we need to add the following to our `~/.bashrc` file:
+
+```
+PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+```
+
+This will allow you to run Jekyll commands.
 
 ## Python
 
-In the installation process, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get `pip`:
+In the installation pIssuesrocess, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get `pip`:
 
 ```
 yaourt -S python-pip
@@ -854,7 +982,6 @@ virtualenv needs to be installed separately, but supports Python 2.6+ and Python
 The basic usage is like so:
 Using virtualenv:
 
-
 ```
 virtualenv <DIR>
 source <DIR>/bin/activate
@@ -868,13 +995,37 @@ source <DIR>/bin/activate
 ```
 For more information, see the virtualenv docs or the venv docs.
 
+### Miscelaneous Issues
+
+I have experienced unexpected behavior with some programs. Here's a list of some major issues and workarounds I have found:
+
+- **Google Hangouts**: I use Google Hangouts a lot for screen sharing and video conferencing. Trying to share my screen only showed a black screen with a cursor, although sharing invidual windows seemed to work fine (similar to what was happening with OBS). I found a [Superuser thread](https://superuser.com/questions/1166765/google-hangouts-screen-share-black-screen-error) describing the same issue. The solution is simply to select an Xorg session on login (instead of GNOME Classic or regular GNOME session). This is something I still don't know much about, but the solution worked for me and I have been able to share my entire screen in Google Hangouts.
+
+You can check which session type you are using with the following command:
+
+```
+echo $XDG_SESSION_TYPE
+```
+
+and you should either see `x11` or `wayland`.
+
+### Keyboard shortcuts
+
+You can configure keyboard shortcuts by going into:
+
+```
+Settings > Keyboard
+```
+
+Search for or find the setting that says "Hide all normal windows". I set mine to `Shift + Alt + D`. You can configure other keyboard shortcuts here.
+
 ## Conclusion and Next Steps
 
-Installing Arch Linux is like trying to build a house with just a spoon. But, you have the benefit of being able to order unlimited copies of free parts and materials online, and a great community of people that are extremely knowledgable about building houses. Pretty soon you are able to quickly build a foundation, scaffolding, wiring, appliances and yes even wallpaper. Arch Linux makes for a nice dwelling and it stays up to date being on a rolling release cycle, so you don't have to rebuild your house every 9 months to stay current.
+Installing Arch Linux is like trying to build a house with just a spoon. You won't get very far with a spoon, but you have the benefit of being able to order unlimited copies of free parts and materials online (the AUR, or Arch User Repository), and a great community of people that are extremely knowledgable about "building houses". Pretty soon you are able to quickly put together a foundation, scaffolding, wiring, appliances and yes even wallpaper. Arch Linux stays with its rolling release cycle, so you don't have to rebuild your house every 9 months to stay current.
 
 Arch Linux is a lot of work to set up compared to popular Linux distributions like Ubuntu. Just like everyone says, you learn a lot by going through the process, breaking things and starting the installations process from scratch. I totally messed up my permissions while installing and quickly found that the only solutions was to reinstall Arch. This guide is primarily for personal use, and I am sure there are things that can be improved and even done completely differently. Here's a list of things I can start with:
 
-- **Fix OBS Studio**: I got this to work in my earlier install and can't seem to remember how I fixed it. Currently OBS displays a black screen when set to `Screen Capture`.
+- **Fix OBS Studio**: ~~I got this to work in my earlier install and can't seem to remember how I fixed it. Currently OBS displays a black screen when set to `Screen Capture`~~. I finally got OBS studio to work and I think the issue was as simple as rebooting (or possibly an update with `sudo pacman -Syu`).
 
 - **Encrypting the home folder**: this is good practice and will make my computer more secure, it shouldnt be too difficult either.
 
@@ -885,7 +1036,6 @@ Arch Linux is a lot of work to set up compared to popular Linux distributions li
 - **NVIDIA drivers**: this does not apply to my laptop, but I would like to figure out how I can get the best drivers in Arch Linux for my NVIDIA GPU on my desktop machine. This is one thing that running Linux in a Virtual Machine really doesn't allow you to do (pass a GPU through a VM), as far as I know.
 
 - **All other drivers**: I still have lots of questions about how to make sure that I am running things properly on my desktop PC. I feel like drivers for the laptop install were pretty automatic, but this may not be the case with additional hardware components on my desktop, such a closed-loop water cooler.
-
 
 - **Additional Customization, Themes, Window Managers, etc.**: There is so much that can be done with Arch Linux in terms of GUI. I love the setup I have but it would be interesting to explore some additional options like i3, for example.
 

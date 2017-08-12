@@ -10,8 +10,8 @@
   <meta name="description" content="This post will be a comprehensive guide to installing Arch Linux. I will be installing Arch Linux on a refurbished ThinkPad T430 Laptop, first as a guest OS ...">
   <link rel="icon" type="image/png" href="favicon.ico" sizes="32x32" />
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2017/08/03/arch-linux-installation-guide.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2017/08/03/arch-linux-installation-guide.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
   <script>
@@ -89,7 +89,11 @@
 
 <p>I recommend that you download a BitTorrent client such as <a href="http://dev.deluge-torrent.org/wiki/Download">Deluge</a>, and then grab the ISO magnet link from <a href="https://www.archlinux.org/download/">https://www.archlinux.org/download/</a>. It should take just a few minutes to complete the download via BitTorrent.</p>
 
-<p>~If you are ~~using~~ a Mac to build the bootable drive, I have read that you can use the <code class="highlighter-rouge">dd</code> command. This didn’t work for me. I referred to the Installation manual for Arch and found instructions for using Rufus, a Windows/Linux utility for burning ISO images to bootable media. The Arch Wiki has a highlighted note about using Rufus: ~</p>
+<p>If you are using a Mac to build the bootable drive, I have read that you can use the <code class="highlighter-rouge">dd</code> command. This didn’t work for me.</p>
+
+<p>I found out that my 2011 MacBook Air is not capable of creating Windows 10 bootable media. Only the options for Windows 7 and 8 were available in Boot Camp Assistant (the Mac utility for installing Windows and creating bootable media). I also found that the latest MacBooks can’t create bootable media. I was able to find another Mac that had the option for creating “Windows 7 or later”, and this finally worked.</p>
+
+<p>Another solution that is probably much faster is using Rufus, a Windows/Linux utility for burning ISO images to bootable media. The Arch Wiki has a highlighted note about using Rufus:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>Note: Be sure to select DD mode or the image will be transferred incorrectly.
 </code></pre>
@@ -135,15 +139,19 @@
   <p>fdisk is a dialogue-driven program for creation and manipulation of partition tables.</p>
 </blockquote>
 
+<p>This part of the guide will be similar for installation on virtual machines and regular installions (on harddrives in desktops and laptops). If you are installing on a physical machine that has other disks of similar size to your target disk, I recommend that you first remove all other drives so you don’t accidentaly format partitions (I did this by accident, but luckily it was just my Windows Boot Partition and I was able to recover my Windows installation).</p>
+
 <p>We want to run fdisk and enter the device we want to work with as the first argument after the command:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>fdisk /dev/sda
 </code></pre>
 </div>
 
+<p>On your Virtual Machine it will most likely be <strong>sda</strong>, but on a physical machine it could vary slightly.</p>
+
 <h4 id="note-about-fdisk">Note about fdisk</h4>
 
-<p>When installing Arch Linux on a disk that has Windows or Linux installed, you can delete the partitions on the drive (which is usually labeled <code class="highlighter-rouge">/dev/sda</code> or <code class="highlighter-rouge">/dev/sdb</code> or <code class="highlighter-rouge">/dev/sdc</code>). Run <code class="highlighter-rouge">lsblk</code> to determine which drive you want to format, then run <code class="highlighter-rouge">fdisk /dev/sdX</code> where <code class="highlighter-rouge">X</code> corresponds to the drive we will be using. You should be inside the fdisk menu. Press <code class="highlighter-rouge">d</code> to start deleting partitions. You may get some warnings about a partition containing some type of trace (such as ext4). This is fine. You can delete all of the partitions.</p>
+<p>When installing Arch Linux on a disk that has Windows or Linux installed (and you want delete the existing Windows or Linux completely to make room for a fresh Arch Linux istallation), you can delete the partitions on the drive (which is usually labeled <code class="highlighter-rouge">/dev/sda</code> or <code class="highlighter-rouge">/dev/sdb</code> or <code class="highlighter-rouge">/dev/sdc</code>). Run <code class="highlighter-rouge">lsblk</code> to determine which drive you want to format, then run <code class="highlighter-rouge">fdisk /dev/sdX</code> where <code class="highlighter-rouge">X</code> corresponds to the drive we will be using. You should be inside the fdisk menu. Press <code class="highlighter-rouge">d</code> to start deleting partitions. You may get some warnings about a partition containing some type of trace (such as ext4). This is fine. You can delete all of the partitions.</p>
 
 <h3 id="create-a-root-partition">Create a root partition</h3>
 
@@ -579,11 +587,11 @@ error: target not found: xorg-server-utils
 
 <p>The tutorial didn’t mention the <code class="highlighter-rouge">linux-headers</code> package, but the error message that comes up if you skip this step say that this package is needed.</p>
 
-<p><code class="highlighter-rouge">xorg-server-utils</code> seems to have been removed, but it was a meta-package that simply included the following:
-<code class="highlighter-rouge">
-xorg-iceauth xorg-sessreg xorg-xcmsdb xorg-xbacklight xorg-xgamma xorg-xhost xorg-xinput xorg-xmodmap xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot
-</code>
-Installing these packages individually did not help.</p>
+<p><code class="highlighter-rouge">xorg-server-utils</code> seems to have been removed, but it was a meta-package that simply included the following:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>xorg-iceauth xorg-sessreg xorg-xcmsdb xorg-xbacklight xorg-xgamma xorg-xhost xorg-xinput xorg-xmodmap xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot
+</code></pre>
+</div>
+<p>Installing these packages individually did not help.</p>
 
 <p>This does a full install of xorg (reinstalling many packages I just installed). After running this command, running <code class="highlighter-rouge">startx</code> gives no errors and lets me enter the X environment.</p>
 
@@ -817,17 +825,61 @@ sudo systemctl start NetworkManager.service
   </li>
 </ul>
 
-<p>OBS took a little bit of configuring to get right. Out of the box, doing a screen capture showed just a black screen. Here’s how we can fix that:</p>
+<p>OBS took a little bit of configuring to get right. Out of the box, doing a screen capture showed just a black screen. I think the solution is to install <code class="highlighter-rouge">obs-studio-git</code> and then reboot your computer.</p>
 
 <ul>
   <li>Dropbox</li>
 </ul>
 
-<p>I’ll talk about more packages in the next section for doing development work on Arch Linux that require some extra work for permissions and configuration.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S dropbox
+</code></pre>
+</div>
+
+<p>Run the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dropbox
+</code></pre>
+</div>
+
+<p>And then follow the dialogue to sign into your Dropbox account. You will see a Dropbox folder in the File Manager.</p>
 
 <ul>
   <li>Google Drive</li>
 </ul>
+
+<p>You can get access to Google Drive by going into:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Settings &gt; Online Accounts &gt; Google
+</code></pre>
+</div>
+
+<p>If you have <code class="highlighter-rouge">Files</code> set to <code class="highlighter-rouge">ON</code>, you will find your Google Drive Folder in the side bar of the File Viewer. Clicking on the icon mounts your Google Drive and gives you access to the files.</p>
+
+<ul>
+  <li>hexchat (IRC client)</li>
+</ul>
+
+<p>Internet Relay Chat (IRC) is an easy way to start talking to people in real-time about any topic you can think of. Hexchat is a popular GUI client for IRC. Here is how to install hexchat:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S hexchat
+</code></pre>
+</div>
+
+<p>Once you have installed hexchat, you will want to register a nickname. <a href="https://freenode.net/kb/answer/registration">This article</a> says that the steps for registering a nickname are to:</p>
+
+<p>Send the following message to <code class="highlighter-rouge">freenode</code> (replace <code class="highlighter-rouge">some_password</code> with a secure password of your choice and <code class="highlighter-rouge">youremail@example.com</code> with your email address):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/msg NickServ REGISTER some_password youremail@example.com
+</code></pre>
+</div>
+
+<p>After you send this message, check your email and you will see instructions to confirm your email that look like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/msg NickServ VERIFY REGISTER &lt;your_name&gt; &lt;some_code_they_give_you&gt;
+</code></pre>
+</div>
+
+<p>This should confirm your nickname. Now you can start chatting on channels. Press <code class="highlighter-rouge">Alt + S</code>, and then <code class="highlighter-rouge">J</code>, and then type the name of the channel you want to join.</p>
 
 <h2 id="setting-up-development-tools">Setting Up Development Tools</h2>
 
@@ -838,6 +890,8 @@ sudo systemctl start NetworkManager.service
 <div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S atom
 </code></pre>
 </div>
+
+<p>Spell checker didn’t seem to be working for me, and this seems to be a <a href="https://github.com/atom/spell-check/issues/129">known issue</a>, so I recommend you install the <code class="highlighter-rouge">atom/spell-checker</code> package if you like to use atom and want spell checking.</p>
 
 <p>The Arch Linux installation also came with an interesting editor called <code class="highlighter-rouge">Builder</code> which seems pretty interesting as well.</p>
 
@@ -857,7 +911,7 @@ sudo systemctl start NetworkManager.service
 </code></pre>
 </div>
 
-<p>Select option 2, continue the installation process and then reboot.</p>
+<p><strong>Select option 2, continue the installation process and then reboot.</strong></p>
 
 <h3 id="quick-note-on-deluge">Quick note on deluge</h3>
 
@@ -871,9 +925,62 @@ sudo systemctl start NetworkManager.service
 
 <p>When it is finished we can launch VirtualBox and create a virtual machine with our ISO.</p>
 
+<h3 id="languages-and-input-sources">Languages and Input Sources</h3>
+
+<p>Here is how to add support for Chinese characters and also Chinese pinyin input:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S adobe-source-han-sans-cn-fonts
+</code></pre>
+</div>
+
+<p>This will make Chinese characters visible. In order to type Chinese using the pinyin input method, run the following commands:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S ibus
+sudo pacman -S ibus-libpinyin
+</code></pre>
+</div>
+
+<p>Next you can go into:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>Settings &gt; Region &amp; Language &gt; Input Source &gt; + &gt; Other
+</code></pre>
+</div>
+<p>Select Chinese (Intelligent Pin Yin) from the list and you should see a language menu in the top bar. At this point I was able to see both English and Chinese in Language menu in the top bar, but the Chinese pinyin only worked after rebooting.</p>
+
+<h3 id="spotify">Spotify</h3>
+
+<p>Get some tunes going with the Spotfy app. It is not officially supported, but it seems to work alright. Facebook login did not work for me. You can create a new account with your existing email like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>youremail+spotify@email.com
+</code></pre>
+</div>
+
+<p>Using my main email to sign up for a new account didn’t work because that email was linked to the Facebook login.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S spotify
+</code></pre>
+</div>
+
+<h3 id="word-processing-libre-office">Word Processing (Libre Office)</h3>
+
+<p>Libre Office is an open-source Office Suite similar in functionality to Microsoft Word.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S libreoffice-fresh
+</code></pre>
+</div>
+
+<p>You can also install any language packs you may need for Libre Office:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S libreoffice-fresh-zh-CN
+</code></pre>
+</div>
+
+<h3 id="sign-up-for-the-arch-wiki">Sign up for the Arch Wiki</h3>
+
+<p>The best way to ask for help is to ask the community. You should sign up for the Arch Wiki and post any questions you have after doing research and trying a few different solutions. The more detailed you are in your post, the better help you will get.</p>
+
 <h3 id="npm-and-nodejs">npm and node.js</h3>
 
-<p>Here’s <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">a helpful article</a> that is important to following when setting up npm and node.js. Be very careful as some of the steps can completely mess up permissions on your entire system.</p>
+<p>Here’s <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">a helpful article</a> that is important to following when setting up npm and node.js. Be very careful here as some of the steps can completely mess up permissions on your entire system.</p>
 
 <p>Here’s a walkthrough of the steps to get <code class="highlighter-rouge">npm</code> setup correctly.</p>
 
@@ -922,9 +1029,35 @@ npm config set prefix '~/.npm-global'
 
 <p>This should install the package with no errors.</p>
 
+<h2 id="ruby-and-jekyll">Ruby and Jekyll</h2>
+
+<p>I use Jekyll for my personal site and blog, which is a static site generator written in Ruby. To start using Jekyll we need to install a ruby gem, and to install the gem we will need to first install ruby. Here is the <a href="https://wiki.archlinux.org/index.php/ruby">ruby page from the Arch Wiki</a>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S ruby
+</code></pre>
+</div>
+
+<p>Next we can install the Jekyll gem:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>gem install jekyll bundler
+</code></pre>
+</div>
+
+<p>It should say something like “20 gems installed” if everything was successful. You can read more about Jekyll <a href="https://jekyllrb.com/">here</a>.</p>
+
+<p>For now I will not be installing RVM (Ruby Version Manager), but the Arch Wiki has good notes on how this can be installed.</p>
+
+<p>Before we use the Jekyll gem, we need to add the following to our <code class="highlighter-rouge">~/.bashrc</code> file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+</code></pre>
+</div>
+
+<p>This will allow you to run Jekyll commands.</p>
+
 <h2 id="python">Python</h2>
 
-<p>In the installation process, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get <code class="highlighter-rouge">pip</code>:</p>
+<p>In the installation pIssuesrocess, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get <code class="highlighter-rouge">pip</code>:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S python-pip
 </code></pre>
@@ -957,15 +1090,41 @@ source &lt;DIR&gt;/bin/activate
 </div>
 <p>For more information, see the virtualenv docs or the venv docs.</p>
 
+<h3 id="miscelaneous-issues">Miscelaneous Issues</h3>
+
+<p>I have experienced unexpected behavior with some programs. Here’s a list of some major issues and workarounds I have found:</p>
+
+<ul>
+  <li><strong>Google Hangouts</strong>: I use Google Hangouts a lot for screen sharing and video conferencing. Trying to share my screen only showed a black screen with a cursor, although sharing invidual windows seemed to work fine (similar to what was happening with OBS). I found a <a href="https://superuser.com/questions/1166765/google-hangouts-screen-share-black-screen-error">Superuser thread</a> describing the same issue. The solution is simply to select an Xorg session on login (instead of GNOME Classic or regular GNOME session). This is something I still don’t know much about, but the solution worked for me and I have been able to share my entire screen in Google Hangouts.</li>
+</ul>
+
+<p>You can check which session type you are using with the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo $XDG_SESSION_TYPE
+</code></pre>
+</div>
+
+<p>and you should either see <code class="highlighter-rouge">x11</code> or <code class="highlighter-rouge">wayland</code>.</p>
+
+<h3 id="keyboard-shortcuts">Keyboard shortcuts</h3>
+
+<p>You can configure keyboard shortcuts by going into:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Settings &gt; Keyboard
+</code></pre>
+</div>
+
+<p>Search for or find the setting that says “Hide all normal windows”. I set mine to <code class="highlighter-rouge">Shift + Alt + D</code>. You can configure other keyboard shortcuts here.</p>
+
 <h2 id="conclusion-and-next-steps">Conclusion and Next Steps</h2>
 
-<p>Installing Arch Linux is like trying to build a house with just a spoon. But, you have the benefit of being able to order unlimited copies of free parts and materials online, and a great community of people that are extremely knowledgable about building houses. Pretty soon you are able to quickly build a foundation, scaffolding, wiring, appliances and yes even wallpaper. Arch Linux makes for a nice dwelling and it stays up to date being on a rolling release cycle, so you don’t have to rebuild your house every 9 months to stay current.</p>
+<p>Installing Arch Linux is like trying to build a house with just a spoon. You won’t get very far with a spoon, but you have the benefit of being able to order unlimited copies of free parts and materials online (the AUR, or Arch User Repository), and a great community of people that are extremely knowledgable about “building houses”. Pretty soon you are able to quickly put together a foundation, scaffolding, wiring, appliances and yes even wallpaper. Arch Linux stays with its rolling release cycle, so you don’t have to rebuild your house every 9 months to stay current.</p>
 
 <p>Arch Linux is a lot of work to set up compared to popular Linux distributions like Ubuntu. Just like everyone says, you learn a lot by going through the process, breaking things and starting the installations process from scratch. I totally messed up my permissions while installing and quickly found that the only solutions was to reinstall Arch. This guide is primarily for personal use, and I am sure there are things that can be improved and even done completely differently. Here’s a list of things I can start with:</p>
 
 <ul>
   <li>
-    <p><strong>Fix OBS Studio</strong>: I got this to work in my earlier install and can’t seem to remember how I fixed it. Currently OBS displays a black screen when set to <code class="highlighter-rouge">Screen Capture</code>.</p>
+    <p><strong>Fix OBS Studio</strong>: <del>I got this to work in my earlier install and can’t seem to remember how I fixed it. Currently OBS displays a black screen when set to <code class="highlighter-rouge">Screen Capture</code></del>. I finally got OBS studio to work and I think the issue was as simple as rebooting (or possibly an update with <code class="highlighter-rouge">sudo pacman -Syu</code>).</p>
   </li>
   <li>
     <p><strong>Encrypting the home folder</strong>: this is good practice and will make my computer more secure, it shouldnt be too difficult either.</p>

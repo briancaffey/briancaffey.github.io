@@ -10,8 +10,8 @@
   <meta name="description" content="For a few months now I have been enjoying a new home media system that I threw together with my Raspberry Pi. My setup allows me sit in my living room and st...">
   <link rel="icon" type="image/png" href="favicon.ico" sizes="32x32" />
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/2016/04/07/home-media-setup.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/2016/04/07/home-media-setup.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
   <script>
@@ -121,34 +121,39 @@
 
 <p>Now that you have your VPN and miniDLNA set up, you will want to try it out with some new content. I use Deluge, a BitTorrent client written in Python, but there are plenty of other great options out there. Deluge is fairly light-weight, so it works well with the Raspberry Pi. There are a number of ways that you can access Deluge, I prefer to use the Deluge WebUI. Here’s <a href="http://www.howtogeek.com/142044/how-to-turn-a-raspberry-pi-into-an-always-on-bittorrent-box/">one more tutorial</a> from How-to Geek that talks about a few different ways to install and configure Deluge. I recommend jumping to the <code class="highlighter-rouge">Setting up Deluge for WebUI Access</code> section and running the three commands you will need to get started:</p>
 
-<pre><code class="language-terminal">$ sudo apt-get install deluged
-$ sudo apt-get install python-mako
-$ sudo apt-get install deluge-web
-</code></pre>
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> apt-get install deluged
+</span><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> apt-get install python-mako
+</span><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> apt-get install deluge-web
+</span></code></pre>
+</div>
 <p>This gets everything installed. To use Deluge, you will need to run two more commands:</p>
 
-<pre><code class="language-terminal">$ deluged
-$ deluge-web&amp;
-</code></pre>
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">deluged</span><span class="kv">
+</span><span class="w">$ </span><span class="nc">deluge-web&amp;</span><span class="kv">
+</span></code></pre>
+</div>
 <p><code class="highlighter-rouge">deluged</code> runs the Deluge daemon (a background process; the <code class="highlighter-rouge">d</code> at the end of <code class="highlighter-rouge">deluge</code> signifies that it is a daemon) that will start Deluge. <code class="highlighter-rouge">deluge-web&amp;</code> starts that web interface that should be available at http://<your raspberry="" pi="" ip="" address="">:8112. The `&amp;` simply keeps the command line available for running other commands.</your></p>
 
 <p>You can set Deluge to save downloaded files directly into your various miniDLNA folders, but you will need to restart miniDLNA with the following commands before they are visible on your network. SSH into your Raspberry Pi by running the following command:</p>
 
-<pre><code class="language-terminal">$ ssh pi@&lt;your raspberry pi ip address&gt;
-</code></pre>
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">ssh</span><span class="kv"> pi@&lt;your raspberry pi ip address&gt;
+</span></code></pre>
+</div>
 
 <p>If you don’t know your Raspberry Pi’s IP address, run following command:</p>
 
-<pre><code class="language-terminal">$ ifconfig
-</code></pre>
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">ifconfig</span><span class="kv">
+</span></code></pre>
+</div>
 
 <p>Look at the output under <code class="highlighter-rouge">wlan0</code> and it will be the address following <code class="highlighter-rouge">inet addr</code>, something like <code class="highlighter-rouge">192.168.1.5</code> or <code class="highlighter-rouge">10.0.1.132</code>. To clarify, this is your Raspberry Pi’s internal IP address; it is assigned to your Raspberry Pi by your home network and it has nothing to do with the external IP address that you set up with TorGuard.</p>
 
 <p>Enter your Raspberry Pi’s login and password and then enter the following commands once you have established an SSH connection:</p>
 
-<pre><code class="language-terminal">$ sudo service minidlna restart
-$ sudo service minidlna force-reload
-</code></pre>
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> service minidlna restart
+</span><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> service minidlna force-reload
+</span></code></pre>
+</div>
 <p>Now you should be able to see your content in media players that support miniDLNA.</p>
 
 <p>Here are some additional resources for <a href="https://help.ubuntu.com/community/MiniDLNA">help with miniDLNA on Ubuntu.com</a>.</p>
