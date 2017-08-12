@@ -10,8 +10,8 @@
   <meta name="description" content="I’m absolutely loving my new Jekyll blog, but getting it setup wasn’t that easy. Finding useful and accessible information on how everything works was very d...">
   <link rel="icon" type="image/png" href="favicon.ico" sizes="32x32" />
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2016/03/17/jekyll-tutorial.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2016/03/17/jekyll-tutorial.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
 </head>
 
   <script>
@@ -79,7 +79,7 @@
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">Simple Jekyll tutorial with Github Pages</h1>
-    <p class="post-meta"><time datetime="2016-03-17T00:00:00+00:00" itemprop="datePublished">Mar 17, 2016</time></p>
+    <p class="post-meta"><time datetime="2016-03-17T00:00:00-04:00" itemprop="datePublished">Mar 17, 2016</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
@@ -96,7 +96,7 @@
 
 <p>The first few steps are the easiest. So let’s jump right in!</p>
 
-<h2 id="step-1-github-pages">Step 1: <a href="https://pages.github.com/">Github Pages</a></h2>
+<h2 id="step-1-github-pageshttpspagesgithubcom">Step 1: <a href="https://pages.github.com/">Github Pages</a></h2>
 
 <p>Check out the instructions that Github offers on their <a href="https://pages.github.com/">Github Pages</a> site. If you don’t already have a Github account, <a href="https://github.com/join">get one first</a>.</p>
 
@@ -110,56 +110,50 @@
 
 <p>I keep mine in a folder at the location <code class="highlighter-rouge">~/Github/briancaffey.github.io</code> (where <code class="highlighter-rouge">~</code> references my ‘Home’ folder). If you are not familiar with Github, read the next few paragraphs carefully before doing anything. The command listed in step 2 of the <a href="https://pages.github.com/">Github Pages</a> instructions tells you to run the following command in your terminal:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">git</span><span class="kv"> clone https://github.com/username/username.github.io
-</span></code></pre>
-</div>
+<pre><code class="language-terminal">$ git clone https://github.com/username/username.github.io
+</code></pre>
 
 <p>This will create a file named username.github.io <em>inside</em> whatever folder you are currently in. Open up terminal and type in the following command, then press enter. (Don’t type the <code class="highlighter-rouge">$</code>, just type <code class="highlighter-rouge">pwd</code>; the <code class="highlighter-rouge">$</code> signifies that you are in the terminal).</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">pwd</span><span class="kv">
-</span>User/yourmaclogin/
+<pre><code class="language-terminal">$ pwd
+User/yourmaclogin/
 </code></pre>
-</div>
 <p>You should see a file path, something like <code class="highlighter-rouge">Users/yourmaclogin</code> on the following line. <code class="highlighter-rouge">pwd</code> means “Print Working Directory”, and that’s just what you did. Your “working directory” is the directory you are “at” (sorry about the poor English, but this is the easiest way to communicate this idea).</p>
 
 <p>So, you should choose the folder that you want to “clone” (copy) your empty <em>username</em>.github.io repository into. We will learn two more commands that will help us “navigate” our file system.</p>
 
 <p>Suppose you have a folder named <code class="highlighter-rouge">main</code> with the following files inside that folder: <code class="highlighter-rouge">sub1</code> and <code class="highlighter-rouge">sub2</code>. Inside <code class="highlighter-rouge">sub1</code> and <code class="highlighter-rouge">sub2</code>, suppose you have some text files: <code class="highlighter-rouge">sub1_example.txt</code> inside the folder <code class="highlighter-rouge">sub1</code> and <code class="highlighter-rouge">sub2_example.txt</code> inside <code class="highlighter-rouge">sub2</code>. If your current working directory is <code class="highlighter-rouge">main</code>, then we can list all of the file and folder that are directly inside of <code class="highlighter-rouge">main</code> with the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">ls</span><span class="kv">
-</span>sub1 sub2
+<pre><code class="language-terminal">$ ls
+sub1 sub2
 </code></pre>
-</div>
 
 <p><code class="highlighter-rouge">ls</code> is short for “list” and it simply lists files and folders that are directly inside a file. It won’t list either of the text files, because those are not directly inside of <code class="highlighter-rouge">main</code>, even though they technically are located “within” it.</p>
 
 <p>In order to see these text files, you will need to change our working directory. You can do this with the “change directory” command that is conveniently called <code class="highlighter-rouge">cd</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">cd</span><span class="kv"> sub1
-</span><span class="w">$ </span><span class="nc">ls</span><span class="kv"> 
-</span>sub1_example.txt
+<pre><code class="language-terminal">$ cd sub1
+$ ls 
+sub1_example.txt
 </code></pre>
-</div>
 
 <p>Great! Now what about sub2? The <code class="highlighter-rouge">cd &lt;folder&gt;</code> command takes us inside a folder that is in our working directory. It can also take us to the folder that <em>contains</em> out working directory. Check out this example:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">cd</span><span class="kv"> ..
-</span><span class="w">$ </span><span class="nc">pwd</span><span class="kv"> 
-</span>/main
+<pre><code class="language-terminal">$ cd ..
+$ pwd 
+/main
 </code></pre>
-</div>
 
 <p><code class="highlighter-rouge">cd ..</code> takes us from <code class="highlighter-rouge">sub1</code> to <code class="highlighter-rouge">main</code>. If you are not sure where you are, just run the <code class="highlighter-rouge">ls</code> command and you can see the contents of your working directory.</p>
 
 <p>Ok, once you have a handle on this, run the following command in the terminal. Be sure to replace <em>username</em> with your actual Github username in both places, otherwise you will see an error. So go ahead and run:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">git</span><span class="kv"> clone https://github.com/username/username.github.io
-</span></code></pre>
-</div>
+<pre><code class="language-terminal">$ git clone https://github.com/username/username.github.io
+</code></pre>
 
 <p>This concludes the first step, let’s move on to Step 2: Jekyll.</p>
 
-<h2 id="step-2-jekyll">Step 2: <a href="https://jekyllrb.com/">Jekyll</a></h2>
+<h2 id="step-2-jekyllhttpsjekyllrbcom">Step 2: <a href="https://jekyllrb.com/">Jekyll</a></h2>
 
 <p>So what exactly is Jekyll? Here an explanation from Jekyll’s <a href="https://jekyllrb.com/docs/home/">website</a>:</p>
 
@@ -171,60 +165,54 @@
 
 <p>Let’s go ahead with out website setup! Go back to Jekyll’s website and look at the very simple instructions they provide for quick-start installation, but don’t run them just yet!</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">gem</span><span class="kv"> install jekyll
-</span><span class="w">$ </span><span class="nc">jekyll</span><span class="kv"> new my-awesome-site
-</span><span class="w">$ </span><span class="nc">cd</span><span class="kv"> my-awesome-site
-</span><span class="w">$ </span><span class="nc">jekyll</span><span class="kv"> serve
-</span><span class="ni"># </span><span class="nc">=&gt;</span><span class="kv"> Now browse to http://localhost:4000
-</span></code></pre>
-</div>
+<pre><code class="language-terminal">$ gem install jekyll
+$ jekyll new my-awesome-site
+$ cd my-awesome-site
+$ jekyll serve
+# =&gt; Now browse to http://localhost:4000
+</code></pre>
 
 <p>We will be modifying these commands slightly to get our website up and running. The first command installs Jekyll onto your computer. Go ahead and do this, then navigate to your <em>username</em>.github.io folder that you have cloned from Github in <a href="#">Step 1</a>. Run the <code class="highlighter-rouge">pwd</code> command to make sure you are in the correct working directory. The needs to be empty for this next step to work, so go ahead and run our <code class="highlighter-rouge">ls</code> command to make sure that there is nothing inside.</p>
 
 <p>At this point we are ready to install Jekyll! Run the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">jekyll</span><span class="kv"> new
-</span></code></pre>
-</div>
+<pre><code class="language-terminal">$ jekyll new
+</code></pre>
 
 <p>Then run the <code class="highlighter-rouge">ls</code> command and you should see the following:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">ls</span><span class="kv">
-</span>_config.yml	_layouts	_sass		css		index.html
+<pre><code class="language-terminal">$ ls
+_config.yml	_layouts	_sass		css		index.html
 _includes	_posts		about.md	feed.xml
 </code></pre>
-</div>
 
 <p>You have installed Jekyll! At this point we can give it a test run! We are going to view our new website in our browser, but we will be running the site locally (i.e. it will not be available at <em>username</em>.github.io).</p>
 
 <p>The next command will start running our website:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">jekyll</span><span class="kv"> serve
-</span></code></pre>
-</div>
+<pre><code class="language-terminal">$ jekyll serve
+</code></pre>
 
 <p>After you run this command, several lines will be printed out in the terminal. Look for one that looks like this:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>Server address: http://127.0.0.1:4000/
+<pre><code class="language-terminal">Server address: http://127.0.0.1:4000/
 </code></pre>
-</div>
 
 <p>This address may be different on your computer, so copy it exactly from your terminal and run it in your browser, or run <code class="highlighter-rouge">localhost:40001</code> in your browser if that doesn’t work. You should see your website!</p>
 
 <p>For now it is mostly filler content, but we will learn how to edit this content in the next few steps.</p>
 
-<h2 id="step-3-github">Step 3: <a href="https://github.com/">Github</a></h2>
+<h2 id="step-3-githubhttpsgithubcom">Step 3: <a href="https://github.com/">Github</a></h2>
 
 <p>This next step will move your entire website onto the web and will make it available at <em>username</em>.github.io.</p>
 
 <p>Confirm you are still in you <em>username</em>.github.io folder (<code class="highlighter-rouge">pwd</code> command) and run the following commands:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">git</span><span class="kv"> init
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> add .
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "initial commit"
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> push origin master
-</span></code></pre>
-</div>
+<pre><code class="language-terminal">$ git init
+$ git add .
+$ git commit -m "initial commit"
+$ git push origin master
+</code></pre>
 
 <p>You will have to enter your Github username and password for the last step to work. Now, if you did not get any error messages in your terminal after running the above commands, open up <em>username</em>.github.io in your browser. You, and anyone with the link, should be able to see your website!</p>
 

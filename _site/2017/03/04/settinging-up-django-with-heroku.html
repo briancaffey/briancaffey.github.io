@@ -10,8 +10,8 @@
   <meta name="description" content="This is a simple guide to setting up a Django project on Heroku.">
   <link rel="icon" type="image/png" href="favicon.ico" sizes="32x32" />
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/03/04/settinging-up-django-with-heroku.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/03/04/settinging-up-django-with-heroku.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
 </head>
 
   <script>
@@ -79,7 +79,7 @@
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">Setting up a Django app on Heroku</h1>
-    <p class="post-meta"><time datetime="2017-03-04T00:00:00+00:00" itemprop="datePublished">Mar 4, 2017</time></p>
+    <p class="post-meta"><time datetime="2017-03-04T00:00:00-05:00" itemprop="datePublished">Mar 4, 2017</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
@@ -87,30 +87,28 @@
 
 <p>The first step is to create a virutal environment in a new directory:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">mkdir</span><span class="kv"> proj &amp;&amp; cd proj
-</span><span class="w">$ </span><span class="nc">virtualenv</span><span class="kv"> -p python3 .
-</span><span class="w">$ </span><span class="nc">source</span><span class="kv"> bin/activate
-</span>(proj) $ mkdir src
+<pre><code class="language-terminal">$ mkdir proj &amp;&amp; cd proj
+$ virtualenv -p python3 .
+$ source bin/activate
+(proj) $ mkdir src
 (proj) $ cd src
 (proj) $ pip install django==1.10.5
 (proj) $ django-admin.py startproject myproj .
 (proj) $ ls
 myproj        manage.py
 </code></pre>
-</div>
 
 <p>This sets up a virtual environment and creates an empty Django project. The next step is to create a settings module.</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ cd myproj
+<pre><code class="language-terminal">(proj) $ cd myproj
 (proj) $ mkdir settings &amp;&amp; cd settings
 </code></pre>
-</div>
 
 <p>Next we want to add <code class="highlighter-rouge">__init__.py</code> to settings to make it a python module.</p>
 
 <p><em>src/myproj/settings/<strong>init</strong>.py</em></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="kn">from</span> <span class="nn">.production</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -125,7 +123,7 @@ myproj        manage.py
 
 <p><em>settings.py</em></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="c"># Build paths inside the project like this: os.path.join(BASE_DIR, ...)</span>
 <span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))))</span>
 <span class="p">[</span><span class="o">...</span><span class="p">]</span>
@@ -134,26 +132,24 @@ myproj        manage.py
 
 <p>Next we need to move <code class="highlighter-rouge">settings.py</code> into the <code class="highlighter-rouge">settings</code> folder and rename it <code class="highlighter-rouge">base.py</code> and then copy <code class="highlighter-rouge">base.py</code> twice as <code class="highlighter-rouge">local.py</code> and <code class="highlighter-rouge">production.py</code> these three files will live in <code class="highlighter-rouge">settings</code>.</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ mv settings.py settings
+<pre><code class="language-terminal">(proj) $ mv settings.py settings
 (proj) $ cd settings
 (proj) $ mv settings.py base.py
 (proj) $ cp base.py local.py
 (proj) $ cp base.py production.py
 </code></pre>
-</div>
 
 <p>Next we need to install PostgreSQL:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ pip install psycopg2
+<pre><code class="language-terminal">(proj) $ pip install psycopg2
 (proj) $ pip install gunicorn dj-database-url
 (proj) $ pip install django-crispy-forms
 (proj) $ pip install pillow
 </code></pre>
-</div>
 
 <p>At this point we can check to see if everything installed correctly:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ pip freeze
+<pre><code class="language-terminal">(proj) $ pip freeze
 appdirs==1.4.3
 dj-database-url==0.4.2
 Django==1.10.5
@@ -166,29 +162,25 @@ psycopg2==2.7.1
 pyparsing==2.2.0
 six==1.10.0
 </code></pre>
-</div>
 <p>And then we can add these to a file in our base directory called <code class="highlighter-rouge">requirements.txt</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ pip freeze &gt; requirements.txt
+<pre><code class="language-terminal">(proj) $ pip freeze &gt; requirements.txt
 </code></pre>
-</div>
 
 <p>Next we can run migrations and create a superuser:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ python manage.py migrate
+<pre><code class="language-terminal">(proj) $ python manage.py migrate
 (proj) $ python manage.py createsuperuser
 </code></pre>
-</div>
 
 <p>Next we need to initialize our git repository and create <code class="highlighter-rouge">.gitignore</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ git init
+<pre><code class="language-terminal">(proj) $ git init
 </code></pre>
-</div>
 
 <p>We can put <code class="highlighter-rouge">.gitignore</code> in our base directory and add the following:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>myproj/settings/local.py
+<div class="highlighter-rouge"><pre class="highlight"><code>myproj/settings/local.py
 </code></pre>
 </div>
 
@@ -196,16 +188,15 @@ six==1.10.0
 
 <p>Next we can make our first commit:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ git add --all
+<pre><code class="language-terminal">(proj) $ git add --all
 (proj) $ git commit -m "initial commit"
 </code></pre>
-</div>
 
 <p>The next step involves setting up Heroku. First we need to create a <code class="highlighter-rouge">Procfile</code> in our base directory:</p>
 
 <p><em>Procfile</em></p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>web: gunicorn myproj.wsgi --log-file -
+<div class="highlighter-rouge"><pre class="highlight"><code>web: gunicorn myproj.wsgi --log-file -
 </code></pre>
 </div>
 
@@ -215,10 +206,9 @@ six==1.10.0
 
 <p>Next we need to create the project on Heroku:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ heroku login
+<pre><code class="language-terminal">(proj) $ heroku login
 (proj) $ heroku create my-unique-project-name-123
 </code></pre>
-</div>
 
 <p>Now we can see our project at <code class="highlighter-rouge">my-unique-project-name-123.herokuapp.com</code>, and it should say <code class="highlighter-rouge">Heroku | Welcome to your new app!</code></p>
 
@@ -226,23 +216,20 @@ six==1.10.0
 
 <p>The very last step is to add the specific version of Python to a file called <code class="highlighter-rouge">runtime.txt</code> in our base directory:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ python -V
+<pre><code class="language-terminal">(proj) $ python -V
 Python 3.4.3
 (proj) $ echo "python-3.4.3" &gt; runtime.txt
 </code></pre>
-</div>
 
 <p>Before we push to Heroku we need to change a setting on Heroku related to static files:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ heroku config:set DISABLE_COLLECTSTATIC=1
+<pre><code class="language-terminal">(proj) $ heroku config:set DISABLE_COLLECTSTATIC=1
 </code></pre>
-</div>
 
 <p>Now we can finally push the git repository to Heroku:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ git push heroku master
+<pre><code class="language-terminal">(proj) $ git push heroku master
 </code></pre>
-</div>
 
 <p>Now if we go to our site on heroku we should see:</p>
 
@@ -261,27 +248,24 @@ The requested URL / was not found on this server.
 No add-ons are automatically provisioned if a pure Python application is detected. If you need a SQL database for your app, add one explicitly:</p>
 </blockquote>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">heroku</span><span class="kv"> addons:create heroku-postgresql:hobby-dev
-</span></code></pre>
-</div>
+<pre><code class="language-terminal">$ heroku addons:create heroku-postgresql:hobby-dev
+</code></pre>
 
 <p>So we need to run this command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>
+<pre><code class="language-terminal">
 (proj) $ heroku addons:create heroku-postgresql:hobby-dev
 
 </code></pre>
-</div>
 
 <p>Next we need to access the terminal on our Heroku server:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ heroku run bash
+<pre><code class="language-terminal">(proj) $ heroku run bash
 </code></pre>
-</div>
 
 <p>Next we need to add database-related information to <code class="highlighter-rouge">production.py</code> under the <code class="highlighter-rouge">DATABASES</code> section:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="kn">import</span> <span class="nn">dj_database_url</span>
 
 <span class="n">db_from_env</span> <span class="o">=</span> <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">()</span>
@@ -292,39 +276,34 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>Now we can push to Heroku:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ git push heroku master
+<pre><code class="language-terminal">(proj) $ git push heroku master
 </code></pre>
-</div>
 
 <p>Next we can run our migrations:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ heroku run python manage.py makemigrations
+<pre><code class="language-terminal">(proj) $ heroku run python manage.py makemigrations
 </code></pre>
-</div>
 
 <p>Next we can run <code class="highlighter-rouge">migrate</code> and <code class="highlighter-rouge">createsuperuser</code> on our Heroku server:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ heroku run python manage.py migrate &amp;&amp; heroku run python manage.py createsuperuser
+<pre><code class="language-terminal">(proj) $ heroku run python manage.py migrate &amp;&amp; heroku run python manage.py createsuperuser
 </code></pre>
-</div>
 
 <p>Now we should be able to login to the admin page with the account we just created, but CSS is still not working at this point. Here’s how we configure static files to get CSS to work:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ pip install whitenoise
+<pre><code class="language-terminal">(proj) $ pip install whitenoise
 </code></pre>
-</div>
 
 <p><code class="highlighter-rouge">whitenoise</code> is needed so Heroku can run our static files.</p>
 
 <p>Next we want to make sure to include <code class="highlighter-rouge">whitenoise</code> in <code class="highlighter-rouge">requirements.txt</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ pip freeze &gt; requirements.txt
+<pre><code class="language-terminal">(proj) $ pip freeze &gt; requirements.txt
 </code></pre>
-</div>
 
 <p>Next we need to add the following item to the list of <code class="highlighter-rouge">MIDDLEWARE</code> components. This needs to be added to BOTH <code class="highlighter-rouge">production.py</code> AND <code class="highlighter-rouge">base.py</code> in order for the local files to show on both our heroku site and the locally served site with <code class="highlighter-rouge">heroku local web</code>:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>MIDDLEWARE = [
+<div class="highlighter-rouge"><pre class="highlight"><code>MIDDLEWARE = [
 [...]
 'whitenoise.middleware.WhiteNoiseMiddleware',
 [...]
@@ -336,7 +315,7 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p><em>production.py</em></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code>
+<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"static"</span><span class="p">),</span>
 <span class="p">)</span>
@@ -356,7 +335,7 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>And we also need to add some files to our base directory that will hold our static files:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ mkdir static
+<pre><code class="language-terminal">(proj) $ mkdir static
 (proj) $ echo "body {color:#000;}" &gt; static/main.css
 (proj) $ mkdir live-static
 (proj) $ mkdir live-static/static-root
@@ -365,11 +344,10 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 (proj) $
 
 </code></pre>
-</div>
 
 <p>And we also need to add the following to the end of <code class="highlighter-rouge">production.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">'/static/'</span>
 
 <span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
@@ -390,7 +368,7 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p><code class="highlighter-rouge">base.py</code> and <code class="highlighter-rouge">local.py</code> should have the following:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">'/static/'</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">'/static/'</span>
 
 <span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"static"</span><span class="p">),</span>
@@ -406,24 +384,21 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>Next we want to run <code class="highlighter-rouge">collectstatic</code> locally:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ python manage.py collectstatic
+<pre><code class="language-terminal">(proj) $ python manage.py collectstatic
 </code></pre>
-</div>
 
 <p>We also want to add a blank file to <code class="highlighter-rouge">live-static/media-root</code> so that it becomes tracked in git:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ echo "some text" &gt; live-static/media-root/blank.txt
+<pre><code class="language-terminal">(proj) $ echo "some text" &gt; live-static/media-root/blank.txt
 </code></pre>
-</div>
 
 <p>Next we can commit these changes and push to Heroku, and check to see if the static files are working in the admin panel. We also want to set <code class="highlighter-rouge">DISABLE_COLLECTSTATIC</code> to <code class="highlighter-rouge">0</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ git add --all
+<pre><code class="language-terminal">(proj) $ git add --all
 (proj) $ git commit -m "added static files"
 (proj) $ git push heroku master
 (proj) $ heroku config:set DISABLE_COLLECTSTATIC=0
 </code></pre>
-</div>
 <p>Now we should be able to see the admin panel with working CSS on both the live and local heroku sites.</p>
 
 <h1 id="adding-an-app-and-configuring-bootstrap">Adding an app and configuring Bootstrap</h1>
@@ -432,15 +407,14 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>Let’s start by creating a new app:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ python manage.py startapp pages
+<pre><code class="language-terminal">(proj) $ python manage.py startapp pages
 </code></pre>
-</div>
 
 <p><code class="highlighter-rouge">pages</code> will be the name of an app that we create here.</p>
 
 <p>In <code class="highlighter-rouge">pages/views.py</code> we can add a class-based view that will serve as the homepage:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
 <span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">View</span>
 <span class="c"># Create your views here.</span>
 
@@ -453,7 +427,7 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>We then update <code class="highlighter-rouge">urls.py</code> to include our new view:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
 <span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
 <span class="kn">from</span> <span class="nn">services.views</span> <span class="kn">import</span> <span class="n">HomeView</span>
 
@@ -468,15 +442,14 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>Next we need to make some folders within our new <code class="highlighter-rouge">pages</code> app:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ mkdir page/templates &amp;&amp; cd pages/templates
+<pre><code class="language-terminal">(proj) $ mkdir page/templates &amp;&amp; cd pages/templates
 (proj) $ mkdir pages
 (proj) $ touch home.html
 </code></pre>
-</div>
 
 <p>Then we need to add the following to <code class="highlighter-rouge">home.html</code>:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>{% extends "base.html" %}
+<div class="highlighter-rouge"><pre class="highlight"><code>{% extends "base.html" %}
 
 {% block content %}
 
@@ -486,21 +459,20 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>Next we need to update <code class="highlighter-rouge">DIR</code> in <code class="highlighter-rouge">TEMPLATES</code> in <code class="highlighter-rouge">base.py</code>, <code class="highlighter-rouge">local.py</code> and <code class="highlighter-rouge">production.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
 <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'templates'</span><span class="p">)],</span>
 <span class="p">[</span><span class="o">...</span><span class="p">]</span>
 </code></pre>
 </div>
 <p>Next we need to add a <code class="highlighter-rouge">templates</code> folder to the root of our project:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>(proj) $ mkdir templates
+<pre><code class="language-terminal">(proj) $ mkdir templates
 (proj) $ touch tempates/base.html
 </code></pre>
-</div>
 
 <p>Next we can add a basic Bootstrap template to <code class="highlighter-rouge">base.html</code>:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
 <span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;head&gt;</span>
     <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>

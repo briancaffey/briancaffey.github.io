@@ -27,17 +27,45 @@ The T430 came with a copy of Windows Pro, which I installed right away. I also p
 
 First we want to set up a new virtual machine with the options Linx / ArchLinux / 64-bit. You are probably using a 64-bit machine (although some old netbooks are 32-bit). The first obstacle is you will probably face with VirtualBox is that there are no options for 64-bit. This is because Intel Virtualization is often disabled by default. You will need to go into the BIOS (by pressing `delete` of `F10`/`F12` at boot time) and then change this option, save the BIOS settings and restart. With this done, you will want to create a virtual machine with at at least 20GB of storage and around 4GB of memory.
 
-### Using `fdisk` for partitioning
+#### Quick note about fonts
+
+The default font when installing Arch Linux is quite small, so you may want to increase the font size.
 
 ```
-fdisk is a dialogue-driven program for creation and manipulation of partition tables.
+ls /usr/share/kbd/consolefonts/
 ```
+
+This command will list the available fonts. To set a font, run the following command:
+
+```
+setfont sun12x22
+```
+
+To revert back to the default font, just run:
+
+```
+setfont
+```
+
+You can also view the current font with
+
+```
+showconsolefont
+```
+
+### Using `fdisk` for partitioning
+
+> fdisk is a dialogue-driven program for creation and manipulation of partition tables.
 
 We want to run fdisk and enter the device we want to work with as the first argument after the command:
 
 ```
 fdisk /dev/sda
 ```
+
+#### Note about fdisk
+
+When installing Arch Linux on a disk that has Windows or Linux installed, you can delete the partitions on the drive (which is usually labeled `/dev/sda` or `/dev/sdb` or `/dev/sdc`). Run `lsblk` to determine which drive you want to format, then run `fdisk /dev/sdX` where `X` corresponds to the drive we will be using. You should be inside the fdisk menu. Press `d` to start deleting partitions. You may get some warnings about a partition containing some type of trace (such as ext4). This is fine. You can delete all of the partitions.
 
 ### Create a root partition
 
@@ -195,11 +223,13 @@ KEYMAP=us
 
 To configure the time zone, we need to create a link to a file called `/etc/localtime`.
 
+The following command won't work, we will do this in a later step, so skip the following command for now.
+
 ```
 ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 ```
 
-This worked on my MacBook Air, but in doing this on my Windows host trying to link to the file `/etc/localtime` gave an error that the file already existed. Skipping this step on my ThinkPad was OK. Looking in the file, it seemed that UTC was already configured.
+This worked on my MacBook Air in VirtualBox, but in doing this on my Windows host in VirtualBox trying to link to the file `/etc/localtime` gave an error that the file already existed. Skipping this step on my ThinkPad was OK. Looking in the file, it seemed that UTC was already configured.
 
 
 ### Set the Hardware Clock
@@ -308,6 +338,23 @@ We need to uncomment the following line:
 To do this, press the down arrow until we are on the line we need to uncomment, then press `i`, then remove the `#` and space. Next, press `esc` and then press `:` and then `x` and then press `ENTER`. That should save our changes. Arch Linux warns that this file ONLY be edited with `vim`.
 
 ### Installing a bootloader
+
+At this point the directions will fork based on your motherboard firmware. By default grub-install uses target x86_64-efi. If you don't have a UEFI system you should use the following command:
+
+```
+grub-install --target=i386-pc --recheck /dev/sdb
+```
+
+If this works properly you should see the following:
+
+```
+Installing for i386-pc platform.
+Installation finished. No error reported.
+```
+
+> --target=i386-pc instructs grub-install to install for BIOS systems only. It is recommended to always use this option to remove ambiguity in grub-install.
+
+Here is [more information about GRUB]( https://wiki.archlinux.org/index.php/GRUB) from the Arch Wiki.
 
 We need to install a bootloader on the first system hard disk (/dev/sda):
 

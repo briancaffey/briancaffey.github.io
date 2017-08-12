@@ -10,8 +10,8 @@
   <meta name="description" content="This post will be a comprehensive guide to installing Arch Linux. I will be installing Arch Linux on a refurbished ThinkPad T430 Laptop, first as a guest OS ...">
   <link rel="icon" type="image/png" href="favicon.ico" sizes="32x32" />
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/08/03/arch-linux-installation-guide.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/08/03/arch-linux-installation-guide.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
 </head>
 
   <script>
@@ -79,17 +79,17 @@
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">Arch Linux Installation Guide</h1>
-    <p class="post-meta"><time datetime="2017-08-03T00:00:00+00:00" itemprop="datePublished">Aug 3, 2017</time></p>
+    <p class="post-meta"><time datetime="2017-08-03T00:00:00-04:00" itemprop="datePublished">Aug 3, 2017</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>This post will be a comprehensive guide to installing Arch Linux. I will be installing Arch Linux on a refurbished <a href="http://www3.lenovo.com/us/en/laptops/thinkpad/t-series/t430/">ThinkPad T430 Laptop</a>, first as a guest OS on a Windows 10 Pro host, and then on a secondary SSD that will replace the optical drive. I will try to cover absolutely everything you need from creating a bootable USB drive to customizing the desktop interface.</p>
+    <p>This post will be a comprehensive guide to installing Arch Linux. I will be installing Arch Linux on a refurbished <a href="http://www3.lenovo.com/us/en/laptops/thinkpad/t-series/t430/">ThinkPad T430 Laptop</a>, first as a guest OS on a Windows 10 Pro host, and then on a secondary SSD that will replace the optical drive. I will try to cover absolutely everything you need from creating a bootable USB drive to customizing the desktop interface and installing development environments and tools.</p>
 
-<h2 id="put-arch-on-a-usb-drive">Put arch on a USB drive</h2>
+<h2 id="put-arch-linux-on-a-usb-drive">Put Arch Linux on a USB drive</h2>
 
 <p>I recommend that you download a BitTorrent client such as <a href="http://dev.deluge-torrent.org/wiki/Download">Deluge</a>, and then grab the ISO magnet link from <a href="https://www.archlinux.org/download/">https://www.archlinux.org/download/</a>. It should take just a few minutes to complete the download via BitTorrent.</p>
 
-<p>If you are using a Mac to build the bootable drive, I have read that you can use the <code class="highlighter-rouge">dd</code> command. This didn’t work for me. I referred to the Installation manual for Arch and found instructions for using Rufus, a Windows/Linux utility for burning ISO images to bootable media. The Arch Wiki has a highlighted note about using Rufus:</p>
+<p>~If you are ~~using~~ a Mac to build the bootable drive, I have read that you can use the <code class="highlighter-rouge">dd</code> command. This didn’t work for me. I referred to the Installation manual for Arch and found instructions for using Rufus, a Windows/Linux utility for burning ISO images to bootable media. The Arch Wiki has a highlighted note about using Rufus: ~</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>Note: Be sure to select DD mode or the image will be transferred incorrectly.
 </code></pre>
@@ -103,17 +103,47 @@
 
 <p>First we want to set up a new virtual machine with the options Linx / ArchLinux / 64-bit. You are probably using a 64-bit machine (although some old netbooks are 32-bit). The first obstacle is you will probably face with VirtualBox is that there are no options for 64-bit. This is because Intel Virtualization is often disabled by default. You will need to go into the BIOS (by pressing <code class="highlighter-rouge">delete</code> of <code class="highlighter-rouge">F10</code>/<code class="highlighter-rouge">F12</code> at boot time) and then change this option, save the BIOS settings and restart. With this done, you will want to create a virtual machine with at at least 20GB of storage and around 4GB of memory.</p>
 
-<h3 id="using-fdisk-for-partitioning">Using <code class="highlighter-rouge">fdisk</code> for partitioning</h3>
+<h4 id="quick-note-about-fonts">Quick note about fonts</h4>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>fdisk is a dialogue-driven program for creation and manipulation of partition tables.
+<p>The default font when installing Arch Linux is quite small, so you may want to increase the font size.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ls /usr/share/kbd/consolefonts/
 </code></pre>
 </div>
+
+<p>This command will list the available fonts. To set a font, run the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>setfont sun12x22
+</code></pre>
+</div>
+
+<p>To revert back to the default font, just run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>setfont
+</code></pre>
+</div>
+
+<p>You can also view the current font with</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>showconsolefont
+</code></pre>
+</div>
+
+<h3 id="using-fdisk-for-partitioning">Using <code class="highlighter-rouge">fdisk</code> for partitioning</h3>
+
+<blockquote>
+  <p>fdisk is a dialogue-driven program for creation and manipulation of partition tables.</p>
+</blockquote>
 
 <p>We want to run fdisk and enter the device we want to work with as the first argument after the command:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>fdisk /dev/sda
 </code></pre>
 </div>
+
+<h4 id="note-about-fdisk">Note about fdisk</h4>
+
+<p>When installing Arch Linux on a disk that has Windows or Linux installed, you can delete the partitions on the drive (which is usually labeled <code class="highlighter-rouge">/dev/sda</code> or <code class="highlighter-rouge">/dev/sdb</code> or <code class="highlighter-rouge">/dev/sdc</code>). Run <code class="highlighter-rouge">lsblk</code> to determine which drive you want to format, then run <code class="highlighter-rouge">fdisk /dev/sdX</code> where <code class="highlighter-rouge">X</code> corresponds to the drive we will be using. You should be inside the fdisk menu. Press <code class="highlighter-rouge">d</code> to start deleting partitions. You may get some warnings about a partition containing some type of trace (such as ext4). This is fine. You can delete all of the partitions.</p>
 
 <h3 id="create-a-root-partition">Create a root partition</h3>
 
@@ -271,11 +301,13 @@ export LANG=en_US.UTF-8
 
 <p>To configure the time zone, we need to create a link to a file called <code class="highlighter-rouge">/etc/localtime</code>.</p>
 
+<p>The following command won’t work, we will do this in a later step, so skip the following command for now.</p>
+
 <div class="highlighter-rouge"><pre class="highlight"><code>ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 </code></pre>
 </div>
 
-<p>This worked on my MacBook Air, but in doing this on my Windows host trying to link to the file <code class="highlighter-rouge">/etc/localtime</code> gave an error that the file already existed. Skipping this step on my ThinkPad was OK. Looking in the file, it seemed that UTC was already configured.</p>
+<p>This worked on my MacBook Air in VirtualBox, but in doing this on my Windows host in VirtualBox trying to link to the file <code class="highlighter-rouge">/etc/localtime</code> gave an error that the file already existed. Skipping this step on my ThinkPad was OK. Looking in the file, it seemed that UTC was already configured.</p>
 
 <h3 id="set-the-hardware-clock">Set the Hardware Clock</h3>
 
@@ -384,11 +416,29 @@ Server = http://repo.archlinux.fr/$arch
 
 <h3 id="installing-a-bootloader">Installing a bootloader</h3>
 
-<p>We need to install a bootloader on the first system hard disk (/dev/sda):</p>
+<p>At this point the directions will fork based on your motherboard firmware. By default grub-install uses target x86_64-efi. If you don’t have a UEFI system you should use the following command:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>pacman -S grub
-grub-install /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
+grub-install --target=i386-pc --recheck /dev/sdb
+</code></pre>
+</div>
+
+<p>If this works properly you should see the following:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Installing for i386-pc platform.
+Installation finished. No error reported.
+</code></pre>
+</div>
+
+<blockquote>
+  <p>–target=i386-pc instructs grub-install to install for BIOS systems only. It is recommended to always use this option to remove ambiguity in grub-install.</p>
+</blockquote>
+
+<p>Here is <a href="https://wiki.archlinux.org/index.php/GRUB">more information about GRUB</a> from the Arch Wiki.</p>
+
+<p>Finally run the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>grub-mkconfig -o /boot/grub/grub.cfg
 </code></pre>
 </div>
 
@@ -503,7 +553,7 @@ error: target not found: xorg-server-utils
 
 <p>It seems that these packages have been deprecated. I think a solution to this is to run:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>pacman -S xorg-apps
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S xorg-apps
 </code></pre>
 </div>
 
@@ -513,7 +563,7 @@ error: target not found: xorg-server-utils
 </code></pre>
 </div>
 
-<p>Select option <code class="highlighter-rouge">1</code>.</p>
+<p>Select option <code class="highlighter-rouge">1</code> (don’t select the options that include the word nvidia).</p>
 
 <p>Next we need to install <code class="highlighter-rouge">linux-headers</code>:</p>
 
@@ -529,11 +579,11 @@ error: target not found: xorg-server-utils
 
 <p>The tutorial didn’t mention the <code class="highlighter-rouge">linux-headers</code> package, but the error message that comes up if you skip this step say that this package is needed.</p>
 
-<p><code class="highlighter-rouge">xorg-server-utils</code> seems to have been removed, but it was a meta-package that simply included the following:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>xorg-iceauth xorg-sessreg xorg-xcmsdb xorg-xbacklight xorg-xgamma xorg-xhost xorg-xinput xorg-xmodmap xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot
-</code></pre>
-</div>
-<p>Installing these packages individually did not help.</p>
+<p><code class="highlighter-rouge">xorg-server-utils</code> seems to have been removed, but it was a meta-package that simply included the following:
+<code class="highlighter-rouge">
+xorg-iceauth xorg-sessreg xorg-xcmsdb xorg-xbacklight xorg-xgamma xorg-xhost xorg-xinput xorg-xmodmap xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot
+</code>
+Installing these packages individually did not help.</p>
 
 <p>This does a full install of xorg (reinstalling many packages I just installed). After running this command, running <code class="highlighter-rouge">startx</code> gives no errors and lets me enter the X environment.</p>
 
@@ -585,6 +635,43 @@ error: target not found: xorg-server-utils
 </code></pre>
 </div>
 
+<p>Login with the user account that you created. At this point, trying to open Terminal will probably not work. This is because of an issue mentioned earlier about a locale file. Let’s look at <code class="highlighter-rouge">/etc/locale.conf</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat /etc/locale.conf
+</code></pre>
+</div>
+
+<p>We just need to make sure that the language we want is uncommented in <code class="highlighter-rouge">/etc/locale.gen</code>. We did this previously. Now we need to run the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo locale-gen
+</code></pre>
+</div>
+
+<p>This should allow us to access the terminal.</p>
+
+<h3 id="enable-wi-fi">Enable Wi-Fi</h3>
+
+<p>To enable Wi-Fi, first check <code class="highlighter-rouge">lspci -k</code> if you have an onboard wifi card or <code class="highlighter-rouge">lsusb -v</code> if you have a USB wifi adapter.</p>
+
+<p>Next run <code class="highlighter-rouge">ip link</code> and see if there is an entry that starts with <code class="highlighter-rouge">w</code>. This is wireless interface. If you don’t have WiFi working it probably says <code class="highlighter-rouge">state DOWN</code> in the description.</p>
+
+<p>We need to run the following command to bring it up:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo ip link set &lt;the code that starts with w&gt; up
+</code></pre>
+</div>
+
+<p>If we go to “Settings” we will see an error that says “NetworkManager needs to be running.”</p>
+
+<p>To get NetworkManager running, issue the following commands:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo systemctl enable NetworkManager.service
+sudo systemctl start NetworkManager.service
+</code></pre>
+</div>
+
+<p>This will prompt you for authentication, then you can go back to <code class="highlighter-rouge">Settings &gt; Network</code> and you should be able to find any available Wi-Fi networks.</p>
+
 <h3 id="customizing-gnome-desktop">Customizing GNOME Desktop</h3>
 
 <p>Next let’s work on customizing our GUI.</p>
@@ -603,23 +690,311 @@ error: target not found: xorg-server-utils
 </code></pre>
 </div>
 
-<p><code class="highlighter-rouge">pacman</code> offers similar functionality, and so does <code class="highlighter-rouge">pacaur</code>. There are several options for how to download software with Arch Linux.</p>
+<p>Let’s start with nice custom theme, numix.</p>
 
-<p>Here are some packages and utilities that can help with customizing the GNOME environment:</p>
+<p>Run the following:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S gnome-tweak-tools
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -Ss numix
 </code></pre>
 </div>
 
-<p>This is a central portal for managing extensions, themes, fonts, icons and more.</p>
+<p>We will see many packages, and there are three that we should install:</p>
 
-<p>I installed a custom theme called <code class="highlighter-rouge">numix</code>, and also installed the a set of “circle” icons from numix that look pretty good. Once installed with <code class="highlighter-rouge">yaourt</code>, the <code class="highlighter-rouge">numix</code> theme and icons can be activated through the <code class="highlighter-rouge">gnome-tweak-tool</code>. You can launch <code class="highlighter-rouge">gnome-tweak-tool</code> by simply running <code class="highlighter-rouge">gnome-tweak-tool</code> in the terminal.</p>
+<ul>
+  <li><code class="highlighter-rouge">numix-gtk-theme</code></li>
+  <li><code class="highlighter-rouge">numix-circle-theme-git</code></li>
+  <li><code class="highlighter-rouge">numix-cursor-theme-git</code></li>
+</ul>
 
-<p>One other great tool for adding extensions to GNOME is <code class="highlighter-rouge">extensions.gnome.org</code>. To use this you need to download an extension for Firefox as well as a small package (it prompts you to do this on the website). Once both of these are installed, you can add extensions directly from Firefox. Two extensions that I added are <code class="highlighter-rouge">Dash to Dock</code> and <code class="highlighter-rouge">Dynamic top bar</code> for managing the icon dock and top bar. Another great extension is the <code class="highlighter-rouge">Removable drive menu</code>.</p>
+<p>The installations process for <code class="highlighter-rouge">numix-gtk-theme</code> is quite long. You need to confirm <code class="highlighter-rouge">Yes</code> and it will also ask you the following:</p>
 
-<h2 id="conclusion">Conclusion</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>Edit PKGBUILD with:
+</code></pre>
+</div>
 
-<p>I am very happy with this VirtualBox setup. I still want to install Arch Linux on “bare metal”, and I may do this with a spare SSD that I have. This</p>
+<p>Here you can type <code class="highlighter-rouge">nano</code> and press <code class="highlighter-rouge">ENTER</code>. It will then show you a file in <code class="highlighter-rouge">nano</code> or the editor you select. You can press <code class="highlighter-rouge">Ctrl-X</code> and the installation script will continue running.</p>
+
+<p>You will also see the following message before being prompted to select an editor:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Please add $VISUAL to your environment variables.
+</code></pre>
+</div>
+
+<p>Let’s do that now so we are not prompted to do it later:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo nano ~/.bashrc
+</code></pre>
+</div>
+
+<p>Add the following line to the end of the file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export VISUAL="nano"
+</code></pre>
+</div>
+
+<p>You could also set <code class="highlighter-rouge">VISUAL="vim"</code> or some other editor.</p>
+
+<p>Now that we have installed the themes, let’s activate them. Press <code class="highlighter-rouge">ALT F2</code> and type <code class="highlighter-rouge">gnome-tweak-tool</code>. Under the appearance tab you can select the newly installed GTK+ theme, icons and cursor.</p>
+
+<h3 id="gnome-shell-extensions">GNOME Shell Extensions</h3>
+
+<p>You can do a lot of neat customization with extensions. You will see an <code class="highlighter-rouge">Extensions</code> tab in the Tweak Tool. Click on “Get more extensions”. This will take you to the <a href="https://extensions.gnome.org">GNOME Shell Extensions</a> site. Before you start using extensions, you need to add a Firefox extensions and install a package. Click the link in the blue bar at the top of the page and install the plugin.</p>
+
+<p>Next you need to install the following package:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S chrome-gnome-shell-git
+</code></pre>
+</div>
+
+<p>Now refresh the GNOME Shell Extensions page and the blue message should go away. Here are the extensions I use:</p>
+
+<ul>
+  <li>Applications menu</li>
+  <li>Removable Drive menu</li>
+  <li>Dash to Dock</li>
+  <li>Dynamic Top Bar</li>
+  <li>User Themes</li>
+  <li>Screen Saver and hibernate buttons (<code class="highlighter-rouge">gnome-screensaver</code> and a GNOME Shell Extension called [add name])</li>
+</ul>
+
+<p>Dash to Dock lets you place the dock wherever you want, you can also change its appearance and behavior.</p>
+
+<h3 id="screenfetch">Screenfetch</h3>
+
+<p>I like to use Screenfetch, a package that prints out ASCII art for your distro and some customizable system information.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S screenfetch
+</code></pre>
+</div>
+
+<p>Now edit <code class="highlighter-rouge">~/.bashrc</code> by adding the following line at the bottom of the file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>screenfetch
+</code></pre>
+</div>
+
+<p>Screefetch can be further customized, check out <code class="highlighter-rouge">man screenfetch</code> for more options. For example, you can exlude certain lines about system information or add custom lines like the model of your PC, etc.</p>
+
+<h4 id="quick-note-on-terminal-colors">Quick Note on Terminal Colors</h4>
+
+<p>I don’t like the default white background of the terminal, so you can change this by editing the default profile. Unselect “Use colors from system theme” and select “Solarized Dark” (my preferred color scheme).</p>
+
+<h4 id="quick-note-on-yaourt">Quick Note on yaourt</h4>
+
+<p>You can add a <code class="highlighter-rouge">--no-confirm</code> flag to yaourt that will prevent it from asking you if you want to proceed with each step of the installation process.</p>
+
+<h3 id="window-options">Window options</h3>
+
+<p>By default, GNOME only shows the <code class="highlighter-rouge">X</code> in the top right corner of windows. You can add the maximize and minimize buttons in the <code class="highlighter-rouge">Windows</code> tab of the GNOME Tweak Tool.</p>
+
+<h3 id="icons-on-desktop">Icons on Desktop</h3>
+
+<p>Another default setting that may be strange for you is “Icons on Desktop” which is set to <code class="highlighter-rouge">OFF</code> by default. The is found under the Desktop tab in the GNOME Tweak Tool.</p>
+
+<h3 id="my-other-setup-notes">My other setup notes</h3>
+
+<p>I install Chromium and set it to my default browser. My must have extension for Chrome (and any other browser) is Last Pass for account and password management.</p>
+
+<h2 id="default-applications">Default Applications</h2>
+
+<p>You can set default applications by opening <code class="highlighter-rouge">Settings &gt; Details &gt; Default Applications</code>. I use Image Viewer for photos instead of GIMP and VLC for Video.</p>
+
+<p><code class="highlighter-rouge">pacman</code> offers similar functionality, and so does <code class="highlighter-rouge">pacaur</code>. There are several options for how to download software with Arch Linux.</p>
+
+<h3 id="other-packages">Other packages</h3>
+
+<p>Here’s a list of other helpful packages:</p>
+
+<ul>
+  <li>
+    <p>htop (system monitoring)</p>
+  </li>
+  <li>
+    <p>blender (video editing and 3d modeling)</p>
+  </li>
+  <li>
+    <p>OBS (screen recording and streaming software)</p>
+  </li>
+</ul>
+
+<p>OBS took a little bit of configuring to get right. Out of the box, doing a screen capture showed just a black screen. Here’s how we can fix that:</p>
+
+<ul>
+  <li>Dropbox</li>
+</ul>
+
+<p>I’ll talk about more packages in the next section for doing development work on Arch Linux that require some extra work for permissions and configuration.</p>
+
+<ul>
+  <li>Google Drive</li>
+</ul>
+
+<h2 id="setting-up-development-tools">Setting Up Development Tools</h2>
+
+<h3 id="atom-and-other-text-editors">Atom and other text editors</h3>
+
+<p>My preferred text editor is Atom:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S atom
+</code></pre>
+</div>
+
+<p>The Arch Linux installation also came with an interesting editor called <code class="highlighter-rouge">Builder</code> which seems pretty interesting as well.</p>
+
+<h3 id="virtualbox-1">VirtualBox</h3>
+
+<p><em>Skip this step if you are installing Arch Linux as guest OS in a VirtualBox (you can’t run a virtual machine in a virtual machine).</em></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S virtualbox
+</code></pre>
+</div>
+
+<p>You will see a message that says:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>:: There are 2 providers available for VIRTUALBOX-HOST-MODULES
+:: Repository community
+   1) virtualbox-host-dkms 2) virtualbox-host-modules-arch
+</code></pre>
+</div>
+
+<p>Select option 2, continue the installation process and then reboot.</p>
+
+<h3 id="quick-note-on-deluge">Quick note on deluge</h3>
+
+<p>You will probably want to use a BitTorrent client to download ISO images for virtual machines you want to run. Deluge works well for this, and we already downloaded it during setup. We can add one more package for a theme that Deluge uses:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S gtk-engine-murrine
+</code></pre>
+</div>
+
+<p>Now grab a torrent link or file for an OS you want to download and add it to Deluge.</p>
+
+<p>When it is finished we can launch VirtualBox and create a virtual machine with our ISO.</p>
+
+<h3 id="npm-and-nodejs">npm and node.js</h3>
+
+<p>Here’s <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">a helpful article</a> that is important to following when setting up npm and node.js. Be very careful as some of the steps can completely mess up permissions on your entire system.</p>
+
+<p>Here’s a walkthrough of the steps to get <code class="highlighter-rouge">npm</code> setup correctly.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S npm
+</code></pre>
+</div>
+
+<p>Next run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm config get prefix
+</code></pre>
+</div>
+
+<p>The output of this command is probably:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/usr
+</code></pre>
+</div>
+
+<p>If this is the case, we MUST follow the following steps (option 2 from <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">this article</a>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+</code></pre>
+</div>
+
+<p>If you don’t already have a <code class="highlighter-rouge">~/.profile</code> file, make one, and then add the following line:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>export PATH=~/.npm-global/bin:$PATH
+</code></pre>
+</div>
+
+<p>Then run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>source ~/.profile
+</code></pre>
+</div>
+
+<p>This will “refresh” <code class="highlighter-rouge">~/.profile</code> so that using the <code class="highlighter-rouge">npm</code> command will work without needing sudo.</p>
+
+<p>Next we can test that <code class="highlighter-rouge">npm</code> works by trying to install a package:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm install -g jshint
+</code></pre>
+</div>
+
+<p>This should install the package with no errors.</p>
+
+<h2 id="python">Python</h2>
+
+<p>In the installation process, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get <code class="highlighter-rouge">pip</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S python-pip
+</code></pre>
+</div>
+
+<p>Here’s <a href="https://docs.python.org/3/library/venv.html">an article from the Python documentation</a> that covers creating virtual environments.</p>
+
+<p>Here is <a href="https://packaging.python.org/tutorials/installing-packages/">another article</a> about creating virtual environments in python.</p>
+
+<blockquote>
+  <p>Currently, there are two viable tools for creating Python virtual environments:
+venv is available by default in Python 3.3 and later, and installs pip and setuptools into created virtual environments in Python 3.4 and later.
+virtualenv needs to be installed separately, but supports Python 2.6+ and Python 3.3+, and pip, setuptools and wheel are always installed into created virtual environments by default (regardless of Python version).
+The basic usage is like so:
+Using virtualenv:</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>virtualenv &lt;DIR&gt;
+source &lt;DIR&gt;/bin/activate
+</code></pre>
+</div>
+
+<blockquote>
+  <p>Using venv:</p>
+</blockquote>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>python3 -m venv &lt;DIR&gt;
+source &lt;DIR&gt;/bin/activate
+</code></pre>
+</div>
+<p>For more information, see the virtualenv docs or the venv docs.</p>
+
+<h2 id="conclusion-and-next-steps">Conclusion and Next Steps</h2>
+
+<p>Installing Arch Linux is like trying to build a house with just a spoon. But, you have the benefit of being able to order unlimited copies of free parts and materials online, and a great community of people that are extremely knowledgable about building houses. Pretty soon you are able to quickly build a foundation, scaffolding, wiring, appliances and yes even wallpaper. Arch Linux makes for a nice dwelling and it stays up to date being on a rolling release cycle, so you don’t have to rebuild your house every 9 months to stay current.</p>
+
+<p>Arch Linux is a lot of work to set up compared to popular Linux distributions like Ubuntu. Just like everyone says, you learn a lot by going through the process, breaking things and starting the installations process from scratch. I totally messed up my permissions while installing and quickly found that the only solutions was to reinstall Arch. This guide is primarily for personal use, and I am sure there are things that can be improved and even done completely differently. Here’s a list of things I can start with:</p>
+
+<ul>
+  <li>
+    <p><strong>Fix OBS Studio</strong>: I got this to work in my earlier install and can’t seem to remember how I fixed it. Currently OBS displays a black screen when set to <code class="highlighter-rouge">Screen Capture</code>.</p>
+  </li>
+  <li>
+    <p><strong>Encrypting the home folder</strong>: this is good practice and will make my computer more secure, it shouldnt be too difficult either.</p>
+  </li>
+  <li>
+    <p><strong>Adding a boot partition and fixing GRUB</strong>: the guides I worked off of didn’t include this, and I think it would be very important to figure out how this works if I want to include Windows 10 for doing Windows-specific tasks on my laptop as well without having to go into the bios each time I want to switch OSs.</p>
+  </li>
+  <li>
+    <p><strong>Using HDDs</strong>: On my desktop I would like to be able to figure out how to mount my HDD that I use for mass file storage on my Windows machine. For simplicity I have kept everything on one SSD, but it would be good to figure out how to easily add additional disks at boot time.</p>
+  </li>
+  <li>
+    <p><strong>NVIDIA drivers</strong>: this does not apply to my laptop, but I would like to figure out how I can get the best drivers in Arch Linux for my NVIDIA GPU on my desktop machine. This is one thing that running Linux in a Virtual Machine really doesn’t allow you to do (pass a GPU through a VM), as far as I know.</p>
+  </li>
+  <li>
+    <p><strong>All other drivers</strong>: I still have lots of questions about how to make sure that I am running things properly on my desktop PC. I feel like drivers for the laptop install were pretty automatic, but this may not be the case with additional hardware components on my desktop, such a closed-loop water cooler.</p>
+  </li>
+  <li>
+    <p><strong>Additional Customization, Themes, Window Managers, etc.</strong>: There is so much that can be done with Arch Linux in terms of GUI. I love the setup I have but it would be interesting to explore some additional options like i3, for example.</p>
+  </li>
+  <li>
+    <p><strong>Cusomt kernels</strong>: I am also interested in learning how I could swap out kernels. I have seen people add LTS kernels to Arch Linux for various reasons, and I’m interested to learn how this works.</p>
+  </li>
+  <li>
+    <p><strong>Maximzing battery life</strong>: During the install process I saw the topic discussed but didn’t look into it. It would be nice to see if I could make changes to get more out of the battery in my refurbished ThinkPad.</p>
+  </li>
+  <li>
+    <p><strong>Other areas for improvement</strong>: [add here]</p>
+  </li>
+</ul>
 
   </div>
 
