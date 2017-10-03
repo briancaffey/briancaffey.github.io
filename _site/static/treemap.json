@@ -1,0 +1,355 @@
+{
+  "name": "Budget du Departement",
+  "rate": 0.03,
+  "children": [
+    {
+      "name": "Aménagement et développement durable",
+      "rate": -0.01,
+      "children": [
+        {
+          "name": "Réseau routier et mobilité durable",
+          "rate": 0,
+          "children": [
+            {
+              "name": "Mobilité durable",
+              "rate": 0.02,
+              "value": 47.1
+            },
+            {
+              "name": "PDU et infrastructures de transports en commun",
+              "rate": -2.92,
+              "value": 0.21
+            },
+            {
+              "name": "Réseau routier",
+              "rate": -0.07,
+              "value": 5.23
+            }
+          ]
+        },
+        {
+          "name": "Développement et attractivité des territoires",
+          "rate": -0.1,
+          "children": [
+            {
+              "name": "Aménagement",
+              "rate": -0.16,
+              "value": 1.52
+            },
+            {
+              "name": "Développement économique et promotion du territoire",
+              "rate": -0.17,
+              "value": 3.03
+            },
+            {
+              "name": "Economie sociale et solidaire, emploi et formation",
+              "rate": -0.05,
+              "value": 1.82
+            },
+            {
+              "name": "Politique de la ville et habitat",
+              "rate": 0.36,
+              "value": 0.49
+            }
+          ]
+        },
+        {
+          "name": "Ecologie urbaine",
+          "rate": -0.02,
+          "children": [
+            {
+              "name": "Biodiversité et nature en ville",
+              "rate": -0.01,
+              "value": 8.96
+            },
+            {
+              "name": "Cadre de vie",
+              "rate": 0.42,
+              "value": 0.01
+            },
+            {
+              "name": "Qualité de l'environnement urbain",
+              "rate": -0.03,
+              "value": 3.82
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Direction générale",
+      "rate": -0.05,
+      "children": [
+        {
+          "name": "Direction et animation de l'action départementale",
+          "rate": -0.07,
+          "children": [
+            {
+              "name": "Animation du développement social local",
+              "rate": 1,
+              "value": 0.01
+            },
+            {
+              "name": "Animation et gestion de projets européens",
+              "rate": -0.48,
+              "value": 0.07
+            },
+            {
+              "name": "Audit interne",
+              "rate": -0.86,
+              "value": 0.02
+            },
+            {
+              "name": "Information et communication",
+              "rate": -0.07,
+              "value": 2.9
+            },
+            {
+              "name": "Pilotage et Stratégie",
+              "rate": -0.02,
+              "value": 0.68
+            }
+          ]
+        },
+        {
+          "name": "Conduite des politiques départementales",
+          "rate": -0.03,
+          "children": [
+            {
+              "name": "Assemblée départementale",
+              "rate": -0.02,
+              "value": 2.5
+            },
+            {
+              "name": "Moyens des groupes politiques",
+              "rate": -0.11,
+              "value": 0.39
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Personnel et relations sociales",
+      "rate": 0.02,
+      "children": [
+        {
+          "name": "Ressources humaines",
+          "rate": 0.02,
+          "children": [
+            {
+              "name": "Gestion prévisionnelle des emplois et des compétences",
+              "rate": -0.14,
+              "value": 1.32
+            },
+            {
+              "name": "Politique salariale et gestion des carrières",
+              "rate": 0.02,
+              "value": 328.73
+            },
+            {
+              "name": "Relations sociales et santé au travail",
+              "rate": 0.02,
+              "value": 3.7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ressources et moyens des services",
+      "rate": 0.05,
+      "children": [
+        {
+          "name": "Finances",
+          "rate": 0.07,
+          "children": [
+            {
+              "name": "Commande publique",
+              "rate": 1,
+              "value": 0.02
+            },
+            {
+              "name": "Stratégie budgétaire et financière",
+              "rate": 0.07,
+              "value": 75.1
+            }
+          ]
+        },
+        {
+          "name": "Supports internes",
+          "rate": 0.01,
+          "children": [
+            {
+              "name": "Bâtiments départementaux",
+              "rate": 0.04,
+              "value": 11.02
+            },
+            {
+              "name": "Logistique",
+              "rate": 0.02,
+              "value": 15.11
+            },
+            {
+              "name": "Patrimoine immobilier et sécurisation juridique",
+              "rate": 0.01,
+              "value": 19.27
+            },
+            {
+              "name": "Systèmes d'information",
+              "rate": -0.08,
+              "value": 3.25
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Société et citoyenneté",
+      "rate": 0.05,
+      "children": [
+        {
+          "name": "Culture, patrimoine, archives",
+          "rate": -0.01,
+          "children": [
+            {
+              "name": "Archives",
+              "rate": 0.14,
+              "value": 0.16
+            },
+            {
+              "name": "Culture",
+              "rate": -0.01,
+              "value": 18.71
+            },
+            {
+              "name": "Patrimoine culturel",
+              "rate": -0.06,
+              "value": 0.59
+            }
+          ]
+        },
+        {
+          "name": "Education et jeunesse",
+          "rate": 0.14,
+          "children": [
+            {
+              "name": "Accueil des collégiens et de la communauté éducative",
+              "rate": 0.17,
+              "value": 33.85
+            },
+            {
+              "name": "Actions éducatives en direction des collégiens",
+              "value": 0
+            },
+            {
+              "name": "Actions pour la jeunesse",
+              "rate": 1,
+              "value": 0.07
+            },
+            {
+              "name": "Projet éducatif départemental",
+              "rate": 0.17,
+              "value": 13.58
+            }
+          ]
+        },
+        {
+          "name": "Citoyenneté active, solidarité internationale et Sport",
+          "rate": -0.25,
+          "children": [
+            {
+              "name": "Promotion de la vie associative et démocratie participative",
+              "rate": 1,
+              "value": 0
+            },
+            {
+              "name": "Solidarité, coopération internationales",
+              "rate": -0.04,
+              "value": 0.3
+            },
+            {
+              "name": "Sport et loisirs",
+              "rate": -0.26,
+              "value": 11.53
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Solidarité",
+      "rate": 0.03,
+      "children": [
+        {
+          "name": "Enfance et famille",
+          "rate": -0.02,
+          "children": [
+            {
+              "name": "Accueil de la petite enfance",
+              "rate": -0.04,
+              "value": 20.84
+            },
+            {
+              "name": "Aide sociale à l'enfance",
+              "rate": -0.02,
+              "value": 250.75
+            },
+            {
+              "name": "Protection maternelle et infantile, planification familiale",
+              "rate": 0.01,
+              "value": 19.16
+            }
+          ]
+        },
+        {
+          "name": "Solidarité, insertion, santé",
+          "rate": 0.07,
+          "children": [
+            {
+              "name": "Accompagnement social",
+              "rate": -0.05,
+              "value": 17.58
+            },
+            {
+              "name": "Insertion",
+              "rate": 0.08,
+              "value": 448.12
+            },
+            {
+              "name": "Prévention des conduites à risques",
+              "rate": 0.04,
+              "value": 0.51
+            },
+            {
+              "name": "Prévention et promotion de la santé",
+              "rate": -0.02,
+              "value": 3.06
+            },
+            {
+              "name": "Promotion des droits fondamentaux",
+              "rate": 0.03,
+              "value": 0.25
+            }
+          ]
+        },
+        {
+          "name": "Autonomie",
+          "rate": 0.01,
+          "children": [
+            {
+              "name": "Personnes âgées",
+              "rate": 0.01,
+              "value": 197.43
+            },
+            {
+              "name": "Personnes handicapées",
+              "rate": 0,
+              "value": 166.87
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

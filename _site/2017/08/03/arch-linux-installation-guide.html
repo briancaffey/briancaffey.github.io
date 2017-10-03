@@ -325,9 +325,9 @@ export LANG=en_US.UTF-8
 
 <h3 id="set-the-host-name-for-the-system">Set the Host Name for the System</h3>
 
-<p>I’m using the hostname arch20815, you can pick whatever host name you want.</p>
+<p>I’m using the hostname <code class="highlighter-rouge">archthinkpad</code>, you can pick whatever host name you want.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>echo arch20815 &gt; /etc/hostname
+<div class="highlighter-rouge"><pre class="highlight"><code>echo archthinkpad &gt; /etc/hostname
 </code></pre>
 </div>
 
@@ -760,9 +760,12 @@ sudo systemctl start NetworkManager.service
   <li>Applications menu</li>
   <li>Removable Drive menu</li>
   <li>Dash to Dock</li>
+  <li>Drop Down Terminal</li>
   <li>Dynamic Top Bar</li>
   <li>User Themes</li>
-  <li>Screen Saver and hibernate buttons (<code class="highlighter-rouge">gnome-screensaver</code> and a GNOME Shell Extension called [add name])</li>
+  <li>System Monitor</li>
+  <li>Sensory Perception</li>
+  <li>Screen Saver and hibernate buttons (requires <code class="highlighter-rouge">gnome-screensaver</code> package and a GNOME Shell Extension called “Suspend and Lock Button”)</li>
 </ul>
 
 <p>Dash to Dock lets you place the dock wherever you want, you can also change its appearance and behavior.</p>
@@ -781,7 +784,31 @@ sudo systemctl start NetworkManager.service
 </code></pre>
 </div>
 
-<p>Screefetch can be further customized, check out <code class="highlighter-rouge">man screenfetch</code> for more options. For example, you can exlude certain lines about system information or add custom lines like the model of your PC, etc.</p>
+<p>Screefetch can be further customized, check out <code class="highlighter-rouge">man screenfetch</code> for more options. For example, you can exlude certain lines about system information or add custom lines like the model of your PC, etc:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>                  -`                 
+                 .o+`                 brian@archthinkpad
+                `ooo/                 OS: Arch Linux
+               `+oooo:                Kernel: x86_64 Linux 4.12.5-1-ARCH
+              `+oooooo:               Uptime: 5h 8m
+              -+oooooo+:              Packages: 1044
+            `/:-:++oooo+:             Shell: bash 4.4.12
+           `/++++/+++++++:            Resolution: 1366x768
+          `/++++++++++++++:           DE: GNOME
+         `/+++ooooooooooooo/`         WM: GNOME Shell
+        ./ooosssso++osssssso+`        GTK Theme: Numix [GTK2/3]
+       .oossssso-````/ossssss+`       Icon Theme: Numix-Circle
+      -osssssso.      :ssssssso.      Font: Cantarell 11
+     :osssssss/        osssso+++.     CPU: Intel Core i5-3320M @ 4x 3.3GHz [44.0°C]
+    /ossssssss/        +ssssooo/-     GPU: intel
+  `/ossssso+/:-        -:/+osssso+-   RAM: 4315MiB / 7685MiB
+  `+sso+:-`                 `.-/+oso:
+ `++:.                           `-/+/
+.`                                 `/
+
+
+</code></pre>
+</div>
 
 <h4 id="quick-note-on-terminal-colors">Quick Note on Terminal Colors</h4>
 
@@ -814,9 +841,12 @@ sudo systemctl start NetworkManager.service
 <p>Here’s a list of other helpful packages:</p>
 
 <ul>
-  <li>
-    <p>htop (system monitoring)</p>
-  </li>
+  <li>htop (system monitoring)</li>
+</ul>
+
+<p>htop can be customized to show some helpful information. Press F2 or click in the terminal where it says “Setup” and you will open a menu to select custom options for htop.</p>
+
+<ul>
   <li>
     <p>blender (video editing and 3d modeling)</p>
   </li>
@@ -881,6 +911,14 @@ sudo systemctl start NetworkManager.service
 
 <p>This should confirm your nickname. Now you can start chatting on channels. Press <code class="highlighter-rouge">Alt + S</code>, and then <code class="highlighter-rouge">J</code>, and then type the name of the channel you want to join.</p>
 
+<h3 id="configure-vpn">Configure VPN</h3>
+
+<p>I setup TorGuard VPN service by installing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S torguard
+</code></pre>
+</div>
+
 <h2 id="setting-up-development-tools">Setting Up Development Tools</h2>
 
 <h3 id="atom-and-other-text-editors">Atom and other text editors</h3>
@@ -924,59 +962,6 @@ sudo systemctl start NetworkManager.service
 <p>Now grab a torrent link or file for an OS you want to download and add it to Deluge.</p>
 
 <p>When it is finished we can launch VirtualBox and create a virtual machine with our ISO.</p>
-
-<h3 id="languages-and-input-sources">Languages and Input Sources</h3>
-
-<p>Here is how to add support for Chinese characters and also Chinese pinyin input:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S adobe-source-han-sans-cn-fonts
-</code></pre>
-</div>
-
-<p>This will make Chinese characters visible. In order to type Chinese using the pinyin input method, run the following commands:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S ibus
-sudo pacman -S ibus-libpinyin
-</code></pre>
-</div>
-
-<p>Next you can go into:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>Settings &gt; Region &amp; Language &gt; Input Source &gt; + &gt; Other
-</code></pre>
-</div>
-<p>Select Chinese (Intelligent Pin Yin) from the list and you should see a language menu in the top bar. At this point I was able to see both English and Chinese in Language menu in the top bar, but the Chinese pinyin only worked after rebooting.</p>
-
-<h3 id="spotify">Spotify</h3>
-
-<p>Get some tunes going with the Spotfy app. It is not officially supported, but it seems to work alright. Facebook login did not work for me. You can create a new account with your existing email like this:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>youremail+spotify@email.com
-</code></pre>
-</div>
-
-<p>Using my main email to sign up for a new account didn’t work because that email was linked to the Facebook login.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S spotify
-</code></pre>
-</div>
-
-<h3 id="word-processing-libre-office">Word Processing (Libre Office)</h3>
-
-<p>Libre Office is an open-source Office Suite similar in functionality to Microsoft Word.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S libreoffice-fresh
-</code></pre>
-</div>
-
-<p>You can also install any language packs you may need for Libre Office:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S libreoffice-fresh-zh-CN
-</code></pre>
-</div>
-
-<h3 id="sign-up-for-the-arch-wiki">Sign up for the Arch Wiki</h3>
-
-<p>The best way to ask for help is to ask the community. You should sign up for the Arch Wiki and post any questions you have after doing research and trying a few different solutions. The more detailed you are in your post, the better help you will get.</p>
 
 <h3 id="npm-and-nodejs">npm and node.js</h3>
 
@@ -1029,7 +1014,56 @@ npm config set prefix '~/.npm-global'
 
 <p>This should install the package with no errors.</p>
 
-<h2 id="ruby-and-jekyll">Ruby and Jekyll</h2>
+<h3 id="heroku">Heroku</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S heroku-cli
+</code></pre>
+</div>
+
+<p>Then run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>heroku keys:add
+</code></pre>
+</div>
+
+<p>and then type <code class="highlighter-rouge">yes</code> at the prompt. This will your computer’s public key to your Heroku account.</p>
+
+<h4 id="note-about-python-versions-on-heroku">Note about Python versions on Heroku</h4>
+
+<p>I have only been able to deploy with Python 3.5.2.</p>
+
+<h3 id="redis">Redis</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S redis
+</code></pre>
+</div>
+
+<p>Next, start and enable  <code class="highlighter-rouge">redis.service</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo systemctl start redis.service
+sudo systemctl enable redis.service
+</code></pre>
+</div>
+
+<h3 id="ssh">SSH</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S openssh
+</code></pre>
+</div>
+
+<h3 id="autoenv-github">autoenv (<a href="https://github.com/kennethreitz/autoenv">GitHub</a>)</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S autoenv
+</code></pre>
+</div>
+
+<p>You need to source activate.sh in your bashrc afterwards:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>echo 'source /usr/share/autoenv/activate.sh' &gt;&gt; ~/.bashrc
+</code></pre>
+</div>
+
+<h3 id="ruby-and-jekyll">Ruby and Jekyll</h3>
 
 <p>I use Jekyll for my personal site and blog, which is a static site generator written in Ruby. To start using Jekyll we need to install a ruby gem, and to install the gem we will need to first install ruby. Here is the <a href="https://wiki.archlinux.org/index.php/ruby">ruby page from the Arch Wiki</a>.</p>
 
@@ -1055,7 +1089,7 @@ npm config set prefix '~/.npm-global'
 
 <p>This will allow you to run Jekyll commands.</p>
 
-<h2 id="python">Python</h2>
+<h3 id="python">Python</h3>
 
 <p>In the installation pIssuesrocess, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get <code class="highlighter-rouge">pip</code>:</p>
 
@@ -1090,7 +1124,164 @@ source &lt;DIR&gt;/bin/activate
 </div>
 <p>For more information, see the virtualenv docs or the venv docs.</p>
 
-<h3 id="miscelaneous-issues">Miscelaneous Issues</h3>
+<h4 id="jupyter-notebook-and-ipython-notebook">Jupyter Notebook and IPython Notebook</h4>
+
+<p>IPython notebooks (also known as Jupyter notebooks), provide a nice environment for combining python runtime environments, Markdown, images, graphs and other interactive Python tools such as Bokeh. You can install both Jupyter Notebooks and IPython Notebooks:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaort -S jupyter-notebook
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S ipython2-notebook
+</code></pre>
+</div>
+
+<p>You can launch either of these with <code class="highlighter-rouge">jupyter notebook</code> or <code class="highlighter-rouge">ipython notebook</code> from the terminal.</p>
+
+<p><em>There seems to be an issue with LaTeX</em></p>
+
+<h4 id="anaconda-distribution-from-continuum-analytics">Anaconda Distribution from Continuum Analytics</h4>
+
+<p>If you are doing scientific computing, statistical analysis or an type of machine learning, you will want to download the Anaconda distribution. This is Python bundled with a bunch of great packages and C libraries for doing heavy lifting. Anaconda uses a slightly different tool for managing virtual environments and package management, but it is very easy to do both using the <code class="highlighter-rouge">conda</code> command.</p>
+
+<h3 id="postgresql">PostgreSQL</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S postgresql
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo -u postgres -i
+</code></pre>
+</div>
+
+<p>This switches you to the PostgreSQL user.</p>
+
+<p>Before PostgreSQL can function correctly, the database cluster must be initialized:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+</code></pre>
+</div>
+
+<p>You should see the following:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[postgres@archthinkpad ~]$ initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.UTF-8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgres/data ... ok
+creating subdirectories ... ok
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting dynamic shared memory implementation ... posix
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+WARNING: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgres/data -l logfile start
+</code></pre>
+</div>
+<p>Now type <code class="highlighter-rouge">exit</code> to return to your regular user.</p>
+
+<p>Next, start and enable <code class="highlighter-rouge">postgresql.service</code> as root:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[brian@archthinkpad ~]$ sudo systemctl start postgresql.service
+[sudo] password for brian:
+[brian@archthinkpad ~]$ sudo systemctl enable postgresql.service
+Created symlink /etc/systemd/system/multi-user.target.wants/postgresql.service → /usr/lib/systemd/system/postgresql.service.
+[brian@archthinkpad ~]$
+</code></pre>
+</div>
+
+<p>See the <a href="https://wiki.archlinux.org/index.php/PostgreSQL">Arch Wiki article on PostgreSQL</a> for more information.</p>
+
+<h3 id="tmux">tmux</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S tmux
+</code></pre>
+</div>
+
+<h3 id="tree">tree</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S tree
+</code></pre>
+</div>
+
+<h3 id="languages-and-input-sources">Languages and Input Sources</h3>
+
+<p>Here is how to add support for Chinese characters and also Chinese pinyin input:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S adobe-source-han-sans-cn-fonts
+</code></pre>
+</div>
+
+<p>This will make Chinese characters visible. In order to type Chinese using the pinyin input method, run the following commands:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S ibus
+sudo pacman -S ibus-libpinyin
+</code></pre>
+</div>
+
+<p>可以打汉字了！其它语言和文字packages可以参考<a href="">这个Arch Wiki文章</a>。</p>
+
+<p>Next you can go into:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>Settings &gt; Region &amp; Language &gt; Input Source &gt; + &gt; Other
+</code></pre>
+</div>
+<p>Select Chinese (Intelligent Pin Yin) from the list and you should see a language menu in the top bar. At this point I was able to see both English and Chinese in Language menu in the top bar, but the Chinese pinyin only worked after rebooting.</p>
+
+<h3 id="spotify">Spotify</h3>
+
+<p>Get some tunes going with the Spotfy app. It is not officially supported, but it seems to work alright. Facebook login did not work for me. You can create a new account with your existing email like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>youremail+spotify@email.com
+</code></pre>
+</div>
+
+<p>Using my main email to sign up for a new account didn’t work because that email was linked to the Facebook login.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S spotify
+</code></pre>
+</div>
+
+<h3 id="word-processing-libre-office">Word Processing (Libre Office)</h3>
+
+<p>Libre Office is an open-source Office Suite similar in functionality to Microsoft Word.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo pacman -S libreoffice-fresh
+</code></pre>
+</div>
+
+<p>You can also install any language packs you may need for Libre Office:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S libreoffice-fresh-zh-CN
+</code></pre>
+</div>
+
+<h3 id="disk-usage-visualizations">Disk Usage Visualizations</h3>
+
+<p>You can get disk usage with the <code class="highlighter-rouge">du</code> command. There are other programs for disk space visualizations, so far I have found <code class="highlighter-rouge">gdmap</code> and <code class="highlighter-rouge">filelight</code> to be helpful. Both are available in the AUR:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yaourt -S gdmap filelight
+</code></pre>
+</div>
+
+<h3 id="sign-up-for-the-arch-wiki">Sign up for the Arch Wiki</h3>
+
+<p>The best way to ask for help is to ask the community. You should sign up for the Arch Wiki and post any questions you have after doing research and trying a few different solutions. The more detailed you are in your post, the better help you will get.</p>
+
+<h2 id="miscelaneous-items">Miscelaneous Items</h2>
 
 <p>I have experienced unexpected behavior with some programs. Here’s a list of some major issues and workarounds I have found:</p>
 
@@ -1115,6 +1306,30 @@ source &lt;DIR&gt;/bin/activate
 </div>
 
 <p>Search for or find the setting that says “Hide all normal windows”. I set mine to <code class="highlighter-rouge">Shift + Alt + D</code>. You can configure other keyboard shortcuts here.</p>
+
+<h3 id="night-light">Night Light</h3>
+
+<p>If you are coming from Mac or Windows, you might be used to using f.lux to dim the blue colors from your screen. There are few options for Linux such as Red Shift and xflux. I finf that in GNOME, using the built in Nigh Light works the best for reduce eye strain. Just go into:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Settings &gt; Displays
+</code></pre>
+</div>
+
+<p>and click on Night Light. Like flux, you can set it for regular hours. There aren’t as many modes or options, but it does a pretty goog job of what I need it to do.</p>
+
+<h3 id="helpful-commands">Helpful Commands</h3>
+
+<p>To view all available commands, run the following command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>compgen -c
+</code></pre>
+</div>
+
+<p>To view all installed packages, run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pacman -Q
+</code></pre>
+</div>
 
 <h2 id="conclusion-and-next-steps">Conclusion and Next Steps</h2>
 
@@ -1153,7 +1368,15 @@ source &lt;DIR&gt;/bin/activate
   <li>
     <p><strong>Other areas for improvement</strong>: [add here]</p>
   </li>
+  <li>
+    <p>Install RVM</p>
+  </li>
+  <li>
+    <p>Install EMACS</p>
+  </li>
 </ul>
+
+<p>-</p>
 
   </div>
 

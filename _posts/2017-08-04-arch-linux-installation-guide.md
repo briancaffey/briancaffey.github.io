@@ -248,10 +248,10 @@ hwclock --systohc --utc
 
 ### Set the Host Name for the System
 
-I'm using the hostname arch20815, you can pick whatever host name you want.
+I'm using the hostname `archthinkpad`, you can pick whatever host name you want.
 
 ```
-echo arch20815 > /etc/hostname
+echo archthinkpad > /etc/hostname
 ```
 
 ### Enable Multilib Repository
@@ -679,9 +679,12 @@ Now refresh the GNOME Shell Extensions page and the blue message should go away.
 - Applications menu
 - Removable Drive menu
 - Dash to Dock
+- Drop Down Terminal
 - Dynamic Top Bar
 - User Themes
-- Screen Saver and hibernate buttons (`gnome-screensaver` and a GNOME Shell Extension called [add name])
+- System Monitor
+- Sensory Perception
+- Screen Saver and hibernate buttons (requires `gnome-screensaver` package and a GNOME Shell Extension called "Suspend and Lock Button")
 
 Dash to Dock lets you place the dock wherever you want, you can also change its appearance and behavior.
 
@@ -699,7 +702,31 @@ Now edit `~/.bashrc` by adding the following line at the bottom of the file:
 screenfetch
 ```
 
-Screefetch can be further customized, check out `man screenfetch` for more options. For example, you can exlude certain lines about system information or add custom lines like the model of your PC, etc.
+Screefetch can be further customized, check out `man screenfetch` for more options. For example, you can exlude certain lines about system information or add custom lines like the model of your PC, etc:
+
+```
+                  -`                 
+                 .o+`                 brian@archthinkpad
+                `ooo/                 OS: Arch Linux
+               `+oooo:                Kernel: x86_64 Linux 4.12.5-1-ARCH
+              `+oooooo:               Uptime: 5h 8m
+              -+oooooo+:              Packages: 1044
+            `/:-:++oooo+:             Shell: bash 4.4.12
+           `/++++/+++++++:            Resolution: 1366x768
+          `/++++++++++++++:           DE: GNOME
+         `/+++ooooooooooooo/`         WM: GNOME Shell
+        ./ooosssso++osssssso+`        GTK Theme: Numix [GTK2/3]
+       .oossssso-````/ossssss+`       Icon Theme: Numix-Circle
+      -osssssso.      :ssssssso.      Font: Cantarell 11
+     :osssssss/        osssso+++.     CPU: Intel Core i5-3320M @ 4x 3.3GHz [44.0°C]
+    /ossssssss/        +ssssooo/-     GPU: intel
+  `/ossssso+/:-        -:/+osssso+-   RAM: 4315MiB / 7685MiB
+  `+sso+:-`                 `.-/+oso:
+ `++:.                           `-/+/
+.`                                 `/
+
+
+```
 
 
 #### Quick Note on Terminal Colors
@@ -735,6 +762,8 @@ You can set default applications by opening `Settings > Details > Default Applic
 Here's a list of other helpful packages:
 
 - htop (system monitoring)
+
+htop can be customized to show some helpful information. Press F2 or click in the terminal where it says "Setup" and you will open a menu to select custom options for htop.
 
 - blender (video editing and 3d modeling)
 
@@ -790,6 +819,14 @@ After you send this message, check your email and you will see instructions to c
 
 This should confirm your nickname. Now you can start chatting on channels. Press `Alt + S`, and then `J`, and then type the name of the channel you want to join.
 
+### Configure VPN
+
+I setup TorGuard VPN service by installing:
+
+```
+yaourt -S torguard
+```
+
 ## Setting Up Development Tools
 
 ### Atom and other text editors
@@ -833,59 +870,6 @@ yaourt -S gtk-engine-murrine
 Now grab a torrent link or file for an OS you want to download and add it to Deluge.
 
 When it is finished we can launch VirtualBox and create a virtual machine with our ISO.
-
-### Languages and Input Sources
-
-Here is how to add support for Chinese characters and also Chinese pinyin input:
-
-```
-yaourt -S adobe-source-han-sans-cn-fonts
-```
-
-This will make Chinese characters visible. In order to type Chinese using the pinyin input method, run the following commands:
-
-```
-sudo pacman -S ibus
-sudo pacman -S ibus-libpinyin
-```
-
-Next you can go into:
-```
-Settings > Region & Language > Input Source > + > Other
-```
-Select Chinese (Intelligent Pin Yin) from the list and you should see a language menu in the top bar. At this point I was able to see both English and Chinese in Language menu in the top bar, but the Chinese pinyin only worked after rebooting.
-
-### Spotify
-
-Get some tunes going with the Spotfy app. It is not officially supported, but it seems to work alright. Facebook login did not work for me. You can create a new account with your existing email like this:
-
-```
-youremail+spotify@email.com
-```
-
-Using my main email to sign up for a new account didn't work because that email was linked to the Facebook login.
-
-```
-yaourt -S spotify
-```
-
-### Word Processing (Libre Office)
-
-Libre Office is an open-source Office Suite similar in functionality to Microsoft Word.
-
-```
-sudo pacman -S libreoffice-fresh
-```
-
-You can also install any language packs you may need for Libre Office:
-
-```
-yaourt -S libreoffice-fresh-zh-CN
-```
-
-### Sign up for the Arch Wiki
-
-The best way to ask for help is to ask the community. You should sign up for the Arch Wiki and post any questions you have after doing research and trying a few different solutions. The more detailed you are in your post, the better help you will get.
 
 ### npm and node.js
 
@@ -938,7 +922,56 @@ npm install -g jshint
 
 This should install the package with no errors.
 
-## Ruby and Jekyll
+### Heroku
+
+```
+yaourt -S heroku-cli
+```
+
+Then run:
+
+```
+heroku keys:add
+```
+
+and then type `yes` at the prompt. This will your computer's public key to your Heroku account.
+
+#### Note about Python versions on Heroku
+
+I have only been able to deploy with Python 3.5.2.
+
+### Redis
+
+```
+sudo pacman -S redis
+```
+
+Next, start and enable  `redis.service`
+
+```
+sudo systemctl start redis.service
+sudo systemctl enable redis.service
+```
+
+### SSH
+
+```
+sudo pacman -S openssh
+```
+
+### autoenv ([GitHub](https://github.com/kennethreitz/autoenv))
+
+```
+yaourt -S autoenv
+```
+
+You need to source activate.sh in your bashrc afterwards:
+
+```
+echo 'source /usr/share/autoenv/activate.sh' >> ~/.bashrc
+```
+
+### Ruby and Jekyll
 
 I use Jekyll for my personal site and blog, which is a static site generator written in Ruby. To start using Jekyll we need to install a ruby gem, and to install the gem we will need to first install ruby. Here is the [ruby page from the Arch Wiki](https://wiki.archlinux.org/index.php/ruby).
 
@@ -964,7 +997,7 @@ PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 This will allow you to run Jekyll commands.
 
-## Python
+### Python
 
 In the installation pIssuesrocess, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get `pip`:
 
@@ -995,7 +1028,164 @@ source <DIR>/bin/activate
 ```
 For more information, see the virtualenv docs or the venv docs.
 
-### Miscelaneous Issues
+#### Jupyter Notebook and IPython Notebook
+
+IPython notebooks (also known as Jupyter notebooks), provide a nice environment for combining python runtime environments, Markdown, images, graphs and other interactive Python tools such as Bokeh. You can install both Jupyter Notebooks and IPython Notebooks:
+
+```
+yaort -S jupyter-notebook
+```
+
+```
+yaourt -S ipython2-notebook
+```
+
+You can launch either of these with `jupyter notebook` or `ipython notebook` from the terminal.
+
+*There seems to be an issue with LaTeX*
+
+#### Anaconda Distribution from Continuum Analytics
+
+If you are doing scientific computing, statistical analysis or an type of machine learning, you will want to download the Anaconda distribution. This is Python bundled with a bunch of great packages and C libraries for doing heavy lifting. Anaconda uses a slightly different tool for managing virtual environments and package management, but it is very easy to do both using the `conda` command.
+
+### PostgreSQL
+
+```
+sudo pacman -S postgresql
+```
+
+```
+sudo -u postgres -i
+```
+
+This switches you to the PostgreSQL user.
+
+Before PostgreSQL can function correctly, the database cluster must be initialized:
+
+```
+initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+```
+
+You should see the following:
+
+```
+[postgres@archthinkpad ~]$ initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.UTF-8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgres/data ... ok
+creating subdirectories ... ok
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting dynamic shared memory implementation ... posix
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+WARNING: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgres/data -l logfile start
+```
+Now type `exit` to return to your regular user.
+
+Next, start and enable `postgresql.service` as root:
+
+```
+[brian@archthinkpad ~]$ sudo systemctl start postgresql.service
+[sudo] password for brian:
+[brian@archthinkpad ~]$ sudo systemctl enable postgresql.service
+Created symlink /etc/systemd/system/multi-user.target.wants/postgresql.service → /usr/lib/systemd/system/postgresql.service.
+[brian@archthinkpad ~]$
+```
+
+See the [Arch Wiki article on PostgreSQL](https://wiki.archlinux.org/index.php/PostgreSQL) for more information.
+
+### tmux
+
+```
+sudo pacman -S tmux
+```
+
+### tree
+
+```
+sudo pacman -S tree
+```
+
+### Languages and Input Sources
+
+Here is how to add support for Chinese characters and also Chinese pinyin input:
+
+```
+yaourt -S adobe-source-han-sans-cn-fonts
+```
+
+This will make Chinese characters visible. In order to type Chinese using the pinyin input method, run the following commands:
+
+```
+sudo pacman -S ibus
+sudo pacman -S ibus-libpinyin
+```
+
+可以打汉字了！其它语言和文字packages可以参考[这个Arch Wiki文章]()。
+
+Next you can go into:
+```
+Settings > Region & Language > Input Source > + > Other
+```
+Select Chinese (Intelligent Pin Yin) from the list and you should see a language menu in the top bar. At this point I was able to see both English and Chinese in Language menu in the top bar, but the Chinese pinyin only worked after rebooting.
+
+### Spotify
+
+Get some tunes going with the Spotfy app. It is not officially supported, but it seems to work alright. Facebook login did not work for me. You can create a new account with your existing email like this:
+
+```
+youremail+spotify@email.com
+```
+
+Using my main email to sign up for a new account didn't work because that email was linked to the Facebook login.
+
+```
+yaourt -S spotify
+```
+
+### Word Processing (Libre Office)
+
+Libre Office is an open-source Office Suite similar in functionality to Microsoft Word.
+
+```
+sudo pacman -S libreoffice-fresh
+```
+
+You can also install any language packs you may need for Libre Office:
+
+```
+yaourt -S libreoffice-fresh-zh-CN
+```
+
+### Disk Usage Visualizations
+
+You can get disk usage with the `du` command. There are other programs for disk space visualizations, so far I have found `gdmap` and `filelight` to be helpful. Both are available in the AUR:
+
+```
+yaourt -S gdmap filelight
+```
+
+### Sign up for the Arch Wiki
+
+The best way to ask for help is to ask the community. You should sign up for the Arch Wiki and post any questions you have after doing research and trying a few different solutions. The more detailed you are in your post, the better help you will get.
+
+## Miscelaneous Items
 
 I have experienced unexpected behavior with some programs. Here's a list of some major issues and workarounds I have found:
 
@@ -1018,6 +1208,32 @@ Settings > Keyboard
 ```
 
 Search for or find the setting that says "Hide all normal windows". I set mine to `Shift + Alt + D`. You can configure other keyboard shortcuts here.
+
+### Night Light
+
+If you are coming from Mac or Windows, you might be used to using f.lux to dim the blue colors from your screen. There are few options for Linux such as Red Shift and xflux. I finf that in GNOME, using the built in Nigh Light works the best for reduce eye strain. Just go into:
+
+```
+Settings > Displays
+```
+
+and click on Night Light. Like flux, you can set it for regular hours. There aren't as many modes or options, but it does a pretty goog job of what I need it to do.
+
+### Helpful Commands
+
+To view all available commands, run the following command:
+
+```
+compgen -c
+```
+
+To view all installed packages, run:
+
+```
+pacman -Q
+```
+
+
 
 ## Conclusion and Next Steps
 
@@ -1044,3 +1260,9 @@ Arch Linux is a lot of work to set up compared to popular Linux distributions li
 - **Maximzing battery life**: During the install process I saw the topic discussed but didn't look into it. It would be nice to see if I could make changes to get more out of the battery in my refurbished ThinkPad.
 
 - **Other areas for improvement**: [add here]
+
+- Install RVM
+
+- Install EMACS
+
+-
