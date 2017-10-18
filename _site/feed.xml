@@ -6,9 +6,99 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 03 Oct 2017 19:12:46 -0400</pubDate>
-    <lastBuildDate>Tue, 03 Oct 2017 19:12:46 -0400</lastBuildDate>
+    <pubDate>Tue, 17 Oct 2017 23:57:47 -0400</pubDate>
+    <lastBuildDate>Tue, 17 Oct 2017 23:57:47 -0400</lastBuildDate>
     <generator>Jekyll v3.5.1</generator>
+    
+      <item>
+        <title>Reading XML with Python</title>
+        <description>&lt;p&gt;On my other personal website, &lt;a href=&quot;briancaffey.com&quot;&gt;briancaffey.com&lt;/a&gt;, I have a blog. The content on that blog has mostly mirrored what I put on this github pages site, &lt;a href=&quot;briancaffey.github.io&quot;&gt;briancaffey.github.io&lt;/a&gt;. I want to display my most recent blog posts from briancaffey.github.io on briancaffey.com, and to do this I will be using the RSS feed that comes with a Jekyll site. This should be pretty simple, we are going to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;requests&lt;/code&gt; librrary, as well as the &lt;code class=&quot;highlighter-rouge&quot;&gt;feedparser&lt;/code&gt; library.&lt;/p&gt;
+
+&lt;p&gt;Here are some &lt;a href=&quot;https://wiki.python.org/moin/RssLibraries&quot;&gt;docs&lt;/a&gt; on how to use &lt;code class=&quot;highlighter-rouge&quot;&gt;feedparser&lt;/code&gt;, it is very simple.&lt;/p&gt;
+
+&lt;p&gt;First, install it with:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pip&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feedparser&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Here’s the setup that I will be using in utility a function that will be imported to &lt;code class=&quot;highlighter-rouge&quot;&gt;views.py&lt;/code&gt; and called in the &lt;code class=&quot;highlighter-rouge&quot;&gt;home()&lt;/code&gt; function that renders the homepage for briancaffey.com:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import feedparser
+
+def get_blog_posts(number_of_posts):
+    url = &quot;http://briancaffey.github.io/feed&quot;
+    feed = feedparser.parse(url)
+    posts = feed['items'][:number_of_posts]
+    return posts
+    
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next, in &lt;code class=&quot;highlighter-rouge&quot;&gt;views.py&lt;/code&gt;, we just need to import the function, call it with the number of articles we want to show, save the returned value to a variable and then pass that to &lt;code class=&quot;highlighter-rouge&quot;&gt;context&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;utils&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_blog_posts&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_blog_posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;'recent_posts'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'home.html'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In the context, we can access the following data for each item:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;content&lt;/th&gt;
+      &lt;th&gt;description&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;item[ “date” ]&lt;/td&gt;
+      &lt;td&gt;“2004-02-13T22:28:23+08:00” - ISO 8601 date&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;item[ “date_parsed” ]&lt;/td&gt;
+      &lt;td&gt;(2004,02,13,14,28,23,4,44,0)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;item[ “title” ]&lt;/td&gt;
+      &lt;td&gt;title for item&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;item[ “summary” ]&lt;/td&gt;
+      &lt;td&gt;change summary&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;item[ “link” ]&lt;/td&gt;
+      &lt;td&gt;URL to the page&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;item[ “wiki_diff” ]&lt;/td&gt;
+      &lt;td&gt;for wiki, a link to the diff for the page&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;item[ “wiki_history” ]&lt;/td&gt;
+      &lt;td&gt;for wiki, a link to the page history&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        <pubDate>Tue, 17 Oct 2017 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/2017/10/17/reading-xml-with-python.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/10/17/reading-xml-with-python.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Simple Board Games in ReactJS</title>
@@ -6548,121 +6638,6 @@ Confusion Matrix:
         <pubDate>Sun, 01 Jan 2017 00:00:00 -0500</pubDate>
         <link>http://localhost:4000/2017/01/01/pc-data.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/01/01/pc-data.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>D3.js on Jekyll</title>
-        <description>&lt;div id=&quot;subdivision&quot;&gt;
-  &lt;input type=&quot;range&quot; min=&quot;1&quot; max=&quot;12&quot; value=&quot;8&quot; /&gt;
-  &lt;output name=&quot;subdivision&quot;&gt;&lt;/output&gt;
-&lt;/div&gt;
-&lt;style&gt;
-
-#subdivision {
-  position: auto;
-  top: 20px;
-  left: 20px;
-}
-
-#subdivision input {
-  position: auto;
-  width: 200px;
-}
-
-&lt;/style&gt;
-
-&lt;script src=&quot;http://d3js.org/d3.v3.min.js&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;http://bl.ocks.org/mbostock/raw/3057239/d3.geodesic.min.js&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-
-var width = 960,
-    height = 500;
-
-var velocity = [.010, .005],
-    t0 = Date.now();
-
-var projection = d3.geo.orthographic()
-    .scale(height / 2 - 10);
-
-var canvas = d3.select(&quot;body&quot;).append(&quot;canvas&quot;)
-    .attr(&quot;width&quot;, width)
-    .attr(&quot;height&quot;, height);
-
-var context = canvas.node().getContext(&quot;2d&quot;);
-
-context.strokeStyle = &quot;#000&quot;;
-context.lineWidth = .5;
-
-var faces;
-
-var output = d3.select(&quot;output&quot;);
-
-var input = d3.select(&quot;input&quot;)
-    .on(&quot;input&quot;, function() { geodesic(+this.value); })
-    .on(&quot;change&quot;, function() { geodesic(+this.value); })
-    .each(function() { geodesic(+this.value); });
-
-d3.timer(function() {
-  var time = Date.now() - t0;
-  projection.rotate([time * velocity[0], time * velocity[1]]);
-  redraw();
-});
-
-function redraw() {
-  context.clearRect(0, 0, width, height);
-
-  faces.forEach(function(d) {
-    d.polygon[0] = projection(d[0]);
-    d.polygon[1] = projection(d[1]);
-    d.polygon[2] = projection(d[2]);
-    if (d.visible = d.polygon.area() &gt; 0) {
-      context.fillStyle = d.fill;
-      context.beginPath();
-      drawTriangle(d.polygon);
-      context.fill();
-    }
-  });
-
-  context.beginPath();
-  faces.forEach(function(d) {
-    if (d.visible) {
-      drawTriangle(d.polygon);
-    }
-  });
-  context.stroke();
-}
-
-function drawTriangle(triangle) {
-  context.moveTo(triangle[0][0], triangle[0][1]);
-  context.lineTo(triangle[1][0], triangle[1][1]);
-  context.lineTo(triangle[2][0], triangle[2][1]);
-  context.closePath();
-}
-
-function geodesic(subdivision) {
-  output.text(subdivision);
-
-  faces = d3.geodesic.polygons(subdivision).map(function(d) {
-    d = d.coordinates[0];
-    d.pop(); // use an open polygon
-    d.fill = d3.hsl(d[0][0], 1, .5) + &quot;&quot;;
-    d.polygon = d3.geom.polygon(d.map(projection));
-    return d;
-  });
-
-  redraw();
-}
-
-&lt;/script&gt;
-
-</description>
-        <pubDate>Fri, 13 May 2016 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/2016/05/13/d3js-on-jekyll.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2016/05/13/d3js-on-jekyll.html</guid>
         
         
       </item>

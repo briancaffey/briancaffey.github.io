@@ -60,7 +60,7 @@
 /******/
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d1c56a01c1bcad410bee"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "e610666d2ae82668607d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -41834,7 +41834,7 @@ var Board = function (_React$Component) {
         var w_diag1 = checkDir(1, 1, 'w') + checkDir(-1, -1, 'w') - 1;
         var b_diag1 = checkDir(1, 1, 'b') + checkDir(-1, -1, 'b') - 1;
 
-        var w_diag2 = checkDir(1, 1, 'w') + checkDir(-1, -1, 'w') - 1;
+        var w_diag2 = checkDir(-1, 1, 'w') + checkDir(1, -1, 'w') - 1;
         var b_diag2 = checkDir(-1, 1, 'b') + checkDir(1, -1, 'b') - 1;
 
         //check to see if there are any sums greater than or equal to 5 and alert the players of a win
