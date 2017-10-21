@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Reading XML with Python</title>
-  <meta name="description" content="On my other personal website, briancaffey.com, I have a blog. The content on that blog has mostly mirrored what I put on this github pages site, briancaffey....">
+  <title>How to connect to Google Starbucks wifi using i3 and Arch Linux</title>
+  <meta name="description" content="If you are new to i3 and find yourself having trouble connecting to wifi networks in new places, you have come to the right article.">
   <link rel="icon" type="image/png" href="favicon.ico" sizes="32x32" />
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/10/17/reading-xml-with-python.html">
+  <link rel="canonical" href="http://localhost:4000/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html">
   <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
 </head>
 
@@ -78,93 +78,48 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Reading XML with Python</h1>
-    <p class="post-meta"><time datetime="2017-10-17T00:00:00-04:00" itemprop="datePublished">Oct 17, 2017</time></p>
+    <h1 class="post-title" itemprop="name headline">How to connect to Google Starbucks wifi using i3 and Arch Linux</h1>
+    <p class="post-meta"><time datetime="2017-10-20T00:00:00-04:00" itemprop="datePublished">Oct 20, 2017</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>On my other personal website, <a href="briancaffey.com">briancaffey.com</a>, I have a blog. The content on that blog has mostly mirrored what I put on this github pages site, <a href="briancaffey.github.io">briancaffey.github.io</a>. I want to display my most recent blog posts from briancaffey.github.io on briancaffey.com, and to do this I will be using the RSS feed that comes with a Jekyll site. This should be pretty simple, we are going to use the <code class="highlighter-rouge">requests</code> librrary, as well as the <code class="highlighter-rouge">feedparser</code> library.</p>
+    <p>If you are new to i3 and find yourself having trouble connecting to wifi networks in new places, you have come to the right article.</p>
 
-<p>Here are some <a href="https://wiki.python.org/moin/RssLibraries">docs</a> on how to use <code class="highlighter-rouge">feedparser</code>, it is very simple.</p>
+<p>I was recently at a Starbucks and couldn’t connect to the open <code class="highlighter-rouge">Google Wifi</code> network. Coming from Gnome Desktop, I have been having to learn how to do things the i3 way. Simple things like connecting to new wifi networks require new approaches.</p>
 
-<p>First, install it with:</p>
+<p>If you install the <code class="highlighter-rouge">dialog</code> package, you can use <code class="highlighter-rouge">wifi-menu</code> to view available networks and select which network you want to join. This didn’t work when I recently tried to join a Google Startbucks wifi network. There is a a simple CLI tool for <code class="highlighter-rouge">NetworkManager</code> called <code class="highlighter-rouge">nmcli</code> that you can use to join networks.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">feedparser</span>
+<p>Here is how to scan networks with <code class="highlighter-rouge">nmcli</code>:</p>
+
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>[brian@archthinkpad ~]$ nmcli d wifi list
+*  SSID                  MODE   CHAN  RATE       SIGNAL  BARS  SECURITY    
+   --                    Infra  11    54 Mbit/s  94      ▂▄▆█  WPA2 802.1X 
+   Google Starbucks      Infra  11    54 Mbit/s  89      ▂▄▆█  --          
+   Google Starbucks      Infra  48    54 Mbit/s  87      ▂▄▆█  --          
+   --                    Infra  48    54 Mbit/s  87      ▂▄▆█  WPA2 802.1X 
+   --                    Infra  1     54 Mbit/s  75      ▂▄▆_  --          
+   Einstein Bros Bagels  Infra  1     54 Mbit/s  75      ▂▄▆_  --          
+   --                    Infra  1     54 Mbit/s  75      ▂▄▆_  WPA1 WPA2   
+   --                    Infra  1     54 Mbit/s  72      ▂▄▆_  WPA2        
+   Einstein Bros Bagels  Infra  161   54 Mbit/s  60      ▂▄▆_  --          
+   --                    Infra  161   54 Mbit/s  59      ▂▄▆_  WPA1 WPA2   
+   xfinitywifi           Infra  153   54 Mbit/s  40      ▂▄__  --          
+   XFINITY               Infra  153   54 Mbit/s  40      ▂▄__  WPA2 802.1X 
+   CoxWiFi               Infra  153   54 Mbit/s  39      ▂▄__  --          
+   CableWiFi             Infra  153   54 Mbit/s  39      ▂▄__  --          
+   XFINITY               Infra  11    54 Mbit/s  27      ▂___  WPA2 802.1X 
+   ZM7JQ                 Infra  6     54 Mbit/s  24      ▂___  WPA2      
+</code></pre>
+</div>
+<p>And here is how to connect to the <code class="highlighter-rouge">Google Starbucks</code> network.</p>
+
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>[brian@archthinkpad ~]$ nmcli dev wifi connect Google\ Starbucks
+Device 'wlp3s0' successfully activated with 'da3af242-4707-42f0-81c8-6f8b9dc1a0f7'.
 </code></pre>
 </div>
 
-<p>Here’s the setup that I will be using in utility a function that will be imported to <code class="highlighter-rouge">views.py</code> and called in the <code class="highlighter-rouge">home()</code> function that renders the homepage for briancaffey.com:</p>
+<p>You can read more about <code class="highlighter-rouge">nmcli</code> on the <a href="https://wiki.archlinux.org/index.php/NetworkManager">Arch Wiki Network Manager article</a>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>import feedparser
-
-def get_blog_posts(number_of_posts):
-    url = "http://briancaffey.github.io/feed"
-    feed = feedparser.parse(url)
-    posts = feed['items'][:number_of_posts]
-    return posts
-    
-</code></pre>
-</div>
-
-<p>Next, in <code class="highlighter-rouge">views.py</code>, we just need to import the function, call it with the number of articles we want to show, save the returned value to a variable and then pass that to <code class="highlighter-rouge">context</code>:</p>
-
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">get_blog_posts</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="o">...</span>
-    <span class="n">posts</span> <span class="o">=</span> <span class="n">get_blog_posts</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="o">...</span>
-        <span class="s">'recent_posts'</span><span class="p">:</span> <span class="n">posts</span><span class="p">,</span>
-        <span class="o">...</span>
-    <span class="p">}</span>
-    
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</code></pre>
-</div>
-
-<p>In the context, we can access the following data for each item:</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>content</th>
-      <th>description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>item[ “date” ]</td>
-      <td>“2004-02-13T22:28:23+08:00” - ISO 8601 date</td>
-    </tr>
-    <tr>
-      <td>item[ “date_parsed” ]</td>
-      <td>(2004,02,13,14,28,23,4,44,0)</td>
-    </tr>
-    <tr>
-      <td>item[ “title” ]</td>
-      <td>title for item</td>
-    </tr>
-    <tr>
-      <td>item[ “summary” ]</td>
-      <td>change summary</td>
-    </tr>
-    <tr>
-      <td>item[ “link” ]</td>
-      <td>URL to the page</td>
-    </tr>
-    <tr>
-      <td>item[ “wiki_diff” ]</td>
-      <td>for wiki, a link to the diff for the page</td>
-    </tr>
-    <tr>
-      <td>item[ “wiki_history” ]</td>
-      <td>for wiki, a link to the page history</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>That’s it!</p>
 
   </div>
 
@@ -173,7 +128,7 @@ def get_blog_posts(number_of_posts):
 <script type="text/javascript">
   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
   var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
-  var disqus_identifier = "/2017/10/17/reading-xml-with-python.html";
+  var disqus_identifier = "/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html";
 
   /* * * DON'T EDIT BELOW THIS LINE * * */
   (function() {
