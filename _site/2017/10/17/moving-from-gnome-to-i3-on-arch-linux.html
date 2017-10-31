@@ -90,20 +90,17 @@
 <p>Here’s a list of everything I want to go through:</p>
 
 <ul>
-  <li>Getting i3 installed</li>
+  <li>Installing i3</li>
   <li>Basic commands</li>
   <li>Workflow</li>
-  <li>Youtube Tutorial</li>
   <li>Setting a background with <code class="highlighter-rouge">feh</code></li>
   <li>The i3 config file</li>
-  <li>Setting a background image</li>
   <li>Setting uxrvt as a default terminal</li>
   <li>Customizing uxrvt</li>
   <li>Customizing workspaces</li>
   <li>Setting up blocks with i3blocks</li>
   <li>Custom lock screen with animation</li>
   <li>i3-gaps</li>
-  <li></li>
 </ul>
 
 <p>Start out by installing <code class="highlighter-rouge">i3</code> with pacman as follows</p>
@@ -506,6 +503,36 @@ bindsym Mod1+Shift+0 move container to workspace $workspace10
 <p>Be careful when you add new bindings! i3 will give you an error if you assign one binding to more than one command. I had to shuffle some of the default bindings around to use <code class="highlighter-rouge">Mod1+space</code>.</p>
 
 <p>This is a good place to stop for now. There is a lot you can do with i3, so it is good to take things one step at a time and also try to do things in different ways to see what you like.</p>
+
+<h2 id="extras">Extras</h2>
+
+<h3 id="chinese-input-support">Chinese Input Support</h3>
+
+<p>Install <code class="highlighter-rouge">ibus-pinyin</code> from AUR</p>
+
+<p>Run the ibus daemon:</p>
+
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>ibus-daemon -xim&amp;
+</code></pre>
+</div>
+
+<p>Install another Chinese font and set in <code class="highlighter-rouge">~/.Xresources</code></p>
+
+<p><a href="https://askubuntu.com/questions/826577/switch-keyboard-layouts-with-i3/826578">https://askubuntu.com/questions/826577/switch-keyboard-layouts-with-i3/826578</a></p>
+
+<h2 id="dotfiles">Dotfiles</h2>
+
+<p>Here are the configuration files I use for i3:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">~/.i3/config</code></li>
+  <li><code class="highlighter-rouge">~/.i3/i3blocks.conf</code>: configuration for status bar in i3</li>
+  <li><code class="highlighter-rouge">~/.i3/blocks/scripts/</code>: scripts that run for <code class="highlighter-rouge">i3blocks</code></li>
+  <li><code class="highlighter-rouge">~/.Xresources</code>: configuration for <code class="highlighter-rouge">rxvt-unicode</code></li>
+  <li><code class="highlighter-rouge">~/.config/ranger/rc.conf</code>: configuration files for <code class="highlighter-rouge">ranger</code></li>
+  <li><code class="highlighter-rouge">~/.vimrc</code>: configuration for <code class="highlighter-rouge">vim</code></li>
+  <li><code class="highlighter-rouge">~/.bashrc</code></li>
+</ul>
 
   </div>
 

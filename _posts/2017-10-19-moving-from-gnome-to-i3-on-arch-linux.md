@@ -13,20 +13,17 @@ i3 sounded like a nice idea at first, but there were a lot of aspects of my Gnom
 
 Here's a list of everything I want to go through:
 
-- Getting i3 installed
+- Installing i3
 - Basic commands
 - Workflow
-- Youtube Tutorial
 - Setting a background with `feh`
 - The i3 config file
-- Setting a background image
 - Setting uxrvt as a default terminal
 - Customizing uxrvt
 - Customizing workspaces
 - Setting up blocks with i3blocks
 - Custom lock screen with animation
 - i3-gaps
-- 
 
 Start out by installing `i3` with pacman as follows
 
@@ -421,3 +418,31 @@ bindsym Mod1+space exec rofi -show run
 Be careful when you add new bindings! i3 will give you an error if you assign one binding to more than one command. I had to shuffle some of the default bindings around to use `Mod1+space`. 
 
 This is a good place to stop for now. There is a lot you can do with i3, so it is good to take things one step at a time and also try to do things in different ways to see what you like. 
+
+## Extras
+
+### Chinese Input Support
+
+Install `ibus-pinyin` from AUR
+
+Run the ibus daemon: 
+
+```terminal
+ibus-daemon -xim&
+```
+
+Install another Chinese font and set in `~/.Xresources`
+
+[https://askubuntu.com/questions/826577/switch-keyboard-layouts-with-i3/826578](https://askubuntu.com/questions/826577/switch-keyboard-layouts-with-i3/826578)
+
+## Dotfiles
+
+Here are the configuration files I use for i3: 
+
+- `~/.i3/config`
+- `~/.i3/i3blocks.conf`: configuration for status bar in i3
+- `~/.i3/blocks/scripts/`: scripts that run for `i3blocks`
+- `~/.Xresources`: configuration for `rxvt-unicode`
+- `~/.config/ranger/rc.conf`: configuration files for `ranger`
+- `~/.vimrc`: configuration for `vim`
+- `~/.bashrc`
