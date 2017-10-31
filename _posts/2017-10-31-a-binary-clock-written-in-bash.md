@@ -21,7 +21,7 @@ To simplifiy my clock, I decided to display Unix time as a binary number with on
 |  ●  |  ○  |  ○  |  ●  |  ●  |
 |  ●  |  ●  |  ○  |  ●  |  ○  |
 
-In this representation, the lower right cell represents the one's place, the next cell to the left represents the two's place, the next over the four's place, etc. 
+In this representation, the lower right cell represents the one's place, the next cell to the left represents the two's place, the next over the four's place, the next the eight's, and so on. 
 
 Here's the code that I ended up using for my clock program: 
 
@@ -72,7 +72,7 @@ The program uses two function and one while loop to display the time.
               print the first NUM bytes of each file;
 ```
 
-This gets `NUM` number of ones and zeros from the string of ones and zeros that results from `decToBin`. 
+This gets `NUM` number of ones and zeros (each being one byte) from the string of ones and zeros that results from `decToBin`. 
 
 In the `while` loop, I measure the length and width of the terminal window to center the position of the clock in case it has been changed with the following lines of code: 
 
@@ -122,3 +122,7 @@ This takes the number of columns that we want to shift our clock as `$h` and rea
 Here's a screenshot of the clock in action: 
 
 ![png](/static/binaryclock.png)
+
+Here's the script on my github account: 
+
+[https://github.com/briancaffey/binaryclock/blob/master/binaryclock](https://github.com/briancaffey/binaryclock/blob/master/binaryclock)

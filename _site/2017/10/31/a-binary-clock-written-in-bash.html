@@ -136,7 +136,7 @@
   </tbody>
 </table>
 
-<p>In this representation, the lower right cell represents the one’s place, the next cell to the left represents the two’s place, the next over the four’s place, etc.</p>
+<p>In this representation, the lower right cell represents the one’s place, the next cell to the left represents the two’s place, the next over the four’s place, the next the eight’s, and so on.</p>
 
 <p>Here’s the code that I ended up using for my clock program:</p>
 
@@ -187,7 +187,7 @@ clear
 </code></pre>
 </div>
 
-<p>This gets <code class="highlighter-rouge">NUM</code> number of ones and zeros from the string of ones and zeros that results from <code class="highlighter-rouge">decToBin</code>.</p>
+<p>This gets <code class="highlighter-rouge">NUM</code> number of ones and zeros (each being one byte) from the string of ones and zeros that results from <code class="highlighter-rouge">decToBin</code>.</p>
 
 <p>In the <code class="highlighter-rouge">while</code> loop, I measure the length and width of the terminal window to center the position of the clock in case it has been changed with the following lines of code:</p>
 
@@ -237,6 +237,10 @@ clear
 <p>Here’s a screenshot of the clock in action:</p>
 
 <p><img src="/static/binaryclock.png" alt="png" /></p>
+
+<p>Here’s the script on my github account:</p>
+
+<p><a href="https://github.com/briancaffey/binaryclock/blob/master/binaryclock">https://github.com/briancaffey/binaryclock/blob/master/binaryclock</a></p>
 
   </div>
 

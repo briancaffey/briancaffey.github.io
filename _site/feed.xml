@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 31 Oct 2017 13:53:30 -0400</pubDate>
-    <lastBuildDate>Tue, 31 Oct 2017 13:53:30 -0400</lastBuildDate>
+    <pubDate>Tue, 31 Oct 2017 14:05:12 -0400</pubDate>
+    <lastBuildDate>Tue, 31 Oct 2017 14:05:12 -0400</lastBuildDate>
     <generator>Jekyll v3.5.1</generator>
     
       <item>
@@ -65,7 +65,7 @@
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;In this representation, the lower right cell represents the one’s place, the next cell to the left represents the two’s place, the next over the four’s place, etc.&lt;/p&gt;
+&lt;p&gt;In this representation, the lower right cell represents the one’s place, the next cell to the left represents the two’s place, the next over the four’s place, the next the eight’s, and so on.&lt;/p&gt;
 
 &lt;p&gt;Here’s the code that I ended up using for my clock program:&lt;/p&gt;
 
@@ -116,7 +116,7 @@ clear
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;This gets &lt;code class=&quot;highlighter-rouge&quot;&gt;NUM&lt;/code&gt; number of ones and zeros from the string of ones and zeros that results from &lt;code class=&quot;highlighter-rouge&quot;&gt;decToBin&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This gets &lt;code class=&quot;highlighter-rouge&quot;&gt;NUM&lt;/code&gt; number of ones and zeros (each being one byte) from the string of ones and zeros that results from &lt;code class=&quot;highlighter-rouge&quot;&gt;decToBin&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;while&lt;/code&gt; loop, I measure the length and width of the terminal window to center the position of the clock in case it has been changed with the following lines of code:&lt;/p&gt;
 
@@ -166,6 +166,10 @@ clear
 &lt;p&gt;Here’s a screenshot of the clock in action:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/static/binaryclock.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Here’s the script on my github account:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/briancaffey/binaryclock/blob/master/binaryclock&quot;&gt;https://github.com/briancaffey/binaryclock/blob/master/binaryclock&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Tue, 31 Oct 2017 00:00:00 -0400</pubDate>
         <link>http://localhost:4000/2017/10/31/a-binary-clock-written-in-bash.html</link>
