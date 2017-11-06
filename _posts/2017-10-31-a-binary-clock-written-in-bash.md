@@ -11,7 +11,7 @@ comments: true
 
 Configuring the i3 window manager on my laptop has got me interested in learning more about bash scripting. As an exercise for getting more familiar with bash, I set out to write a simple [binary clock](https://en.wikipedia.org/wiki/Binary_clock) application that runs in the terminal. 
 
-To simplifiy my clock, I decided to display Unix time as a binary number with ones and zeros represented as the unicode symbols ● and ○, respectively. [Unix time](https://en.wikipedia.org/wiki/Unix_time) is the number of second that have passed since January 1, 1970. Here's what I had in mind when I started out: 2
+To simplifiy my clock, I decided to display Unix time as a binary number with ones and zeros represented as the unicode symbols ● and ○, respectively. [Unix time](https://en.wikipedia.org/wiki/Unix_time) is the number of second that have passed since January 1, 1970. Here's what I had in mind when I started out: 
 
 |--|--|--|--|--|
 |  ○  |  ○  |  ●  |  ●  |  ○  | 
@@ -126,3 +126,5 @@ Here's a screenshot of the clock in action:
 Here's the script on my github account: 
 
 [https://github.com/briancaffey/binaryclock/blob/master/binaryclock](https://github.com/briancaffey/binaryclock/blob/master/binaryclock)
+
+The clock works well on `rxvt-unicode`, but I need to make some small changes to make it work on other terminal emulators. 
