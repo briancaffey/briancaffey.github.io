@@ -7,7 +7,11 @@ comments: true
 
 ---
 
-For recent project and hackathons I have been using the same Django project template outlined in an article I wrote last year about how to deploy a Django project on Heroku. In this article I want to update the process I have been using to deploy Django projects and get a "Deploy to Heroku" button working so I (or anyone else) can spin up a new project as fast as possible. Here are some things that I will be adding to the project that I didn't include in my last article/tutorial: 
+For recent project and hackathons I have been using the same Django project template outlined in an article I wrote last year about how to deploy a Django project on Heroku. In this article I want to update the process I have been using to deploy Django projects and get a "Deploy to Heroku" button working so I (or anyone else) can spin up a new project as fast as possible. This is what the button looks like: 
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](#)
+
+Here are some things that I will be adding to the project that I didn't include in my last article/tutorial: 
 
 - Django Rest Framework (DRF)
 - Enabling CORS (useful if you are using Django as your backend only with a separate front-end)
