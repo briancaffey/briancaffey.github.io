@@ -6,9 +6,296 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 19 Nov 2017 19:19:46 -0500</pubDate>
-    <lastBuildDate>Sun, 19 Nov 2017 19:19:46 -0500</lastBuildDate>
+    <pubDate>Sun, 19 Nov 2017 21:48:52 -0500</pubDate>
+    <lastBuildDate>Sun, 19 Nov 2017 21:48:52 -0500</lastBuildDate>
     <generator>Jekyll v3.5.1</generator>
+    
+      <item>
+        <title>Installing the GPU version of Tensorflow with Docker on Arch Linux</title>
+        <description>&lt;p&gt;I’ve tried installing the GPU version of Tensorflow a few times before and failed. There seems to be lots of confusion about the build process, of which there are many. Also, over the last few years there have been many new versions of the software needed to support the GPU version of Tensorflow as well as the first official release of Tensorflow itself (which is now on version 1.4), such as CUDA and cudnn, and different version of python. This is one more attempt at installing the GPU version of Tensor Flow on my Desktop PC that is currently dual booting with Arch Linux and Windows 10. I’ve decided to try going the docker route because it should eliminate some of the headache of missing depedencies. Here are the specs for my computer:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;i7-7600K&lt;/li&gt;
+  &lt;li&gt;NVIDIA GTX 1080&lt;/li&gt;
+  &lt;li&gt;Asus Hero VIII motherboard&lt;/li&gt;
+  &lt;li&gt;Arch Linux on a 128 GB SSD (Windows 10 is installed on a separate SSD)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;installing-cuda-and-cudnn&quot;&gt;Installing CUDA and cudnn&lt;/h2&gt;
+
+&lt;p&gt;We don’t need to install these when installing Tensorflow with Docker. Read to the bottom for more info.&lt;/p&gt;
+
+&lt;h2 id=&quot;installing-docker&quot;&gt;Installing Docker&lt;/h2&gt;
+
+&lt;p&gt;To install docker on our machine, let’s start with the &lt;a href=&quot;https://wiki.archlinux.org/index.php/Docker&quot;&gt;Arch Wiki article on docker&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We need to add the Loopback module to the Linux Kernel, so we run:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;tee&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; /etc/modules-load.d/loop.conf &amp;lt;&amp;lt;&amp;lt; &quot;loop&quot;
+&lt;/span&gt;&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;modprobe&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; loop
+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;reboot&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Ater rebooting we can install docker:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yaourt -S docker
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next we need to start the docker daemon:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ systemctl start docker
+==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
+Authentication is required to start 'docker.service'.
+Authenticating as: brian
+Password: 
+==== AUTHENTICATION COMPLETE ====
+$
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So far so good. Next let’s look at the Tensorflow documentation for installing Tensorflow with docker.&lt;/p&gt;
+
+&lt;p&gt;We need to install &lt;code class=&quot;highlighter-rouge&quot;&gt;nvidia-docker&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;yaourt&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; -S nvidia-docker
+&lt;/span&gt;[...]
+[sudo] password for brian: 
+loading packages...
+resolving dependencies...
+looking for conflicting packages...
+
+Packages (1) nvidia-docker-1.0.1-1
+
+Total Installed Size:  13.34 MiB
+
+:: Proceed with installation? [Y/n] 
+(1/1) checking keys in keyring                                 [##################################] 100%
+(1/1) checking package integrity                               [##################################] 100%
+(1/1) loading package files                                    [##################################] 100%
+(1/1) checking for file conflicts                              [##################################] 100%
+(1/1) checking available disk space                            [##################################] 100%
+:: Processing package changes...
+(1/1) installing nvidia-docker                                 [##################################] 100%
+=&amp;gt; Prior to running 'CUDA'-containers, ensure that the nvidia-docker-plugin
+   is loaded. -&amp;gt; https://github.com/NVIDIA/nvidia-docker#other-distributions
+
+*) manually; sudo -b nohup nvidia-docker-plugin &amp;gt; /tmp/nvidia-docker.log
+
+*) automatically at startup; systemctl enable nvidia-docker.service
+Optional dependencies for nvidia-docker
+    cuda [installed]
+    nvidia [installed]
+    opencl-nvidia [installed]
+:: Running post-transaction hooks...
+(1/1) Arming ConditionNeedsUpdate...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next it says: Launch a Docker container that contains one of the TensorFlow binary images. Those images are available &lt;a href=&quot;https://hub.docker.com/r/tensorflow/tensorflow/tags/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Next I pulled the container with the &lt;code class=&quot;highlighter-rouge&quot;&gt;gpu-latest&lt;/code&gt; tag and it started to download the container:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; docker pull tensorflow/tensorflow:gpu-latest
+&lt;/span&gt;[sudo] password for brian: 
+latest-gpu: Pulling from tensorflow/tensorflow
+ae79f2514705: Pull complete 
+c59d01a7e4ca: Pull complete 
+41ba73a9054d: Pull complete 
+f1bbfd495cc1: Pull complete 
+0c346f7223e2: Pull complete 
+5dcd01667896: Pull complete 
+ca677f607487: Downloading  180.7MB/453MB
+b4637619a887: Download complete 
+8c644ff287da: Downloading    224MB/465.6MB
+119c5f576e79: Download complete 
+009f82e71a7c: Download complete 
+dbc0fb5872c7: Downloading  17.83MB/66.54MB
+5ef01389c5b2: Waiting 
+04f824004b76: Waiting 
+5861b82f52e5: Waiting 
+a495a3b4e6e1: Waiting 
+3a0a25b1bbaf: Pulling fs layer 
+b76a0afeb1e1: Waiting 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It finished after several minutes:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ca677f607487: Pull complete 
+b4637619a887: Pull complete 
+8c644ff287da: Pull complete 
+119c5f576e79: Pull complete 
+009f82e71a7c: Pull complete 
+dbc0fb5872c7: Pull complete 
+5ef01389c5b2: Pull complete 
+04f824004b76: Pull complete 
+5861b82f52e5: Pull complete 
+a495a3b4e6e1: Pull complete 
+3a0a25b1bbaf: Pull complete 
+b76a0afeb1e1: Pull complete 
+Digest: sha256:90e27448121b321c5ec66069fb2c718301df2ddaf25ba916b6f53719141572b0
+Status: Downloaded newer image for tensorflow/tensorflow:latest-gpu
+&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s verify that it has the image:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; docker images
+&lt;/span&gt;REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+tensorflow/tensorflow   latest-gpu          2f243a16ff63        13 days ago         3.36GB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Next let’s start the &lt;code class=&quot;highlighter-rouge&quot;&gt;nvidia-docker&lt;/code&gt; service:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;systemctl&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; start nvidia-docker
+&lt;/span&gt;==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
+Authentication is required to start 'nvidia-docker.service'.
+Authenticating as: brian
+Password: 
+==== AUTHENTICATION COMPLETE ====
+&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;OK, we should be ready to launch the image:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; nvidia-docker run -it tensorflow/tensorflow:latest-gpu bash
+&lt;/span&gt;&lt;span class=&quot;ni&quot;&gt;root@761a62c1cff1:/notebooks# &lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This is looking good. Let’s try to start python:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;ni&quot;&gt;root@761a62c1cff1:/notebooks# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;python&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
+&lt;/span&gt;Python 2.7.12 (default, Nov 19 2016, 06:48:10) 
+[GCC 5.4.0 20160609] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import tensorflow as tf
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;That works! Let’s try out the classic MNIST hand-written digit classification problem that comes packaged as a notebook with the container image:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; nvidia-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
+&lt;/span&gt;[sudo] password for brian: 
+[I 21:54:26.671 NotebookApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
+[W 21:54:26.689 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[I 21:54:26.693 NotebookApp] Serving notebooks from local directory: /notebooks
+[I 21:54:26.693 NotebookApp] 0 active kernels
+[I 21:54:26.693 NotebookApp] The Jupyter Notebook is running at:
+[I 21:54:26.693 NotebookApp] http://[all ip addresses on your system]:8888/?token=cda89aff96a3d4a9741cc755aac07f65f3aa372f60a198bd
+[I 21:54:26.693 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 21:54:26.693 NotebookApp] 
+    
+    Copy/paste this URL into your browser when you connect for the first time,
+    to login with a token:
+        http://localhost:8888/?token=cda89aff96a3d4a9741cc755aac07f65f3aa372f60a198bd
+[I 21:54:34.489 NotebookApp] 302 GET /?token=cda89aff96a3d4a9741cc755aac07f65f3aa372f60a198bd (172.17.0.1) 0.32ms
+[I 21:54:59.019 NotebookApp] Writing notebook-signing key to /root/.local/share/jupyter/notebook_secret
+[W 21:54:59.023 NotebookApp] Notebook 3_mnist_from_scratch.ipynb is not trusted
+[W 21:54:59.049 NotebookApp] 404 GET /nbextensions/widgets/notebook/js/extension.js?v=20171119215426 (172.17.0.1) 4.38ms referer=http://localhost:8888/notebooks/3_mnist_from_scratch.ipynb
+[I 21:54:59.813 NotebookApp] Kernel started: 00027a3e-59ae-47ce-90a5-752a9d1fe075
+[I 21:55:00.199 NotebookApp] Adapting to protocol v5.1 for kernel 00027a3e-59ae-47ce-90a5-752a9d1fe075
+[I 21:56:59.815 NotebookApp] Saving file at /3_mnist_from_scratch.ipynb
+[W 21:56:59.816 NotebookApp] Notebook 3_mnist_from_scratch.ipynb is not trusted
+2017-11-19 21:57:03.988627: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2017-11-19 21:57:04.070873: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:892] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2017-11-19 21:57:04.071129: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties: 
+name: GeForce GTX 1080 major: 6 minor: 1 memoryClockRate(GHz): 1.7335
+pciBusID: 0000:01:00.0
+totalMemory: 7.92GiB freeMemory: 7.44GiB
+2017-11-19 21:57:04.071143: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -&amp;gt; (device: 0, name: GeForce GTX 1080, pci bus id: 0000:01:00.0, compute capability: 6.1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I was only able to get the entire notebook to run after making a few small configuration tweaks to the tensorflow Interactive Session to fix some memory issues:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;gpu_options&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GPUOptions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;per_process_gpu_memory_fraction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InteractiveSession&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ConfigProto&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gpu_options&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gpu_options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Use our newly created session as the default for &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# subsequent operations.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as_default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Initialize all the variables we defined above.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;tf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;global_variables_initializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Without setting &lt;code class=&quot;highlighter-rouge&quot;&gt;gpu_options&lt;/code&gt;, Tensorflow allocates 95% of available GPU memory (according to &lt;a href=&quot;https://stackoverflow.com/questions/34514324/error-using-tensorflow-with-gpu&quot;&gt;this SO question&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Setting it to &lt;code class=&quot;highlighter-rouge&quot;&gt;0.333&lt;/code&gt; was too low and didn’t allow for training to complete, but setting it to &lt;code class=&quot;highlighter-rouge&quot;&gt;0.75&lt;/code&gt; seemed to work just fine.&lt;/p&gt;
+
+&lt;p&gt;You can monitor GPU memory usage on NVIDIA cards with the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ nvidia-smi
+Sun Nov 19 17:03:03 2017       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 384.59                 Driver Version: 384.59                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1080    Off  | 00000000:01:00.0  On |                  N/A |
+| 27%   32C    P8    10W / 180W |   6707MiB /  8105MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID  Type  Process name                               Usage      |
+|=============================================================================|
+|    0       350    C   /usr/bin/python                               6365MiB |
+|    0       554    G   /usr/lib/xorg-server/Xorg                       19MiB |
+|    0       588    G   /usr/bin/gnome-shell                            28MiB |
+|    0       853    G   /usr/lib/xorg-server/Xorg                      186MiB |
+|    0       873    G   compton                                          2MiB |
+|    0      1114    G   ...el-token=A50C2F183DB4F79482A2D8768ED1B285    64MiB |
+|    0      2190    G   ...el-token=1AC796A35DBDCDBE07AEC2FC1E8026C4    35MiB |
++-----------------------------------------------------------------------------+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I think this was a success! I’m fairly certain that we were leveraging the GPU to run the MNIST hand-written digit notebook. I didn’t see messages that CUDNN loaded, but I can find versions of both CUDNN and CUDA in the docker image:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;ni&quot;&gt;root@80f65a971e9a:/# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ls&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; /usr/include/x86_64-linux-gnu/                                  
+&lt;/span&gt;a.out.h  bits  cudnn_v6.h      fpu_control.h  gnu        python2.7
+asm      c++   expat_config.h  freetype2      ieee754.h  sys
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;ni&quot;&gt;root@80f65a971e9a:/# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;nvcc&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; --version
+&lt;/span&gt;nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2016 NVIDIA Corporation
+Built on Tue_Jan_10_13:22:03_CST_2017
+Cuda compilation tools, release 8.0, V8.0.61
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In previous attempts I had to register for an NVIDIA developer account and install these packages, but they seem to be packaged with the container.&lt;/p&gt;
+
+&lt;p&gt;Finally, we can check the installed python packages:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;ni&quot;&gt;root@80f65a971e9a:~# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;pip&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; freeze | grep tensorflow
+&lt;/span&gt;tensorflow-gpu==1.4.0
+tensorflow-tensorboard==0.4.0rc2
+&lt;span class=&quot;ni&quot;&gt;root@80f65a971e9a:~# &lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This looks good, but I’m still not 100% sure that everything was done properly. I would like to learn more about Tensorflow and also play around with some examples using Tensorboard. Let me know if you have any questions or comments about this setup, I’m still learning! Thanks for reading.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 19 Nov 2017 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Automating Django deployment with a Deploy-to-Heroku button</title>
@@ -2655,263 +2942,6 @@ sudo pacman -S ibus-libpinyin
         <pubDate>Thu, 03 Aug 2017 00:00:00 -0400</pubDate>
         <link>http://localhost:4000/2017/08/03/arch-linux-installation-guide.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/08/03/arch-linux-installation-guide.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Posting JSON data to the Django REST Framework with AJAX</title>
-        <description>&lt;p&gt;This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX function. After tracing down all of the error messages into the documentation for Django, Django REST Framework, jQuery and JavaScript and many Stack Overflow questions, I was finally able to see my “It worked!” alert pop up from the &lt;code class=&quot;highlighter-rouge&quot;&gt;success&lt;/code&gt; callback.&lt;/p&gt;
-
-&lt;h2 id=&quot;context&quot;&gt;Context&lt;/h2&gt;
-
-&lt;p&gt;This issue came up over the weekend while working on a JavaScript game I started several months ago. The game is a ‘&lt;a href=&quot;https://en.wikipedia.org/wiki/Dungeon_crawl&quot;&gt;dungeon crawler&lt;/a&gt;’ where the characters and environment are represented by Unicode emoji. In the initial version, you control a character who roams through a forest, slays a dragon that threatens a princess in distress, and then meet the King of the Land, hence the name of the game “King’s Encounter”. I wanted an easier way to design levels, and also wanted to let users create and share their own worlds and adventures.&lt;/p&gt;
-
-&lt;p&gt;The entire game state is stored in a JavaScript object. Here’s a simplified representation of the structure:&lt;/p&gt;
-
-&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;game&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;s2&quot;&gt;&quot;map&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:{&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,],&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;player&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,],&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tree&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,],&lt;/span&gt;
-  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The UI lets users manipulate the values of each row in the game state’s &lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt; property. The values of the row arrays are objects themselves, which contain information about which emoji they represent and how they interact with the player (for example, you can’t pass through a tree, so it has a &lt;code class=&quot;highlighter-rouge&quot;&gt;'wall':true&lt;/code&gt; property).&lt;/p&gt;
-
-&lt;p&gt;I added a “Save Game” button, which when clicked would fire a POST or PUT request to create or update the user’s game design. On the homepage of my personal website I includes a simple AJAX POST, so I first copied it over as boilerplate code to modify.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-HTML&quot;&gt;$(&quot;#post-form&quot;).on('submit', function(event){
-  event.preventDefault();
-  var this_ = $(this)
-  var gb_endpoint = this_.attr(&quot;data-href&quot;)
-  $.ajax({
-    url: gb_endpoint,
-    type: &quot;POST&quot;,
-    data: { message : $(&quot;#post-text&quot;).val(),
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            city: &quot;some city&quot;,
-            state: &quot;some state&quot;,
-    },
-    success: function(json){
-      $('#post-text').val('');
-      $('#post-form').blur();
-      var gb_num = $(&quot;#gb-num&quot;).text();
-      var new_gb_num = parseInt(gb_num) + 1
-      $(&quot;#gb-num&quot;).text(new_gb_num);
-
-
-      if (1 == 1){
-        var user = json.user
-        $('#guest-book-items').prepend('&amp;lt;div class=&quot;panel panel-success&quot;&amp;gt;&amp;lt;div class=&quot;panel-heading&quot;&amp;gt;From {% if user.is_authenticated %}{{ user }}{% else %}someone{% endif %} in the ' + json.city + ', ' + json.state + ' area | just now&amp;lt;/div&amp;gt;&amp;lt;div class=&quot;panel-body&quot;&amp;gt;' + json.message + '&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;')
-      }
-    },
-  });
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here’s the AJAX call that worked after lots of debugging:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-HTML&quot;&gt;$(&quot;#save-level&quot;).click(function(event){
-  event.preventDefault();
-  $.ajax({
-    type : &quot;POST&quot;,
-    url : &quot;/api/kings/save/&quot;,
-    csrfmiddlewaretoken: &quot;{{ csrf_token }}&quot;,
-    data : JSON.stringify({game:scene}),
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-      },
-    success: function(){
-        alert(&quot;Saved! It worked.&quot;);
-      },
-    error: function(XMLHttpRequest, textStatus, errorThrown) {
-      alert(&quot;some error &quot; + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
-      }
-    });
-  });
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;django-rest-framework-settings-and-api-endpoints&quot;&gt;Django REST Framework settings and API endpoints&lt;/h2&gt;
-
-&lt;p&gt;Before I started writing the AJAX call, I looked in the Django REST Framework documentation for instructions on how to post JSON data. Here are the REST Framework settings I added to &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;REST_FRAMEWORK&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;'DEFAULT_RENDERER_CLASSES'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'rest_framework.renderers.JSONRenderer'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;'DEFAULT_PARSER_CLASSES'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'rest_framework.parsers.JSONParser'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;I’m not sure if this was completely necessary, but I think the &lt;a href=&quot;http://www.django-rest-framework.org/api-guide/renderers/#jsonrenderer&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JSONRenderer&lt;/code&gt; helps with the serialization of Unicode data&lt;/a&gt;, since earlier attempts returned Unicode representation of emoji rather than the emoji themselves (e.g., U+1F600 instead of 😀).&lt;/p&gt;
-
-&lt;p&gt;I should also mention that I added a simple “Game” model in &lt;code class=&quot;highlighter-rouge&quot;&gt;models.py&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib.postgres.fields&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JSONField&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;models&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JSONField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Next I added the views and serializers for the API endpoint (&lt;code class=&quot;highlighter-rouge&quot;&gt;/api/kings/save/&lt;/code&gt;) for the POST request:&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;kings/api/views.py&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;..models&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;.serializers&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GameSerializer&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.generics&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CreateAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# ListAPIView&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.views&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;APIView&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.response&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Response&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GameCreateAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CreateAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;queryset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;all&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GameSerializer&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;perform_create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serializer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# class GameListAPIView(ListAPIView):&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#     queryset = Game.objects.all()&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;#     serializer_class = GameSerializer&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;em&gt;kings/api/serializers.py&lt;/em&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework.serializers&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ModelSerializer&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;rest_framework&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serializers&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;..models&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GameSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ModelSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Meta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Game&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;fields&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-            &lt;span class=&quot;s&quot;&gt;'game'&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Writing this view was the first big hurdle. I was under the impression that the JSON data was to be accessed in &lt;code class=&quot;highlighter-rouge&quot;&gt;self.request.body&lt;/code&gt;. The error message said &lt;a href=&quot;https://github.com/encode/django-rest-framework/issues/2774&quot;&gt;You cannot access body after reading from request’s data stream&lt;/a&gt;, and there were some elaborate solutions that I didn’t think I would be able to implement.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://www.django-rest-framework.org/api-guide/requests/#request-parsing&quot;&gt;This topic&lt;/a&gt; in the DRF documentation describes the &lt;code class=&quot;highlighter-rouge&quot;&gt;.data&lt;/code&gt; method for parsing requests.&lt;/p&gt;
-
-&lt;h2 id=&quot;debugging-the-ajax-call-and-formatting-json-data&quot;&gt;Debugging the AJAX call and formatting JSON data&lt;/h2&gt;
-
-&lt;p&gt;The next important clue came from a footnote in this section about requests:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Note: If a client sends malformed content, then accessing request.data may raise a ParseError. By default REST framework’s APIView class or @api_view decorator will catch the error and return a 400 Bad Request response.
-If a client sends a request with a content-type that cannot be parsed then a UnsupportedMediaType exception will be raised, which by default will be caught and return a 415 Unsupported Media Type response.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;I resolved the &lt;code class=&quot;highlighter-rouge&quot;&gt;415&lt;/code&gt; error by adding the following to the AJAX call.&lt;/p&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;headers: {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json'
-  },
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;One aspect of all of the debugging which was frustrating is that the sqlite3 database on my local environment does not support storing JSON data (as far as I know), so I committed and pushed code to my production server on Heroku (which uses PostgreSQL) for each step in the debug process. Eventually I realized that a &lt;code class=&quot;highlighter-rouge&quot;&gt;500&lt;/code&gt; server error on my local environment meant that everything was working correctly except for the very last step: saving the &lt;code class=&quot;highlighter-rouge&quot;&gt;Game&lt;/code&gt; object.&lt;/p&gt;
-
-&lt;p&gt;At this point I thought I was pretty close. I could successfully POST data using the DRF web interface, and I got the following type of error messages (which were &lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP 400 Bad Request&lt;/code&gt;) when I tried to post malformed data:&lt;/p&gt;
-
-&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;detail&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;JSON parse error - Expecting value: line 2 column 13 (char 14)&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;To see what error message I was getting using AJAX, I found that jQuery makes the error message available in &lt;code class=&quot;highlighter-rouge&quot;&gt;XMLHttpRequest.responseText&lt;/code&gt;. I then added the following to the AJAX &lt;code class=&quot;highlighter-rouge&quot;&gt;error&lt;/code&gt; callback:&lt;/p&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$.ajax({
-  ...
-  error: function(XMLHttpRequest, textStatus, errorThrown) {
-    alert(&quot;some error &quot; + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
-    }
-  });
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This error message was saying:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ValueError: Expecting value: line 1 column 1 (char 0)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This led me to believe that there was an issue with the &lt;code class=&quot;highlighter-rouge&quot;&gt;data&lt;/code&gt; attribute being passed into the AJAX call. It was particularly difficult to figure out how to write the JSONified version of JavaScript object. SO posts had many different ways, and I eventually found that the following worked:&lt;/p&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$.ajax({
-  ...
-  data : JSON.stringify({game:scene}),
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Since I named the &lt;code class=&quot;highlighter-rouge&quot;&gt;JSONField()&lt;/code&gt; field in my Game model &lt;code class=&quot;highlighter-rouge&quot;&gt;game&lt;/code&gt;, I believe that &lt;code class=&quot;highlighter-rouge&quot;&gt;game&lt;/code&gt; needed to be the “main attribute” of the JSON in the POST request. &lt;code class=&quot;highlighter-rouge&quot;&gt;scene&lt;/code&gt; is the name of the variable that held the JavaScript object I wanted to send. &lt;code class=&quot;highlighter-rouge&quot;&gt;JSON.stringify()&lt;/code&gt; was a little confusing, and there was lots of confusion online about what it returns. Here’s the &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify&quot;&gt;MDN documentation&lt;/a&gt; that was helpful in figuring out &lt;code class=&quot;highlighter-rouge&quot;&gt;JSON.stringify()&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;cross-site-request-forgery-issue-when-using-ajax-with-django&quot;&gt;Cross-site Request Forgery issue when using AJAX with Django&lt;/h2&gt;
-
-&lt;p&gt;At some point in all of this debugging I got a strange error message saying the CSRF Token was missing or incorrect. I had included &lt;code class=&quot;highlighter-rouge&quot;&gt;csrfmiddlewaretoken: &quot;{{ csrf_token }}&quot;,&lt;/code&gt; in the AJAX call, and it wasn’t an issue I had experienced with making my other POST request with AJAX. I found &lt;a href=&quot;https://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request&quot;&gt;this Stack Overflow answer&lt;/a&gt; with 143 votes and 90,322 views, and was pleased that the proposed solution worked just fine. It involves adding &lt;code class=&quot;highlighter-rouge&quot;&gt;$.ajaxSetup()&lt;/code&gt; before the AJAX call:&lt;/p&gt;
-
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$.ajaxSetup({
-     beforeSend: function(xhr, settings) {
-         function getCookie(name) {
-             var cookieValue = null;
-             if (document.cookie &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; document.cookie != '') {
-                 var cookies = document.cookie.split(';');
-                 for (var i = 0; i &lt;span class=&quot;nt&quot;&gt;&amp;lt; cookies&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;
-                     &lt;span class=&quot;na&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;cookie =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;jQuery.trim(cookies[i]);&lt;/span&gt;
-                     &lt;span class=&quot;err&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Does&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;cookie&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;begin&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;we&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;want&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;?&lt;/span&gt;
-                     &lt;span class=&quot;na&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;cookie&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;substring&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;'='))&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;
-                         &lt;span class=&quot;na&quot;&gt;cookieValue =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;decodeURIComponent(cookie.substring(name.length&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;));&lt;/span&gt;
-                         &lt;span class=&quot;na&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt;
-                     &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
-                 &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
-             &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;cookieValue&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;;&lt;/span&gt;
-         &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
-         &lt;span class=&quot;na&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;(!(/^&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;http:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.*/.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;/^&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;https:&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.*/.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;)))&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;
-             &lt;span class=&quot;err&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Only&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;send&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;relative&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;URLs&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;locally&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;
-             &lt;span class=&quot;na&quot;&gt;xhr&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setRequestHeader&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;(&quot;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;X-CSRFToken&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&quot;,&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;getCookie&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;('&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;csrftoken&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;'));&lt;/span&gt;
-         &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
-     &lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;err&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;I won’t go into to much detail here, but you can read more about this issue which apparently also impacts Ruby on Rails as well. Here’s a &lt;a href=&quot;https://www.djangoproject.com/weblog/2011/feb/08/security/&quot;&gt;link to a security post on the Django Project blog&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Finally, I pressing the &lt;code class=&quot;highlighter-rouge&quot;&gt;Save Game&lt;/code&gt; button gave me the long-awaited succss message: &lt;code class=&quot;highlighter-rouge&quot;&gt;Saved! It worked.&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;I still have quite a bit of work to do before the “level-building” feature is complete for this game. Hopefully there are not as many issues in retrieving JSON data stored in the database.&lt;/p&gt;
-
-&lt;p&gt;It would probably make more sense to build this type of game with a JS backend and a NoSQL database, but it is good to know that Django + DRF + PostgreSQL can handle this.&lt;/p&gt;
-
-&lt;p&gt;A live demo of the level-building is available here: &lt;a href=&quot;http://briancaffey.com/kings/kingsencounter/level_builder&quot;&gt;http://briancaffey.com/kings/kingsencounter/level_builder&lt;/a&gt;, and you can find a demo of the game here: &lt;a href=&quot;http://briancaffey.com/kings/kingsencounter/&quot;&gt;http://briancaffey.com/kings/kingsencounter/&lt;/a&gt;. Here’s what the game looks like:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/kings_encounter.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;If you save your game, you can see the JSON in the list of all saved games using the DRF web UI: &lt;a href=&quot;http://briancaffey.com/api/kings/games/&quot;&gt;http://briancaffey.com/api/kings/games/&lt;/a&gt;. One of the very next things I need to do on the backend assign a unique URL to each &lt;code class=&quot;highlighter-rouge&quot;&gt;Game&lt;/code&gt; object and update that &lt;code class=&quot;highlighter-rouge&quot;&gt;Game&lt;/code&gt; model rather than creating new games with each request. This will involve something like &lt;code class=&quot;highlighter-rouge&quot;&gt;UpdateAPIView&lt;/code&gt; in the REST Framework.&lt;/p&gt;
-
-&lt;p&gt;Hopefully this article is helpful if you are struggling with making an AJAX POST request to DRF on the backend. Thanks for reading and feel free to leave a comment if you have any thoughts or questions or can point out something I can improve.&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 22 Jul 2017 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html</guid>
         
         
       </item>
