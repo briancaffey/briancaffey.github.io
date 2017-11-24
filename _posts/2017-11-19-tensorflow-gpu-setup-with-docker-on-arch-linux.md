@@ -9,7 +9,7 @@ comments: true
 
 I've tried installing the GPU version of Tensorflow a few times before and failed. There seems to be lots of confusion about the build process, of which there are many. Also, over the last few years there have been many new versions of the software needed to support the GPU version of Tensorflow as well as the first official release of Tensorflow itself (which is now on version 1.4), such as CUDA and cudnn, and different version of python. This is one more attempt at installing the GPU version of Tensor Flow on my Desktop PC that is currently dual booting with Arch Linux and Windows 10. I've decided to try going the docker route because it should eliminate some of the headache of missing depedencies. Here are the specs for my computer: 
 
-- i7-7600K
+- i7-6700K
 - NVIDIA GTX 1080
 - Asus Hero VIII motherboard
 - Arch Linux on a 128 GB SSD (Windows 10 is installed on a separate SSD)
@@ -36,7 +36,47 @@ Ater rebooting we can install docker:
 yaourt -S docker
 ```
 
-Next we need to start the docker daemon: 
+Now we want to add ourself to the docker group with the following command:
+
+```terminal
+$ sudo gpasswd -a brian docker
+[sudo] password for brian: 
+Adding user brian to group docker
+```
+
+If you run `groups`, you won't see docker listed in the groups you (brian) belong to. Run `newgrp docker` and then re-run docker and you should see `docker` listed with any other groups you belong to: 
+
+```terminal
+[brian@a1arch ~]$ groups
+wheel storage power users
+[brian@a1arch ~]$ newgrp docker
+                   -`                    brian@a1arch
+                  .o+`                   ------------
+                 `ooo/                   OS: Arch Linux x86_64
+                `+oooo:                  Kernel: 4.12.8-2-ARCH
+               `+oooooo:                 Uptime: 6 mins
+               -+oooooo+:                Packages: 1127
+             `/:-:++oooo+:               Shell: bash 4.4.12
+            `/++++/+++++++:              Resolution: 1920x1080
+           `/++++++++++++++:             WM: i3
+          `/+++ooooooooooooo/`           Theme: Adwaita [GTK2]
+         ./ooosssso++osssssso+`          Icons: Adwaita [GTK2]
+        .oossssso-````/ossssss+`         Terminal: urxvt
+       -osssssso.      :ssssssso.        Terminal Font: Inconsolata-12
+      :osssssss/        osssso+++.       CPU: Intel i7-6700K (8) @ 4.200GHz
+     /ossssssss/        +ssssooo/-       GPU: NVIDIA GeForce GTX 1080
+   `/ossssso+/:-        -:/+osssso+-     Memory: 3289MiB / 15975MiB
+  `+sso+:-`                 `.-/+oso: 
+ `++:.                           `-/+/                           
+ .`                                 `/ 
+
+[brian@a1arch ~]$ groups
+docker wheel storage power users
+```
+
+Doing this prevents us from having to write sudo each time we run docker. 
+
+Next we need to start the docker daemon. 
 
 ```
 $ systemctl start docker
@@ -47,6 +87,10 @@ Password:
 ==== AUTHENTICATION COMPLETE ====
 $
 ``` 
+
+### Side note
+
+There seems to be an [Arch Linux-specific bug](https://github.com/moby/moby/issues/23289) which prevents us from enabling docker (and nvidia-docker which we will get next). There is a solution to downgrade to an older version of docker, or you can just start the docker service and the nvidia-docker service when you want to use them. I have found it faster to first start nvidia-docker and then start docker services. 
 
 So far so good. Next let's look at the Tensorflow documentation for installing Tensorflow with docker. 
 
@@ -92,7 +136,7 @@ Next it says: Launch a Docker container that contains one of the TensorFlow bina
 Next I pulled the container with the `gpu-latest` tag and it started to download the container:
 
 ```terminal
-$ sudo docker pull tensorflow/tensorflow:gpu-latest
+$ docker pull tensorflow/tensorflow:gpu-latest
 [sudo] password for brian: 
 latest-gpu: Pulling from tensorflow/tensorflow
 ae79f2514705: Pull complete 
@@ -138,7 +182,7 @@ $
 Let's verify that it has the image: 
 
 ```terminal
-$ sudo docker images
+$ docker images
 REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
 tensorflow/tensorflow   latest-gpu          2f243a16ff63        13 days ago         3.36GB
 ```
@@ -159,7 +203,7 @@ OK, we should be ready to launch the image:
 
 
 ```terminal
-$ sudo nvidia-docker run -it tensorflow/tensorflow:latest-gpu bash
+$ nvidia-docker run -it tensorflow/tensorflow:latest-gpu bash
 root@761a62c1cff1:/notebooks# 
 ```
 
@@ -177,7 +221,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 That works! Let's try out the classic MNIST hand-written digit classification problem that comes packaged as a notebook with the container image: 
 
 ```terminal
-$ sudo nvidia-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
+$ nvidia-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
 [sudo] password for brian: 
 [I 21:54:26.671 NotebookApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
 [W 21:54:26.689 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
