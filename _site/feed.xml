@@ -6,9 +6,395 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 24 Nov 2017 18:25:30 -0500</pubDate>
-    <lastBuildDate>Fri, 24 Nov 2017 18:25:30 -0500</lastBuildDate>
+    <pubDate>Thu, 30 Nov 2017 18:47:21 -0500</pubDate>
+    <lastBuildDate>Thu, 30 Nov 2017 18:47:21 -0500</lastBuildDate>
     <generator>Jekyll v3.5.1</generator>
+    
+      <item>
+        <title>Removing root partition bloat caused by docker</title>
+        <description>&lt;p&gt;Recently I’ve been having storage issues in the root partitions of both my desktop and laptop computers. These issues came up soon after I started playing around with docker. In this article I’ll talk briefly about how I fixed this problem, the resources and tools I picked up along the way, and anything else I have learned along the way.&lt;/p&gt;
+
+&lt;p&gt;I first learned how bad this issue was when I went to install anaconda on my desktop PC. I quiclky ran &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; and saw that my 20G root partition had less than 1G of available space. To look further into this I ran &lt;code class=&quot;highlighter-rouge&quot;&gt;baobab&lt;/code&gt;. In the baobab home screen the root partition had slightly more space, but it was still close to being full. The expanded view was only showing me informatoin for around 8G of storage, leaving almost 11G of space not accounted for.&lt;/p&gt;
+
+&lt;p&gt;I started reaching for different tools and packages to slim down disk usage. &lt;code class=&quot;highlighter-rouge&quot;&gt;pacgraph&lt;/code&gt; is a pretty neat way to visualize the relative size of packages. Here’s an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/pacgraph.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This helps you quickly find packages that you can do without. After removing some large packages like Libre Office I realized that this was barely moving the needle on my storage problem. Running &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;baobab&lt;/code&gt; again with root priviledges gave me slightly different results. At this point I turned to docker and deleted all of the images with `docker rmi &lt;IMAGE ID=&quot;&quot;&gt; -f. This didn't help either. Here are the images that I removed from my desktop:&lt;/IMAGE&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[brian@a1arch ~]$ docker images
+REPOSITORY                              TAG                 IMAGE ID            CREATED             SIZE
+flaskmicroservicesusers_users-service   latest              1e59fa4d2af5        5 days ago          739MB
+&amp;lt;none&amp;gt;                                  &amp;lt;none&amp;gt;              18f9191b4d9a        5 days ago          739MB
+flaskmicroservicesusers_users-db        latest              f1de1c3ef3f2        5 days ago          287MB
+&amp;lt;none&amp;gt;                                  &amp;lt;none&amp;gt;              11188ac6f36a        5 days ago          712MB
+postgres                                latest              599272bf538f        12 days ago         287MB
+tensorflow/tensorflow                   latest-gpu          2f243a16ff63        3 weeks ago         3.36GB
+python                                  3.6.2               26acbad26a2c        2 months ago        690MB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Here’s the storage profile before I started remove docker-related files:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ df -h | grep /dev/sda1
+/dev/sda1        20G   18G  737M  97% /
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;After I removed the docker images, here is the same command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ df -h | grep /dev/sda1
+/dev/sda1        20G   18G  737M  97% /
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I found a helpful serverfault question from 6 years ago that address the issue I was having titled &lt;a href=&quot;https://serverfault.com/questions/275206/disk-full-du-tells-different-how-to-further-investigate&quot;&gt;Disk full, du tells different. How to further investigate?&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I saw a helpful comment related to docker:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Thanks - this showed that docker was filling up my hard drive with diffs in &lt;code class=&quot;highlighter-rouge&quot;&gt;/var/lib/docker/aufs/diff/&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Could this be my issue?&lt;/p&gt;
+
+&lt;p&gt;Here’s the folder in question on my laptop:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ cd /var/lib/docker
+ $ sudo du -s -h .
+2.6G	.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;On my desktop this was taking up about 10G!&lt;/p&gt;
+
+&lt;p&gt;Wow! I didn’t even see this when I ran &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo baobab&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/baobab.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I stopped the docker service and deleted the overlay2 file:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ sudo systemctl stop docker
+ $ cd /var/lib/docker
+ $ sudo rm -rf layover2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;With &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo baobab&lt;/code&gt; I was also able to delete 3.6G of trash with this command:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ sudo -i
+ # rm -rf /root/.local/share/Trash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I think this may be related to having previously emptied the Trash in nautilus file browser with files that I might not have owned.&lt;/p&gt;
+
+&lt;p&gt;I think it would be a good idea to change the docker image installation directory. &lt;a href=&quot;https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169&quot;&gt;Here is a link&lt;/a&gt; from a docker forum talking about how to do that. &lt;a href=&quot;https://forums.docker.com/t/some-way-to-clean-up-identify-contents-of-var-lib-docker-overlay/30604&quot;&gt;Here is another docker forum post&lt;/a&gt; that talks about the overlay and storage issues that docker has.&lt;/p&gt;
+
+&lt;p&gt;Here is a helpful snippet from the &lt;a href=&quot;https://wiki.archlinux.org/index.php/Docker&quot;&gt;Arch Wiki Docker article&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Images location
+By default, docker images are located at /var/lib/docker. They can be moved to other partitions. First, stop the docker.service.&lt;/p&gt;
+
+  &lt;p&gt;If you have run the docker images, you need to make sure the images are unmounted totally. Once that is completed, you may move the images from /var/lib/docker to the target destination.&lt;/p&gt;
+
+  &lt;p&gt;Then add a Drop-in snippet for the docker.service, adding the –data-root parameter to the ExecStart:&lt;/p&gt;
+
+  &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/etc/systemd/system/docker.service.d/docker-storage.conf
+[Service]
+ExecStart= 
+ExecStart=/usr/bin/dockerd --data-root=/path/to/new/location/docker -H fd://
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Update: I did this on my desktop with a &lt;code class=&quot;highlighter-rouge&quot;&gt;--data-root&lt;/code&gt; path in my home folder.&lt;/p&gt;
+
+&lt;p&gt;I followed the directions form &lt;a href=&quot;https://linuxconfig.org/how-to-move-docker-s-default-var-lib-docker-to-another-directory-on-ubuntu-debian-linux&quot;&gt;this article&lt;/a&gt; and was able to set up docker on my home partition.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 28 Nov 2017 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2017/11/28/remove-root-partition-bloat-from-docker.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/11/28/remove-root-partition-bloat-from-docker.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Switching from yaourt to pacaur</title>
+        <description>&lt;p&gt;Since I started using Arch Linux I have been using &lt;code class=&quot;highlighter-rouge&quot;&gt;yaourt&lt;/code&gt;, a pacman wrapper with extended features and AUR support.&lt;/p&gt;
+
+&lt;p&gt;There are lots of options, and there is a helpful &lt;a href=&quot;https://wiki.archlinux.org/index.php/AUR_helpers&quot;&gt;comparison chart&lt;/a&gt; on the Arch Wiki.&lt;/p&gt;
+
+&lt;p&gt;One annoying part of installing packages with yaourt is that it will ask you to examine/edit the contents of PKGBUILD. Here’s an example:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ yaourt -S freecell
+
+==&amp;gt; Downloading freecell PKGBUILD from AUR...
+x .SRCINFO
+x PKGBUILD
+Anonymous comment on 2012-04-22 13:26			 
+Your arch line is wrong!
+Please change
+arch=('i686' 'x64')
+to
+arch=('i686' 'x86_64')
+
+freecell 1.0-4  (2015-06-10 11:30)
+( Unsupported package: Potentially dangerous ! )
+==&amp;gt; Edit PKGBUILD ? [Y/n] (&quot;A&quot; to abort)
+==&amp;gt; ------------------------------------
+==&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;What is PKGBUILD? From the Arch Wiki:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A PKGBUILD is a shell script containing the build information required by Arch Linux packages.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For most package installations, yaourt will also ask you to confirm installation:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;==&amp;gt; Edit PKGBUILD ? [Y/n] (&quot;A&quot; to abort)
+==&amp;gt; ------------------------------------
+==&amp;gt; n
+
+==&amp;gt; freecell dependencies:
+ - ncurses (already installed)
+
+
+==&amp;gt; Continue building freecell ? [Y/n]
+==&amp;gt; ----------------------------------
+==&amp;gt; Y
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;And often times you will need to do this more than once:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[...]
+==&amp;gt; Continue building freecell ? [Y/n]
+==&amp;gt; ----------------------------------
+==&amp;gt; Y
+
+==&amp;gt; Building and installing package
+==&amp;gt; Making package: freecell 1.0-4 (Fri Nov 24 20:58:00 EST 2017)
+==&amp;gt; Checking runtime dependencies...
+==&amp;gt; Checking buildtime dependencies...
+==&amp;gt; Retrieving sources...
+  -&amp;gt; Downloading freecell-1.0.tar.gz...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 87713  100 87713    0     0  87713      0  0:00:01 --:--:--  0:00:01  101k
+==&amp;gt; Validating source files with md5sums...
+    freecell-1.0.tar.gz ... Passed
+==&amp;gt; Extracting sources...
+  -&amp;gt; Extracting freecell-1.0.tar.gz with bsdtar
+==&amp;gt; Starting build()...
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... gawk
+checking whether make sets $(MAKE)... yes
+checking for gcc... gcc
+checking for C compiler default output file name... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables... 
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking for style of include used by make... GNU
+checking dependency style of gcc... gcc3
+checking for start_color in -lncurses... yes
+checking how to run the C preprocessor... gcc -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for an ANSI C-conforming const... yes
+checking for stdlib.h... (cached) yes
+checking for GNU libc compatible malloc... yes
+checking for strdup... yes
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating src/Makefile
+config.status: creating doc/Makefile
+config.status: executing depfiles commands
+Making all in src
+make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+gcc -DPACKAGE_NAME=\&quot;freecell\&quot; -DPACKAGE_TARNAME=\&quot;freecell\&quot; -DPACKAGE_VERSION=\&quot;1.0\&quot; -DPACKAGE_STRING=\&quot;freecell\ 1.0\&quot; -DPACKAGE_BUGREPORT=\&quot;linus@linusakesson.net\&quot; -DPACKAGE=\&quot;freecell\&quot; -DVERSION=\&quot;1.0\&quot; -DHAVE_LIBNCURSES=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_MALLOC=1 -DHAVE_STRDUP=1 -I.   -D_FORTIFY_SOURCE=2  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt -MT freecell.o -MD -MP -MF .deps/freecell.Tpo -c -o freecell.o freecell.c
+freecell.c:350:1: warning: return type defaults to ‘int’ [-Wimplicit-int]
+ usage() {
+ ^~~~~
+freecell.c: In function ‘main’:
+freecell.c:403:9: warning: implicit declaration of function ‘time’; did you mean ‘nice’? [-Wimplicit-function-declaration]
+   srand(time(0));
+         ^~~~
+         nice
+mv -f .deps/freecell.Tpo .deps/freecell.Po
+gcc -DPACKAGE_NAME=\&quot;freecell\&quot; -DPACKAGE_TARNAME=\&quot;freecell\&quot; -DPACKAGE_VERSION=\&quot;1.0\&quot; -DPACKAGE_STRING=\&quot;freecell\ 1.0\&quot; -DPACKAGE_BUGREPORT=\&quot;linus@linusakesson.net\&quot; -DPACKAGE=\&quot;freecell\&quot; -DVERSION=\&quot;1.0\&quot; -DHAVE_LIBNCURSES=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_MALLOC=1 -DHAVE_STRDUP=1 -I.   -D_FORTIFY_SOURCE=2  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt -MT gameno.o -MD -MP -MF .deps/gameno.Tpo -c -o gameno.o gameno.c
+mv -f .deps/gameno.Tpo .deps/gameno.Po
+gcc  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt  -Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now -o freecell freecell.o gameno.o  -lncurses 
+make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+Making all in doc
+make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
+make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
+==&amp;gt; Entering fakeroot environment...
+==&amp;gt; Starting package()...
+Making install in src
+make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+make[2]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+test -z &quot;/usr/bin&quot; || /usr/bin/mkdir -p &quot;/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/bin&quot;
+  /usr/bin/install -c 'freecell' '/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/bin/freecell'
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+Making install in doc
+make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
+make[2]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
+make[2]: Nothing to be done for 'install-exec-am'.
+test -z &quot;/usr/share/man/man6&quot; || /usr/bin/mkdir -p &quot;/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/share/man/man6&quot;
+ /usr/bin/install -c -m 644 './freecell.6' '/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/share/man/man6/freecell.6'
+make[2]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
+make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
+make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
+make[2]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
+make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
+==&amp;gt; Tidying install...
+  -&amp;gt; Removing libtool files...
+  -&amp;gt; Purging unwanted files...
+  -&amp;gt; Removing static library files...
+  -&amp;gt; Stripping unneeded symbols from binaries and libraries...
+  -&amp;gt; Compressing man and info pages...
+==&amp;gt; Checking for packaging issue...
+==&amp;gt; Creating package &quot;freecell&quot;...
+  -&amp;gt; Generating .PKGINFO file...
+  -&amp;gt; Generating .BUILDINFO file...
+  -&amp;gt; Generating .MTREE file...
+  -&amp;gt; Compressing package...
+==&amp;gt; Leaving fakeroot environment.
+==&amp;gt; Finished making: freecell 1.0-4 (Fri Nov 24 20:58:05 EST 2017)
+==&amp;gt; Cleaning up...
+
+==&amp;gt; Continue installing freecell ? [Y/n]
+==&amp;gt; [v]iew package contents [c]heck package with namcap
+==&amp;gt; ---------------------------------------------------
+==&amp;gt; 
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;and you often times have to provide your password during the install process:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;==&amp;gt; Continue installing freecell ? [Y/n]
+==&amp;gt; [v]iew package contents [c]heck package with namcap
+==&amp;gt; ---------------------------------------------------
+==&amp;gt; Y
+
+[sudo] password for brian: 
+loading packages...
+resolving dependencies...
+looking for conflicting packages...
+
+Package (1)  New Version  Net Change
+
+freecell     1.0-4          0.02 MiB
+
+Total Installed Size:  0.02 MiB
+
+:: Proceed with installation? [Y/n] 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This process becomes quite tedious when you are installing lots of packages. In most cases you don’t want to edit PKGBUILD, and you DO want to continue with the installation. yaourt does have flags such as &lt;code class=&quot;highlighter-rouge&quot;&gt;--no-edit&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;--no-confirm&lt;/code&gt; that you can pass in to skip these dialogue prompts. However, in some cases there may be conflicting packages that you would want inspect.&lt;/p&gt;
+
+&lt;p&gt;Here’s the description of the pacaur package:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;aur/pacaur 4.7.10-1 [installed] (1057) (47.35)
+    An AUR helper that minimizes user interaction
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Compared to the description of yaourt:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;aur/yaourt 1.9-1 [installed] (2991) (16.33)
+    A pacman wrapper with extended features and AUR support
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Let’s see how pacaur holds up to it’s philosophy of minimizing user interaction:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ yaourt -R freecell &amp;amp;&amp;amp; pacaur -S freecell
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The pacaur installation did ask me to confirm once at the beginning of the install process, and it automatically confirmed the second time without asking me to edit the PKGBUILD. Nice! Trying one more time with &lt;code class=&quot;highlighter-rouge&quot;&gt;--noconfirm&lt;/code&gt;, there was zero interaction between pressing ENTER and the end of the install process. Even better! Either way, using pacaur is much nicer than using yaourt for something as simple as installing freecell.&lt;/p&gt;
+
+&lt;p&gt;It makes sense to prompt the user with any questions at the beginning of the install process and then have then package manager continue with installing the package(s).&lt;/p&gt;
+
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;I ran into signature verification issues when trying to install pacaur. This issue came up when the install process was installing cower, one of pacaur’s dependecies. Thankfully, the issue was addressed in one of the pinned comments on the &lt;a href=&quot;https://aur.archlinux.org/packages/cower/&quot;&gt;cower AUR page&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If you are having problems installing this package due to signature verification, please run the below before running makepkg:&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This will add a security key to our keyring:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ gpg --list-keys
+ /home/brian/.gnupg/pubring.kbx
+------------------------------
+pub   rsa2048 2011-06-25 [SC]
+      487EACC08557AD082088DABA1EB2638FF56C0C53
+uid           [ unknown] Dave Reisner &amp;lt;d@falconindy.com&amp;gt;
+uid           [ unknown] Dave Reisner &amp;lt;dreisner@archlinux.org&amp;gt;
+sub   rsa2048 2011-06-25 [E]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I’m not too sure about how gpg keys work or why they are important here, but there is plenty of reading to do about this topic that I will leave for a later article.&lt;/p&gt;
+
+&lt;p&gt;Once we add this key, we can simply install pacaur with the tool that it will soon replace:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ yaourt -S pacaur
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The syntax and options of pacaur is similar to those of pacman and yaourt, so luckily there is nothing new to learn when switching to pacaur. I’m still new to this tool, so I’ll add any new insights to this article as I get more experience using pacaur as a package manager.&lt;/p&gt;
+
+&lt;h2 id=&quot;updates&quot;&gt;Updates&lt;/h2&gt;
+
+&lt;p&gt;Nothing yet.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 24 Nov 2017 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2017/11/24/switching-from-yaourt-to-pacaur.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/11/24/switching-from-yaourt-to-pacaur.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>How to enable color emoji on Arch Linux with Emoji One Font</title>
@@ -1026,558 +1412,6 @@ Device 'wlp3s0' successfully activated with 'da3af242-4707-42f0-81c8-6f8b9dc1a0f
         <pubDate>Fri, 20 Oct 2017 00:00:00 -0400</pubDate>
         <link>http://localhost:4000/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html</link>
         <guid isPermaLink="true">http://localhost:4000/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Moving from Gnome Desktop to i3 window manager on Arch Linux</title>
-        <description>&lt;p&gt;I recently tried out &lt;a href=&quot;http://i3wm.org&quot;&gt;i3&lt;/a&gt; on my laptop and I’m really liking it so far. I am going to try to recreate the same i3 configuration on my desktop installation of Arch Linux. I’ll try to faithfully cover each step of the process in this article.&lt;/p&gt;
-
-&lt;p&gt;i3 sounded like a nice idea at first, but there were a lot of aspects of my Gnome desktop that I didn’t think I could do without. I’m still new to i3, but I have found it very interesting to see how everything can be configured. If you are thinking about switching to i3, hopefully this can help you out.&lt;/p&gt;
-
-&lt;p&gt;Here’s a list of everything I want to go through:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Installing i3&lt;/li&gt;
-  &lt;li&gt;Basic commands&lt;/li&gt;
-  &lt;li&gt;Workflow&lt;/li&gt;
-  &lt;li&gt;Setting a background with &lt;code class=&quot;highlighter-rouge&quot;&gt;feh&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;The i3 config file&lt;/li&gt;
-  &lt;li&gt;Setting uxrvt as a default terminal&lt;/li&gt;
-  &lt;li&gt;Customizing uxrvt&lt;/li&gt;
-  &lt;li&gt;Customizing workspaces&lt;/li&gt;
-  &lt;li&gt;Setting up blocks with i3blocks&lt;/li&gt;
-  &lt;li&gt;Custom lock screen with animation&lt;/li&gt;
-  &lt;li&gt;i3-gaps&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Start out by installing &lt;code class=&quot;highlighter-rouge&quot;&gt;i3&lt;/code&gt; with pacman as follows&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[brian@archthinkpad ~]$ sudo pacman -S i3
-[sudo] password for brian: 
-:: There are 4 members in group i3:
-:: Repository community
-   1) i3-wm  2) i3blocks  3) i3lock  4) i3status
-
-Enter a selection (default=all): 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;You won’t find &lt;code class=&quot;highlighter-rouge&quot;&gt;i3&lt;/code&gt; with a regular search in the AUR because it is a package group, containing a number of packages that will help us do things with i3.&lt;/p&gt;
-
-&lt;p&gt;Once you have installed &lt;code class=&quot;highlighter-rouge&quot;&gt;i3&lt;/code&gt;, logout of your current Gnome session, and then go back to login and select &lt;code class=&quot;highlighter-rouge&quot;&gt;i3&lt;/code&gt; from the login menu.&lt;/p&gt;
-
-&lt;p&gt;You will be greated with a black screen and a dialogue box that says &lt;code class=&quot;highlighter-rouge&quot;&gt;i3: first confuguration&lt;/code&gt;. I recommend that you press &lt;code class=&quot;highlighter-rouge&quot;&gt;Enter&lt;/code&gt; and have i3 generate a config file for you as it says in the prompt.&lt;/p&gt;
-
-&lt;p&gt;Next, choose either &lt;code class=&quot;highlighter-rouge&quot;&gt;Win&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Alt&lt;/code&gt; as the key that will help you launch most commands in i3. I use &lt;code class=&quot;highlighter-rouge&quot;&gt;Alt&lt;/code&gt;, but it won’t make a difference in this tutorial since we will be refering to whichever key you select as &lt;code class=&quot;highlighter-rouge&quot;&gt;Mod1&lt;/code&gt; from here on out.&lt;/p&gt;
-
-&lt;p&gt;Once you make this selection, the prompt will go away and you are met with a black screen and and a status bar on the bottom, as well as workspace indicator on the bottom left. Welcome to i3!&lt;/p&gt;
-
-&lt;p&gt;At this point, you should have a read through the very well-written i3 User Guide linked &lt;a href=&quot;https://i3wm.org/docs/userguide.html&quot;&gt;here&lt;/a&gt;. Learn how to move windows around, close windows and stack windows.&lt;/p&gt;
-
-&lt;p&gt;Here’s the one command you really need to get going:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Mod1+Enter&lt;/code&gt;: open a new terminal&lt;/p&gt;
-
-&lt;p&gt;You probably want to change this terminal right away. There’s a handy little program launcher that we can use for now called &lt;code class=&quot;highlighter-rouge&quot;&gt;dmenu&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[brian@archthinkpad ~]$ sudo pacman -Ss dmenu
-[sudo] password for brian: 
-community/dmenu 4.7-1 [installed]
-    A generic menu for X
-community/pdmenu 1.3.2-2
-    simple full screen menu program
-[brian@archthinkpad ~]$ 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Once you install &lt;code class=&quot;highlighter-rouge&quot;&gt;dmenu&lt;/code&gt;, you can easily launch programs with &lt;code class=&quot;highlighter-rouge&quot;&gt;Mod1+d&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In a minute we will customize dmenu to look better, but for now we need to get into the meat of i3: customization.&lt;/p&gt;
-
-&lt;h2 id=&quot;customization&quot;&gt;Customization&lt;/h2&gt;
-
-&lt;p&gt;Most of the work you do in customizing i3 involves editing &lt;code class=&quot;highlighter-rouge&quot;&gt;i3&lt;/code&gt;’s config file. To change the configuration of i3, copy &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/i3/config&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt; with:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp /etc/i3/config ~/.i3/config
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;At this point I will reference my “Dotfiles” on github. Dotfiles is used to refer to hidden configuration folders and files prepended with a “.”, such as &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.Xresources&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;A public repo with my dotfiles is available &lt;a href=&quot;https://github.com/briancaffey/.i3&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let’s start by adding a background image. Find an image you like and add it to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/Pictures&lt;/code&gt;. Then install &lt;code class=&quot;highlighter-rouge&quot;&gt;feh&lt;/code&gt; from the AUR if you don’t alread have it.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;feh&lt;/code&gt; will let us set a background image from the command line, and we can do so each time we launch &lt;code class=&quot;highlighter-rouge&quot;&gt;i3&lt;/code&gt; by adding the following line to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;exec_always feh --bg-scale ~/Pictures/image.jpg
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now we can run the following command to restart i3 in place (without having to logout):&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Mod1&lt;/code&gt;+&lt;code class=&quot;highlighter-rouge&quot;&gt;shift&lt;/code&gt;+&lt;code class=&quot;highlighter-rouge&quot;&gt;r&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;You will see this shortcut in &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt; in the following line:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bindsym Mod1+Shift+r restart
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This binds &lt;code class=&quot;highlighter-rouge&quot;&gt;Mod1&lt;/code&gt;+&lt;code class=&quot;highlighter-rouge&quot;&gt;shift&lt;/code&gt;+&lt;code class=&quot;highlighter-rouge&quot;&gt;r&lt;/code&gt; to instructions that restart i3.&lt;/p&gt;
-
-&lt;p&gt;If you write &lt;code class=&quot;highlighter-rouge&quot;&gt;bindsym Some+key+combo exec reboot&lt;/code&gt;, your system will reboot when you press &lt;code class=&quot;highlighter-rouge&quot;&gt;Some+key+combo&lt;/code&gt;. You can call any command this way, allowing for a high level of customization. It is helpful to see what others have done by browsing &lt;code class=&quot;highlighter-rouge&quot;&gt;.dotfiles&lt;/code&gt; online. You can mix and match commands to your liking. If you make an error, i3 will warn you when you start or restart i3.&lt;/p&gt;
-
-&lt;h2 id=&quot;customizing-the-terminal-urxvt&quot;&gt;Customizing the Terminal (urxvt)&lt;/h2&gt;
-
-&lt;p&gt;Next let’s take care of our terminal. You will notice that the command to launch a new terminal actually launches another program called &lt;code class=&quot;highlighter-rouge&quot;&gt;i3-sensible-terminal&lt;/code&gt;. Run &lt;code class=&quot;highlighter-rouge&quot;&gt;man i3-sensible-terminal&lt;/code&gt; to see how this works in detail. It basically picks a terminal program for you based on what you have installed on your system.&lt;/p&gt;
-
-&lt;p&gt;For my terminal, I use a program called &lt;code class=&quot;highlighter-rouge&quot;&gt;urxvt&lt;/code&gt;. This is a popular terminal program in the i3 community because of the fact that it is highly customizable. There are a lot of options for terminals, so feel free to use whatever you like. I will go into depth here about how I customize &lt;code class=&quot;highlighter-rouge&quot;&gt;urxvt&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;First, install it with:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo pacman -S rxvt-unicode
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;And then launch it with &lt;code class=&quot;highlighter-rouge&quot;&gt;urxvt&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;It probably looks equally bad to whatever default you were using, but we are about to fix it up so it looks and works great.&lt;/p&gt;
-
-&lt;p&gt;First, have a look at the &lt;a href=&quot;https://wiki.archlinux.org/index.php/rxvt-unicode&quot;&gt;Arch Wikie article on rxvt-unicode&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;xresources&quot;&gt;~/.Xresources&lt;/h3&gt;
-
-&lt;p&gt;Just like how the behavior of i3 is read from &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt;, the behavior of &lt;code class=&quot;highlighter-rouge&quot;&gt;urxvt&lt;/code&gt; is read from a file in your home directory called &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.Xresources&lt;/code&gt;. This file won’t be here, so we need to create it.&lt;/p&gt;
-
-&lt;p&gt;For simplicity, I recommend that you copy the contents of &lt;a href=&quot;https://raw.githubusercontent.com/briancaffey/.i3/master/.Xresources&quot;&gt;this link&lt;/a&gt; into you newly created &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.Xresources&lt;/code&gt; file and then run the following command to refresh the settings for &lt;code class=&quot;highlighter-rouge&quot;&gt;urxvt&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;xrdb ~/.Xresources
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now restart &lt;code class=&quot;highlighter-rouge&quot;&gt;urxvt&lt;/code&gt; and you should see that it looks very different.&lt;/p&gt;
-
-&lt;p&gt;Look over the arch wiki article mentioned above for more information on how to customize urxvt.&lt;/p&gt;
-
-&lt;h2 id=&quot;pywal&quot;&gt;pywal&lt;/h2&gt;
-
-&lt;p&gt;Next lets work on terminal colors. There is a great program called &lt;code class=&quot;highlighter-rouge&quot;&gt;pywal&lt;/code&gt; which reads one or several image file and then applies a color scheme to your system based on the colors found.&lt;/p&gt;
-
-&lt;p&gt;Install it from the AUR:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo pacman -S python-pywal
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now we just need to add the following line to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;pywal&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
-&lt;/span&gt;setsid wal -i ~/Pictures/image.jpg
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;source ~/.bashrc&lt;/code&gt; and reopen &lt;code class=&quot;highlighter-rouge&quot;&gt;urxvt&lt;/code&gt; and it should have new color scheme that goes well with you background image. You can install another program called &lt;code class=&quot;highlighter-rouge&quot;&gt;neofetch&lt;/code&gt; to print out the current colorscheme along with system information:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yaourt -S neofetch
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;You can add the following line to the bottom of your &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; file and have neofetch run whenever you open a new terminal:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;setsid wal -r
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;neofetch
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Here are a few other customizations I have in my &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt; file:&lt;/p&gt;
-
-&lt;p&gt;Remove window boarders:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;for_window [class=&quot;^.*&quot;] border pixel 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Enable smooth transitions with compton:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;compton&lt;/code&gt; is a package that enables for nice transitions when navigating i3. First, install the compton package:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yaourt -S compton
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Next we need to add the following line to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;exec compton -f
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;You might need to reboot to see how the effect that compton has.&lt;/p&gt;
-
-&lt;h2 id=&quot;i3-gaps&quot;&gt;i3-gaps&lt;/h2&gt;
-
-&lt;p&gt;We can now add a neat feature to our i3 setup by installing a popular fork of i3 callde &lt;code class=&quot;highlighter-rouge&quot;&gt;i3-gaps&lt;/code&gt;. It adds some additional functionality to i3, including the ability to add gaps in between our windows.&lt;/p&gt;
-
-&lt;p&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;i3-gaps&lt;/code&gt; from the AUR:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yaourt -S i3-gaps
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Remove the packages in conflict and then add the following lines to &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;i3-gaps&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;
-&lt;/span&gt;gaps inner 10
-gaps outer 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Refresh i3 and you should now see gaps in between your windows.&lt;/p&gt;
-
-&lt;h2 id=&quot;the-bar&quot;&gt;The Bar&lt;/h2&gt;
-
-&lt;p&gt;Things should be looking pretty good, but we still need to do some work on the bar at the bottom of the screen.&lt;/p&gt;
-
-&lt;p&gt;Let’s install FontAwesome so we can use some nice icons in our bar:&lt;/p&gt;
-
-&lt;p&gt;Find the most recent release of FontAwesome &lt;a href=&quot;https://github.com/FortAwesome/Font-Awesome/releases&quot;&gt;here&lt;/a&gt;, click on the zip download link and then run:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;unzip ~/Downloads/Font-Awesome-4.7.0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The release number may be different for you. Once you have unzipped the file, we want to move all of the files ending with &lt;code class=&quot;highlighter-rouge&quot;&gt;.ttf&lt;/code&gt; to a folder that may or may not exist on your machine.&lt;/p&gt;
-
-&lt;p&gt;First, run:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mkdir ~/.fonts
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;and then run:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cp ~/Downloads/Font-Awesome-4.7.0/fonts/*.ttf ~/.fonts
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Now that you have these fonts installed, go over to &lt;a href=&quot;http://fontawesome.io/cheatsheet/&quot;&gt;http://fontawesome.io/cheatsheet/&lt;/a&gt; and you should see lots of icons that you might not have been able to see before.&lt;/p&gt;
-
-&lt;p&gt;We will come back to the fonts in just a minute. First let’s change the bar by replacing &lt;code class=&quot;highlighter-rouge&quot;&gt;bar {...}&lt;/code&gt; with the following:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bar {
-  	position top
-        status_command i3blocks -c /home/brian/.i3/i3blocks.conf
-	colors {
-		background $bg-color
-	    	separator #757575
-&lt;span class=&quot;ni&quot;&gt;		# &lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;                 border             background         text
-&lt;/span&gt;		focused_workspace  $bg-color          $bg-color          $text-color
-		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Don’t refresh i3 just yet. Let’s go through this block first.&lt;/p&gt;
-
-&lt;p&gt;We tell i3 that our bar will appear at the top of the screen, and that the contents of the bar come from the command: &lt;code class=&quot;highlighter-rouge&quot;&gt;status_command i3blocks -c /home/brian/.i3/i3blocks.conf&lt;/code&gt;. Finally, we define some background colors.&lt;/p&gt;
-
-&lt;p&gt;First, pull in the colors from my dotfiles before the bar block:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;set $bg-color 	         #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676E7D
-set $urgent-bg-color     #E53935
-
-&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;window&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; colors
-&lt;/span&gt;&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;kv&quot;&gt;                      border              background         text                 indicator
-&lt;/span&gt;client.focused          $bg-color           $bg-color          $text-color          #00ff00
-client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
-client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
-client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Next let’s take care of the i3blocks command. The &lt;code class=&quot;highlighter-rouge&quot;&gt;i3blocks&lt;/code&gt; package was installed when we instaled i3, so we just need to provide an absolute path to a file as the argument for this command, as well as the &lt;code class=&quot;highlighter-rouge&quot;&gt;-c&lt;/code&gt; flag. In this file we simply define what shows up in the bar. Here’s a simple version that shows date, time, CPU temperature and wifi:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[wifi]
-label=
-command=iwgetid -r
-separator=true
-interval=3
-
-#[volume]
-#label=
-#interval=1
-#separator=true
-#command=amixer get Master | egrep -o &quot;[0-9]+%&quot; | sed -n '2 p'
-
-#[cpu]
-#label=
-#interval=10
-#separator=true
-
-[temperature]
-command=T=$(cat /sys/class/thermal/thermal_zone0/temp); echo $(( $T / 1000 ))°C
-label=
-interval=10
-separator=true
-
-[time]
-command= date '+%H:%M:%S'
-interval=2
-label=
-separator=true
-
-[day]
-command= date '+%a %b %e, %Y'
-interval=2
-label=
-separator=true
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This is why it is called i3&lt;em&gt;blocks&lt;/em&gt;, because each part of the bar is defined in a block that has a command, an interval in seconds that determines how often the command is run, and a label. You can choose any text or icon for the labels.&lt;/p&gt;
-
-&lt;p&gt;Next we can add some labels to the workspaces on the left side of the bar. I like to divide my workspaces into groups to keep things organized.&lt;/p&gt;
-
-&lt;p&gt;Add the following to your &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt; file:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;set $workspace10 &quot;H0me &quot;
-set $workspace1 &quot;F1rst &quot;
-set $workspace4 &quot;Edi4or &quot;
-set $workspace3 &quot;Brows3r &quot;
-set $workspace2 &quot;2erminal &quot;
-set $workspace5 &quot;Mu5ic &quot;
-set $workspace8 &quot;O8S &quot;
-
-&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;switch&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; to workspace
-&lt;/span&gt;bindsym Mod1+1 workspace $workspace1
-bindsym Mod1+2 workspace $workspace2
-bindsym Mod1+3 workspace $workspace3
-bindsym Mod1+4 workspace $workspace4
-bindsym Mod1+5 workspace $workspace5
-bindsym Mod1+6 workspace 6
-bindsym Mod1+7 workspace 7
-bindsym Mod1+8 workspace $workspace8
-bindsym Mod1+9 workspace 9
-bindsym Mod1+0 workspace $workspace10
-
-&lt;span class=&quot;ni&quot;&gt;# &lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;kv&quot;&gt; focused container to workspace
-&lt;/span&gt;bindsym Mod1+Shift+1 move container to workspace $workspace1
-bindsym Mod1+Shift+2 move container to workspace $workspace2
-bindsym Mod1+Shift+3 move container to workspace $workspace3
-bindsym Mod1+Shift+4 move container to workspace $workspace4
-bindsym Mod1+Shift+5 move container to workspace $workspace5
-bindsym Mod1+Shift+6 move container to workspace 6
-bindsym Mod1+Shift+7 move container to workspace 7
-bindsym Mod1+Shift+8 move container to workspace $workspace8
-bindsym Mod1+Shift+9 move container to workspace 9
-bindsym Mod1+Shift+0 move container to workspace $workspace10
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Things are looking pretty good at this point. Here are some other things that I have found to be very helpful:&lt;/p&gt;
-
-&lt;h3 id=&quot;brightness-controller&quot;&gt;Brightness Controller&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yaourt -S brightness-controller
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Next we can add a shortcut for this package:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bindsym Mod1+Ctrl+b exec brightness-controller 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;ranger&quot;&gt;Ranger&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ranger&lt;/code&gt; is a terminal-based file browser that is nice to use.&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yaourt -S ranger
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;There is a lot we can do to customize ranger, here are some important things that I do. First, run the following command:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ranger --copy-config=all
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This will create a file located here: &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.config/ranger/rc.conf&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;We need to make the following adjustments:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;change &lt;code class=&quot;highlighter-rouge&quot;&gt;set preview_images false&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;set preview_images true&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;change &lt;code class=&quot;highlighter-rouge&quot;&gt;set draw_borders false&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;set draw_borders true&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;install a package called &lt;code class=&quot;highlighter-rouge&quot;&gt;w3m&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;add (overwrite) this line: &lt;code class=&quot;highlighter-rouge&quot;&gt;set preview_images_method w3m&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;run &lt;code class=&quot;highlighter-rouge&quot;&gt;source ~/.config/ranger/rc.conf&lt;/code&gt; and then launch ranger in a new terminal&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;These changes will allow you to preview images right inside of the ranger file browser. There may be another combination of settings that get this to work, but these worked for me. Be careful that things you want to change in &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.config/ranger/rc.conf&lt;/code&gt; are not overwritten by other lines.&lt;/p&gt;
-
-&lt;h2 id=&quot;rofi&quot;&gt;Rofi&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rofi&lt;/code&gt; is a launcher similar to &lt;code class=&quot;highlighter-rouge&quot;&gt;dmenu&lt;/code&gt; that we used in the beginnings, but it is better. Here’s how to install it:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo pacman -S rofi
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Next we can add a key binding so we can quickly launch any program with rofi:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bindsym Mod1+space exec rofi -show run
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Be careful when you add new bindings! i3 will give you an error if you assign one binding to more than one command. I had to shuffle some of the default bindings around to use &lt;code class=&quot;highlighter-rouge&quot;&gt;Mod1+space&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;This is a good place to stop for now. There is a lot you can do with i3, so it is good to take things one step at a time and also try to do things in different ways to see what you like.&lt;/p&gt;
-
-&lt;h2 id=&quot;extras&quot;&gt;Extras&lt;/h2&gt;
-
-&lt;h3 id=&quot;chinese-input-support&quot;&gt;Chinese Input Support&lt;/h3&gt;
-
-&lt;p&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;ibus-pinyin&lt;/code&gt; from AUR&lt;/p&gt;
-
-&lt;p&gt;Run the ibus daemon:&lt;/p&gt;
-
-&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ibus-daemon -xim&amp;amp;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Install another Chinese font and set in &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.Xresources&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://askubuntu.com/questions/826577/switch-keyboard-layouts-with-i3/826578&quot;&gt;https://askubuntu.com/questions/826577/switch-keyboard-layouts-with-i3/826578&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;dotfiles&quot;&gt;Dotfiles&lt;/h2&gt;
-
-&lt;p&gt;Here are the configuration files I use for i3:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/config&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/i3blocks.conf&lt;/code&gt;: configuration for status bar in i3&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.i3/blocks/scripts/&lt;/code&gt;: scripts that run for &lt;code class=&quot;highlighter-rouge&quot;&gt;i3blocks&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.Xresources&lt;/code&gt;: configuration for &lt;code class=&quot;highlighter-rouge&quot;&gt;rxvt-unicode&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.config/ranger/rc.conf&lt;/code&gt;: configuration files for &lt;code class=&quot;highlighter-rouge&quot;&gt;ranger&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.vimrc&lt;/code&gt;: configuration for &lt;code class=&quot;highlighter-rouge&quot;&gt;vim&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Tue, 17 Oct 2017 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Reading XML with Python</title>
-        <description>&lt;p&gt;On my other personal website, &lt;a href=&quot;briancaffey.com&quot;&gt;briancaffey.com&lt;/a&gt;, I have a blog. The content on that blog has mostly mirrored what I put on this github pages site, &lt;a href=&quot;briancaffey.github.io&quot;&gt;briancaffey.github.io&lt;/a&gt;. I want to display my most recent blog posts from briancaffey.github.io on briancaffey.com, and to do this I will be using the RSS feed that comes with a Jekyll site. This should be pretty simple, we are going to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;requests&lt;/code&gt; librrary, as well as the &lt;code class=&quot;highlighter-rouge&quot;&gt;feedparser&lt;/code&gt; library.&lt;/p&gt;
-
-&lt;p&gt;Here are some &lt;a href=&quot;https://wiki.python.org/moin/RssLibraries&quot;&gt;docs&lt;/a&gt; on how to use &lt;code class=&quot;highlighter-rouge&quot;&gt;feedparser&lt;/code&gt;, it is very simple.&lt;/p&gt;
-
-&lt;p&gt;First, install it with:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pip&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feedparser&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Here’s the setup that I will be using in utility a function that will be imported to &lt;code class=&quot;highlighter-rouge&quot;&gt;views.py&lt;/code&gt; and called in the &lt;code class=&quot;highlighter-rouge&quot;&gt;home()&lt;/code&gt; function that renders the homepage for briancaffey.com:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import feedparser
-
-def get_blog_posts(number_of_posts):
-    url = &quot;http://briancaffey.github.io/feed&quot;
-    feed = feedparser.parse(url)
-    posts = feed['items'][:number_of_posts]
-    return posts
-    
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Next, in &lt;code class=&quot;highlighter-rouge&quot;&gt;views.py&lt;/code&gt;, we just need to import the function, call it with the number of articles we want to show, save the returned value to a variable and then pass that to &lt;code class=&quot;highlighter-rouge&quot;&gt;context&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;utils&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_blog_posts&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_blog_posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-    &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'recent_posts'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'home.html'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;In the context, we can access the following data for each item:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;content&lt;/th&gt;
-      &lt;th&gt;description&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;item[ “date” ]&lt;/td&gt;
-      &lt;td&gt;“2004-02-13T22:28:23+08:00” - ISO 8601 date&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;item[ “date_parsed” ]&lt;/td&gt;
-      &lt;td&gt;(2004,02,13,14,28,23,4,44,0)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;item[ “title” ]&lt;/td&gt;
-      &lt;td&gt;title for item&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;item[ “summary” ]&lt;/td&gt;
-      &lt;td&gt;change summary&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;item[ “link” ]&lt;/td&gt;
-      &lt;td&gt;URL to the page&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;item[ “wiki_diff” ]&lt;/td&gt;
-      &lt;td&gt;for wiki, a link to the diff for the page&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;item[ “wiki_history” ]&lt;/td&gt;
-      &lt;td&gt;for wiki, a link to the page history&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;That’s it!&lt;/p&gt;
-</description>
-        <pubDate>Tue, 17 Oct 2017 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/2017/10/17/reading-xml-with-python.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2017/10/17/reading-xml-with-python.html</guid>
         
         
       </item>
