@@ -98,7 +98,7 @@ with open('/home/brian/Documents/github/briancaffey.github.io/aur/data.json', 'w
     json.dump(data, outfile)
 ```
 
-* Feed the JSON file into [this tempalte](https://bl.ocks.org/mbostock/4062045) which renders a D3.js force-directed graph. 
+* Feed the JSON file into [this template](https://bl.ocks.org/mbostock/4062045) which renders a D3.js force-directed graph. 
 
 * To save the graph as a SVG file, I ran the [NYT crowbar script](https://graphicdesign.stackexchange.com/questions/55123/how-do-i-save-an-svg-thats-on-a-website-to-my-computer) in the browser console: 
 

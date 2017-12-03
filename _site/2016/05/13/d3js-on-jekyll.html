@@ -92,109 +92,127 @@
 <p>This should result in the following:</p>
 
 <div id="subdivision">
-    <input type="range" min="1" max="12" value="8" />
-    <output name="subdivision"></output>
-  </div>
+  <input type="range" min="1" max="12" value="8" />
+  <output name="subdivision"></output>
+</div>
 <style>
-  
-  #subdivision {
-    position: auto;
-    top: 20px;
-    left: 20px;
-  }
-  
-  #subdivision input {
-    position: auto;
-    width: 200px;
-  }
-  
-  </style>
+
+#subdivision {
+  position: auto;
+  top: 20px;
+  left: 20px;
+}
+
+#subdivision input {
+  position: auto;
+  width: 200px;
+}
+
+</style>
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 
 <script src="http://bl.ocks.org/mbostock/raw/3057239/d3.geodesic.min.js"></script>
 
 <script>
-  
-  var width = 960,
-      height = 500;
-  
-  var velocity = [.010, .005],
-      t0 = Date.now();
-  
-  var projection = d3.geo.orthographic()
-      .scale(height / 2 - 10);
-  
-  var canvas = d3.select("body").append("canvas")
-      .attr("width", width)
-      .attr("height", height);
-  
-  var context = canvas.node().getContext("2d");
-  
-  context.strokeStyle = "#000";
-  context.lineWidth = .5;
-  
-  var faces;
-  
-  var output = d3.select("output");
-  
-  var input = d3.select("input")
-      .on("input", function() { geodesic(+this.value); })
-      .on("change", function() { geodesic(+this.value); })
-      .each(function() { geodesic(+this.value); });
-  
-  d3.timer(function() {
-    var time = Date.now() - t0;
-    projection.rotate([time * velocity[0], time * velocity[1]]);
-    redraw();
+
+var width = 960,
+    height = 500;
+
+var velocity = [.010, .005],
+    t0 = Date.now();
+
+var projection = d3.geo.orthographic()
+    .scale(height / 2 - 10);
+
+var canvas = d3.select("#subdivision").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+
+var context = canvas.node().getContext("2d");
+
+context.strokeStyle = "#000";
+context.lineWidth = .5;
+
+var faces;
+
+var output = d3.select("output");
+
+var input = d3.select("input")
+    .on("input", function() { geodesic(+this.value); })
+    .on("change", function() { geodesic(+this.value); })
+    .each(function() { geodesic(+this.value); });
+
+d3.timer(function() {
+  var time = Date.now() - t0;
+  projection.rotate([time * velocity[0], time * velocity[1]]);
+  redraw();
+});
+
+function redraw() {
+  context.clearRect(0, 0, width, height);
+
+  faces.forEach(function(d) {
+    d.polygon[0] = projection(d[0]);
+    d.polygon[1] = projection(d[1]);
+    d.polygon[2] = projection(d[2]);
+    if (d.visible = d.polygon.area() > 0) {
+      context.fillStyle = d.fill;
+      context.beginPath();
+      drawTriangle(d.polygon);
+      context.fill();
+    }
   });
-  
-  function redraw() {
-    context.clearRect(0, 0, width, height);
-  
-    faces.forEach(function(d) {
-      d.polygon[0] = projection(d[0]);
-      d.polygon[1] = projection(d[1]);
-      d.polygon[2] = projection(d[2]);
-      if (d.visible = d.polygon.area() > 0) {
-        context.fillStyle = d.fill;
-        context.beginPath();
-        drawTriangle(d.polygon);
-        context.fill();
-      }
-    });
-  
-    context.beginPath();
-    faces.forEach(function(d) {
-      if (d.visible) {
-        drawTriangle(d.polygon);
-      }
-    });
-    context.stroke();
-  }
-  
-  function drawTriangle(triangle) {
-    context.moveTo(triangle[0][0], triangle[0][1]);
-    context.lineTo(triangle[1][0], triangle[1][1]);
-    context.lineTo(triangle[2][0], triangle[2][1]);
-    context.closePath();
-  }
-  
-  function geodesic(subdivision) {
-    output.text(subdivision);
-  
-    faces = d3.geodesic.polygons(subdivision).map(function(d) {
-      d = d.coordinates[0];
-      d.pop(); // use an open polygon
-      d.fill = d3.hsl(d[0][0], 1, .5) + "";
-      d.polygon = d3.geom.polygon(d.map(projection));
-      return d;
-    });
-  
-    redraw();
-  }
-  
-  </script>
+
+  context.beginPath();
+  faces.forEach(function(d) {
+    if (d.visible) {
+      drawTriangle(d.polygon);
+    }
+  });
+  context.stroke();
+}
+
+function drawTriangle(triangle) {
+  context.moveTo(triangle[0][0], triangle[0][1]);
+  context.lineTo(triangle[1][0], triangle[1][1]);
+  context.lineTo(triangle[2][0], triangle[2][1]);
+  context.closePath();
+}
+
+function geodesic(subdivision) {
+  output.text(subdivision);
+
+  faces = d3.geodesic.polygons(subdivision).map(function(d) {
+    d = d.coordinates[0];
+    d.pop(); // use an open polygon
+    d.fill = d3.hsl(d[0][0], 1, .5) + "";
+    d.polygon = d3.geom.polygon(d.map(projection));
+    return d;
+  });
+
+  redraw();
+}
+
+</script>
+
+<p>I took this example from <a href="https://bl.ocks.org/mbostock/3057239">here</a>. This code was placing the slider in the correct place, but the animate was displaying at the very bottom of the page past the comments section. To fix this, I changed this:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"body"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>to this:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"#subdivision"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>Here is the full code snippet as I have changed it for the example above:</p>
 
 <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"subdivision"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"range"</span> <span class="na">min=</span><span class="s">"1"</span> <span class="na">max=</span><span class="s">"12"</span> <span class="na">value=</span><span class="s">"8"</span><span class="nt">&gt;</span>
@@ -231,7 +249,7 @@
 <span class="kd">var</span> <span class="nx">projection</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">geo</span><span class="p">.</span><span class="nx">orthographic</span><span class="p">()</span>
     <span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">10</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"body"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"#subdivision"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
 

@@ -4,6 +4,7 @@ layout: post
 title: D3.js on Jekyll
 date: 2016-05-13
 comments: true
+image: /static/d3_example.png
 
 ---
 
@@ -15,8 +16,27 @@ The best way to include d3.js graphs in Jekyll blogs is to put the related code 
 
 This should result in the following: 
 
+
 {% include d3_example.html %}
 
+
+I took this example from [here](https://bl.ocks.org/mbostock/3057239). This code was placing the slider in the correct place, but the animate was displaying at the very bottom of the page past the comments section. To fix this, I changed this: 
+
+```javascript
+var canvas = d3.select("body").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+```
+
+to this:
+
+```javascript
+var canvas = d3.select("#subdivision").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+```
+
+Here is the full code snippet as I have changed it for the example above: 
 
 ```html
 <div id="subdivision">
@@ -54,7 +74,7 @@ var velocity = [.010, .005],
 var projection = d3.geo.orthographic()
     .scale(height / 2 - 10);
 
-var canvas = d3.select("body").append("canvas")
+var canvas = d3.select("#subdivision").append("canvas")
     .attr("width", width)
     .attr("height", height);
 
