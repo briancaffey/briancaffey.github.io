@@ -4,6 +4,7 @@ layout: post
 title: Related subreddit graph exploration with NetworkX
 date: 2017-03-03
 comments: true
+image: /static/subreddits.png
 
 ---
 

@@ -4,6 +4,7 @@ layout: post
 title: Simple Board Games in ReactJS
 date: 2017-10-03
 comments: true
+image: /img/wuziqi.png
 
 ---
 

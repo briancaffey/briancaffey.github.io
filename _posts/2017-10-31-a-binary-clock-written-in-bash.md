@@ -4,6 +4,7 @@ layout: post
 title: A binary clock written in bash
 date: 2017-10-31
 comments: true
+image: /static/binaryclock.png
 
 ---
 

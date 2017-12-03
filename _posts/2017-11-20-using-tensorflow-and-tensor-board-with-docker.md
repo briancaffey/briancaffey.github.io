@@ -4,6 +4,7 @@ layout: post
 title: Using Tensorflow and Tensorboard with Docker
 date: 2017-11-20
 comments: true
+image: /static/tf.png
 
 ---
 

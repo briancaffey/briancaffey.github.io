@@ -4,6 +4,7 @@ layout: post
 title: Removing root partition bloat caused by docker
 date: 2017-11-28
 comments: true
+image: /static/baobab.png
 
 ---
 

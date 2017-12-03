@@ -4,6 +4,7 @@ layout: post
 title: Installing the GPU version of Tensorflow with Docker on Arch Linux
 date: 2017-11-19
 comments: true
+image: /static/trump.png
 
 ---
 
@@ -329,3 +330,11 @@ root@80f65a971e9a:~#
 ```
 
 This looks good, but I'm still not 100% sure that everything was done properly. I would like to learn more about Tensorflow and also play around with some examples using Tensorboard. Let me know if you have any questions or comments about this setup, I'm still learning! Thanks for reading.
+
+Just for fun, here's a DeepDream rendering of a famous Donald Trump picture using Google's pre-trained [Inception model](https://github.com/google/inception):
+
+![png](/static/trump.png)
+
+For comparison, here is the original image: 
+
+![png](/static/trump_original.jpg)
