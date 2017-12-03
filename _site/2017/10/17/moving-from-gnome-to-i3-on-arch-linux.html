@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Moving from Gnome Desktop to i3 window manager on Arch Linux</title>
-  <meta name="description" content="I recently tried out i3 on my laptop and I’m really liking it so far. I am going to try to recreate the same i3 configuration on my desktop installation of A...">
+  <meta name="description" content="">
   <link rel="icon" type="image/png" href="favicon.ico" sizes="32x32" />
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://localhost:4000/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html">
@@ -83,7 +83,9 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>I recently tried out <a href="http://i3wm.org">i3</a> on my laptop and I’m really liking it so far. I am going to try to recreate the same i3 configuration on my desktop installation of Arch Linux. I’ll try to faithfully cover each step of the process in this article.</p>
+    <p><img src="/static/gnome.png" alt="png" /></p>
+
+<p>I recently tried out <a href="http://i3wm.org">i3</a> on my laptop and I’m really liking it so far. I am going to try to recreate the same i3 configuration on my desktop installation of Arch Linux. I’ll try to faithfully cover each step of the process in this article.</p>
 
 <p>i3 sounded like a nice idea at first, but there were a lot of aspects of my Gnome desktop that I didn’t think I could do without. I’m still new to i3, but I have found it very interesting to see how everything can be configured. If you are thinking about switching to i3, hopefully this can help you out.</p>
 
@@ -525,14 +527,16 @@ bindsym Mod1+Shift+0 move container to workspace $workspace10
 <p>Here are the configuration files I use for i3:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">~/.i3/config</code></li>
+  <li><code class="highlighter-rouge">~/.i3/config</code>: general configurations for i3</li>
   <li><code class="highlighter-rouge">~/.i3/i3blocks.conf</code>: configuration for status bar in i3</li>
   <li><code class="highlighter-rouge">~/.i3/blocks/scripts/</code>: scripts that run for <code class="highlighter-rouge">i3blocks</code></li>
   <li><code class="highlighter-rouge">~/.Xresources</code>: configuration for <code class="highlighter-rouge">rxvt-unicode</code></li>
   <li><code class="highlighter-rouge">~/.config/ranger/rc.conf</code>: configuration files for <code class="highlighter-rouge">ranger</code></li>
   <li><code class="highlighter-rouge">~/.vimrc</code>: configuration for <code class="highlighter-rouge">vim</code></li>
-  <li><code class="highlighter-rouge">~/.bashrc</code></li>
+  <li><code class="highlighter-rouge">~/.bashrc</code>: environment variables, functions and aliases</li>
 </ul>
+
+<p>I’m constantly changing things around in these files but I try to keep them up to date in a repo on my Github account which you can find <a href="https://github.com/briancaffey/.i3">here</a>.</p>
 
   </div>
 

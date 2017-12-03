@@ -4,6 +4,7 @@ layout: post
 title: Capital One Code < FAM /> Hackathon recap
 date: 2017-11-05
 comments: true
+image: /static/capital_one.png
 
 ---
 

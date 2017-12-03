@@ -4,8 +4,12 @@ layout: post
 title: Moving from Gnome Desktop to i3 window manager on Arch Linux
 date: 2017-10-17
 comments: true
+image: /static/gnome-i3.png
 
 ---
+
+![png](/static/gnome.png)
+
 
 I recently tried out [i3](http://i3wm.org) on my laptop and I'm really liking it so far. I am going to try to recreate the same i3 configuration on my desktop installation of Arch Linux. I'll try to faithfully cover each step of the process in this article. 
 
@@ -439,10 +443,12 @@ Install another Chinese font and set in `~/.Xresources`
 
 Here are the configuration files I use for i3: 
 
-- `~/.i3/config`
+- `~/.i3/config`: general configurations for i3
 - `~/.i3/i3blocks.conf`: configuration for status bar in i3
 - `~/.i3/blocks/scripts/`: scripts that run for `i3blocks`
 - `~/.Xresources`: configuration for `rxvt-unicode`
 - `~/.config/ranger/rc.conf`: configuration files for `ranger`
 - `~/.vimrc`: configuration for `vim`
-- `~/.bashrc`
+- `~/.bashrc`: environment variables, functions and aliases
+
+I'm constantly changing things around in these files but I try to keep them up to date in a repo on my Github account which you can find [here](https://github.com/briancaffey/.i3).
