@@ -6,6 +6,19 @@ date: 2016-05-13
 comments: true
 
 ---
+
+The best way to include d3.js graphs in Jekyll blogs is to put the related code for the animate in a file in the `includes` folder in the Jekyll site directory, and then reference the file with liquid tags as follows:
+
+```html
+{% raw %}{% include d3_example.html %} {% endraw%}
+```
+
+This should result in the following: 
+
+{% include d3_example.html %}
+
+
+```html
 <div id="subdivision">
   <input type="range" min="1" max="12" value="8">
   <output name="subdivision"></output>
@@ -111,3 +124,4 @@ function geodesic(subdivision) {
 }
 
 </script>
+```

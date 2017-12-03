@@ -4,6 +4,7 @@ layout: post
 title: How to enable color emoji on Arch Linux with Emoji One Font
 date: 2017-11-20
 comments: true
+image: /static/emoji_flags.png
 
 ---
 

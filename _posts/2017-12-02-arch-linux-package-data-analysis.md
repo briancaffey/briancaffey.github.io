@@ -35,7 +35,7 @@ It looks like there was a big boost in the number of packages submitted in mid-2
 
 ## Official Repositories
 
-The official repositories contain just under 10,000 packages. Here is a force-directed graph (undirected graph) in D3.js that shows these packages as nodes and package dependencies as edges. You can find the interactive graph [here](/aur/d3test.html). This image shows a sample of about 1,000 packages and it is somewhat representative of the whole graph show further below. 
+The official repositories contain just under 10,000 packages. Here is a force-directed graph (undirected graph) in D3.js that shows these packages as nodes and package dependencies as edges. You can find the interactive graph [here](/aur). This image shows a sample of about 1,000 packages and it is somewhat representative of the whole graph show further below. 
 
 ![png](/static/official_repos.png)
 
