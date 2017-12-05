@@ -117,10 +117,10 @@ class UserProfile(models.Model):
     def get_connections(self):
   		connections = Connection.objects.filter(creator=self.user)
   		return connections
-
-  	def get_followers(self):
-  		followers = Connection.objects.filter(following=self.user)
-  		return followers
+          
+    def get_followers(self):
+        followers = Connection.objects.filter(following=self.user)
+        return followers
 ```
 
 ## Accessing Connection Information in API Data
