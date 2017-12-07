@@ -22,3 +22,8 @@ highlighter: rouge
 
 #gems:
 #  - jekyll-assets
+
+collections:
+  projects:
+    output: true
+    permalink: /:collection/:name

@@ -62,6 +62,10 @@
           
         
           
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
           <a class="page-link" href="/resume">Resume</a>
           
         
@@ -85,7 +89,7 @@
   <div class="post-content" itemprop="articleBody">
     <p><img src="/static/the-12-factor-app.png" alt="png" /></p>
 
-<p>I recently had a conversation with a developer on the topic of bridging application development and production. From this conversation I was recommneded to have a look at <em>The Twelve-Factor App</em>, a high level guide for building modern, production-ready web applications. In this article I thought it would be interesting to go through each of the twelve sections and reflect on my current development process and how it follows and/or deviates from these factors. I also want to talk about the new technologies and techniques I have been learning from <a href="https://testdriven.io/">testdriven.io</a> and how I hope they can benefit on the next stage of my learning.</p>
+<p>I recently had a conversation with a developer on the topic of bridging application development and production. From this conversation I was recommneded to have a look at <em>The Twelve-Factor App</em>, a high level guide for building modern, production-ready web applications. In this article I thought it would be interesting to go through each of the twelve sections and reflect on my current development process and how it follows and/or deviates from these factors. I also want to talk about the new technologies and techniques I have been learning from <a href="https://testdriven.io/">testdriven.io</a> and how I hope they can benefit me on the next stage of my learning.</p>
 
 <h2 id="i-codebase">I. Codebase</h2>
 
@@ -253,6 +257,121 @@ To https://git.heroku.com/briancaffey.git
 </code></pre>
 </div>
 
+<p>Here’s what the Django project says about using gunicorn:</p>
+
+<blockquote>
+  <p>When Gunicorn is installed, a gunicorn command is available which starts the Gunicorn server process. At its simplest, gunicorn just needs to be called with the location of a module containing a WSGI application object named application.</p>
+
+  <p>So for a typical Django project, invoking gunicorn would look like:</p>
+
+  <p><code class="highlighter-rouge">gunicorn myproject.wsgi</code></p>
+</blockquote>
+
+<blockquote>
+  <p>This will start one process running one thread listening on 127.0.0.1:8000. It requires that your project be on the Python path; the simplest way to ensure that is to run this command from the same directory as your manage.py file.</p>
+</blockquote>
+
+<p>In a Django project, the <code class="highlighter-rouge">wsgi.py</code> file in the main folder of the project root directory has the following contents:</p>
+
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">django.core.wsgi</span> <span class="kn">import</span> <span class="n">get_wsgi_application</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">"DJANGO_SETTINGS_MODULE"</span><span class="p">,</span> <span class="s">"brianblog.settings"</span><span class="p">)</span>
+
+<span class="n">application</span> <span class="o">=</span> <span class="n">get_wsgi_application</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<h2 id="vi-port-binding">VI. Port binding</h2>
+
+<p><strong>Export services via port binding</strong></p>
+
+<p>This is an area that I’m trying to learn more about. I feel like I have a pretty good grasp of what is going on regarding port binding in the microservice architecture with docker I have seen.</p>
+
+<p>From the docker-compose docs, the “short syntax” for mapping ports between hosts and containers is <code class="highlighter-rouge">HOST:CONTAINER</code>:</p>
+
+<blockquote>
+  <p>Either specify both ports (HOST:CONTAINER), or just the container port (a random host port will be chosen).</p>
+</blockquote>
+
+<p>The following are examples of how this could work:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ports:
+ - "3000"
+ - "3000-3005"
+ - "8000:8000"
+ - "9090-9091:8080-8081"
+ - "49100:22"
+ - "127.0.0.1:8001:8001"
+ - "127.0.0.1:5000-5010:5000-5010"
+ - "6060:6060/udp"
+</code></pre>
+</div>
+
+<h2 id="viii-concurrency">VIII. Concurrency</h2>
+
+<p><strong>Scale out via the process model</strong></p>
+
+<p>This is an important area, but it is something I haven’t had to be aware of since the apps I have developed don’t require scaling processes. I belive that Heroku makes this fairly simple by allowing you to increase the number of web or worker processes through the CLI:</p>
+
+<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>heroku ps:scale web=1 worker=5
+</code></pre>
+</div>
+
+<p>I haven’t covered Part 5 of testdriven.io yet, but it has a section on Elastic Load Balancing with EC2 which should cover this area.</p>
+
+<blockquote>
+  <p>Twelve-factor app processes should never daemonize or write PID files. Instead, rely on the operating system’s process manager to manage output streams, respond to crashed processes, and handle user-initiated restarts and shutdowns.</p>
+</blockquote>
+
+<p>I have been learning more about <code class="highlighter-rouge">systemd</code> and customizing</p>
+
+<h2 id="ix-disposability">IX. Disposability</h2>
+
+<p><strong>Maximize robustness with fast startup and graceful shutdown</strong></p>
+
+<blockquote>
+  <p>The twelve-factor app’s processes are disposable, meaning they can be started or stopped at a moment’s notice. This facilitates fast elastic scaling, rapid deployment of code or config changes, and robustness of production deploys.</p>
+</blockquote>
+
+<p>I have used some Heroku tools to start and stop web workers, and docker commands make this factor fairly easy to do correctly. Here’s an excerpt from <a href="https://www.ctl.io/developers/blog/post/gracefully-stopping-docker-containers/">Century Link</a> about the <code class="highlighter-rouge">docker stop</code> command:</p>
+
+<blockquote>
+  <p>The docker stop command attempts to stop a running container first by sending a SIGTERM signal to the root process (PID 1) in the container. If the process hasn’t exited within the timeout period a SIGKILL signal will be sent.</p>
+</blockquote>
+
+<h2 id="x-devprod-parity">X. Dev/prod parity</h2>
+
+<blockquote>
+  <p>Keep development, staging, and production as similar as possible</p>
+</blockquote>
+
+<p>This is exactly why I’m so interested in using Docker.</p>
+
+<p>In one of my personal projects I did with Heroku I was relying on a feature of Postgres that is not available in sqlite3, the default database that comes with Django. This produced friction that I wouldn’t have had to deal with if I was using Docker. I could have set up a local postgres server, but it would have been much easier to run a docker container that ran the server.</p>
+
+<h2 id="xi-logs">XI. Logs</h2>
+
+<p><strong>Treat logs as event streams</strong></p>
+
+<blockquote>
+  <p>A twelve-factor app never concerns itself with routing or storage of its output stream. It should not attempt to write to or manage logfiles. Instead, each running process writes its event stream, unbuffered, to stdout. During local development, the developer will view this stream in the foreground of their terminal to observe the app’s behavior.</p>
+</blockquote>
+
+<p>Running <code class="highlighter-rouge">heroku log</code> has been helpful in debugging deployment issues.</p>
+
+<p>Docker also produces helpful logs for all the containers currently running.</p>
+
+<h2 id="xii-admin-processes">XII. Admin processes</h2>
+
+<p><strong>Run admin/management tasks as one-off processes</strong></p>
+
+<blockquote>
+  <p>One-off admin processes should be run in an identical environment as the regular long-running processes of the app. They run against a release, using the same codebase and config as any process run against that release. Admin code must ship with application code to avoid synchronization issues.</p>
+</blockquote>
+
+<p>This seems to be true about the way I run admin processes on my Django apps.</p>
 
   </div>
 

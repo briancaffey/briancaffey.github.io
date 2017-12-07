@@ -100,6 +100,6 @@ ExecStart=
 ExecStart=/usr/bin/dockerd --data-root=/path/to/new/location/docker -H fd://
 ```
 
-Update: I did this on my desktop with a `--data-root` path in my home folder. 
+Update: I did this on my desktop with a `--data-rogettingot` path in my home folder. 
 
 I followed the directions form [this article](https://linuxconfig.org/how-to-move-docker-s-default-var-lib-docker-to-another-directory-on-ubuntu-debian-linux) and was able to set up docker on my home partition. 

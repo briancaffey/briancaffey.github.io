@@ -4,6 +4,7 @@ layout: post
 title: Setting up a Django app on Heroku
 date: 2017-03-04
 comments: true
+image: /static/django-heroku.png
 
 ---
 

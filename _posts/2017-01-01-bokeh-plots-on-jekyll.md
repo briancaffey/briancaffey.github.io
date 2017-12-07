@@ -102,6 +102,44 @@ Here's the HTML as I post include it in a Markdown file on my markdown file for 
 <div class="plotdiv" id="b201e9fd-4166-4aa8-8963-0ce26eeb8e73"></div>
 ```
 
+**Update:**
+
+Instead of including the html directly in the markdown file, the better way is to put the Bokeh html file in the `_include` folder and then use the following liquid template syntax to include the html in the markdown: 
+
+```
+{% raw %}{% include my_bokeh_file.html %}{% endraw %}
+```
+
+You may need to inspect the file that bokeh generates and remove some of the stying. Here is the `<head>` tag of one of the bokeh files I have used in a Jekyll blog post: 
+
+```html
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Bokeh Plot</title>
+        
+<link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.css" type="text/css" />
+        
+<script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.10.min.js"></script>
+<script type="text/javascript">
+    Bokeh.set_log_level("info");
+</script>
+        <style>
+          /* html {
+            width: 100%;
+            height: 100%;
+          }
+          body {
+            width: 90%;
+            height: 100%;
+            margin: auto;
+          } */
+        </style>
+    </head>
+```
+
+Commenting out the style portion was enough to fix the styling issue I had, but there is probably more you can remove from the html file as well. Be sure to include the javascript links that bokeh needs to run properly. 
+
 It is important that the `<script>`, `<link>` and `<div>` tags are not indented in Markdown, otherwise the Bokeh plot may not render correcty in the Jekyll engine. The result should be an interactive Bokeh plot:
 
 <meta charset="utf-8">

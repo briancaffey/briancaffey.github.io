@@ -8,17 +8,15 @@ permalink: /blog
 
 <h1 class="page-heading">Recent Posts</h1>
 
-<ul>
-  {% for post in site.posts %}
-  <li>
-    <a href="{{ post.url }}" title="{{ post.title }}">
-      <span class="date">
-        <span class="day">{{ post.date | date: '%d' }}</span>
-        <span class="month"><abbr>{{ post.date | date: '%b' }}</abbr></span>
-        <span class="year">{{ post.date | date: '%Y' }}</span>
-      </span>
-      <span class="title">{{ post.title }}</span>
-    </a>
-  </li>
-  {% endfor %}
-</ul>
+  <ul class="post-list">
+    {% for post in site.posts %}
+      <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+
+        <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+        {% if post.image %}<a href="{{ post.url | prepend: site.baseurl }}" ><img src="{{ post.image }}" /></a>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
