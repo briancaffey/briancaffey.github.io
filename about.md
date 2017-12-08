@@ -8,7 +8,10 @@ permalink: /contact
 
 This is my work-in-progress Jekyll site with information about interesting things I have been getting up to recently.
 
-Please connect with my on Twitter and LinkedIn:
+Please connect with me on social media:
 
- - [LinkedIn](https://www.linkedin.com/in/brian-caffey-06b22a18)
- - [Twitter](https://twitter.com/jamesbrianc) {% include icon-twitter.html %}
+<ul>
+<li>{% include purple-icon-github.html username=site.github_username %}</li>
+<li>{% include icon-twitter.html username=site.twitter_username %}</li>
+<li>{% include linkedin.html %}</li>
+</ul>

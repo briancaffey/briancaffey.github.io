@@ -4,8 +4,11 @@ layout: post
 date: 2016-04-07
 title: Home media center meta-tutorial with miniDLNA, Raspberry Pi, Deluge and Apple TV
 comments: true 
+image: /static/media-setup.png
 
 ---
+
+![png](/static/media-setup.png)
 
 For a few months now I have been enjoying a new home media system that I threw together with my Raspberry Pi. My setup allows me sit in my living room and stream content from my Raspberry Pi to my 4th Generation Apple TV in full 1080p resolution. The Raspberry Pi is a small, inexpensive stand-alone computer, but it can serve as a powerful media server, and I've been blown away by its consistent performance. Rather than write everything from scratch, I've gathered the tutorials I used when setting up my devices and software and sprinkled it with a few bits of knowledge that I wish I knew when I started. 
 

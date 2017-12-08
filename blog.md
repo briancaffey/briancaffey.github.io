@@ -5,8 +5,11 @@ title: "Blog"
 permalink: /blog
 
 ---
-
-<h1 class="page-heading">Recent Posts</h1>
+  {% assign total = 0 %}
+  {% for post in site.posts %}
+    {% assign total = total | plus: 1 %}
+  {% endfor %}
+<h1 class="page-heading">Recent Posts ({{ total }})</h1>
 
   <ul class="post-list">
     {% for post in site.posts %}

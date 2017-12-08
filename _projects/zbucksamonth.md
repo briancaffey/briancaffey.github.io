@@ -5,7 +5,7 @@ comments: true
 permalink: /projects/bucksamonth
 github: briancaffey/bucksamonth
 image: /static/bucksamonth.png
-link: http://bucksamonth.com
+link: http://www.bucksamonth.com
 
 ---
 

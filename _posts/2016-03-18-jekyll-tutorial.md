@@ -4,8 +4,11 @@ layout: post
 title: Simple Jekyll tutorial with Github Pages
 date: 2016-03-17
 comments: true
+image: /static/jekyll_github.png
 
 ---
+
+![png](/static/jekyll_github.png)
 
 I'm absolutely loving my new Jekyll blog, but getting it setup wasn't that easy. Finding useful and accessible information on how everything works was very difficult. In the end, faithfully following tutorials and crashing around on Github resulted in this functional blog. 
 
