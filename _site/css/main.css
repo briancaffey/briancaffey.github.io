@@ -150,6 +150,12 @@ pre {
   .purple-icon > svg path {
     fill: #6e5494; }
 
+.so-icon > svg {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle; }
+
 /**
  * Site header
  */
