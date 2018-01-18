@@ -104,23 +104,22 @@
 
 <p>The last part of the notebook attempts to use new methods from the latest version of scikit-learn (<a href="http://scikit-learn.org/stable/whats_new.html">0.18.1</a>) to cluster ants by their behavior: k-means (for clustering) and Isolation Forests (for detecting outliers).</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">PIL</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">PIL</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cluster</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#this script generates an image (or a series of images) for n-state 2D Langton's Ant cellular automaton. </span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#this script generates an image (or a series of images) for n-state 2D Langton's Ant cellular automaton. </span>
 
 <span class="c">#SETTINGS</span>
 
@@ -397,8 +396,7 @@
     
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">'~/Documents/CA_1/'</span><span class="p">))</span>
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s">'ants_hist_.csv'</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h1 id="clustering">Clustering</h1>
 
@@ -406,38 +404,33 @@
 
 <p>First let’s read the csv into a pandas DataFrame and look at some of the data.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">PIL</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">PIL</span>
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">cluster</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">'~/Documents/CA_1/'</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">'~/Documents/CA_1/'</span><span class="p">))</span>
 <span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">'ants_hist_.csv'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df1</span><span class="o">.</span><span class="n">shape</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df1</span><span class="o">.</span><span class="n">shape</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(32768, 18)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(32768, 18)
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df1</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df1</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
 
 <div>
 <table border="1" class="dataframe">
@@ -534,37 +527,30 @@
 
 <p>There are 32768 unique instructions for 16-state termites <code class="highlighter-rouge">(2^16)/2 = 32768</code>. Let’s check to see how many of these are duplicates. We want to select only the state-counts and then call <code class="highlighter-rouge">.drop_duplicates</code> on that DataFrame.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df2</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df2</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">16</span><span class="p">]</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">df2</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">df2</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1566
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1566
+</code></pre></div></div>
 
 <p>1566 of the 16-state termites. It might be helpful to remove these termites from the DataFrame before we cluster them.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">unique_termites_index</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">index</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unique_termites_index</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">index</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">unique_termites_index</span><span class="p">,:]</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">unique_termites_index</span><span class="p">,:]</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'steps_taken'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100000</span> <span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="mi">0</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">last_step</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="p">[</span><span class="s">'steps_taken'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100000</span> <span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="mi">0</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">last_step</span><span class="p">]</span>
 <span class="n">df</span><span class="p">[</span><span class="s">'file_names'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="s">'.png'</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">moves</span><span class="p">]</span>
 <span class="n">df</span><span class="p">[</span><span class="s">'move_len'</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">moves</span><span class="p">]</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
 
 <div>
 <table border="1" class="dataframe">
@@ -720,160 +706,135 @@
 <p>5 rows × 21 columns</p>
 </div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">file_names</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">file_names</span>
+</code></pre></div></div>
 
 <p>Here’s a quick look at the distribution of the base canvas color (red in the images below) over all of the unique termites.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="s">'0'</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="s">'0'</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">'whitegrid'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Count of Cells in state 0'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Count'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Histogram Showing Termite Count by number of cells in state 0'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x116dee10&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x116dee10&gt;
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_20_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(31202, 21)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(31202, 21)
+</code></pre></div></div>
 
 <p>Now we can prepare a DataFrame that we will feed in to the clustering model. We will take only the pixel counts and the total number of steps taken.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">move_len</span><span class="o">==</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">18</span><span class="p">]]</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">move_len</span><span class="o">==</span><span class="mi">16</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">18</span><span class="p">]]</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X</span><span class="o">.</span><span class="n">columns</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span><span class="o">.</span><span class="n">columns</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Index([u'0', u'1', u'10', u'11', u'12', u'13', u'14', u'15', u'2', u'3', u'4',
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Index([u'0', u'1', u'10', u'11', u'12', u'13', u'14', u'15', u'2', u'3', u'4',
        u'5', u'6', u'7', u'8', u'9', u'steps_taken'],
       dtype='object')
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Most of the termites completed all 100000 steps within the grid boundries.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">==</span><span class="mi">100000</span><span class="p">]</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">==</span><span class="mi">100000</span><span class="p">]</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>29955
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>29955
+</code></pre></div></div>
 
 <p>Here’a a histogram of the steps taken by ants that took less than 100000 steps.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">&lt;</span><span class="mi">100000</span><span class="p">]</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">&lt;</span><span class="mi">100000</span><span class="p">]</span><span class="o">.</span><span class="n">steps_taken</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Histogram of steps_taken for termites that stayed in bounds'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'steps_taken'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Count'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x18aa3a58&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x18aa3a58&gt;
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_28_1.png" alt="png" /></p>
 
 <p>Here’s another look at the distribution of cells in state 3 over all termites:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="s">'3'</span> <span class="c">#other intereting states: 1, 7, 11, 15</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="s">'3'</span> <span class="c">#other intereting states: 1, 7, 11, 15</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">'whitegrid'</span><span class="p">)</span>
 <span class="c">#plt.figure(figsize=(12,8))</span>
 <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Count of Cells in state 3'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Count (termites)'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Histogram Showing Termite Count by number of cells in state 3'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x15ba6630&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x15ba6630&gt;
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_30_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>(31202, 17)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(31202, 17)
+</code></pre></div></div>
 
 <p>To cluster the different termites, we can use an unsupervised learning method called clustering. It is “unsupervised” because I don’t explicitly tell the model what types termites should be grouped together. Instead, we will tell the model <em>how many different clusters there are.</em> Of course, I really don’t know how many clusters there should be. I do know from looking at the results that there seem to be many different types of behavior, patterns, sizes and other characteristics. We significantly reduce the complexity of clustering task by training the model on the count of pixels by what state the are in. I’m sure that the model won’t be able to pick up on all of the nuances that humans can detect by looking at the images, but I have a feeling that it should be able to do a fairly good job. After we take a look at the individual clusters, we can try to find an optimal number of clusters by minimizing the total number of outliers of all the clusters. Here’s <a href="http://papers.nips.cc/paper/5306-on-integrated-clustering-and-outlier-detection.pdf">an interesting paper</a> on integrated clustering and outlier detection.</p>
 
 <p>Here’s how we set up the clustering model. For the numebr of clusters, let’s start with 75.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">k_means</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">k_means</span> <span class="o">=</span> <span class="n">cluster</span><span class="o">.</span><span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">k_means</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">k_means</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>KMeans(algorithm='auto', copy_x=True, init='k-means++', max_iter=300,
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>KMeans(algorithm='auto', copy_x=True, init='k-means++', max_iter=300,
     n_clusters=75, n_init=10, n_jobs=1, precompute_distances='auto',
     random_state=1, tol=0.0001, verbose=0)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Then we add the cluster number to each termite:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X</span><span class="p">[</span><span class="s">'clusters'</span><span class="p">]</span> <span class="o">=</span> <span class="n">k_means</span><span class="o">.</span><span class="n">labels_</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span><span class="p">[</span><span class="s">'clusters'</span><span class="p">]</span> <span class="o">=</span> <span class="n">k_means</span><span class="o">.</span><span class="n">labels_</span>
+</code></pre></div></div>
 
 <p>Here’s the breakdown of clusters by number of termites in each cluster:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Cluster Number'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Count'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Termite count by cluster'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x15c4c358&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.text.Text at 0x15c4c358&gt;
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_38_1.png" alt="png" /></p>
 
 <p>And here is a list of the data shown above:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()):</span> <span class="k">print</span><span class="p">(</span><span class="s">' || cluster_num: '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">,</span> <span class="s">'count: '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s">'  '</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()):</span> <span class="k">print</span><span class="p">(</span><span class="s">' || cluster_num: '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">,</span> <span class="s">'count: '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s">'  '</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> || cluster_num: 16 count: 3293   || cluster_num: 71 count: 3036   || cluster_num: 46 count: 2993   || cluster_num: 0 count: 2752   || cluster_num: 23 count: 2667   || cluster_num: 52 count: 2540   || cluster_num: 50 count: 2185   || cluster_num: 5 count: 1412   || cluster_num: 19 count: 987   || cluster_num: 45 count: 816   || cluster_num: 44 count: 791   || cluster_num: 54 count: 686   || cluster_num: 42 count: 625   || cluster_num: 64 count: 603   || cluster_num: 21 count: 534   || cluster_num: 37 count: 518   || cluster_num: 38 count: 345   || cluster_num: 73 count: 315   || cluster_num: 57 count: 314   || cluster_num: 4 count: 302   || cluster_num: 22 count: 291   || cluster_num: 70 count: 285   || cluster_num: 8 count: 225   || cluster_num: 2 count: 224   || cluster_num: 9 count: 218   || cluster_num: 26 count: 182   || cluster_num: 49 count: 178   || cluster_num: 65 count: 138   || cluster_num: 29 count: 137   || cluster_num: 63 count: 123   || cluster_num: 25 count: 122   || cluster_num: 33 count: 105   || cluster_num: 1 count: 74   || cluster_num: 66 count: 71   || cluster_num: 27 count: 70   || cluster_num: 62 count: 66   || cluster_num: 69 count: 58   || cluster_num: 35 count: 56   || cluster_num: 11 count: 55   || cluster_num: 68 count: 54   || cluster_num: 14 count: 51   || cluster_num: 32 count: 49   || cluster_num: 30 count: 45   || cluster_num: 55 count: 38   || cluster_num: 6 count: 35   || cluster_num: 13 count: 34   || cluster_num: 43 count: 30   || cluster_num: 60 count: 30   || cluster_num: 58 count: 30   || cluster_num: 24 count: 29   || cluster_num: 39 count: 26   || cluster_num: 51 count: 25   || cluster_num: 3 count: 24   || cluster_num: 28 count: 24   || cluster_num: 15 count: 23   || cluster_num: 72 count: 23   || cluster_num: 17 count: 22   || cluster_num: 10 count: 22   || cluster_num: 34 count: 21   || cluster_num: 74 count: 20   || cluster_num: 36 count: 20   || cluster_num: 61 count: 19   || cluster_num: 31 count: 17   || cluster_num: 20 count: 13   || cluster_num: 18 count: 12   || cluster_num: 67 count: 12   || cluster_num: 12 count: 11   || cluster_num: 47 count: 11   || cluster_num: 59 count: 10   || cluster_num: 53 count: 8   || cluster_num: 7 count: 6   || cluster_num: 41 count: 6   || cluster_num: 40 count: 6   || cluster_num: 48 count: 3   || cluster_num: 56 count: 1  
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> || cluster_num: 16 count: 3293   || cluster_num: 71 count: 3036   || cluster_num: 46 count: 2993   || cluster_num: 0 count: 2752   || cluster_num: 23 count: 2667   || cluster_num: 52 count: 2540   || cluster_num: 50 count: 2185   || cluster_num: 5 count: 1412   || cluster_num: 19 count: 987   || cluster_num: 45 count: 816   || cluster_num: 44 count: 791   || cluster_num: 54 count: 686   || cluster_num: 42 count: 625   || cluster_num: 64 count: 603   || cluster_num: 21 count: 534   || cluster_num: 37 count: 518   || cluster_num: 38 count: 345   || cluster_num: 73 count: 315   || cluster_num: 57 count: 314   || cluster_num: 4 count: 302   || cluster_num: 22 count: 291   || cluster_num: 70 count: 285   || cluster_num: 8 count: 225   || cluster_num: 2 count: 224   || cluster_num: 9 count: 218   || cluster_num: 26 count: 182   || cluster_num: 49 count: 178   || cluster_num: 65 count: 138   || cluster_num: 29 count: 137   || cluster_num: 63 count: 123   || cluster_num: 25 count: 122   || cluster_num: 33 count: 105   || cluster_num: 1 count: 74   || cluster_num: 66 count: 71   || cluster_num: 27 count: 70   || cluster_num: 62 count: 66   || cluster_num: 69 count: 58   || cluster_num: 35 count: 56   || cluster_num: 11 count: 55   || cluster_num: 68 count: 54   || cluster_num: 14 count: 51   || cluster_num: 32 count: 49   || cluster_num: 30 count: 45   || cluster_num: 55 count: 38   || cluster_num: 6 count: 35   || cluster_num: 13 count: 34   || cluster_num: 43 count: 30   || cluster_num: 60 count: 30   || cluster_num: 58 count: 30   || cluster_num: 24 count: 29   || cluster_num: 39 count: 26   || cluster_num: 51 count: 25   || cluster_num: 3 count: 24   || cluster_num: 28 count: 24   || cluster_num: 15 count: 23   || cluster_num: 72 count: 23   || cluster_num: 17 count: 22   || cluster_num: 10 count: 22   || cluster_num: 34 count: 21   || cluster_num: 74 count: 20   || cluster_num: 36 count: 20   || cluster_num: 61 count: 19   || cluster_num: 31 count: 17   || cluster_num: 20 count: 13   || cluster_num: 18 count: 12   || cluster_num: 67 count: 12   || cluster_num: 12 count: 11   || cluster_num: 47 count: 11   || cluster_num: 59 count: 10   || cluster_num: 53 count: 8   || cluster_num: 7 count: 6   || cluster_num: 41 count: 6   || cluster_num: 40 count: 6   || cluster_num: 48 count: 3   || cluster_num: 56 count: 1  
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">cluster_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())}</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cluster_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())}</span>
+</code></pre></div></div>
 
 <p>Now let’s have a look at some of the termite clusters. We can use matplotlib and PIL to display multiple images using subplots.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#variables to manage the arrangement and spacing of cluster images</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#variables to manage the arrangement and spacing of cluster images</span>
 <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">rows</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">im_length</span> <span class="o">=</span> <span class="mi">0</span>
@@ -909,378 +870,303 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="s">'Cluster #'</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">clusters</span><span class="p">)</span> <span class="o">+</span> <span class="s">' -- Cluster Total: '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cluster_dict</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">clusters</span><span class="p">]))</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #16 -- Cluster Total: 3293
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #16 -- Cluster Total: 3293
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_44_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">46</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">46</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #46 -- Cluster Total: 2993
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #46 -- Cluster Total: 2993
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_45_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #51 -- Cluster Total: 25
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #51 -- Cluster Total: 25
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_46_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #18 -- Cluster Total: 12
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #18 -- Cluster Total: 12
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_47_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #4 -- Cluster Total: 302
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #4 -- Cluster Total: 302
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_48_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #5 -- Cluster Total: 1412
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #5 -- Cluster Total: 1412
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_49_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #6 -- Cluster Total: 35
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #6 -- Cluster Total: 35
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_50_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #9 -- Cluster Total: 218
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #9 -- Cluster Total: 218
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_51_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #12 -- Cluster Total: 11
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #12 -- Cluster Total: 11
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_52_1.png" alt="png" /></p>
 
 <p>The next four cluster samples are the largest clusters:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #30 -- Cluster Total: 45
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #30 -- Cluster Total: 45
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_54_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #30 -- Cluster Total: 45
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #30 -- Cluster Total: 45
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_55_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #0 -- Cluster Total: 2752
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #0 -- Cluster Total: 2752
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_56_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #30 -- Cluster Total: 45
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #30 -- Cluster Total: 45
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_57_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">63</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">63</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #63 -- Cluster Total: 123
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #63 -- Cluster Total: 123
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_58_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #60 -- Cluster Total: 30
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #60 -- Cluster Total: 30
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_59_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">59</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">59</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #59 -- Cluster Total: 10
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #59 -- Cluster Total: 10
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_60_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">57</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">57</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #57 -- Cluster Total: 314
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #57 -- Cluster Total: 314
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_61_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">56</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">56</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #56 -- Cluster Total: 1
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #56 -- Cluster Total: 1
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_62_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #55 -- Cluster Total: 38
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #55 -- Cluster Total: 38
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_63_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">54</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">54</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #54 -- Cluster Total: 686
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #54 -- Cluster Total: 686
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_64_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">53</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">53</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #53 -- Cluster Total: 8
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #53 -- Cluster Total: 8
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_65_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">52</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">52</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #52 -- Cluster Total: 2540
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #52 -- Cluster Total: 2540
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_66_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">51</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #51 -- Cluster Total: 25
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #51 -- Cluster Total: 25
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_67_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #50 -- Cluster Total: 2185
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #50 -- Cluster Total: 2185
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_68_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">49</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #49 -- Cluster Total: 178
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #49 -- Cluster Total: 178
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_69_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">48</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #48 -- Cluster Total: 3
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #48 -- Cluster Total: 3
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_70_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">47</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">47</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #47 -- Cluster Total: 11
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #47 -- Cluster Total: 11
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_71_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">46</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">46</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #46 -- Cluster Total: 2993
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #46 -- Cluster Total: 2993
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_72_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #45 -- Cluster Total: 816
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #45 -- Cluster Total: 816
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_73_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">44</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">44</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #44 -- Cluster Total: 791
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #44 -- Cluster Total: 791
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_74_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">43</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">43</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #43 -- Cluster Total: 30
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #43 -- Cluster Total: 30
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_75_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #42 -- Cluster Total: 625
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #42 -- Cluster Total: 625
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_76_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">41</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">41</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #41 -- Cluster Total: 6
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #41 -- Cluster Total: 6
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_77_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #40 -- Cluster Total: 6
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #40 -- Cluster Total: 6
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_78_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">39</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">39</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #39 -- Cluster Total: 26
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #39 -- Cluster Total: 26
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_79_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #38 -- Cluster Total: 345
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #38 -- Cluster Total: 345
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_80_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">show_images</span><span class="p">(</span><span class="mi">37</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #37 -- Cluster Total: 518
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #37 -- Cluster Total: 518
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_81_1.png" alt="png" /></p>
 
@@ -1290,71 +1176,58 @@
 
 <p>It could also be interesting to see how many outliers are present in each cluster for various values of k in the k-means algorithm. This may help us choose a more fitting number of clusters by which the termites can be grouped. here’s how we could do that:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">IsolationForest</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">IsolationForest</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">==</span><span class="mi">37</span><span class="p">,</span> <span class="p">:]</span> <span class="c">#16</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">==</span><span class="mi">37</span><span class="p">,</span> <span class="p">:]</span> <span class="c">#16</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">==</span><span class="mi">37</span><span class="p">,</span> <span class="p">:]</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">X</span><span class="o">.</span><span class="n">clusters</span><span class="o">==</span><span class="mi">37</span><span class="p">,</span> <span class="p">:]</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">clf</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">max_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">clf</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">max_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">rng</span><span class="p">)</span>
 <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_</span><span class="p">)</span>
 
 <span class="n">y_pred_train</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_</span><span class="p">)</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">y_pred_train</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y_pred_train</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>0.79922779922779918
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.79922779922779918
+</code></pre></div></div>
 
 <p>The following values gives us the average of the predicted values (1 for inlier, -1 for outlier), so this value doesn’t correspond to a percentage accuracy. The accuracy is about 89% (the model determined that 89% of termites in cluster 37 are inliers and the remaining 11% are outliers.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X_</span><span class="p">[</span><span class="s">'anom'</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred_train</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X_</span><span class="p">[</span><span class="s">'anom'</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred_train</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">X_</span><span class="o">.</span><span class="n">anom</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X_</span><span class="o">.</span><span class="n">anom</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> 1    466
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1    466
 -1     52
 Name: anom, dtype: int64
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Let’s compare some of the inliers with the outliers:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">files_normal</span> <span class="o">=</span> <span class="n">X_</span><span class="p">[</span><span class="n">X_</span><span class="o">.</span><span class="n">anom</span><span class="o">==</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">files_normal</span> <span class="o">=</span> <span class="n">X_</span><span class="p">[</span><span class="n">X_</span><span class="o">.</span><span class="n">anom</span><span class="o">==</span><span class="p">(</span><span class="mi">1</span><span class="p">)]</span>
 <span class="n">show_images</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">samples</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">files_bool</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files_normal</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #37 -- Cluster Total: 518
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #37 -- Cluster Total: 518
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_92_1.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">files_abnormal</span> <span class="o">=</span> <span class="n">X_</span><span class="p">[</span><span class="n">X_</span><span class="o">.</span><span class="n">anom</span><span class="o">==</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">files_abnormal</span> <span class="o">=</span> <span class="n">X_</span><span class="p">[</span><span class="n">X_</span><span class="o">.</span><span class="n">anom</span><span class="o">==</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
 <span class="n">show_images</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">samples</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">files_bool</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files_abnormal</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Cluster #37 -- Cluster Total: 518
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Cluster #37 -- Cluster Total: 518
+</code></pre></div></div>
 
 <p><img src="/static/ants_files/ants_93_1.png" alt="png" /></p>
 

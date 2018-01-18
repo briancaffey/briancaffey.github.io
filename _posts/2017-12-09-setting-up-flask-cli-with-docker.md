@@ -11,7 +11,7 @@ image: /static/flask-docker.png
 
 ⚠️ This article is under contruction ⚠️
 
-I've recently been working on [a tutorial](https://testdriver.io) that covers flask, react and docker. The beginning of the project covers how to setup a basic flask app using `flask-scripts`. `flask-scripts` is a deprecated tool and the tutorial recommends using `Flask CLI`. I have fumbled with this the first time I tried to set it up and while I was able to get it working, I couldn't get it working inside of docker. In this article I'll detail the setup of my flask project with `Flask CLI`. 
+I've recently been working on an awesome tutorial from [testdriven.io](https://testdriven.io) that covers flask, react and docker. The beginning of the project covers how to setup a basic flask app using `flask-scripts`. `flask-scripts` is a deprecated tool and the tutorial recommends using `Flask CLI`. I have fumbled with this the first time I tried to set it up and while I was able to get it working, I couldn't get it working inside of docker. In this article I'll detail the setup of my flask project with `Flask CLI`. 
 
 > One of the nice new features in Flask 0.11 is the built-in integration of the click command line interface. This enables a wide range of new features for the Flask ecosystem and your own applications.
 

@@ -98,8 +98,8 @@
 
 <p>Here is how to scan networks with <code class="highlighter-rouge">nmcli</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>[brian@archthinkpad ~]$ nmcli d wifi list
-*  SSID                  MODE   CHAN  RATE       SIGNAL  BARS  SECURITY    
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@archthinkpad ~]$</span> nmcli d wifi list
+<span class="go">*  SSID                  MODE   CHAN  RATE       SIGNAL  BARS  SECURITY    
    --                    Infra  11    54 Mbit/s  94      ▂▄▆█  WPA2 802.1X 
    Google Starbucks      Infra  11    54 Mbit/s  89      ▂▄▆█  --          
    Google Starbucks      Infra  48    54 Mbit/s  87      ▂▄▆█  --          
@@ -116,22 +116,19 @@
    CableWiFi             Infra  153   54 Mbit/s  39      ▂▄__  --          
    XFINITY               Infra  11    54 Mbit/s  27      ▂___  WPA2 802.1X 
    ZM7JQ                 Infra  6     54 Mbit/s  24      ▂___  WPA2      
-</code></pre>
-</div>
+</span></code></pre></div></div>
 <p>And here is how to connect to the <code class="highlighter-rouge">Google Starbucks</code> network.</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>[brian@archthinkpad ~]$ nmcli dev wifi connect Google\ Starbucks
-Device 'wlp3s0' successfully activated with 'da3af242-4707-42f0-81c8-6f8b9dc1a0f7'.
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@archthinkpad ~]$</span> nmcli dev wifi connect Google<span class="se">\ </span>Starbucks
+<span class="go">Device 'wlp3s0' successfully activated with 'da3af242-4707-42f0-81c8-6f8b9dc1a0f7'.
+</span></code></pre></div></div>
 
 <p>If there is a <strong>password</strong> required to join the network, simply use the <code class="highlighter-rouge">-a</code> flag at the end of the command and you will be prompted to enter the password:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>[brian@archthinkpad ~]$ nmcli dev wifi connect some_ssid -a
-Password:
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@archthinkpad ~]$</span> nmcli dev wifi connect some_ssid <span class="nt">-a</span>
+<span class="go">Password:
 Device 'wlp3s0' successfully activated with 'da3af242-4707-42f0-81c8-6f8b9dc1a0f7'.
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>You can read more about <code class="highlighter-rouge">nmcli</code> on the <a href="https://wiki.archlinux.org/index.php/NetworkManager">Arch Wiki Network Manager article</a>.</p>
 

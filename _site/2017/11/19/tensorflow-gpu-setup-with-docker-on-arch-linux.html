@@ -107,32 +107,29 @@
 
 <p>We need to add the Loopback module to the Linux Kernel, so we run:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="ni"># </span><span class="nc">tee</span><span class="kv"> /etc/modules-load.d/loop.conf &lt;&lt;&lt; "loop"
-</span><span class="ni"># </span><span class="nc">modprobe</span><span class="kv"> loop
-</span><span class="w">$ </span><span class="nc">reboot</span><span class="kv">
-</span></code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">#</span> <span class="nb">tee</span> /etc/modules-load.d/loop.conf <span class="o">&lt;&lt;&lt;</span> <span class="s2">"loop"</span>
+<span class="gp">#</span> modprobe loop
+<span class="gp">$</span> reboot
+</code></pre></div></div>
 
 <p>Ater rebooting we can install docker:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>yaourt -S docker
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">yaourt -S docker
+</span></code></pre></div></div>
 
 <p>Now we want to add ourself to the docker group with the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> gpasswd -a brian docker
-</span>[sudo] password for brian: 
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">sudo </span>gpasswd <span class="nt">-a</span> brian docker
+<span class="go">[sudo] password for brian: 
 Adding user brian to group docker
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>If you run <code class="highlighter-rouge">groups</code>, you won’t see docker listed in the groups you (brian) belong to. Run <code class="highlighter-rouge">newgrp docker</code> and then re-run docker and you should see <code class="highlighter-rouge">docker</code> listed with any other groups you belong to:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>[brian@a1arch ~]$ groups
-wheel storage power users
-[brian@a1arch ~]$ newgrp docker
-                   -`                    brian@a1arch
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@a1arch ~]$</span> <span class="nb">groups</span>
+<span class="go">wheel storage power users
+</span><span class="gp">[brian@a1arch ~]$</span> newgrp docker
+<span class="go">                   -`                    brian@a1arch
                   .o+`                   ------------
                  `ooo/                   OS: Arch Linux x86_64
                 `+oooo:                  Kernel: 4.12.8-2-ARCH
@@ -152,24 +149,22 @@ wheel storage power users
  `++:.                           `-/+/                           
  .`                                 `/ 
 
-[brian@a1arch ~]$ groups
-docker wheel storage power users
-</code></pre>
-</div>
+</span><span class="gp">[brian@a1arch ~]$</span> <span class="nb">groups</span>
+<span class="go">docker wheel storage power users
+</span></code></pre></div></div>
 
 <p>Doing this prevents us from having to write sudo each time we run docker.</p>
 
 <p>Next we need to start the docker daemon.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ systemctl start docker
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ systemctl start docker
 ==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
 Authentication is required to start 'docker.service'.
 Authenticating as: brian
 Password: 
 ==== AUTHENTICATION COMPLETE ====
 $
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="side-note">Side note</h3>
 
@@ -179,8 +174,8 @@ $
 
 <p>We need to install <code class="highlighter-rouge">nvidia-docker</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">yaourt</span><span class="kv"> -S nvidia-docker
-</span>[...]
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> yaourt <span class="nt">-S</span> nvidia-docker
+<span class="go">[...]
 [sudo] password for brian: 
 loading packages...
 resolving dependencies...
@@ -191,34 +186,33 @@ Packages (1) nvidia-docker-1.0.1-1
 Total Installed Size:  13.34 MiB
 
 :: Proceed with installation? [Y/n] 
-(1/1) checking keys in keyring                                 [##################################] 100%
-(1/1) checking package integrity                               [##################################] 100%
-(1/1) loading package files                                    [##################################] 100%
-(1/1) checking for file conflicts                              [##################################] 100%
-(1/1) checking available disk space                            [##################################] 100%
-:: Processing package changes...
-(1/1) installing nvidia-docker                                 [##################################] 100%
-=&gt; Prior to running 'CUDA'-containers, ensure that the nvidia-docker-plugin
-   is loaded. -&gt; https://github.com/NVIDIA/nvidia-docker#other-distributions
-
-*) manually; sudo -b nohup nvidia-docker-plugin &gt; /tmp/nvidia-docker.log
-
-*) automatically at startup; systemctl enable nvidia-docker.service
-Optional dependencies for nvidia-docker
+</span><span class="gp">(1/1) checking keys in keyring                                 [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) checking package integrity                               [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) loading package files                                    [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) checking for file conflicts                              [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) checking available disk space                            [#</span><span class="c">#################################] 100%</span>
+<span class="go">:: Processing package changes...
+</span><span class="gp">(1/1) installing nvidia-docker                                 [#</span><span class="c">#################################] 100%</span>
+<span class="gp">=&gt;</span> Prior to running <span class="s1">'CUDA'</span><span class="nt">-containers</span>, ensure that the nvidia-docker-plugin
+<span class="gp">   is loaded. -&gt;</span> https://github.com/NVIDIA/nvidia-docker#other-distributions
+<span class="go">
+</span><span class="gp">*) manually;</span> <span class="nb">sudo</span> <span class="nt">-b</span> <span class="nb">nohup </span>nvidia-docker-plugin <span class="o">&gt;</span> /tmp/nvidia-docker.log
+<span class="go">
+</span><span class="gp">*) automatically at startup;</span> systemctl <span class="nb">enable </span>nvidia-docker.service
+<span class="go">Optional dependencies for nvidia-docker
     cuda [installed]
     nvidia [installed]
     opencl-nvidia [installed]
 :: Running post-transaction hooks...
 (1/1) Arming ConditionNeedsUpdate...
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Next it says: Launch a Docker container that contains one of the TensorFlow binary images. Those images are available <a href="https://hub.docker.com/r/tensorflow/tensorflow/tags/">here</a>.</p>
 
 <p>Next I pulled the container with the <code class="highlighter-rouge">gpu-latest</code> tag and it started to download the container:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">docker</span><span class="kv"> pull tensorflow/tensorflow:gpu-latest
-</span>[sudo] password for brian: 
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> docker pull tensorflow/tensorflow:gpu-latest
+<span class="go">[sudo] password for brian: 
 latest-gpu: Pulling from tensorflow/tensorflow
 ae79f2514705: Pull complete 
 c59d01a7e4ca: Pull complete 
@@ -238,12 +232,11 @@ dbc0fb5872c7: Downloading  17.83MB/66.54MB
 a495a3b4e6e1: Waiting 
 3a0a25b1bbaf: Pulling fs layer 
 b76a0afeb1e1: Waiting 
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>It finished after several minutes:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>ca677f607487: Pull complete 
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">ca677f607487: Pull complete 
 b4637619a887: Pull complete 
 8c644ff287da: Pull complete 
 119c5f576e79: Pull complete 
@@ -257,52 +250,47 @@ a495a3b4e6e1: Pull complete
 b76a0afeb1e1: Pull complete 
 Digest: sha256:90e27448121b321c5ec66069fb2c718301df2ddaf25ba916b6f53719141572b0
 Status: Downloaded newer image for tensorflow/tensorflow:latest-gpu
-<span class="w">$ </span><span class="kv">
-</span></code></pre>
-</div>
+</span><span class="gp">$</span> 
+</code></pre></div></div>
 
 <p>Let’s verify that it has the image:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">docker</span><span class="kv"> images
-</span>REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> docker images
+<span class="go">REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
 tensorflow/tensorflow   latest-gpu          2f243a16ff63        13 days ago         3.36GB
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Next let’s start the <code class="highlighter-rouge">nvidia-docker</code> service:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">systemctl</span><span class="kv"> start nvidia-docker
-</span>==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> systemctl start nvidia-docker
+<span class="go">==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
 Authentication is required to start 'nvidia-docker.service'.
 Authenticating as: brian
 Password: 
 ==== AUTHENTICATION COMPLETE ====
-<span class="w">$ </span><span class="kv">
-</span></code></pre>
-</div>
+</span><span class="gp">$</span> 
+</code></pre></div></div>
 
 <p>OK, we should be ready to launch the image:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">nvidia-docker</span><span class="kv"> run -it tensorflow/tensorflow:latest-gpu bash
-</span><span class="ni">root@761a62c1cff1:/notebooks# </span><span class="kv">
-</span></code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> nvidia-docker run <span class="nt">-it</span> tensorflow/tensorflow:latest-gpu bash
+<span class="gp">root@761a62c1cff1:/notebooks#</span> 
+</code></pre></div></div>
 
 <p>This is looking good. Let’s try to start python:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="ni">root@761a62c1cff1:/notebooks# </span><span class="nc">python</span><span class="kv">
-</span>Python 2.7.12 (default, Nov 19 2016, 06:48:10) 
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@761a62c1cff1:/notebooks#</span> python
+<span class="go">Python 2.7.12 (default, Nov 19 2016, 06:48:10) 
 [GCC 5.4.0 20160609] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
-&gt;&gt;&gt; import tensorflow as tf
-&gt;&gt;&gt; 
-</code></pre>
-</div>
+</span><span class="gp">&gt;</span><span class="o">&gt;&gt;</span> import tensorflow as tf
+<span class="gp">&gt;</span><span class="o">&gt;&gt;</span> 
+</code></pre></div></div>
 
 <p>That works! Let’s try out the classic MNIST hand-written digit classification problem that comes packaged as a notebook with the container image:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">nvidia-docker</span><span class="kv"> run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
-</span>[sudo] password for brian: 
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> nvidia-docker run <span class="nt">-it</span> <span class="nt">-p</span> 8888:8888 tensorflow/tensorflow:latest-gpu
+<span class="go">[sudo] password for brian: 
 [I 21:54:26.671 NotebookApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
 [W 21:54:26.689 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
 [I 21:54:26.693 NotebookApp] Serving notebooks from local directory: /notebooks
@@ -329,13 +317,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 name: GeForce GTX 1080 major: 6 minor: 1 memoryClockRate(GHz): 1.7335
 pciBusID: 0000:01:00.0
 totalMemory: 7.92GiB freeMemory: 7.44GiB
-2017-11-19 21:57:04.071143: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -&gt; (device: 0, name: GeForce GTX 1080, pci bus id: 0000:01:00.0, compute capability: 6.1)
-</code></pre>
-</div>
+</span><span class="gp">2017-11-19 21:57:04.071143: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -&gt;</span> <span class="o">(</span>device: 0, name: GeForce GTX 1080, pci bus <span class="nb">id</span>: 0000:01:00.0, compute capability: 6.1<span class="o">)</span>
+</code></pre></div></div>
 
 <p>I was only able to get the entire notebook to run after making a few small configuration tweaks to the tensorflow Interactive Session to fix some memory issues:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">gpu_options</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">GPUOptions</span><span class="p">(</span><span class="n">per_process_gpu_memory_fraction</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gpu_options</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">GPUOptions</span><span class="p">(</span><span class="n">per_process_gpu_memory_fraction</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
 
 <span class="n">s</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">InteractiveSession</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ConfigProto</span><span class="p">(</span><span class="n">gpu_options</span><span class="o">=</span><span class="n">gpu_options</span><span class="p">))</span>
 
@@ -345,8 +332,7 @@ totalMemory: 7.92GiB freeMemory: 7.44GiB
 
 <span class="c"># Initialize all the variables we defined above.</span>
 <span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Without setting <code class="highlighter-rouge">gpu_options</code>, Tensorflow allocates 95% of available GPU memory (according to <a href="https://stackoverflow.com/questions/34514324/error-using-tensorflow-with-gpu">this SO question</a>).</p>
 
@@ -354,7 +340,7 @@ totalMemory: 7.92GiB freeMemory: 7.44GiB
 
 <p>You can monitor GPU memory usage on NVIDIA cards with the following command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ nvidia-smi
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ nvidia-smi
 Sun Nov 19 17:03:03 2017       
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 384.59                 Driver Version: 384.59                    |
@@ -378,35 +364,31 @@ Sun Nov 19 17:03:03 2017
 |    0      1114    G   ...el-token=A50C2F183DB4F79482A2D8768ED1B285    64MiB |
 |    0      2190    G   ...el-token=1AC796A35DBDCDBE07AEC2FC1E8026C4    35MiB |
 +-----------------------------------------------------------------------------+
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>I think this was a success! I’m fairly certain that we were leveraging the GPU to run the MNIST hand-written digit notebook. I didn’t see messages that CUDNN loaded, but I can find versions of both CUDNN and CUDA in the docker image:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="ni">root@80f65a971e9a:/# </span><span class="nc">ls</span><span class="kv"> /usr/include/x86_64-linux-gnu/                                  
-</span>a.out.h  bits  cudnn_v6.h      fpu_control.h  gnu        python2.7
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@80f65a971e9a:/#</span> <span class="nb">ls</span> /usr/include/x86_64-linux-gnu/                                  
+<span class="go">a.out.h  bits  cudnn_v6.h      fpu_control.h  gnu        python2.7
 asm      c++   expat_config.h  freetype2      ieee754.h  sys
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="ni">root@80f65a971e9a:/# </span><span class="nc">nvcc</span><span class="kv"> --version
-</span>nvcc: NVIDIA (R) Cuda compiler driver
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@80f65a971e9a:/#</span> nvcc <span class="nt">--version</span>
+<span class="go">nvcc: NVIDIA (R) Cuda compiler driver
 Copyright (c) 2005-2016 NVIDIA Corporation
 Built on Tue_Jan_10_13:22:03_CST_2017
 Cuda compilation tools, release 8.0, V8.0.61
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>In previous attempts I had to register for an NVIDIA developer account and install these packages, but they seem to be packaged with the container.</p>
 
 <p>Finally, we can check the installed python packages:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="ni">root@80f65a971e9a:~# </span><span class="nc">pip</span><span class="kv"> freeze | grep tensorflow
-</span>tensorflow-gpu==1.4.0
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@80f65a971e9a:~#</span> pip freeze | <span class="nb">grep </span>tensorflow
+<span class="go">tensorflow-gpu==1.4.0
 tensorflow-tensorboard==0.4.0rc2
-<span class="ni">root@80f65a971e9a:~# </span><span class="kv">
-</span></code></pre>
-</div>
+</span><span class="gp">root@80f65a971e9a:~#</span> 
+</code></pre></div></div>
 
 <p>This looks good, but I’m still not 100% sure that everything was done properly. I would like to learn more about Tensorflow and also play around with some examples using Tensorboard. Let me know if you have any questions or comments about this setup, I’m still learning! Thanks for reading.</p>
 

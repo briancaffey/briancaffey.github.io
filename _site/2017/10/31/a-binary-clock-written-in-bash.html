@@ -145,17 +145,17 @@
 
 <p>Here’s the code that I ended up using for my clock program:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-resize -s 8 19
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+resize <span class="nt">-s</span> 8 19
 
-<span class="k">function </span>decToBin <span class="o">{</span> <span class="nb">echo</span> <span class="s2">"ibase=10; obase=2; </span><span class="nv">$1</span><span class="s2">"</span> | bc; <span class="o">}</span>;
+<span class="k">function </span>decToBin <span class="o">{</span> <span class="nb">echo</span> <span class="s2">"ibase=10; obase=2; </span><span class="nv">$1</span><span class="s2">"</span> | bc<span class="p">;</span> <span class="o">}</span><span class="p">;</span>
 
 draw<span class="o">()</span> <span class="o">{</span>
-  <span class="nv">binstring</span><span class="o">=</span><span class="k">$(</span>decToBin <span class="o">{</span><span class="k">$(</span>date <span class="s1">'+%s'</span><span class="k">)</span><span class="o">}</span><span class="k">)</span>
+  <span class="nv">binstring</span><span class="o">=</span><span class="k">$(</span>decToBin <span class="o">{</span><span class="k">$(</span><span class="nb">date</span> <span class="s1">'+%s'</span><span class="k">)</span><span class="o">}</span><span class="k">)</span>
 
   <span class="k">for </span>i <span class="k">in</span> <span class="o">{</span>31..6..-5<span class="o">}</span>
     <span class="k">do
-      </span><span class="nb">echo</span> <span class="nv">$binstring</span> | tail -c <span class="nv">$i</span> | head -c 5
+      </span><span class="nb">echo</span> <span class="nv">$binstring</span> | <span class="nb">tail</span> <span class="nt">-c</span> <span class="nv">$i</span> | <span class="nb">head</span> <span class="nt">-c</span> 5
       <span class="nb">printf</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
     <span class="k">done</span>
 <span class="o">}</span>
@@ -163,23 +163,22 @@ draw<span class="o">()</span> <span class="o">{</span>
 <span class="nb">printf</span> <span class="s1">'\e[?25l'</span>
 clear 
 
-<span class="k">while </span><span class="nb">true</span> ; <span class="k">do
+<span class="k">while </span><span class="nb">true</span> <span class="p">;</span> <span class="k">do
   </span><span class="nb">printf</span> <span class="s1">'\033[;H'</span> 
   <span class="nv">offset_v</span><span class="o">=</span><span class="k">$((</span> <span class="k">$((</span> <span class="k">$(</span>tput lines<span class="k">)</span>  <span class="o">/</span> <span class="m">2</span>  <span class="k">))</span>  <span class="o">-</span> <span class="m">3</span>  <span class="k">))</span>
-  <span class="nv">v</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_v</span> &gt; <span class="m">0</span> ? <span class="nv">$offset_v</span> : <span class="m">0</span> <span class="k">))</span>; 
-  <span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>seq 1 <span class="nv">$v</span><span class="sb">`</span>;
+  <span class="nv">v</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_v</span> <span class="o">&gt;</span> <span class="m">0</span> ? <span class="nv">$offset_v</span> : <span class="m">0</span> <span class="k">))</span><span class="p">;</span> 
+  <span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span><span class="nb">seq </span>1 <span class="nv">$v</span><span class="sb">`</span><span class="p">;</span>
     <span class="k">do
         </span><span class="nb">printf</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
     <span class="k">done
   </span><span class="nv">offset_h</span><span class="o">=</span><span class="k">$((</span> <span class="k">$((</span> <span class="k">$(</span>tput cols<span class="k">)</span>  <span class="o">/</span> <span class="m">2</span>  <span class="k">))</span>  <span class="o">-</span> <span class="m">7</span>  <span class="k">))</span>
-  <span class="nv">h</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_h</span> &gt; <span class="m">0</span> ? <span class="nv">$offset_h</span> : <span class="m">0</span> <span class="k">))</span>; 
-  <span class="k">$(</span><span class="nb">echo </span>draw<span class="k">)</span> | sed <span class="s2">"s/1/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">● /g"</span> | 
-                 sed <span class="s2">"s/0/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">○ /g"</span> |
-                 sed <span class="s2">"s/^/</span><span class="k">$(</span>head -c <span class="nv">$h</span> &lt; /dev/zero | tr <span class="s1">'\0'</span> <span class="s1">'\ '</span>;<span class="k">)</span><span class="s2">/"</span>
-  sleep 1
+  <span class="nv">h</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_h</span> <span class="o">&gt;</span> <span class="m">0</span> ? <span class="nv">$offset_h</span> : <span class="m">0</span> <span class="k">))</span><span class="p">;</span> 
+  <span class="k">$(</span><span class="nb">echo </span>draw<span class="k">)</span> | <span class="nb">sed</span> <span class="s2">"s/1/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">● /g"</span> | 
+                 <span class="nb">sed</span> <span class="s2">"s/0/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">○ /g"</span> |
+                 <span class="nb">sed</span> <span class="s2">"s/^/</span><span class="k">$(</span><span class="nb">head</span> <span class="nt">-c</span> <span class="nv">$h</span> &lt; /dev/zero | <span class="nb">tr</span> <span class="s1">'\0'</span> <span class="s1">'\ '</span><span class="p">;</span><span class="k">)</span><span class="s2">/"</span>
+  <span class="nb">sleep </span>1
 <span class="k">done</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The program uses two function and one while loop to display the time.</p>
 
@@ -187,55 +186,49 @@ clear
 
 <p><code class="highlighter-rouge">draw</code> structures the the string of ones and zeros into 6 rows and five columns of ones and zeros. This function uses <code class="highlighter-rouge">head</code> and <code class="highlighter-rouge">tail</code> in combination with a <code class="highlighter-rouge">for</code> loop to iterate over a string. Notice the <code class="highlighter-rouge">-c</code> flag on <code class="highlighter-rouge">tail</code> and <code class="highlighter-rouge">head</code>. The following is from the <code class="highlighter-rouge">man head</code>:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>       -c, --bytes<span class="o">=[</span>-]NUM
-              print the first NUM bytes of each file;
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>       <span class="nt">-c</span>, <span class="nt">--bytes</span><span class="o">=[</span>-]NUM
+              print the first NUM bytes of each file<span class="p">;</span>
+</code></pre></div></div>
 
 <p>This gets <code class="highlighter-rouge">NUM</code> number of ones and zeros (each being one byte) from the string of ones and zeros that results from <code class="highlighter-rouge">decToBin</code>.</p>
 
 <p>In the <code class="highlighter-rouge">while</code> loop, I measure the length and width of the terminal window to center the position of the clock in case it has been changed with the following lines of code:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>...]
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>...]
   <span class="nv">offset_v</span><span class="o">=</span><span class="k">$((</span> <span class="k">$((</span> <span class="k">$(</span>tput lines<span class="k">)</span>  <span class="o">/</span> <span class="m">2</span>  <span class="k">))</span>  <span class="o">-</span> <span class="m">3</span>  <span class="k">))</span>
-  <span class="nv">v</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_v</span> &gt; <span class="m">0</span> ? <span class="nv">$offset_v</span> : <span class="m">0</span> <span class="k">))</span>; 
-  <span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>seq 1 <span class="nv">$v</span><span class="sb">`</span>;
+  <span class="nv">v</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_v</span> <span class="o">&gt;</span> <span class="m">0</span> ? <span class="nv">$offset_v</span> : <span class="m">0</span> <span class="k">))</span><span class="p">;</span> 
+  <span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span><span class="nb">seq </span>1 <span class="nv">$v</span><span class="sb">`</span><span class="p">;</span>
     <span class="k">do
         </span><span class="nb">printf</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
     <span class="k">done
   </span><span class="nv">offset_h</span><span class="o">=</span><span class="k">$((</span> <span class="k">$((</span> <span class="k">$(</span>tput cols<span class="k">)</span>  <span class="o">/</span> <span class="m">2</span>  <span class="k">))</span>  <span class="o">-</span> <span class="m">7</span>  <span class="k">))</span>
-  <span class="nv">h</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_h</span> &gt; <span class="m">0</span> ? <span class="nv">$offset_h</span> : <span class="m">0</span> <span class="k">))</span>; 
+  <span class="nv">h</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$offset_h</span> <span class="o">&gt;</span> <span class="m">0</span> ? <span class="nv">$offset_h</span> : <span class="m">0</span> <span class="k">))</span><span class="p">;</span> 
 <span class="o">[</span>...]
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Finally, I convert the ones and zeros to the colored unicode circles with the following lines of code:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>  <span class="k">$(</span><span class="nb">echo </span>draw<span class="k">)</span> | sed <span class="s2">"s/1/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">● /g"</span> | 
-                 sed <span class="s2">"s/0/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">○ /g"</span> |
-                 sed <span class="s2">"s/^/</span><span class="k">$(</span>head -c <span class="nv">$h</span> &lt; /dev/zero | tr <span class="s1">'\0'</span> <span class="s1">'\ '</span>;<span class="k">)</span><span class="s2">/"</span>
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">$(</span><span class="nb">echo </span>draw<span class="k">)</span> | <span class="nb">sed</span> <span class="s2">"s/1/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">● /g"</span> | 
+                 <span class="nb">sed</span> <span class="s2">"s/0/ </span><span class="k">$(</span>tput setaf 6<span class="k">)</span><span class="s2">○ /g"</span> |
+                 <span class="nb">sed</span> <span class="s2">"s/^/</span><span class="k">$(</span><span class="nb">head</span> <span class="nt">-c</span> <span class="nv">$h</span> &lt; /dev/zero | <span class="nb">tr</span> <span class="s1">'\0'</span> <span class="s1">'\ '</span><span class="p">;</span><span class="k">)</span><span class="s2">/"</span>
+</code></pre></div></div>
 
 <p>Piping the output of <code class="highlighter-rouge">draw</code> to <code class="highlighter-rouge">sed</code> lets us do some simple substition using the pattern:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>sed <span class="s2">"s/&lt;what you want to swap out&gt;/&lt;what you want to swap in&gt;/g"</span> 
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s2">"s/&lt;what you want to swap out&gt;/&lt;what you want to swap in&gt;/g"</span> 
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">"../g"</code> at the end of the <code class="highlighter-rouge">sed</code> argument specifies that we want to make the substition globally.</p>
 
 <p>The last <code class="highlighter-rouge">sed</code> command inserts spaces to the right of each row for the horizontal offset (in order to center the clock on our terminal window). This uses another interesting pattern that I came across on StackOverflow:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>sed <span class="s2">"s/^/</span><span class="k">$(</span>head -c <span class="nv">$h</span> &lt; /dev/zero | tr <span class="s1">'\0'</span> <span class="s1">'\ '</span>;<span class="k">)</span><span class="s2">/"</span>
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sed</span> <span class="s2">"s/^/</span><span class="k">$(</span><span class="nb">head</span> <span class="nt">-c</span> <span class="nv">$h</span> &lt; /dev/zero | <span class="nb">tr</span> <span class="s1">'\0'</span> <span class="s1">'\ '</span><span class="p">;</span><span class="k">)</span><span class="s2">/"</span>
+</code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">^</code> is a regular expression that represents the beginning of a line. So with this <code class="highlighter-rouge">sed</code> substitution we will be adding to the beginning of each line. What we are adding is the following:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="k">$(</span>head -c <span class="nv">$h</span> &lt; /dev/zero | tr <span class="s1">'\0'</span> <span class="s1">'\ '</span>;<span class="k">)</span>/
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">$(</span><span class="nb">head</span> <span class="nt">-c</span> <span class="nv">$h</span> &lt; /dev/zero | <span class="nb">tr</span> <span class="s1">'\0'</span> <span class="s1">'\ '</span><span class="p">;</span><span class="k">)</span>/
+</code></pre></div></div>
 
 <p>This takes the number of columns that we want to shift our clock as <code class="highlighter-rouge">$h</code> and reads the first <code class="highlighter-rouge">$h</code> bytes from <code class="highlighter-rouge">/dev/zero</code>. <code class="highlighter-rouge">/dev/zero</code> produces a continuous stream of NULL (zero value) bytes, so the first <code class="highlighter-rouge">$h</code> bytes will be something like <code class="highlighter-rouge">\0, \0, \0, \0, \0</code>. We then pipe this output to <code class="highlighter-rouge">tr</code> which translates the null bytes into spaces (<code class="highlighter-rouge">'\ '</code>) which help us pad our clock.</p>
 

@@ -92,28 +92,25 @@
 
 <p>When we opened the Jupyter notebook, our command included port mapping. Here is that command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">sudo</span><span class="kv"> nvidia-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
-</span></code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">sudo </span>nvidia-docker run <span class="nt">-it</span> <span class="nt">-p</span> 8888:8888 tensorflow/tensorflow:latest-gpu
+</code></pre></div></div>
 
 <p>Tensorboard will be served in our browser on port <code class="highlighter-rouge">6006</code>, so we will want to do that port mapping in our <code class="highlighter-rouge">nvidia-docker</code> command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>sudo nvidia-docker run -p 0.0.0.0:6006:6006 -it tensorflow/tensorflow:latest-gpu bash
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">sudo nvidia-docker run -p 0.0.0.0:6006:6006 -it tensorflow/tensorflow:latest-gpu bash
+</span></code></pre></div></div>
 
 <p>I want to run <a href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py">this script</a> from the Tensorflow github repo. It is an example of MNIST with summaries. Summaries are logs that are captured from script and they provide the data that runs Tensorboard. In this case they are recorded in <code class="highlighter-rouge">/tmp/tensorflow/mnist/logs/</code>.</p>
 
 <p>To start with this script let’s just copy and paste it into a file. We will need to add vim to our docker container for that:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="ni"># </span><span class="nc">apt-get</span><span class="kv"> update
-</span><span class="ni"># </span><span class="nc">apt-get</span><span class="kv"> install vim
-</span></code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">#</span> apt-get update
+<span class="gp">#</span> apt-get <span class="nb">install </span>vim
+</code></pre></div></div>
 
 <p>Now we can copy and paste the script and run it:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">root</span><span class="nd">@eb9e069064d7</span><span class="p">:</span><span class="o">~</span><span class="c"># python tb.py </span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">root</span><span class="nd">@eb9e069064d7</span><span class="p">:</span><span class="o">~</span><span class="c"># python tb.py </span>
 <span class="n">Successfully</span> <span class="n">downloaded</span> <span class="n">train</span><span class="o">-</span><span class="n">images</span><span class="o">-</span><span class="n">idx3</span><span class="o">-</span><span class="n">ubyte</span><span class="o">.</span><span class="n">gz</span> <span class="mi">9912422</span> <span class="nb">bytes</span><span class="o">.</span>
 <span class="n">Extracting</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">tensorflow</span><span class="o">/</span><span class="n">mnist</span><span class="o">/</span><span class="n">input_data</span><span class="o">/</span><span class="n">train</span><span class="o">-</span><span class="n">images</span><span class="o">-</span><span class="n">idx3</span><span class="o">-</span><span class="n">ubyte</span><span class="o">.</span><span class="n">gz</span>
 <span class="n">Successfully</span> <span class="n">downloaded</span> <span class="n">train</span><span class="o">-</span><span class="n">labels</span><span class="o">-</span><span class="n">idx1</span><span class="o">-</span><span class="n">ubyte</span><span class="o">.</span><span class="n">gz</span> <span class="mi">28881</span> <span class="nb">bytes</span><span class="o">.</span>
@@ -123,132 +120,130 @@
 <span class="n">Successfully</span> <span class="n">downloaded</span> <span class="n">t10k</span><span class="o">-</span><span class="n">labels</span><span class="o">-</span><span class="n">idx1</span><span class="o">-</span><span class="n">ubyte</span><span class="o">.</span><span class="n">gz</span> <span class="mi">4542</span> <span class="nb">bytes</span><span class="o">.</span>
 <span class="n">Extracting</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">tensorflow</span><span class="o">/</span><span class="n">mnist</span><span class="o">/</span><span class="n">input_data</span><span class="o">/</span><span class="n">t10k</span><span class="o">-</span><span class="n">labels</span><span class="o">-</span><span class="n">idx1</span><span class="o">-</span><span class="n">ubyte</span><span class="o">.</span><span class="n">gz</span>
 <span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">20</span> <span class="mo">03</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">53.792141</span><span class="p">:</span> <span class="n">I</span> <span class="n">tensorflow</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">cpu_feature_guard</span><span class="o">.</span><span class="n">cc</span><span class="p">:</span><span class="mi">137</span><span class="p">]</span> <span class="n">Your</span> <span class="n">CPU</span> <span class="n">supports</span> <span class="n">instructions</span> <span class="n">that</span> <span class="n">this</span> <span class="n">TensorFlow</span> <span class="n">binary</span> <span class="n">was</span> <span class="ow">not</span> <span class="n">compiled</span> <span class="n">to</span> <span class="n">use</span><span class="p">:</span> <span class="n">SSE4</span><span class="o">.</span><span class="mi">1</span> <span class="n">SSE4</span><span class="o">.</span><span class="mi">2</span> <span class="n">AVX</span> <span class="n">AVX2</span> <span class="n">FMA</span>
-<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">20</span> <span class="mo">03</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">53.878640</span><span class="p">:</span> <span class="n">I</span> <span class="n">tensorflow</span><span class="o">/</span><span class="n">stream_executor</span><span class="o">/</span><span class="n">cuda</span><span class="o">/</span><span class="n">cuda_gpu_executor</span><span class="o">.</span><span class="n">cc</span><span class="p">:</span><span class="mi">892</span><span class="p">]</span> <span class="n">successful</span> <span class="n">NUMA</span> <span class="n">node</span> <span class="n">read</span> <span class="kn">from</span> <span class="nn">SysFS</span> <span class="nn">had</span> <span class="nn">negative</span> <span class="nn">value</span> <span class="err">(-1),</span> <span class="nn">but</span> <span class="nn">there</span> <span class="nn">must</span> <span class="nn">be</span> <span class="nn">at</span> <span class="nn">least</span> <span class="nn">one</span> <span class="nn">NUMA</span> <span class="nn">node</span><span class="err">,</span> <span class="nn">so</span> <span class="nn">returning</span> <span class="nn">NUMA</span> <span class="nn">node</span> <span class="nn">zero</span><span class="err">
-2017-11-20</span> <span class="err">03:52:53</span><span class="nn">.878892</span><span class="err">:</span> <span class="nn">I</span> <span class="nn">tensorflow</span><span class="err">/</span><span class="nn">core</span><span class="err">/</span><span class="nn">common_runtime</span><span class="err">/</span><span class="nn">gpu</span><span class="err">/</span><span class="nn">gpu_device.cc</span><span class="err">:1030]</span> <span class="nn">Found</span> <span class="nn">device</span> <span class="err">0</span> <span class="nn">with</span> <span class="nn">properties</span><span class="err">:</span> <span class="err">
-</span><span class="nn">name</span><span class="err">:</span> <span class="nn">GeForce</span> <span class="nn">GTX</span> <span class="err">1080</span> <span class="nn">major</span><span class="err">:</span> <span class="err">6</span> <span class="nn">minor</span><span class="err">:</span> <span class="err">1</span> <span class="nn">memoryClockRate</span><span class="err">(</span><span class="nn">GHz</span><span class="err">):</span> <span class="err">1</span><span class="nn">.7335</span><span class="err">
-</span><span class="nn">pciBusID</span><span class="err">:</span> <span class="err">0000:01:00</span><span class="nn">.0</span><span class="err">
-</span><span class="nn">totalMemory</span><span class="err">:</span> <span class="err">7</span><span class="nn">.92GiB</span> <span class="nn">freeMemory</span><span class="err">:</span> <span class="err">7</span><span class="nn">.43GiB</span><span class="err">
-2017-11-20</span> <span class="err">03:52:53</span><span class="nn">.878904</span><span class="err">:</span> <span class="nn">I</span> <span class="nn">tensorflow</span><span class="err">/</span><span class="nn">core</span><span class="err">/</span><span class="nn">common_runtime</span><span class="err">/</span><span class="nn">gpu</span><span class="err">/</span><span class="nn">gpu_device.cc</span><span class="err">:1120]</span> <span class="nn">Creating</span> <span class="nn">TensorFlow</span> <span class="nn">device</span> <span class="err">(/</span><span class="nn">device</span><span class="err">:</span><span class="nn">GPU</span><span class="err">:0)</span> <span class="err">-&gt;</span> <span class="err">(</span><span class="nn">device</span><span class="err">:</span> <span class="err">0,</span> <span class="nn">name</span><span class="err">:</span> <span class="nn">GeForce</span> <span class="nn">GTX</span> <span class="err">1080,</span> <span class="nn">pci</span> <span class="nn">bus</span> <span class="nn">id</span><span class="err">:</span> <span class="err">0000:01:00</span><span class="nn">.0</span><span class="err">,</span> <span class="nn">compute</span> <span class="nn">capability</span><span class="err">:</span> <span class="err">6</span><span class="nn">.1</span><span class="err">)
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">0:</span> <span class="err">0</span><span class="nn">.1235</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">10:</span> <span class="err">0</span><span class="nn">.7297</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">20:</span> <span class="err">0</span><span class="nn">.8414</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">30:</span> <span class="err">0</span><span class="nn">.8717</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">40:</span> <span class="err">0</span><span class="nn">.886</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">50:</span> <span class="err">0</span><span class="nn">.896</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">60:</span> <span class="err">0</span><span class="nn">.9027</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">70:</span> <span class="err">0</span><span class="nn">.9068</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">80:</span> <span class="err">0</span><span class="nn">.9101</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">90:</span> <span class="err">0</span><span class="nn">.9121</span><span class="err">
-2017-11-20</span> <span class="err">03:52:57</span><span class="nn">.583676</span><span class="err">:</span> <span class="nn">I</span> <span class="nn">tensorflow</span><span class="err">/</span><span class="nn">stream_executor</span><span class="err">/</span><span class="nn">dso_loader.cc</span><span class="err">:139]</span> <span class="nn">successfully</span> <span class="nn">opened</span> <span class="nn">CUDA</span> <span class="nn">library</span> <span class="nn">libcupti.so.8.0</span> <span class="nn">locally</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">99
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">100:</span> <span class="err">0</span><span class="nn">.9124</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">110:</span> <span class="err">0</span><span class="nn">.9164</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">120:</span> <span class="err">0</span><span class="nn">.9198</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">130:</span> <span class="err">0</span><span class="nn">.9205</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">140:</span> <span class="err">0</span><span class="nn">.9142</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">150:</span> <span class="err">0</span><span class="nn">.9224</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">160:</span> <span class="err">0</span><span class="nn">.9294</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">170:</span> <span class="err">0</span><span class="nn">.928</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">180:</span> <span class="err">0</span><span class="nn">.9312</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">190:</span> <span class="err">0</span><span class="nn">.9301</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">199
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">200:</span> <span class="err">0</span><span class="nn">.9346</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">210:</span> <span class="err">0</span><span class="nn">.9381</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">220:</span> <span class="err">0</span><span class="nn">.9396</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">230:</span> <span class="err">0</span><span class="nn">.9406</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">240:</span> <span class="err">0</span><span class="nn">.9273</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">250:</span> <span class="err">0</span><span class="nn">.941</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">260:</span> <span class="err">0</span><span class="nn">.9369</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">270:</span> <span class="err">0</span><span class="nn">.9329</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">280:</span> <span class="err">0</span><span class="nn">.9404</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">290:</span> <span class="err">0</span><span class="nn">.9444</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">299
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">300:</span> <span class="err">0</span><span class="nn">.9438</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">310:</span> <span class="err">0</span><span class="nn">.9426</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">320:</span> <span class="err">0</span><span class="nn">.9462</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">330:</span> <span class="err">0</span><span class="nn">.9449</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">340:</span> <span class="err">0</span><span class="nn">.9478</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">350:</span> <span class="err">0</span><span class="nn">.9458</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">360:</span> <span class="err">0</span><span class="nn">.9464</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">370:</span> <span class="err">0</span><span class="nn">.9474</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">380:</span> <span class="err">0</span><span class="nn">.9528</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">390:</span> <span class="err">0</span><span class="nn">.9499</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">399
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">400:</span> <span class="err">0</span><span class="nn">.9507</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">410:</span> <span class="err">0</span><span class="nn">.9501</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">420:</span> <span class="err">0</span><span class="nn">.9513</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">430:</span> <span class="err">0</span><span class="nn">.9483</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">440:</span> <span class="err">0</span><span class="nn">.9518</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">450:</span> <span class="err">0</span><span class="nn">.949</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">460:</span> <span class="err">0</span><span class="nn">.9543</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">470:</span> <span class="err">0</span><span class="nn">.9552</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">480:</span> <span class="err">0</span><span class="nn">.9515</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">490:</span> <span class="err">0</span><span class="nn">.9544</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">499
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">500:</span> <span class="err">0</span><span class="nn">.9586</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">510:</span> <span class="err">0</span><span class="nn">.9567</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">520:</span> <span class="err">0</span><span class="nn">.9572</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">530:</span> <span class="err">0</span><span class="nn">.9574</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">540:</span> <span class="err">0</span><span class="nn">.9584</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">550:</span> <span class="err">0</span><span class="nn">.9593</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">560:</span> <span class="err">0</span><span class="nn">.958</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">570:</span> <span class="err">0</span><span class="nn">.9575</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">580:</span> <span class="err">0</span><span class="nn">.9582</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">590:</span> <span class="err">0</span><span class="nn">.9609</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">599
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">600:</span> <span class="err">0</span><span class="nn">.9618</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">610:</span> <span class="err">0</span><span class="nn">.9605</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">620:</span> <span class="err">0</span><span class="nn">.9606</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">630:</span> <span class="err">0</span><span class="nn">.961</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">640:</span> <span class="err">0</span><span class="nn">.963</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">650:</span> <span class="err">0</span><span class="nn">.9614</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">660:</span> <span class="err">0</span><span class="nn">.9622</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">670:</span> <span class="err">0</span><span class="nn">.9634</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">680:</span> <span class="err">0</span><span class="nn">.9641</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">690:</span> <span class="err">0</span><span class="nn">.9627</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">699
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">700:</span> <span class="err">0</span><span class="nn">.9623</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">710:</span> <span class="err">0</span><span class="nn">.9612</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">720:</span> <span class="err">0</span><span class="nn">.9628</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">730:</span> <span class="err">0</span><span class="nn">.965</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">740:</span> <span class="err">0</span><span class="nn">.9635</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">750:</span> <span class="err">0</span><span class="nn">.9635</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">760:</span> <span class="err">0</span><span class="nn">.9648</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">770:</span> <span class="err">0</span><span class="nn">.9637</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">780:</span> <span class="err">0</span><span class="nn">.9658</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">790:</span> <span class="err">0</span><span class="nn">.9649</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">799
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">800:</span> <span class="err">0</span><span class="nn">.9681</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">810:</span> <span class="err">0</span><span class="nn">.9661</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">820:</span> <span class="err">0</span><span class="nn">.9657</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">830:</span> <span class="err">0</span><span class="nn">.9646</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">840:</span> <span class="err">0</span><span class="nn">.9647</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">850:</span> <span class="err">0</span><span class="nn">.965</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">860:</span> <span class="err">0</span><span class="nn">.9677</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">870:</span> <span class="err">0</span><span class="nn">.9649</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">880:</span> <span class="err">0</span><span class="nn">.9675</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">890:</span> <span class="err">0</span><span class="nn">.969</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">899
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">900:</span> <span class="err">0</span><span class="nn">.9689</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">910:</span> <span class="err">0</span><span class="nn">.967</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">920:</span> <span class="err">0</span><span class="nn">.9672</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">930:</span> <span class="err">0</span><span class="nn">.9645</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">940:</span> <span class="err">0</span><span class="nn">.9657</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">950:</span> <span class="err">0</span><span class="nn">.9699</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">960:</span> <span class="err">0</span><span class="nn">.968</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">970:</span> <span class="err">0</span><span class="nn">.9679</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">980:</span> <span class="err">0</span><span class="nn">.9651</span><span class="err">
-</span><span class="nn">Accuracy</span> <span class="nn">at</span> <span class="nn">step</span> <span class="err">990:</span> <span class="err">0</span><span class="nn">.9683</span><span class="err">
-</span><span class="nn">Adding</span> <span class="nn">run</span> <span class="nn">metadata</span> <span class="nn">for</span> <span class="err">999
-</span></code></pre>
-</div>
+<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">20</span> <span class="mo">03</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">53.878640</span><span class="p">:</span> <span class="n">I</span> <span class="n">tensorflow</span><span class="o">/</span><span class="n">stream_executor</span><span class="o">/</span><span class="n">cuda</span><span class="o">/</span><span class="n">cuda_gpu_executor</span><span class="o">.</span><span class="n">cc</span><span class="p">:</span><span class="mi">892</span><span class="p">]</span> <span class="n">successful</span> <span class="n">NUMA</span> <span class="n">node</span> <span class="n">read</span> <span class="k">from</span> <span class="n">SysFS</span> <span class="n">had</span> <span class="n">negative</span> <span class="n">value</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">but</span> <span class="n">there</span> <span class="n">must</span> <span class="n">be</span> <span class="n">at</span> <span class="n">least</span> <span class="n">one</span> <span class="n">NUMA</span> <span class="n">node</span><span class="p">,</span> <span class="n">so</span> <span class="n">returning</span> <span class="n">NUMA</span> <span class="n">node</span> <span class="n">zero</span>
+<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">20</span> <span class="mo">03</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">53.878892</span><span class="p">:</span> <span class="n">I</span> <span class="n">tensorflow</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">common_runtime</span><span class="o">/</span><span class="n">gpu</span><span class="o">/</span><span class="n">gpu_device</span><span class="o">.</span><span class="n">cc</span><span class="p">:</span><span class="mi">1030</span><span class="p">]</span> <span class="n">Found</span> <span class="n">device</span> <span class="mi">0</span> <span class="k">with</span> <span class="n">properties</span><span class="p">:</span> 
+<span class="n">name</span><span class="p">:</span> <span class="n">GeForce</span> <span class="n">GTX</span> <span class="mi">1080</span> <span class="n">major</span><span class="p">:</span> <span class="mi">6</span> <span class="n">minor</span><span class="p">:</span> <span class="mi">1</span> <span class="n">memoryClockRate</span><span class="p">(</span><span class="n">GHz</span><span class="p">):</span> <span class="mf">1.7335</span>
+<span class="n">pciBusID</span><span class="p">:</span> <span class="mo">0000</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mf">00.0</span>
+<span class="n">totalMemory</span><span class="p">:</span> <span class="mf">7.92</span><span class="n">GiB</span> <span class="n">freeMemory</span><span class="p">:</span> <span class="mf">7.43</span><span class="n">GiB</span>
+<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">20</span> <span class="mo">03</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">53.878904</span><span class="p">:</span> <span class="n">I</span> <span class="n">tensorflow</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">common_runtime</span><span class="o">/</span><span class="n">gpu</span><span class="o">/</span><span class="n">gpu_device</span><span class="o">.</span><span class="n">cc</span><span class="p">:</span><span class="mi">1120</span><span class="p">]</span> <span class="n">Creating</span> <span class="n">TensorFlow</span> <span class="n">device</span> <span class="p">(</span><span class="o">/</span><span class="n">device</span><span class="p">:</span><span class="n">GPU</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">device</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">GeForce</span> <span class="n">GTX</span> <span class="mi">1080</span><span class="p">,</span> <span class="n">pci</span> <span class="n">bus</span> <span class="nb">id</span><span class="p">:</span> <span class="mo">0000</span><span class="p">:</span><span class="mo">01</span><span class="p">:</span><span class="mf">00.0</span><span class="p">,</span> <span class="n">compute</span> <span class="n">capability</span><span class="p">:</span> <span class="mf">6.1</span><span class="p">)</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">0</span><span class="p">:</span> <span class="mf">0.1235</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">10</span><span class="p">:</span> <span class="mf">0.7297</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">20</span><span class="p">:</span> <span class="mf">0.8414</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">30</span><span class="p">:</span> <span class="mf">0.8717</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">40</span><span class="p">:</span> <span class="mf">0.886</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">50</span><span class="p">:</span> <span class="mf">0.896</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">60</span><span class="p">:</span> <span class="mf">0.9027</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">70</span><span class="p">:</span> <span class="mf">0.9068</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">80</span><span class="p">:</span> <span class="mf">0.9101</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">90</span><span class="p">:</span> <span class="mf">0.9121</span>
+<span class="mi">2017</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">20</span> <span class="mo">03</span><span class="p">:</span><span class="mi">52</span><span class="p">:</span><span class="mf">57.583676</span><span class="p">:</span> <span class="n">I</span> <span class="n">tensorflow</span><span class="o">/</span><span class="n">stream_executor</span><span class="o">/</span><span class="n">dso_loader</span><span class="o">.</span><span class="n">cc</span><span class="p">:</span><span class="mi">139</span><span class="p">]</span> <span class="n">successfully</span> <span class="n">opened</span> <span class="n">CUDA</span> <span class="n">library</span> <span class="n">libcupti</span><span class="o">.</span><span class="n">so</span><span class="o">.</span><span class="mf">8.0</span> <span class="n">locally</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">99</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">100</span><span class="p">:</span> <span class="mf">0.9124</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">110</span><span class="p">:</span> <span class="mf">0.9164</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">120</span><span class="p">:</span> <span class="mf">0.9198</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">130</span><span class="p">:</span> <span class="mf">0.9205</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">140</span><span class="p">:</span> <span class="mf">0.9142</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">150</span><span class="p">:</span> <span class="mf">0.9224</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">160</span><span class="p">:</span> <span class="mf">0.9294</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">170</span><span class="p">:</span> <span class="mf">0.928</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">180</span><span class="p">:</span> <span class="mf">0.9312</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">190</span><span class="p">:</span> <span class="mf">0.9301</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">199</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">200</span><span class="p">:</span> <span class="mf">0.9346</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">210</span><span class="p">:</span> <span class="mf">0.9381</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">220</span><span class="p">:</span> <span class="mf">0.9396</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">230</span><span class="p">:</span> <span class="mf">0.9406</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">240</span><span class="p">:</span> <span class="mf">0.9273</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">250</span><span class="p">:</span> <span class="mf">0.941</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">260</span><span class="p">:</span> <span class="mf">0.9369</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">270</span><span class="p">:</span> <span class="mf">0.9329</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">280</span><span class="p">:</span> <span class="mf">0.9404</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">290</span><span class="p">:</span> <span class="mf">0.9444</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">299</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">300</span><span class="p">:</span> <span class="mf">0.9438</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">310</span><span class="p">:</span> <span class="mf">0.9426</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">320</span><span class="p">:</span> <span class="mf">0.9462</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">330</span><span class="p">:</span> <span class="mf">0.9449</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">340</span><span class="p">:</span> <span class="mf">0.9478</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">350</span><span class="p">:</span> <span class="mf">0.9458</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">360</span><span class="p">:</span> <span class="mf">0.9464</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">370</span><span class="p">:</span> <span class="mf">0.9474</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">380</span><span class="p">:</span> <span class="mf">0.9528</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">390</span><span class="p">:</span> <span class="mf">0.9499</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">399</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">400</span><span class="p">:</span> <span class="mf">0.9507</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">410</span><span class="p">:</span> <span class="mf">0.9501</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">420</span><span class="p">:</span> <span class="mf">0.9513</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">430</span><span class="p">:</span> <span class="mf">0.9483</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">440</span><span class="p">:</span> <span class="mf">0.9518</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">450</span><span class="p">:</span> <span class="mf">0.949</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">460</span><span class="p">:</span> <span class="mf">0.9543</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">470</span><span class="p">:</span> <span class="mf">0.9552</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">480</span><span class="p">:</span> <span class="mf">0.9515</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">490</span><span class="p">:</span> <span class="mf">0.9544</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">499</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">500</span><span class="p">:</span> <span class="mf">0.9586</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">510</span><span class="p">:</span> <span class="mf">0.9567</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">520</span><span class="p">:</span> <span class="mf">0.9572</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">530</span><span class="p">:</span> <span class="mf">0.9574</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">540</span><span class="p">:</span> <span class="mf">0.9584</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">550</span><span class="p">:</span> <span class="mf">0.9593</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">560</span><span class="p">:</span> <span class="mf">0.958</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">570</span><span class="p">:</span> <span class="mf">0.9575</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">580</span><span class="p">:</span> <span class="mf">0.9582</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">590</span><span class="p">:</span> <span class="mf">0.9609</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">599</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">600</span><span class="p">:</span> <span class="mf">0.9618</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">610</span><span class="p">:</span> <span class="mf">0.9605</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">620</span><span class="p">:</span> <span class="mf">0.9606</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">630</span><span class="p">:</span> <span class="mf">0.961</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">640</span><span class="p">:</span> <span class="mf">0.963</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">650</span><span class="p">:</span> <span class="mf">0.9614</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">660</span><span class="p">:</span> <span class="mf">0.9622</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">670</span><span class="p">:</span> <span class="mf">0.9634</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">680</span><span class="p">:</span> <span class="mf">0.9641</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">690</span><span class="p">:</span> <span class="mf">0.9627</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">699</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">700</span><span class="p">:</span> <span class="mf">0.9623</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">710</span><span class="p">:</span> <span class="mf">0.9612</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">720</span><span class="p">:</span> <span class="mf">0.9628</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">730</span><span class="p">:</span> <span class="mf">0.965</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">740</span><span class="p">:</span> <span class="mf">0.9635</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">750</span><span class="p">:</span> <span class="mf">0.9635</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">760</span><span class="p">:</span> <span class="mf">0.9648</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">770</span><span class="p">:</span> <span class="mf">0.9637</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">780</span><span class="p">:</span> <span class="mf">0.9658</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">790</span><span class="p">:</span> <span class="mf">0.9649</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">799</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">800</span><span class="p">:</span> <span class="mf">0.9681</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">810</span><span class="p">:</span> <span class="mf">0.9661</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">820</span><span class="p">:</span> <span class="mf">0.9657</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">830</span><span class="p">:</span> <span class="mf">0.9646</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">840</span><span class="p">:</span> <span class="mf">0.9647</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">850</span><span class="p">:</span> <span class="mf">0.965</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">860</span><span class="p">:</span> <span class="mf">0.9677</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">870</span><span class="p">:</span> <span class="mf">0.9649</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">880</span><span class="p">:</span> <span class="mf">0.9675</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">890</span><span class="p">:</span> <span class="mf">0.969</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">899</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">900</span><span class="p">:</span> <span class="mf">0.9689</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">910</span><span class="p">:</span> <span class="mf">0.967</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">920</span><span class="p">:</span> <span class="mf">0.9672</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">930</span><span class="p">:</span> <span class="mf">0.9645</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">940</span><span class="p">:</span> <span class="mf">0.9657</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">950</span><span class="p">:</span> <span class="mf">0.9699</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">960</span><span class="p">:</span> <span class="mf">0.968</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">970</span><span class="p">:</span> <span class="mf">0.9679</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">980</span><span class="p">:</span> <span class="mf">0.9651</span>
+<span class="n">Accuracy</span> <span class="n">at</span> <span class="n">step</span> <span class="mi">990</span><span class="p">:</span> <span class="mf">0.9683</span>
+<span class="n">Adding</span> <span class="n">run</span> <span class="n">metadata</span> <span class="k">for</span> <span class="mi">999</span>
+</code></pre></div></div>
 
 <p>The script completed successfully! Now we can can take a look at what happened during the training. Launch Tensorboard with the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="ni">root@eb9e069064d7:~# </span><span class="nc">tensorboard</span><span class="kv"> --logdir=/tmp/tensorflow/mnist/logs/
-</span>TensorBoard 0.4.0rc2 at http://eb9e069064d7:6006 (Press CTRL+C to quit)
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@eb9e069064d7:~#</span> tensorboard <span class="nt">--logdir</span><span class="o">=</span>/tmp/tensorflow/mnist/logs/
+<span class="go">TensorBoard 0.4.0rc2 at http://eb9e069064d7:6006 (Press CTRL+C to quit)
+</span></code></pre></div></div>
 
 <p>Now we can simply navigate to <code class="highlighter-rouge">localhost:6006</code> in our browser to start using Tensorboard. Here’s a screenshot of Tensorboard showing accuracy:</p>
 

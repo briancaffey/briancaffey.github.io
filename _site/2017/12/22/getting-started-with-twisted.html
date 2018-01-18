@@ -94,9 +94,8 @@
 
 <h2 id="installation">Installation</h2>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code> $ pip install twisted
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> pip <span class="nb">install </span>twisted
+</code></pre></div></div>
 
 <p>The main idea behind Twisted is that it gives us the parallelism of multithreading programming with the ease of reasoning of single threaded programming.</p>
 
@@ -106,19 +105,18 @@
 
 <p>This is the core of Twisted. Here is a simple explanation of what the reactor does with psuedo-code:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
     <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout_until_next_timed_event</span><span class="p">()</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">wait_for_events</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
     <span class="n">events</span> <span class="o">+=</span> <span class="n">timed_events_until</span><span class="p">(</span><span class="n">now</span><span class="p">())</span>
     <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
         <span class="n">event</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Here’s a simple echo server/client example that illustrates how the reactor works. It is composed of <code class="highlighter-rouge">echoclient.py</code> and <code class="highlighter-rouge">echoserver.py</code>:</p>
 
 <p><em>echoclient.py</em></p>
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">protocol</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">protocol</span>
 
 <span class="k">class</span> <span class="nc">EchoClient</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -142,12 +140,11 @@
 
 <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">,</span> <span class="mi">8000</span><span class="p">,</span> <span class="n">EchoFactory</span><span class="p">())</span>
 <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><em>echoserver.py</em></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span>
 
 <span class="k">class</span> <span class="nc">Echo</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">dataReceived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
@@ -159,8 +156,7 @@
 
 <span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">8000</span><span class="p">,</span> <span class="n">EchoFactory</span><span class="p">())</span>
 <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
   </div>
 

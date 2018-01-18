@@ -104,46 +104,43 @@
 
 <p>The process of making a one-click deploy button is very simple. For Django projects, we just need to add an <code class="highlighter-rouge">app.json</code> file to our base directory. Here is the <code class="highlighter-rouge">app.json</code> file for my Django template app:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="p">{</span>
-  <span class="s2">"name"</span><span class="err">:</span> <span class="s2">"Django One Click App"</span><span class="p">,</span>
-  <span class="s2">"description"</span><span class="err">:</span> <span class="s2">"A Template for a Django Projec that uses Django Rest Framework"</span><span class="p">,</span>
-  <span class="s2">"repository"</span><span class="err">:</span> <span class="s2">"https://github.com/briancaffey/oneclickapp"</span><span class="p">,</span>
-  <span class="s2">"keywords"</span><span class="err">:</span> <span class="p">[</span><span class="s2">"django"</span><span class="p">,</span> <span class="s2">"python"</span><span class="p">,</span> <span class="s2">"heroku"</span><span class="p">],</span>
-  <span class="s2">"success_url"</span><span class="err">:</span><span class="s2">"/success"</span><span class="p">,</span>
-  <span class="s2">"env"</span><span class="err">:</span><span class="p">{</span>
-    <span class="s2">"DISABLE_COLLECTSTATIC"</span><span class="err">:</span><span class="s2">"1"</span><span class="p">,</span> 
-    <span class="s2">"SECRET_KEY"</span><span class="err">:</span> <span class="p">{</span>
-      <span class="s2">"description"</span><span class="err">:</span> <span class="s2">"A secret key for verifying the integrity of signed cookies."</span><span class="p">,</span>
-      <span class="s2">"generator"</span><span class="err">:</span> <span class="s2">"secret"</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+  <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Django One Click App"</span><span class="p">,</span>
+  <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"A Template for a Django Projec that uses Django Rest Framework"</span><span class="p">,</span>
+  <span class="s2">"repository"</span><span class="p">:</span> <span class="s2">"https://github.com/briancaffey/oneclickapp"</span><span class="p">,</span>
+  <span class="s2">"keywords"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"django"</span><span class="p">,</span> <span class="s2">"python"</span><span class="p">,</span> <span class="s2">"heroku"</span><span class="p">],</span>
+  <span class="s2">"success_url"</span><span class="p">:</span><span class="s2">"/success"</span><span class="p">,</span>
+  <span class="s2">"env"</span><span class="p">:{</span>
+    <span class="s2">"DISABLE_COLLECTSTATIC"</span><span class="p">:</span><span class="s2">"1"</span><span class="p">,</span> 
+    <span class="s2">"SECRET_KEY"</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"A secret key for verifying the integrity of signed cookies."</span><span class="p">,</span>
+      <span class="s2">"generator"</span><span class="p">:</span> <span class="s2">"secret"</span>
     <span class="p">},</span>
   <span class="p">},</span>
-  <span class="s2">"addons"</span><span class="err">:</span><span class="p">[</span>
+  <span class="s2">"addons"</span><span class="p">:[</span>
     <span class="p">{</span>
 	    <span class="s2">"plan"</span><span class="p">:</span><span class="s2">"heroku-postgresql"</span>
     <span class="p">}</span>
   <span class="p">],</span> 
-  <span class="s2">"scripts"</span><span class="err">:</span>
+  <span class="s2">"scripts"</span><span class="p">:</span>
     <span class="p">{</span>
-      <span class="s2">"postdeploy"</span><span class="err">:</span><span class="s2">"./postdeploy.sh"</span>
+      <span class="s2">"postdeploy"</span><span class="p">:</span><span class="s2">"./postdeploy.sh"</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>It is very important that you include <code class="highlighter-rouge">"DISABLE_COLLECTSTATIC":"1",</code> in the <code class="highlighter-rouge">env</code> section of <code class="highlighter-rouge">app.json</code>. <a href="https://devcenter.heroku.com/articles/django-assets">Here</a> is a Heroku article that explains this issue in more detail.</p>
 
 <p>I found a <a href="https://stackoverflow.com/questions/40985063/how-to-run-postdeploy-scripts-in-heroku-button-app-json">helpful answer</a> on StackOverflow regarding the <code class="highlighter-rouge">scripts</code> portion of <code class="highlighter-rouge">app.json</code>. If you want to call multiple commands once the app has been built successfully, you can simply execute a bash script. Make sure that this script has execute permissions by running the following command on the file locally before committing it to your repo:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>sudo chmod +x postdeploy.sh
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">sudo chmod +x postdeploy.sh
+</span></code></pre></div></div>
 
 <p>Here is my <code class="highlighter-rouge">postdeploy.sh</code> script:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>python manage.py migrate
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')" | python manage.py shell
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">python manage.py migrate
+</span><span class="gp">echo "from django.contrib.auth.models import User;</span> User.objects.create_superuser<span class="o">(</span><span class="s1">'admin'</span>, <span class="s1">'admin@example.com'</span>, <span class="s1">'password'</span><span class="o">)</span><span class="s2">" | python manage.py shell
+</span></code></pre></div></div>
 
 <p>First, I make migrations and then I run the equivalent of <code class="highlighter-rouge">python manage.py createsuperuser</code> with a default username and password for a simple admin user.</p>
 
@@ -151,15 +148,13 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 
 <p>Here’s an example of how to make this with markdown:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/briancaffey/oneclickapp
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/briancaffey/oneclickapp
+</code></pre></div></div>
 
 <p>To clarify, the link portion should be:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>"https://heroku.com/deploy" + "?template=" + &lt;github repo URL&gt; 
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"https://heroku.com/deploy" + "?template=" + &lt;github repo URL&gt; 
+</code></pre></div></div>
 
 <p>This needs to be a GitHub repo.</p>
 
@@ -173,21 +168,18 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 
 <p>Once you have deployed the app to Heroku you should clone the Heroku git repo to your local machine with the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>heroku git:clone -a yourappname
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">heroku git:clone -a yourappname
+</span></code></pre></div></div>
 
 <p>Replace <code class="highlighter-rouge">yourappname</code> with the name of your app. For Django projects like this you should first create a virtual environment in your workspace and then create an <code class="highlighter-rouge">src</code> folder in which you clone this repo. Then you should run the following command from inside the <code class="highlighter-rouge">src</code> folder:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>cp yourappname/settings/base.py yourappname/settings/local.py
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">cp yourappname/settings/base.py yourappname/settings/local.py
+</span></code></pre></div></div>
 
 <p>This will give you a settings file that you can use locally. Finally, run the app locally to make sure it is working properly:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>python manage.py runserver
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">python manage.py runserver
+</span></code></pre></div></div>
 
 <p>There is more you can do with <code class="highlighter-rouge">app.json</code> to customize how the app behaves when deployed, such as specifying deployment environments, but I won’t touch on those for now.</p>
 

@@ -96,27 +96,25 @@
 
 <p>If you visit reddit.com as a guest, you will see a list of popular subreddits. This list is located inside an <code class="highlighter-rouge">html</code> tag called <code class="highlighter-rouge">drop-choices</code>. Here it is:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">PhantomJS</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">PhantomJS</span><span class="p">()</span>
 <span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.reddit.com/'</span><span class="p">)</span>
 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
 <span class="n">html</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">page_source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">)</span>
 
 <span class="n">s</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
 <span class="n">defaults</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">'class'</span><span class="p">:</span><span class="s">'drop-choices'</span><span class="p">})</span>
-<span class="n">subs</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">r"</span><span class="err">\</span><span class="s">/r</span><span class="err">\</span><span class="s">/[</span><span class="err">\</span><span class="s">w.]+</span><span class="err">\</span><span class="s">/?"</span><span class="p">)</span>
+<span class="n">subs</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">r"\/r\/[\w.]+\/?"</span><span class="p">)</span>
 <span class="n">default_subreddits</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">subs</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">defaults</span><span class="p">))))</span>
 
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">default_subreddits</span><span class="p">:</span> <span class="k">print</span> <span class="s">'['</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="s">'](https://reddit.com'</span><span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="s">'), '</span><span class="p">,</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Here are the elements of <code class="highlighter-rouge">default_subreddits</code>:</p>
 
@@ -135,7 +133,7 @@
   <p>Few programming languages provide direct support for graphs as a data type, and Python is no exception. However, graphs are easily built out of lists and dictionaries. For instance, here’s a simple graph (I can’t use drawings in these columns, so I write down the graph’s arcs):</p>
 </blockquote>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>A -&gt; B
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A -&gt; B
 A -&gt; C
 B -&gt; C
 B -&gt; D
@@ -143,23 +141,21 @@ C -&gt; D
 D -&gt; C
 E -&gt; F
 F -&gt; C 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This graph has six nodes (A-F) and eight arcs. It can be represented by the following Python data structure:</p>
 
-<div class="language-text highlighter-rouge"><pre class="highlight"><code>graph =     {'A': ['B', 'C'],
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>graph =     {'A': ['B', 'C'],
              'B': ['C', 'D'],
              'C': ['D'],
              'D': ['C'],
              'E': ['F'],
              'F': ['C']}
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>First let’s define how we would go only one branch deep into this graph (i.e. find the related subreddits for <em>only</em> the default subreddits). To collect the data, I first looped through the default subreddits and save the html of each subreddit to its own text file. Here’s a script with comments:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#first we navigate to the correct folder where we will store the first level of related subreddits</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#first we navigate to the correct folder where we will store the first level of related subreddits</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">'~/Documents/Projects/Data/Subreddits/one/'</span><span class="p">))</span>
 
 <span class="c">#next we instantiate the webdriver we will be using: PhantomJS</span>
@@ -192,8 +188,7 @@ F -&gt; C
     <span class="c">#print out the number and name of the subreddit we just scrapped to make sure things are working</span>
     <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">+</span> <span class="s">' '</span> <span class="o">+</span> <span class="n">subreddit</span><span class="p">,</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next, we want to go through each file and extract the information we want. Here’s what we will be getting:</p>
 
@@ -206,7 +201,7 @@ F -&gt; C
 
 <p>For this type of project, I prefer to loop through each page and creating several small dictionaries for each data point, then combine the small dictionaries into a large dictionary, and then append the dictionary to a list of dictionaries. Once I have looped through all of the pages, I can create a pandas DataFrame from the list of dictionaries. This allows me to easily manipulate the data. Here’s the script that I used to do this:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#navigate to where the html files are stored (I moved them around a bit so it is not consistent with the script above)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#navigate to where the html files are stored (I moved them around a bit so it is not consistent with the script above)</span>
 <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s">'E://DATA/Subreddits/subreddits_html/'</span><span class="p">)</span>
 
 <span class="c">#generate a list of files that we will loop through</span>
@@ -252,7 +247,7 @@ F -&gt; C
     <span class="n">desc_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">'description'</span><span class="p">:</span><span class="n">desc</span><span class="p">}</span>
 
     <span class="c">#here we use regular expressions to find links anywhere on the page that have the structure: "/r/something/"</span>
-    <span class="n">rel_subr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">r"</span><span class="err">\</span><span class="s">/r</span><span class="err">\</span><span class="s">/[</span><span class="err">\</span><span class="s">w.]+</span><span class="err">\</span><span class="s">/?"</span><span class="p">)</span>
+    <span class="n">rel_subr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="nb">compile</span><span class="p">(</span><span class="s">r"\/r\/[\w.]+\/?"</span><span class="p">)</span>
     <span class="c">#make a list of these links based on the "/r/something/" pattern</span>
     <span class="n">related_subreddits</span> <span class="o">=</span> <span class="n">rel_subr</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
     
@@ -280,15 +275,13 @@ F -&gt; C
     
     <span class="c">#clost the file</span>
     <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next, let’s save the results into a csv file. This let’s us load the results quickly without having to scrape everyting again. To do this we can use the pandas library.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
 <span class="n">df0</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dict_list</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>At this point, we can go through the <code class="highlighter-rouge">related</code> column in the DataFrame and put together a list of all the related subreddits. With this list, we can simply repeat the process over and over again. However, each time we start with a new list of subreddits, we want to make sure that they have not already been collected.</p>
 
@@ -298,19 +291,18 @@ F -&gt; C
 
 <p>This DataFrame represents the collection of subreddits from all of these “layers” of the graph.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
 <span class="n">master_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s">'pickle/master_df.p'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Now we can do a quick visualization of the growth in number of subreddits since the website’s start in 2005.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">warnings</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s">'ignore'</span><span class="p">)</span>
 <span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
 
 <span class="n">master_df_</span> <span class="o">=</span> <span class="n">master_df</span><span class="p">[</span><span class="n">master_df</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
 <span class="n">master_df_</span><span class="o">.</span><span class="n">date1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">master_df_</span><span class="p">[</span><span class="s">'date1'</span><span class="p">])</span>
@@ -323,8 +315,7 @@ F -&gt; C
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Date'</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Cummulative Count'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">'~/Documents/GitHub/briancaffey.github.io/img/subreddit_graph/subreddits_count.png'</span><span class="p">))</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/img/subreddit_graph/subreddits_count.png" alt="png" /></p>
 
@@ -332,220 +323,179 @@ F -&gt; C
 
 <p>Next we can start to look at the collection of reddits and related subreddits as a graph. I will be using a Python package for network and graph analysis called <a href="https://networkx.github.io">NetworkX</a>.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#Let's make sure that we have only unique entries in the dataframe.</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#Let's make sure that we have only unique entries in the dataframe.</span>
 <span class="n">master_df_u</span> <span class="o">=</span> <span class="n">master_df_</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s">'subreddit'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">master_df_u</span> <span class="o">=</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/track__subreddits_'</span><span class="p">])</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">master_df_u</span> <span class="o">=</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/track__subreddits_'</span><span class="p">])</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#here we define a dictionary where the keys are subreddits and the values are lists of related subreddits</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#here we define a dictionary where the keys are subreddits and the values are lists of related subreddits</span>
 <span class="n">graph</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">related</span><span class="p">)}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#NetworkX comes with the python Anaconda distribution</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="kn">as</span> <span class="nn">nx</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#NetworkX comes with the python Anaconda distribution</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="n">nx</span>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 <span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">from_dict_of_lists</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 <span class="c">#making the graph undirected takes all of the vertices between nodes and makes them bi-directional</span>
 <span class="n">G1</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">to_undirected</span><span class="p">()</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">choice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">choice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">choice</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>['/r/streetboarding' '/r/stephenking']
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['/r/streetboarding' '/r/stephenking']
+</code></pre></div></div>
 
 <p>Let’s test out some of the functions from NetworkX for graph analysis. First, let’s take the two randomly selected nodes defined above and test to see if there exists a path between them:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">has_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">has_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>True
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
+</code></pre></div></div>
 
 <h1 id="shortest-path">Shortest path</h1>
 
 <p>Now let’s see (at least one of) the shortest path that exists between these nodes:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choice</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choice</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>['/r/streetboarding',
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['/r/streetboarding',
  '/r/freebord',
  '/r/adrenaline',
  '/r/imaginaryadrenaline',
  '/r/imaginarystephenking',
  '/r/stephenking']
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Let’s write a function that selects two random subreddits and then prints a shortest path if it exists:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">short_path</span><span class="p">():</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">short_path</span><span class="p">():</span>
     <span class="n">choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nx</span><span class="o">.</span><span class="n">has_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">shortest_path</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">print</span> <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">' and '</span> <span class="o">+</span> <span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">' are joined by: </span><span class="se">\n</span><span class="s">'</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span> 
         <span class="k">print</span> <span class="s">"No path exists between "</span> <span class="o">+</span> <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">' and '</span> <span class="o">+</span> <span class="n">choices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Here’s a collection of results from the <code class="highlighter-rouge">short_path</code> function defined above that start to paint a picuture of the broad set of topics covered by reddit.com:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/personalizationadvice and /r/beautifulfemales are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/personalizationadvice and /r/beautifulfemales are joined by: 
 ['/r/personalizationadvice', '/r/coloranalysis', '/r/fashion', '/r/redcarpet', '/r/gentlemanboners', '/r/beautifulfemales']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/caffeine and /r/shittyramen are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/caffeine and /r/shittyramen are joined by: 
 ['/r/caffeine', '/r/toast', '/r/cooking', '/r/ramen', '/r/shittyramen']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/watchingcongress and /r/iwantthatonashirt are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/watchingcongress and /r/iwantthatonashirt are joined by: 
 ['/r/watchingcongress', '/r/stand', '/r/snowden', '/r/undelete', '/r/trees', '/r/iwantthatonashirt']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/asksciencediscussion and /r/dogsonhardwoodfloors are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/asksciencediscussion and /r/dogsonhardwoodfloors are joined by: 
 ['/r/asksciencediscussion', '/r/badscience', '/r/badlinguistics', '/r/animalsbeingjerks', '/r/startledcats', '/r/dogsonhardwoodfloors']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/randommail and /r/mini are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/randommail and /r/mini are joined by: 
 ['/r/randommail', '/r/spiceexchange', '/r/cameraswapping', '/r/itookapicture', '/r/carporn', '/r/mini']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/catsinsinks and /r/nzmovies are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/catsinsinks and /r/nzmovies are joined by: 
 ['/r/catsinsinks', '/r/wetcats', '/r/tinysubredditoftheday', '/r/sheep', '/r/nzmetahub', '/r/nzmovies']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/thoriumreactor and /r/sailing are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/thoriumreactor and /r/sailing are joined by: 
 ['/r/thoriumreactor', '/r/energy', '/r/spev', '/r/sailing']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/deathnote and /r/vegetarianism are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/deathnote and /r/vegetarianism are joined by: 
 ['/r/deathnote', '/r/television', '/r/netflixbestof', '/r/naturefilms', '/r/environment', '/r/vegetarianism']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/mississippir4r and /r/mathematics are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/mississippir4r and /r/mathematics are joined by: 
 ['/r/mississippir4r', '/r/mississippi', '/r/prisonreform', '/r/socialscience', '/r/alltech', '/r/mathematics']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/britainsgottalent and /r/irelandbaldwin are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/britainsgottalent and /r/irelandbaldwin are joined by: 
 ['/r/britainsgottalent', '/r/britishtv', '/r/that70sshow', '/r/mila_kunis', '/r/christinaricci', '/r/irelandbaldwin']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/the_donald and /r/ladybusiness are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/the_donald and /r/ladybusiness are joined by: 
 ['/r/the_donald', '/r/shitliberalssay', '/r/trollxchromosomes', '/r/ladybusiness']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/selfharm and /r/medlabprofessionals are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/selfharm and /r/medlabprofessionals are joined by: 
 ['/r/selfharm', '/r/adhd', '/r/neuroimaging', '/r/pharmacy', '/r/medlabprofessionals']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/coverart and /r/phillycraftbeer are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/coverart and /r/phillycraftbeer are joined by: 
 ['/r/coverart', '/r/nostalgia', '/r/upvotedbecausegirl', '/r/wtf', '/r/remindsmeofdf', '/r/beer', '/r/phillycraftbeer']
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">short_path</span><span class="p">()</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/hotguyswithlonghair and /r/castles are joined by: 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/hotguyswithlonghair and /r/castles are joined by: 
 ['/r/hotguyswithlonghair', '/r/majesticmanes', '/r/ladyboners', '/r/imaginaryladyboners', '/r/imaginarycastles', '/r/castles']
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Taking a look <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/unweighted.html?highlight=bidirectional_shortest_path">under the hood</a> of NetworkX and examining the algorith that finds the <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/generic.html#shortest_path">shortest path</a> between any two nodes in a graph, we find that it simply boils down to:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>def shortest_path(G, source=None, target=None, weight=None):
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def shortest_path(G, source=None, target=None, weight=None):
     paths=nx.bidirectional_shortest_path(G,source,target)
     return paths
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>You can read more about the <code class="highlighter-rouge">bidirectional_shortest_path</code> function <a href="http://networkx.readthedocs.io/en/networkx-1.11/_modules/networkx/algorithms/shortest_paths/unweighted.html?highlight=bidirectional_shortest_path">here</a> in the NetworkX documentation.</p>
 
 <p>When I was first experimenting with graph algorithms, I had an interesting result using an algorithm intruduced <a href="https://www.python.org/doc/essays/graphs/">here</a> in the Python documentation. Here’s the algorithm:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_path</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="p">[]):</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">find_path</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="p">[]):</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="p">[</span><span class="n">start</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">start</span> <span class="o">==</span> <span class="n">end</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">path</span>
@@ -556,8 +506,7 @@ F -&gt; C
             <span class="n">newpath</span> <span class="o">=</span> <span class="n">find_path</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">newpath</span><span class="p">:</span> <span class="k">return</span> <span class="n">newpath</span>
     <span class="k">return</span> <span class="bp">None</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The above algorthim uses a process called backtracking to exaustively try all possibilities until it returns a solution. It creates an interesting “random walk” through groups of related subreddits. Here’s the result of calling the above function on our graph (only 2 layers deep) with two random nodes: /r/persianrap and /r/nosleep:</p>
 
@@ -575,55 +524,46 @@ F -&gt; C
 
 <p>There are several different methods of measuring centrality in a graph. Here I use <code class="highlighter-rouge">eigenvector_centrality_numpy</code>, a function included in NetworkX. It takes in a graph and returns a dictionary with graph nodes as keys and node centrality as values.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">eigenvector_centrality_numpy</span><span class="p">(</span><span class="n">G1</span><span class="p">)</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">centrality</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">eigenvector_centrality_numpy</span><span class="p">(</span><span class="n">G1</span><span class="p">)</span>
+</code></pre></div></div>
 
 <p>Let’s see which subreddit has the highest centrality:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">),</span> <span class="n">centrality</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">)]</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span> <span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">),</span> <span class="n">centrality</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">centrality</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">centrality</span><span class="o">.</span><span class="n">get</span><span class="p">)]</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/imaginarybattlefields 0.0721530261127
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/imaginarybattlefields 0.0721530261127
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="nb">len</span><span class="p">(</span><span class="n">centrality</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">len</span><span class="p">(</span><span class="n">centrality</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>True
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
+</code></pre></div></div>
 
 <p>Since all of the centrality values are unique, we can look up nodes by their centrality values.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">subr_list</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">subr_list</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">centrality</span><span class="p">:</span>
     <span class="n">subr_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">node</span><span class="p">,</span> <span class="n">centrality</span><span class="p">[</span><span class="n">node</span><span class="p">]))</span>
     
 <span class="n">sorted_subr_list</span> <span class="o">=</span> <span class="n">subr_list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subr_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">200</span><span class="p">]:</span> <span class="k">print</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">subr_list</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">200</span><span class="p">]:</span> <span class="k">print</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/imaginarybattlefields /r/imaginarycityscapes /r/imaginarywastelands /r/imaginarywildlands /r/imaginaryleviathans /r/imaginarydragons /r/imaginarystarscapes /r/imaginarywesteros /r/imaginaryartifacts /r/imaginaryangels /r/imaginarymaps /r/imaginarybehemoths /r/imaginarydemons /r/imaginaryelves /r/imaginarycentaurs /r/imaginaryfuturewar /r/imaginarysoldiers /r/imaginaryhistory /r/imaginaryarmor /r/imaginarystarships /r/imaginarynetwork /r/imaginaryjedi /r/imaginarydinosaurs /r/imaginarysteampunk /r/imaginarycyberpunk /r/imaginaryarchers /r/imaginaryvehicles /r/imaginaryanime /r/imaginaryfallout /r/imaginaryastronauts /r/imaginarymusic /r/imaginaryfactories /r/imaginaryequestria /r/imaginarywarships /r/imaginaryazeroth /r/imaginaryarrakis /r/imaginarydisney /r/imaginarypolitics /r/imaginaryhorrors /r/imaginarywinterscapes /r/imaginaryseascapes /r/imaginarypirates /r/imaginarywarriors /r/imaginarymiddleearth /r/imaginarygallifrey /r/imaginarymechs /r/imaginarypropaganda /r/imaginarymerfolk /r/imaginaryvikings /r/imaginaryundead /r/imaginarybeasts /r/imaginarymutants /r/imaginaryruins /r/imaginarytamriel /r/imaginaryforests /r/imaginaryelementals /r/imaginaryskyscapes /r/imaginarymonuments /r/imaginarywaterfalls /r/imaginaryworlds /r/imaginarywizards /r/imaginaryinteriors /r/imaginaryhogwarts /r/imaginarytowers /r/imaginaryarchitecture /r/imaginaryweaponry /r/imaginarygaming /r/imaginarycastles /r/imaginaryrobotics /r/imaginarybooks /r/imaginarygnomes /r/imaginaryvillages /r/imaginarydeserts /r/imaginarywerewolves /r/imaginarydieselpunk /r/imaginaryvampires /r/imaginaryadrenaline /r/imaginarykanto /r/imaginarynatives /r/imaginaryrivers /r/imaginarytemples /r/imaginaryassassins /r/imaginaryvolcanoes /r/imaginaryclerics /r/imaginaryprisons /r/imaginarygiants /r/imaginarycowboys /r/imaginaryhumans /r/imaginarydwarves /r/imaginarycaves /r/imaginarytrolls /r/imaginarywalls /r/imaginarylakes /r/imaginarywitches /r/imaginaryorcs /r/imaginarycanyons /r/imaginaryasylums /r/imaginaryimmortals /r/imaginaryaliens /r/imaginarynobles /r/imaginaryspirits /r/imaginaryaetherpunk /r/imaginarytrees /r/imaginaryislands /r/imaginaryninjas /r/imaginaryscience /r/imaginarymountains /r/imaginaryknights /r/imaginarygoblins /r/imaginaryfaeries /r/imaginarygotham /r/imaginarycybernetics /r/imaginaryooo /r/imaginaryderelicts /r/imaginaryfood /r/imaginaryworldeaters /r/imaginarymindscapes /r/imaginaryaww /r/imaginarymarvel /r/imaginaryweather /r/imaginarynewnewyork /r/imaginaryspidey /r/imaginaryautumnscapes /r/imaginarywarhammer /r/imaginaryfeels /r/imaginarywitcher /r/imaginaryvessels /r/imaginarytaverns /r/imaginarybestof /r/imaginaryairships /r/imaginaryportals /r/imaginaryfashion /r/imaginarylovers /r/imaginarydc /r/imaginaryanimals /r/imaginaryhellscapes /r/imaginarycolorscapes /r/imaginarymonstergirls /r/imaginaryswamps /r/imaginarymythology /r/imaginaryscholars /r/imaginaryladyboners /r/imaginaryfuturism /r/imaginaryaviation /r/imaginarypathways /r/imaginarygatherings /r/imaginarybodyscapes /r/imaginaryoverwatch /r/imaginarydwellings /r/imaginarystephenking /r/specart /r/inegentlemanboners /r/comicbookart /r/imaginarymasseffect /r/imaginaryhalo /r/imaginaryjerk /r/backgroundart /r/futureporn /r/imaginarywallpapers /r/imaginaryfamilies /r/imaginarylibraries /r/imaginaryturtleworlds /r/imaginarydesigns /r/wallpapers /r/apocalypseporn /r/comicbookporn /r/isometric /r/imaginarybakerst /r/imaginaryverse /r/imaginarysunnydale /r/imaginaryfederation /r/imaginarysanctuary /r/starshipporn /r/imaginarystarcraft /r/imaginaryoldkingdom /r/imaginarynarnia /r/imaginarycybertron /r/gameworlds /r/imaginarycarnage /r/imaginaryboners /r/icandrawthat /r/imaginarycosmere /r/imaginaryaperture /r/armoredwomen /r/imaginarywtf /r/unusualart /r/imaginaryblueprints /r/alternativeart /r/sympatheticmonsters /r/adorabledragons /r/imaginarysummerscapes /r/imaginarygayboners /r/imaginarystash /r/artistoftheday /r/imaginaryglaciers /r/imaginaryhybrids /r/imaginaryadventurers /r/imaginarymetropolis /r/craftsoficeandfire /r/popartnouveau
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/imaginarybattlefields /r/imaginarycityscapes /r/imaginarywastelands /r/imaginarywildlands /r/imaginaryleviathans /r/imaginarydragons /r/imaginarystarscapes /r/imaginarywesteros /r/imaginaryartifacts /r/imaginaryangels /r/imaginarymaps /r/imaginarybehemoths /r/imaginarydemons /r/imaginaryelves /r/imaginarycentaurs /r/imaginaryfuturewar /r/imaginarysoldiers /r/imaginaryhistory /r/imaginaryarmor /r/imaginarystarships /r/imaginarynetwork /r/imaginaryjedi /r/imaginarydinosaurs /r/imaginarysteampunk /r/imaginarycyberpunk /r/imaginaryarchers /r/imaginaryvehicles /r/imaginaryanime /r/imaginaryfallout /r/imaginaryastronauts /r/imaginarymusic /r/imaginaryfactories /r/imaginaryequestria /r/imaginarywarships /r/imaginaryazeroth /r/imaginaryarrakis /r/imaginarydisney /r/imaginarypolitics /r/imaginaryhorrors /r/imaginarywinterscapes /r/imaginaryseascapes /r/imaginarypirates /r/imaginarywarriors /r/imaginarymiddleearth /r/imaginarygallifrey /r/imaginarymechs /r/imaginarypropaganda /r/imaginarymerfolk /r/imaginaryvikings /r/imaginaryundead /r/imaginarybeasts /r/imaginarymutants /r/imaginaryruins /r/imaginarytamriel /r/imaginaryforests /r/imaginaryelementals /r/imaginaryskyscapes /r/imaginarymonuments /r/imaginarywaterfalls /r/imaginaryworlds /r/imaginarywizards /r/imaginaryinteriors /r/imaginaryhogwarts /r/imaginarytowers /r/imaginaryarchitecture /r/imaginaryweaponry /r/imaginarygaming /r/imaginarycastles /r/imaginaryrobotics /r/imaginarybooks /r/imaginarygnomes /r/imaginaryvillages /r/imaginarydeserts /r/imaginarywerewolves /r/imaginarydieselpunk /r/imaginaryvampires /r/imaginaryadrenaline /r/imaginarykanto /r/imaginarynatives /r/imaginaryrivers /r/imaginarytemples /r/imaginaryassassins /r/imaginaryvolcanoes /r/imaginaryclerics /r/imaginaryprisons /r/imaginarygiants /r/imaginarycowboys /r/imaginaryhumans /r/imaginarydwarves /r/imaginarycaves /r/imaginarytrolls /r/imaginarywalls /r/imaginarylakes /r/imaginarywitches /r/imaginaryorcs /r/imaginarycanyons /r/imaginaryasylums /r/imaginaryimmortals /r/imaginaryaliens /r/imaginarynobles /r/imaginaryspirits /r/imaginaryaetherpunk /r/imaginarytrees /r/imaginaryislands /r/imaginaryninjas /r/imaginaryscience /r/imaginarymountains /r/imaginaryknights /r/imaginarygoblins /r/imaginaryfaeries /r/imaginarygotham /r/imaginarycybernetics /r/imaginaryooo /r/imaginaryderelicts /r/imaginaryfood /r/imaginaryworldeaters /r/imaginarymindscapes /r/imaginaryaww /r/imaginarymarvel /r/imaginaryweather /r/imaginarynewnewyork /r/imaginaryspidey /r/imaginaryautumnscapes /r/imaginarywarhammer /r/imaginaryfeels /r/imaginarywitcher /r/imaginaryvessels /r/imaginarytaverns /r/imaginarybestof /r/imaginaryairships /r/imaginaryportals /r/imaginaryfashion /r/imaginarylovers /r/imaginarydc /r/imaginaryanimals /r/imaginaryhellscapes /r/imaginarycolorscapes /r/imaginarymonstergirls /r/imaginaryswamps /r/imaginarymythology /r/imaginaryscholars /r/imaginaryladyboners /r/imaginaryfuturism /r/imaginaryaviation /r/imaginarypathways /r/imaginarygatherings /r/imaginarybodyscapes /r/imaginaryoverwatch /r/imaginarydwellings /r/imaginarystephenking /r/specart /r/inegentlemanboners /r/comicbookart /r/imaginarymasseffect /r/imaginaryhalo /r/imaginaryjerk /r/backgroundart /r/futureporn /r/imaginarywallpapers /r/imaginaryfamilies /r/imaginarylibraries /r/imaginaryturtleworlds /r/imaginarydesigns /r/wallpapers /r/apocalypseporn /r/comicbookporn /r/isometric /r/imaginarybakerst /r/imaginaryverse /r/imaginarysunnydale /r/imaginaryfederation /r/imaginarysanctuary /r/starshipporn /r/imaginarystarcraft /r/imaginaryoldkingdom /r/imaginarynarnia /r/imaginarycybertron /r/gameworlds /r/imaginarycarnage /r/imaginaryboners /r/icandrawthat /r/imaginarycosmere /r/imaginaryaperture /r/armoredwomen /r/imaginarywtf /r/unusualart /r/imaginaryblueprints /r/alternativeart /r/sympatheticmonsters /r/adorabledragons /r/imaginarysummerscapes /r/imaginarygayboners /r/imaginarystash /r/artistoftheday /r/imaginaryglaciers /r/imaginaryhybrids /r/imaginaryadventurers /r/imaginarymetropolis /r/craftsoficeandfire /r/popartnouveau
+</code></pre></div></div>
 
 <p>There seems to be a network of “imaginary” subreddits that have the highest centrality. The members of this network probably all link to themselves as well as many other subreddits as the “imaginary” topics span a wide range content. This network may be drowning out other nodes that would otherwise have a high centrality relative to the rest of the subreddits. It might be interesting to eliminate these nodes from the graph and recalculate centrality. Let’s look at the distribution of centrality values:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">1000</span><span class="p">])</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">centrality</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)[:</span><span class="mi">1000</span><span class="p">])</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Subreddit Centrality (top 1000)'</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Rank'</span><span class="p">)</span>
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Centrality'</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">'~/Documents/GitHub/briancaffey.github.io/img/subreddit_graph/centrality.png'</span><span class="p">))</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><img src="/img/subreddit_graph/centrality.png" alt="png" /></p>
 
@@ -631,58 +571,47 @@ F -&gt; C
 
 <p>Let’s take a look at the graph as a whole. One thing I’m not sure of is whether or not the entire graph is connected. This means that any node can be reached from any other node. Since we constructed the graph from 49 unrelated nodes, it is possible that the graph is unconnected. This would mean that one or more of the default subreddits and its subreddits is not connected with the rest of the graph. In searching for the shortest path I did not come across any pairs of nodes that did not have a path between themselves. I wouldn’t be surprised if there are a handful of nodes that stand on their own.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="c">#size of graph: nodes and edges (or, subreddits and connecting links)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#size of graph: nodes and edges (or, subreddits and connecting links)</span>
 <span class="k">print</span> <span class="s">"Our graph has "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">' nodes and '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_edges</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">' edges.'</span> 
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>Our graph has 29854 nodes and 149491 edges.
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Our graph has 29854 nodes and 149491 edges.
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">"True of False: our graph is connected... "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">'!'</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span> <span class="s">"True of False: our graph is connected... "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span><span class="n">G1</span><span class="p">))</span> <span class="o">+</span> <span class="s">'!'</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>True of False: our graph is connected... False!
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True of False: our graph is connected... False!
+</code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">Gc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">connected_component_subgraphs</span><span class="p">(</span><span class="n">G1</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Gc</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">connected_component_subgraphs</span><span class="p">(</span><span class="n">G1</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>
 <span class="k">print</span> <span class="s">"The largest connected component subgraph has "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">(</span><span class="n">Gc</span><span class="p">))</span> <span class="o">+</span> <span class="s">" nodes. "</span> 
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>The largest connected component subgraph has 29840 nodes. 
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The largest connected component subgraph has 29840 nodes. 
+</code></pre></div></div>
 
 <p>There are 14 nodes that are not connected to the main connected component. Let’s list them.</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span> <span class="k">print</span> <span class="n">x</span><span class="p">,</span> 
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">to_dict_of_lists</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span> <span class="k">print</span> <span class="n">x</span><span class="p">,</span> 
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>/r/spacediscussions /r/wtfit.gif /r/space. /r/subreddit_graph /r/vidalia /r/listentothis. /r/history. /r/all. /r/ghostdriver /r/personalfinance. /r/toombscounty /r/gaming /r/science /r/books.
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/r/spacediscussions /r/wtfit.gif /r/space. /r/subreddit_graph /r/vidalia /r/listentothis. /r/history. /r/all. /r/ghostdriver /r/personalfinance. /r/toombscounty /r/gaming /r/science /r/books.
+</code></pre></div></div>
 
 <p>Some of the large communities on reddit include /r/books, /r/gaming and /r/science. These subreddits list related subreddits on separate wiki pages since there are many related subreddits for each one. They were most likely all captured in the subsequent levels of the graph, but they also did not link back to /r/science. Here’s an example:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/physics'</span><span class="p">]</span><span class="o">.</span><span class="n">related</span><span class="p">:</span> <span class="k">print</span> <span class="n">x</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">master_df_u</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">master_df_u</span><span class="o">.</span><span class="n">subreddit</span><span class="o">==</span><span class="s">'/r/physics'</span><span class="p">]</span><span class="o">.</span><span class="n">related</span><span class="p">:</span> <span class="k">print</span> <span class="n">x</span>
+</code></pre></div></div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>['/r/physicsjokes', '/r/gradadmissions', '/r/homeworkhelp', '/r/scienceimages', '/r/askacademia', '/r/physicsgifs', '/r/physicsstudents', '/r/gradschool', '/r/askphysics', '/r/physics']
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>['/r/physicsjokes', '/r/gradadmissions', '/r/homeworkhelp', '/r/scienceimages', '/r/askacademia', '/r/physicsgifs', '/r/physicsstudents', '/r/gradschool', '/r/askphysics', '/r/physics']
+</code></pre></div></div>
 
 <p>I’ve got some additional ideas to explore in another post on this topic, such as finding cliques and maximual cliques, and doing graph visualizations with D3.js. If you are interested in playing with the data, you can clone <a href="https://github.com/briancaffey/reddit-graph-analysis">my GitHub repo</a> and load the pickled DataFrames like this:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="s">'pickle/master_df.p'</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
   </div>
 

@@ -108,7 +108,7 @@
 
 <p>Open up your favorite text editor and create a new Python script called something like <code class="highlighter-rouge">tweetbot.py</code>. Copy in the following code:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tweepy</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tweepy</span>
 
 <span class="n">CONSUMER_KEY</span> <span class="o">=</span> <span class="s">'replace with your key'</span>
 <span class="n">CONSUMER_SECRET</span> <span class="o">=</span> <span class="s">'replace with your secret'</span>
@@ -120,8 +120,7 @@
 
 <span class="n">api</span><span class="o">.</span><span class="n">update_status</span><span class="p">(</span><span class="s">"Sending my first tweet via Tweepy!"</span><span class="p">)</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Navigate to the location of this script in your command line and run it with <code class="highlighter-rouge">$ python tweetbot.py</code>.</p>
 
@@ -131,13 +130,12 @@
 
 <p>With the simple script we can schedule regular tweets by adding a simple <code class="highlighter-rouge">while</code> loop with a timer:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
 <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
     <span class="n">tweet</span> <span class="o">=</span> <span class="n">scrape_some_data</span><span class="p">()</span>
     <span class="n">api</span><span class="o">.</span><span class="n">update_status</span><span class="p">(</span><span class="n">tweet</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In this example, the <code class="highlighter-rouge">scrape_some_data()</code> function would scrape some information and save it to the variable <code class="highlighter-rouge">tweet</code>. Next, <code class="highlighter-rouge">time.sleep(300)</code> waits 5 minutes before the loop starts again. This makes sure that your twitter-bot doesn’t exceed the <a href="https://dev.twitter.com/rest/public/rate-limiting">Twitter API rate limit</a>.</p>
 
@@ -153,14 +151,13 @@
 
 <p>First, download the Heroku Toolbelt (command line tools) and run <code class="highlighter-rouge">$ heroku login</code>, then enter your Heroku account information. Download the sample web application and check out what files come with it.</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">git</span><span class="kv"> clone https://github.com/heroku/python-getting-started.git
-</span><span class="w">$ </span><span class="nc">cd</span><span class="kv"> python-getting-started
-</span><span class="w">$ </span><span class="nc">ls</span><span class="kv">
-</span>Procfile		app.json		manage.py
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> git clone https://github.com/heroku/python-getting-started.git
+<span class="gp">$</span> <span class="nb">cd </span>python-getting-started
+<span class="gp">$</span> <span class="nb">ls</span>
+<span class="go">Procfile		app.json		manage.py
 Procfile.windows	gettingstarted		requirements.txt
 README.md		hello			runtime.txt
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">Procfile</code> file will give instructions to your dyno regarding what it should do. Take a look inside this file, and you will see <code class="highlighter-rouge">web: gunicorn gettingstarted.wsgi --log-file -</code>. This indicates that the dyno will be making a website using the file <code class="highlighter-rouge">gettingstarted.wsgi</code>.</p>
 
@@ -171,18 +168,16 @@ README.md		hello			runtime.txt
 
 <p>Next, we will create a place on Heroku where your twitter-bot will live. Run the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">heroku</span><span class="kv"> create
-</span>Creating app... done, stack is cedar-14
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> heroku create
+<span class="go">Creating app... done, stack is cedar-14
 https://random-word-28487.herokuapp.com/ | https://git.heroku.com/random-word-28487.git
-</code></pre>
-</div>
+</span></code></pre></div></div>
 <p>Like Github, Heroku uses <code class="highlighter-rouge">git</code> to move files from your local machine to Heroku’s containers. Clear out the <code class="highlighter-rouge">python-getting-started</code> file so that the only files inside are <code class="highlighter-rouge">tweetbot.py</code>, <code class="highlighter-rouge">requirements.txt</code> and <code class="highlighter-rouge">Procfile</code>.</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code><span class="w">$ </span><span class="nc">git</span><span class="kv"> add .
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> commit -m "initial commit"
-</span><span class="w">$ </span><span class="nc">git</span><span class="kv"> push heroku master
-</span></code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> git add <span class="nb">.</span>
+<span class="gp">$</span> git commit <span class="nt">-m</span> <span class="s2">"initial commit"</span>
+<span class="gp">$</span> git push heroku master
+</code></pre></div></div>
 <p>Pushing the files to Heroku with <code class="highlighter-rouge">$ git push heroku master</code> should create your twitter-bot program on Heroku and launch it into the Twitter-verse! To make sure everything is running smoothly, you can check out the log files on your Heroku Dashboard. There is lots you can do with Twitter and Tweepy, hopefully this tutorial has helped you understand the basics of how the Twitter API works and how to write your own twitter-bot. Thanks for reading, and feel free to leave a comment!</p>
 
   </div>

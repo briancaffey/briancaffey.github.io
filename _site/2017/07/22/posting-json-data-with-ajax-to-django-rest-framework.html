@@ -96,15 +96,14 @@
 
 <p>The entire game state is stored in a JavaScript object. Here’s a simplified representation of the structure:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">"map"</span><span class="p">:{</span>
     <span class="s2">"0"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
     <span class="s2">"1"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">player</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
     <span class="s2">"2"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>The UI lets users manipulate the values of each row in the game state’s <code class="highlighter-rouge">map</code> property. The values of the row arrays are objects themselves, which contain information about which emoji they represent and how they interact with the player (for example, you can’t pass through a tree, so it has a <code class="highlighter-rouge">'wall':true</code> property).</p>
 
@@ -165,7 +164,7 @@
 
 <p>Before I started writing the AJAX call, I looked in the Django REST Framework documentation for instructions on how to post JSON data. Here are the REST Framework settings I added to <code class="highlighter-rouge">settings.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">REST_FRAMEWORK</span> <span class="o">=</span> <span class="p">{</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">REST_FRAMEWORK</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">'DEFAULT_RENDERER_CLASSES'</span><span class="p">:</span> <span class="p">(</span>
         <span class="s">'rest_framework.renderers.JSONRenderer'</span><span class="p">,</span>
     <span class="p">),</span>
@@ -173,25 +172,23 @@
         <span class="s">'rest_framework.parsers.JSONParser'</span><span class="p">,</span>
     <span class="p">)</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>I’m not sure if this was completely necessary, but I think the <a href="http://www.django-rest-framework.org/api-guide/renderers/#jsonrenderer"><code class="highlighter-rouge">JSONRenderer</code> helps with the serialization of Unicode data</a>, since earlier attempts returned Unicode representation of emoji rather than the emoji themselves (e.g., U+1F600 instead of 😀).</p>
 
 <p>I should also mention that I added a simple “Game” model in <code class="highlighter-rouge">models.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib.postgres.fields</span> <span class="kn">import</span> <span class="n">JSONField</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib.postgres.fields</span> <span class="kn">import</span> <span class="n">JSONField</span>
 
 <span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="n">game</span> <span class="o">=</span> <span class="n">JSONField</span><span class="p">()</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next I added the views and serializers for the API endpoint (<code class="highlighter-rouge">/api/kings/save/</code>) for the POST request:</p>
 
 <p><em>kings/api/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
 <span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">GameSerializer</span>
 
 <span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">CreateAPIView</span><span class="p">,</span> <span class="c"># ListAPIView</span>
@@ -209,12 +206,11 @@
 <span class="c"># class GameListAPIView(ListAPIView):</span>
 <span class="c">#     queryset = Game.objects.all()</span>
 <span class="c">#     serializer_class = GameSerializer</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><em>kings/api/serializers.py</em></p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">ModelSerializer</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">ModelSerializer</span>
 <span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
 <span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
 
@@ -225,8 +221,7 @@
         <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s">'game'</span>
         <span class="p">]</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Writing this view was the first big hurdle. I was under the impression that the JSON data was to be accessed in <code class="highlighter-rouge">self.request.body</code>. The error message said <a href="https://github.com/encode/django-rest-framework/issues/2774">You cannot access body after reading from request’s data stream</a>, and there were some elaborate solutions that I didn’t think I would be able to implement.</p>
 
@@ -243,47 +238,42 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>I resolved the <code class="highlighter-rouge">415</code> error by adding the following to the AJAX call.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>headers: {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>headers: {
   'Accept': 'application/json',
   'Content-Type': 'application/json'
   },
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>One aspect of all of the debugging which was frustrating is that the sqlite3 database on my local environment does not support storing JSON data (as far as I know), so I committed and pushed code to my production server on Heroku (which uses PostgreSQL) for each step in the debug process. Eventually I realized that a <code class="highlighter-rouge">500</code> server error on my local environment meant that everything was working correctly except for the very last step: saving the <code class="highlighter-rouge">Game</code> object.</p>
 
 <p>At this point I thought I was pretty close. I could successfully POST data using the DRF web interface, and I got the following type of error messages (which were <code class="highlighter-rouge">HTTP 400 Bad Request</code>) when I tried to post malformed data:</p>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON parse error - Expecting value: line 2 column 13 (char 14)"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON parse error - Expecting value: line 2 column 13 (char 14)"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>To see what error message I was getting using AJAX, I found that jQuery makes the error message available in <code class="highlighter-rouge">XMLHttpRequest.responseText</code>. I then added the following to the AJAX <code class="highlighter-rouge">error</code> callback:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>$.ajax({
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajax({
   ...
   error: function(XMLHttpRequest, textStatus, errorThrown) {
     alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
     }
   });
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>This error message was saying:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ValueError: Expecting value: line 1 column 1 (char 0)
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ValueError: Expecting value: line 1 column 1 (char 0)
+</code></pre></div></div>
 
 <p>This led me to believe that there was an issue with the <code class="highlighter-rouge">data</code> attribute being passed into the AJAX call. It was particularly difficult to figure out how to write the JSONified version of JavaScript object. SO posts had many different ways, and I eventually found that the following worked:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>$.ajax({
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajax({
   ...
   data : JSON.stringify({game:scene}),
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Since I named the <code class="highlighter-rouge">JSONField()</code> field in my Game model <code class="highlighter-rouge">game</code>, I believe that <code class="highlighter-rouge">game</code> needed to be the “main attribute” of the JSON in the POST request. <code class="highlighter-rouge">scene</code> is the name of the variable that held the JavaScript object I wanted to send. <code class="highlighter-rouge">JSON.stringify()</code> was a little confusing, and there was lots of confusion online about what it returns. Here’s the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify">MDN documentation</a> that was helpful in figuring out <code class="highlighter-rouge">JSON.stringify()</code>.</p>
 
@@ -291,13 +281,13 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>At some point in all of this debugging I got a strange error message saying the CSRF Token was missing or incorrect. I had included <code class="highlighter-rouge">csrfmiddlewaretoken: "{{ csrf_token }}",</code> in the AJAX call, and it wasn’t an issue I had experienced with making my other POST request with AJAX. I found <a href="https://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request">this Stack Overflow answer</a> with 143 votes and 90,322 views, and was pleased that the proposed solution worked just fine. It involves adding <code class="highlighter-rouge">$.ajaxSetup()</code> before the AJAX call:</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>$.ajaxSetup({
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
              var cookieValue = null;
              if (document.cookie <span class="err">&amp;&amp;</span> document.cookie != '') {
                  var cookies = document.cookie.split(';');
-                 for (var i = 0; i <span class="nt">&lt; cookies</span><span class="err">.</span><span class="na">length</span><span class="err">;</span> <span class="na">i</span><span class="err">++)</span> <span class="err">{</span>
+                 for (var i = 0; i <span class="nt">&lt;</span> <span class="nt">cookies</span><span class="err">.</span><span class="na">length</span><span class="err">;</span> <span class="na">i</span><span class="err">++)</span> <span class="err">{</span>
                      <span class="na">var</span> <span class="na">cookie =</span><span class="err"> </span><span class="s">jQuery.trim(cookies[i]);</span>
                      <span class="err">//</span> <span class="na">Does</span> <span class="na">this</span> <span class="na">cookie</span> <span class="na">string</span> <span class="na">begin</span> <span class="na">with</span> <span class="na">the</span> <span class="na">name</span> <span class="na">we</span> <span class="na">want</span><span class="err">?</span>
                      <span class="na">if</span> <span class="err">(</span><span class="na">cookie</span><span class="err">.</span><span class="na">substring</span><span class="err">(</span><span class="na">0</span><span class="err">,</span> <span class="na">name</span><span class="err">.</span><span class="na">length</span> <span class="err">+</span> <span class="na">1</span><span class="err">)</span> <span class="err">==</span> <span class="err">(</span><span class="na">name</span> <span class="err">+</span> <span class="err">'='))</span> <span class="err">{</span>
@@ -314,8 +304,7 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
          <span class="err">}</span>
      <span class="err">}</span>
 <span class="err">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>I won’t go into to much detail here, but you can read more about this issue which apparently also impacts Ruby on Rails as well. Here’s a <a href="https://www.djangoproject.com/weblog/2011/feb/08/security/">link to a security post on the Django Project blog</a>.</p>
 

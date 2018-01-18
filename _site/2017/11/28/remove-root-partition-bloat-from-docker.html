@@ -98,30 +98,27 @@
 
 <p>This helps you quickly find packages that you can do without. After removing some large packages like Libre Office I realized that this was barely moving the needle on my storage problem. Running <code class="highlighter-rouge">df -h</code> and <code class="highlighter-rouge">baobab</code> again with root priviledges gave me slightly different results. At this point I turned to docker and deleted all of the images with `docker rmi <IMAGE ID=""> -f. This didn't help either. Here are the images that I removed from my desktop:</IMAGE></p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code>[brian@a1arch ~]$ docker images
-REPOSITORY                              TAG                 IMAGE ID            CREATED             SIZE
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@a1arch ~]$</span> docker images
+<span class="go">REPOSITORY                              TAG                 IMAGE ID            CREATED             SIZE
 flaskmicroservicesusers_users-service   latest              1e59fa4d2af5        5 days ago          739MB
-&lt;none&gt;                                  &lt;none&gt;              18f9191b4d9a        5 days ago          739MB
-flaskmicroservicesusers_users-db        latest              f1de1c3ef3f2        5 days ago          287MB
-&lt;none&gt;                                  &lt;none&gt;              11188ac6f36a        5 days ago          712MB
-postgres                                latest              599272bf538f        12 days ago         287MB
+</span><span class="gp">&lt;none&gt;</span>                                  &lt;none&gt;              18f9191b4d9a        5 days ago          739MB
+<span class="go">flaskmicroservicesusers_users-db        latest              f1de1c3ef3f2        5 days ago          287MB
+</span><span class="gp">&lt;none&gt;</span>                                  &lt;none&gt;              11188ac6f36a        5 days ago          712MB
+<span class="go">postgres                                latest              599272bf538f        12 days ago         287MB
 tensorflow/tensorflow                   latest-gpu          2f243a16ff63        3 weeks ago         3.36GB
 python                                  3.6.2               26acbad26a2c        2 months ago        690MB
-</code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Here’s the storage profile before I started remove docker-related files:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code> $ df -h | grep /dev/sda1
-/dev/sda1        20G   18G  737M  97% /
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> /dev/sda1
+<span class="go">/dev/sda1        20G   18G  737M  97% /
+</span></code></pre></div></div>
 <p>After I removed the docker images, here is the same command:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> $ df -h | grep /dev/sda1
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ df -h | grep /dev/sda1
 /dev/sda1        20G   18G  737M  97% /
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>I found a helpful serverfault question from 6 years ago that address the issue I was having titled <a href="https://serverfault.com/questions/275206/disk-full-du-tells-different-how-to-further-investigate">Disk full, du tells different. How to further investigate?</a>.</p>
 
@@ -135,11 +132,10 @@ python                                  3.6.2               26acbad26a2c        
 
 <p>Here’s the folder in question on my laptop:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code> $ cd /var/lib/docker
- $ sudo du -s -h .
-2.6G	.
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">cd</span> /var/lib/docker
+<span class="gp"> $</span> <span class="nb">sudo du</span> <span class="nt">-s</span> <span class="nt">-h</span> <span class="nb">.</span>
+<span class="go">2.6G	.
+</span></code></pre></div></div>
 
 <p>On my desktop this was taking up about 10G!</p>
 
@@ -149,18 +145,16 @@ python                                  3.6.2               26acbad26a2c        
 
 <p>I stopped the docker service and deleted the overlay2 file:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code> $ sudo systemctl stop docker
- $ cd /var/lib/docker
- $ sudo rm -rf layover2
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">sudo </span>systemctl stop docker
+<span class="gp"> $</span> <span class="nb">cd</span> /var/lib/docker
+<span class="gp"> $</span> <span class="nb">sudo rm</span> <span class="nt">-rf</span> layover2
+</code></pre></div></div>
 
 <p>With <code class="highlighter-rouge">sudo baobab</code> I was also able to delete 3.6G of trash with this command:</p>
 
-<div class="language-terminal highlighter-rouge"><pre class="highlight"><code> $ sudo -i
- # rm -rf /root/.local/share/Trash
-</code></pre>
-</div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">sudo</span> <span class="nt">-i</span>
+<span class="gp"> #</span> <span class="nb">rm</span> <span class="nt">-rf</span> /root/.local/share/Trash
+</code></pre></div></div>
 
 <p>I think this may be related to having previously emptied the Trash in nautilus file browser with files that I might not have owned.</p>
 
@@ -176,12 +170,11 @@ By default, docker images are located at /var/lib/docker. They can be moved to o
 
   <p>Then add a Drop-in snippet for the docker.service, adding the –data-root parameter to the ExecStart:</p>
 
-  <div class="highlighter-rouge"><pre class="highlight"><code>/etc/systemd/system/docker.service.d/docker-storage.conf
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/systemd/system/docker.service.d/docker-storage.conf
 [Service]
 ExecStart= 
 ExecStart=/usr/bin/dockerd --data-root=/path/to/new/location/docker -H fd://
-</code></pre>
-  </div>
+</code></pre></div>  </div>
 </blockquote>
 
 <p>Update: I did this on my desktop with a <code class="highlighter-rouge">--data-rogettingot</code> path in my home folder.</p>

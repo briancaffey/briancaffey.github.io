@@ -98,13 +98,13 @@
 
 <p>I wanted to give the game some additional features, so I let the player set the dimensions of the board to be any integer greater than 1. Here’s a look at the main component called “Board” which contains most of the business logic:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">'react'</span><span class="p">;</span>
-<span class="kr">import</span> <span class="p">{</span> <span class="nx">grid</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'../data/grid.js'</span><span class="p">;</span>
-<span class="kr">import</span> <span class="p">{</span> <span class="nx">Square</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'./Square'</span><span class="p">;</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">grid</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'../data/grid.js'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Square</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./Square'</span><span class="p">;</span>
 
-<span class="kr">export</span> <span class="kr">class</span> <span class="nx">Board</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
-  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">){</span>
-    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">Board</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">){</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
       <span class="na">dim</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
       <span class="na">grid</span><span class="p">:</span><span class="nb">Array</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nb">Array</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="s2">"+"</span><span class="p">)),</span>
@@ -119,34 +119,34 @@
   <span class="p">}</span>
 
   <span class="nx">handleReset</span><span class="p">(){</span>
-    <span class="kr">const</span> <span class="nx">newGrid</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">dim</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nb">Array</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">dim</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="s2">"+"</span><span class="p">))</span>
+    <span class="kd">const</span> <span class="nx">newGrid</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">dim</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nb">Array</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">dim</span><span class="p">).</span><span class="nx">fill</span><span class="p">(</span><span class="s2">"+"</span><span class="p">))</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="s1">'grid'</span><span class="p">:</span><span class="nx">newGrid</span><span class="p">,</span> <span class="s1">'player'</span><span class="p">:</span><span class="s1">'X'</span><span class="p">});</span>
   <span class="p">}</span>
 
   <span class="nx">checkWins</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">){</span>
-    <span class="kr">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span>
+    <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span>
 
     <span class="kd">function</span> <span class="nx">checkDiagonal1</span><span class="p">(){</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">==</span> <span class="nx">y</span><span class="p">){</span>
-        <span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">i</span><span class="p">]));</span>
+        <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">i</span><span class="p">]));</span>
         <span class="nx">announceWin</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="kd">function</span> <span class="nx">checkDiagonal2</span><span class="p">(){</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">x</span><span class="o">+</span><span class="nx">y</span><span class="o">+</span><span class="mi">1</span> <span class="o">==</span> <span class="nx">g</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
-        <span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">g</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="nx">i</span><span class="p">]))</span>
+        <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">g</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="nx">i</span><span class="p">]))</span>
         <span class="nx">announceWin</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="kd">function</span> <span class="nx">checkHorizontal</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span>
-      <span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">]);</span>
+      <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">]);</span>
       <span class="nx">announceWin</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="kd">function</span> <span class="nx">checkVertical</span><span class="p">(</span><span class="nx">y</span><span class="p">){</span>
-      <span class="kr">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">x</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">x</span><span class="p">[</span><span class="nx">y</span><span class="p">]));</span>
+      <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Set</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">x</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">x</span><span class="p">[</span><span class="nx">y</span><span class="p">]));</span>
       <span class="nx">announceWin</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
     <span class="p">}</span>
 
@@ -169,7 +169,7 @@
   <span class="p">}</span>
 
   <span class="nx">handleOnClick</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">){</span>
-    <span class="kr">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span>
+    <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">active</span><span class="p">){</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'+'</span><span class="p">){</span>
         <span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">player</span><span class="p">;</span>
@@ -183,7 +183,7 @@
   <span class="p">}</span>
 
   <span class="nx">render</span><span class="p">(){</span>
-    <span class="kr">const</span> <span class="nx">style</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">style</span> <span class="o">=</span> <span class="p">{</span>
       <span class="na">margin</span><span class="p">:</span><span class="s1">'auto'</span><span class="p">,</span>
       <span class="na">width</span><span class="p">:</span> <span class="s2">"auto"</span><span class="p">,</span>
       <span class="na">height</span><span class="p">:</span><span class="s2">"auto"</span><span class="p">,</span>
@@ -192,7 +192,7 @@
       <span class="na">fontSize</span><span class="p">:</span><span class="s2">"3em"</span><span class="p">,</span>
       <span class="na">tableLayout</span><span class="p">:</span><span class="s1">'fixed'</span><span class="p">,</span>
     <span class="p">}</span>
-    <span class="kr">const</span> <span class="nx">rows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">r</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="k">return</span> <span class="p">(</span>
+    <span class="kd">const</span> <span class="nx">rows</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">r</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="k">return</span> <span class="p">(</span>
       <span class="o">&lt;</span><span class="nx">tr</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="s2">"row_"</span><span class="o">+</span><span class="nx">i</span><span class="p">}</span><span class="o">&gt;</span>
         <span class="p">{</span><span class="nx">r</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">d</span><span class="p">,</span> <span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'building'</span><span class="p">);</span> <span class="k">return</span><span class="p">(</span>
           <span class="o">&lt;</span><span class="nx">Square</span>
@@ -231,8 +231,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>I had so much fun putting together this tic-tac-toe app that I decided to write another one of my favorite games called Gomoku. This game is somwhat similar to tic-tac-toe, but the objective is to connect 5 stones of the same color on a much larger board.</p>
 
@@ -244,15 +243,15 @@
 
 <p>Here’s the main component for this game with heavy commenting:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">//import React and Square component</span>
-<span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">'react'</span><span class="p">;</span>
-<span class="kr">import</span> <span class="p">{</span> <span class="nx">Square</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'./Square'</span><span class="p">;</span>
-<span class="kr">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">'./Button'</span><span class="p">;</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//import React and Square component</span>
+<span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Square</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./Square'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span> <span class="nx">Button</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'./Button'</span><span class="p">;</span>
 
 <span class="c1">//main board component with game logic</span>
-<span class="kr">export</span> <span class="kr">class</span> <span class="nx">Board</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="p">{</span>
-  <span class="nx">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">){</span>
-    <span class="kr">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">Board</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="nx">props</span><span class="p">){</span>
+    <span class="k">super</span><span class="p">(</span><span class="nx">props</span><span class="p">);</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
       <span class="c1">//white goes first</span>
       <span class="s1">'isWhite'</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
@@ -275,7 +274,7 @@
     <span class="c1">//only add a peice and check for wins if the clicked square is empty</span>
     <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'+'</span><span class="p">){</span>
       <span class="c1">//we don't want to mutate state directly, so we store the reference to 'grid' in a const</span>
-      <span class="kr">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span><span class="p">;</span>
       <span class="c1">//set the grid square cooresponding to the clicked square to the color of the current player</span>
       <span class="nx">g</span><span class="p">[</span><span class="nx">x</span><span class="p">][</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">isWhite</span> <span class="o">===</span> <span class="kc">true</span> <span class="p">?</span> <span class="s1">'w'</span><span class="p">:</span><span class="s1">'b'</span><span class="p">;</span>
       <span class="c1">//set the state with the new grid data</span>
@@ -299,17 +298,17 @@
         <span class="k">return</span> <span class="nx">tracked</span><span class="p">;</span>
       <span class="p">}</span>
       <span class="c1">//sum the directions (left+right, up+down, 2 diagonals)</span>
-      <span class="kr">const</span> <span class="nx">w_horizontal</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-      <span class="kr">const</span> <span class="nx">b_horizontal</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">w_horizontal</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">b_horizontal</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 
-      <span class="kr">const</span> <span class="nx">w_vertical</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-      <span class="kr">const</span> <span class="nx">b_vertical</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">w_vertical</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">b_vertical</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 
-      <span class="kr">const</span> <span class="nx">w_diag1</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-      <span class="kr">const</span> <span class="nx">b_diag1</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">w_diag1</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">b_diag1</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 
-      <span class="kr">const</span> <span class="nx">w_diag2</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-      <span class="kr">const</span> <span class="nx">b_diag2</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">w_diag2</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'w'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="kd">const</span> <span class="nx">b_diag2</span> <span class="o">=</span> <span class="nx">checkDir</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">+</span> <span class="nx">checkDir</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 
       <span class="c1">//check to see if there are any sums greater than or equal to 5 and alert the players of a win</span>
       <span class="c1">//setTimeout is called so that the alert() function does not hold up the rendering of the board.</span>
@@ -324,7 +323,7 @@
   <span class="p">}</span>
   <span class="nx">render</span><span class="p">(){</span>
     <span class="c1">//define styles for the &lt;table&gt; element in the return() function below</span>
-    <span class="kr">const</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span>
              <span class="na">textAlign</span><span class="p">:</span> <span class="s2">"center"</span><span class="p">,</span>
              <span class="na">margin</span><span class="p">:</span><span class="s2">"auto"</span><span class="p">,</span>
              <span class="na">height</span><span class="p">:</span> <span class="s2">"auto"</span><span class="p">,</span>
@@ -332,14 +331,14 @@
              <span class="na">border</span><span class="p">:</span><span class="s2">"1px solid black"</span><span class="p">,</span>
              <span class="na">tableLayout</span><span class="p">:</span><span class="s1">'fixed'</span><span class="p">,</span>
            <span class="p">};</span>
-    <span class="kr">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">g</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">grid</span><span class="p">;</span>
     <span class="c1">//loop through the squares in each row and generate a new Square component,</span>
     <span class="c1">//passing in props to the Square component in the nested map() function</span>
-    <span class="kr">const</span> <span class="nx">board</span> <span class="o">=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">row</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span>
+    <span class="kd">const</span> <span class="nx">board</span> <span class="o">=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">row</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span>
       <span class="o">&lt;</span><span class="nx">tr</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="s2">"row_"</span><span class="o">+</span><span class="nx">i</span><span class="p">}</span><span class="o">&gt;</span>
         <span class="p">{</span><span class="nx">row</span><span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">col</span><span class="p">,</span> <span class="nx">j</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
           <span class="c1">//set the color of the square based on state.grid</span>
-          <span class="kr">const</span> <span class="nx">color_</span> <span class="o">=</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'+'</span> <span class="p">?</span> <span class="s1">'#e4e4a1'</span><span class="p">:</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'w'</span> <span class="p">?</span> <span class="s1">'white'</span><span class="p">:</span><span class="s1">'black'</span><span class="p">;</span>
+          <span class="kd">const</span> <span class="nx">color_</span> <span class="o">=</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'+'</span> <span class="p">?</span> <span class="s1">'#e4e4a1'</span><span class="p">:</span> <span class="nx">g</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="s1">'w'</span> <span class="p">?</span> <span class="s1">'white'</span><span class="p">:</span><span class="s1">'black'</span><span class="p">;</span>
           <span class="c1">//return Square component, passing in the following as props:</span>
           <span class="c1">//square color defined above in color_,</span>
           <span class="c1">//a value for the key which React needs (I think) and</span>
@@ -373,16 +372,15 @@
   <span class="p">}</span>
 <span class="p">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>And here is the square component:</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kr">import</span> <span class="nx">React</span> <span class="nx">from</span> <span class="s1">'react'</span><span class="p">;</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span> <span class="k">from</span> <span class="s1">'react'</span><span class="p">;</span>
 
-<span class="kr">export</span> <span class="kr">class</span> <span class="nx">Square</span> <span class="kr">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">Square</span> <span class="kd">extends</span> <span class="nx">React</span><span class="p">.</span><span class="nx">Component</span><span class="p">{</span>
   <span class="nx">render</span><span class="p">(){</span>
-    <span class="kr">const</span> <span class="nx">color_</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">color</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">color_</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">color</span><span class="p">;</span>
     <span class="k">return</span> <span class="p">(</span>
       <span class="o">&lt;</span><span class="nx">td</span>
         <span class="nx">style</span><span class="o">=</span><span class="p">{{</span>
@@ -408,8 +406,7 @@
   <span class="p">}</span>
 <span class="p">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>So far, I love using React. These examples only scratch the surface of what you can do with the library, but even with these examples you can see how easy it is to keep track of state. By making use of the virtual DOM, React only rerenders the part of the actual DOM for which there has been a change in state.</p>
 

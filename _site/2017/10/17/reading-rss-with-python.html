@@ -94,13 +94,12 @@
 
 <p>First, install it with:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">feedparser</span>
-</code></pre>
-</div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">feedparser</span>
+</code></pre></div></div>
 
 <p>Here’s the setup that I will be using in utility a function that will be imported to <code class="highlighter-rouge">views.py</code> and called in the <code class="highlighter-rouge">home()</code> function that renders the homepage for briancaffey.com:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>import feedparser
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import feedparser
 
 def get_blog_posts(number_of_posts):
     url = "http://briancaffey.github.io/feed"
@@ -108,12 +107,11 @@ def get_blog_posts(number_of_posts):
     posts = feed['items'][:number_of_posts]
     return posts
     
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Next, in <code class="highlighter-rouge">views.py</code>, we just need to import the function, call it with the number of articles we want to show, save the returned value to a variable and then pass that to <code class="highlighter-rouge">context</code>:</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">get_blog_posts</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">get_blog_posts</span>
 <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="o">...</span>
     <span class="n">posts</span> <span class="o">=</span> <span class="n">get_blog_posts</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -125,8 +123,7 @@ def get_blog_posts(number_of_posts):
     <span class="p">}</span>
     
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>In the context, we can access the following data for each item:</p>
 
