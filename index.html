@@ -5,7 +5,9 @@ layout: default
 <div class="home">
   {% assign total = 0 %}
   {% for post in site.posts %}
+
     {% assign total = total | plus: 1 %}
+
   {% endfor %}
   <h1 class="page-heading">Recent Posts ({{ total }})</h1>
 
