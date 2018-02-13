@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Distilling lessons from the OTTG Django tutorial</title>
+  <meta name="description" content="This post will boil down the important steps described in Obey the Testing Goat, a book I am reading on test-driven development (TDD) in Django, a web framew...">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://localhost:4000/2017/03/04/ottg-tutorial.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+          <a class="page-link" href="/my-other-site">My Other Website</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
+          <a class="page-link" href="/resume">Resume</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Distilling lessons from the OTTG Django tutorial</h1>
+    <p class="post-meta"><time datetime="2017-03-04T00:00:00-05:00" itemprop="datePublished">Mar 4, 2017</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>This post will boil down the important steps described in <a href="http://www.obeythetestinggoat.com/">Obey the Testing Goat</a>, a book I am reading on test-driven development (TDD) in <a href="https://www.djangoproject.com/">Django</a>, a web framework written in Python.</p>
+
+<p>The book (which is published under the <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>) does a great job of introducing TDD and Django, and it does so in lots of detail. I’m trying to get a better sense of the work flow, so I’m going to list the important steps for working with Django, using tests and also using git to build a simple web application.</p>
+
+<h1 id="obey-the-testing-goat">Obey the Testing Goat</h1>
+
+<p>If you are using the Anaconda distribution, there may be an issue with creating a Python 3 environment. If you see the following error, you will need to resolve <a href="https://github.com/conda/conda/issues/3935">an issue</a> caused by <code class="highlighter-rouge">pyopenssl</code> and <code class="highlighter-rouge">cryptography</code> being out of sync.</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> conda create <span class="nt">-n</span> py3k <span class="nv">python</span><span class="o">=</span>3 anaconda
+<span class="go">Fetching package metadata ...An unexpected error has occurred.
+[...]
+</span></code></pre></div></div>
+
+<p>To fix this, run:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">CONDA_SSL_VERIFY=false conda update pyopenssl
+</span></code></pre></div></div>
+
+<p>Then you can run <code class="highlighter-rouge">$ conda create -n py3k python=3 anaconda</code> again and it should create the environment.</p>
+
+<p>Another issue invovles using the webdriver <code class="highlighter-rouge">geckodriver</code>. Once you <a href="https://github.com/mozilla/geckodriver/releases">download the appropriate release version</a>, you will need to put the executable in your path. To do this, run the following once you have unzipped the driver (assuming you unzipped the executable to your Downloads folder:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">mv</span> ~/Downloads/geckodriver /usr/local/bin
+</code></pre></div></div>
+
+<p>Check to see if you get this:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> geckodriver <span class="nt">--version</span>
+<span class="go">geckodriver 0.14.0
+
+The source code of this program is available at
+https://github.com/mozilla/geckodriver.
+
+This program is subject to the terms of the Mozilla Public License 2.0.
+You can obtain a copy of the license at https://mozilla.org/MPL/2.0/.
+</span></code></pre></div></div>
+
+<p>We can now install the two packages we need to get going: Django and selenium. Make sure to activate your virtual environment before making the installation. My virtual environment is called <code class="highlighter-rouge">py3k</code>.</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">source </span>activate py3k
+<span class="gp">(py3k) $</span> pip <span class="nb">install</span> <span class="s2">"django&lt;1.11"</span> <span class="s2">"selenium&gt;3"</span>
+</code></pre></div></div>
+
+<p>At this point we should be ready to start!</p>
+
+<h2 id="chapter-1-getting-django-set-up-using-a-functional-test">Chapter 1: Getting Django Set Up Using a Functional Test</h2>
+
+<p><strong>TEST:</strong> Is the Django server running? (Is the word Django in the title?)</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> nano functional_tests.py
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">browser</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+<span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://localhost:8000'</span><span class="p">)</span>
+
+<span class="k">assert</span> <span class="s">'Django'</span> <span class="ow">in</span> <span class="n">browser</span><span class="o">.</span><span class="n">title</span>
+</code></pre></div></div>
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python functional_tests.py
+<span class="go">
+[...]
+selenium.common.exceptions.WebDriverException: Message: Error loading page
+</span></code></pre></div></div>
+
+<p><strong>CREATE DJANGO PROJECT</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> django-admin.py startproject superlists
+<span class="gp">(py3) $</span> tree
+<span class="c">.
+</span><span class="go">├── functional_tests.py
+└── superlists
+    ├── manage.py
+    └── superlists
+        ├── __init__.py
+        ├── settings.py
+        ├── urls.py
+        └── wsgi.py
+
+2 directories, 6 files
+	
+</span></code></pre></div></div>
+<p><strong>RUN SERVER</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> <span class="nb">cd </span>superlists
+<span class="gp">(py3) $</span> python manage.py runserver
+<span class="go">[...]
+Quit the server with CONTROL-C.
+</span></code></pre></div></div>
+
+<p><strong>TEST PASSES</strong></p>
+
+<p><strong>GIT</strong></p>
+
+<p>I won’t go into much detail about git, but it’s important to get everything set up correctly, so here are the important things to do</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> <span class="nb">ls</span>
+<span class="go">superlists  functional_tests.py  geckodriver.log
+</span><span class="gp">(py3) $</span> <span class="nb">mv </span>functional_tests.py superlists/
+<span class="gp">(py3) $</span> <span class="nb">cd </span>superlists
+<span class="gp">(py3) $</span> git init <span class="nb">.</span>
+<span class="gp">(py3) $</span> <span class="nb">echo</span> <span class="s2">"db.sqlite3"</span> <span class="o">&gt;&gt;</span> .gitignore
+<span class="gp">(py3) $</span> <span class="nb">echo</span> <span class="s2">"geckodriver.log"</span> <span class="o">&gt;&gt;</span> .gitignore
+<span class="gp">(py3) $</span> git add <span class="nb">.</span>
+<span class="gp">(py3) $</span> git <span class="nb">rm</span> <span class="nt">-r</span> <span class="nt">--cached</span> superlists/__pycache__
+<span class="gp">(py3) $</span> <span class="nb">echo</span> <span class="s2">"__pycache__"</span> <span class="o">&gt;&gt;</span> .gitignore
+<span class="gp">(py3) $</span> <span class="nb">echo</span> <span class="s2">"*.pyc"</span> <span class="o">&gt;&gt;</span> .gitignore
+<span class="gp">(py3) $</span> git add .gitignore
+<span class="gp">(py3) $</span> git commit
+</code></pre></div></div>
+
+<h2 id="chapter-2-extending-our-functional-test-using-the-unittest-module">Chapter 2: Extending Our Functional Test Using the unittest Module</h2>
+
+<p>Extending <code class="highlighter-rouge">functional_tests.py</code> for storyboarding and “minimum viable app”.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="k">class</span> <span class="nc">NewVisitorTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>  
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_can_start_a_list_and_retrieve_it_later</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  
+        <span class="c"># Edith has heard about a cool new online to-do app. She goes</span>
+        <span class="c"># to check out its homepage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://localhost:8000'</span><span class="p">)</span>
+
+        <span class="c"># She notices the page title and header mention to-do lists</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'To-Do'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>  
+        <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s">'Finish the test!'</span><span class="p">)</span>  
+
+        <span class="c"># She is invited to enter a to-do item straight away</span>
+        <span class="p">[</span><span class="o">...</span><span class="n">rest</span> <span class="n">of</span> <span class="n">comments</span> <span class="k">as</span> <span class="n">before</span><span class="p">]</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>  
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">warnings</span><span class="o">=</span><span class="s">'ignore'</span><span class="p">)</span>  
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">py3</span><span class="p">)</span> <span class="err">$</span> <span class="n">python</span> <span class="n">functional_tests</span><span class="o">.</span><span class="n">py</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="nb">AssertionError</span><span class="p">:</span> <span class="s">'To-Do'</span> <span class="ow">not</span> <span class="n">found</span> <span class="ow">in</span> <span class="s">'Welcome to Django'</span>
+</code></pre></div></div>
+<p>Browser Reads:</p>
+
+<blockquote>
+  <p>It worked!
+Congratulations on your first Django-powered page.</p>
+</blockquote>
+
+<p><strong>GIT:</strong> commit</p>
+
+<h1 id="chapter-3-testing-a-simple-home-page-with-unit-tests">Chapter 3: Testing a Simple Home Page with Unit Tests</h1>
+
+<p>Start a new app in the project:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py startapp lists
+<span class="gp">(py3) &gt;</span><span class="o">&gt;</span>tree
+<span class="c">.
+</span><span class="go">├── db.sqlite3
+├── functional_tests.py
+├── geckodriver.log
+├── lists
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+├── manage.py
+└── superlists
+    ├── __init__.py
+    ├── __pycache__
+    │   ├── __init__.cpython-36.pyc
+    │   ├── settings.cpython-36.pyc
+    │   ├── urls.cpython-36.pyc
+    │   └── wsgi.cpython-36.pyc
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+</span></code></pre></div></div>
+
+<p><strong>GIT:</strong> commit</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> git add lists/
+<span class="gp">(py3) $</span> git commit <span class="nt">-m</span> <span class="s2">"add app for lists"</span>
+</code></pre></div></div>
+
+<p><strong>REVIEW:</strong> Django workflow</p>
+
+<ol>
+  <li>An HTTP request comes in for a particular URL.</li>
+  <li>Django uses some rules to decide which view function should deal with the request (this is referred to as resolving the URL).</li>
+  <li>The view function processes the request and returns an HTTP response.</li>
+</ol>
+
+<p><strong>TEST</strong>: Unit Tests</p>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">from django.core.urlresolvers import resolve
+from django.test import TestCase
+from lists.views import home_page
+
+class HomePageTest(TestCase):
+
+	def test_root_url_resolves_to_home_page_view(self):
+		found = resolve('/')
+		self.assertEqual(found.func, home_page)
+</span></code></pre></div></div>
+
+<p><em><code class="highlighter-rouge">resolve().func</code> is the view function that would be used to serve the URL</em> <a href="https://docs.djangoproject.com/en/1.10/ref/urlresolvers/">Link</a></p>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="c"># Create your views here.</span>
+<span class="n">home_page</span> <span class="o">=</span> <span class="bp">None</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> unit test</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">[...]
+django.urls.exceptions.Resolver404: {'tried': [[&lt;RegexURLResolver
+</span><span class="gp">&lt;RegexURLPattern list&gt;</span> <span class="o">(</span>admin:admin<span class="o">)</span> ^admin/&gt;]], <span class="s1">'path'</span>: <span class="s1">''</span><span class="o">}</span>
+</code></pre></div></div>
+
+<p><em>superlists/urls.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">lists</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">home_page</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> unit test</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">[...]
+TypeError: view must be a callable or a list/tuple in the case of include().
+</span></code></pre></div></div>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> unit test passes</p>
+
+<p><strong>GIT:</strong> commit</p>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">resolve</span>
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpRequest</span>
+
+<span class="kn">from</span> <span class="nn">lists.views</span> <span class="kn">import</span> <span class="n">home_page</span>
+
+<span class="k">class</span> <span class="nc">HomePageTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_root_url_resolves_to_home_page_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">found</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">home_page</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_home_page_returns_correct_html</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">HttpRequest</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">'utf8'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">startwith</span><span class="p">(</span><span class="s">'&lt;html&gt;'</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'&lt;title&gt;To-Do lists&lt;/title&gt;'</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">'&lt;/html&gt;'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">[...]
+TypeError: home_page() takes 0 positional arguments but 1 was given
+</span></code></pre></div></div>
+
+<p>To make this test pass we will need to pass <code class="highlighter-rouge">request</code> into <code class="highlighter-rouge">home_page</code>.</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">requests</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">[...]
+AttributeError: 'NoneType' object has no attribute 'content'
+</span></code></pre></div></div>
+
+<p>This part is pretty tediuous, the book stresses <em>very</em> small incremental changes between each test.</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">[...]
+</span><span class="gp">    self.assertTrue(html.startswith('&lt;html&gt;</span><span class="s1">'))
+</span><span class="go">NameError: name 'self' is not defined
+</span></code></pre></div></div>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'&lt;html&gt;'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">[...]
+</span><span class="gp">    self.assertIn('&lt;title&gt;</span>To-Do lists&lt;/title&gt;<span class="s1">', html)
+</span><span class="gp">AssertionError: '&lt;title&gt;</span><span class="s1">To-Do lists&lt;/title&gt;'</span> not found <span class="k">in</span> <span class="s1">'&lt;html&gt;'</span>
+</code></pre></div></div>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'&lt;html&gt;&lt;title&gt;To-Do lists&lt;/title&gt;&lt;/html&gt;'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py <span class="nb">test</span>
+<span class="go">Creating test database for alias 'default'...
+</span><span class="c">..
+</span><span class="go">----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+OK
+Destroying test database for alias 'default'...
+</span></code></pre></div></div>
+<p><strong>TEST:</strong> <em>lists/functional_tests.py</em> passes</p>
+
+<p><strong>GIT:</strong> commit</p>
+
+<h1 id="chapter-4-what-are-we-doing-with-all-these-tests-and-refactoring">Chapter 4: What Are We Doing with All These Tests? (And, Refactoring)</h1>
+
+<p>That last part was pretty tedious. The rest is a little bit smoother. The next step is to expand our functional test.</p>
+
+<p><em>lists/functional_tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="k">class</span> <span class="nc">NewVisitorTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_can_start_a_list_and_retrieve_it_later</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+
+        <span class="c">#user goes to site</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://localhost:8000'</span><span class="p">)</span>
+
+        <span class="c">#page title mentions to-do lists</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'To-Do'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">head_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s">'h1'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'To-Do'</span><span class="p">,</span> <span class="n">head_text</span><span class="p">)</span>
+
+        <span class="c">#user is prompted to enter a to-do item</span>
+        <span class="n">inputbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_new_item'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">inputbox</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'placeholder'</span><span class="p">),</span>
+            <span class="s">'Enter a to-do item'</span>
+        <span class="p">)</span>
+
+        <span class="c">#user types "buy peacock feathers"</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'Buy peacock feathers'</span><span class="p">)</span>
+
+        <span class="c">#user hits enter, page updates, page displays "1: Buy peacock feathers" in list</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_list_table'</span><span class="p">)</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="nb">any</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">'1: Buy peacock feathers'</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c">#more tests</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s">'Finish the test!'</span><span class="p">)</span>
+</code></pre></div></div>
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python functional_tests.py
+<span class="go">[...]
+selenium.common.exceptions.NoSuchElementException: Message: Unable to locate
+element: h1
+</span></code></pre></div></div>
+
+<p><strong>GIT:</strong> commit</p>
+
+<h2 id="templates">Templates</h2>
+
+<p>Now we start to organize html into templates. We need a templates folder:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> <span class="nb">mkdir </span>lists/templates
+</code></pre></div></div>
+
+<p><em>lists/templates/home.html</em></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;title&gt;</span>To-Do lists<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>With this basic template we can rewrite <code class="highlighter-rouge">views.py</code>:</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">[...]
+django.template.exceptions.TemplateDoesNotExist: home.html
+</span></code></pre></div></div>
+
+<p>Reason for failure: <code class="highlighter-rouge">lists</code> app not “officially registered” with Django. 
+Solution: add <code class="highlighter-rouge">lists</code> app to <code class="highlighter-rouge">settings.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
+    <span class="s">'lists'</span><span class="p">,</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> pass</p>
+
+<p>For Mac/Linux users, this test will pass. Windows users might fail this test, see Chapter 4 for more information.</p>
+
+<p>The next section significantly simplifies <code class="highlighter-rouge">lists/tests.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="k">class</span> <span class="nc">HomePageTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+	<span class="k">def</span> <span class="nf">test_uses_home_template</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleint</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>GIT:</strong> add and commit</p>
+
+<p>The next step is to get our functional test to pass. To do that we need to add more content to the <code class="highlighter-rouge">home.html</code> template. In the same fashion, the book adds elements one at a time to make each test pass. Here’s the final html that will pass the test:</p>
+
+<p><em>templates/home.html</em></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>To-Do lists<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Your To-Do list<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">"id_new_item"</span> <span class="na">placeholder=</span><span class="s">"Enter a to-do item"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"id_list_table"</span><span class="nt">&gt;</span>
+    	<span class="nt">&lt;/table&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> the test results now read:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python functional_tests.py
+<span class="go">F
+======================================================================
+FAIL: test_can_start_a_list_and_retrieve_it_later (__main__.NewVisitorTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "functional_tests.py", line 42, in test_can_start_a_list_and_retrieve_it_later
+    any(row.text == '1: Buy peacock feathers' for row in rows)
+AssertionError: False is not true
+</span></code></pre></div></div>
+
+<p>One more helpful tip is passing error messages to assertion methods. Here’s one example of how we could do that it <code class="highlighter-rouge">functional_tests.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+    <span class="nb">any</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s">'1: Buy peacock feathers'</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">),</span>
+    <span class="s">"New to-do item did not appear in table"</span>
+<span class="p">)</span>
+</code></pre></div></div>
+<p><strong>GIT:</strong> commit</p>
+
+<p>Here’s a helpful image from the book that I found helpful:</p>
+
+<p><img src="/img/ottg/tdd.png" alt="png" /></p>
+
+<h1 id="chapter-5-saving-user-input-testing-the-database">Chapter 5: Saving User Input: Testing the Database</h1>
+
+<p>To get our browser to send a POST request, we need to do two things:</p>
+
+<ol>
+  <li>Give the <code class="highlighter-rouge">&lt;input&gt;</code> element a <code class="highlighter-rouge">name=</code> attribute</li>
+  <li>Wrap it in a <code class="highlighter-rouge">&lt;form&gt;</code> tag with <code class="highlighter-rouge">method="POST"</code></li>
+</ol>
+
+<p>Here’s how to do that:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>Your To-Do list<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"item_text"</span> <span class="na">id=</span><span class="s">"id_new_item"</span> <span class="na">placeholder=</span><span class="s">"Enter a to-do item"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+
+<span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"id_list_table"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<p>To pass the test we must place a CRSF (Cross-Site Request Forgery) token in the form. Django makes this easy, we simply add a template tag:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">"item_text"</span> <span class="na">id=</span><span class="s">"id_new_item"</span> <span class="na">placeholder=</span><span class="s">"Enter a to-do item"</span> <span class="nt">/&gt;</span>
+    {% csrf_token %}
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div></div>
+
+<p>We haven’t specified an <code class="highlighter-rouge">action=</code> attribute for the form, so it is submitting back to the same URL it was sent from. This URL is the base URL (‘/’), and this is handled by the <code class="highlighter-rouge">home_page</code> function in <code class="highlighter-rouge">views.py</code>. The next step is to adapt the <code class="highlighter-rouge">home_page</code> view. But first, we write a test:</p>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">test_can_save_a_POST_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'item_text'</span><span class="p">:</span><span class="s">'A new list item'</span><span class="p">})</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'A new list item'</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test</span>
+<span class="go">Creating test database for alias 'default'...
+F.
+======================================================================
+FAIL: test_can_save_a_POST_request (lists.tests.HomePageTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/andrewcaffey/Documents/Projects/django-test/superlists/lists/tests.py", line 11, in test_can_save_a_POST_request
+    self.assertIn('A new list item', response.content.decode())
+</span><span class="gp">AssertionError: 'A new list item' not found in '&lt;html&gt;</span><span class="se">\n</span>    &lt;<span class="nb">head</span><span class="o">&gt;</span><span class="se">\n</span>        &lt;title&gt;To-Do lists&lt;/title&gt;<span class="se">\n</span>    &lt;/head&gt;<span class="se">\n</span>    &lt;body&gt;<span class="se">\n</span>        &lt;h1&gt;Your To-Do list&lt;/h1&gt;<span class="se">\n\t\t</span>    &lt;form <span class="nv">method</span><span class="o">=</span><span class="s2">"POST"</span><span class="o">&gt;</span><span class="se">\n\t\t</span>        &lt;input <span class="nb">id</span><span class="o">=</span><span class="s2">"id_new_item"</span> <span class="nv">placeholder</span><span class="o">=</span><span class="s2">"Enter a to-do item"</span> /&gt;<span class="se">\n\t\t</span>        &lt;input <span class="nb">type</span><span class="o">=</span><span class="se">\'</span>hidden<span class="se">\'</span> <span class="nv">name</span><span class="o">=</span><span class="se">\'</span>csrfmiddlewaretoken<span class="se">\'</span> <span class="nv">value</span><span class="o">=</span><span class="se">\'</span>tbPa4MSp8R7ItrmqP5EWjbZFqYan0GtEetdIymi92wDTLwkiqyk4IqhbiOWoq2xb<span class="se">\'</span> /&gt;<span class="se">\n\t\t</span>    &lt;/form&gt;<span class="se">\n\t\t</span>        &lt;table <span class="nb">id</span><span class="o">=</span><span class="s2">"id_list_table"</span><span class="o">&gt;</span><span class="se">\n\t\t</span>    <span class="se">\t</span>&lt;/table&gt;<span class="se">\n\t\t</span>    <span class="se">\n</span>    &lt;/body&gt;<span class="se">\n</span>&lt;/html&gt;<span class="s1">'
+</span></code></pre></div></div>
+
+<p>Now we can modify <code class="highlighter-rouge">views.py</code> to handle a post request:</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span> 
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="k">return</span>  
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> passes</p>
+
+<p>Our test checks for <code class="highlighter-rouge">A new list item</code> in the <code class="highlighter-rouge">item_text</code> of the HTTP response, so this passes the test. The next step is to add this text to the table so it displays on the page. We can use {{ … }}  notation to include a Python object in a template. Our table can be written like this:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"id_list_table"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;tr&gt;&lt;td&gt;</span>{{ new_item_text }}<span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</code></pre></div></div>
+
+<p>Now we can rewrite the test to check if we are still using the template (we are not though, because <code class="highlighter-rouge">home_page</code> returns <code class="highlighter-rouge">HttpResponse(request.POST['item_text'])</code> when the request method is POST).</p>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">test_can_save_a_POST_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'item_text'</span><span class="p">:</span><span class="s">'A new list item'</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'A new list item'</span><span class="p">,</span> <span class="n">repsonse</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed: No templates used to render the response</p>
+
+<p>Once again we will rewrite the view. This time we will pass the POST parameter to the template by passing it (the POST parameter, or data) as the third argument of the <code class="highlighter-rouge">render</code> method.</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'new_item_text'</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">'item_text'</span><span class="p">],</span>
+    <span class="p">})</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py <span class="nb">test</span>
+<span class="go">[...]
+django.utils.datastructures.MultiValueDictKeyError: "'item_text'"
+</span></code></pre></div></div>
+
+<p>We also need to rewrite <code class="highlighter-rouge">views.py</code>:</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'new_item_text'</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'item_text'</span><span class="p">,</span> <span class="s">''</span><span class="p">),</span>
+    <span class="p">})</span>
+</code></pre></div></div>
+
+<p>Here’s an explanation of <code class="highlighter-rouge">dict.get()</code> from the <a href="https://docs.python.org/3/library/stdtypes.html#dict.get">Python documentation</a>:</p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">get(key[, default])</code>: 
+Return the value for key if key is in the dictionary, else default. If default is not given, it defaults to None, so that this method never raises a KeyError.</p>
+</blockquote>
+
+<p><strong>TEST:</strong> unit test pass, functional test fails:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python functional_tests.py
+<span class="go">F
+======================================================================
+FAIL: test_can_start_a_list_and_retrieve_it_later (__main__.NewVisitorTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "functional_tests.py", line 41, in test_can_start_a_list_and_retrieve_it_later
+    self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+AssertionError: '1: Buy peacock feathers' not found in ['Buy peacock feathers']
+</span></code></pre></div></div>
+
+<p>Fixing this is simple, we just need to add <code class="highlighter-rouge">1: </code> in before the item:</p>
+
+<p><em>lists/templates/home.html</em></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;tr&gt;&lt;td&gt;</span>1: <span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+</code></pre></div></div>
+
+<h2 id="redgreenrefactor-and-triangulation">Red/Green/Refactor and Triangulation</h2>
+
+<p>Here’s another helpful passage from the book:</p>
+
+<p>The unit-test/code cycle is sometimes taught as Red, Green, Refactor:</p>
+
+<ul>
+  <li>Start by writing a unit test which fails (Red).</li>
+  <li>Write the simplest possible code to get it to pass (Green), even if that means cheating.</li>
+  <li>Refactor to get to better code that makes more sense.</li>
+</ul>
+
+<p>So what do we do during the Refactor stage? What justifies moving from an implementation where we “cheat” to one we’re happy with?</p>
+
+<p>One methodology is eliminate duplication: if your test uses a magic constant (like the “1:” in front of our list item), and your application code also uses it, that counts as duplication, so it justifies refactoring. Removing the magic constant from the application code usually means you have to stop cheating.</p>
+
+<p>I find that leaves things a little too vague, so I usually like to use a second technique, which is called triangulation: if your tests let you get away with writing “cheating” code that you’re not happy with, like returning a magic constant, write another test that forces you to write some better code. That’s what we’re doing when we extend the FT to check that we get a “2:” when inputting a second list item.</p>
+
+<p><em>functional_tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c">#user adds another item</span>
+    <span class="n">inputbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_new_item'</span><span class="p">)</span>
+    <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'Use peacock feathers to make a fly'</span><span class="p">)</span>
+    <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c">#page updats, both items show on the list</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_list_table'</span><span class="p">)</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'1: Buy peacock feathers'</span><span class="p">,</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span>
+        <span class="s">'2: Use peacock feathers to make a fly'</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c">#unique url displays</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="s">'Finish the test!'</span><span class="p">)</span>
+
+    <span class="c">#user goes to the unique url for their list</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<p><em>lists/functional_tests.py</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(py3) &gt;&gt;python functional_tests.py
+F
+======================================================================
+FAIL: test_can_start_a_list_and_retrieve_it_later (__main__.NewVisitorTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "functional_tests.py", line 54, in test_can_start_a_list_and_retrieve_it_later
+    self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+AssertionError: '1: Buy peacock feathers' not found in ['1: Use peacock feathers to make a fly']
+</code></pre></div></div>
+
+<p><strong>GIT:</strong> commit</p>
+
+<p>Next we add a helper function to <code class="highlighter-rouge">functional_tests.py</code>:</p>
+
+<p><em>functional_tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">check_for_row_in_list_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row_text</span><span class="p">):</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_list_table'</span><span class="p">)</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">row_text</span><span class="p">,</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>Now we can rewrite <code class="highlighter-rouge">functional_tests.py</code> to make use of <code class="highlighter-rouge">check_for_row_in_list_table</code>:</p>
+
+<p><em>functional_tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c">#user hits ENTER, updates page, list item displays</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_row_in_list_table</span><span class="p">(</span><span class="s">'1: Buy peacock feathers'</span><span class="p">)</span>
+
+        <span class="c">#user adds another item in the text box</span>
+        <span class="n">inputbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_new_item'</span><span class="p">)</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'Use peacock feathers to make a fly'</span><span class="p">)</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c">#page update, shows both items in list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_row_in_list_table</span><span class="p">(</span><span class="s">'1: Buy peacock feathers'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_for_row_in_list_table</span><span class="p">(</span><span class="s">'2: Use peacock feathers to make a fly'</span><span class="p">)</span>
+
+        <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> functional test still fails:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python functional_tests.py
+<span class="go">[...]
+    self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+AssertionError: '1: Buy peacock feathers' not found in ['1: Use peacock feathers to make a fly']
+
+</span></code></pre></div></div>
+
+<p><strong>GIT:</strong> commit</p>
+
+<h2 id="the-django-orm-and-our-first-model">The Django ORM and Our First Model</h2>
+
+<blockquote>
+  <p>An Object-Relational Mapper (ORM) is a layer of abstraction for data stored in a database with tables, rows, and columns. It lets us work with databases using familiar object-oriented metaphors which work well with code. Classes map to database tables, attributes map to columns, and an individual instance of the class represents a row of data in the database.</p>
+</blockquote>
+
+<blockquote>
+  <p>Django comes with an excellent ORM, and writing a unit test that uses it is actually an excellent way of learning it, since it exercises code by specifying how we want it to work.</p>
+</blockquote>
+
+<p>First we make a test:</p>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">lists.models</span> <span class="kn">import</span> <span class="n">Item</span>
+
+<span class="k">class</span> <span class="nc">ItemModelTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">test_saving_and_retrieving_items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">first_item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span>
+        <span class="n">first_item</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">'The first (ever) list item'</span>
+        <span class="n">frist_item</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">second_item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span>
+        <span class="n">second_item</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">'Item the second'</span>
+        <span class="n">second_item</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="n">saved_items</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">saved_items</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">first_saved_item</span> <span class="o">=</span> <span class="n">saved_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">second_saved_item</span> <span class="o">=</span> <span class="n">saved_items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">first_saved_item</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">'The first (ever) list item'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">second_saved_item</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'Item the second'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>These test will be redone later on, the way of doing it here is to help introduce the idea of ORM in Django.</p>
+
+<p><strong>TEST:</strong> fail: cannot import name ‘Item’</p>
+
+<p>To make the test pass, we have to create the <code class="highlighter-rouge">Item</code> class in <code class="highlighter-rouge">lists/models.py</code>:</p>
+
+<p><em>lists/models.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong>     failed: first_item.save(), AttributeError: ‘Item’ object has no attribute ‘save’</p>
+
+<p><em>lists/models.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<h2 id="first-database-migration">First Database Migration</h2>
+
+<p><strong>TEST:</strong> failed: django.db.utils.OperationalError: no such table: lists_item</p>
+
+<p>In Django, the ORM’s job is to model the database, but there’s a second system that’s in charge of actually building the database called migrations. Its job is to give you the ability to add and remove tables and columns, based on changes you make to your models.py files.</p>
+
+<p>One way to think of it is as a version control system for your database. As we’ll see later, it comes in particularly useful when we need to upgrade a database that’s deployed on a live server.</p>
+
+<p>For now all we need to know is how to build our first database migration, which we do using the <code class="highlighter-rouge">makemigrations</code> command:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py makemigrations
+<span class="go">Migrations for 'lists':
+  lists/migrations/0001_initial.py:
+    - Create model Item
+</span><span class="gp">(py3) $</span> <span class="nb">ls </span>lists/migrations
+<span class="go">0001_initial.py __init__.py __pycache__
+</span></code></pre></div></div>
+<p>Let’s take a look at <code class="highlighter-rouge">0001_inital.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># -*- coding: utf-8 -*-</span>
+<span class="c"># Generated by Django 1.10.6 on 2017-03-05 20:07</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">migrations</span><span class="p">,</span> <span class="n">models</span>
+
+
+<span class="k">class</span> <span class="nc">Migration</span><span class="p">(</span><span class="n">migrations</span><span class="o">.</span><span class="n">Migration</span><span class="p">):</span>
+
+    <span class="n">initial</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">]</span>
+
+    <span class="n">operations</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">migrations</span><span class="o">.</span><span class="n">CreateModel</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s">'Item'</span><span class="p">,</span>
+            <span class="n">fields</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">(</span><span class="s">'id'</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">AutoField</span><span class="p">(</span><span class="n">auto_created</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">serialize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s">'ID'</span><span class="p">)),</span>
+            <span class="p">],</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py <span class="nb">test </span>lists
+<span class="go">Creating test database for alias 'default'...
+..E
+======================================================================
+ERROR: test_saving_and_retrieving_items (lists.tests.ItemModelTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/andrewcaffey/Documents/Projects/django-test/superlists/lists/tests.py", line 31, in test_saving_and_retrieving_items
+    self.assertEqual(first_saved_item.text, 'The first (ever) list item')
+AttributeError: 'Item' object has no attribute 'text'
+</span></code></pre></div></div>
+<blockquote>
+  <p>If you’re new to Python, you might have been surprised we were allowed to assign the .text attribute at all. In something like Java, that would probably give you a compilation error. Python is more relaxed about things like that.</p>
+</blockquote>
+
+<p>Classes that inherit from models.Model map to tables in the database. By default they get an auto-generated id attribute, which will be a primary key column in the database, but you have to define any other columns you want explicitly. Here’s how we set up a text field:</p>
+
+<p><em>lists/models.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test </span>lists
+<span class="go">[...]
+django.db.utils.OperationalError: no such column: lists_item.text
+</span></code></pre></div></div>
+
+<p>This test fails because we have added a field in the database (by including <code class="highlighter-rouge">text = models.TextField()</code> in the <code class="highlighter-rouge">Item</code> class), but didn’t create a migration after making this change. Let’s make the migration:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py makemigrations
+<span class="gp">You are trying to add a non-nullable field 'text' to item without a default;</span> we can<span class="s1">'t do that (the database needs something to populate existing rows).
+</span><span class="go">Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+Select an option: 2
+</span></code></pre></div></div>
+<p>We have to go back to <code class="highlighter-rouge">models.py</code> and add a default value for our text field:</p>
+
+<p><em>lists/models.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Item</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py makemigrations
+<span class="go">Migrations for 'lists':
+  lists/migrations/0002_item_text.py:
+    - Add field text to item
+</span></code></pre></div></div>
+
+<p><strong>TEST:</strong> pass: the .text attribute on our model objects is now recognised as a special attribute, so it does get saved to the database, and the tests pass</p>
+
+<p><strong>GIT:</strong> commit</p>
+
+<h2 id="saving-the-post-to-the-database">Saving the POST to the Database</h2>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">test_can_save_a_POST_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> 
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'item_text'</span><span class="p">:</span> <span class="s">'A new list item'</span><span class="p">})</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">new_item</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">new_item</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'A new list item'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'A new list item'</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTemplateUsed</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Note: <code class="highlighter-rouge">objects.first()</code> has the same result as <code class="highlighter-rouge">objects.all()[0]</code>, and <code class="highlighter-rouge">objects.count()</code> is the same as <code class="highlighter-rouge">objects.all().count()</code>. The above test needs some refactoring.</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test </span>lists
+<span class="go">    self.assertEqual(Item.objects.count(), 1)
+AssertionError: 0 != 1
+</span></code></pre></div></div>
+
+<p>Here’s what <code class="highlighter-rouge">views.py</code> looks like now:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'new_item_text'</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'item_text'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span> 
+        <span class="p">})</span>
+</code></pre></div></div>
+
+<p>And here is how we change it to incorporate the <code class="highlighter-rouge">Item</code> object:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span>
+    <span class="n">item</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'item_text'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="n">item</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'new_item_text'</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'item_text'</span><span class="p">,</span> <span class="s">''</span><span class="p">),</span> 
+    <span class="p">})</span>
+</code></pre></div></div>
+
+<p>And finally we can simply exchange <code class="highlighter-rouge">request.POST.get('item_text', '')</code> for <code class="highlighter-rouge">item.text</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span>
+    <span class="n">item</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'item_text'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="n">item</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'new_item_text'</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">text</span> 
+    <span class="p">})</span>
+</code></pre></div></div>
+
+<p>Here’s a list of what we want to accomplish:</p>
+
+<ul>
+  <li>Don’t save blank items for every request</li>
+  <li>Code smell: POST test is too long?</li>
+  <li>Display multiple items in the table</li>
+  <li>Support more than one list!</li>
+</ul>
+
+<p><em>lists/tests.py</em></p>
+
+<p>class HomePageTest(TestCase):
+    […]</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def test_only_saves_items_when_necessary(self):
+    self.client.get('/')
+    self.assertEqual(Item.objects.count(), 0) ```
+</code></pre></div></div>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test </span>lists
+<span class="go">    self.assertEqual(Item.objects.count(), 0)
+AssertionError: 1 != 0
+</span></code></pre></div></div>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">new_item_text</span><span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">'item_text'</span><span class="p">]</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">new_item_text</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_item_text</span> <span class="o">=</span> <span class="s">''</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">requests</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s">'new_item_text'</span><span class="p">:</span> <span class="n">new_item_text</span><span class="p">,</span> 
+    <span class="p">})</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> passes</p>
+
+<h2 id="redirect-after-a-post">Redirect After a POST</h2>
+
+<p><a href="https://en.wikipedia.org/wiki/Post/Redirect/Get">Always redirect after a post</a>.</p>
+
+<p>We want to change <code class="highlighter-rouge">lists/tests.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">def</span> <span class="nf">test_can_save_a_POST_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'item_text'</span><span class="p">:</span> <span class="s">'A new list item'</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">new_item</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">302</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">'location'</span><span class="p">],</span> <span class="s">'/'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test </span>lists
+<span class="go">[...]
+    self.assertEqual(response.status_code, 302)
+AssertionError: 200 != 302
+</span></code></pre></div></div>
+
+<p>Next we change <code class="highlighter-rouge">views.py</code> to include a redirect:</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">lists.models</span> <span class="kn">import</span> <span class="n">Item</span>
+
+<span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">'item_text'</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> passes</p>
+
+<h2 id="better-unit-testing-practice-each-test-should-test-one-thing">Better Unit Testing Practice: Each Test Should Test One Thing</h2>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">test_can_save_a_POST_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'item_text'</span><span class="p">:</span> <span class="s">'A new lists item'</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">new_item</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">new_item</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="s">'A new list item'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_redirects_after_POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'item_text'</span><span class="p">:</span><span class="s">'A new list item'</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">302</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">'location'</span><span class="p">],</span> <span class="s">'/'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Each test now tests one thing.</p>
+
+<p><strong>TEST:</strong> passes</p>
+
+<h2 id="rendering-items-in-the-template">Rendering Items in the Template</h2>
+
+<p>Next on our list is to display items in the table. Let’s add a test to check for multiple items in the list:</p>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">HomePageTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">test_displays_all_list_items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">'itemey 1'</span><span class="p">)</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">'itemey 2'</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'itemey 1'</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'itemey 2'</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>Next we need to add a loop with Django’s templating tags and replace <code class="highlighter-rouge">new_item_text</code> with <code class="highlighter-rouge">items.text</code>. We will define <code class="highlighter-rouge">items</code> to be <code class="highlighter-rouge">Item.objects.all()</code> in <code class="highlighter-rouge">views.py</code> below:</p>
+
+<p><em>lists/templates/home.html</em></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"ide_list_table"</span><span class="nt">&gt;</span>
+    {% for item in items %}
+        <span class="nt">&lt;tr&gt;&lt;td&gt;</span>1: {{ item.text }}<span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+    {% endfor %}
+<span class="nt">&lt;/table&gt;</span>
+</code></pre></div></div>
+
+<p>This alone is not enough to make the template pass. We need to pass in an <code class="highlighter-rouge">items</code> value from <code class="highlighter-rouge">views.py</code>:</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">'item_text'</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+
+    <span class="n">items</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'items'</span><span class="p">:</span> <span class="n">items</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> unit test passes, functional test fails</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python functional_tests.py
+<span class="go">[...]
+    self.assertIn('To-Do', self.browser.title)
+AssertionError: 'To-Do' not found in 'OperationalError at /'
+</span></code></pre></div></div>
+
+<p>If we navigate to <code class="highlighter-rouge">localhost:8000</code>, we can see that the error message reads: <code class="highlighter-rouge">no such table: lists_item</code>. This sounds like there is a problem with the database.</p>
+
+<h2 id="creating-our-production-database-with-migrate">Creating Our Production Database with migrate</h2>
+
+<p>But how come everything worked fine in the unit tests? This is because Django creates a special test database for unit tests; it’s one of the magical things that Django’s TestCase does.</p>
+
+<p>To set up our “real” database, we need to create it. SQLite databases are just a file on disk, and you’ll see in settings.py that Django, by default, will just put it in a file called db.sqlite3 in the base project directory:</p>
+
+<p><em>superlists/settings.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="c"># Database</span>
+<span class="c"># https://docs.djangoproject.com/en/1.10/ref/settings/#databases</span>
+
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'default'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">'ENGINE'</span><span class="p">:</span> <span class="s">'django.db.backends.sqlite3'</span><span class="p">,</span>
+        <span class="s">'NAME'</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'db.sqlite3'</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We’ve told Django everything it needs to create the database, first via models.py and then when we created the migrations file. To actually apply it to creating a real database, we use another Django Swiss Army knife manage.py command, <code class="highlighter-rouge">migrate</code>:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py migrate
+<span class="go">Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, lists, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying lists.0001_initial... OK
+  Applying lists.0002_item_text... OK
+  Applying sessions.0001_initial... OK
+</span></code></pre></div></div>
+
+<p>Now we can run the functional test again:</p>
+
+<p><strong>TEST:</strong> failed: AssertionError: ‘2: Use peacock feathers to make a fly’ not found in [‘1: Buy
+peacock feathers’, ‘1: Use peacock feathers to make a fly’]</p>
+
+<p>To fix list numbering we can simply add a <code class="highlighter-rouge">forloop.counter</code> template tag:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {% for item in items %}
+        <span class="nt">&lt;tr&gt;&lt;td&gt;</span>{{ forloop.counter }}: {{ item.text }}<span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+    {% endfor %}
+</code></pre></div></div>
+
+<p>This works, but the list items from the test remain on the list. We need a way to clean up the database after each test. For now, we can simply delete and then recreate the database:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> <span class="nb">rm </span>db.sqlite3
+<span class="gp">(py3) $</span> python manage.py migrate <span class="nt">--noinput</span>
+</code></pre></div></div>
+
+<p><strong>GIT:</strong> commit</p>
+
+<h1 id="chapter-6-improving-functional-tests-ensuring-isolation-and-removing-voodoo-sleeps">Chapter 6: Improving Functional Tests: Ensuring Isolation and Removing Voodoo Sleeps</h1>
+
+<p>This section fixes two issues: test runs interfere with each other, and we use arbitrary <code class="highlighter-rouge">time.sleep</code> waiting periods throughout the code.</p>
+
+<h2 id="ensuring-test-isolation-in-functional-tests">Ensuring Test Isolation in Functional Tests</h2>
+
+<p>When we run unit tests, the Django test runner automatically creates a brand new test database (separate from the real one), which it can safely reset before each individual test is run, and then throw away at the end. But our functional tests currently run against the “real” database, db.sqlite3.</p>
+
+<p>Since Django 1.4 though, there’s a new class called <code class="highlighter-rouge">LiveServerTestCase</code> which will automatically create a test database (just like in a unit test run), and start up a development server for the functional tests to run against. Although as a tool it has some limitations which we’ll need to work around later, it’s dead useful at this stage, so let’s check it out.</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> <span class="nb">mkdir </span>functional_tests
+<span class="gp">(py3) $</span> <span class="nb">touch </span>functional_tests/__init__.py
+</code></pre></div></div>
+<p>We can move this folder to a better location:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> git <span class="nb">mv </span>functional_tests.py functional_tests/tests.py
+<span class="gp">(py3) $</span> <span class="o">(</span>py3<span class="o">)</span> <span class="o">&gt;&gt;</span>tree
+<span class="c">.
+</span><span class="go">├── db.sqlite3
+├── functional_tests
+│   ├── __init__.py
+│   └── tests.py
+├── geckodriver.log
+├── lists
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-36.pyc
+│   │   ├── admin.cpython-36.pyc
+│   │   ├── models.cpython-36.pyc
+│   │   ├── tests.cpython-36.pyc
+│   │   └── views.cpython-36.pyc
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── 0002_item_text.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── 0001_initial.cpython-36.pyc
+│   │       ├── 0002_item_text.cpython-36.pyc
+│   │       └── __init__.cpython-36.pyc
+│   ├── models.py
+│   ├── templates
+│   │   └── home.html
+│   ├── tests.py
+│   └── views.py
+├── manage.py
+└── superlists
+    ├── __init__.py
+    ├── __pycache__
+    │   ├── __init__.cpython-36.pyc
+    │   ├── settings.cpython-36.pyc
+    │   ├── urls.cpython-36.pyc
+    │   └── wsgi.cpython-36.pyc
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+
+8 directories, 31 files
+</span></code></pre></div></div>
+<p>We can now update <code class="highlighter-rouge">functional_tests/tests.py</code>:</p>
+
+<p><em>functional_tests/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">LiveServerTestCase</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+
+<span class="k">class</span> <span class="nc">NewVisitorTest</span><span class="p">(</span><span class="n">LiveServerTestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="n">eslf</span><span class="p">):</span>
+        <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Instead of hardcoding the visit to localhost port 8000, LiveServerTestCase gives us an attribute called live_server_url:</p>
+
+<p><em>functional_tests/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">test_can_start_a_list_and_retrieve_it_later</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c">#user visits site</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">live_server_url</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now we can run our functional test by sing the Django test runner:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test </span>functional_tests
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> passes (finish the test!)</p>
+
+<p><strong>GIT:</strong> add <code class="highlighter-rouge">functional_tests</code> and commit</p>
+
+<p>Next we can get ride of our explicit waits in the tests (<code class="highlighter-rouge">time.sleep</code>) by rewriting <code class="highlighter-rouge">check_for_new_row_in_list_table</code>:</p>
+
+<p><em>functional_tests/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">WebDriverException</span>
+
+<span class="n">MAX_WAIT</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">wait_for_row_in_list_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row_text</span><span class="p">):</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_list_table'</span><span class="p">)</span>
+
+                <span class="n">rows</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'tr'</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">row_text</span><span class="p">,</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">])</span>
+                <span class="k">return</span>
+            <span class="k">except</span> <span class="p">(</span><span class="nb">AssertionError</span><span class="p">,</span> <span class="n">WebDriverException</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&gt;</span> <span class="n">MAX_WAIT</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">e</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Finally we can refactor the rest of <em>functional_tests/tests.py</em> to make use of this new function:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="c">#user hits enter and page updates</span>
+<span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">wait_for_row_in_list_table</span><span class="p">(</span><span class="s">'1: Buy peacock feathers'</span><span class="p">)</span>
+
+<span class="c">#user enters another item</span>
+<span class="n">inputbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_new_item'</span><span class="p">)</span>
+<span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'Use peacock feather to make a fly'</span><span class="p">)</span>
+<span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+
+<span class="bp">self</span><span class="o">.</span><span class="n">wait_for_row_in_list_table</span><span class="p">(</span><span class="s">'2: Use peacock feathers to make a fly'</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">wait_for_row_in_list_table</span><span class="p">(</span><span class="s">'1: Buy peacock feathers'</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> passes</p>
+
+<h1 id="chapter-7-working-incrementally">Chapter 7: Working Incrementally</h1>
+
+<h2 id="rest-ish-design">REST (ish) design</h2>
+
+<p>REST suggests that we have a URL structure that matches our data structure, in this case lists and list items. Each list can have its own URL:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/lists/<span class="nt">&lt;list</span> <span class="na">identifier</span><span class="nt">&gt;</span>/
+</code></pre></div></div>
+
+<p>To create a brand new list, we’ll have a special URL that accepts POST requests:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/lists/new
+</code></pre></div></div>
+
+<p>To add a new item to an existing list, we’ll have a separate URL, to which we can send POST requests:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/lists/<span class="nt">&lt;list</span> <span class="na">identifier</span><span class="nt">&gt;</span>/add_item
+</code></pre></div></div>
+
+<p>Our scratchpad for this chapter looks something like this:</p>
+
+<ul>
+  <li>Get FTs to clean up after themselves</li>
+  <li>Adjust model so that items are associated with different lists</li>
+  <li>Add unique URLs for each list</li>
+  <li>Add a URL for creating a new list via POST</li>
+  <li>Add URLs for adding a new item to an existing list via POST</li>
+</ul>
+
+<p>First we need to test that the first user gets their own unique URL for the list they create, and then we have a second user come along. Here’s how this would look in out functional test:</p>
+
+<p><em>functional_tests/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">test_multiple_users_can_start_lists_at_different_urls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">live_server_url</span><span class="p">)</span>
+        <span class="n">inputbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_new_item'</span><span class="p">)</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'Buy peacock feathers'</span><span class="p">)</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_row_in_list_table</span><span class="p">(</span><span class="s">'1: Buy peacock feathers'</span><span class="p">)</span>
+
+        <span class="c">#user sees unique URL</span>
+        <span class="n">edith_list_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">current_url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertRegex</span><span class="p">(</span><span class="n">edith_list_url</span><span class="p">,</span> <span class="s">'/lists/.+'</span><span class="p">)</span>
+
+        <span class="c">#new user comes along</span>
+        <span class="c">#we close the first browser and open a second </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
+
+        <span class="c">#second user visits the home page and doesn't see anything about our first user's list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">live_server_url</span><span class="p">)</span>
+        <span class="n">page_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s">'body'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s">'Buy peacock feathers'</span><span class="p">,</span> <span class="n">page_text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s">'make a fly'</span><span class="p">,</span> <span class="n">page_text</span><span class="p">)</span>
+
+        <span class="c">#second user starts a new list by entering a new item</span>
+        <span class="n">inputbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_new_item'</span><span class="p">)</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'Buy milk'</span><span class="p">)</span>
+        <span class="n">inputbox</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ENTER</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wait_for_row_in_list_table</span><span class="p">(</span><span class="s">'1: Buy milk'</span><span class="p">)</span>
+
+        <span class="c">#user 2 does not see anything related to user 1's list</span>
+        <span class="n">page_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s">'body'</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s">'Buy peacock feathers'</span><span class="p">,</span> <span class="n">page_text</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'Buy milk'</span><span class="p">,</span> <span class="n">page_text</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> fails</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test </span>functional_tests
+<span class="go">Creating test database for alias 'default'...
+.F
+======================================================================
+FAIL: test_multiple_users_can_start_lists_at_different_urls (functional_tests.tests.NewVisitorTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/andrewcaffey/Documents/Projects/django-test/superlists/functional_tests/tests.py", line 89, in test_multiple_users_can_start_lists_at_different_urls
+    self.assertRegex(edith_list_url, '/lists/.+')
+AssertionError: Regex didn't match: '/lists/.+' not found in 'http://localhost:8081/'
+</span></code></pre></div></div>
+<p><strong>GIT:</strong> commit</p>
+
+<p>No we can change the test to make sure that the redirect goes to a different address:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">test_redirects_after_POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s">'item_text'</span><span class="p">:</span> <span class="s">'A new list item'</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">302</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">'location'</span><span class="p">],</span> <span class="s">'/lists/the-only-list-in-the-world/'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This is not the URL we will ultimately want to use, but it is unique, so we start with it.</p>
+
+<p><strong>TEST:</strong> unit test fails</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) $</span> python manage.py <span class="nb">test </span>lists
+<span class="go">    self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
+AssertionError: '/' != '/lists/the-only-list-in-the-world/'
+</span></code></pre></div></div>
+
+<p>We can get this test to pass by changing our view:</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">home_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">'item_text'</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'/lists/the-only-list-in-the-world/'</span><span class="p">)</span>
+
+    <span class="n">items</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'items'</span><span class="p">:</span> <span class="n">items</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">selenium.common.exceptions.NoSuchElementException: Message: Unable to locate
+element: [id="id_list_table"]
+</span></code></pre></div></div>
+<p>Next we can try to fix this by building a URL for our <code class="highlighter-rouge">/lists/the-only-list-in-the-world/</code> URL.</p>
+
+<p><em>lists/tests.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ListViewTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_displays_all_items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">'itemey 1'</span><span class="p">)</span>
+        <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s">'itemey 2'</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'/'</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">'itemey 1'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertContains</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="s">'itemey 2'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">[...]
+AssertionError: 404 != 200 : Couldn't retrieve content: Response code was 404 (expected 200)
+</span></code></pre></div></div>
+
+<p>This error message tells us that the URL we are requesting does not exist. The next step is to add this individual URL:</p>
+
+<p><em>superlists/urls.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">home_page</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span> 
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^lists/the-only-list-in-the-world/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">view_list</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'view_list'</span><span class="p">),</span> 
+<span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed: <code class="highlighter-rouge">AttributeError: module 'lists.views' has no attribute 'view_list'</code></p>
+
+<p>Next, we define a new view function:</p>
+
+<p><em>*lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">view_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> failed</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">ValueError: The view lists.views.view_list didn't return an HttpResponse object. It returned None instead.
+</span></code></pre></div></div>
+
+<p>Next we fill out the body of <code class="highlighter-rouge">view_list</code>:</p>
+
+<p><em>lists/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">view_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">Item</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'items'</span><span class="p">:</span> <span class="n">items</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p><strong>TEST:</strong> unit test passes, functional test fails</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">[...]
+AssertionError: '2: Use peacock feathers to make a fly' not found in ['1: Buy peacock feathers']
+[...]
+AssertionError: 'Buy peacock feathers' unexpectedly found in 'Your To-Do list\n1: Buy peacock feathers'
+</span></code></pre></div></div>
+
+<p>The problem now is that the <code class="highlighter-rouge">home.html</code> input form does not specify an explicit URL to post to. We can change this by adding an <code class="highlighter-rouge">actiion</code> attribute to the <code class="highlighter-rouge">form</code>:</p>
+
+<p><em>lists/templates/home.html</em></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">"/"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>Now we find that we are only failing on of the functional tests:</p>
+
+<p><strong>TEST:</strong></p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">[...]
+AssertionError: 'Buy peacock feathers' unexpectedly found in 'Your To-Do list\n1: Buy peacock feathers'
+</span></code></pre></div></div>
+
+<h2 id="another-small-step-a-separate-template-for-viewing-lists">Another Small Step: A Separate Template for Viewing Lists</h2>
+
+<p>Let’s add a new test to check that it’s using a different template:</p>
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017/03/04/ottg-tutorial.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="http://briancaffey.com" target="_blank">briancaffey.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://steemit.com/@mrbrian">
+    <span class="so-icon icon--github">
+        <svg viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>steem</title><desc>Created with Sketch.</desc><defs></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="steem" fill-rule="nonzero" fill="#07DFB0"><g id="Group-9"><g id="SteemIt_LogoType_Logo" transform="translate(0.122180, 0.120594)"><path d="M26.220401,8.97838251 C24.9619868,7.74033201 23.4972752,6.83444139 21.9397298,6.25064522 C22.8474384,3.62356245 26.065678,2.66734458 26.065678,2.66734458 C26.065678,2.66734458 18.5564522,-1.16759234 10.2632962,0.362356245 C7.49891092,0.795170648 4.84798918,2.46603555 2.90879351,4.67036938 C-1.29967369,9.45145872 -0.742670683,16.6482564 4.15689285,20.7549605 C4.9098784,21.3890839 5.72475318,21.9024219 6.57057257,22.3151054 C6.5602577,22.30504 6.5602577,22.284909 6.54994283,22.2748436 C6.57057257,22.3251709 6.59120231,22.3754981 6.62214692,22.4258254 C5.51845577,25.183759 1.99077002,25.9386679 1.99077002,25.9386679 C1.99077002,25.9386679 6.65309153,28.8073215 12.914218,29.5521648 C14.5749121,29.7534739 16.338755,29.8038011 18.1644871,29.6125576 C21.0629658,29.3810522 23.9511295,27.8712345 26.148197,25.7474243 C30.9033523,21.1374476 30.9446118,13.628621 26.220401,8.97838251 Z M24.074908,23.9155122 C22.3007502,25.6266389 19.6498285,26.7137076 17.6074841,26.8646894 C17.5868544,26.8646894 17.5662246,26.8646894 17.5559098,26.8646894 C16.1634022,27.0056057 14.6161716,27.0257366 13.1308303,26.8445585 C10.9440777,26.5828567 9.3659025,25.9889951 7.81867191,25.4152644 C8.60260207,24.670421 9.38653224,23.643745 9.70629323,22.7579853 C9.91259064,22.2345818 9.8919609,21.6507856 9.644404,21.1374476 C7.98370984,17.7755869 8.70575078,13.7494064 11.4391915,11.1323891 C13.4196466,9.23001879 16.1427725,8.33419363 18.9071578,8.66635352 C20.9391873,8.90792435 22.7855491,9.78361861 24.229631,11.2028472 C27.736687,14.6653625 27.6129086,20.5234551 24.074908,23.9155122 Z" id="Shape"></path></g></g></g></g></svg>
+    </span>
+    <span class="username">
+        mrbrian
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-col footer-col-3">
+        <p>Thanks for visiting my site, please take a minute to look around!
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
