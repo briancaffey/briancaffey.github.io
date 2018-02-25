@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title: Using Leaflet to display geographical data in a Django app with Mapbox, DataTables, Bootstrap 4 and Travis CI
+title: Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis CI
 date: 2018-02-19
 comments: true
 image: /static/map_homepage.png
@@ -18,6 +18,7 @@ Getting started with Leaflet is very easy. All you need to do is request a publi
 
 Then you will follow steps on the [quickstart guide](http://leafletjs.com/examples/quick-start/) and replace `your.mapbox.access.token` with your Mapbox API key. 
 
+{% raw %}
 ```javascript
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -26,6 +27,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: 'your.mapbox.access.token'
 }).addTo(mymap);
 ```
+{% endraw %}
 
 I'll come back to using Leaflet later on, and also show how to use Leaflet plugins that can be used to add functionality such as aggregating markers on a map. 
 
@@ -107,6 +109,7 @@ This adds our markers to the map, and also passes link and title data to the pop
 
 Here's the entire script that is used to populate map data:
 
+{% raw %}
 ```html
 <script>        
 
@@ -160,6 +163,7 @@ Here's the entire script that is used to populate map data:
 
 </script>
 ```
+{% endraw %}
 
 ## Login Redirect
 
@@ -187,17 +191,19 @@ def login_view(request):
 
 Notice that I pass `next` as a context variable. I use this in the login form here:
 
+{% raw %}
 ```html
 <form method="POST" action=".">
-{\% csrf_token \%}
+{% csrf_token %}
 {{ form | crispy }}
 <input type="hidden" value="{{ next }}" name="next"/>
 <div class="login-center">
     <input class="btn btn-success login-center" type="submit" value="Login" />
 </div>
-<br/>  or <a href="{\% url 'accounts:register' \%}">create an account</a>
+<br/>  or <a href="{% url 'accounts:register' %}">create an account</a>
 </form>
 ```
+{% endraw %}
 
 By passing this as a hidden value to the form, when a `POST` request is made, we are redirected to the value of `next` if it is not `None`, or if there is no redirect. 
 
@@ -235,14 +241,16 @@ This gave us two books by an author.
 
 Now, let's look at how to find all authors of a given book. For this example, we can get authors directly in the template from a book object. This example come from the `book_detail` template: 
 
+{% raw %}
 ```html
 <h3>
     Authors: 
         {% for author in book.authors.all %}
-            <a href="{\% url 'authors:author_detail' id=author.id \%}">{{ author.full_name }}</a>
+            <a href="{% url 'authors:author_detail' id=author.id %}">{{ author.full_name }}</a>
         {% endfor %}
 </h3>
 ```
+{% endraw %}
 
 We could just as well access `books.authors.all` in the view and pass authors in a variable that we can iterate over in the template, but this keeps things simpler without much more code to write. 
 
@@ -373,14 +381,15 @@ def export_filtered_books_csv(request):
 
 I wanted to put this button in the filter form on the main `books` page, but I need to place the button outside of the form tag. To get around this, here is the HTML I used: 
 
+{% raw %}
 ```html
-<form action="{\% url 'books:csv' \%}">
+<form action="{% url 'books:csv' %}">
 
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
         Filter Books
     </a>
-    <input type="submit" class="btn btn-info" form="id_query_form" formaction="{\% url 'books:csv' \%}" value="Export CSV">
-    <input type="submit" class="btn btn-default" form="id_query_form" formaction="{\% url 'books:xls' \%}" value="Export XLS">
+    <input type="submit" class="btn btn-info" form="id_query_form" formaction="{% url 'books:csv' %}" value="Export CSV">
+    <input type="submit" class="btn btn-default" form="id_query_form" formaction="{% url 'books:xls' %}" value="Export XLS">
 </form>
 
 <form method="get" action="." id="id_query_form">
@@ -405,6 +414,7 @@ I wanted to put this button in the filter form on the main `books` page, but I n
 
 </form>
 ```
+{% endraw %}
 
 There are two forms here, but the first form has an `input` of `type=submit` that references another form with `form="id_query_form"`, and this button's action is the url for the `export_filtered_books_csv` function shown above. 
 
@@ -452,6 +462,85 @@ This is good for a small database, but could end up having to do lots of operati
 
 One option that I have considered to simplify the search query is to make one field called something like `search_string`. This field would be modified on `save`, and it would simply appends the text from all of the fields I'm interested in searching. Then, instead of doing Q lookups for each word over many different fields, I could search each word in `keywords` over one field. I haven't implemented this here, but I would like to test this in the future. 
 
+## Finding "Books Nearby"
+
+On the pages that show details for each book I wanted to add additional information. I thought it would be interesting to show the 5 books closest to the book we are currently showing. Since we are dealing with coordinate points on a globe, the best way to calculate distance between two points is to use the Halversine formula:
+
+> The haversine formula determines the great-circle distance between two points on a sphere given their longitudes and latitudes. Important in navigation, it is a special case of a more general formula in spherical trigonometry, the law of haversines, that relates the sides and angles of spherical triangles.
+
+![png](/static/great_circle.png)
+
+Here's the code I used for calculating distance (using the Halversine formula):
+
+```python
+from math import radians, cos, sin, asin, sqrt
+
+def distance(origin, destination):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+
+    lon1, lat1 = origin
+    lon2, lat2 = destination
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 3956 # miles
+    return c * r
+```
+
+This formula assumes that the earth is a perfect sphere. Another approach would be to use the the Vincety Formula: 
+
+> Vincenty's formulae are two related iterative methods used in geodesy to calculate the distance between two points on the surface of a spheroid, developed by Thaddeus Vincenty (1975a). They are based on the assumption that the figure of the Earth is an oblate spheroid, and hence are more accurate than methods that assume a spherical Earth, such as great-circle distance.
+
+This distance is packaged in `geopy` and can be calculated easily: 
+
+```python
+import geopy.distance
+
+coords_1 = (52.2296756, 21.0122287)
+coords_2 = (52.406374, 16.9251681)
+
+print geopy.distance.vincenty(coords_1, coords_2).km
+```
+
+Here's a look at the function I wrote for the `book_detail` view. I have commented out parts that aren't related to finding nearby books:
+
+```python
+def book_detail(request, id, slug):
+
+    book = Book.objects.get(id=id, slug=slug)
+    b_coords = (book.lat, book.lon)
+    all_books = Book.objects.all()
+    coords = [((b.lat, b.lon),b) for b in all_books]
+
+    distance_dict = {}
+    for c in coords:
+        if c[0] != b_coords:
+            distance_dict[c[0]]=(distance(c[0],b_coords),c)
+
+    sorted_nearby = sorted(distance_dict.items(), key=lambda x: x[1][0])[:5]
+
+    # map_book = [{'loc':[float(book.lon), float(book.lat)], 
+    #              'title':book.title, 
+    #              'url':book.get_absolute_url()}]
+    context = {
+        'book':book, 
+        # 'map_book':mark_safe(escapejs(json.dumps(map_book))), 
+        'sorted_nearby':sorted_nearby,
+    }
+    return render(request, 'books/book_detail.html', context)
+```
+
+To find the 5 closest books I arrived at a solution that seems fairly convoluted and should be refactored, but works! I start with a queryset of all books, then use list comprehension to make a list of tuples containing `((< longitutde >, < latitude >), < Book Object >)`. Then I loop over this list and create a dictionary where the keys are `(< longitutde >, < latitude >)` and the values are tuples of the form: `(< distance in miles >, < Book Object >)`. Finally, I use `sorted` on `dictionary_dict.items()` where the key is `lambda x: x[1][0]`. The `[1]` accesses the `value` of the `(< key >, < value>)` tuple returned by `items()`, and the `[0]` access the first item, which is the `distance` value we calculated. Finally, I take the first `[:5]` items of this sorted list. 
+
+With this approach I think I avoided the possible issue of ambiguity if we have two books with the same coordinates. I'll need to add this scenario to my test suite later. 
+
 ## Testing & Travis CI
 
 Speaking of testing, this applcation includes a simple testing suite (that I am currently working on expanding). I have also managed to setup Travis CI for this project. When I push code from my local repo to GitHub, Travis CI automatically runs test, and the commit message contains additional information about whether or not all of the tests were successful. 
@@ -462,22 +551,22 @@ Setting up Travis CI is very simple. We need to grant Travis CI (.org) access to
 language: python
 
 python:
-        - "3.5"
+    - "3.5"
 
 services: 
-        - postgresql
+    - postgresql
 
 env:
-        -DJANGO=2.0 DB=postgresql
+    -DJANGO=2.0 DB=postgresql
 
 install: 
-        - pip install -r requirements.txt
+    - pip install -r requirements.txt
 
 before_script:
-  - psql -c "CREATE USER u_brian WITH PASSWORD 'Saintmary88'; ALTER USER u_brian CREATEDB;" -U postgres
+    - psql -c "CREATE USER u_brian WITH PASSWORD 'password'; ALTER USER u_brian CREATEDB;" -U postgres
 
 script: 
-        - python manage.py test books/
+    - python manage.py test books/
 ```
 
 We can generate a Travis CI badge that shows the status of the current Github deploy with the following code:
@@ -488,8 +577,86 @@ We can generate a Travis CI badge that shows the status of the current Github de
 
 [![Build Status](https://travis-ci.org/briancaffey/django-leaflet-demo.svg?branch=master)](https://travis-ci.org/briancaffey/django-leaflet-demo)
 
-Finally, to deploy this app, I used DigitalOcean. I have used Heroku for most of my previous projects, but I decided to use DigitalOcean for this one to learn something new and get more experience with using Ubuntu. 
+## Deploying to DigitalOcean
 
-Again, for I turned to Vitor's blog for a very straightforward introduction to deploying on DigitalOcean with a simple Droplet. You can read more about the instructions for deployment [here](https://simpleisbetterthancomplex.com/tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html), and I can say that I had no problems following the instructions step by step. 
+Finally, I used DigitalOcean to deploy this app. I have used Heroku for most of my previous projects, but I decided to use DigitalOcean for this one to learn something new and get more experience with using Ubuntu and related tools for running a website: nginx and gunicorn. 
 
-For now, you can view the live project on DigitalOcean [here](http://159.89.235.193/books/). In the future I would like to use this Droplet to do more demo apps like this one as I continue to learn the ins and outs of using Django and more frontend tools. Thanks for reading to the end and let me know if you have any comments or critiques on how I went about this project, I would be happy to hear from you!
+Again, for I turned to Vitor's blog for a very straightforward introduction to deploying on DigitalOcean with a simple Droplet. You can read more about the instructions for deployment [here](https://simpleisbetterthancomplex.com/tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html), and I can say that I had no problems following the instructions step by step. Here are the `gunicorn` and `nginx` scripts I have used to successfully deploy my project: 
+
+*/home/brian/bin/gunicorn_start*
+
+```bash
+#!/bin/bash
+
+NAME="django-leaflet-demo"
+DIR=/home/brian/django-leaflet-demo
+USER=brian
+GROUP=brian
+WORKERS=3
+BIND=unix:/home/brian/run/gunicorn.sock
+DJANGO_SETTINGS_MODULE=djangoapp.settings
+DJANGO_WSGI_MODULE=djangoapp.wsgi
+LOG_LEVEL=error
+cd $DIR
+source ../bin/activate
+
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DIR:$PYTHONPATH
+
+exec ../bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+  --name=$NAME \
+  --workers=$WORKERS \
+  --user=$USER \
+  --group=$GROUP \
+  --bind=$BIND \
+  --log-level=$LOG_LEVEL \
+  --log-file=-
+```
+
+*/etc/nginx/sites-available*
+
+```yml
+upstream app_server {
+    server unix:/home/brian/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+    listen 80;
+    server_name 159.89.235.193
+    keepalive_timeout 5;
+    client_max_body_size 4G;
+    access_log /home/brian/logs/nginx-access.log;
+    error_log /home/brian/logs/nginx-error.log;
+    
+    location /static/ {
+        alias /home/brian/static/;
+}
+
+location / {
+    try_files $uri @proxy_to_app;
+}
+
+location @proxy_to_app {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://app_server;
+    }
+}
+```
+
+Finally, here is the Supervisor configuration file that runs the gunicorn server:
+
+```cs
+[program:django-leaflet-demo]
+command=/home/brian/bin/gunicorn_start
+user=brian
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/home/brian/logs/gunicorn-error.log
+```
+
+I would definitely like to dive into DigitalOcean deployment in more depth in my next post. 
+
+For now, you can view the live project on DigitalOcean here: [http://159.89.235.193/books/](http://159.89.235.193/books/). In the future I would like to use this Droplet to do more demo apps like this one as I continue to learn the ins and outs of using Django and more frontend tools. Thanks for reading to the end and let me know if you have any comments or critiques on how I went about this project, I would be happy to hear from you!

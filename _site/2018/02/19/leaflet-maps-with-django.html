@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Using Leaflet to display geographical data in a Django app with Mapbox, DataTables, Bootstrap 4 and Travis CI</title>
+  <title>Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis CI</title>
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
@@ -87,7 +87,7 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Using Leaflet to display geographical data in a Django app with Mapbox, DataTables, Bootstrap 4 and Travis CI</h1>
+    <h1 class="post-title" itemprop="name headline">Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis CI</h1>
     <p class="post-meta"><time datetime="2018-02-19T00:00:00-05:00" itemprop="datePublished">Feb 19, 2018</time></p>
   </header>
 
@@ -232,7 +232,7 @@
     <span class="p">}</span>
 
     <span class="c1">// use context variable instead of making AJAX call </span>
-    <span class="kd">var</span> <span class="nx">map_books</span> <span class="o">=</span>  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">map_books</span> <span class="o">=</span>  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">'{{ map_books }}'</span><span class="p">)</span>
     <span class="kd">var</span> <span class="nx">new_lat</span> <span class="o">=</span> <span class="nx">map_books</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="kd">var</span> <span class="nx">new_lon</span> <span class="o">=</span> <span class="nx">map_books</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="nx">mymap</span><span class="p">.</span><span class="nx">setView</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
@@ -267,13 +267,13 @@
 <p>Notice that I pass <code class="highlighter-rouge">next</code> as a context variable. I use this in the login form here:</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">"."</span><span class="nt">&gt;</span>
-{\% csrf_token \%}
-
-<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">value=</span><span class="s">""</span> <span class="na">name=</span><span class="s">"next"</span><span class="nt">/&gt;</span>
+{% csrf_token %}
+{{ form | crispy }}
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">value=</span><span class="s">"{{ next }}"</span> <span class="na">name=</span><span class="s">"next"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"login-center"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"btn btn-success login-center"</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Login"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;br/&gt;</span>  or <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{\% url 'accounts:register' \%}"</span><span class="nt">&gt;</span>create an account<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;br/&gt;</span>  or <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'accounts:register' %}"</span><span class="nt">&gt;</span>create an account<span class="nt">&lt;/a&gt;</span>
 <span class="nt">&lt;/form&gt;</span>
 </code></pre></div></div>
 
@@ -312,7 +312,9 @@
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h3&gt;</span>
     Authors: 
-        
+        {% for author in book.authors.all %}
+            <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'authors:author_detail' id=author.id %}"</span><span class="nt">&gt;</span>{{ author.full_name }}<span class="nt">&lt;/a&gt;</span>
+        {% endfor %}
 <span class="nt">&lt;/h3&gt;</span>
 </code></pre></div></div>
 
@@ -441,25 +443,25 @@
 
 <p>I wanted to put this button in the filter form on the main <code class="highlighter-rouge">books</code> page, but I need to place the button outside of the form tag. To get around this, here is the HTML I used:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{\% url 'books:csv' \%}"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{% url 'books:csv' %}"</span><span class="nt">&gt;</span>
 
     <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span> <span class="na">data-toggle=</span><span class="s">"collapse"</span> <span class="na">href=</span><span class="s">"#collapseExample"</span> <span class="na">aria-expanded=</span><span class="s">"false"</span> <span class="na">aria-controls=</span><span class="s">"collapseExample"</span><span class="nt">&gt;</span>
         Filter Books
     <span class="nt">&lt;/a&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">class=</span><span class="s">"btn btn-info"</span> <span class="na">form=</span><span class="s">"id_query_form"</span> <span class="na">formaction=</span><span class="s">"{\% url 'books:csv' \%}"</span> <span class="na">value=</span><span class="s">"Export CSV"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span> <span class="na">form=</span><span class="s">"id_query_form"</span> <span class="na">formaction=</span><span class="s">"{\% url 'books:xls' \%}"</span> <span class="na">value=</span><span class="s">"Export XLS"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">class=</span><span class="s">"btn btn-info"</span> <span class="na">form=</span><span class="s">"id_query_form"</span> <span class="na">formaction=</span><span class="s">"{% url 'books:csv' %}"</span> <span class="na">value=</span><span class="s">"Export CSV"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span> <span class="na">form=</span><span class="s">"id_query_form"</span> <span class="na">formaction=</span><span class="s">"{% url 'books:xls' %}"</span> <span class="na">value=</span><span class="s">"Export XLS"</span><span class="nt">&gt;</span>
 <span class="nt">&lt;/form&gt;</span>
 
 <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"get"</span> <span class="na">action=</span><span class="s">"."</span> <span class="na">id=</span><span class="s">"id_query_form"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;p&gt;</span>
-        
+        {{ form.keywords }}
     <span class="nt">&lt;/p&gt;</span>
     <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-md-6"</span><span class="nt">&gt;</span>
-            
+            {{ form.publish_date_before }}
         <span class="nt">&lt;/div&gt;</span>
         <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-md-6"</span><span class="nt">&gt;</span>
-            
+            {{ form.publish_date_after }}
         <span class="nt">&lt;/div&gt;</span>
     <span class="nt">&lt;/div&gt;</span>
         
@@ -516,6 +518,86 @@
 
 <p>One option that I have considered to simplify the search query is to make one field called something like <code class="highlighter-rouge">search_string</code>. This field would be modified on <code class="highlighter-rouge">save</code>, and it would simply appends the text from all of the fields I’m interested in searching. Then, instead of doing Q lookups for each word over many different fields, I could search each word in <code class="highlighter-rouge">keywords</code> over one field. I haven’t implemented this here, but I would like to test this in the future.</p>
 
+<h2 id="finding-books-nearby">Finding “Books Nearby”</h2>
+
+<p>On the pages that show details for each book I wanted to add additional information. I thought it would be interesting to show the 5 books closest to the book we are currently showing. Since we are dealing with coordinate points on a globe, the best way to calculate distance between two points is to use the Halversine formula:</p>
+
+<blockquote>
+  <p>The haversine formula determines the great-circle distance between two points on a sphere given their longitudes and latitudes. Important in navigation, it is a special case of a more general formula in spherical trigonometry, the law of haversines, that relates the sides and angles of spherical triangles.</p>
+</blockquote>
+
+<p><img src="/static/great_circle.png" alt="png" /></p>
+
+<p>Here’s the code I used for calculating distance (using the Halversine formula):</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">radians</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">sqrt</span>
+
+<span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
+    <span class="s">"""
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """</span>
+
+    <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span> <span class="o">=</span> <span class="n">origin</span>
+    <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span> <span class="o">=</span> <span class="n">destination</span>
+    <span class="c"># convert decimal degrees to radians </span>
+    <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">radians</span><span class="p">,</span> <span class="p">[</span><span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span><span class="p">])</span>
+    <span class="c"># haversine formula </span>
+    <span class="n">dlon</span> <span class="o">=</span> <span class="n">lon2</span> <span class="o">-</span> <span class="n">lon1</span> 
+    <span class="n">dlat</span> <span class="o">=</span> <span class="n">lat2</span> <span class="o">-</span> <span class="n">lat1</span> 
+    <span class="n">a</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">dlat</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">lat2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">dlon</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">asin</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> 
+    <span class="n">r</span> <span class="o">=</span> <span class="mi">3956</span> <span class="c"># miles</span>
+    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">r</span>
+</code></pre></div></div>
+
+<p>This formula assumes that the earth is a perfect sphere. Another approach would be to use the the Vincety Formula:</p>
+
+<blockquote>
+  <p>Vincenty’s formulae are two related iterative methods used in geodesy to calculate the distance between two points on the surface of a spheroid, developed by Thaddeus Vincenty (1975a). They are based on the assumption that the figure of the Earth is an oblate spheroid, and hence are more accurate than methods that assume a spherical Earth, such as great-circle distance.</p>
+</blockquote>
+
+<p>This distance is packaged in <code class="highlighter-rouge">geopy</code> and can be calculated easily:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">geopy.distance</span>
+
+<span class="n">coords_1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">52.2296756</span><span class="p">,</span> <span class="mf">21.0122287</span><span class="p">)</span>
+<span class="n">coords_2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">52.406374</span><span class="p">,</span> <span class="mf">16.9251681</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">geopy</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">vincenty</span><span class="p">(</span><span class="n">coords_1</span><span class="p">,</span> <span class="n">coords_2</span><span class="p">)</span><span class="o">.</span><span class="n">km</span>
+</code></pre></div></div>
+
+<p>Here’s a look at the function I wrote for the <code class="highlighter-rouge">book_detail</code> view. I have commented out parts that aren’t related to finding nearby books:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">book_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+
+    <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
+    <span class="n">b_coords</span> <span class="o">=</span> <span class="p">(</span><span class="n">book</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">book</span><span class="o">.</span><span class="n">lon</span><span class="p">)</span>
+    <span class="n">all_books</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="p">[((</span><span class="n">b</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">lon</span><span class="p">),</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">all_books</span><span class="p">]</span>
+
+    <span class="n">distance_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">b_coords</span><span class="p">:</span>
+            <span class="n">distance_dict</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b_coords</span><span class="p">),</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="n">sorted_nearby</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">distance_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])[:</span><span class="mi">5</span><span class="p">]</span>
+
+    <span class="c"># map_book = [{'loc':[float(book.lon), float(book.lat)], </span>
+    <span class="c">#              'title':book.title, </span>
+    <span class="c">#              'url':book.get_absolute_url()}]</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'book'</span><span class="p">:</span><span class="n">book</span><span class="p">,</span> 
+        <span class="c"># 'map_book':mark_safe(escapejs(json.dumps(map_book))), </span>
+        <span class="s">'sorted_nearby'</span><span class="p">:</span><span class="n">sorted_nearby</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'books/book_detail.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>To find the 5 closest books I arrived at a solution that seems fairly convoluted and should be refactored, but works! I start with a queryset of all books, then use list comprehension to make a list of tuples containing <code class="highlighter-rouge">((&lt; longitutde &gt;, &lt; latitude &gt;), &lt; Book Object &gt;)</code>. Then I loop over this list and create a dictionary where the keys are <code class="highlighter-rouge">(&lt; longitutde &gt;, &lt; latitude &gt;)</code> and the values are tuples of the form: <code class="highlighter-rouge">(&lt; distance in miles &gt;, &lt; Book Object &gt;)</code>. Finally, I use <code class="highlighter-rouge">sorted</code> on <code class="highlighter-rouge">dictionary_dict.items()</code> where the key is <code class="highlighter-rouge">lambda x: x[1][0]</code>. The <code class="highlighter-rouge">[1]</code> accesses the <code class="highlighter-rouge">value</code> of the <code class="highlighter-rouge">(&lt; key &gt;, &lt; value&gt;)</code> tuple returned by <code class="highlighter-rouge">items()</code>, and the <code class="highlighter-rouge">[0]</code> access the first item, which is the <code class="highlighter-rouge">distance</code> value we calculated. Finally, I take the first <code class="highlighter-rouge">[:5]</code> items of this sorted list.</p>
+
+<p>With this approach I think I avoided the possible issue of ambiguity if we have two books with the same coordinates. I’ll need to add this scenario to my test suite later.</p>
+
 <h2 id="testing--travis-ci">Testing &amp; Travis CI</h2>
 
 <p>Speaking of testing, this applcation includes a simple testing suite (that I am currently working on expanding). I have also managed to setup Travis CI for this project. When I push code from my local repo to GitHub, Travis CI automatically runs test, and the commit message contains additional information about whether or not all of the tests were successful.</p>
@@ -525,22 +607,22 @@
 <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">language</span><span class="pi">:</span> <span class="s">python</span>
 
 <span class="na">python</span><span class="pi">:</span>
-        <span class="pi">-</span> <span class="s2">"</span><span class="s">3.5"</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">3.5"</span>
 
 <span class="na">services</span><span class="pi">:</span> 
-        <span class="pi">-</span> <span class="s">postgresql</span>
+    <span class="pi">-</span> <span class="s">postgresql</span>
 
 <span class="na">env</span><span class="pi">:</span>
-        <span class="s">-DJANGO=2.0 DB=postgresql</span>
+    <span class="s">-DJANGO=2.0 DB=postgresql</span>
 
 <span class="na">install</span><span class="pi">:</span> 
-        <span class="pi">-</span> <span class="s">pip install -r requirements.txt</span>
+    <span class="pi">-</span> <span class="s">pip install -r requirements.txt</span>
 
 <span class="na">before_script</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s">psql -c "CREATE USER u_brian WITH PASSWORD 'Saintmary88'; ALTER USER u_brian CREATEDB;" -U postgres</span>
+    <span class="pi">-</span> <span class="s">psql -c "CREATE USER u_brian WITH PASSWORD 'password'; ALTER USER u_brian CREATEDB;" -U postgres</span>
 
 <span class="na">script</span><span class="pi">:</span> 
-        <span class="pi">-</span> <span class="s">python manage.py test books/</span>
+    <span class="pi">-</span> <span class="s">python manage.py test books/</span>
 </code></pre></div></div>
 
 <p>We can generate a Travis CI badge that shows the status of the current Github deploy with the following code:</p>
@@ -550,11 +632,86 @@
 
 <p><a href="https://travis-ci.org/briancaffey/django-leaflet-demo"><img src="https://travis-ci.org/briancaffey/django-leaflet-demo.svg?branch=master" alt="Build Status" /></a></p>
 
-<p>Finally, to deploy this app, I used DigitalOcean. I have used Heroku for most of my previous projects, but I decided to use DigitalOcean for this one to learn something new and get more experience with using Ubuntu.</p>
+<h2 id="deploying-to-digitalocean">Deploying to DigitalOcean</h2>
 
-<p>Again, for I turned to Vitor’s blog for a very straightforward introduction to deploying on DigitalOcean with a simple Droplet. You can read more about the instructions for deployment <a href="https://simpleisbetterthancomplex.com/tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">here</a>, and I can say that I had no problems following the instructions step by step.</p>
+<p>Finally, I used DigitalOcean to deploy this app. I have used Heroku for most of my previous projects, but I decided to use DigitalOcean for this one to learn something new and get more experience with using Ubuntu and related tools for running a website: nginx and gunicorn.</p>
 
-<p>For now, you can view the live project on DigitalOcean <a href="http://159.89.235.193/books/">here</a>. In the future I would like to use this Droplet to do more demo apps like this one as I continue to learn the ins and outs of using Django and more frontend tools. Thanks for reading to the end and let me know if you have any comments or critiques on how I went about this project, I would be happy to hear from you!</p>
+<p>Again, for I turned to Vitor’s blog for a very straightforward introduction to deploying on DigitalOcean with a simple Droplet. You can read more about the instructions for deployment <a href="https://simpleisbetterthancomplex.com/tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">here</a>, and I can say that I had no problems following the instructions step by step. Here are the <code class="highlighter-rouge">gunicorn</code> and <code class="highlighter-rouge">nginx</code> scripts I have used to successfully deploy my project:</p>
+
+<p><em>/home/brian/bin/gunicorn_start</em></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">NAME</span><span class="o">=</span><span class="s2">"django-leaflet-demo"</span>
+<span class="nv">DIR</span><span class="o">=</span>/home/brian/django-leaflet-demo
+<span class="nv">USER</span><span class="o">=</span>brian
+<span class="nv">GROUP</span><span class="o">=</span>brian
+<span class="nv">WORKERS</span><span class="o">=</span>3
+<span class="nv">BIND</span><span class="o">=</span>unix:/home/brian/run/gunicorn.sock
+<span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>djangoapp.settings
+<span class="nv">DJANGO_WSGI_MODULE</span><span class="o">=</span>djangoapp.wsgi
+<span class="nv">LOG_LEVEL</span><span class="o">=</span>error
+<span class="nb">cd</span> <span class="nv">$DIR</span>
+<span class="nb">source</span> ../bin/activate
+
+<span class="nb">export </span><span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span><span class="nv">$DJANGO_SETTINGS_MODULE</span>
+<span class="nb">export </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$DIR</span>:<span class="nv">$PYTHONPATH</span>
+
+<span class="nb">exec</span> ../bin/gunicorn <span class="k">${</span><span class="nv">DJANGO_WSGI_MODULE</span><span class="k">}</span>:application <span class="se">\</span>
+  <span class="nt">--name</span><span class="o">=</span><span class="nv">$NAME</span> <span class="se">\</span>
+  <span class="nt">--workers</span><span class="o">=</span><span class="nv">$WORKERS</span> <span class="se">\</span>
+  <span class="nt">--user</span><span class="o">=</span><span class="nv">$USER</span> <span class="se">\</span>
+  <span class="nt">--group</span><span class="o">=</span><span class="nv">$GROUP</span> <span class="se">\</span>
+  <span class="nt">--bind</span><span class="o">=</span><span class="nv">$BIND</span> <span class="se">\</span>
+  <span class="nt">--log-level</span><span class="o">=</span><span class="nv">$LOG_LEVEL</span> <span class="se">\</span>
+  <span class="nt">--log-file</span><span class="o">=</span>-
+</code></pre></div></div>
+
+<p><em>/etc/nginx/sites-available</em></p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">upstream app_server {</span>
+    <span class="s">server unix:/home/brian/run/gunicorn.sock fail_timeout=0;</span>
+<span class="err">}</span>
+
+<span class="s">server {</span>
+    <span class="s">listen 80;</span>
+    <span class="s">server_name 159.89.235.193</span>
+    <span class="s">keepalive_timeout 5;</span>
+    <span class="s">client_max_body_size 4G;</span>
+    <span class="s">access_log /home/brian/logs/nginx-access.log;</span>
+    <span class="s">error_log /home/brian/logs/nginx-error.log;</span>
+    
+    <span class="s">location /static/ {</span>
+        <span class="s">alias /home/brian/static/;</span>
+<span class="err">}</span>
+
+<span class="s">location / {</span>
+    <span class="s">try_files $uri @proxy_to_app;</span>
+<span class="err">}</span>
+
+<span class="s">location @proxy_to_app {</span>
+    <span class="s">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span>
+    <span class="s">proxy_set_header Host $http_host;</span>
+    <span class="s">proxy_redirect off;</span>
+    <span class="s">proxy_pass http://app_server;</span>
+    <span class="s">}</span>
+<span class="err">}</span>
+</code></pre></div></div>
+
+<p>Finally, here is the Supervisor configuration file that runs the gunicorn server:</p>
+
+<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[program:django-leaflet-demo]</span>
+<span class="n">command</span><span class="p">=/</span><span class="n">home</span><span class="p">/</span><span class="n">brian</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">gunicorn_start</span>
+<span class="n">user</span><span class="p">=</span><span class="n">brian</span>
+<span class="n">autostart</span><span class="p">=</span><span class="k">true</span>
+<span class="n">autorestart</span><span class="p">=</span><span class="k">true</span>
+<span class="n">redirect_stderr</span><span class="p">=</span><span class="k">true</span>
+<span class="n">stdout_logfile</span><span class="p">=/</span><span class="n">home</span><span class="p">/</span><span class="n">brian</span><span class="p">/</span><span class="n">logs</span><span class="p">/</span><span class="n">gunicorn</span><span class="p">-</span><span class="n">error</span><span class="p">.</span><span class="n">log</span>
+</code></pre></div></div>
+
+<p>I would definitely like to dive into DigitalOcean deployment in more depth in my next post.</p>
+
+<p>For now, you can view the live project on DigitalOcean here: <a href="http://159.89.235.193/books/">http://159.89.235.193/books/</a>. In the future I would like to use this Droplet to do more demo apps like this one as I continue to learn the ins and outs of using Django and more frontend tools. Thanks for reading to the end and let me know if you have any comments or critiques on how I went about this project, I would be happy to hear from you!</p>
 
   </div>
 
