@@ -10,6 +10,8 @@ image: /static/map_homepage.png
 
 ![png](/static/map_entire.png)
 
+### [Live Demo on DigitalOcean](http://159.89.235.193/books/)
+
 This post is a review of my first attempt at using geographical data in a Django project. I have been interested in working with map APIs, and I once looked into the Google Maps API. For this project I chose to use [Leaflet](http://leafletjs.com/):
 
 > an open-source JavaScript library for mobile-friendly interactive maps
