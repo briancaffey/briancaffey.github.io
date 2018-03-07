@@ -8,7 +8,7 @@ image: /static/stirlingii.png
 
 ---
 
-Here is a problem set from a recent coding screen that I took. I want to go over the questions to try to get a better grasp on some of the concepts covered. 
+Here is a problem set from a recent coding screen. I want to go over the questions to try to get a better grasp on some of the concepts covered. 
 
 *Please answer the following questions. Provide exemplary executable Python code to answer questions 1 through 4 (questions 0 and 5 do not require code). Partial progress towards a solution, either in prose or pseudocode, will be evaluated. Questions can be answered in any order.*
 
