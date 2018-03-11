@@ -2,10 +2,13 @@
 
 layout: post
 title: Ubuntu 16.04.4 Installation and Setup Notes
-date: 2018-03-09
+date: 2018-03-01
 comments: true
+image: /static/ubuntu_installation.png
 
 ---
+
+![png](/static/ubuntu_installation.png)
 
 # Ubuntu Setup
 
