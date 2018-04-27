@@ -4,14 +4,15 @@ title: Contact
 permalink: /contact
 
 ---
+
 <style>
 img {
-    border-radius: 50%;
+    border-radius: 10%;
     display: block;
     margin: 0 auto;
 }
 </style>
-<img src="../static/JBC_photo.jpg" width="200">  	
+<img src="../static/JBC_PA.jpg" width="300">
 
 This is my work-in-progress Jekyll site with information about interesting things I have been getting up to recently.
 
