@@ -1,7 +1,7 @@
 ---
 
 layout: post
-title: Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis CI
+title: Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis-CI
 date: 2018-02-19
 comments: true
 image: /static/map_homepage.png
@@ -16,7 +16,7 @@ This post is a review of my first attempt at using geographical data in a Django
 
 > an open-source JavaScript library for mobile-friendly interactive maps
 
-Getting started with Leaflet is very easy. All you need to do is request a public Mapbox API key which is free (with no credit card required). You can get a key from [https://www.mapbox.com/account/access-tokens/](https://www.mapbox.com/account/access-tokens/).
+Getting started with Leaflet is easy. All you need to do is request a public Mapbox API key which is free (with no credit card required). You can get a key from [https://www.mapbox.com/account/access-tokens/](https://www.mapbox.com/account/access-tokens/).
 
 Then you will follow steps on the [quickstart guide](http://leafletjs.com/examples/quick-start/) and replace `your.mapbox.access.token` with your Mapbox API key. 
 

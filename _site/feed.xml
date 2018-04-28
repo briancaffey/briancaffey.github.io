@@ -6,6 +6,7 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+<<<<<<< HEAD
     <pubDate>Thu, 26 Apr 2018 22:09:19 -0400</pubDate>
     <lastBuildDate>Thu, 26 Apr 2018 22:09:19 -0400</lastBuildDate>
     <generator>Jekyll v3.7.0</generator>
@@ -380,12 +381,419 @@ sudo systemctl enable timidity.service
         <pubDate>Thu, 26 Apr 2018 00:00:00 -0400</pubDate>
         <link>http://localhost:4000/2018/04/26/generating-music-from-guitar-tabs-with-python.html</link>
         <guid isPermaLink="true">http://localhost:4000/2018/04/26/generating-music-from-guitar-tabs-with-python.html</guid>
+=======
+    <pubDate>Sun, 11 Mar 2018 13:58:32 -0400</pubDate>
+    <lastBuildDate>Sun, 11 Mar 2018 13:58:32 -0400</lastBuildDate>
+    <generator>Jekyll v3.7.3</generator>
+    
+      <item>
+        <title>Ubuntu 16.04.4 Installation and Setup Notes</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/static/ubuntu_installation.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;ubuntu-setup&quot;&gt;Ubuntu Setup&lt;/h1&gt;
+
+&lt;p&gt;I have recently been working between MacOS, Windows 10 and Linux machines, but I haven’t spent much time on Ubuntu. This is a collection of notes on setting up Ubunutu with a few different development environments:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;nodejs&lt;/li&gt;
+  &lt;li&gt;ruby&lt;/li&gt;
+  &lt;li&gt;python&lt;/li&gt;
+  &lt;li&gt;postgresql&lt;/li&gt;
+  &lt;li&gt;various development tools&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;installation&quot;&gt;Installation&lt;/h3&gt;
+
+&lt;p&gt;To install Ubuntu you need the ISO image. The fastest way to download this is BitTorrent, using a client like Deluge. Grad the torrent file from &lt;a href=&quot;https://www.ubuntu.com/download/alternative-downloads&quot;&gt;Ubuntu Alternative Downloads&lt;/a&gt; and make sure you get the correct version. I will be using &lt;strong&gt;Ubuntu 16.04.4 Desktop (64-bit)&lt;/strong&gt;. Next, use a utility like Rufus to put the ISO image on a USB drive. Then you will need to boot into the USB that contains the ISO image. At this point, you need to make some decisions about where to install Ubuntu. I select the &lt;em&gt;Do something else&lt;/em&gt; option that allows me to create partition tables.&lt;/p&gt;
+
+&lt;p&gt;Here is how I partitioned my drive using a 240GB SSD:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;200MB&lt;/code&gt; - &lt;code class=&quot;highlighter-rouge&quot;&gt;efi boot&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1MB&lt;/code&gt; - &lt;code class=&quot;highlighter-rouge&quot;&gt;swap area&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;40GB&lt;/code&gt; - &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;185GB&lt;/code&gt; - &lt;code class=&quot;highlighter-rouge&quot;&gt;/home&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brian@brian-ThinkPad-T430:~$ df -h | grep sdb
+/dev/sdb1             188M  3.4M  184M   2% /boot/efi
+/dev/sdb3              37G  5.3G   30G  16% /
+/dev/sdb4             183G  2.3G  171G   2% /home
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;ubunutu-software&quot;&gt;Ubunutu Software&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Chrome&lt;/li&gt;
+  &lt;li&gt;VSCode&lt;/li&gt;
+  &lt;li&gt;Gimp&lt;/li&gt;
+  &lt;li&gt;Blender&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;git&quot;&gt;git&lt;/h3&gt;
+
+&lt;p&gt;Install and configure git with the following commands:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install git 
+$ git config --global user.name &quot;John Doe&quot;
+$ git config --global user.email johndoe@example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;curl&quot;&gt;curl&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt install curl
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;npm&quot;&gt;npm&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;vim&quot;&gt;vim&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt install vim
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;ssh-keys-for-github&quot;&gt;SSH Keys for github&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brian@brian-ThinkPad-T430:~$ ssh-keygen -t rsa -C &quot;briancaffey2010@gmail.com&quot;
+[sudo] password for brian: 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/brian/.ssh/id_rsa): 
+Created directory '/home/brian/.ssh'.
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/brian/.ssh/id_rsa.
+Your public key has been saved in /home/brian/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:DSFNVSFDLKUVSIVUHTR98948W498FH54W54H/g briancaffey2010@gmail.com
+The key's randomart image is:
++---[RSA 2048]----+
+| o=v++o.         |
+|..D-*. o         |
+|+. .O.+ o .      |
+|o+ * x = * .     |
+|- o X . S .      |
+| B = +   o       |
+|  o =            |
+|   + .           |
+|                 |
++----[SHA256]-----+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To get the public key, run:&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;brian@brian-ThinkPad-T430:~$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; ~/.ssh/id_rsa.pub
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://security.stackexchange.com/questions/120706/why-would-i-sign-my-git-commits-with-a-gpg-key-when-i-already-use-an-ssh-key-to&quot;&gt;Why you should have both GPG and SSH&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;gpg-key-for-github&quot;&gt;GPG Key for github&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gpg --gen-key
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; gpg &lt;span class=&quot;nt&quot;&gt;--list-secret-keys&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--keyid-format&lt;/span&gt; LONG
+&lt;span class=&quot;gp&quot;&gt;brian@brian-ThinkPad-T430:~/Documents$&lt;/span&gt; gpg &lt;span class=&quot;nt&quot;&gt;--list-secret-keys&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--keyid-format&lt;/span&gt; LONG
+&lt;span class=&quot;go&quot;&gt;/home/brian/.gnupg/secring.gpg
+------------------------------
+sec   2048R/A4E10BFF341S64V3 2018-03-06
+&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;uid                          Brian Caffey (t430 key) &amp;lt;briancaffey2010@gmail.com&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;ssb   2048R/49B26066D2G5E456 2018-03-06
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, print out the key and add it to github.&lt;/p&gt;
+
+&lt;div class=&quot;language-terminal highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt; gpg &lt;span class=&quot;nt&quot;&gt;--armor&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--export&lt;/span&gt; A4E10BFF341S64V3
+&lt;span class=&quot;go&quot;&gt;-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1
+
+UREFLIUWFWOI8F98F98U459FU43982U4F98UP9432UFP98U4
+[...]
+FWERO8FEFPHHSLIREUFHWEIRHUFWREHWRLFUWH5LIFU4H5F=
+=6H/K
+-----END PGP PUBLIC KEY BLOCK-----
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;jekyll-ruby-based-static-blog-generator&quot;&gt;Jekyll (Ruby-based static blog generator)&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install ruby ruby-dev make gcc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We need to reinstall Ruby to fix permission issues:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get remove ruby
+$ git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Follow instructions on &lt;a href=&quot;https://stackoverflow.com/questions/37720892/you-dont-have-write-permissions-for-the-var-lib-gems-2-3-0-directory&quot;&gt;this SO post&lt;/a&gt; to install a newer version of Ruby with rbenv.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd $HOME
+sudo apt-get update 
+sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
+
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+echo 'export PATH=&quot;$HOME/.rbenv/bin:$PATH&quot;' &amp;gt;&amp;gt; ~/.bashrc
+echo 'eval &quot;$(rbenv init -)&quot;' &amp;gt;&amp;gt; ~/.bashrc
+exec $SHELL
+
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+echo 'export PATH=&quot;$HOME/.rbenv/plugins/ruby-build/bin:$PATH&quot;' &amp;gt;&amp;gt; ~/.bashrc
+exec $SHELL
+
+rbenv install 2.3.1
+rbenv global 2.3.1
+ruby -v
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Note: This failed:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ rbenv install 2.3.1
+Downloading ruby-2.3.1.tar.bz2...
+-&amp;gt; https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.bz2
+Installing ruby-2.3.1...
+
+BUILD FAILED (Ubuntu 16.04 using ruby-build 20180224)
+
+Inspect or clean up the working tree at /tmp/ruby-build.20180306153138.18887
+Results logged to /tmp/ruby-build.20180306153138.18887.log
+
+Last 10 log lines:
+The Ruby openssl extension was not compiled.
+The Ruby readline extension was not compiled.
+The Ruby zlib extension was not compiled.
+ERROR: Ruby install aborted due to missing extensions
+Try running `apt-get install -y libssl-dev libreadline-dev zlib1g-dev` to fetch missing dependencies.
+
+Configure options used:
+  --prefix=/home/brian/.rbenv/versions/2.3.1
+  LDFLAGS=-L/home/brian/.rbenv/versions/2.3.1/lib 
+  CPPFLAGS=-I/home/brian/.rbenv/versions/2.3.1/include 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As the message recommends, we should install some missing dependencies:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install -y libssl-dev libreadline-dev zlib1g-dev
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And now it should work:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ rbenv install 2.3.1
+Downloading ruby-2.3.1.tar.bz2...
+-&amp;gt; https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.bz2
+Installing ruby-2.3.1...
+Installed ruby-2.3.1 to /home/brian/.rbenv/versions/2.3.1
+
+$ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, run:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ rbenv global 2.3.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;install-jekyll&quot;&gt;Install Jekyll&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gem install jekyll bundler
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;node-permission-issues&quot;&gt;Node permission issues&lt;/h3&gt;
+
+&lt;p&gt;(Following steps from &lt;a href=&quot;http://nodesource.com/blog/installing-node-js-tutorial-using-nvm-on-mac-os-x-and-ubuntu/&quot;&gt;this article&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;I need root permission to run &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install -g ...&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;First, remove &lt;code class=&quot;highlighter-rouge&quot;&gt;nodejs&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;npm&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get remove nodejs
+$ sudo apt-get remove npm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, update:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get update
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can install &lt;code class=&quot;highlighter-rouge&quot;&gt;nvm&lt;/code&gt; (Node Version Manager):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, reload &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ source ~/.bashrc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can run &lt;code class=&quot;highlighter-rouge&quot;&gt;nvm&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ nvm --version
+0.33.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can install &lt;code class=&quot;highlighter-rouge&quot;&gt;nodejs&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ nvm install node
+Downloading and installing node v9.7.1...
+Downloading https://nodejs.org/dist/v9.7.1/node-v9.7.1-linux-x64.tar.xz...
+######################################################################## 100.0%
+Computing checksum with sha256sum
+Checksums matched!
+Now using node v9.7.1 (npm v5.6.0)
+Creating default alias: default -&amp;gt; node (-&amp;gt; v9.7.1)
+brian@brian-ThinkPad-T430:~$ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can try to install something with node, like &lt;code class=&quot;highlighter-rouge&quot;&gt;create-react-app&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brian@brian-ThinkPad-T430:~$ npm install -g create-react-app
+/home/brian/.nvm/versions/node/v9.7.1/bin/create-react-app -&amp;gt; /home/brian/.nvm/versions/node/v9.7.1/lib/node_modules/create-react-app/index.js
++ create-react-app@1.5.2
+added 114 packages in 6.634s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;utilities&quot;&gt;Utilities&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install htop
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;compizconfig&quot;&gt;CompizConfig&lt;/h3&gt;
+
+&lt;p&gt;For:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;changing UI&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;settings&quot;&gt;Settings&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;keyboard speed&lt;/li&gt;
+  &lt;li&gt;mouse speed&lt;/li&gt;
+  &lt;li&gt;workspaces shortcuts&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;python-3-python-36&quot;&gt;Python 3, Python 3.6&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt install virtualenv
+$ virtualenv -p python3 venv
+Already using interpreter /usr/bin/python3
+Using base prefix '/usr'
+New python executable in /home/brian/Documents/python/venv/bin/python3
+Also creating executable in /home/brian/Documents/python/venv/bin/python
+Installing setuptools, pkg_resources, pip, wheel...done.
+$ source venv/bin/activate
+(venv) $ python -V
+Python 3.5.2
+(venv) $ deactivate 
+$ python -V
+Python 2.7.12
+$ source venv/bin/activate
+(venv) $ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Install &lt;code class=&quot;highlighter-rouge&quot;&gt;python3-pip&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install python3-pip
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If we run &lt;code class=&quot;highlighter-rouge&quot;&gt;pip freeze&lt;/code&gt;, we will see &lt;code class=&quot;highlighter-rouge&quot;&gt;pkg-resources==0.0.0&lt;/code&gt;. See this note about &lt;a href=&quot;https://stackoverflow.com/questions/39577984/what-is-pkg-resources-0-0-0-in-output-of-pip-freeze-command&quot;&gt;what &lt;code class=&quot;highlighter-rouge&quot;&gt;pkg-resources==0.0.0&lt;/code&gt;&lt;/a&gt; is.&lt;/p&gt;
+
+&lt;h3 id=&quot;python-36&quot;&gt;Python 3.6&lt;/h3&gt;
+
+&lt;p&gt;We can install a newer version of Python (3.6) to use with Anaconda. Instructions are &lt;a href=&quot;https://askubuntu.com/questions/865554/how-do-i-install-python-3-6-using-apt-get&quot;&gt;in this Ask Ubuntu post&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt-get install python3.6
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After running these commands, we can now use Python3.6:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brian@brian-ThinkPad-T430:~/Documents/python/demo$ python3.6
+Python 3.6.4 (default, Jan 28 2018, 17:52:01) 
+[GCC 5.4.0 20160609] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&amp;gt;&amp;gt;&amp;gt; import sys; print(sys.version)
+3.6.4 (default, Jan 28 2018, 17:52:01) 
+[GCC 5.4.0 20160609]
+&amp;gt;&amp;gt;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;anaconda&quot;&gt;Anaconda&lt;/h3&gt;
+
+&lt;p&gt;Now let’s install the Anaconda distribution of Python. First, download the Linux Installer from &lt;a href=&quot;https://www.anaconda.com/download/#linux&quot;&gt;https://www.anaconda.com/download/#linux&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then, run:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ bash ~/Downloads/Anaconda3-5.1.0-Linux-x86_64.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;postgresql&quot;&gt;Postgresql&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install postgresql postgresql-contrib
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here’s how to access Postgres:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brian@brian-ThinkPad-T430:~$ sudo -i -u postgres
+postgres@brian-ThinkPad-T430:~$ psql
+psql (9.5.12)
+Type &quot;help&quot; for help.
+
+postgres=# \q
+postgres@brian-ThinkPad-T430:~$ exit
+logout
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo -u postgres psql
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;More information on postgresql &lt;a href=&quot;https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04&quot;&gt;in this DigitalOcean article&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;brightness-controller&quot;&gt;Brightness Controller&lt;/h3&gt;
+
+&lt;p&gt;This is a must-have program that is similar to flux:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo add-apt-repository ppa:apandada1/brightness-controller
+$ sudo apt-get update
+$ sudo apt-get install brightness-controller
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;obs&quot;&gt;OBS&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-add-repository ppa:obsproject/obs-studio
+$ sudo apt-get update
+$ sudo apt-get install ffmpeg obs-studio
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;neofetch&quot;&gt;neofetch&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo add-apt-repository ppa:dawidd0811/neofetch
+$ sudo apt update
+$ sudo apt install neofetch
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;disabling-whoopsie&quot;&gt;Disabling whoopsie&lt;/h3&gt;
+
+&lt;p&gt;Here’s an &lt;a href=&quot;https://askubuntu.com/questions/135540/what-is-the-whoopsie-process-and-how-can-i-remove-it&quot;&gt;Ask Ubuntu post about how to disable &lt;code class=&quot;highlighter-rouge&quot;&gt;whoopsie&lt;/code&gt;&lt;/a&gt;, an error reporting daemon that ships with Ubuntu.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 01 Mar 2018 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/2018/03/01/ubuntu-installation-and-setup-notes.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/03/01/ubuntu-installation-and-setup-notes.html</guid>
+>>>>>>> 6384a2d009b2cf367675e5e0e0f0f34cbef7ad99
         
         
       </item>
     
       <item>
+<<<<<<< HEAD
         <title>Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis CI</title>
+=======
+        <title>Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis-CI</title>
+>>>>>>> 6384a2d009b2cf367675e5e0e0f0f34cbef7ad99
         <description>&lt;p&gt;&lt;img src=&quot;/static/map_entire.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;live-demo-on-digitalocean&quot;&gt;&lt;a href=&quot;http://159.89.235.193/books/&quot;&gt;Live Demo on DigitalOcean&lt;/a&gt;&lt;/h3&gt;
@@ -396,7 +804,7 @@ sudo systemctl enable timidity.service
   &lt;p&gt;an open-source JavaScript library for mobile-friendly interactive maps&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Getting started with Leaflet is very easy. All you need to do is request a public Mapbox API key which is free (with no credit card required). You can get a key from &lt;a href=&quot;https://www.mapbox.com/account/access-tokens/&quot;&gt;https://www.mapbox.com/account/access-tokens/&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Getting started with Leaflet is easy. All you need to do is request a public Mapbox API key which is free (with no credit card required). You can get a key from &lt;a href=&quot;https://www.mapbox.com/account/access-tokens/&quot;&gt;https://www.mapbox.com/account/access-tokens/&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Then you will follow steps on the &lt;a href=&quot;http://leafletjs.com/examples/quick-start/&quot;&gt;quickstart guide&lt;/a&gt; and replace &lt;code class=&quot;highlighter-rouge&quot;&gt;your.mapbox.access.token&lt;/code&gt; with your Mapbox API key.&lt;/p&gt;
 
@@ -1018,7 +1426,7 @@ sudo systemctl enable timidity.service
     
       <item>
         <title>Generators, decorators and Stirling Numbers of the Second Kind</title>
-        <description>&lt;p&gt;Here is a problem set from a recent coding screen that I took. I want to go over the questions to try to get a better grasp on some of the concepts covered.&lt;/p&gt;
+        <description>&lt;p&gt;Here is a problem set from a recent coding screen. I want to go over the questions to try to get a better grasp on some of the concepts covered.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Please answer the following questions. Provide exemplary executable Python code to answer questions 1 through 4 (questions 0 and 5 do not require code). Partial progress towards a solution, either in prose or pseudocode, will be evaluated. Questions can be answered in any order.&lt;/em&gt;&lt;/p&gt;
 
