@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/12/09/setting-up-flask-cli-with-docker.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/12/09/setting-up-flask-cli-with-docker.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -108,46 +108,50 @@
 
 <h3 id="directories">Directories</h3>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">mkdir </span>test-flask <span class="o">&amp;&amp;</span> <span class="nb">cd </span>test-flask
-<span class="gp"> $</span> <span class="nb">mkdir </span>users-service <span class="o">&amp;&amp;</span> <span class="nb">cd </span>users-service
-<span class="gp"> $</span> <span class="nb">mkdir </span>project
-<span class="go">
-</span></code></pre></div></div>
+<p>```terminal
+ $ mkdir test-flask &amp;&amp; cd test-flask
+ $ mkdir users-service &amp;&amp; cd users-service
+ $ mkdir project</p>
+
+<p>```</p>
 
 <h3 id="virtual-environment">Virtual Environment</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ virtualenv -p python3 env
+<p><code class="highlighter-rouge">
+ $ virtualenv -p python3 env
 Running virtualenv with interpreter /home/brian/anaconda3/bin/python3
 Using base prefix '/home/brian/anaconda3'
 New python executable in /home/brian/Documents/flask/test-flask/users-service/env/bin/python3
 Also creating executable in /home/brian/Documents/flask/test-flask/users-service/env/bin/python
 Installing setuptools, pip, wheel...done.
-</code></pre></div></div>
+</code></p>
 
 <h3 id="activate-virtual-environment">Activate Virtual Environment</h3>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">source env</span>/bin/activate
-<span class="gp">(env) $</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+ $ source env/bin/activate
+(env) $
+</code></p>
 
 <p>We will come back to the <code class="highlighter-rouge">activate</code> script and add some environment variables to the bottom if it so we have them accessible when we activate the virtual environment.</p>
 
 <h3 id="install-flask-in-the-virtual-environment">Install flask in the virtual environment</h3>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> pip <span class="nb">install </span><span class="nv">flask</span><span class="o">==</span>0.12.2
-<span class="go">Collecting flask==0.12.2
+<p><code class="highlighter-rouge">terminal
+ $ pip install flask==0.12.2
+Collecting flask==0.12.2
   Using cached Flask-0.12.2-py2.py3-none-any.whl
-</span><span class="gp">Collecting itsdangerous&gt;</span><span class="o">=</span>0.21 <span class="o">(</span>from <span class="nv">flask</span><span class="o">==</span>0.12.2<span class="o">)</span>
-<span class="gp">Collecting Werkzeug&gt;</span><span class="o">=</span>0.7 <span class="o">(</span>from <span class="nv">flask</span><span class="o">==</span>0.12.2<span class="o">)</span>
-<span class="go">  Using cached Werkzeug-0.13-py2.py3-none-any.whl
-</span><span class="gp">Collecting click&gt;</span><span class="o">=</span>2.0 <span class="o">(</span>from <span class="nv">flask</span><span class="o">==</span>0.12.2<span class="o">)</span>
-<span class="go">  Using cached click-6.7-py2.py3-none-any.whl
-</span><span class="gp">Collecting Jinja2&gt;</span><span class="o">=</span>2.4 <span class="o">(</span>from <span class="nv">flask</span><span class="o">==</span>0.12.2<span class="o">)</span>
-<span class="go">  Using cached Jinja2-2.10-py2.py3-none-any.whl
-</span><span class="gp">Collecting MarkupSafe&gt;</span><span class="o">=</span>0.23 <span class="o">(</span>from Jinja2&gt;<span class="o">=</span>2.4-&gt;flask<span class="o">==</span>0.12.2<span class="o">)</span>
-<span class="go">Installing collected packages: itsdangerous, Werkzeug, click, MarkupSafe, Jinja2, flask
+Collecting itsdangerous&gt;=0.21 (from flask==0.12.2)
+Collecting Werkzeug&gt;=0.7 (from flask==0.12.2)
+  Using cached Werkzeug-0.13-py2.py3-none-any.whl
+Collecting click&gt;=2.0 (from flask==0.12.2)
+  Using cached click-6.7-py2.py3-none-any.whl
+Collecting Jinja2&gt;=2.4 (from flask==0.12.2)
+  Using cached Jinja2-2.10-py2.py3-none-any.whl
+Collecting MarkupSafe&gt;=0.23 (from Jinja2&gt;=2.4-&gt;flask==0.12.2)
+Installing collected packages: itsdangerous, Werkzeug, click, MarkupSafe, Jinja2, flask
 Successfully installed Jinja2-2.10 MarkupSafe-1.0 Werkzeug-0.13 click-6.7 flask-0.12.2 itsdangerous-0.24
-</span><span class="gp">(env) $</span>
-</code></pre></div></div>
+(env) $
+</code></p>
 
 <p>At this point we are ready to create our flask app.</p>
 
@@ -161,143 +165,162 @@ Successfully installed Jinja2-2.10 MarkupSafe-1.0 Werkzeug-0.13 click-6.7 flask-
 
 <p><em>app.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">jsonify</span>
+<p>```python
+from flask import Flask, jsonify</p>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<p>app = Flask(<strong>name</strong>)</p>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s">'/users/ping'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">'GET'</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">ping_pong</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
-        <span class="s">'message'</span><span class="p">:</span><span class="s">'pong!'</span><span class="p">,</span> 
-        <span class="s">'status'</span><span class="p">:</span><span class="s">'success'</span>
-        <span class="p">})</span>
-</code></pre></div></div>
+<p>@app.route(‘/users/ping’, methods=[‘GET’])
+def ping_pong():
+    return jsonify({
+        ‘message’:’pong!’, 
+        ‘status’:’success’
+        })
+```</p>
 
 <p>And now let’s add an environment variable to tell the Flask CLI where our app is located:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">export </span><span class="nv">FLASK_APP</span><span class="o">=</span>/home/brian/Documents/flask/test-flask/users-service/project/app.py 
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+ $ export FLASK_APP=/home/brian/Documents/flask/test-flask/users-service/project/app.py 
+</code></p>
 
 <p>OK, now let’s try to run <code class="highlighter-rouge">flask run</code> and navigate to <code class="highlighter-rouge">/users/ping</code> and see what happens:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> flask run
-<span class="go"> * Serving Flask app "app"
+<p><code class="highlighter-rouge">terminal
+ $ flask run
+ * Serving Flask app "app"
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 127.0.0.1 - - [09/Dec/2017 19:20:14] "GET /users/ping HTTP/1.1" 200 -
-</span></code></pre></div></div>
+</code></p>
 
 <p>Great! We see our <code class="highlighter-rouge">pong!</code> message returned in the browser. Next, let’s configure our settings:</p>
 
 <p><em>project/config.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BaseConfig</span><span class="p">:</span>
-    <span class="s">"""Base configuration"""</span>
-    <span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">TESTING</span> <span class="o">=</span> <span class="bp">False</span>
-<span class="k">class</span> <span class="nc">DevelopmentConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
-    <span class="s">"""Development configuration"""</span>
-    <span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="k">class</span> <span class="nc">TestingConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
-    <span class="s">"""Testing configuration"""</span>
-    <span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">TESTING</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="k">class</span> <span class="nc">ProductionConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
-    <span class="s">"""Production configuration"""</span>
-    <span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">False</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+class BaseConfig:
+    """Base configuration"""
+    DEBUG = False
+    TESTING = False
+class DevelopmentConfig(BaseConfig):
+    """Development configuration"""
+    DEBUG = True
+class TestingConfig(BaseConfig):
+    """Testing configuration"""
+    DEBUG = True
+    TESTING = True
+class ProductionConfig(BaseConfig):
+    """Production configuration"""
+    DEBUG = False
+</code></p>
 
 <p>And now we can add the following line right below where we define <code class="highlighter-rouge">app = Flask(__name__)</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">from_object</span><span class="p">(</span><span class="s">'project.config.DevelopmentConfig'</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+app.config.from_object('project.config.DevelopmentConfig')
+</code></p>
 
 <p>When we run <code class="highlighter-rouge">flask run</code>, we get a long error message including:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">Debugged import:
+<p>```terminal
+Debugged import:</p>
 
-- 'project' not found.
+<ul>
+  <li>‘project’ not found.</li>
+</ul>
 
-Original exception:
+<p>Original exception:</p>
 
-ImportStringError: import_string() failed for 'project.config'. Possible reasons are:
+<p>ImportStringError: import_string() failed for ‘project.config’. Possible reasons are:</p>
 
-</span><span class="gp">- missing __init__.py in a package;</span>
-<span class="gp">- package or module path not included in sys.path;</span>
-<span class="gp">- duplicated package or module name taking precedence in sys.path;</span>
-<span class="gp">- missing module, class, function or variable;</span>
-</code></pre></div></div>
+<ul>
+  <li>missing <strong>init</strong>.py in a package;</li>
+  <li>package or module path not included in sys.path;</li>
+  <li>duplicated package or module name taking precedence in sys.path;</li>
+  <li>missing module, class, function or variable;
+```</li>
+</ul>
 
 <p>Let’s try to add <code class="highlighter-rouge">__init__.py</code> to our <code class="highlighter-rouge">project</code> folder.</p>
 
 <p>Once we do this, we are able to run the app successfully, but we don’t see any special message about Debug mode being on:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> flask run
-<span class="go"> * Serving Flask app "project.app"
+<p><code class="highlighter-rouge">terminal
+ $ flask run
+ * Serving Flask app "project.app"
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-</span></code></pre></div></div>
+</code></p>
 
 <p>The documentation mentions that we can turn on Debug mode with:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">export FLASK_DEBUG=1
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+export FLASK_DEBUG=1
+</code></p>
 
 <p>We can check the debug mode by printing <code class="highlighter-rouge">app.config</code> in the <code class="highlighter-rouge">ping_pong()</code> function that is returned when we hit <code class="highlighter-rouge">/users/ping</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@app.route</span><span class="p">(</span><span class="s">'/users/ping'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">'GET'</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">ping_pong</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
-        <span class="s">'message'</span><span class="p">:</span><span class="s">'pong!'</span><span class="p">,</span> 
-        <span class="s">'status'</span><span class="p">:</span><span class="s">'success'</span>
-        <span class="p">})</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+@app.route('/users/ping', methods=['GET'])
+def ping_pong():
+    print(app.config)
+    return jsonify({
+        'message':'pong!', 
+        'status':'success'
+        })
+</code></p>
 
 <p>Here’s what we see in the terminal:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&lt;Config {'DEBUG': True, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}&gt;</span>
-<span class="go">127.0.0.1 - - [09/Dec/2017 19:42:46] "GET /users/ping HTTP/1.1" 200 -
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+&lt;Config {'DEBUG': True, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}&gt;
+127.0.0.1 - - [09/Dec/2017 19:42:46] "GET /users/ping HTTP/1.1" 200 -
+</code></p>
 
 <p>Just to be sure this is working correctly, let’s try another config setting, <code class="highlighter-rouge">ProductionConfig</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&lt;Config {'DEBUG': False, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}&gt;</span>
-<span class="go">127.0.0.1 - - [09/Dec/2017 19:45:29] "GET /users/ping HTTP/1.1" 200 -
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+&lt;Config {'DEBUG': False, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}&gt;
+127.0.0.1 - - [09/Dec/2017 19:45:29] "GET /users/ping HTTP/1.1" 200 -
+</code></p>
 
 <p>OK, so far so good! I think that <code class="highlighter-rouge">FLASK_DEBUG</code> may give us some additional information in the terminal.</p>
 
 <p>Let’s run:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">export FLASK_DEBUG=1
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+export FLASK_DEBUG=1
+</code></p>
 
 <p>and run our app in <code class="highlighter-rouge">ProductionConfig</code> mode:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> flask run
-<span class="go"> * Serving Flask app "project.app"
+<p><code class="highlighter-rouge">terminal
+ $ flask run
+ * Serving Flask app "project.app"
  * Forcing debug mode on
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 775-946-486
-</span></code></pre></div></div>
+</code></p>
 
 <p>and when we hit <code class="highlighter-rouge">/users/ping</code> we get:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">&lt;Config {'DEBUG': True, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}&gt;</span>
-<span class="go">127.0.0.1 - - [09/Dec/2017 19:51:17] "GET /users/ping HTTP/1.1" 200 -
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+&lt;Config {'DEBUG': True, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}&gt;
+127.0.0.1 - - [09/Dec/2017 19:51:17] "GET /users/ping HTTP/1.1" 200 -
+</code></p>
 
 <p>Here we can see that <code class="highlighter-rouge">DEBUG</code> is <code class="highlighter-rouge">True</code>, which was forced when we set <code class="highlighter-rouge">FLASK_DEBUG=1</code>.</p>
 
 <p>For clarity, let’s review the directory structure of our project:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> tree project/
-<span class="go">project/
+<p><code class="highlighter-rouge">terminal
+ $ tree project/
+project/
 ├── app.py
 ├── config.py
 └── __init__.py
-</span></code></pre></div></div>
+</code></p>
 
 <p><code class="highlighter-rouge">__init__.py</code> is just an empty file at this point, but in the testdriven.io tutorial it is the file that contains our app.</p>
 
@@ -307,173 +330,186 @@ ImportStringError: import_string() failed for 'project.config'. Possible reasons
 
 <p><em>requirements.txt</em></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Flask==0.12.1
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+Flask==0.12.1
+</code></p>
 
 <p>And we can add a <code class="highlighter-rouge">.gitignore</code> file as well at the same level:</p>
 
 <p><em>.gitignore</em></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>__pycache__
+<p><code class="highlighter-rouge">
+__pycache__
 env
-</code></pre></div></div>
+</code></p>
 
 <h2 id="docker">Docker</h2>
 
 <p>Here are the versions of docker applications I have installed:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> docker <span class="nt">-v</span> <span class="o">&amp;&amp;</span> docker-compose <span class="nt">-v</span> <span class="o">&amp;&amp;</span> docker-machine <span class="nt">-v</span>
-<span class="go">Docker version 17.10.0-ce, build f4ffd2511c
+<p><code class="highlighter-rouge">terminal
+ $ docker -v &amp;&amp; docker-compose -v &amp;&amp; docker-machine -v
+Docker version 17.10.0-ce, build f4ffd2511c
 docker-compose version 1.17.1, build unknown
 docker-machine version 0.13.0, build HEAD
-</span></code></pre></div></div>
+</code></p>
 
 <p>Currently I don’t have any docker machines, images or containers. Here is the status of the docker service:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> systemctl status docker
-<span class="go">● docker.service - Docker Application Container Engine
-</span><span class="gp">   Loaded: loaded (/usr/lib/systemd/system/docker.service;</span> enabled<span class="p">;</span> vendor preset: disabled<span class="o">)</span>
-<span class="gp">   Active: active (running) since Fri 2017-12-08 19:13:09 EST;</span> 24h ago
-<span class="go">     Docs: https://docs.docker.com
+<p>```terminal
+ $ systemctl status docker
+● docker.service - Docker Application Container Engine
+   Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
+   Active: active (running) since Fri 2017-12-08 19:13:09 EST; 24h ago
+     Docs: https://docs.docker.com
  Main PID: 5486 (dockerd)
     Tasks: 26 (limit: 4915)
    CGroup: /system.slice/docker.service
            ├─5486 /usr/bin/dockerd -g /home/brian/docker -H fd://
-           └─5492 docker-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --shim docker-containerd-shim --runtime docker-runc
+           └─5492 docker-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock –metrics-interval=0 –start-timeout 2m –state-dir /var/run/docker/libcontainerd/containerd –shim docker-containerd-shim –runtime docker-runc</p>
 
-Dec 08 19:13:08 archthinkpad dockerd[5486]: time="2017-12-08T19:13:08.126834430-05:00" level=warning msg="Your kernel does not support cgroup rt period"
-Dec 08 19:13:08 archthinkpad dockerd[5486]: time="2017-12-08T19:13:08.126850093-05:00" level=warning msg="Your kernel does not support cgroup rt runtime"
-Dec 08 19:13:08 archthinkpad dockerd[5486]: time="2017-12-08T19:13:08.127216425-05:00" level=info msg="Loading containers: start."
-Dec 08 19:13:08 archthinkpad dockerd[5486]: time="2017-12-08T19:13:08.776371797-05:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used to set a preferred IP address"
-Dec 08 19:13:09 archthinkpad dockerd[5486]: time="2017-12-08T19:13:09.013651222-05:00" level=info msg="Loading containers: done."
-Dec 08 19:13:09 archthinkpad dockerd[5486]: time="2017-12-08T19:13:09.041318847-05:00" level=warning msg="Not using native diff for overlay2, this may cause degraded performance for building images: kernel has CONFIG_OVERLAY_FS_REDIRECT_DIR enabled"
-Dec 08 19:13:09 archthinkpad dockerd[5486]: time="2017-12-08T19:13:09.075633462-05:00" level=info msg="Docker daemon" commit=f4ffd2511c graphdriver(s)=overlay2 version=17.10.0-ce
-Dec 08 19:13:09 archthinkpad dockerd[5486]: time="2017-12-08T19:13:09.076162900-05:00" level=info msg="Daemon has completed initialization"
-Dec 08 19:13:09 archthinkpad dockerd[5486]: time="2017-12-08T19:13:09.082056339-05:00" level=info msg="API listen on /var/run/docker.sock"
+<p>Dec 08 19:13:08 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:08.126834430-05:00” level=warning msg=”Your kernel does not support cgroup rt period”
+Dec 08 19:13:08 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:08.126850093-05:00” level=warning msg=”Your kernel does not support cgroup rt runtime”
+Dec 08 19:13:08 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:08.127216425-05:00” level=info msg=”Loading containers: start.”
+Dec 08 19:13:08 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:08.776371797-05:00” level=info msg=”Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option –bip can be used to set a preferred IP address”
+Dec 08 19:13:09 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:09.013651222-05:00” level=info msg=”Loading containers: done.”
+Dec 08 19:13:09 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:09.041318847-05:00” level=warning msg=”Not using native diff for overlay2, this may cause degraded performance for building images: kernel has CONFIG_OVERLAY_FS_REDIRECT_DIR enabled”
+Dec 08 19:13:09 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:09.075633462-05:00” level=info msg=”Docker daemon” commit=f4ffd2511c graphdriver(s)=overlay2 version=17.10.0-ce
+Dec 08 19:13:09 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:09.076162900-05:00” level=info msg=”Daemon has completed initialization”
+Dec 08 19:13:09 archthinkpad dockerd[5486]: time=”2017-12-08T19:13:09.082056339-05:00” level=info msg=”API listen on /var/run/docker.sock”
 Dec 08 19:13:09 archthinkpad systemd[1]: Started Docker Application Container Engine.
-</span></code></pre></div></div>
+```</p>
 
 <p>OK, docker seems to be working fine. Now we need to create a Docker host and point the docker client at it. What does this mean? From what I understand, we will be running docker containers not on our local machine but in an instance of <code class="highlighter-rouge">virtualbox</code> on our local machine. To do this, we will use the <code class="highlighter-rouge">docker-machine</code> command:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> docker-machine create <span class="nt">-d</span> virtualbox testdriven-dev
-<span class="go">Running pre-create checks...
-Creating machine...
-(testdriven-dev) Copying /home/brian/.docker/machine/cache/boot2docker.iso to /home/brian/.docker/machine/machines/testdriven-dev/boot2docker.iso...
-(testdriven-dev) Creating VirtualBox VM...
-(testdriven-dev) Creating SSH key...
-(testdriven-dev) Starting the VM...
-(testdriven-dev) Check network to re-create if needed...
-(testdriven-dev) Waiting for an IP...
-Waiting for machine to be running, this may take a few minutes...
-Detecting operating system of created instance...
-Waiting for SSH to be available...
-Detecting the provisioner...
-Provisioning with boot2docker...
-Copying certs to the local machine directory...
-Copying certs to the remote machine...
-Setting Docker configuration on the remote daemon...
+<p>```terminal
+ $ docker-machine create -d virtualbox testdriven-dev
+Running pre-create checks…
+Creating machine…
+(testdriven-dev) Copying /home/brian/.docker/machine/cache/boot2docker.iso to /home/brian/.docker/machine/machines/testdriven-dev/boot2docker.iso…
+(testdriven-dev) Creating VirtualBox VM…
+(testdriven-dev) Creating SSH key…
+(testdriven-dev) Starting the VM…
+(testdriven-dev) Check network to re-create if needed…
+(testdriven-dev) Waiting for an IP…
+Waiting for machine to be running, this may take a few minutes…
+Detecting operating system of created instance…
+Waiting for SSH to be available…
+Detecting the provisioner…
+Provisioning with boot2docker…
+Copying certs to the local machine directory…
+Copying certs to the remote machine…
+Setting Docker configuration on the remote daemon…</p>
 
-This machine has been allocated an IP address, but Docker Machine could not reach it successfully.
+<p>This machine has been allocated an IP address, but Docker Machine could not reach it successfully.</p>
 
-</span><span class="gp">SSH for the machine should still work, but connecting to exposed ports, such as the Docker daemon port (usually &lt;ip&gt;</span>:2376<span class="o">)</span>, may not work properly.
-<span class="go">
-You may need to add the route manually, or use another related workaround.
+<p>SSH for the machine should still work, but connecting to exposed ports, such as the Docker daemon port (usually <ip>:2376), may not work properly.</ip></p>
 
-This could be due to a VPN, proxy, or host file configuration issue.
+<p>You may need to add the route manually, or use another related workaround.</p>
 
-You also might want to clear any VirtualBox host only interfaces you are not using.
-Checking connection to Docker...
+<p>This could be due to a VPN, proxy, or host file configuration issue.</p>
+
+<p>You also might want to clear any VirtualBox host only interfaces you are not using.
+Checking connection to Docker…
 Docker is up and running!
 To see how to connect your Docker Client to the Docker Engine running on this virtual machine, run: docker-machine env testdriven-dev
-</span></code></pre></div></div>
+```</p>
 
 <p>We see that <code class="highlighter-rouge">Docker is up and running!</code>, but notice this line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>This machine has been allocated an IP address, but Docker Machine could not reach it successfully.
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+This machine has been allocated an IP address, but Docker Machine could not reach it successfully.
+</code></p>
 
 <p>This might be a problem. I think that the <code class="highlighter-rouge">docker-machine env &lt;machine-name&gt;</code> command fixes this:</p>
 
 <p>When you run this command you get the following:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> docker-machine <span class="nb">env </span>testdriven-dev
-<span class="go">export DOCKER_TLS_VERIFY="1"
+<p><code class="highlighter-rouge">terminal
+ $ docker-machine env testdriven-dev
+export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://192.168.99.100:2376"
 export DOCKER_CERT_PATH="/home/brian/.docker/machine/machines/testdriven-dev"
 export DOCKER_MACHINE_NAME="testdriven-dev"
-</span><span class="gp">#</span> Run this <span class="nb">command </span>to configure your shell: 
-<span class="gp">#</span> <span class="nb">eval</span> <span class="k">$(</span>docker-machine <span class="nb">env </span>testdriven-dev<span class="k">)</span>
-</code></pre></div></div>
+# Run this command to configure your shell: 
+# eval $(docker-machine env testdriven-dev)
+</code></p>
 
 <p>The result of this command tells us to run `eval $(docker-machine env testdriven-dev):</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">eval "$</span><span class="o">(</span>docker-machine <span class="nb">env </span>testdriven-dev<span class="o">)</span><span class="s2">"
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+eval "$(docker-machine env testdriven-dev)"
+</code></p>
 
 <p>To clarify, running the above commands puts adds some environment variables:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">env</span> | <span class="nb">grep </span>DOCKER
-<span class="go">DOCKER_MACHINE_NAME=testdriven-dev
+<p><code class="highlighter-rouge">terminal
+ $ env | grep DOCKER
+DOCKER_MACHINE_NAME=testdriven-dev
 DOCKER_CERT_PATH=/home/brian/.docker/machine/machines/testdriven-dev
 DOCKER_TLS_VERIFY=1
 DOCKER_HOST=tcp://192.168.99.100:2376
-</span></code></pre></div></div>
+</code></p>
 
 <p>Next we need to add a Dockerfile. We will call it <code class="highlighter-rouge">Dockerfile-dev</code>. Let’s look at <code class="highlighter-rouge">Dockerfile-dev</code> from the tutorial and see how we may need to modify it for the way we set up our project:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM python:3.6.3
+<p>```
+FROM python:3.6.3</p>
 
-# set working directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+<h1 id="set-working-directory">set working directory</h1>
+<p>RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app</p>
 
-# add requirements
-ADD ./requirements.txt /usr/src/app/requirements.txt
+<h1 id="add-requirements">add requirements</h1>
+<p>ADD ./requirements.txt /usr/src/app/requirements.txt</p>
 
-# install requirements
-RUN pip install -r requirements.txt
+<h1 id="install-requirements">install requirements</h1>
+<p>RUN pip install -r requirements.txt</p>
 
-# add app
-ADD . /usr/src/app
+<h1 id="add-app">add app</h1>
+<p>ADD . /usr/src/app</p>
 
-# run server
-CMD python manage.py runserver -h 0.0.0.0
-</code></pre></div></div>
+<h1 id="run-server">run server</h1>
+<p>CMD python manage.py runserver -h 0.0.0.0
+```</p>
 
 <p>We start by defining a base image with the <code class="highlighter-rouge">FROM</code> line which will give us the correct version of python. We then set folders and the current working directory in docker. Next we install flask add the <code class="highlighter-rouge">requirements.txt</code> file and install flask with the <code class="highlighter-rouge">RUN</code> line. We then add the directory (on our local machine) with <code class="highlighter-rouge">ADD . /usr/src/app</code>.</p>
 
 <p>This should all be fine up until the last line where we see a <code class="highlighter-rouge">manage.py</code> file. We never created this file since we wish to use the Flask CLI. We could try replicating the process did locally inside our Dockerfile. We need to add the the <code class="highlighter-rouge">FLASK_APP</code> environment variable, and its value should be the script that has just been added to the docker image. Let’s try:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[...]
+<p>```
+[…]</p>
 
-ENV FLASK_APP /usr/src/app/project/app.py
+<p>ENV FLASK_APP /usr/src/app/project/app.py</p>
 
-CMD flask run
-</code></pre></div></div>
+<p>CMD flask run
+```</p>
 
 <p>Next we need a script for <code class="highlighter-rouge">docker-compose</code>. <code class="highlighter-rouge">docker-compose</code> is a tool for defining and running multi-container Docker applications. Again, let’s look at what was included in the tutorial and then see if we need to make any adjustments:</p>
 
 <p><em>docker-compose-dev.yml</em> (this file goes in the root directory, one level up from where <code class="highlighter-rouge">Dockerfile-dev</code>)</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3.3'
+<p>```
+version: ‘3.3’</p>
 
-services:
+<p>services:</p>
 
-  users-service:
+<p>users-service:
     container_name: users-service
       build:
         context: ./users-service
         dockerfile: Dockerfile-dev
       volumes:
-        - './users-service:/usr/src/app'
+        - ‘./users-service:/usr/src/app’
       ports:
         - 5001:5000
-</code></pre></div></div>
+```</p>
 
 <p>OK, this looks good! Let’s give it a try. We can run the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> docker-compose <span class="nt">-f</span> docker-compose-dev.yml build
-<span class="go">Building users-service
+<p>```terminal
+ $ docker-compose -f docker-compose-dev.yml build
+Building users-service
 85b1f47fba49: Pull complete
 ba6bd283713a: Pull complete
 817c8cd48a09: Pull complete
@@ -484,62 +520,63 @@ db9a0221399f: Pull complete
 1223757f6914: Pull complete
 Digest: sha256:db9d8546f3ff74e96702abe0a78a0e0454df6ea898de8f124feba81deea416d7
 Status: Downloaded newer image for python:3.6.3
-</span><span class="gp"> ---&gt;</span> 79e1dc9af1c1
-<span class="go">Step 2/8 : RUN mkdir -p /usr/src/app
-</span><span class="gp"> ---&gt;</span> Running <span class="k">in </span>808f6c0497d3
-<span class="gp"> ---&gt;</span> 8873e8e0d526
-<span class="go">Removing intermediate container 808f6c0497d3
+ —&gt; 79e1dc9af1c1
+Step 2/8 : RUN mkdir -p /usr/src/app
+ —&gt; Running in 808f6c0497d3
+ —&gt; 8873e8e0d526
+Removing intermediate container 808f6c0497d3
 Step 3/8 : WORKDIR /usr/src/app
-</span><span class="gp"> ---&gt;</span> 76ef8912b4d5
-<span class="go">Removing intermediate container a3ca419fe9c1
+ —&gt; 76ef8912b4d5
+Removing intermediate container a3ca419fe9c1
 Step 4/8 : ADD ./requirements.txt /usr/src/app/requirements.txt
-</span><span class="gp"> ---&gt;</span> eb513314527a
-<span class="go">Step 5/8 : RUN pip install -r requirements.txt
-</span><span class="gp"> ---&gt;</span> Running <span class="k">in </span>1a708ec3b565
-<span class="go">Collecting Flask==0.12.1 (from -r requirements.txt (line 1))
+ —&gt; eb513314527a
+Step 5/8 : RUN pip install -r requirements.txt
+ —&gt; Running in 1a708ec3b565
+Collecting Flask==0.12.1 (from -r requirements.txt (line 1))
   Downloading Flask-0.12.1-py2.py3-none-any.whl (82kB)
-</span><span class="gp">Collecting Jinja2&gt;</span><span class="o">=</span>2.4 <span class="o">(</span>from <span class="nv">Flask</span><span class="o">==</span>0.12.1-&gt;-r requirements.txt <span class="o">(</span>line 1<span class="o">))</span>
-<span class="go">  Downloading Jinja2-2.10-py2.py3-none-any.whl (126kB)
-</span><span class="gp">Collecting click&gt;</span><span class="o">=</span>2.0 <span class="o">(</span>from <span class="nv">Flask</span><span class="o">==</span>0.12.1-&gt;-r requirements.txt <span class="o">(</span>line 1<span class="o">))</span>
-<span class="go">  Downloading click-6.7-py2.py3-none-any.whl (71kB)
-</span><span class="gp">Collecting Werkzeug&gt;</span><span class="o">=</span>0.7 <span class="o">(</span>from <span class="nv">Flask</span><span class="o">==</span>0.12.1-&gt;-r requirements.txt <span class="o">(</span>line 1<span class="o">))</span>
-<span class="go">  Downloading Werkzeug-0.13-py2.py3-none-any.whl (311kB)
-</span><span class="gp">Collecting itsdangerous&gt;</span><span class="o">=</span>0.21 <span class="o">(</span>from <span class="nv">Flask</span><span class="o">==</span>0.12.1-&gt;-r requirements.txt <span class="o">(</span>line 1<span class="o">))</span>
-<span class="go">  Downloading itsdangerous-0.24.tar.gz (46kB)
-</span><span class="gp">Collecting MarkupSafe&gt;</span><span class="o">=</span>0.23 <span class="o">(</span>from Jinja2&gt;<span class="o">=</span>2.4-&gt;Flask<span class="o">==</span>0.12.1-&gt;-r requirements.txt <span class="o">(</span>line 1<span class="o">))</span>
-<span class="go">  Downloading MarkupSafe-1.0.tar.gz
+Collecting Jinja2&gt;=2.4 (from Flask==0.12.1-&gt;-r requirements.txt (line 1))
+  Downloading Jinja2-2.10-py2.py3-none-any.whl (126kB)
+Collecting click&gt;=2.0 (from Flask==0.12.1-&gt;-r requirements.txt (line 1))
+  Downloading click-6.7-py2.py3-none-any.whl (71kB)
+Collecting Werkzeug&gt;=0.7 (from Flask==0.12.1-&gt;-r requirements.txt (line 1))
+  Downloading Werkzeug-0.13-py2.py3-none-any.whl (311kB)
+Collecting itsdangerous&gt;=0.21 (from Flask==0.12.1-&gt;-r requirements.txt (line 1))
+  Downloading itsdangerous-0.24.tar.gz (46kB)
+Collecting MarkupSafe&gt;=0.23 (from Jinja2&gt;=2.4-&gt;Flask==0.12.1-&gt;-r requirements.txt (line 1))
+  Downloading MarkupSafe-1.0.tar.gz
 Building wheels for collected packages: itsdangerous, MarkupSafe
   Running setup.py bdist_wheel for itsdangerous: started
-  Running setup.py bdist_wheel for itsdangerous: finished with status 'done'
+  Running setup.py bdist_wheel for itsdangerous: finished with status ‘done’
   Stored in directory: /root/.cache/pip/wheels/fc/a8/66/24d655233c757e178d45dea2de22a04c6d92766abfb741129a
   Running setup.py bdist_wheel for MarkupSafe: started
-  Running setup.py bdist_wheel for MarkupSafe: finished with status 'done'
+  Running setup.py bdist_wheel for MarkupSafe: finished with status ‘done’
   Stored in directory: /root/.cache/pip/wheels/88/a7/30/e39a54a87bcbe25308fa3ca64e8ddc75d9b3e5afa21ee32d57
 Successfully built itsdangerous MarkupSafe
 Installing collected packages: MarkupSafe, Jinja2, click, Werkzeug, itsdangerous, Flask
 Successfully installed Flask-0.12.1 Jinja2-2.10 MarkupSafe-1.0 Werkzeug-0.13 click-6.7 itsdangerous-0.24
-</span><span class="gp"> ---&gt;</span> d828a0518114
-<span class="go">Removing intermediate container 1a708ec3b565
+ —&gt; d828a0518114
+Removing intermediate container 1a708ec3b565
 Step 6/8 : ADD . /usr/src/app
-</span><span class="gp"> ---&gt;</span> 8e0efae73a47
-<span class="go">Step 7/8 : ENV FLASK_APP /usr/src/app/project/app.py
-</span><span class="gp"> ---&gt;</span> Running <span class="k">in </span>959581952d05
-<span class="gp"> ---&gt;</span> 20aaec61b615
-<span class="go">Removing intermediate container 959581952d05
+ —&gt; 8e0efae73a47
+Step 7/8 : ENV FLASK_APP /usr/src/app/project/app.py
+ —&gt; Running in 959581952d05
+ —&gt; 20aaec61b615
+Removing intermediate container 959581952d05
 Step 8/8 : CMD flask run
-</span><span class="gp"> ---&gt;</span> Running <span class="k">in </span>4f2fc701ba14
-<span class="gp"> ---&gt;</span> 1d5b59f3cef2
-<span class="go">Removing intermediate container 4f2fc701ba14
+ —&gt; Running in 4f2fc701ba14
+ —&gt; 1d5b59f3cef2
+Removing intermediate container 4f2fc701ba14</p>
 
-Successfully built 1d5b59f3cef2
-Successfully tagged testflask_users-service:latest
+<p>Successfully built 1d5b59f3cef2
+Successfully tagged testflask_users-service:latest</p>
 
-</span></code></pre></div></div>
+<p>```</p>
 
 <p>That seemed to work. Next the tutorial says to run <code class="highlighter-rouge">docker-compose -f docker-compose-dev.yml up -d</code>. I’ll run this without the <code class="highlighter-rouge">-d</code> flag so we can see if there are any errors. Moment of truth!</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> docker-compose <span class="nt">-f</span> docker-compose-dev.yml up
-<span class="go">Creating network "testflask_default" with the default driver
+<p><code class="highlighter-rouge">terminal
+ $ docker-compose -f docker-compose-dev.yml up
+Creating network "testflask_default" with the default driver
 Creating users-service ... 
 Creating users-service ... done
 Attaching to users-service
@@ -547,7 +584,7 @@ users-service    | Usage: flask run [OPTIONS]
 users-service    | 
 users-service    | Error: The file/path provided (/usr/src/app/project/app.py) does not appear to exist.  Please verify the path is correct.  If app is not on PYTHONPATH, ensure the extension is .py
 users-service exited with code 2
-</span></code></pre></div></div>
+</code></p>
 
 <p>OK, we have an error that seems to have come from our <code class="highlighter-rouge">flask run</code> command.</p>
 

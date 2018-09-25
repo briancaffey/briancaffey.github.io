@@ -10,8 +10,8 @@
   <meta name="description" content="Recently I’ve been having storage issues in the root partitions of both my desktop and laptop computers. These issues came up soon after I started playing ar...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/11/28/remove-root-partition-bloat-from-docker.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/11/28/remove-root-partition-bloat-from-docker.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -102,90 +102,94 @@
 
 <p><img src="/static/pacgraph.png" alt="png" /></p>
 
-<p>This helps you quickly find packages that you can do without. After removing some large packages like Libre Office I realized that this was barely moving the needle on my storage problem. Running <code class="highlighter-rouge">df -h</code> and <code class="highlighter-rouge">baobab</code> again with root priviledges gave me slightly different results. At this point I turned to docker and deleted all of the images with `docker rmi <IMAGE ID=""> -f. This didn't help either. Here are the images that I removed from my desktop:</IMAGE></p>
+<p>This helps you quickly find packages that you can do without. After removing some large packages like Libre Office I realized that this was barely moving the needle on my storage problem. Running <code class="highlighter-rouge">df -h</code> and <code class="highlighter-rouge">baobab</code> again with root priviledges gave me slightly different results. At this point I turned to docker and deleted all of the images with `docker rmi <image> -f. This didn't help either. Here are the images that I removed from my desktop:</image></p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@a1arch ~]$</span> docker images
-<span class="go">REPOSITORY                              TAG                 IMAGE ID            CREATED             SIZE
-flaskmicroservicesusers_users-service   latest              1e59fa4d2af5        5 days ago          739MB
-</span><span class="gp">&lt;none&gt;</span>                                  &lt;none&gt;              18f9191b4d9a        5 days ago          739MB
-<span class="go">flaskmicroservicesusers_users-db        latest              f1de1c3ef3f2        5 days ago          287MB
-</span><span class="gp">&lt;none&gt;</span>                                  &lt;none&gt;              11188ac6f36a        5 days ago          712MB
-<span class="go">postgres                                latest              599272bf538f        12 days ago         287MB
+<p>```terminal
+[brian@a1arch ~]$ docker images
+REPOSITORY                              TAG                 IMAGE ID            CREATED             SIZE
+flaskmicroservicesusers_users-service   latest              1e59fa4d2af5        5 days ago          739MB</p>
+<none>                                  <none>              18f9191b4d9a        5 days ago          739MB
+flaskmicroservicesusers_users-db        latest              f1de1c3ef3f2        5 days ago          287MB
+<none>                                  <none>              11188ac6f36a        5 days ago          712MB
+postgres                                latest              599272bf538f        12 days ago         287MB
 tensorflow/tensorflow                   latest-gpu          2f243a16ff63        3 weeks ago         3.36GB
 python                                  3.6.2               26acbad26a2c        2 months ago        690MB
-</span></code></pre></div></div>
+```
 
-<p>Here’s the storage profile before I started remove docker-related files:</p>
+Here's the storage profile before I started remove docker-related files: 
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> /dev/sda1
-<span class="go">/dev/sda1        20G   18G  737M  97% /
-</span></code></pre></div></div>
-<p>After I removed the docker images, here is the same command:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ df -h | grep /dev/sda1
+```terminal
+ $ df -h | grep /dev/sda1
 /dev/sda1        20G   18G  737M  97% /
-</code></pre></div></div>
+```
+After I removed the docker images, here is the same command: 
 
-<p>I found a helpful serverfault question from 6 years ago that address the issue I was having titled <a href="https://serverfault.com/questions/275206/disk-full-du-tells-different-how-to-further-investigate">Disk full, du tells different. How to further investigate?</a>.</p>
+```
+ $ df -h | grep /dev/sda1
+/dev/sda1        20G   18G  737M  97% /
+```
 
-<p>I saw a helpful comment related to docker:</p>
+I found a helpful serverfault question from 6 years ago that address the issue I was having titled [Disk full, du tells different. How to further investigate?](https://serverfault.com/questions/275206/disk-full-du-tells-different-how-to-further-investigate). 
 
-<blockquote>
-  <p>Thanks - this showed that docker was filling up my hard drive with diffs in <code class="highlighter-rouge">/var/lib/docker/aufs/diff/</code></p>
-</blockquote>
+I saw a helpful comment related to docker: 
 
-<p>Could this be my issue?</p>
+&gt; Thanks - this showed that docker was filling up my hard drive with diffs in `/var/lib/docker/aufs/diff/`
 
-<p>Here’s the folder in question on my laptop:</p>
+Could this be my issue?
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">cd</span> /var/lib/docker
-<span class="gp"> $</span> <span class="nb">sudo du</span> <span class="nt">-s</span> <span class="nt">-h</span> <span class="nb">.</span>
-<span class="go">2.6G	.
-</span></code></pre></div></div>
+Here's the folder in question on my laptop: 
 
-<p>On my desktop this was taking up about 10G!</p>
+```terminal
+ $ cd /var/lib/docker
+ $ sudo du -s -h .
+2.6G	.
+```
 
-<p>Wow! I didn’t even see this when I ran <code class="highlighter-rouge">sudo baobab</code>:</p>
+On my desktop this was taking up about 10G!
 
-<p><img src="/static/baobab.png" alt="png" /></p>
+Wow! I didn't even see this when I ran `sudo baobab`: 
 
-<p>I stopped the docker service and deleted the overlay2 file:</p>
+![png](/static/baobab.png)
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">sudo </span>systemctl stop docker
-<span class="gp"> $</span> <span class="nb">cd</span> /var/lib/docker
-<span class="gp"> $</span> <span class="nb">sudo rm</span> <span class="nt">-rf</span> layover2
-</code></pre></div></div>
+I stopped the docker service and deleted the overlay2 file: 
 
-<p>With <code class="highlighter-rouge">sudo baobab</code> I was also able to delete 3.6G of trash with this command:</p>
+```terminal
+ $ sudo systemctl stop docker
+ $ cd /var/lib/docker
+ $ sudo rm -rf layover2
+```
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> <span class="nb">sudo</span> <span class="nt">-i</span>
-<span class="gp"> #</span> <span class="nb">rm</span> <span class="nt">-rf</span> /root/.local/share/Trash
-</code></pre></div></div>
+With `sudo baobab` I was also able to delete 3.6G of trash with this command: 
 
-<p>I think this may be related to having previously emptied the Trash in nautilus file browser with files that I might not have owned.</p>
+```terminal
+ $ sudo -i
+ # rm -rf /root/.local/share/Trash
+```
 
-<p>I think it would be a good idea to change the docker image installation directory. <a href="https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169">Here is a link</a> from a docker forum talking about how to do that. <a href="https://forums.docker.com/t/some-way-to-clean-up-identify-contents-of-var-lib-docker-overlay/30604">Here is another docker forum post</a> that talks about the overlay and storage issues that docker has.</p>
+I think this may be related to having previously emptied the Trash in nautilus file browser with files that I might not have owned.
 
-<p>Here is a helpful snippet from the <a href="https://wiki.archlinux.org/index.php/Docker">Arch Wiki Docker article</a>:</p>
+I think it would be a good idea to change the docker image installation directory. [Here is a link](https://forums.docker.com/t/how-do-i-change-the-docker-image-installation-directory/1169) from a docker forum talking about how to do that. [Here is another docker forum post](https://forums.docker.com/t/some-way-to-clean-up-identify-contents-of-var-lib-docker-overlay/30604) that talks about the overlay and storage issues that docker has. 
 
-<blockquote>
-  <p>Images location
-By default, docker images are located at /var/lib/docker. They can be moved to other partitions. First, stop the docker.service.</p>
+Here is a helpful snippet from the [Arch Wiki Docker article](https://wiki.archlinux.org/index.php/Docker):
 
-  <p>If you have run the docker images, you need to make sure the images are unmounted totally. Once that is completed, you may move the images from /var/lib/docker to the target destination.</p>
-
-  <p>Then add a Drop-in snippet for the docker.service, adding the –data-root parameter to the ExecStart:</p>
-
-  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/systemd/system/docker.service.d/docker-storage.conf
+&gt; Images location
+&gt;By default, docker images are located at /var/lib/docker. They can be moved to other partitions. First, stop the docker.service.
+&gt;
+&gt; If you have run the docker images, you need to make sure the images are unmounted totally. Once that is completed, you may move the images from /var/lib/docker to the target destination.
+&gt;
+&gt; Then add a Drop-in snippet for the docker.service, adding the --data-root parameter to the ExecStart:
+&gt; 
+&gt; ```
+/etc/systemd/system/docker.service.d/docker-storage.conf
 [Service]
 ExecStart= 
 ExecStart=/usr/bin/dockerd --data-root=/path/to/new/location/docker -H fd://
-</code></pre></div>  </div>
-</blockquote>
+```
 
-<p>Update: I did this on my desktop with a <code class="highlighter-rouge">--data-rogettingot</code> path in my home folder.</p>
+Update: I did this on my desktop with a `--data-rogettingot` path in my home folder. 
 
-<p>I followed the directions form <a href="https://linuxconfig.org/how-to-move-docker-s-default-var-lib-docker-to-another-directory-on-ubuntu-debian-linux">this article</a> and was able to set up docker on my home partition.</p>
+I followed the directions form [this article](https://linuxconfig.org/how-to-move-docker-s-default-var-lib-docker-to-another-directory-on-ubuntu-debian-linux) and was able to set up docker on my home partition. 
+</none></none></none></none>
 
   </div>
 

@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2018/03/01/ubuntu-installation-and-setup-notes.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2018/03/01/ubuntu-installation-and-setup-notes.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -121,11 +121,12 @@
   <li><code class="highlighter-rouge">185GB</code> - <code class="highlighter-rouge">/home</code></li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brian@brian-ThinkPad-T430:~$ df -h | grep sdb
+<p><code class="highlighter-rouge">
+brian@brian-ThinkPad-T430:~$ df -h | grep sdb
 /dev/sdb1             188M  3.4M  184M   2% /boot/efi
 /dev/sdb3              37G  5.3G   30G  16% /
 /dev/sdb4             183G  2.3G  171G   2% /home
-</code></pre></div></div>
+</code></p>
 
 <h3 id="ubunutu-software">Ubunutu Software</h3>
 
@@ -140,30 +141,35 @@
 
 <p>Install and configure git with the following commands:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install git 
+<p><code class="highlighter-rouge">
+$ sudo apt-get install git 
 $ git config --global user.name "John Doe"
 $ git config --global user.email johndoe@example.com
-</code></pre></div></div>
+</code></p>
 
 <h3 id="curl">curl</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt install curl
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt install curl
+</code></p>
 
 <h3 id="npm">npm</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+<p><code class="highlighter-rouge">
+$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 $ sudo apt-get install -y nodejs
-</code></pre></div></div>
+</code></p>
 
 <h3 id="vim">vim</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt install vim
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt install vim
+</code></p>
 
 <h3 id="ssh-keys-for-github">SSH Keys for github</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brian@brian-ThinkPad-T430:~$ ssh-keygen -t rsa -C "briancaffey2010@gmail.com"
+<p><code class="highlighter-rouge">
+brian@brian-ThinkPad-T430:~$ ssh-keygen -t rsa -C "briancaffey2010@gmail.com"
 [sudo] password for brian: 
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/brian/.ssh/id_rsa): 
@@ -186,123 +192,135 @@ The key's randomart image is:
 |   + .           |
 |                 |
 +----[SHA256]-----+
-</code></pre></div></div>
+</code></p>
 
 <p>To get the public key, run:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">brian@brian-ThinkPad-T430:~$</span> <span class="nb">cat</span> ~/.ssh/id_rsa.pub
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+brian@brian-ThinkPad-T430:~$ cat ~/.ssh/id_rsa.pub
+</code></p>
 
 <p><a href="https://security.stackexchange.com/questions/120706/why-would-i-sign-my-git-commits-with-a-gpg-key-when-i-already-use-an-ssh-key-to">Why you should have both GPG and SSH</a></p>
 
 <h3 id="gpg-key-for-github">GPG Key for github</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ gpg --gen-key
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ gpg --gen-key
+</code></p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> gpg <span class="nt">--list-secret-keys</span> <span class="nt">--keyid-format</span> LONG
-<span class="gp">brian@brian-ThinkPad-T430:~/Documents$</span> gpg <span class="nt">--list-secret-keys</span> <span class="nt">--keyid-format</span> LONG
-<span class="go">/home/brian/.gnupg/secring.gpg
+<p><code class="highlighter-rouge">terminal
+$ gpg --list-secret-keys --keyid-format LONG
+brian@brian-ThinkPad-T430:~/Documents$ gpg --list-secret-keys --keyid-format LONG
+/home/brian/.gnupg/secring.gpg
 ------------------------------
 sec   2048R/A4E10BFF341S64V3 2018-03-06
-</span><span class="gp">uid                          Brian Caffey (t430 key) &lt;briancaffey2010@gmail.com&gt;</span>
-<span class="go">ssb   2048R/49B26066D2G5E456 2018-03-06
-</span></code></pre></div></div>
+uid                          Brian Caffey (t430 key) &lt;briancaffey2010@gmail.com&gt;
+ssb   2048R/49B26066D2G5E456 2018-03-06
+</code></p>
 
 <p>Finally, print out the key and add it to github.</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> gpg <span class="nt">--armor</span> <span class="nt">--export</span> A4E10BFF341S64V3
-<span class="go">-----BEGIN PGP PUBLIC KEY BLOCK-----
-Version: GnuPG v1
+<p>```terminal
+$ gpg –armor –export A4E10BFF341S64V3
+—–BEGIN PGP PUBLIC KEY BLOCK—–
+Version: GnuPG v1</p>
 
-UREFLIUWFWOI8F98F98U459FU43982U4F98UP9432UFP98U4
-[...]
+<p>UREFLIUWFWOI8F98F98U459FU43982U4F98UP9432UFP98U4
+[…]
 FWERO8FEFPHHSLIREUFHWEIRHUFWREHWRLFUWH5LIFU4H5F=
 =6H/K
------END PGP PUBLIC KEY BLOCK-----
-</span></code></pre></div></div>
+—–END PGP PUBLIC KEY BLOCK—–
+```</p>
 
 <h3 id="jekyll-ruby-based-static-blog-generator">Jekyll (Ruby-based static blog generator)</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install ruby ruby-dev make gcc
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt-get install ruby ruby-dev make gcc
+</code></p>
 
 <p>We need to reinstall Ruby to fix permission issues:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get remove ruby
+<p><code class="highlighter-rouge">
+$ sudo apt-get remove ruby
 $ git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-</code></pre></div></div>
+</code></p>
 
 <p>Follow instructions on <a href="https://stackoverflow.com/questions/37720892/you-dont-have-write-permissions-for-the-var-lib-gems-2-3-0-directory">this SO post</a> to install a newer version of Ruby with rbenv.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd $HOME
+<p>```
+cd $HOME
 sudo apt-get update 
-sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev
+sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev</p>
 
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-echo 'export PATH="$HOME/.rbenv/bin:$PATH"' &gt;&gt; ~/.bashrc
-echo 'eval "$(rbenv init -)"' &gt;&gt; ~/.bashrc
-exec $SHELL
+<p>git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+echo ‘export PATH=”$HOME/.rbenv/bin:$PATH”’ » ~/.bashrc
+echo ‘eval “$(rbenv init -)”’ » ~/.bashrc
+exec $SHELL</p>
 
-git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' &gt;&gt; ~/.bashrc
-exec $SHELL
+<p>git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+echo ‘export PATH=”$HOME/.rbenv/plugins/ruby-build/bin:$PATH”’ » ~/.bashrc
+exec $SHELL</p>
 
-rbenv install 2.3.1
+<p>rbenv install 2.3.1
 rbenv global 2.3.1
 ruby -v
-</code></pre></div></div>
+```</p>
 
 <p>Note: This failed:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rbenv install 2.3.1
-Downloading ruby-2.3.1.tar.bz2...
+<p>```
+$ rbenv install 2.3.1
+Downloading ruby-2.3.1.tar.bz2…
 -&gt; https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.bz2
-Installing ruby-2.3.1...
+Installing ruby-2.3.1…</p>
 
-BUILD FAILED (Ubuntu 16.04 using ruby-build 20180224)
+<p>BUILD FAILED (Ubuntu 16.04 using ruby-build 20180224)</p>
 
-Inspect or clean up the working tree at /tmp/ruby-build.20180306153138.18887
-Results logged to /tmp/ruby-build.20180306153138.18887.log
+<p>Inspect or clean up the working tree at /tmp/ruby-build.20180306153138.18887
+Results logged to /tmp/ruby-build.20180306153138.18887.log</p>
 
-Last 10 log lines:
+<p>Last 10 log lines:
 The Ruby openssl extension was not compiled.
 The Ruby readline extension was not compiled.
 The Ruby zlib extension was not compiled.
 ERROR: Ruby install aborted due to missing extensions
-Try running `apt-get install -y libssl-dev libreadline-dev zlib1g-dev` to fetch missing dependencies.
+Try running <code class="highlighter-rouge">apt-get install -y libssl-dev libreadline-dev zlib1g-dev</code> to fetch missing dependencies.</p>
 
-Configure options used:
-  --prefix=/home/brian/.rbenv/versions/2.3.1
+<p>Configure options used:
+  –prefix=/home/brian/.rbenv/versions/2.3.1
   LDFLAGS=-L/home/brian/.rbenv/versions/2.3.1/lib 
   CPPFLAGS=-I/home/brian/.rbenv/versions/2.3.1/include 
-</code></pre></div></div>
+```</p>
 
 <p>As the message recommends, we should install some missing dependencies:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install -y libssl-dev libreadline-dev zlib1g-dev
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt-get install -y libssl-dev libreadline-dev zlib1g-dev
+</code></p>
 
 <p>And now it should work:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rbenv install 2.3.1
-Downloading ruby-2.3.1.tar.bz2...
+<p>```
+$ rbenv install 2.3.1
+Downloading ruby-2.3.1.tar.bz2…
 -&gt; https://cache.ruby-lang.org/pub/ruby/2.3/ruby-2.3.1.tar.bz2
-Installing ruby-2.3.1...
-Installed ruby-2.3.1 to /home/brian/.rbenv/versions/2.3.1
+Installing ruby-2.3.1…
+Installed ruby-2.3.1 to /home/brian/.rbenv/versions/2.3.1</p>
 
-$ 
-</code></pre></div></div>
+<p>$ 
+```</p>
 
 <p>Finally, run:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rbenv global 2.3.1
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ rbenv global 2.3.1
+</code></p>
 
 <h3 id="install-jekyll">Install Jekyll</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ gem install jekyll bundler
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ gem install jekyll bundler
+</code></p>
 
 <h3 id="node-permission-issues">Node permission issues</h3>
 
@@ -312,34 +330,40 @@ $
 
 <p>First, remove <code class="highlighter-rouge">nodejs</code> and <code class="highlighter-rouge">npm</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get remove nodejs
+<p><code class="highlighter-rouge">
+$ sudo apt-get remove nodejs
 $ sudo apt-get remove npm
-</code></pre></div></div>
+</code></p>
 
 <p>Then, update:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get update
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt-get update
+</code></p>
 
 <p>Now we can install <code class="highlighter-rouge">nvm</code> (Node Version Manager):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+</code></p>
 
 <p>Next, reload <code class="highlighter-rouge">~/.bashrc</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ source ~/.bashrc
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ source ~/.bashrc
+</code></p>
 
 <p>Now we can run <code class="highlighter-rouge">nvm</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ nvm --version
+<p><code class="highlighter-rouge">
+$ nvm --version
 0.33.0
-</code></pre></div></div>
+</code></p>
 
 <p>Now we can install <code class="highlighter-rouge">nodejs</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ nvm install node
+<p><code class="highlighter-rouge">
+$ nvm install node
 Downloading and installing node v9.7.1...
 Downloading https://nodejs.org/dist/v9.7.1/node-v9.7.1-linux-x64.tar.xz...
 ######################################################################## 100.0%
@@ -348,20 +372,22 @@ Checksums matched!
 Now using node v9.7.1 (npm v5.6.0)
 Creating default alias: default -&gt; node (-&gt; v9.7.1)
 brian@brian-ThinkPad-T430:~$ 
-</code></pre></div></div>
+</code></p>
 
 <p>Now we can try to install something with node, like <code class="highlighter-rouge">create-react-app</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brian@brian-ThinkPad-T430:~$ npm install -g create-react-app
+<p><code class="highlighter-rouge">
+brian@brian-ThinkPad-T430:~$ npm install -g create-react-app
 /home/brian/.nvm/versions/node/v9.7.1/bin/create-react-app -&gt; /home/brian/.nvm/versions/node/v9.7.1/lib/node_modules/create-react-app/index.js
 + create-react-app@1.5.2
 added 114 packages in 6.634s
-</code></pre></div></div>
+</code></p>
 
 <h3 id="utilities">Utilities</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install htop
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt-get install htop
+</code></p>
 
 <h3 id="compizconfig">CompizConfig</h3>
 
@@ -381,7 +407,8 @@ added 114 packages in 6.634s
 
 <h3 id="python-3-python-36">Python 3, Python 3.6</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt install virtualenv
+<p><code class="highlighter-rouge">
+$ sudo apt install virtualenv
 $ virtualenv -p python3 venv
 Already using interpreter /usr/bin/python3
 Using base prefix '/usr'
@@ -396,12 +423,13 @@ $ python -V
 Python 2.7.12
 $ source venv/bin/activate
 (venv) $ 
-</code></pre></div></div>
+</code></p>
 
 <p>Install <code class="highlighter-rouge">python3-pip</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install python3-pip
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt-get install python3-pip
+</code></p>
 
 <p>If we run <code class="highlighter-rouge">pip freeze</code>, we will see <code class="highlighter-rouge">pkg-resources==0.0.0</code>. See this note about <a href="https://stackoverflow.com/questions/39577984/what-is-pkg-resources-0-0-0-in-output-of-pip-freeze-command">what <code class="highlighter-rouge">pkg-resources==0.0.0</code></a> is.</p>
 
@@ -409,14 +437,16 @@ $ source venv/bin/activate
 
 <p>We can install a newer version of Python (3.6) to use with Anaconda. Instructions are <a href="https://askubuntu.com/questions/865554/how-do-i-install-python-3-6-using-apt-get">in this Ask Ubuntu post</a>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo add-apt-repository ppa:deadsnakes/ppa
+<p><code class="highlighter-rouge">
+sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get install python3.6
-</code></pre></div></div>
+</code></p>
 
 <p>After running these commands, we can now use Python3.6:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brian@brian-ThinkPad-T430:~/Documents/python/demo$ python3.6
+<p><code class="highlighter-rouge">
+brian@brian-ThinkPad-T430:~/Documents/python/demo$ python3.6
 Python 3.6.4 (default, Jan 28 2018, 17:52:01) 
 [GCC 5.4.0 20160609] on linux
 Type "help", "copyright", "credits" or "license" for more information.
@@ -424,7 +454,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 3.6.4 (default, Jan 28 2018, 17:52:01) 
 [GCC 5.4.0 20160609]
 &gt;&gt;&gt; 
-</code></pre></div></div>
+</code></p>
 
 <h3 id="anaconda">Anaconda</h3>
 
@@ -432,30 +462,34 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 <p>Then, run:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ bash ~/Downloads/Anaconda3-5.1.0-Linux-x86_64.sh
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ bash ~/Downloads/Anaconda3-5.1.0-Linux-x86_64.sh
+</code></p>
 
 <h3 id="postgresql">Postgresql</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install postgresql postgresql-contrib
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo apt-get install postgresql postgresql-contrib
+</code></p>
 
 <p>Here’s how to access Postgres:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brian@brian-ThinkPad-T430:~$ sudo -i -u postgres
+<p>```
+brian@brian-ThinkPad-T430:~$ sudo -i -u postgres
 postgres@brian-ThinkPad-T430:~$ psql
 psql (9.5.12)
-Type "help" for help.
+Type “help” for help.</p>
 
-postgres=# \q
+<p>postgres=# \q
 postgres@brian-ThinkPad-T430:~$ exit
 logout
-</code></pre></div></div>
+```</p>
 
 <p>or</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo -u postgres psql
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ sudo -u postgres psql
+</code></p>
 
 <p>More information on postgresql <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04">in this DigitalOcean article</a>.</p>
 
@@ -463,24 +497,27 @@ logout
 
 <p>This is a must-have program that is similar to flux:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo add-apt-repository ppa:apandada1/brightness-controller
+<p><code class="highlighter-rouge">
+$ sudo add-apt-repository ppa:apandada1/brightness-controller
 $ sudo apt-get update
 $ sudo apt-get install brightness-controller
-</code></pre></div></div>
+</code></p>
 
 <h3 id="obs">OBS</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-add-repository ppa:obsproject/obs-studio
+<p><code class="highlighter-rouge">
+$ sudo apt-add-repository ppa:obsproject/obs-studio
 $ sudo apt-get update
 $ sudo apt-get install ffmpeg obs-studio
-</code></pre></div></div>
+</code></p>
 
 <h3 id="neofetch">neofetch</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo add-apt-repository ppa:dawidd0811/neofetch
+<p><code class="highlighter-rouge">
+$ sudo add-apt-repository ppa:dawidd0811/neofetch
 $ sudo apt update
 $ sudo apt install neofetch
-</code></pre></div></div>
+</code></p>
 
 <h3 id="disabling-whoopsie">Disabling whoopsie</h3>
 

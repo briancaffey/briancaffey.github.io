@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/12/22/getting-started-with-twisted.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/12/22/getting-started-with-twisted.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -100,8 +100,9 @@
 
 <h2 id="installation">Installation</h2>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> pip <span class="nb">install </span>twisted
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+ $ pip install twisted
+</code></p>
 
 <p>The main idea behind Twisted is that it gives us the parallelism of multithreading programming with the ease of reasoning of single threaded programming.</p>
 
@@ -111,58 +112,65 @@
 
 <p>This is the core of Twisted. Here is a simple explanation of what the reactor does with psuedo-code:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-    <span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout_until_next_timed_event</span><span class="p">()</span>
-    <span class="n">events</span> <span class="o">=</span> <span class="n">wait_for_events</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
-    <span class="n">events</span> <span class="o">+=</span> <span class="n">timed_events_until</span><span class="p">(</span><span class="n">now</span><span class="p">())</span>
-    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
-        <span class="n">event</span><span class="o">.</span><span class="n">process</span><span class="p">()</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+while True:
+    timeout = timeout_until_next_timed_event()
+    events = wait_for_events(timeout)
+    events += timed_events_until(now())
+    for event in events:
+        event.process()
+</code></p>
 
 <p>Here’s a simple echo server/client example that illustrates how the reactor works. It is composed of <code class="highlighter-rouge">echoclient.py</code> and <code class="highlighter-rouge">echoserver.py</code>:</p>
 
-<p><em>echoclient.py</em></p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">protocol</span>
+<p><em>echoclient.py</em>
+```python
+from twisted.internet import reactor, protocol</p>
 
-<span class="k">class</span> <span class="nc">EchoClient</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">u"Hello, world!"</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
+<p>class EchoClient(protocol.Protocol):
+    def connectionMade(self):
+        self.transport.write(u”Hello, world!”.encode(‘utf-8’))</p>
 
-    <span class="k">def</span> <span class="nf">dataReceived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Server said:"</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">loseConnection</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>def dataReceived(self, data):
+    print("Server said:", data)
+    self.transport.loseConnection()
+</code></pre>
+</div>
 
-<span class="k">class</span> <span class="nc">EchoFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">buildProtocol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">EchoClient</span><span class="p">()</span>
+<p>class EchoFactory(protocol.ClientFactory):
+    def buildProtocol(self, addr):
+        return EchoClient()</p>
 
-    <span class="k">def</span> <span class="nf">clientConnectionFailed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Connection failed."</span><span class="p">)</span>
-        <span class="n">reactor</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>def clientConnectionFailed(self, connector, reason):
+    print("Connection failed.")
+    reactor.stop()
 
-    <span class="k">def</span> <span class="nf">clientConnectionLost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s">"Connection lost."</span><span class="p">)</span>
-        <span class="n">reactor</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+def clientConnectionLost(self, connector, reason):
+    print("Connection lost.")
+    reactor.stop()
+</code></pre>
+</div>
 
-<span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">"localhost"</span><span class="p">,</span> <span class="mi">8000</span><span class="p">,</span> <span class="n">EchoFactory</span><span class="p">())</span>
-<span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre></div></div>
+<p>reactor.connectTCP(“localhost”, 8000, EchoFactory())
+reactor.run()
+```</p>
 
 <p><em>echoserver.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span>
+<p>```python
+from twisted.internet import protocol, reactor</p>
 
-<span class="k">class</span> <span class="nc">Echo</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">dataReceived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<p>class Echo(protocol.Protocol):
+    def dataReceived(self,data):
+        self.transport.write(data)</p>
 
-<span class="k">class</span> <span class="nc">EchoFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Factory</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">buildProtocol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Echo</span><span class="p">()</span>
+<p>class EchoFactory(protocol.Factory):
+    def buildProtocol(self, addr):
+        return Echo()</p>
 
-<span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">8000</span><span class="p">,</span> <span class="n">EchoFactory</span><span class="p">())</span>
-<span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</code></pre></div></div>
+<p>reactor.listenTCP(8000, EchoFactory())
+reactor.run()
+```</p>
 
   </div>
 

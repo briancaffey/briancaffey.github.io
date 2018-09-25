@@ -10,8 +10,8 @@
   <meta name="description" content="Here’s a walkthrough of the tutorial on the Django website. I’ve included some of my own notes. This post is primarily for self reference.">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/03/06/django-poll-tutorial.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/03/06/django-poll-tutorial.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -98,23 +98,25 @@
 
 <p>First, navigate to a folder where we will put the project, then make the project with:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>django-admin startproject mysite
-<span class="gp">(py3) &gt;</span><span class="o">&gt;</span><span class="nb">cd </span>mysite
-<span class="gp">(py3) &gt;</span><span class="o">&gt;</span>tree
-<span class="c">.
-</span><span class="go">├── manage.py
+<p>```terminal
+(py3) »django-admin startproject mysite
+(py3) »cd mysite
+(py3) »tree
+.
+├── manage.py
 └── mysite
-    ├── __init__.py
+    ├── <strong>init</strong>.py
     ├── settings.py
     ├── urls.py
-    └── wsgi.py
+    └── wsgi.py</p>
 
-1 directory, 5 files
-</span></code></pre></div></div>
-<p>Next we can start the server:</p>
+<p>1 directory, 5 files
+```
+Next we can start the server:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py runserver
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(py3) &gt;&gt;python manage.py runserver
+</code></p>
 
 <blockquote>
   <p>Ignore the warning about unapplied database migrations for now; we’ll deal with the database shortly.</p>
@@ -122,55 +124,59 @@
 
 <p>Next we create an app called <code class="highlighter-rouge">polls</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py startapp polls
-<span class="gp">(py3) &gt;</span><span class="o">&gt;</span><span class="nb">cd </span>polls
-<span class="gp">(py3) &gt;</span><span class="o">&gt;</span>tree
-<span class="c">.
-</span><span class="go">├── __init__.py
+<p>```terminal
+(py3) »python manage.py startapp polls
+(py3) »cd polls
+(py3) »tree
+.
+├── <strong>init</strong>.py
 ├── admin.py
 ├── apps.py
 ├── migrations
-│   └── __init__.py
+│   └── <strong>init</strong>.py
 ├── models.py
 ├── tests.py
-└── views.py
+└── views.py</p>
 
-1 directory, 7 files
-</span></code></pre></div></div>
+<p>1 directory, 7 files
+```</p>
 
 <p>Next we can write the first view for our app:</p>
 
 <p><em>polls/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<p>```python
+from django.shortcuts import render
+from django.http import HttpResponse</p>
 
-<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">"Hello, world! You are at the polls index."</span><span class="p">)</span>
-</code></pre></div></div>
+<p>def index(request):
+	return HttpResponse(“Hello, world! You are at the polls index.”)
+```</p>
 
 <p>This is the simplest view possible in Django. To call the view, we need to map it to a URL - and for this we need a URLconf. To create a URLconf in the polls directory, create a file called urls.py.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<p>```python
+from django.conf.urls import url</p>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+<p>from . import views</p>
 
-<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">)</span>
-<span class="p">]</span>
-</code></pre></div></div>
+<p>urlpatterns = [
+	url(r’^$’, views.index, name=’index’)
+]
+```</p>
 
 <p>The next step is to point the root URLconf at the polls.urls module. In mysite/urls.py, add an import for django.conf.urls.include and insert an include() in the urlpatterns list, so you have:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
-<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<p>```python
+from django.conf.urls import url
+from django.contrib import admin</p>
 
-<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">url</span><span class="p">(</span><span class="s">r'^admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
-    <span class="n">url</span><span class="p">(</span><span class="s">r'^polls/'</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">polls</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
-<span class="p">]</span>
-</code></pre></div></div>
-<h1 id="part-2">Part 2</h1>
+<p>urlpatterns = [
+    url(r’^admin/’, admin.site.urls),
+    url(r’^polls/’, include(polls.urls)),
+]
+```
+# Part 2</p>
 
 <p>This chapter covers databases and Django’s automatically-generated admin site.</p>
 
@@ -178,8 +184,9 @@
 
 <p>The migrate command looks at the INSTALLED_APPS setting and creates any necessary database tables according to the database settings in your mysite/settings.py file and the database migrations shipped with the app (we’ll cover those later).</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py migrate
-<span class="go">Operations to perform:
+<p><code class="highlighter-rouge">terminal
+(py3) &gt;&gt;python manage.py migrate
+Operations to perform:
   Apply all migrations: admin, auth, contenttypes, sessions
 Running migrations:
   Applying contenttypes.0001_initial... OK
@@ -195,7 +202,7 @@ Running migrations:
   Applying auth.0007_alter_validators_add_error_messages... OK
   Applying auth.0008_alter_user_username_max_length... OK
   Applying sessions.0001_initial... OK
-</span></code></pre></div></div>
+</code></p>
 
 <h2 id="creating-models">Creating models</h2>
 
@@ -203,17 +210,18 @@ Running migrations:
 
 <p><em>polls/models.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<p>```python 
+from django.db import models</p>
 
-<span class="k">class</span> <span class="nc">Question</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-	<span class="n">question_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-	<span class="n">pub_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="s">'date published'</span><span class="p">)</span>
+<p>class Question(models.Model):
+	question_text = models.CharField(max_length=200)
+	pub_date = models.DateTimeField(‘date published’)</p>
 
-<span class="k">class</span> <span class="nc">Choice</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-	<span class="n">question</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
-	<span class="n">choice_text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-	<span class="n">votes</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</code></pre></div></div>
+<p>class Choice(models.Model):
+	question = models.ForeignKey(Question, on_delete=models.CASCADE)
+	choice_text = models.CharField(max_length=200)
+	votes = models.IntegerField(default=0)
+```</p>
 
 <p>Note a relationship is defined, using ForeignKey. That tells Django each Choice is related to a single Question. Django supports all the common database relationships: many-to-one, many-to-many, and one-to-one.</p>
 
@@ -221,28 +229,30 @@ Running migrations:
 
 <p><em>mysite/settings.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
- <span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
-    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
-    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
-    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
-    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
-    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
-    <span class="s">'polls.apps.PollsConfig'</span><span class="p">,</span>
-<span class="p">]</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+[...]
+ INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'polls.apps.PollsConfig',
+]
+[...]
+</code></p>
 
 <p>Now Django knows to include the polls app. Next, we can run the <code class="highlighter-rouge">makemigrations</code> command:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py makemigrations
-<span class="go">Migrations for 'polls':
+<p><code class="highlighter-rouge">terminal
+(py3) &gt;&gt;python manage.py makemigrations
+Migrations for 'polls':
   polls/migrations/0001_initial.py:
     - Create model Choice
     - Create model Question
     - Add field question to choice
-</span></code></pre></div></div>
+</code></p>
 
 <p>By running makemigrations, you’re telling Django that you’ve made some changes to your models (in this case, you’ve made new ones) and that you’d like the changes to be stored as a migration.</p>
 
@@ -250,48 +260,51 @@ Running migrations:
 
 <p>There’s a command that will run the migrations for you and manage your database schema automatically - that’s called <code class="highlighter-rouge">migrate</code>, and we’ll come to it in a moment - but first, let’s see what SQL that migration would run. The <code class="highlighter-rouge">sqlmigrate</code> command takes migration names and returns their SQL:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py sqlmigrate polls 0001
-<span class="gp">BEGIN;</span>
-<span class="go">--
+<p><code class="highlighter-rouge">terminal
+(py3) &gt;&gt;python manage.py sqlmigrate polls 0001
+BEGIN;
+--
 -- Create model Choice
 --
-</span><span class="gp">CREATE TABLE "polls_choice" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "choice_text" varchar(200) NOT NULL, "votes" integer NOT NULL);</span>
-<span class="go">--
+CREATE TABLE "polls_choice" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "choice_text" varchar(200) NOT NULL, "votes" integer NOT NULL);
+--
 -- Create model Question
 --
-</span><span class="gp">CREATE TABLE "polls_question" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "question_text" varchar(200) NOT NULL, "pub_date" datetime NOT NULL);</span>
-<span class="go">--
+CREATE TABLE "polls_question" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "question_text" varchar(200) NOT NULL, "pub_date" datetime NOT NULL);
+--
 -- Add field question to choice
 --
-</span><span class="gp">ALTER TABLE "polls_choice" RENAME TO "polls_choice__old";</span>
-<span class="gp">CREATE TABLE "polls_choice" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "choice_text" varchar(200) NOT NULL, "votes" integer NOT NULL, "question_id" integer NOT NULL REFERENCES "polls_question" ("id"));</span>
-<span class="gp">INSERT INTO "polls_choice" ("id", "choice_text", "votes", "question_id") SELECT "id", "choice_text", "votes", NULL FROM "polls_choice__old";</span>
-<span class="gp">DROP TABLE "polls_choice__old";</span>
-<span class="gp">CREATE INDEX "polls_choice_7aa0f6ee" ON "polls_choice" ("question_id");</span>
-<span class="gp">COMMIT;</span>
-</code></pre></div></div>
+ALTER TABLE "polls_choice" RENAME TO "polls_choice__old";
+CREATE TABLE "polls_choice" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "choice_text" varchar(200) NOT NULL, "votes" integer NOT NULL, "question_id" integer NOT NULL REFERENCES "polls_question" ("id"));
+INSERT INTO "polls_choice" ("id", "choice_text", "votes", "question_id") SELECT "id", "choice_text", "votes", NULL FROM "polls_choice__old";
+DROP TABLE "polls_choice__old";
+CREATE INDEX "polls_choice_7aa0f6ee" ON "polls_choice" ("question_id");
+COMMIT;
+</code></p>
 
 <p>The sqlmigrate command doesn’t actually run the migration on your database - it just prints it to the screen so that you can see what SQL Django thinks is required.</p>
 
 <p>Now we can run the <code class="highlighter-rouge">migrate</code> command:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py migrate
-<span class="go">Operations to perform:
+<p><code class="highlighter-rouge">terminal
+(py3) &gt;&gt;python manage.py migrate
+Operations to perform:
   Apply all migrations: admin, auth, contenttypes, polls, sessions
 Running migrations:
   Applying polls.0001_initial... OK
-</span></code></pre></div></div>
-<h2 id="introducing-the-django-admin">Introducing the Django Admin</h2>
+</code>
+## Introducing the Django Admin</p>
 
 <p>First we’ll need to create a user who can login to the admin site. Run the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(py3) &gt;</span><span class="o">&gt;</span>python manage.py createsuperuser
-<span class="go">Username: brian
+<p><code class="highlighter-rouge">terminal
+(py3) &gt;&gt;python manage.py createsuperuser
+Username: brian
 Email address: [email@email.com]
 Password:
 Password (again):
 Superuser created successfully.
-</span></code></pre></div></div>
+</code></p>
 
 <p>Now we can access the admin portal at <code class="highlighter-rouge">localhost:8000/admin/</code></p>
 
@@ -299,12 +312,13 @@ Superuser created successfully.
 
 <p><em>polls/admin.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<p>```python
+from django.contrib import admin</p>
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
+<p>from .models import Question</p>
 
-<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Question</span><span class="p">)</span>
-</code></pre></div></div>
+<p>admin.site.register(Question)
+```</p>
 
 <p>Now that we’ve registered Question, Django knows that it should be displayed on the admin index page. And it now is.</p>
 
@@ -342,45 +356,48 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">"You are looking at question </span><span class="si">%</span><span class="s">s."</span> <span class="o">%</span> <span class="n">question_id</span><span class="p">)</span>
+<p>```python
+[…]
+def detail(request, question_id):
+	return HttpResponse(“You are looking at question %s.” % question_id)</p>
 
-<span class="k">def</span> <span class="nf">results</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-	<span class="n">response</span> <span class="o">=</span> <span class="s">"You're looking at the results of question </span><span class="si">%</span><span class="s">s."</span>
-	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">response</span> <span class="o">%</span> <span class="n">question_id</span><span class="p">)</span>
+<p>def results(request, question_id):
+	response = “You’re looking at the results of question %s.”
+	return HttpResponse(response % question_id)</p>
 
-<span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">"You're voting on question </span><span class="si">%</span><span class="s">s."</span> <span class="o">%</span> <span class="n">question_id</span><span class="p">)</span>
-</code></pre></div></div>
+<p>def vote(request, question_id):
+	return HttpResponse(“You’re voting on question %s.” % question_id)
+```</p>
 
 <p>Next we need to “wire up” the <code class="highlighter-rouge">urls.py</code> file so that we can call these functions based on different URL patterns:</p>
 
 <p><em>polls/urls.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<p>```python
+from django.conf.urls import url</p>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+<p>from . import views</p>
 
-<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-	<span class="c"># ex: /polls/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">),</span> 
+<p>urlpatterns = [
+	# ex: /polls/
+	url(r’^$’, views.index, name=’index’),</p>
 
-	<span class="c"># ex: /polls/5/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;question_id&gt;[0-9]+)/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'detail'</span><span class="p">),</span>
+<div class="highlighter-rouge"><pre class="highlight"><code># ex: /polls/5/
+url(r'^(?P&lt;question_id&gt;[0-9]+)/$', views.detail, name='detail'),
 
-	<span class="c"># ex: /polls/5/results/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;question_id&gt;[0-9]+)/results/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'results'</span><span class="p">),</span> 
+# ex: /polls/5/results/
+url(r'^(?P&lt;question_id&gt;[0-9]+)/results/$', views.results, name='results'), 
 
-	<span class="c"># ex: /polls/5/vote/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;question_id&gt;[0-9]+)/vote/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">vote</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'vote'</span><span class="p">),</span>
-<span class="p">]</span>
-</code></pre></div></div>
+# ex: /polls/5/vote/
+url(r'^(?P&lt;question_id&gt;[0-9]+)/vote/$', views.vote, name='vote'), ] ```
+</code></pre>
+</div>
 
 <p>When somebody requests a page from your website – say, “/polls/34/”, Django will load the mysite.urls Python module because it’s pointed to by the <code class="highlighter-rouge">ROOT_URLCONF</code> setting. It finds the variable named urlpatterns and traverses the regular expressions in order. After finding the match at ‘^polls/’, it strips off the matching text (“polls/”) and sends the remaining text – “34/” – to the ‘polls.urls’ URLconf for further processing. There it matches r’^(?P<question_id>[0-9]+)/$', resulting in a call to the detail() view like so:</question_id></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">detail</span><span class="p">(</span><span class="n">request</span><span class="o">=&lt;</span><span class="n">HttpRequest</span> <span class="nb">object</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">question_id</span><span class="o">=</span><span class="s">'34'</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+detail(request=&lt;HttpRequest object&gt;, question_id='34')
+</code></p>
 
 <p>The question_id=’34’ part comes from (?P<question_id>[0-9]+). Using parentheses around a pattern “captures” the text matched by that pattern and sends it as an argument to the view function; ?P<question_id> defines the name that will be used to identify the matched pattern; and [0-9]+ is a regular expression to match a sequence of digits (i.e., a number).</question_id></question_id></p>
 
@@ -401,44 +418,47 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-	<span class="n">latest_question_list</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-pub_date'</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
-	<span class="n">output</span> <span class="o">=</span> <span class="s">','</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">q</span><span class="o">.</span><span class="n">question_text</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">latest_question_list</span><span class="p">])</span>
-	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+def index(request):
+	latest_question_list = Question.objects.order_by('-pub_date')[:5]
+	output = ','.join([q.question_text for q in latest_question_list])
+	return HttpResponse(output)
+</code></p>
 
 <p>This shows the 5 most recent questions joined by commas. Next we will put these questions in a structured HTML list with a template.</p>
 
 <p><em>polls/templates/polls/index.html</em></p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% if latest_question_list %}
-	<span class="nt">&lt;ul&gt;</span>
+<p><code class="highlighter-rouge">html
+{% if latest_question_list %}
+	&lt;ul&gt;
 		{% for question in latest_question_list %}
-			<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/polls/{{ question.id }}/"</span><span class="nt">&gt;</span>{{question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+			&lt;li&gt;&lt;a href="/polls/{{ question.id }}/"&gt;{{question.question_text }}&lt;/a&gt;&lt;/li&gt;
 		{% endfor %}
-	<span class="nt">&lt;/ul&gt;</span>
+	&lt;/ul&gt;
 {% else %}
-	<span class="nt">&lt;p&gt;</span>No polls are available.<span class="nt">&lt;/p&gt;</span>
+	&lt;p&gt;No polls are available.&lt;/p&gt;
 {% endif %}
-</code></pre></div></div>
+</code></p>
 
 <p>Next, we need to update our index view in <code class="highlighter-rouge">polls/views.py</code> to use the template:</p>
 
 <p><em>polls/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">loader</span>
+<p>```python
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template import loader</p>
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
+<p>from .models import Question</p>
 
-<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-	<span class="n">latest_question_list</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-pub_date'</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
-	<span class="n">template</span> <span class="o">=</span> <span class="n">loader</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s">'polls/index.html'</span><span class="p">)</span>
-	<span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">'latest_question_list'</span><span class="p">:</span> <span class="n">latest_question_list</span><span class="p">,</span> <span class="p">}</span>
-	<span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">request</span><span class="p">))</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p>def index(request):
+	latest_question_list = Question.objects.order_by(‘-pub_date’)[:5]
+	template = loader.get_template(‘polls/index.html’)
+	context = {‘latest_question_list’: latest_question_list, }
+	return HttpResponse(template.render(context, request))
+[…]
+```</p>
 
 <h2 id="a-shortcut">A shortcut</h2>
 
@@ -446,15 +466,16 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
+<p>```python
+from django.shortcuts import render
+from .models import Question</p>
 
-<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-	<span class="n">latest_question_list</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-pub_date'</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
-	<span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">'latest_question_list'</span><span class="p">:</span> <span class="n">latest_question_list</span><span class="p">,</span> <span class="p">}</span>
-	<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'polls/index.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p>def index(request):
+	latest_question_list = Question.objects.order_by(‘-pub_date’)[:5]
+	context = {‘latest_question_list’: latest_question_list, }
+	return render(request, ‘polls/index.html’, context)
+[…]
+```</p>
 
 <p>This is much simpler than the previous ways of writing the <code class="highlighter-rouge">index</code> function.</p>
 
@@ -464,37 +485,40 @@ Superuser created successfully.
 
 <p><em>polls/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-	<span class="k">try</span><span class="p">:</span> 
-		<span class="n">question</span> <span class="o">=</span> <span class="n">Question</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
-	<span class="k">except</span> <span class="n">Question</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
-		<span class="k">raise</span> <span class="n">Http404</span><span class="p">(</span><span class="s">'Question does not exist'</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'polls/detail.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'question'</span><span class="p">:</span> <span class="n">question</span><span class="p">})</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+from django.http import Http404
+[...]
+def detail(request, question_id):
+	try: 
+		question = Question.objects.get(pk=question_id)
+	except Question.DoesNotExist:
+		raise Http404('Question does not exist')
+	return render(request, 'polls/detail.html', {'question': question})
+[...]
+</code></p>
 
 <p>The view raises the Http404 exception if a question with the requested ID doesn’t exist.</p>
 
 <p>For now we can write a simple template for <code class="highlighter-rouge">detail.html</code>:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{{ question }}
-</code></pre></div></div>
+<p><code class="highlighter-rouge">html
+{{ question }}
+</code></p>
 
-<h2 id="another-shortcut-get_object_or_404">Another shortcut: <em>get_object_or_404()</em></h2>
+<h2 id="another-shortcut-getobjector404">Another shortcut: <em>get_object_or_404()</em></h2>
 
 <p>It’s a very common idiom to use get() and raise Http404 if the object doesn’t exist. Django provides a shortcut. Here’s the detail() view, rewritten:</p>
 
 <p><em>polls/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="k">def</span> <span class="nf">detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-	<span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'polls/detail.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'question'</span><span class="p">:</span> <span class="n">question</span><span class="p">})</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+from django.http import Http404
+[...]
+def detail(request, question_id):
+	question = get_object_or_404(Question, pk=question_id)
+	return render(request, 'polls/detail.html', {'question': question})
+[...]
+</code></p>
 
 <p>The get_object_or_404() function takes a Django model as its first argument and an arbitrary number of keyword arguments, which it passes to the get() function of the model’s manager. It raises Http404 if the object doesn’t exist.</p>
 
@@ -504,13 +528,14 @@ Superuser created successfully.
 
 <p><em>polls/templates/polls/detail.html</em></p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
-<span class="nt">&lt;ul&gt;</span>
+<p>```html</p>
+<h1>{{ question.question_text }}</h1>
+<ul>
 {% for choice in question.choice_set.all %}
-	<span class="nt">&lt;li&gt;</span>{{ choice.choice_text }}<span class="nt">&lt;/li&gt;</span>
+	<li>{{ choice.choice_text }}</li>
 {% endfor %}
-<span class="nt">&lt;/ul&gt;</span>
-</code></pre></div></div>
+</ul>
+<p>```</p>
 
 <p>Method-calling happens in the {% for %} loop: question.choice_set.all is interpreted as the Python code question.choice_set.all(), which returns an iterable of Choice objects and is suitable for use in the {% for %} tag.</p>
 
@@ -518,20 +543,23 @@ Superuser created successfully.
 
 <p>In <code class="highlighter-rouge">polls/index.html</code> we used a hardcoded link:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/polls/{{ question.id }}/"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-</code></pre></div></div>
+<p>```html</p>
+<li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+<p>```</p>
 
 <p>It would be very challening to change this URL if we had many such templates. However, since you defined the name argument in the url() functions in the polls.urls module, you can remove a reliance on specific URL paths defined in your url configurations by using the {% url %} template tag:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'detail' question.id %}"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-</code></pre></div></div>
+<p>```html</p>
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+<p>```</p>
 
 <p>The way this works is by looking up the URL definition as specified in the polls.urls module. Remember, we defined the name of <code class="highlighter-rouge">detail</code> in <code class="highlighter-rouge">urls.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="n">url</span><span class="p">(</span><span class="s">r'(?P&lt;question_id&gt;[0-9]+)/$'</span><span class="p">,</span> <span class="n">view</span><span class="o">.</span><span class="n">detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'detail'</span><span class="p">),</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+[...]
+url(r'(?P&lt;question_id&gt;[0-9]+)/$', view.detail, name='detail'),
+[...]
+</code></p>
 
 <p>The tutorial project has just one app, polls. In real Django projects, there might be five, ten, twenty apps or more. How does Django differentiate the URL names between them? For example, the polls app has a detail view, and so might an app on the same project that is for a blog. How does one make it so that Django knows which app view to create for a url when using the {% url %} template tag?</p>
 
@@ -539,32 +567,34 @@ Superuser created successfully.
 
 <p><em>polls/urls.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<p>```python
+from django.conf.urls import url</p>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+<p>from . import views</p>
 
-<span class="n">app_name</span> <span class="o">=</span> <span class="s">'polls'</span>
-<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-	<span class="c"># ex: /polls/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">),</span> 
+<p>app_name = ‘polls’
+urlpatterns = [
+	# ex: /polls/
+	url(r’^$’, views.index, name=’index’),</p>
 
-	<span class="c"># ex: /polls/5/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;question_id&gt;[0-9]+)/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">detail</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'detail'</span><span class="p">),</span>
+<div class="highlighter-rouge"><pre class="highlight"><code># ex: /polls/5/
+url(r'^(?P&lt;question_id&gt;[0-9]+)/$', views.detail, name='detail'),
 
-	<span class="c"># ex: /polls/5/results/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;question_id&gt;[0-9]+)/results/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">results</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'results'</span><span class="p">),</span> 
+# ex: /polls/5/results/
+url(r'^(?P&lt;question_id&gt;[0-9]+)/results/$', views.results, name='results'), 
 
-	<span class="c"># ex: /polls/5/vote/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;question_id&gt;[0-9]+)/vote/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">vote</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'vote'</span><span class="p">),</span>
-<span class="p">]</span>
-</code></pre></div></div>
+# ex: /polls/5/vote/
+url(r'^(?P&lt;question_id&gt;[0-9]+)/vote/$', views.vote, name='vote'), ] ```
+</code></pre>
+</div>
 
 <p>Now we can change the namespace in the <code class="highlighter-rouge">index.html</code> template to make use of this namespace:</p>
 
 <p><em>polls/templates/polls/index.html</em></p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'polls:detail' question.id %}"</span><span class="nt">&gt;</span>{{ question.question_text }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-</code></pre></div></div>
+<p>```html</p>
+<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+<p>```</p>
 
 <h1 id="part-4">Part 4</h1>
 
@@ -574,188 +604,184 @@ Superuser created successfully.
 
 <p><em>polls/templates/polls/detail.html</em></p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
-{% if error_message %}<span class="nt">&lt;p&gt;&lt;strong&gt;</span>{{ error_message }}<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>{% endif %}
+<p>```html</p>
+<h1>{{ question.question_text }}</h1>
+<p>{% if error_message %}&lt;p&gt;<strong>{{ error_message }}</strong>&lt;/p&gt;{% endif %}</p>
 
-<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{% url 'polls:vote' question.id %}"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+<form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
 {% for choice in question.choice_set.all %}
-	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"radio"</span> <span class="na">name=</span><span class="s">"choice"</span> <span class="na">id=</span><span class="s">"choice{{ forloop.counter }}"</span><span class="nt">&gt;</span>{{ chocie.choice_text }}<span class="nt">&lt;/label&gt;&lt;br</span> <span class="nt">/&gt;</span>
+	<input type="radio" name="choice" id="choice{{ forloop.counter }}" />{{ chocie.choice_text }}<br />
 {% endfor %}
 
-<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Vote"</span> <span class="nt">/&gt;</span>
+<input type="submit" value="Vote" />
 
-<span class="nt">&lt;ul&gt;</span>
+<ul>
 {% for choice in question.choice_set.all %}
-	<span class="nt">&lt;li&gt;</span>{{ choice.choice_text }}<span class="nt">&lt;/li&gt;</span>
+	<li>{{ choice.choice_text }}</li>
 {% endfor %}
-<span class="nt">&lt;/ul&gt;</span>
-</code></pre></div></div>
+</ul>
+```
 
-<p>Now, let’s create a Django view that handles the submitted data and does something with it. We previously defined a dummy <code class="highlighter-rouge">vote()</code> function, now let’s create a real version of it:</p>
+Now, let’s create a Django view that handles the submitted data and does something with it. We previously defined a dummy `vote()` function, now let's create a real version of it: 
 
-<p><em>polls/views.py</em></p>
+*polls/views.py*
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+```python
 
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span><span class="p">,</span> <span class="n">Choice</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-    <span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">selected_choice</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">'choice'</span><span class="p">])</span>
-    <span class="k">except</span> <span class="p">(</span><span class="nb">KeyError</span><span class="p">,</span> <span class="n">Choice</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">):</span>
-        <span class="c">#display the question voting form</span>
-        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'polls/detail.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'question'</span><span class="p">:</span> <span class="n">question</span><span class="p">,</span> <span class="s">'error_message'</span><span class="p">:</span><span class="s">"You didn't select a choice"</span><span class="p">,})</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">selected_choice</span><span class="o">.</span><span class="n">votes</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">selected_choice</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="c">#Always submit an HttpResponseRedirect after successfully dealing with POST data</span>
-        <span class="c">#This prevents the form being posted twice if a user hits the back button</span>
-        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">'polls:results'</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="nb">id</span><span class="p">,)))</span>
-</code></pre></div></div>
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
 
-<p>This code includes a few things we haven’t covered yet in this tutorial:</p>
+from django.urls import reverse
+from .models import Question, Choice
+[...]
+def vote(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    try:
+        selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        #display the question voting form
+        return render(request, 'polls/detail.html', {'question': question, 'error_message':"You didn't select a choice",})
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        #Always submit an HttpResponseRedirect after successfully dealing with POST data
+        #This prevents the form being posted twice if a user hits the back button
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+```
+
+This code includes a few things we haven’t covered yet in this tutorial:
+
+- `request.POST` is a dictionary-like object that lets you access submitted data by key name. In this case, `request.POST['choice']` returns the ID of the selected choice, as a string. `request.POST` values are always strings.
+
+Note that Django also provides `request.GET` for accessing GET data in the same way – but we’re explicitly using `request.POST` in our code, to ensure that data is only altered via a `POST` call.
+
+- `request.POST['choice']` will raise `KeyError` if `choice` wasn’t provided in `POST` data. The above code checks for `KeyError` and redisplays the question form with an error message if choice isn’t given.
+
+- After incrementing the choice count, the code returns an `HttpResponseRedirect` rather than a normal `HttpResponse`. `HttpResponseRedirect` takes a single argument: the URL to which the user will be redirected (see the following point for how we construct the URL in this case).
+
+As the Python comment above points out, you should always return an `HttpResponseRedirect` after successfully dealing with `POST` data. This tip isn’t specific to Django; it’s just good Web development practice.
+
+- We are using the `reverse()` function in the `HttpResponseRedirect` constructor in this example. This function helps avoid having to hardcode a URL in the view function. It is given the name of the view that we want to pass control to and the variable portion of the URL pattern that points to that view. In this case, using the `URLconf` we set up in Tutorial 3, this `reverse()` call will return a string like:
+
+```text
+'/polls/3/results/'
+```
+
+where the 3 is the value of `question.id`. This redirected URL will then call the `'results'` view to display the final page. Here is the `results` view: 
+
+*polls/views.py*
+
+```python
+[...]
+def results(request, question_id):
+	question = get_object_or_404(Question, pk=question_id)
+	return render(request, 'polls/results.html', {'question': question})
+[...]
+```
+
+Now we can create the `results.html` template:
+
+*polls/results.html*
+
+```html
+<h1>{{ question.question_text }}</h1>
 
 <ul>
-  <li><code class="highlighter-rouge">request.POST</code> is a dictionary-like object that lets you access submitted data by key name. In this case, <code class="highlighter-rouge">request.POST['choice']</code> returns the ID of the selected choice, as a string. <code class="highlighter-rouge">request.POST</code> values are always strings.</li>
-</ul>
-
-<p>Note that Django also provides <code class="highlighter-rouge">request.GET</code> for accessing GET data in the same way – but we’re explicitly using <code class="highlighter-rouge">request.POST</code> in our code, to ensure that data is only altered via a <code class="highlighter-rouge">POST</code> call.</p>
-
-<ul>
-  <li>
-    <p><code class="highlighter-rouge">request.POST['choice']</code> will raise <code class="highlighter-rouge">KeyError</code> if <code class="highlighter-rouge">choice</code> wasn’t provided in <code class="highlighter-rouge">POST</code> data. The above code checks for <code class="highlighter-rouge">KeyError</code> and redisplays the question form with an error message if choice isn’t given.</p>
-  </li>
-  <li>
-    <p>After incrementing the choice count, the code returns an <code class="highlighter-rouge">HttpResponseRedirect</code> rather than a normal <code class="highlighter-rouge">HttpResponse</code>. <code class="highlighter-rouge">HttpResponseRedirect</code> takes a single argument: the URL to which the user will be redirected (see the following point for how we construct the URL in this case).</p>
-  </li>
-</ul>
-
-<p>As the Python comment above points out, you should always return an <code class="highlighter-rouge">HttpResponseRedirect</code> after successfully dealing with <code class="highlighter-rouge">POST</code> data. This tip isn’t specific to Django; it’s just good Web development practice.</p>
-
-<ul>
-  <li>We are using the <code class="highlighter-rouge">reverse()</code> function in the <code class="highlighter-rouge">HttpResponseRedirect</code> constructor in this example. This function helps avoid having to hardcode a URL in the view function. It is given the name of the view that we want to pass control to and the variable portion of the URL pattern that points to that view. In this case, using the <code class="highlighter-rouge">URLconf</code> we set up in Tutorial 3, this <code class="highlighter-rouge">reverse()</code> call will return a string like:</li>
-</ul>
-
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'/polls/3/results/'
-</code></pre></div></div>
-
-<p>where the 3 is the value of <code class="highlighter-rouge">question.id</code>. This redirected URL will then call the <code class="highlighter-rouge">'results'</code> view to display the final page. Here is the <code class="highlighter-rouge">results</code> view:</p>
-
-<p><em>polls/views.py</em></p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="k">def</span> <span class="nf">results</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-	<span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'polls/results.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'question'</span><span class="p">:</span> <span class="n">question</span><span class="p">})</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>Now we can create the <code class="highlighter-rouge">results.html</code> template:</p>
-
-<p><em>polls/results.html</em></p>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h1&gt;</span>{{ question.question_text }}<span class="nt">&lt;/h1&gt;</span>
-
-<span class="nt">&lt;ul&gt;</span>
 {% for choice in question.choice_set.all %}
-	<span class="nt">&lt;li&gt;</span>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}<span class="nt">&lt;/li&gt;</span>
+	<li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
 {% endfor %}
-<span class="nt">&lt;/ul&gt;</span>
+</ul>
 
-<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'polls:detail' question.id %}"</span><span class="nt">&gt;</span>Vote again?<span class="nt">&lt;/a&gt;</span>
-</code></pre></div></div>
+<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+```
 
-<p>If we visit <code class="highlighter-rouge">/polls/1/</code> and click on the <code class="highlighter-rouge">Vote</code> button, we are taken to <code class="highlighter-rouge">/polls/1/vote/</code> and we see the error message: <code class="highlighter-rouge">You didn't select a choice</code>.</p>
+If we visit `/polls/1/` and click on the `Vote` button, we are taken to `/polls/1/vote/` and we see the error message: `You didn't select a choice`. 
 
-<h2 id="using-generic-views">Using Generic Views</h2>
+## Using Generic Views 
 
-<p>The detail() (from Tutorial 3) and results() views are very simple – and, as mentioned above, redundant. The index() view, which displays a list of polls, is similar.</p>
+The detail() (from Tutorial 3) and results() views are very simple – and, as mentioned above, redundant. The index() view, which displays a list of polls, is similar.
 
-<p>These views represent a common case of basic Web development: getting data from the database according to a parameter passed in the URL, loading a template and returning the rendered template. Because this is so common, Django provides a shortcut, called the “generic views” system.</p>
+These views represent a common case of basic Web development: getting data from the database according to a parameter passed in the URL, loading a template and returning the rendered template. Because this is so common, Django provides a shortcut, called the “generic views” system.
 
-<p>Generic views abstract common patterns to the point where you don’t even need to write Python code to write an app.</p>
+Generic views abstract common patterns to the point where you don’t even need to write Python code to write an app.
 
-<p>Let’s convert our poll app to use the generic views system, so we can delete a bunch of our own code. We’ll just have to take a few steps to make the conversion. We will:</p>
+Let’s convert our poll app to use the generic views system, so we can delete a bunch of our own code. We’ll just have to take a few steps to make the conversion. We will:
 
-<ol>
-  <li>Convert the URLconf.</li>
-  <li>Delete some of the old, unneeded views.</li>
-  <li>Introduce new views based on Django’s generic views.</li>
-</ol>
+1. Convert the URLconf.
+2. Delete some of the old, unneeded views.
+3. Introduce new views based on Django’s generic views.
 
-<p>This last part will redo some of the parts we have already completed to explore the concepts of generic views in Django.</p>
+This last part will redo some of the parts we have already completed to explore the concepts of generic views in Django. 
 
-<p><em>polls/urls.py</em></p>
+*polls/urls.py*
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+```python
+from django.conf.urls import url
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+from . import views
 
-<span class="n">app_name</span> <span class="o">=</span> <span class="s">'polls'</span>
-<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-	<span class="c"># ex: /polls/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">IndexView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'index'</span><span class="p">),</span> 
-	<span class="c"># ex: /polls/5/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;pk&gt;[0-9]+)/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">DetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'detail'</span><span class="p">),</span>
-	<span class="c"># ex: /polls/5/results/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;pk&gt;[0-9]+)/results/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">ResultsView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'results'</span><span class="p">),</span> 
-	<span class="c"># ex: /polls/5/vote/</span>
-	<span class="n">url</span><span class="p">(</span><span class="s">r'^(?P&lt;question_id&gt;[0-9]+)/vote/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">vote</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'vote'</span><span class="p">),</span>
-<span class="p">]</span>
-</code></pre></div></div>
+app_name = 'polls'
+urlpatterns = [
+	# ex: /polls/
+	url(r'^$', views.IndexView.as_view(), name='index'), 
+	# ex: /polls/5/
+	url(r'^(?P<pk>[0-9]+)/$', views.DetailView.as_view(), name='detail'),
+	# ex: /polls/5/results/
+	url(r'^(?P<pk>[0-9]+)/results/$', views.ResultsView.as_view(), name='results'), 
+	# ex: /polls/5/vote/
+	url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
+]
+```
 
-<p>Note that the name of the matched pattern in the regexes of the second and third patterns has changed from <code class="highlighter-rouge">&lt;question_id&gt;</code> to <code class="highlighter-rouge">&lt;pk&gt;</code>.</p>
+Note that the name of the matched pattern in the regexes of the second and third patterns has changed from `<question_id>` to `<pk>`.
 
-<p>Next, we’re going to remove our old index, detail, and results views and use Django’s generic views instead.</p>
+Next, we’re going to remove our old index, detail, and results views and use Django’s generic views instead. 
 
-<p><strong>This is a new Django feature that can be tricky for beginnners. It is recommended to avoid class-based views (generic views) if you don’t mind writing out function-based views.</strong></p>
+**This is a new Django feature that can be tricky for beginnners. It is recommended to avoid class-based views (generic views) if you don't mind writing out function-based views.**
 
-<p><em>polls/views.py</em></p>
+*polls/views.py*
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span>
-<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
-<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">generic</span>
-<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+```python 
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.views import generic
+from django.urls import reverse
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span><span class="p">,</span> <span class="n">Choice</span>
+from .models import Question, Choice
 
-<span class="k">class</span> <span class="nc">IndexView</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">ListView</span><span class="p">):</span>
-	<span class="n">template_name</span> <span class="o">=</span> <span class="s">'polls/index.html'</span>
-	<span class="n">context_object_name</span> <span class="o">=</span> <span class="s">'latest_question_list'</span>
+class IndexView(generic.ListView):
+	template_name = 'polls/index.html'
+	context_object_name = 'latest_question_list'
 
-	<span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="s">"""Return last five published questions"""</span>
-		<span class="k">return</span> <span class="n">Questions</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-pub_date'</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
+	def get_queryset(self):
+		"""Return last five published questions"""
+		return Questions.objects.order_by('-pub_date')[:5]
 
-<span class="k">class</span> <span class="nc">DetailView</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">DetailView</span><span class="p">):</span>
-	<span class="n">model</span> <span class="o">=</span> <span class="n">Question</span>
-	<span class="n">template_name</span> <span class="o">=</span> <span class="s">'polls/detail.html'</span>
+class DetailView(generic.DetailView):
+	model = Question
+	template_name = 'polls/detail.html'
 
-<span class="k">class</span> <span class="nc">ResultsView</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">DetailView</span><span class="p">):</span>
-	<span class="n">model</span> <span class="o">=</span> <span class="n">Question</span>
-	<span class="n">template_name</span> <span class="o">=</span> <span class="s">'polls/results.html'</span>
+class ResultsView(generic.DetailView):
+	model = Question
+	template_name = 'polls/results.html'
 
-<span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">question_id</span><span class="p">):</span>
-	<span class="n">question</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">question_id</span><span class="p">)</span>
-	<span class="k">try</span><span class="p">:</span>
-		<span class="n">selected_choice</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s">'choice'</span><span class="p">])</span>
-	<span class="k">except</span> <span class="p">(</span><span class="nb">KeyError</span><span class="p">,</span> <span class="n">Choice</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">):</span>
-		<span class="c">#display the question voting form</span>
-		<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'polls/detail.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'question'</span><span class="p">:</span> <span class="n">question</span><span class="p">,</span> <span class="s">'error_message'</span><span class="p">:</span><span class="s">"You didn't select a choice"</span><span class="p">,})</span>
-	<span class="k">else</span><span class="p">:</span>
-		<span class="n">selected_choice</span><span class="o">.</span><span class="n">votes</span> <span class="o">+=</span> <span class="mi">1</span>
-		<span class="n">selected_choice</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-		<span class="c">#Always submit an HttpResponseRedirect after successfully dealing with POST data</span>
-		<span class="c">#This prevents the form being posted twice if a user hits the back button</span>
-		<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">'polls:results'</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="nb">id</span><span class="p">,)))</span>
+def vote(request, question_id):
+	question = get_object_or_404(Question, pk=question_id)
+	try:
+		selected_choice = question.choice_set.get(pk=request.POST['choice'])
+	except (KeyError, Choice.DoesNotExist):
+		#display the question voting form
+		return render(request, 'polls/detail.html', {'question': question, 'error_message':"You didn't select a choice",})
+	else:
+		selected_choice.votes += 1
+		selected_choice.save()
+		#Always submit an HttpResponseRedirect after successfully dealing with POST data
+		#This prevents the form being posted twice if a user hits the back button
+		return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
-<span class="s">""" Without Generic Views (for comparison)
+""" Without Generic Views (for comparison)
 
 def index(request):
 	latest_question_list = Question.objects.order_by('-pub_date')[:5]
@@ -783,111 +809,115 @@ def vote(request, question_id):
 		#Always submit an HttpResponseRedirect after successfully dealing with POST data
 		#This prevents the form being posted twice if a user hits the back button
 		return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
-"""</span>
-</code></pre></div></div>
+"""
+```
 
-<p>We’re using two generic views here: <code class="highlighter-rouge">ListView</code> and <code class="highlighter-rouge">DetailView</code>. Respectively, those two views abstract the concepts of “display a list of objects” and “display a detail page for a particular type of object.”</p>
+We’re using two generic views here: `ListView` and `DetailView`. Respectively, those two views abstract the concepts of “display a list of objects” and “display a detail page for a particular type of object.”
 
-<ul>
-  <li>
-    <p>Each generic view needs to know what model it will be acting upon. This is provided using the model attribute.</p>
-  </li>
-  <li>
-    <p>The <code class="highlighter-rouge">DetailView</code> generic view expects the primary key value captured from the URL to be called “pk”, so we’ve changed <code class="highlighter-rouge">question_id</code> to <code class="highlighter-rouge">pk</code> for the generic views.</p>
-  </li>
-</ul>
+- Each generic view needs to know what model it will be acting upon. This is provided using the model attribute.
 
-<p>By default, the DetailView generic view uses a template called <code class="highlighter-rouge">&lt;app name&gt;/&lt;model name&gt;_detail.html</code>. In our case, it would use the template “polls/question_detail.html”. The <code class="highlighter-rouge">template_name</code> attributes we give our classes in <code class="highlighter-rouge">views.py</code> tell Django to use a specific template instead of the autogenerated default template view.</p>
+- The `DetailView` generic view expects the primary key value captured from the URL to be called "pk", so we’ve changed `question_id` to `pk` for the generic views.
 
-<p>In previous parts of the tutorial, the templates have been provided with a context that contains the <code class="highlighter-rouge">question</code> and <code class="highlighter-rouge">latest_question_list</code> context variables. For <code class="highlighter-rouge">DetailView</code> the question variable is provided automatically – since we’re using a Django model (<code class="highlighter-rouge">Question</code>), Django is able to determine an appropriate name for the context variable. However, for ListView, the automatically generated context variable is <code class="highlighter-rouge">question_list</code>. To override this we provide the <code class="highlighter-rouge">context_object_name</code> attribute, specifying that we want to use <code class="highlighter-rouge">latest_question_list</code> instead. As an alternative approach, you could change your templates to match the new default context variables – but it’s a lot easier to just tell Django to use the variable you want.</p>
+By default, the DetailView generic view uses a template called `<app name="">/<model name="">_detail.html`. In our case, it would use the template "polls/question_detail.html". The `template_name` attributes we give our classes in `views.py` tell Django to use a specific template instead of the autogenerated default template view.
 
-<h1 id="part-5-automated-testing">Part 5: Automated testing</h1>
+In previous parts of the tutorial, the templates have been provided with a context that contains the `question` and `latest_question_list` context variables. For `DetailView` the question variable is provided automatically – since we’re using a Django model (`Question`), Django is able to determine an appropriate name for the context variable. However, for ListView, the automatically generated context variable is `question_list`. To override this we provide the `context_object_name` attribute, specifying that we want to use `latest_question_list` instead. As an alternative approach, you could change your templates to match the new default context variables – but it’s a lot easier to just tell Django to use the variable you want.
 
-<p>Coming soon!</p>
+# Part 5: Automated testing
 
-<h1 id="part-6-static-files">Part 6: Static files</h1>
+Coming soon!
 
-<p><code class="highlighter-rouge">django.contrib.staticfiles</code> collects static files from each of your applications (and any other places you specify) into a single location that can easily be served in production.</p>
+# Part 6: Static files
 
-<h2 id="customize-your-apps-look-and-feel">Customize your app’s look and feel</h2>
+`django.contrib.staticfiles` collects static files from each of your applications (and any other places you specify) into a single location that can easily be served in production.
 
-<p>First, create a directory called <code class="highlighter-rouge">static</code> in your polls directory. Django will look for static files there, similarly to how Django finds templates inside <code class="highlighter-rouge">polls/templates/</code>.</p>
+## Customize your app's look and feel
 
-<p>Within the static directory you have just created, create another directory called polls and within that create a file called style.css. Now we can add to this file:</p>
+First, create a directory called `static` in your polls directory. Django will look for static files there, similarly to how Django finds templates inside `polls/templates/`.
 
-<p><em>polls/static/polls/style.css</em></p>
+Within the static directory you have just created, create another directory called polls and within that create a file called style.css. Now we can add to this file: 
 
-<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">li</span> <span class="nt">a</span> <span class="p">{</span>
-	<span class="nl">color</span><span class="p">:</span> <span class="no">green</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
+*polls/static/polls/style.css*
 
-<p>Next, add the following at the top of <code class="highlighter-rouge">polls/templates/polls/index.html</code>:</p>
+```css
+li a {
+	color: green;
+}
+```
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% load static %}
+Next, add the following at the top of `polls/templates/polls/index.html`:
 
-<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">href=</span><span class="s">"{% static 'polls/style.css' %}"</span> <span class="nt">/&gt;</span> 
-</code></pre></div></div>
+```html
+{% load static %}
 
-<p>The <code class="highlighter-rouge">{% static %}</code> template tag generates the absolute URL of static files.</p>
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" /> 
+```
 
-<h1 id="part-7">Part 7</h1>
+The `{% static %}` template tag generates the absolute URL of static files.
 
-<p>This section focuses on customizing Django’s automatically-generated admin site. At this point, we haven’t authorized the admin site to create or access the <code class="highlighter-rouge">Choice</code> model. We are going to associate these two objects so that it is easier to create questions with choices in the admin panel.</p>
+# Part 7 
 
-<p><em>polls/admin.py</em></p>
+This section focuses on customizing Django's automatically-generated admin site. At this point, we haven't authorized the admin site to create or access the `Choice` model. We are going to associate these two objects so that it is easier to create questions with choices in the admin panel. 
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+*polls/admin.py*
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
+```python
+from django.contrib import admin
 
-<span class="k">class</span> <span class="nc">QuestionAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
-	<span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s">'pub_date'</span><span class="p">,</span> <span class="s">'question_text'</span><span class="p">]</span>
+from .models import Question
 
-<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">QuestionAdmin</span><span class="p">)</span>
-</code></pre></div></div>
+class QuestionAdmin(admin.ModelAdmin):
+	fields = ['pub_date', 'question_text']
 
-<p>You’ll follow this pattern – create a model admin class, then pass it as the second argument to <code class="highlighter-rouge">admin.site.register()</code> – any time you need to change the admin options for a model.</p>
+admin.site.register(Question, QuestionAdmin)
+```
 
-<p>All this does is change the order of the publication date and the question field. This is fairly simple, but it may be helpful if you have dozens of fields in a model.</p>
+You’ll follow this pattern – create a model admin class, then pass it as the second argument to `admin.site.register()` – any time you need to change the admin options for a model.
 
-<p>We can also split up the form on the admin panel by fieldsets:</p>
+All this does is change the order of the publication date and the question field. This is fairly simple, but it may be helpful if you have dozens of fields in a model. 
 
-<p><em>polls/admin.py</em></p>
+We can also split up the form on the admin panel by fieldsets:
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+*polls/admin.py*
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Question</span>
+```python
+from django.contrib import admin
 
-<span class="k">class</span> <span class="nc">QuestionAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
-	<span class="n">fieldsets</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">None</span><span class="p">,</span> <span class="p">{</span><span class="s">'fields'</span><span class="p">:[</span><span class="s">'question_text'</span><span class="p">]}),</span> <span class="p">(</span><span class="s">'Date information'</span><span class="p">,</span> <span class="p">{</span><span class="s">'fields'</span><span class="p">:[</span><span class="s">'pub_date'</span><span class="p">]}),</span> <span class="p">]</span>
+from .models import Question
 
-<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">QuestionAdmin</span><span class="p">)</span>
-</code></pre></div></div>
+class QuestionAdmin(admin.ModelAdmin):
+	fieldsets = [(None, {'fields':['question_text']}), ('Date information', {'fields':['pub_date']}), ]
 
-<p>This groups fields together. Next we want to make the Choice object related to the Question object in the admin panel:</p>
+admin.site.register(Question, QuestionAdmin)
+```
 
-<p><em>polls/admin.py</em></p>
+This groups fields together. Next we want to make the Choice object related to the Question object in the admin panel: 
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+*polls/admin.py*
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Choice</span><span class="p">,</span> <span class="n">Question</span>
+```python
+from django.contrib import admin
 
-<span class="k">class</span> <span class="nc">ChoiceInline</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">TabularInline</span><span class="p">):</span>
-	<span class="n">model</span> <span class="o">=</span> <span class="n">Choice</span>
-	<span class="n">extra</span> <span class="o">=</span> <span class="mi">3</span>
+from .models import Choice, Question
 
-<span class="k">class</span> <span class="nc">QuestionAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
-	<span class="n">fieldsets</span> <span class="o">=</span> <span class="p">[</span>
-		<span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="p">{</span><span class="s">'fields'</span><span class="p">:[</span><span class="s">'question_text'</span><span class="p">]}),</span> 
-		<span class="p">(</span><span class="s">'Date information'</span><span class="p">,</span> <span class="p">{</span><span class="s">'fields'</span><span class="p">:</span> <span class="p">[</span><span class="s">'pub_date'</span><span class="p">],</span> <span class="s">'classes'</span><span class="p">:[</span><span class="s">'collapse'</span><span class="p">]}),]</span>
-	<span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChoiceInline</span><span class="p">]</span>
+class ChoiceInline(admin.TabularInline):
+	model = Choice
+	extra = 3
 
-<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">QuestionAdmin</span><span class="p">)</span>
-</code></pre></div></div>
+class QuestionAdmin(admin.ModelAdmin):
+	fieldsets = [
+		(None, {'fields':['question_text']}), 
+		('Date information', {'fields': ['pub_date'], 'classes':['collapse']}),]
+	inlines = [ChoiceInline]
 
-<p>This tells Django: “Choice objects are edited on the Question admin page. By default, provide enough fields for 3 choices.”</p>
+admin.site.register(Question, QuestionAdmin)
+```
 
+This tells Django: “Choice objects are edited on the Question admin page. By default, provide enough fields for 3 choices.” 
+
+
+
+
+</model></app></pk></question_id></question_id></pk></pk></form>
 
   </div>
 

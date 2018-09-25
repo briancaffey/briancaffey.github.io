@@ -10,8 +10,8 @@
   <meta name="description" content="Since I started using Arch Linux I have been using yaourt, a pacman wrapper with extended features and AUR support.">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/11/24/switching-from-yaourt-to-pacaur.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/11/24/switching-from-yaourt-to-pacaur.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -100,24 +100,25 @@
 
 <p>One annoying part of installing packages with yaourt is that it will ask you to examine/edit the contents of PKGBUILD. Here’s an example:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> yaourt <span class="nt">-S</span> freecell
-<span class="go">
-</span><span class="gp">==&gt;</span> Downloading freecell PKGBUILD from AUR...
-<span class="go">x .SRCINFO
+<p>```terminal 
+ $ yaourt -S freecell</p>
+
+<p>==&gt; Downloading freecell PKGBUILD from AUR…
+x .SRCINFO
 x PKGBUILD
 Anonymous comment on 2012-04-22 13:26			 
 Your arch line is wrong!
 Please change
-arch=('i686' 'x64')
+arch=(‘i686’ ‘x64’)
 to
-arch=('i686' 'x86_64')
+arch=(‘i686’ ‘x86_64’)</p>
 
-freecell 1.0-4  (2015-06-10 11:30)
+<p>freecell 1.0-4  (2015-06-10 11:30)
 ( Unsupported package: Potentially dangerous ! )
-</span><span class="gp">==&gt;</span> Edit PKGBUILD ? <span class="o">[</span>Y/n] <span class="o">(</span><span class="s2">"A"</span> to abort<span class="o">)</span>
-<span class="gp">==&gt;</span> <span class="nt">------------------------------------</span>
-<span class="gp">==&gt;</span> 
-</code></pre></div></div>
+==&gt; Edit PKGBUILD ? [Y/n] (“A” to abort)
+==&gt; ————————————
+==&gt; 
+```</p>
 
 <p>What is PKGBUILD? From the Arch Wiki:</p>
 
@@ -127,190 +128,195 @@ freecell 1.0-4  (2015-06-10 11:30)
 
 <p>For most package installations, yaourt will also ask you to confirm installation:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">==&gt;</span> Edit PKGBUILD ? <span class="o">[</span>Y/n] <span class="o">(</span><span class="s2">"A"</span> to abort<span class="o">)</span>
-<span class="gp">==&gt;</span> <span class="nt">------------------------------------</span>
-<span class="gp">==&gt;</span> n
-<span class="go">
-</span><span class="gp">==&gt;</span> freecell dependencies:
-<span class="go"> - ncurses (already installed)
+<p>```terminal
+==&gt; Edit PKGBUILD ? [Y/n] (“A” to abort)
+==&gt; ————————————
+==&gt; n</p>
 
+<p>==&gt; freecell dependencies:
+ - ncurses (already installed)</p>
 
-</span><span class="gp">==&gt;</span> Continue building freecell ? <span class="o">[</span>Y/n]
-<span class="gp">==&gt;</span> <span class="nt">----------------------------------</span>
-<span class="gp">==&gt;</span> Y
-</code></pre></div></div>
+<p>==&gt; Continue building freecell ? [Y/n]
+==&gt; ———————————-
+==&gt; Y
+```</p>
 
 <p>And often times you will need to do this more than once:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">[...]
-</span><span class="gp">==&gt;</span> Continue building freecell ? <span class="o">[</span>Y/n]
-<span class="gp">==&gt;</span> <span class="nt">----------------------------------</span>
-<span class="gp">==&gt;</span> Y
-<span class="go">
-</span><span class="gp">==&gt;</span> Building and installing package
-<span class="gp">==&gt;</span> Making package: freecell 1.0-4 <span class="o">(</span>Fri Nov 24 20:58:00 EST 2017<span class="o">)</span>
-<span class="gp">==&gt;</span> Checking runtime dependencies...
-<span class="gp">==&gt;</span> Checking buildtime dependencies...
-<span class="gp">==&gt;</span> Retrieving sources...
-<span class="gp">  -&gt;</span> Downloading freecell-1.0.tar.gz...
-<span class="go">  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+<p>```terminal
+[…]
+==&gt; Continue building freecell ? [Y/n]
+==&gt; ———————————-
+==&gt; Y</p>
+
+<p>==&gt; Building and installing package
+==&gt; Making package: freecell 1.0-4 (Fri Nov 24 20:58:00 EST 2017)
+==&gt; Checking runtime dependencies…
+==&gt; Checking buildtime dependencies…
+==&gt; Retrieving sources…
+  -&gt; Downloading freecell-1.0.tar.gz…
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100 87713  100 87713    0     0  87713      0  0:00:01 --:--:--  0:00:01  101k
-</span><span class="gp">==&gt;</span> Validating <span class="nb">source </span>files with md5sums...
-<span class="go">    freecell-1.0.tar.gz ... Passed
-</span><span class="gp">==&gt;</span> Extracting sources...
-<span class="gp">  -&gt;</span> Extracting freecell-1.0.tar.gz with bsdtar
-<span class="gp">==&gt;</span> Starting build<span class="o">()</span>...
-<span class="go">checking for a BSD-compatible install... /usr/bin/install -c
-checking whether build environment is sane... yes
-checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
-checking for gawk... gawk
-</span><span class="gp">checking whether make sets $</span><span class="o">(</span>MAKE<span class="o">)</span>... <span class="nb">yes</span>
-<span class="go">checking for gcc... gcc
-checking for C compiler default output file name... a.out
-checking whether the C compiler works... yes
-checking whether we are cross compiling... no
-checking for suffix of executables... 
-checking for suffix of object files... o
-checking whether we are using the GNU C compiler... yes
-checking whether gcc accepts -g... yes
-checking for gcc option to accept ISO C89... none needed
-checking for style of include used by make... GNU
-checking dependency style of gcc... gcc3
-checking for start_color in -lncurses... yes
-checking how to run the C preprocessor... gcc -E
-checking for grep that handles long lines and -e... /usr/bin/grep
-checking for egrep... /usr/bin/grep -E
-checking for ANSI C header files... yes
-checking for sys/types.h... yes
-checking for sys/stat.h... yes
-checking for stdlib.h... yes
-checking for string.h... yes
-checking for memory.h... yes
-checking for strings.h... yes
-checking for inttypes.h... yes
-checking for stdint.h... yes
-checking for unistd.h... yes
-checking for stdlib.h... (cached) yes
-checking for string.h... (cached) yes
-checking for unistd.h... (cached) yes
-checking for an ANSI C-conforming const... yes
-checking for stdlib.h... (cached) yes
-checking for GNU libc compatible malloc... yes
-checking for strdup... yes
+100 87713  100 87713    0     0  87713      0  0:00:01 –:–:–  0:00:01  101k
+==&gt; Validating source files with md5sums…
+    freecell-1.0.tar.gz … Passed
+==&gt; Extracting sources…
+  -&gt; Extracting freecell-1.0.tar.gz with bsdtar
+==&gt; Starting build()…
+checking for a BSD-compatible install… /usr/bin/install -c
+checking whether build environment is sane… yes
+checking for a thread-safe mkdir -p… /usr/bin/mkdir -p
+checking for gawk… gawk
+checking whether make sets $(MAKE)… yes
+checking for gcc… gcc
+checking for C compiler default output file name… a.out
+checking whether the C compiler works… yes
+checking whether we are cross compiling… no
+checking for suffix of executables… 
+checking for suffix of object files… o
+checking whether we are using the GNU C compiler… yes
+checking whether gcc accepts -g… yes
+checking for gcc option to accept ISO C89… none needed
+checking for style of include used by make… GNU
+checking dependency style of gcc… gcc3
+checking for start_color in -lncurses… yes
+checking how to run the C preprocessor… gcc -E
+checking for grep that handles long lines and -e… /usr/bin/grep
+checking for egrep… /usr/bin/grep -E
+checking for ANSI C header files… yes
+checking for sys/types.h… yes
+checking for sys/stat.h… yes
+checking for stdlib.h… yes
+checking for string.h… yes
+checking for memory.h… yes
+checking for strings.h… yes
+checking for inttypes.h… yes
+checking for stdint.h… yes
+checking for unistd.h… yes
+checking for stdlib.h… (cached) yes
+checking for string.h… (cached) yes
+checking for unistd.h… (cached) yes
+checking for an ANSI C-conforming const… yes
+checking for stdlib.h… (cached) yes
+checking for GNU libc compatible malloc… yes
+checking for strdup… yes
 configure: creating ./config.status
 config.status: creating Makefile
 config.status: creating src/Makefile
 config.status: creating doc/Makefile
 config.status: executing depfiles commands
 Making all in src
-make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
-gcc -DPACKAGE_NAME=\"freecell\" -DPACKAGE_TARNAME=\"freecell\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"freecell\ 1.0\" -DPACKAGE_BUGREPORT=\"linus@linusakesson.net\" -DPACKAGE=\"freecell\" -DVERSION=\"1.0\" -DHAVE_LIBNCURSES=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_MALLOC=1 -DHAVE_STRDUP=1 -I.   -D_FORTIFY_SOURCE=2  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt -MT freecell.o -MD -MP -MF .deps/freecell.Tpo -c -o freecell.o freecell.c
+make[1]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src’
+gcc -DPACKAGE_NAME="freecell" -DPACKAGE_TARNAME="freecell" -DPACKAGE_VERSION="1.0" -DPACKAGE_STRING="freecell\ 1.0" -DPACKAGE_BUGREPORT="linus@linusakesson.net" -DPACKAGE="freecell" -DVERSION="1.0" -DHAVE_LIBNCURSES=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_MALLOC=1 -DHAVE_STRDUP=1 -I.   -D_FORTIFY_SOURCE=2  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt -MT freecell.o -MD -MP -MF .deps/freecell.Tpo -c -o freecell.o freecell.c
 freecell.c:350:1: warning: return type defaults to ‘int’ [-Wimplicit-int]
  usage() {
  ^~~~~
 freecell.c: In function ‘main’:
-</span><span class="gp">freecell.c:403:9: warning: implicit declaration of function ‘time’;</span> did you mean ‘nice’? <span class="o">[</span><span class="nt">-Wimplicit-function-declaration</span><span class="o">]</span>
-<span class="gp">   srand(time(0));</span>
-<span class="go">         ^~~~
+freecell.c:403:9: warning: implicit declaration of function ‘time’; did you mean ‘nice’? [-Wimplicit-function-declaration]
+   srand(time(0));
+         ^~~~
          nice
 mv -f .deps/freecell.Tpo .deps/freecell.Po
-gcc -DPACKAGE_NAME=\"freecell\" -DPACKAGE_TARNAME=\"freecell\" -DPACKAGE_VERSION=\"1.0\" -DPACKAGE_STRING=\"freecell\ 1.0\" -DPACKAGE_BUGREPORT=\"linus@linusakesson.net\" -DPACKAGE=\"freecell\" -DVERSION=\"1.0\" -DHAVE_LIBNCURSES=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_MALLOC=1 -DHAVE_STRDUP=1 -I.   -D_FORTIFY_SOURCE=2  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt -MT gameno.o -MD -MP -MF .deps/gameno.Tpo -c -o gameno.o gameno.c
+gcc -DPACKAGE_NAME="freecell" -DPACKAGE_TARNAME="freecell" -DPACKAGE_VERSION="1.0" -DPACKAGE_STRING="freecell\ 1.0" -DPACKAGE_BUGREPORT="linus@linusakesson.net" -DPACKAGE="freecell" -DVERSION="1.0" -DHAVE_LIBNCURSES=1 -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDLIB_H=1 -DHAVE_MALLOC=1 -DHAVE_STRDUP=1 -I.   -D_FORTIFY_SOURCE=2  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt -MT gameno.o -MD -MP -MF .deps/gameno.Tpo -c -o gameno.o gameno.c
 mv -f .deps/gameno.Tpo .deps/gameno.Po
-gcc  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt  -Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now -o freecell freecell.o gameno.o  -lncurses 
-make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+gcc  -march=x86-64 -mtune=generic -O2 -pipe -fstack-protector-strong -fno-plt  -Wl,-O1,–sort-common,–as-needed,-z,relro,-z,now -o freecell freecell.o gameno.o  -lncurses 
+make[1]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src’
 Making all in doc
-make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
-make[1]: Nothing to be done for 'all'.
-make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
-make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
-make[1]: Nothing to be done for 'all-am'.
-make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
-</span><span class="gp">==&gt;</span> Entering fakeroot environment...
-<span class="gp">==&gt;</span> Starting package<span class="o">()</span>...
-<span class="go">Making install in src
-make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
-make[2]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
-test -z "/usr/bin" || /usr/bin/mkdir -p "/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/bin"
-  /usr/bin/install -c 'freecell' '/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/bin/freecell'
-make[2]: Nothing to be done for 'install-data-am'.
-make[2]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
-make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src'
+make[1]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc’
+make[1]: Nothing to be done for ‘all’.
+make[1]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc’
+make[1]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0’
+make[1]: Nothing to be done for ‘all-am’.
+make[1]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0’
+==&gt; Entering fakeroot environment…
+==&gt; Starting package()…
+Making install in src
+make[1]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src’
+make[2]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src’
+test -z “/usr/bin” || /usr/bin/mkdir -p “/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/bin”
+  /usr/bin/install -c ‘freecell’ ‘/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/bin/freecell’
+make[2]: Nothing to be done for ‘install-data-am’.
+make[2]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src’
+make[1]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/src’
 Making install in doc
-make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
-make[2]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
-make[2]: Nothing to be done for 'install-exec-am'.
-test -z "/usr/share/man/man6" || /usr/bin/mkdir -p "/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/share/man/man6"
- /usr/bin/install -c -m 644 './freecell.6' '/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/share/man/man6/freecell.6'
-make[2]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
-make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc'
-make[1]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
-make[2]: Entering directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
-make[2]: Nothing to be done for 'install-exec-am'.
-make[2]: Nothing to be done for 'install-data-am'.
-make[2]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
-make[1]: Leaving directory '/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0'
-</span><span class="gp">==&gt;</span> Tidying install...
-<span class="gp">  -&gt;</span> Removing libtool files...
-<span class="gp">  -&gt;</span> Purging unwanted files...
-<span class="gp">  -&gt;</span> Removing static library files...
-<span class="gp">  -&gt;</span> Stripping unneeded symbols from binaries and libraries...
-<span class="gp">  -&gt;</span> Compressing man and info pages...
-<span class="gp">==&gt;</span> Checking <span class="k">for </span>packaging issue...
-<span class="gp">==&gt;</span> Creating package <span class="s2">"freecell"</span>...
-<span class="gp">  -&gt;</span> Generating .PKGINFO file...
-<span class="gp">  -&gt;</span> Generating .BUILDINFO file...
-<span class="gp">  -&gt;</span> Generating .MTREE file...
-<span class="gp">  -&gt;</span> Compressing package...
-<span class="gp">==&gt;</span> Leaving fakeroot environment.
-<span class="gp">==&gt;</span> Finished making: freecell 1.0-4 <span class="o">(</span>Fri Nov 24 20:58:05 EST 2017<span class="o">)</span>
-<span class="gp">==&gt;</span> Cleaning up...
-<span class="go">
-</span><span class="gp">==&gt;</span> Continue installing freecell ? <span class="o">[</span>Y/n]
-<span class="gp">==&gt;</span> <span class="o">[</span>v]iew package contents <span class="o">[</span>c]heck package with namcap
-<span class="gp">==&gt;</span> <span class="nt">---------------------------------------------------</span>
-<span class="gp">==&gt;</span> 
-<span class="go">
-</span></code></pre></div></div>
-<p>and you often times have to provide your password during the install process:</p>
+make[1]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc’
+make[2]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc’
+make[2]: Nothing to be done for ‘install-exec-am’.
+test -z “/usr/share/man/man6” || /usr/bin/mkdir -p “/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/share/man/man6”
+ /usr/bin/install -c -m 644 ‘./freecell.6’ ‘/tmp/yaourt-tmp-brian/aur-freecell/pkg/freecell/usr/share/man/man6/freecell.6’
+make[2]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc’
+make[1]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0/doc’
+make[1]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0’
+make[2]: Entering directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0’
+make[2]: Nothing to be done for ‘install-exec-am’.
+make[2]: Nothing to be done for ‘install-data-am’.
+make[2]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0’
+make[1]: Leaving directory ‘/tmp/yaourt-tmp-brian/aur-freecell/src/freecell-1.0’
+==&gt; Tidying install…
+  -&gt; Removing libtool files…
+  -&gt; Purging unwanted files…
+  -&gt; Removing static library files…
+  -&gt; Stripping unneeded symbols from binaries and libraries…
+  -&gt; Compressing man and info pages…
+==&gt; Checking for packaging issue…
+==&gt; Creating package “freecell”…
+  -&gt; Generating .PKGINFO file…
+  -&gt; Generating .BUILDINFO file…
+  -&gt; Generating .MTREE file…
+  -&gt; Compressing package…
+==&gt; Leaving fakeroot environment.
+==&gt; Finished making: freecell 1.0-4 (Fri Nov 24 20:58:05 EST 2017)
+==&gt; Cleaning up…</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">==&gt;</span> Continue installing freecell ? <span class="o">[</span>Y/n]
-<span class="gp">==&gt;</span> <span class="o">[</span>v]iew package contents <span class="o">[</span>c]heck package with namcap
-<span class="gp">==&gt;</span> <span class="nt">---------------------------------------------------</span>
-<span class="gp">==&gt;</span> Y
-<span class="go">
-[sudo] password for brian: 
-loading packages...
-resolving dependencies...
-looking for conflicting packages...
+<p>==&gt; Continue installing freecell ? [Y/n]
+==&gt; [v]iew package contents [c]heck package with namcap
+==&gt; —————————————————
+==&gt;</p>
 
-Package (1)  New Version  Net Change
+<p>```
+and you often times have to provide your password during the install process:</p>
 
-freecell     1.0-4          0.02 MiB
+<p>```terminal
+==&gt; Continue installing freecell ? [Y/n]
+==&gt; [v]iew package contents [c]heck package with namcap
+==&gt; —————————————————
+==&gt; Y</p>
 
-Total Installed Size:  0.02 MiB
+<p>[sudo] password for brian: 
+loading packages…
+resolving dependencies…
+looking for conflicting packages…</p>
 
-:: Proceed with installation? [Y/n] 
-</span></code></pre></div></div>
+<p>Package (1)  New Version  Net Change</p>
+
+<p>freecell     1.0-4          0.02 MiB</p>
+
+<p>Total Installed Size:  0.02 MiB</p>
+
+<p>:: Proceed with installation? [Y/n] 
+```</p>
 
 <p>This process becomes quite tedious when you are installing lots of packages. In most cases you don’t want to edit PKGBUILD, and you DO want to continue with the installation. yaourt does have flags such as <code class="highlighter-rouge">--no-edit</code> and <code class="highlighter-rouge">--no-confirm</code> that you can pass in to skip these dialogue prompts. However, in some cases there may be conflicting packages that you would want inspect.</p>
 
 <p>Here’s the description of the pacaur package:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">aur/pacaur 4.7.10-1 [installed] (1057) (47.35)
+<p><code class="highlighter-rouge">terminal
+aur/pacaur 4.7.10-1 [installed] (1057) (47.35)
     An AUR helper that minimizes user interaction
-</span></code></pre></div></div>
+</code></p>
 
 <p>Compared to the description of yaourt:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">aur/yaourt 1.9-1 [installed] (2991) (16.33)
+<p><code class="highlighter-rouge">terminal
+aur/yaourt 1.9-1 [installed] (2991) (16.33)
     A pacman wrapper with extended features and AUR support
-</span></code></pre></div></div>
+</code></p>
 
 <p>Let’s see how pacaur holds up to it’s philosophy of minimizing user interaction:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> yaourt <span class="nt">-R</span> freecell <span class="o">&amp;&amp;</span> pacaur <span class="nt">-S</span> freecell
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+ $ yaourt -R freecell &amp;&amp; pacaur -S freecell
+</code></p>
 
 <p>The pacaur installation did ask me to confirm once at the beginning of the install process, and it automatically confirmed the second time without asking me to edit the PKGBUILD. Nice! Trying one more time with <code class="highlighter-rouge">--noconfirm</code>, there was zero interaction between pressing ENTER and the end of the install process. Even better! Either way, using pacaur is much nicer than using yaourt for something as simple as installing freecell.</p>
 
@@ -324,27 +330,30 @@ Total Installed Size:  0.02 MiB
   <p>If you are having problems installing this package due to signature verification, please run the below before running makepkg:</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+ $ gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
+</code></p>
 
 <p>This will add a security key to our keyring:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> gpg <span class="nt">--list-keys</span>
-<span class="go"> /home/brian/.gnupg/pubring.kbx
+<p><code class="highlighter-rouge">terminal
+ $ gpg --list-keys
+ /home/brian/.gnupg/pubring.kbx
 ------------------------------
 pub   rsa2048 2011-06-25 [SC]
       487EACC08557AD082088DABA1EB2638FF56C0C53
-</span><span class="gp">uid           [ unknown] Dave Reisner &lt;d@falconindy.com&gt;</span>
-<span class="gp">uid           [ unknown] Dave Reisner &lt;dreisner@archlinux.org&gt;</span>
-<span class="go">sub   rsa2048 2011-06-25 [E]
-</span></code></pre></div></div>
+uid           [ unknown] Dave Reisner &lt;d@falconindy.com&gt;
+uid           [ unknown] Dave Reisner &lt;dreisner@archlinux.org&gt;
+sub   rsa2048 2011-06-25 [E]
+</code></p>
 
 <p>I’m not too sure about how gpg keys work or why they are important here, but there is plenty of reading to do about this topic that I will leave for a later article.</p>
 
 <p>Once we add this key, we can simply install pacaur with the tool that it will soon replace:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> yaourt <span class="nt">-S</span> pacaur
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+ $ yaourt -S pacaur
+</code></p>
 
 <p>The syntax and options of pacaur is similar to those of pacman and yaourt, so luckily there is nothing new to learn when switching to pacaur. I’m still new to this tool, so I’ll add any new insights to this article as I get more experience using pacaur as a package manager.</p>
 

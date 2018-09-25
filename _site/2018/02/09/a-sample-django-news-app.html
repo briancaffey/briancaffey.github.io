@@ -10,8 +10,8 @@
   <meta name="description" content="The Django project started in the news room. This article will offer detailed documentation of the setup process for a simple news application. This project ...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2018/02/09/a-sample-django-news-app.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2018/02/09/a-sample-django-news-app.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -139,23 +139,25 @@
 
 <p><em>views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@cache_page</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="s">"""
+<p>```python
+@cache_page(None)
+def home(request):
+    “””
     This is the public view that displays only published posts. 
     The view also returns a UNIX timestamp of the most recently updated post.
-    This timestamp is compared with the `LastUpdate` value to determine when the page should be refreshed.
-    Every 5 seconds, the `latest` timestamp is compared with the `LastUpdate` timestamp. 
-    If `LastUpdate` is greater that `latest`, this implies that a Post has either been published or unpublished.
-    """</span>
+    This timestamp is compared with the <code class="highlighter-rouge">LastUpdate</code> value to determine when the page should be refreshed.
+    Every 5 seconds, the <code class="highlighter-rouge">latest</code> timestamp is compared with the <code class="highlighter-rouge">LastUpdate</code> timestamp. 
+    If <code class="highlighter-rouge">LastUpdate</code> is greater that <code class="highlighter-rouge">latest</code>, this implies that a Post has either been published or unpublished.
+    “””</p>
 
-    <span class="n">posts</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">published</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-    <span class="n">latest</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">if</span> <span class="n">posts</span><span class="p">:</span>
-        <span class="n">latest</span> <span class="o">=</span> <span class="n">Post</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">latest</span><span class="p">(</span><span class="s">'updated'</span><span class="p">)</span><span class="o">.</span><span class="n">unix_time</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>posts = Post.objects.filter(published=True)
+latest = 0
+if posts:
+    latest = Post.objects.latest('updated').unix_time()
 
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'posts/home.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'posts'</span><span class="p">:</span><span class="n">posts</span><span class="p">,</span> <span class="s">'latest'</span><span class="p">:</span><span class="n">latest</span><span class="p">})</span>
-</code></pre></div></div>
+return render(request, 'posts/home.html', {'posts':posts, 'latest':latest}) ```
+</code></pre>
+</div>
 
 <h4 id="ajax-poll-on-home-page">AJAX poll on home page</h4>
 
@@ -163,52 +165,55 @@
 
 <p><em>home.html</em> (AJAX poll)</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script&gt;</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"working"</span><span class="p">)</span>
-    <span class="nx">poll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-        <span class="na">url</span><span class="p">:</span> <span class="s1">'/refresh'</span><span class="p">,</span>
-        <span class="na">dataType</span><span class="p">:</span> <span class="s1">'json'</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'get'</span><span class="p">,</span>
-        <span class="na">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">latest</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">latest</span><span class="p">)</span>
-            <span class="kd">var</span> <span class="nx">latest_local</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="s2">"#last"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'data'</span><span class="p">))</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">latest</span> <span class="o">&gt;</span> <span class="nx">latest_local</span> <span class="o">+</span> <span class="mi">2</span><span class="p">){</span>
-                <span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">()</span>
-            <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="na">error</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'The refresh poll was not successful'</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="p">});</span>
-    <span class="p">},</span>
-    <span class="nx">pollInterval</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">poll</span><span class="p">();</span>
-        <span class="p">},</span> <span class="mi">5000</span><span class="p">);</span>
-<span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">html
+&lt;script&gt;
+    console.log("working")
+    poll = function() {
+        $.ajax({
+        url: '/refresh',
+        dataType: 'json',
+        type: 'get',
+        success: function(data) {
+            var latest = parseInt(data.latest)
+            var latest_local = parseInt($("#last").attr('data'))
+            if (latest &gt; latest_local + 2){
+                location.reload()
+            }
+        },
+        error: function() {
+            console.log('The refresh poll was not successful');
+        }
+        });
+    },
+    pollInterval = setInterval(function() {
+        poll();
+        }, 5000);
+&lt;/script&gt;
+</code></p>
 
 <p><em>views.py</em> (the view that the AJAX poll requests; return JSON)</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="s">"""
+<p>```python
+def refresh(request):
+    “””
     This is the URL that is polled by the public-facing page.
     It returns a UNIX timestamp of the last time an article was published or unpublished. 
-    This timestamp comes from the `LastUpdated`, a table that stores and updates only one row with one datetime column.
+    This timestamp comes from the <code class="highlighter-rouge">LastUpdated</code>, a table that stores and updates only one row with one datetime column.
     Publishing and unpublishing are the only two actions that clear the cached homepage. 
     When the returned UNIX timestamp is greater than the UNIX timestamp of the most recently updated article,
-    The page is refreshed with `location.reload()`.
-    """</span>
-    
-    <span class="n">t</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">LastUpdate</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">unix_time</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">unix_time</span><span class="p">()</span>
-    <span class="n">latest</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
-    <span class="k">return</span> <span class="n">JsonResponse</span><span class="p">({</span><span class="s">'latest'</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">latest</span><span class="p">)})</span>
-</code></pre></div></div>
+    The page is refreshed with <code class="highlighter-rouge">location.reload()</code>.
+    “””</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>t, created = LastUpdate.objects.get_or_create(id=1)
+if created:
+    t.save()
+    t = t.unix_time()
+else:
+    t = t.unix_time()
+latest = int(t) - 2
+return JsonResponse({'latest':int(latest)}) ```
+</code></pre>
+</div>
 
 <h4 id="email-admin-through-a-celery-task">Email admin through a celery task</h4>
 
@@ -230,10 +235,11 @@
   <li>To cache a page from the <code class="highlighter-rouge">home</code> view, I used a decorator: <code class="highlighter-rouge">from django.views.decorators.cache import cache_page</code>:</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@cache_page</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+@cache_page(None)
+def home(request):
+    [...]
+</code></p>
 
 <ul>
   <li>
@@ -246,47 +252,51 @@
 
 <p>In order for caching to work we need to add the following to <code class="highlighter-rouge">settings.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CACHES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">'default'</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.core.cache.backends.memcached.MemcachedCache'</span><span class="p">,</span>
-        <span class="s">'LOCATION'</span><span class="p">:</span> <span class="s">'127.0.0.1:11211'</span><span class="p">,</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+</code></p>
 
 <p>Next, we need to install the following packages:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(virtualenv) $ pip install memcache 
+<p><code class="highlighter-rouge">
+(virtualenv) $ pip install memcache 
 # pacman -S memcached
 # systemctl start memcached
 # systemctl enable memcached
-</code></pre></div></div>
+</code></p>
 
 <h5 id="clearing-the-cache">Clearing the cache</h5>
 
 <p>To clear the cache, we can simply do the following in a view:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+<p>```python
+from django.core.cache import cache</p>
 
-<span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">toggle_publish</span><span class="p">(</span><span class="n">request</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
-    <span class="n">instance</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Post</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+<p>@login_required
+def toggle_publish(request,id):
+    instance = get_object_or_404(Post, id=id)</p>
 
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span><span class="o">==</span><span class="s">"POST"</span><span class="p">:</span>
-        <span class="n">instance</span><span class="o">.</span><span class="n">published</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">published</span>
-        <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>if request.method=="POST":
+    instance.published = not instance.published
+    instance.save()
 
-        <span class="n">t</span> <span class="o">=</span> <span class="n">LastUpdate</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">updated</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">updated</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    t = LastUpdate.objects.all().first()
+    t.updated = instance.updated
+    t.save()
 
-        <span class="n">cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'posts:home'</span><span class="p">)</span>
+    cache.clear()
+    return redirect('posts:home')
 
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">'post'</span><span class="p">:</span><span class="n">instance</span><span class="p">}</span>
+context = {'post':instance}
 
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'posts/publish.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</code></pre></div></div>
+return render(request, 'posts/publish.html', context) ```
+</code></pre>
+</div>
 
 <p><code class="highlighter-rouge">cache.clear()</code> clears the cache, and the <code class="highlighter-rouge">home</code> view is regenerated from the Queryset and template rather the being served directly from the cache. This newly generated page is then saved to the cache and used on subsequent calls to <code class="highlighter-rouge">home</code> until the cache is cleared again.</p>
 
@@ -296,27 +306,32 @@
 
 <p>First, let’s start with creating a virtual environment:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ virtualenv -p python3 virtualenv
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ virtualenv -p python3 virtualenv
+</code></p>
 
 <p>Next, let’s activate the virtual environment with:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ source virtualenv/bin/activate
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+$ source virtualenv/bin/activate
+</code></p>
 
 <p>Next, let’s install <code class="highlighter-rouge">django</code> and <code class="highlighter-rouge">selenium</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(virtualenv) $ pip install django selenium
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+(virtualenv) $ pip install django selenium
+</code></p>
 
 <p>Next, let’s start our app:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(virtualenv) $ django-admin.py startproject news .
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+(virtualenv) $ django-admin.py startproject news .
+</code></p>
 
 <p>The <code class="highlighter-rouge">.</code> will start the project in the current environment. Let’s take a look at the directory structure:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(virtualenv) $ tree -L 2
+<p><code class="highlighter-rouge">
+(virtualenv) $ tree -L 2
  $ tree -L 2
 .
 ├── manage.py
@@ -331,23 +346,24 @@
     ├── lib
     ├── pip-selfcheck.json
     └── selenium
-</code></pre></div></div>
+</code></p>
 
 <p>At this point, we can start the local server:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(virtualenv) $ python manage.py runserver
-Performing system checks...
+<p>```
+(virtualenv) $ python manage.py runserver
+Performing system checks…</p>
 
-System check identified no issues (0 silenced).
+<p>System check identified no issues (0 silenced).</p>
 
-You have 14 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
-Run 'python manage.py migrate' to apply them.
+<p>You have 14 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run ‘python manage.py migrate’ to apply them.</p>
 
-February 10, 2018 - 02:16:47
-Django version 2.0.2, using settings 'news.settings'
+<p>February 10, 2018 - 02:16:47
+Django version 2.0.2, using settings ‘news.settings’
 Starting development server at http://127.0.0.1:8000/
 Quit the server with CONTROL-C.
-</code></pre></div></div>
+```</p>
 
 <p>Now we should see the new Django 2 startup screen in our browser if we navigate to <a href="">http://127.0.0.1:8000/</a>:</p>
 
@@ -359,103 +375,108 @@ Quit the server with CONTROL-C.
 
 <p><strong>functional_tests.py</strong></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
-<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<p>```python
+from selenium import webdriver
+from django.conf import settings</p>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">'DJANGO_SETTINGS_MODULE'</span><span class="p">,</span> <span class="s">'news.settings'</span><span class="p">)</span>
+<p>import os
+os.environ.setdefault(‘DJANGO_SETTINGS_MODULE’, ‘news.settings’)</p>
 
-<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">LiveServerTestCase</span>
-<span class="kn">import</span> <span class="nn">unittest</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">factory</span>
+<p>from django.test import LiveServerTestCase
+import unittest
+import time
+import factory</p>
 
-<span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">get_user_model</span>
-<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<p>from django.contrib.auth import get_user_model
+from selenium import webdriver</p>
 
-<span class="n">User</span> <span class="o">=</span> <span class="n">get_user_model</span><span class="p">()</span>
+<p>User = get_user_model()</p>
 
-<span class="k">class</span> <span class="nc">UserFactory</span><span class="p">(</span><span class="n">factory</span><span class="o">.</span><span class="n">DjangoModelFactory</span><span class="p">):</span>
-    <span class="s">"""This class sets up a staff user that we can use for testing using factory"""</span>
+<p>class UserFactory(factory.DjangoModelFactory):
+    “"”This class sets up a staff user that we can use for testing using factory”””</p>
 
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>class Meta:
+    model = User
 
-    <span class="n">email</span> <span class="o">=</span> <span class="s">'brian@djangonews.com'</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="s">'brian1'</span>
-    <span class="n">password</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">PostGenerationMethodCall</span><span class="p">(</span><span class="s">'set_password'</span><span class="p">,</span> <span class="s">'qwer1234'</span><span class="p">)</span>
+email = 'brian@djangonews.com'
+username = 'brian1'
+password = factory.PostGenerationMethodCall('set_password', 'qwer1234')
 
-    <span class="n">is_superuser</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">is_staff</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">is_active</span> <span class="o">=</span> <span class="bp">True</span>
+is_superuser = True
+is_staff = True
+is_active = True
+</code></pre>
+</div>
 
-<span class="k">class</span> <span class="nc">NewsAppTest</span><span class="p">(</span><span class="n">LiveServerTestCase</span><span class="p">):</span>
-    <span class="s">"""Main Tests"""</span>
+<p>class NewsAppTest(LiveServerTestCase):
+    “"”Main Tests”””</p>
 
-    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="s">'http://127.0.0.1:8081'</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">UserFactory</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>def setUp(self):
+    self.browser = webdriver.Firefox()
+    self.domain = 'http://127.0.0.1:8081'
+    self.user = UserFactory.create()
 
-    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
-
-
-    <span class="k">def</span> <span class="nf">test_page_title_is_correct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'Django News'</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+def tearDown(self):
+    self.browser.quit()
 
 
-    <span class="k">def</span> <span class="nf">test_staff_can_create_and_publish_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">"""
-        Tests the core functionality of a staff member loging in, creating an article, then publishing that article
-        """</span>
+def test_page_title_is_correct(self):
+    self.browser.get(self.domain)
+    self.assertIn('Django News', self.browser.title)
 
-        <span class="c"># staff logs into admin page</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="o">+</span><span class="s">"/admin"</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_username'</span><span class="p">)</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'brian1'</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_password'</span><span class="p">)</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'qwer1234'</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_class_name</span><span class="p">(</span><span class="s">'submit-row'</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
 
-        <span class="c"># navigate to homepage</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+def test_staff_can_create_and_publish_article(self):
+    """
+    Tests the core functionality of a staff member loging in, creating an article, then publishing that article
+    """
 
-        <span class="c"># navigate to new article page and write sample article</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'new-article'</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-        <span class="n">html</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">page_source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'Write your Django News article here'</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_title'</span><span class="p">)</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'testing with selenium'</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_content'</span><span class="p">)</span><span class="o">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'about testing with selenium'</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'id_submit'</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-        <span class="n">html</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">page_source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'publish settings'</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+    # staff logs into admin page
+    self.browser.get(self.domain+"/admin")
+    self.browser.find_element_by_id('id_username').send_keys('brian1')
+    self.browser.find_element_by_id('id_password').send_keys('qwer1234')
+    self.browser.find_element_by_class_name('submit-row').click()
 
-        <span class="c"># go back to home page and check that the article is not displayed</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
-        <span class="n">html</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">page_source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="s">'testing with selenium'</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+    # navigate to homepage
+    self.browser.get(self.domain)
+    time.sleep(2)
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">back</span><span class="p">()</span>
+    # navigate to new article page and write sample article
+    self.browser.find_element_by_id('new-article').click()
+    html = str(self.browser.page_source.encode('utf-8'))
+    self.assertIn('Write your Django News article here', html)
+    self.browser.find_element_by_id('id_title').send_keys('testing with selenium')
+    self.browser.find_element_by_id('id_content').send_keys('about testing with selenium')
+    self.browser.find_element_by_id('id_submit').click()
+    html = str(self.browser.page_source.encode('utf-8'))
+    self.assertIn('publish settings', html)
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'toggle-publish'</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
-        <span class="n">html</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="o">.</span><span class="n">page_source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'utf-8'</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s">'testing with selenium'</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+    # go back to home page and check that the article is not displayed
+    self.browser.get(self.domain)
+    html = str(self.browser.page_source.encode('utf-8'))
+    self.assertNotIn('testing with selenium', html)
 
-    <span class="k">def</span> <span class="nf">test_public_page_reloads_when_article_is_published</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">browser2</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Firefox</span><span class="p">()</span>
-        <span class="n">browser2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
-        <span class="n">html</span> <span class="o">=</span> <span class="n">browser2</span><span class="o">.</span><span class="n">page_source</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test_staff_can_create_and_publish_article</span><span class="p">()</span>
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">browser2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
-        <span class="n">html_after_publish</span> <span class="o">=</span> <span class="n">browser2</span><span class="o">.</span><span class="n">page_source</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">html_after_publish</span><span class="p">)</span>
-        <span class="n">browser2</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+    self.browser.back()
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">warnings</span><span class="o">=</span><span class="s">"ignore"</span><span class="p">)</span>
-</code></pre></div></div>
+    self.browser.find_element_by_id('toggle-publish').click()
+    html = str(self.browser.page_source.encode('utf-8'))
+    self.assertIn('testing with selenium', html)
+
+def test_public_page_reloads_when_article_is_published(self):
+    browser2 = webdriver.Firefox()
+    browser2.get(self.domain)
+    html = browser2.page_source
+    self.test_staff_can_create_and_publish_article()
+    time.sleep(2)
+    browser2.get(self.domain)
+    html_after_publish = browser2.page_source
+    self.assertNotEqual(html, html_after_publish)
+    browser2.quit()
+</code></pre>
+</div>
+
+<p>if <strong>name</strong> == “<strong>main</strong>”:
+    unittest.main(warnings=”ignore”)
+```</p>
 
 <p>I used the package called <code class="highlighter-rouge">factory_boy</code> to setup create a user that I could use in my test. This project didn’t include a staff registration page, so to test regular staff functionality I used <code class="highlighter-rouge">factory</code> to create a dummy user that can login and perform tasks.</p>
 
