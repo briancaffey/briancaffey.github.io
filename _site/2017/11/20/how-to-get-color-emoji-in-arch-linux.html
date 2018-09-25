@@ -10,8 +10,8 @@
   <meta name="description" content="This is a short article about how to enable color emoji on Arch Linux. I have searched for a working solution for this a few times but never found something ...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/11/20/how-to-get-color-emoji-in-arch-linux.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/11/20/how-to-get-color-emoji-in-arch-linux.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -102,38 +102,39 @@
 
 <p>Next, run the script from the gist mentioned above:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># create folders if does not exist
+<p>```
+# create folders if does not exist
 mkdir -p ~/.fonts
-mkdir -p ~/.config/fontconfig/
+mkdir -p ~/.config/fontconfig/</p>
 
-# download noto color emoji font from https://www.google.com/get/noto/#emoji-zsye-color
-# extract NotoColorEmoji.ttf file into ~/.fonts/
+<h1 id="download-noto-color-emoji-font-from-httpswwwgooglecomgetnotoemoji-zsye-color">download noto color emoji font from https://www.google.com/get/noto/#emoji-zsye-color</h1>
+<p># extract NotoColorEmoji.ttf file into ~/.fonts/</p>
 
-# create font config file
-cat &lt;&lt; 'EOF' &gt; ~/.config/fontconfig/fonts.conf
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
-&lt;match&gt;
- &lt;test name="family"&gt;&lt;string&gt;sans-serif&lt;/string&gt;&lt;/test&gt;
- &lt;edit name="family" mode="prepend" binding="strong"&gt;
- &lt;string&gt;Noto Color Emoji&lt;/string&gt;
- &lt;/edit&gt;
- &lt;/match&gt;
-&lt;match&gt;
- &lt;test name="family"&gt;&lt;string&gt;serif&lt;/string&gt;&lt;/test&gt;
- &lt;edit name="family" mode="prepend" binding="strong"&gt;
- &lt;string&gt;Noto Color Emoji&lt;/string&gt;
- &lt;/edit&gt;
- &lt;/match&gt;
-&lt;match&gt;
- &lt;test name="family"&gt;&lt;string&gt;Apple Color Emoji&lt;/string&gt;&lt;/test&gt;
- &lt;edit name="family" mode="prepend" binding="strong"&gt;
- &lt;string&gt;Noto Color Emoji&lt;/string&gt;
- &lt;/edit&gt;
- &lt;/match&gt;
-EOF
+<h1 id="create-font-config-file">create font config file</h1>
+<p>cat « ‘EOF’ &gt; ~/.config/fontconfig/fonts.conf
+<?xml version="1.0" encoding="UTF-8"?>&lt;!DOCTYPE fontconfig SYSTEM “fonts.dtd”&gt;</p>
+<match>
+ <test name="family"><string>sans-serif</string></test>
+ <edit name="family" mode="prepend" binding="strong">
+ <string>Noto Color Emoji</string>
+ </edit>
+ </match>
+<match>
+ <test name="family"><string>serif</string></test>
+ <edit name="family" mode="prepend" binding="strong">
+ <string>Noto Color Emoji</string>
+ </edit>
+ </match>
+<match>
+ <test name="family"><string>Apple Color Emoji</string></test>
+ <edit name="family" mode="prepend" binding="strong">
+ <string>Noto Color Emoji</string>
+ </edit>
+ </match>
+<p>EOF
 # build font information cache files
 fc-cache -f -v 
-</code></pre></div></div>
+```</p>
 
 <p>As recommended in the comments of the gist, you will notice that numbers in most applications are represented with emoji numbers.</p>
 

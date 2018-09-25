@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2018/02/19/leaflet-maps-with-django.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2018/02/19/leaflet-maps-with-django.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -96,7 +96,7 @@
   <div class="post-content" itemprop="articleBody">
     <p><img src="/static/map_entire.png" alt="png" /></p>
 
-<h3 id="live-demo-on-digitalocean"><a href="http://159.89.235.193/books/">Live Demo on DigitalOcean</a></h3>
+<h3 id="live-demo-on-digitaloceanhttp15989235193books"><a href="http://159.89.235.193/books/">Live Demo on DigitalOcean</a></h3>
 
 <p>This post is a review of my first attempt at using geographical data in a Django project. I have been interested in working with map APIs, and I once looked into the Google Maps API. For this project I chose to use <a href="http://leafletjs.com/">Leaflet</a>:</p>
 
@@ -108,13 +108,14 @@
 
 <p>Then you will follow steps on the <a href="http://leafletjs.com/examples/quick-start/">quickstart guide</a> and replace <code class="highlighter-rouge">your.mapbox.access.token</code> with your Mapbox API key.</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="s1">'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}'</span><span class="p">,</span> <span class="p">{</span>
-    <span class="na">attribution</span><span class="p">:</span> <span class="s1">'Map data &amp;copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors, &lt;a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA&lt;/a&gt;, Imagery © &lt;a href="http://mapbox.com"&gt;Mapbox&lt;/a&gt;'</span><span class="p">,</span>
-    <span class="na">maxZoom</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
-    <span class="na">id</span><span class="p">:</span> <span class="s1">'mapbox.streets'</span><span class="p">,</span>
-    <span class="na">accessToken</span><span class="p">:</span> <span class="s1">'your.mapbox.access.token'</span>
-<span class="p">}).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">mymap</span><span class="p">);</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &amp;copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors, &lt;a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA&lt;/a&gt;, Imagery © &lt;a href="http://mapbox.com"&gt;Mapbox&lt;/a&gt;',
+    maxZoom: 18,
+    id: 'mapbox.streets',
+    accessToken: 'your.mapbox.access.token'
+}).addTo(mymap);
+</code></p>
 
 <p>I’ll come back to using Leaflet later on, and also show how to use Leaflet plugins that can be used to add functionality such as aggregating markers on a map.</p>
 
@@ -124,12 +125,13 @@
 
 <p>To store latitude and longitude data, we can use <code class="highlighter-rouge">DecimalField</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
-    <span class="n">lat</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-    <span class="n">lon</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
-    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+class Book(models.Model):
+    title = models.CharField(max_length=300)
+    lat = models.DecimalField(max_digits=9, decimal_places=6)
+    lon = models.DecimalField(max_digits=9, decimal_places=6)
+    [...]
+</code></p>
 
 <p>This allows us to store numbers to six decimal places. The difference between 0 and 0.00001 is about 3 feet, so this gives us plenty of accuracy for our geographical coordinate data.</p>
 
@@ -141,109 +143,117 @@
 
 <p>First, let’s look at the request with some added comments:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">all_books</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="s">"""
+<p>```python
+def all_books(request):
+    “””
     Main view for books. request.GET parameters are used to filter books
-    """</span>
-    <span class="n">books</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
-    <span class="n">form</span> <span class="o">=</span> <span class="n">QueryForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">)</span>
-    <span class="n">paramDict</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span>
+    “””
+    books = Book.objects.all()
+    form = QueryForm(request.GET or None)
+    paramDict = request.GET</p>
 
-    <span class="n">books</span> <span class="o">=</span> <span class="n">filter_books</span><span class="p">(</span><span class="n">books</span><span class="p">,</span> <span class="n">paramDict</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>books = filter_books(books, paramDict)
 
-    <span class="n">page_count</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">'pages'</span><span class="p">))</span>
+page_count = books.aggregate(Sum('pages'))
 
-    <span class="c"># This takes the first book query an reformats the data so it can be read</span>
-    <span class="c"># by the map script on the frontend. </span>
-    <span class="n">map_books</span> <span class="o">=</span> <span class="p">[{</span><span class="s">'loc'</span><span class="p">:[</span><span class="nb">float</span><span class="p">(</span><span class="n">book</span><span class="o">.</span><span class="n">lon</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">book</span><span class="o">.</span><span class="n">lat</span><span class="p">)],</span> 
-                  <span class="s">'title'</span><span class="p">:</span><span class="n">book</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
-                  <span class="s">'url'</span><span class="p">:</span><span class="n">book</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">()}</span> <span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">books</span><span class="p">]</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">'books'</span><span class="p">:</span><span class="n">books</span><span class="p">,</span>
-        <span class="c"># Here, we apply `json.dumps`, `escapejs` and `marksafe` for security </span>
-        <span class="c"># and proper formatting</span>
-        <span class="s">'map_books'</span><span class="p">:</span> <span class="n">mark_safe</span><span class="p">(</span><span class="n">escapejs</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">map_books</span><span class="p">))),</span>
-        <span class="s">'page_count'</span><span class="p">:</span><span class="n">page_count</span><span class="p">[</span><span class="s">'pages__sum'</span><span class="p">],</span> 
-        <span class="s">'form'</span><span class="p">:</span><span class="n">form</span><span class="p">}</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'books/books.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+# This takes the first book query an reformats the data so it can be read
+# by the map script on the frontend. 
+map_books = [{'loc':[float(book.lon), float(book.lat)], 
+              'title':book.title,
+              'url':book.get_absolute_url()} for book in books]
+context = {
+    'books':books,
+    # Here, we apply `json.dumps`, `escapejs` and `marksafe` for security 
+    # and proper formatting
+    'map_books': mark_safe(escapejs(json.dumps(map_books))),
+    'page_count':page_count['pages__sum'], 
+    'form':form}
+return render(request, 'books/books.html', context)
+</code></pre>
+</div>
 
-</code></pre></div></div>
+<p>```</p>
 
 <p>On the frontend, I passed the <code class="highlighter-rouge">map_books</code> variable to the template like this:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">map_books</span> <span class="o">=</span>  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+var map_books =  JSON.parse('')
+</code></p>
 
 <p>Now that I have <code class="highlighter-rouge">map_books</code> as a JavaScript object, I can simply pass it into the map function that populates data in the Leaflet map. Here’s the function that does that:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">populateMap</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">title</span><span class="p">,</span>	<span class="c1">//value searched</span>
-        <span class="nx">loc</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">loc</span><span class="p">,</span>		<span class="c1">//position found</span>
-        <span class="nx">url</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">url</span><span class="p">,</span>
-        <span class="nx">marker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Marker</span><span class="p">(</span><span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">latLng</span><span class="p">(</span><span class="nx">loc</span><span class="p">),</span> <span class="p">{</span><span class="na">title</span><span class="p">:</span> <span class="nx">title</span><span class="p">,</span> <span class="na">icon</span><span class="p">:</span> <span class="nx">bookIcon</span><span class="p">}</span> <span class="p">);</span><span class="c1">//se property searched</span>
-    <span class="nx">marker</span><span class="p">.</span><span class="nx">bindPopup</span><span class="p">(</span><span class="s1">'&lt;p&gt;&lt;a href="'</span><span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">'"&gt;'</span> <span class="o">+</span> <span class="nx">title</span> <span class="o">+</span> <span class="s1">'&lt;/a&gt;&lt;/p&gt;'</span><span class="p">);</span>
-    <span class="nx">markersLayer</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">marker</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+function populateMap(data){
+    for(i in data) {
+    var title = data[i].title,	//value searched
+        loc = data[i].loc,		//position found
+        url = data[i].url,
+        marker = new L.Marker(new L.latLng(loc), {title: title, icon: bookIcon} );//se property searched
+    marker.bindPopup('&lt;p&gt;&lt;a href="'+ url + '"&gt;' + title + '&lt;/a&gt;&lt;/p&gt;');
+    markersLayer.addLayer(marker);
+    }
+}
+</code></p>
 
 <p>This adds our markers to the map, and also passes link and title data to the popup box when a marker is clicked.</p>
 
 <p>Here’s the entire script that is used to populate map data:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script&gt;</span>        
+<p>```html
+<script></script></p>
 
-    <span class="kd">var</span> <span class="nx">mymap</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nb">Map</span><span class="p">(</span><span class="s1">'mapid'</span><span class="p">,</span> <span class="p">{</span><span class="na">zoom</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="na">center</span><span class="p">:</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">latLng</span><span class="p">([</span><span class="mi">40</span><span class="p">,</span><span class="mi">13</span><span class="p">])</span> <span class="p">});</span>	<span class="c1">//set center from first location</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>var mymap = new L.Map('mapid', {zoom: 9, center: new L.latLng([40,13]) });	//set center from first location
 
-    <span class="nx">L</span><span class="p">.</span><span class="nx">tileLayer</span><span class="p">(</span><span class="s1">'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}'</span><span class="p">,</span> <span class="p">{</span>
-        <span class="na">attribution</span><span class="p">:</span> <span class="s1">'Map data &amp;copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors, &lt;a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA&lt;/a&gt;, Imagery © &lt;a href="http://mapbox.com"&gt;Mapbox&lt;/a&gt;'</span><span class="p">,</span>
-        <span class="na">maxZoom</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
-        <span class="na">id</span><span class="p">:</span> <span class="s1">'mapbox.streets'</span><span class="p">,</span>
-        <span class="na">accessToken</span><span class="p">:</span> <span class="s1">'pk.eyJ1IjoiYnJpYW5jYWZmZXkiLCJhIjoiY2pkczJycjl5MmhqbTMzbzQ3bHJuaHA3aiJ9.cvRYYPNjQJVpFjdUcmIHzA'</span>
-    <span class="p">}).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">mymap</span><span class="p">);</span>
+L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &amp;copy; &lt;a href="http://openstreetmap.org"&gt;OpenStreetMap&lt;/a&gt; contributors, &lt;a href="http://creativecommons.org/licenses/by-sa/2.0/"&gt;CC-BY-SA&lt;/a&gt;, Imagery © &lt;a href="http://mapbox.com"&gt;Mapbox&lt;/a&gt;',
+    maxZoom: 18,
+    id: 'mapbox.streets',
+    accessToken: 'pk.eyJ1IjoiYnJpYW5jYWZmZXkiLCJhIjoiY2pkczJycjl5MmhqbTMzbzQ3bHJuaHA3aiJ9.cvRYYPNjQJVpFjdUcmIHzA'
+}).addTo(mymap);
 
-    <span class="kd">var</span> <span class="nx">bookIcon</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">icon</span><span class="p">({</span>
-        <span class="na">iconUrl</span><span class="p">:</span> <span class="s1">'/static/images/marker-icon.png'</span><span class="p">,</span>
-        <span class="na">iconSize</span><span class="p">:</span>     <span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="mi">35</span><span class="p">],</span> <span class="c1">// size of the icon</span>
-        <span class="na">iconAnchor</span><span class="p">:</span>   <span class="p">[</span><span class="mi">17</span><span class="p">,</span> <span class="mi">35</span><span class="p">],</span> <span class="c1">// point of the icon which will correspond to marker's location</span>
-        <span class="na">popupAnchor</span><span class="p">:</span>  <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">30</span><span class="p">]</span> <span class="c1">// point from which the popup should open relative to the iconAnchor</span>
-        <span class="p">});</span>
+var bookIcon = L.icon({
+    iconUrl: '/static/images/marker-icon.png',
+    iconSize:     [35, 35], // size of the icon
+    iconAnchor:   [17, 35], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -30] // point from which the popup should open relative to the iconAnchor
+    });
 
-    <span class="kd">var</span> <span class="nx">markersLayer</span> <span class="o">=</span> <span class="nx">L</span><span class="p">.</span><span class="nx">markerClusterGroup</span><span class="p">();</span>
+var markersLayer = L.markerClusterGroup();
 
-    <span class="nx">mymap</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">markersLayer</span><span class="p">);</span>
+mymap.addLayer(markersLayer);
 
-    <span class="kd">var</span> <span class="nx">controlSearch</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Control</span><span class="p">.</span><span class="nx">Search</span><span class="p">({</span>
-        <span class="na">position</span><span class="p">:</span><span class="s1">'topright'</span><span class="p">,</span>		
-        <span class="na">layer</span><span class="p">:</span> <span class="nx">markersLayer</span><span class="p">,</span>
-        <span class="na">initial</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="na">zoom</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
-        <span class="na">marker</span><span class="p">:</span> <span class="kc">false</span>
-    <span class="p">});</span>
+var controlSearch = new L.Control.Search({
+    position:'topright',		
+    layer: markersLayer,
+    initial: false,
+    zoom: 12,
+    marker: false
+});
 
-    <span class="nx">mymap</span><span class="p">.</span><span class="nx">addControl</span><span class="p">(</span> <span class="nx">controlSearch</span> <span class="p">);</span>
+mymap.addControl( controlSearch );
 
-    <span class="kd">function</span> <span class="nx">populateMap</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">title</span><span class="p">,</span>	<span class="c1">//value searched</span>
-            <span class="nx">loc</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">loc</span><span class="p">,</span>		<span class="c1">//position found</span>
-            <span class="nx">url</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">url</span><span class="p">,</span>
-            <span class="nx">marker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">Marker</span><span class="p">(</span><span class="k">new</span> <span class="nx">L</span><span class="p">.</span><span class="nx">latLng</span><span class="p">(</span><span class="nx">loc</span><span class="p">),</span> <span class="p">{</span><span class="na">title</span><span class="p">:</span> <span class="nx">title</span><span class="p">,</span> <span class="na">icon</span><span class="p">:</span> <span class="nx">bookIcon</span><span class="p">}</span> <span class="p">);</span><span class="c1">//se property searched</span>
-        <span class="nx">marker</span><span class="p">.</span><span class="nx">bindPopup</span><span class="p">(</span><span class="s1">'&lt;p&gt;&lt;a href="'</span><span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">'"&gt;'</span> <span class="o">+</span> <span class="nx">title</span> <span class="o">+</span> <span class="s1">'&lt;/a&gt;&lt;/p&gt;'</span><span class="p">);</span>
-        <span class="nx">markersLayer</span><span class="p">.</span><span class="nx">addLayer</span><span class="p">(</span><span class="nx">marker</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+function populateMap(data){
+    for(i in data) {
+    var title = data[i].title,	//value searched
+        loc = data[i].loc,		//position found
+        url = data[i].url,
+        marker = new L.Marker(new L.latLng(loc), {title: title, icon: bookIcon} );//se property searched
+    marker.bindPopup('&lt;p&gt;&lt;a href="'+ url + '"&gt;' + title + '&lt;/a&gt;&lt;/p&gt;');
+    markersLayer.addLayer(marker);
+    }
+}
 
-    <span class="c1">// use context variable instead of making AJAX call </span>
-    <span class="kd">var</span> <span class="nx">map_books</span> <span class="o">=</span>  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">'{{ map_books }}'</span><span class="p">)</span>
-    <span class="kd">var</span> <span class="nx">new_lat</span> <span class="o">=</span> <span class="nx">map_books</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="kd">var</span> <span class="nx">new_lon</span> <span class="o">=</span> <span class="nx">map_books</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    <span class="nx">mymap</span><span class="p">.</span><span class="nx">setView</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
-    <span class="nx">populateMap</span><span class="p">(</span><span class="nx">map_books</span><span class="p">)</span>
+// use context variable instead of making AJAX call 
+var map_books =  JSON.parse('{{ map_books }}')
+var new_lat = map_books[0].loc[0]
+var new_lon = map_books[0].loc[1]
+mymap.setView([0, 0], 2);
+populateMap(map_books)
+</code></pre>
+</div>
 
-<span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
+<p>&lt;/script&gt;
+```</p>
 
 <h2 id="login-redirect">Login Redirect</h2>
 
@@ -251,42 +261,45 @@
 
 <p>Here’s the login view:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">login_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-	<span class="n">next_redirect</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'next'</span><span class="p">)</span>
-	<span class="n">form</span> <span class="o">=</span> <span class="n">UserLoginForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">)</span>
-	<span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
-		<span class="n">next_redirect</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'next'</span><span class="p">)</span>
-		<span class="n">username</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'username'</span><span class="p">)</span>
-		<span class="n">password</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'password'</span><span class="p">)</span>
-		<span class="n">user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
-		<span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
-		<span class="k">print</span><span class="p">(</span><span class="n">next_redirect</span><span class="p">)</span>
-		<span class="k">if</span> <span class="n">next_redirect</span> <span class="o">!=</span> <span class="s">'None'</span><span class="p">:</span>
-			<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">next_redirect</span><span class="p">)</span>
-		<span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'books:all'</span><span class="p">)</span>
-	<span class="n">context</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'form'</span><span class="p">:</span><span class="n">form</span><span class="p">,</span> <span class="s">'next'</span><span class="p">:</span><span class="n">next_redirect</span> <span class="p">}</span>
-	<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'accounts/login_form.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+def login_view(request):
+	next_redirect = request.GET.get('next')
+	form = UserLoginForm(request.POST or None)
+	if form.is_valid():
+		next_redirect = request.POST.get('next')
+		username = form.cleaned_data.get('username')
+		password = form.cleaned_data.get('password')
+		user = authenticate(username=username, password=password)
+		login(request, user)
+		print(next_redirect)
+		if next_redirect != 'None':
+			return redirect(next_redirect)
+		return redirect('books:all')
+	context = { 'form':form, 'next':next_redirect }
+	return render(request, 'accounts/login_form.html', context)
+</code></p>
 
 <p>Notice that I pass <code class="highlighter-rouge">next</code> as a context variable. I use this in the login form here:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">"."</span><span class="nt">&gt;</span>
+<p>```html</p>
+<form method="POST" action=".">
 {% csrf_token %}
 {{ form | crispy }}
-<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">value=</span><span class="s">"{{ next }}"</span> <span class="na">name=</span><span class="s">"next"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"login-center"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"btn btn-success login-center"</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Login"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;br/&gt;</span>  or <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'accounts:register' %}"</span><span class="nt">&gt;</span>create an account<span class="nt">&lt;/a&gt;</span>
-<span class="nt">&lt;/form&gt;</span>
-</code></pre></div></div>
+<input type="hidden" value="{{ next }}" name="next" />
+<div class="login-center">
+    <input class="btn btn-success login-center" type="submit" value="Login" />
+</div>
+<br />  or <a href="{% url 'accounts:register' %}">create an account</a>
+</form>
+<p>```</p>
 
 <p>By passing this as a hidden value to the form, when a <code class="highlighter-rouge">POST</code> request is made, we are redirected to the value of <code class="highlighter-rouge">next</code> if it is not <code class="highlighter-rouge">None</code>, or if there is no redirect.</p>
 
 <p>When a <code class="highlighter-rouge">@login_required</code> decorator is used, and we want to access a url such as <code class="highlighter-rouge">/books/add</code>, we are redirected to a url that looks like this:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost:8000/accounts/login/?next=/books/new/
-</code></pre></div></div>
+<p><code class="highlighter-rouge">html
+http://localhost:8000/accounts/login/?next=/books/new/
+</code></p>
 
 <p>In this way we can pass the next parameter from the <code class="highlighter-rouge">GET</code> request to the <code class="highlighter-rouge">POST</code> request that is made when the login view is hit.</p>
 
@@ -294,33 +307,36 @@
 
 <p>For illustration purposes, I included an <code class="highlighter-rouge">Author</code> model. Since a book can have zero, one or many Authors, I used a many-to-many relationship to link authors to books. Here is how we do this in our Book model:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Book</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="p">[</span><span class="o">...</span><span class="n">other</span> <span class="n">fields</span><span class="o">...</span><span class="p">]</span>
-    <span class="n">authors</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="s">'authors.Author'</span><span class="p">)</span>  
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+class Book(models.Model):
+    [...other fields...]
+    authors = models.ManyToManyField('authors.Author')  
+</code></p>
 
 <p>This dot notation with <code class="highlighter-rouge">'authors.Author'</code> is important. Previously I would have just imported the <code class="highlighter-rouge">Author</code>model and then referenced that in the ManyToManyField. However, this can lead to circular import errors which are hard to debug unless you know what a circular import is.</p>
 
 <p>Now let’s look at how to find all <code class="highlighter-rouge">Books</code> by a certain author, as well as all <code class="highlighter-rouge">Authors</code> of a given book. Uing the Django shell, we can do the following:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">authors.models</span> <span class="kn">import</span> <span class="n">Author</span>
-<span class="kn">from</span> <span class="nn">books.models</span> <span class="kn">import</span> <span class="n">Book</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">Author</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-<span class="n">a</span><span class="o">.</span><span class="n">book_set</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-<span class="o">&lt;</span><span class="n">QuerySet</span> <span class="p">[{</span><span class="s">'id'</span><span class="p">:</span> <span class="mi">583</span><span class="p">,</span> <span class="s">'title'</span><span class="p">:</span> <span class="s">'None Or Other'</span><span class="p">,</span> <span class="s">'lat'</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">(</span><span class="s">'-118.035345'</span><span class="p">),</span> <span class="s">'lon'</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">(</span><span class="s">'34.139729'</span><span class="p">),</span> <span class="s">'pages'</span><span class="p">:</span> <span class="mi">1881</span><span class="p">,</span> <span class="s">'publish_date'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span> <span class="s">'website'</span><span class="p">:</span> <span class="s">'https://www.fleming-mitchell.com/'</span><span class="p">,</span> <span class="s">'synopsis'</span><span class="p">:</span> <span class="s">'Option ever large throw dinner worker ahead realize clearly congress as smile size spend expert chair well. Brother item win follow hope coach garden later arrive who if ago voice analysis simply reflect. Amount under data drug kind book fish still information president minute stage dog. Focus full green society parent door according my management sell arrive only send international tonight. Player character financial detail oil check bring pressure possible former. Learn politics compare position large loss exactly probably approach physical international machine as model. '</span><span class="p">,</span> <span class="s">'slug'</span><span class="p">:</span> <span class="s">'none-or-other'</span><span class="p">,</span> <span class="s">'status'</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span> <span class="p">{</span><span class="s">'id'</span><span class="p">:</span> <span class="mi">601</span><span class="p">,</span> <span class="s">'title'</span><span class="p">:</span> <span class="s">'Teacher Them Step'</span><span class="p">,</span> <span class="s">'lat'</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">(</span><span class="s">'-80.268357'</span><span class="p">),</span> <span class="s">'lon'</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">(</span><span class="s">'26.661763'</span><span class="p">),</span> <span class="s">'pages'</span><span class="p">:</span> <span class="mi">206</span><span class="p">,</span> <span class="s">'publish_date'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">27</span><span class="p">),</span> <span class="s">'website'</span><span class="p">:</span> <span class="s">'http://www.rodriguez.net/'</span><span class="p">,</span> <span class="s">'synopsis'</span><span class="p">:</span> <span class="s">'Drug fact behavior environment green try account where training brother building particular window even reach. Pressure lawyer dog world thought near institution we get force market can guy receive matter structure research foot of small. Professor production very this practice car wind wish relationship after follow professor news card concern media property have. According majority owner go mention reach store computer project kitchen group quality present several another time school and will. Before during central artist page only health region happen share traditional section well out human. Mention quite short race only education heavy book up recent official here spring oil buy which language information practice. Time mother better peace girl defense rock mr never feeling tax city stock bar tv others right conference skin. '</span><span class="p">,</span> <span class="s">'slug'</span><span class="p">:</span> <span class="s">'teacher-them-step'</span><span class="p">,</span> <span class="s">'status'</span><span class="p">:</span> <span class="bp">True</span><span class="p">}]</span><span class="o">&gt;</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+from authors.models import Author
+from books.models import Book
+a = Author.objects.all().first()
+a.book_set.values()
+&lt;QuerySet [{'id': 583, 'title': 'None Or Other', 'lat': Decimal('-118.035345'), 'lon': Decimal('34.139729'), 'pages': 1881, 'publish_date': datetime.date(2018, 3, 18), 'website': 'https://www.fleming-mitchell.com/', 'synopsis': 'Option ever large throw dinner worker ahead realize clearly congress as smile size spend expert chair well. Brother item win follow hope coach garden later arrive who if ago voice analysis simply reflect. Amount under data drug kind book fish still information president minute stage dog. Focus full green society parent door according my management sell arrive only send international tonight. Player character financial detail oil check bring pressure possible former. Learn politics compare position large loss exactly probably approach physical international machine as model. ', 'slug': 'none-or-other', 'status': True}, {'id': 601, 'title': 'Teacher Them Step', 'lat': Decimal('-80.268357'), 'lon': Decimal('26.661763'), 'pages': 206, 'publish_date': datetime.date(2018, 2, 27), 'website': 'http://www.rodriguez.net/', 'synopsis': 'Drug fact behavior environment green try account where training brother building particular window even reach. Pressure lawyer dog world thought near institution we get force market can guy receive matter structure research foot of small. Professor production very this practice car wind wish relationship after follow professor news card concern media property have. According majority owner go mention reach store computer project kitchen group quality present several another time school and will. Before during central artist page only health region happen share traditional section well out human. Mention quite short race only education heavy book up recent official here spring oil buy which language information practice. Time mother better peace girl defense rock mr never feeling tax city stock bar tv others right conference skin. ', 'slug': 'teacher-them-step', 'status': True}]&gt;
+</code></p>
 
 <p>This gave us two books by an author.</p>
 
 <p>Now, let’s look at how to find all authors of a given book. For this example, we can get authors directly in the template from a book object. This example come from the <code class="highlighter-rouge">book_detail</code> template:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;h3&gt;</span>
+<p>```html</p>
+<h3>
     Authors: 
         {% for author in book.authors.all %}
-            <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'authors:author_detail' id=author.id %}"</span><span class="nt">&gt;</span>{{ author.full_name }}<span class="nt">&lt;/a&gt;</span>
+            <a href="{% url 'authors:author_detail' id=author.id %}">{{ author.full_name }}</a>
         {% endfor %}
-<span class="nt">&lt;/h3&gt;</span>
-</code></pre></div></div>
+</h3>
+<p>```</p>
 
 <p>We could just as well access <code class="highlighter-rouge">books.authors.all</code> in the view and pass authors in a variable that we can iterate over in the template, but this keeps things simpler without much more code to write.</p>
 
@@ -330,94 +346,99 @@
 
 <p>Here’s a look at the form I put together for filtering data:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">QueryForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+<p>```python
+class QueryForm(forms.Form):</p>
 
-    <span class="n">publish_date_before</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span>
-        <span class="n">label</span><span class="o">=</span><span class="s">''</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="c"># initial = datetime.datetime.now(),</span>
-        <span class="n">widget</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span>
-            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
-                <span class="s">'class'</span><span class="p">:</span> <span class="s">'form-control'</span><span class="p">,</span>
-                <span class="s">'id'</span><span class="p">:</span><span class="s">'datepicker1'</span><span class="p">,</span> 
-                <span class="s">'placeholder'</span><span class="p">:</span><span class="s">'published before'</span>
-            <span class="p">}))</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>publish_date_before = forms.DateField(
+    label='',
+    required=False,
+    # initial = datetime.datetime.now(),
+    widget = forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'id':'datepicker1', 
+            'placeholder':'published before'
+        }))
 
-    <span class="n">publish_date_after</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span>
-        <span class="n">label</span><span class="o">=</span><span class="s">''</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="c"># initial = datetime.datetime.now(),</span>
-        <span class="n">widget</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span>
-            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
-                <span class="s">'class'</span><span class="p">:</span> <span class="s">'form-control'</span><span class="p">,</span>
-                <span class="s">'id'</span><span class="p">:</span><span class="s">'datepicker2'</span><span class="p">,</span> 
-                <span class="s">'placeholder'</span><span class="p">:</span><span class="s">'published after'</span>
-            <span class="p">}))</span>
+publish_date_after = forms.DateField(
+    label='',
+    required=False,
+    # initial = datetime.datetime.now(),
+    widget = forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'id':'datepicker2', 
+            'placeholder':'published after'
+        }))
 
-    <span class="n">keywords</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
-        <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s">''</span><span class="p">,</span>
-        <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span>
-            
-            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
-                <span class="s">'class'</span><span class="p">:</span><span class="s">'form-control'</span><span class="p">,</span>
-                <span class="s">'placeholder'</span><span class="p">:</span><span class="s">'space-separated words matching title, synopsis, website or tags'</span>
-            <span class="p">}))</span>
-</code></pre></div></div>
+keywords = forms.CharField(
+    required=False,
+    label='',
+    widget=forms.TextInput(
+        
+        attrs={
+            'class':'form-control',
+            'placeholder':'space-separated words matching title, synopsis, website or tags'
+        })) ```
+</code></pre>
+</div>
 
 <p>Here we are using three fields to filter data, a <code class="highlighter-rouge">published_before</code> date, a <code class="highlighter-rouge">published_after</code> date and a <code class="highlighter-rouge">keywords</code> field.</p>
 
 <p>Filtering this data can really clog up code in <code class="highlighter-rouge">views.py</code>, and I know I was going to need this same code again for filtering data for CSV and XLS file downloads (more on this in a minute), so I decided to wrote a utility function that takes a <code class="highlighter-rouge">Book</code> queryset and parameter dictionary (<code class="highlighter-rouge">request.GET</code>), and returns a filtered <code class="highlighter-rouge">Book</code> queryset. Here’s what that function looks like:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
-<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Book</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
+<p>```python
+from django.db.models import Q
+from functools import reduce
+from ..models import Book
+import datetime</p>
 
-<span class="k">def</span> <span class="nf">filter_books</span><span class="p">(</span><span class="n">books</span><span class="p">,</span> <span class="n">paramDict</span><span class="p">):</span>
-    <span class="c"># paramDict = request.GET</span>
-    <span class="n">params</span> <span class="o">=</span> <span class="n">paramDict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<p>def filter_books(books, paramDict):
+    # paramDict = request.GET
+    params = paramDict.keys()</p>
 
-    <span class="c"># data filtering</span>
-    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span><span class="o">!=</span><span class="s">''</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">paramDict</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-        <span class="k">if</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'publish_date_after'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">''</span><span class="p">:</span>
-            <span class="n">after_date</span> <span class="o">=</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'publish_date_after'</span><span class="p">]</span>
-            <span class="n">_after_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">after_date</span><span class="p">,</span> <span class="s">'</span><span class="si">%</span><span class="s">m/</span><span class="si">%</span><span class="s">d/</span><span class="si">%</span><span class="s">Y'</span><span class="p">)</span>
-        
-            <span class="n">books</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">publish_date__gte</span><span class="o">=</span><span class="n">_after_date</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code># data filtering
+if any(x!='' for x in paramDict.values()):
+    if paramDict['publish_date_after'] != '':
+        after_date = paramDict['publish_date_after']
+        _after_date = datetime.datetime.strptime(after_date, '%m/%d/%Y')
+    
+        books = books.filter(publish_date__gte=_after_date)
 
-        <span class="k">if</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'publish_date_before'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">''</span><span class="p">:</span>
-            <span class="n">before_date</span> <span class="o">=</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'publish_date_before'</span><span class="p">]</span>
-            <span class="n">_before_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">before_date</span><span class="p">,</span> <span class="s">'</span><span class="si">%</span><span class="s">m/</span><span class="si">%</span><span class="s">d/</span><span class="si">%</span><span class="s">Y'</span><span class="p">)</span>
-            <span class="n">books</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">publish_date__lte</span><span class="o">=</span><span class="n">_before_date</span><span class="p">)</span>
+    if paramDict['publish_date_before'] != '':
+        before_date = paramDict['publish_date_before']
+        _before_date = datetime.datetime.strptime(before_date, '%m/%d/%Y')
+        books = books.filter(publish_date__lte=_before_date)
 
-        <span class="c"># filters records that contain any of the following keywords</span>
-        <span class="k">if</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'keywords'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">''</span><span class="p">:</span>
-            <span class="n">kws</span> <span class="o">=</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'keywords'</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-            <span class="n">q_lookups</span> <span class="o">=</span> <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="n">title__icontains</span><span class="o">=</span><span class="n">kw</span><span class="p">)</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">]</span> <span class="o">+</span> \
-                        <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="n">synopsis__icontains</span><span class="o">=</span><span class="n">kw</span><span class="p">)</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">]</span> <span class="o">+</span> \
-                        <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="n">website__icontains</span><span class="o">=</span><span class="n">kw</span><span class="p">)</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">]</span>
-            <span class="n">filters</span> <span class="o">=</span> <span class="n">Q</span><span class="p">()</span>
-            <span class="n">filters</span> <span class="o">|=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">|</span> <span class="n">y</span><span class="p">,</span> <span class="n">q_lookups</span><span class="p">)</span>
-            <span class="n">books</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
+    # filters records that contain any of the following keywords
+    if paramDict['keywords'] != '':
+        kws = paramDict['keywords'].split()
+        q_lookups = [Q(title__icontains=kw) for kw in kws] + \
+                    [Q(synopsis__icontains=kw) for kw in kws] + \
+                    [Q(website__icontains=kw) for kw in kws]
+        filters = Q()
+        filters |= reduce(lambda x, y: x | y, q_lookups)
+        books = books.filter(filters)
 
-    <span class="k">return</span> <span class="n">books</span>
-</code></pre></div></div>
+return books ```
+</code></pre>
+</div>
 
 <p>This makes things much more simple in our views. Here’s the code in the main <code class="highlighter-rouge">books</code> view that uses this filter function, truncated for simplicity:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">all_books</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">books</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
-    <span class="n">form</span> <span class="o">=</span> <span class="n">QueryForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">)</span>
-    <span class="n">paramDict</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span>
-    <span class="n">books</span> <span class="o">=</span> <span class="n">filter_books</span><span class="p">(</span><span class="n">books</span><span class="p">,</span> <span class="n">paramDict</span><span class="p">)</span>
-    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">'books'</span><span class="p">:</span><span class="n">books</span><span class="p">,</span>
-        <span class="s">'form'</span><span class="p">:</span><span class="n">form</span><span class="p">,</span> 
-        <span class="p">[</span><span class="o">...</span><span class="p">],}</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'books/books.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+def all_books(request):
+    books = Book.objects.all()
+    form = QueryForm(request.GET or None)
+    paramDict = request.GET
+    books = filter_books(books, paramDict)
+    [...]
+    context = {
+        'books':books,
+        'form':form, 
+        [...],}
+    return render(request, 'books/books.html', context)
+</code></p>
 
 <h2 id="exporting-data-as-csv-or-xls">Exporting data as CSV or XLS</h2>
 
@@ -425,66 +446,70 @@
 
 <p>With the filter data function, I was able to keep things DRY (Don’t Repeart Yourself). This task taught me about a few aspects of HTML5 and forms that I wasn’t aware of. First, let’s take a look at the CSV export function that I learned about throught <a href="https://simpleisbetterthancomplex.com/tutorial/2016/07/29/how-to-export-to-excel.html">this blog post</a>, from a great Django blog called <a href="https://simpleisbetterthancomplex.com/tutorial/2016/07/29/how-to-export-to-excel.html">Simple is Better than Complex</a> by <a href="https://github.com/vitorfs">Vitor Freitas</a>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">export_filtered_books_csv</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">content_type</span><span class="o">=</span><span class="s">'text/csv'</span><span class="p">)</span>
-    <span class="n">response</span><span class="p">[</span><span class="s">'Content-Disposition'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'attachment; filename="books.csv"'</span>
+<p>```python
+def export_filtered_books_csv(request):
+    response = HttpResponse(content_type=’text/csv’)
+    response[‘Content-Disposition’] = ‘attachment; filename=”books.csv”’</p>
 
-    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s">'Title'</span><span class="p">,</span> <span class="s">'Synopsis'</span><span class="p">,</span> <span class="s">'Pages'</span><span class="p">])</span>
-    <span class="n">books</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
-    <span class="n">paramDict</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span>
-    <span class="n">books</span> <span class="o">=</span> <span class="n">filter_books</span><span class="p">(</span><span class="n">books</span><span class="p">,</span> <span class="n">paramDict</span><span class="p">)</span>
-    <span class="n">books</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span>
-        <span class="s">'title'</span><span class="p">,</span>
-        <span class="s">'synopsis'</span><span class="p">,</span> 
-        <span class="s">'pages'</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>writer = csv.writer(response)
+writer.writerow(['Title', 'Synopsis', 'Pages'])
+books = Book.objects.all()
+paramDict = request.GET
+books = filter_books(books, paramDict)
+books = books.values_list(
+    'title',
+    'synopsis', 
+    'pages')
 
-    <span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">books</span><span class="p">:</span>
-        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+for book in books:
+    writer.writerow(book)
 
-    <span class="k">return</span> <span class="n">response</span>
-</code></pre></div></div>
+return response ```
+</code></pre>
+</div>
 
 <p>I wanted to put this button in the filter form on the main <code class="highlighter-rouge">books</code> page, but I need to place the button outside of the form tag. To get around this, here is the HTML I used:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{% url 'books:csv' %}"</span><span class="nt">&gt;</span>
+<p>```html</p>
+<form action="{% url 'books:csv' %}">
 
-    <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span> <span class="na">data-toggle=</span><span class="s">"collapse"</span> <span class="na">href=</span><span class="s">"#collapseExample"</span> <span class="na">aria-expanded=</span><span class="s">"false"</span> <span class="na">aria-controls=</span><span class="s">"collapseExample"</span><span class="nt">&gt;</span>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
         Filter Books
-    <span class="nt">&lt;/a&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">class=</span><span class="s">"btn btn-info"</span> <span class="na">form=</span><span class="s">"id_query_form"</span> <span class="na">formaction=</span><span class="s">"{% url 'books:csv' %}"</span> <span class="na">value=</span><span class="s">"Export CSV"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span> <span class="na">form=</span><span class="s">"id_query_form"</span> <span class="na">formaction=</span><span class="s">"{% url 'books:xls' %}"</span> <span class="na">value=</span><span class="s">"Export XLS"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;/form&gt;</span>
+    </a>
+    <input type="submit" class="btn btn-info" form="id_query_form" formaction="{% url 'books:csv' %}" value="Export CSV" />
+    <input type="submit" class="btn btn-default" form="id_query_form" formaction="{% url 'books:xls' %}" value="Export XLS" />
+</form>
 
-<span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"get"</span> <span class="na">action=</span><span class="s">"."</span> <span class="na">id=</span><span class="s">"id_query_form"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;p&gt;</span>
+<form method="get" action="." id="id_query_form">
+    <p>
         {{ form.keywords }}
-    <span class="nt">&lt;/p&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-md-6"</span><span class="nt">&gt;</span>
+    </p>
+    <div class="row">
+        <div class="col-md-6">
             {{ form.publish_date_before }}
-        <span class="nt">&lt;/div&gt;</span>
-        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-md-6"</span><span class="nt">&gt;</span>
+        </div>
+        <div class="col-md-6">
             {{ form.publish_date_after }}
-        <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
+        </div>
+    </div>
         
-    <span class="nt">&lt;p&gt;&lt;/p&gt;</span>
-    <span class="nt">&lt;p&gt;</span>
-        <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">"btn btn-success"</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">/&gt;</span>
-        <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"reset"</span> <span class="na">class=</span><span class="s">"btn btn-info"</span> <span class="na">value=</span><span class="s">"Reset filters"</span><span class="nt">&gt;</span>Reset filters<span class="nt">&lt;/button&gt;</span>
-        <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"reset"</span> <span class="na">class=</span><span class="s">"btn btn-warning"</span> <span class="na">id=</span><span class="s">"id_clear_filters"</span> <span class="na">onclick=</span><span class="s">"return resetForm(this.form);"</span><span class="nt">&gt;</span>Clear Filters<span class="nt">&lt;/button&gt;</span>
-    <span class="nt">&lt;/p&gt;</span>
+    <p></p>
+    <p>
+        <input class="btn btn-success" type="submit" />
+        <button type="reset" class="btn btn-info" value="Reset filters">Reset filters</button>
+        <button type="reset" class="btn btn-warning" id="id_clear_filters" onclick="return resetForm(this.form);">Clear Filters</button>
+    </p>
 
-<span class="nt">&lt;/form&gt;</span>
-</code></pre></div></div>
+</form>
+<p>```</p>
 
 <p>There are two forms here, but the first form has an <code class="highlighter-rouge">input</code> of <code class="highlighter-rouge">type=submit</code> that references another form with <code class="highlighter-rouge">form="id_query_form"</code>, and this button’s action is the url for the <code class="highlighter-rouge">export_filtered_books_csv</code> function shown above.</p>
 
 <p>For the filter function, I make a <code class="highlighter-rouge">utils</code> folder in the app I am working with, so the directory structure looks like this (for the <code class="highlighter-rouge">books</code> app):</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">.
-</span><span class="go">├── admin.py
+<p><code class="highlighter-rouge">terminal
+.
+├── admin.py
 ├── apps.py
 ├── forms.py
 ├── __init__.py
@@ -502,21 +527,22 @@
 │   ├── __init__.py
 │   └── nearby.py
 └── views.py
-</span></code></pre></div></div>
+</code></p>
 
 <p>I initially had a litte bit of confusion on how to write a simple search query. I wanted a user to be able to enter terms that would return a query set where the items in the query set contained at least on of the terms in at least on of a few different fields (<code class="highlighter-rouge">title</code>, <code class="highlighter-rouge">synopsis</code>, <code class="highlighter-rouge">website</code>).</p>
 
 <p>To make this filter, I found a nice idiomatic pattern:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'keywords'</span><span class="p">]</span> <span class="o">!=</span> <span class="s">''</span><span class="p">:</span>
-    <span class="n">kws</span> <span class="o">=</span> <span class="n">paramDict</span><span class="p">[</span><span class="s">'keywords'</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-    <span class="n">q_lookups</span> <span class="o">=</span> <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="n">title__icontains</span><span class="o">=</span><span class="n">kw</span><span class="p">)</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">]</span> <span class="o">+</span> \
-                <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="n">synopsis__icontains</span><span class="o">=</span><span class="n">kw</span><span class="p">)</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">]</span> <span class="o">+</span> \
-                <span class="p">[</span><span class="n">Q</span><span class="p">(</span><span class="n">website__icontains</span><span class="o">=</span><span class="n">kw</span><span class="p">)</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">kws</span><span class="p">]</span>
-    <span class="n">filters</span> <span class="o">=</span> <span class="n">Q</span><span class="p">()</span>
-    <span class="n">filters</span> <span class="o">|=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">|</span> <span class="n">y</span><span class="p">,</span> <span class="n">q_lookups</span><span class="p">)</span>
-    <span class="n">books</span> <span class="o">=</span> <span class="n">books</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+if paramDict['keywords'] != '':
+    kws = paramDict['keywords'].split()
+    q_lookups = [Q(title__icontains=kw) for kw in kws] + \
+                [Q(synopsis__icontains=kw) for kw in kws] + \
+                [Q(website__icontains=kw) for kw in kws]
+    filters = Q()
+    filters |= reduce(lambda x, y: x | y, q_lookups)
+    books = books.filter(filters)
+</code></p>
 
 <p>This is good for a small database, but could end up having to do lots of operations, especially if I decided that I want to add more fields to be searched, such as category or tags.</p>
 
@@ -534,26 +560,28 @@
 
 <p>Here’s the code I used for calculating distance (using the Halversine formula):</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">radians</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">sqrt</span>
+<p>```python
+from math import radians, cos, sin, asin, sqrt</p>
 
-<span class="k">def</span> <span class="nf">distance</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
-    <span class="s">"""
+<p>def distance(origin, destination):
+    “””
     Calculate the great circle distance between two points 
     on the earth (specified in decimal degrees)
-    """</span>
+    “””</p>
 
-    <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span> <span class="o">=</span> <span class="n">origin</span>
-    <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span> <span class="o">=</span> <span class="n">destination</span>
-    <span class="c"># convert decimal degrees to radians </span>
-    <span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">radians</span><span class="p">,</span> <span class="p">[</span><span class="n">lon1</span><span class="p">,</span> <span class="n">lat1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">,</span> <span class="n">lat2</span><span class="p">])</span>
-    <span class="c"># haversine formula </span>
-    <span class="n">dlon</span> <span class="o">=</span> <span class="n">lon2</span> <span class="o">-</span> <span class="n">lon1</span> 
-    <span class="n">dlat</span> <span class="o">=</span> <span class="n">lat2</span> <span class="o">-</span> <span class="n">lat1</span> 
-    <span class="n">a</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">dlat</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span class="n">lat2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">dlon</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">asin</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> 
-    <span class="n">r</span> <span class="o">=</span> <span class="mi">3956</span> <span class="c"># miles</span>
-    <span class="k">return</span> <span class="n">c</span> <span class="o">*</span> <span class="n">r</span>
-</code></pre></div></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>lon1, lat1 = origin
+lon2, lat2 = destination
+# convert decimal degrees to radians 
+lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+# haversine formula 
+dlon = lon2 - lon1 
+dlat = lat2 - lat1 
+a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+c = 2 * asin(sqrt(a)) 
+r = 3956 # miles
+return c * r ```
+</code></pre>
+</div>
 
 <p>This formula assumes that the earth is a perfect sphere. Another approach would be to use the the Vincety Formula:</p>
 
@@ -563,40 +591,43 @@
 
 <p>This distance is packaged in <code class="highlighter-rouge">geopy</code> and can be calculated easily:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">geopy.distance</span>
+<p>```python
+import geopy.distance</p>
 
-<span class="n">coords_1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">52.2296756</span><span class="p">,</span> <span class="mf">21.0122287</span><span class="p">)</span>
-<span class="n">coords_2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">52.406374</span><span class="p">,</span> <span class="mf">16.9251681</span><span class="p">)</span>
+<p>coords_1 = (52.2296756, 21.0122287)
+coords_2 = (52.406374, 16.9251681)</p>
 
-<span class="k">print</span> <span class="n">geopy</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">vincenty</span><span class="p">(</span><span class="n">coords_1</span><span class="p">,</span> <span class="n">coords_2</span><span class="p">)</span><span class="o">.</span><span class="n">km</span>
-</code></pre></div></div>
+<p>print geopy.distance.vincenty(coords_1, coords_2).km
+```</p>
 
 <p>Here’s a look at the function I wrote for the <code class="highlighter-rouge">book_detail</code> view. I have commented out parts that aren’t related to finding nearby books:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">book_detail</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">slug</span><span class="p">):</span>
+<p>```python
+def book_detail(request, id, slug):</p>
 
-    <span class="n">book</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="n">slug</span><span class="p">)</span>
-    <span class="n">b_coords</span> <span class="o">=</span> <span class="p">(</span><span class="n">book</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">book</span><span class="o">.</span><span class="n">lon</span><span class="p">)</span>
-    <span class="n">all_books</span> <span class="o">=</span> <span class="n">Book</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
-    <span class="n">coords</span> <span class="o">=</span> <span class="p">[((</span><span class="n">b</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">lon</span><span class="p">),</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">all_books</span><span class="p">]</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>book = Book.objects.get(id=id, slug=slug)
+b_coords = (book.lat, book.lon)
+all_books = Book.objects.all()
+coords = [((b.lat, b.lon),b) for b in all_books]
 
-    <span class="n">distance_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">b_coords</span><span class="p">:</span>
-            <span class="n">distance_dict</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">=</span><span class="p">(</span><span class="n">distance</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">b_coords</span><span class="p">),</span><span class="n">c</span><span class="p">)</span>
+distance_dict = {}
+for c in coords:
+    if c[0] != b_coords:
+        distance_dict[c[0]]=(distance(c[0],b_coords),c)
 
-    <span class="n">sorted_nearby</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">distance_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])[:</span><span class="mi">5</span><span class="p">]</span>
+sorted_nearby = sorted(distance_dict.items(), key=lambda x: x[1][0])[:5]
 
-    <span class="c"># map_book = [{'loc':[float(book.lon), float(book.lat)], </span>
-    <span class="c">#              'title':book.title, </span>
-    <span class="c">#              'url':book.get_absolute_url()}]</span>
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">'book'</span><span class="p">:</span><span class="n">book</span><span class="p">,</span> 
-        <span class="c"># 'map_book':mark_safe(escapejs(json.dumps(map_book))), </span>
-        <span class="s">'sorted_nearby'</span><span class="p">:</span><span class="n">sorted_nearby</span><span class="p">,</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'books/book_detail.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</code></pre></div></div>
+# map_book = [{'loc':[float(book.lon), float(book.lat)], 
+#              'title':book.title, 
+#              'url':book.get_absolute_url()}]
+context = {
+    'book':book, 
+    # 'map_book':mark_safe(escapejs(json.dumps(map_book))), 
+    'sorted_nearby':sorted_nearby,
+}
+return render(request, 'books/book_detail.html', context) ```
+</code></pre>
+</div>
 
 <p>To find the 5 closest books I arrived at a solution that seems fairly convoluted and should be refactored, but works! I start with a queryset of all books, then use list comprehension to make a list of tuples containing <code class="highlighter-rouge">((&lt; longitutde &gt;, &lt; latitude &gt;), &lt; Book Object &gt;)</code>. Then I loop over this list and create a dictionary where the keys are <code class="highlighter-rouge">(&lt; longitutde &gt;, &lt; latitude &gt;)</code> and the values are tuples of the form: <code class="highlighter-rouge">(&lt; distance in miles &gt;, &lt; Book Object &gt;)</code>. Finally, I use <code class="highlighter-rouge">sorted</code> on <code class="highlighter-rouge">dictionary_dict.items()</code> where the key is <code class="highlighter-rouge">lambda x: x[1][0]</code>. The <code class="highlighter-rouge">[1]</code> accesses the <code class="highlighter-rouge">value</code> of the <code class="highlighter-rouge">(&lt; key &gt;, &lt; value&gt;)</code> tuple returned by <code class="highlighter-rouge">items()</code>, and the <code class="highlighter-rouge">[0]</code> access the first item, which is the <code class="highlighter-rouge">distance</code> value we calculated. Finally, I take the first <code class="highlighter-rouge">[:5]</code> items of this sorted list.</p>
 
@@ -608,31 +639,33 @@
 
 <p>Setting up Travis CI is very simple. We need to grant Travis CI (.org) access to our GitHub account, enable Travis CI on the repository we are working with, and then add a <code class="highlighter-rouge">.travis.yml</code> file to the top level of the project directory. Here’s the <code class="highlighter-rouge">.travis.yml</code> file I have for this project:</p>
 
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">language</span><span class="pi">:</span> <span class="s">python</span>
+<p>```yml
+language: python</p>
 
-<span class="na">python</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s2">"</span><span class="s">3.5"</span>
+<p>python:
+    - “3.5”</p>
 
-<span class="na">services</span><span class="pi">:</span> 
-    <span class="pi">-</span> <span class="s">postgresql</span>
+<p>services: 
+    - postgresql</p>
 
-<span class="na">env</span><span class="pi">:</span>
-    <span class="s">-DJANGO=2.0 DB=postgresql</span>
+<p>env:
+    -DJANGO=2.0 DB=postgresql</p>
 
-<span class="na">install</span><span class="pi">:</span> 
-    <span class="pi">-</span> <span class="s">pip install -r requirements.txt</span>
+<p>install: 
+    - pip install -r requirements.txt</p>
 
-<span class="na">before_script</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">psql -c "CREATE USER u_brian WITH PASSWORD 'password'; ALTER USER u_brian CREATEDB;" -U postgres</span>
+<p>before_script:
+    - psql -c “CREATE USER u_brian WITH PASSWORD ‘password’; ALTER USER u_brian CREATEDB;” -U postgres</p>
 
-<span class="na">script</span><span class="pi">:</span> 
-    <span class="pi">-</span> <span class="s">python manage.py test books/</span>
-</code></pre></div></div>
+<p>script: 
+    - python manage.py test books/
+```</p>
 
 <p>We can generate a Travis CI badge that shows the status of the current Github deploy with the following code:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[![Build Status](https://travis-ci.org/briancaffey/django-leaflet-demo.svg?branch=master)](https://travis-ci.org/briancaffey/django-leaflet-demo)
-</code></pre></div></div>
+<p><code class="highlighter-rouge">html
+[![Build Status](https://travis-ci.org/briancaffey/django-leaflet-demo.svg?branch=master)](https://travis-ci.org/briancaffey/django-leaflet-demo)
+</code></p>
 
 <p><a href="https://travis-ci.org/briancaffey/django-leaflet-demo"><img src="https://travis-ci.org/briancaffey/django-leaflet-demo.svg?branch=master" alt="Build Status" /></a></p>
 
@@ -644,74 +677,78 @@
 
 <p><em>/home/brian/bin/gunicorn_start</em></p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<p>```bash
+#!/bin/bash</p>
 
-<span class="nv">NAME</span><span class="o">=</span><span class="s2">"django-leaflet-demo"</span>
-<span class="nv">DIR</span><span class="o">=</span>/home/brian/django-leaflet-demo
-<span class="nv">USER</span><span class="o">=</span>brian
-<span class="nv">GROUP</span><span class="o">=</span>brian
-<span class="nv">WORKERS</span><span class="o">=</span>3
-<span class="nv">BIND</span><span class="o">=</span>unix:/home/brian/run/gunicorn.sock
-<span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>djangoapp.settings
-<span class="nv">DJANGO_WSGI_MODULE</span><span class="o">=</span>djangoapp.wsgi
-<span class="nv">LOG_LEVEL</span><span class="o">=</span>error
-<span class="nb">cd</span> <span class="nv">$DIR</span>
-<span class="nb">source</span> ../bin/activate
+<p>NAME=”django-leaflet-demo”
+DIR=/home/brian/django-leaflet-demo
+USER=brian
+GROUP=brian
+WORKERS=3
+BIND=unix:/home/brian/run/gunicorn.sock
+DJANGO_SETTINGS_MODULE=djangoapp.settings
+DJANGO_WSGI_MODULE=djangoapp.wsgi
+LOG_LEVEL=error
+cd $DIR
+source ../bin/activate</p>
 
-<span class="nb">export </span><span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span><span class="nv">$DJANGO_SETTINGS_MODULE</span>
-<span class="nb">export </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$DIR</span>:<span class="nv">$PYTHONPATH</span>
+<p>export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DIR:$PYTHONPATH</p>
 
-<span class="nb">exec</span> ../bin/gunicorn <span class="k">${</span><span class="nv">DJANGO_WSGI_MODULE</span><span class="k">}</span>:application <span class="se">\</span>
-  <span class="nt">--name</span><span class="o">=</span><span class="nv">$NAME</span> <span class="se">\</span>
-  <span class="nt">--workers</span><span class="o">=</span><span class="nv">$WORKERS</span> <span class="se">\</span>
-  <span class="nt">--user</span><span class="o">=</span><span class="nv">$USER</span> <span class="se">\</span>
-  <span class="nt">--group</span><span class="o">=</span><span class="nv">$GROUP</span> <span class="se">\</span>
-  <span class="nt">--bind</span><span class="o">=</span><span class="nv">$BIND</span> <span class="se">\</span>
-  <span class="nt">--log-level</span><span class="o">=</span><span class="nv">$LOG_LEVEL</span> <span class="se">\</span>
-  <span class="nt">--log-file</span><span class="o">=</span>-
-</code></pre></div></div>
+<p>exec ../bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+  –name=$NAME \
+  –workers=$WORKERS \
+  –user=$USER \
+  –group=$GROUP \
+  –bind=$BIND \
+  –log-level=$LOG_LEVEL \
+  –log-file=-
+```</p>
 
 <p><em>/etc/nginx/sites-available</em></p>
 
-<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">upstream app_server {</span>
-    <span class="s">server unix:/home/brian/run/gunicorn.sock fail_timeout=0;</span>
-<span class="err">}</span>
+<p>```yml
+upstream app_server {
+    server unix:/home/brian/run/gunicorn.sock fail_timeout=0;
+}</p>
 
-<span class="s">server {</span>
-    <span class="s">listen 80;</span>
-    <span class="s">server_name 159.89.235.193</span>
-    <span class="s">keepalive_timeout 5;</span>
-    <span class="s">client_max_body_size 4G;</span>
-    <span class="s">access_log /home/brian/logs/nginx-access.log;</span>
-    <span class="s">error_log /home/brian/logs/nginx-error.log;</span>
-    
-    <span class="s">location /static/ {</span>
-        <span class="s">alias /home/brian/static/;</span>
-<span class="err">}</span>
+<p>server {
+    listen 80;
+    server_name 159.89.235.193
+    keepalive_timeout 5;
+    client_max_body_size 4G;
+    access_log /home/brian/logs/nginx-access.log;
+    error_log /home/brian/logs/nginx-error.log;</p>
 
-<span class="s">location / {</span>
-    <span class="s">try_files $uri @proxy_to_app;</span>
-<span class="err">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>location /static/ {
+    alias /home/brian/static/; }
+</code></pre>
+</div>
 
-<span class="s">location @proxy_to_app {</span>
-    <span class="s">proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span>
-    <span class="s">proxy_set_header Host $http_host;</span>
-    <span class="s">proxy_redirect off;</span>
-    <span class="s">proxy_pass http://app_server;</span>
-    <span class="s">}</span>
-<span class="err">}</span>
-</code></pre></div></div>
+<p>location / {
+    try_files $uri @proxy_to_app;
+}</p>
+
+<p>location @proxy_to_app {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://app_server;
+    }
+}
+```</p>
 
 <p>Finally, here is the Supervisor configuration file that runs the gunicorn server:</p>
 
-<div class="language-cs highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[program:django-leaflet-demo]</span>
-<span class="n">command</span><span class="p">=/</span><span class="n">home</span><span class="p">/</span><span class="n">brian</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">gunicorn_start</span>
-<span class="n">user</span><span class="p">=</span><span class="n">brian</span>
-<span class="n">autostart</span><span class="p">=</span><span class="k">true</span>
-<span class="n">autorestart</span><span class="p">=</span><span class="k">true</span>
-<span class="n">redirect_stderr</span><span class="p">=</span><span class="k">true</span>
-<span class="n">stdout_logfile</span><span class="p">=/</span><span class="n">home</span><span class="p">/</span><span class="n">brian</span><span class="p">/</span><span class="n">logs</span><span class="p">/</span><span class="n">gunicorn</span><span class="p">-</span><span class="n">error</span><span class="p">.</span><span class="n">log</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">cs
+[program:django-leaflet-demo]
+command=/home/brian/bin/gunicorn_start
+user=brian
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/home/brian/logs/gunicorn-error.log
+</code></p>
 
 <p>I would definitely like to dive into DigitalOcean deployment in more depth in my next post.</p>
 

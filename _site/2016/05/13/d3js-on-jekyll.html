@@ -10,8 +10,8 @@
   <meta name="description" content="The best way to include d3.js graphs in Jekyll blogs is to put the related code for the animate in a file in the includes folder in the Jekyll site directory...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2016/05/13/d3js-on-jekyll.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2016/05/13/d3js-on-jekyll.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -96,8 +96,9 @@
   <div class="post-content" itemprop="articleBody">
     <p>The best way to include d3.js graphs in Jekyll blogs is to put the related code for the animate in a file in the <code class="highlighter-rouge">includes</code> folder in the Jekyll site directory, and then reference the file with liquid tags as follows:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% include d3_example.html %} 
-</code></pre></div></div>
+<p><code class="highlighter-rouge">html
+{% include d3_example.html %} 
+</code></p>
 
 <p>This should result in the following:</p>
 
@@ -208,126 +209,129 @@ function geodesic(subdivision) {
 
 <p>I took this example from <a href="https://bl.ocks.org/mbostock/3057239">here</a>. This code was placing the slider in the correct place, but the animate was displaying at the very bottom of the page past the comments section. To fix this, I changed this:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"body"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+var canvas = d3.select("body").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+</code></p>
 
 <p>to this:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"#subdivision"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+var canvas = d3.select("#subdivision").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
+</code></p>
 
 <p>Here is the full code snippet as I have changed it for the example above:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"subdivision"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"range"</span> <span class="na">min=</span><span class="s">"1"</span> <span class="na">max=</span><span class="s">"12"</span> <span class="na">value=</span><span class="s">"8"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;output</span> <span class="na">name=</span><span class="s">"subdivision"</span><span class="nt">&gt;&lt;/output&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
-<span class="nt">&lt;style&gt;</span>
+<p>```html</p>
+<div id="subdivision">
+  <input type="range" min="1" max="12" value="8" />
+  <output name="subdivision"></output>
+</div>
+<style>
 
-<span class="nf">#subdivision</span> <span class="p">{</span>
-  <span class="nl">position</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
-  <span class="nl">top</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
-  <span class="nl">left</span><span class="p">:</span> <span class="m">20px</span><span class="p">;</span>
-<span class="p">}</span>
+#subdivision {
+  position: auto;
+  top: 20px;
+  left: 20px;
+}
 
-<span class="nf">#subdivision</span> <span class="nt">input</span> <span class="p">{</span>
-  <span class="nl">position</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
-  <span class="nl">width</span><span class="p">:</span> <span class="m">200px</span><span class="p">;</span>
-<span class="p">}</span>
+#subdivision input {
+  position: auto;
+  width: 200px;
+}
 
-<span class="nt">&lt;/style&gt;</span>
+</style>
 
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"http://d3js.org/d3.v3.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"http://bl.ocks.org/mbostock/raw/3057239/d3.geodesic.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 
+<script src="http://bl.ocks.org/mbostock/raw/3057239/d3.geodesic.min.js"></script>
 
+<script>
 
-<span class="nt">&lt;script&gt;</span>
+var width = 960,
+    height = 500;
 
-<span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="mi">960</span><span class="p">,</span>
-    <span class="nx">height</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+var velocity = [.010, .005],
+    t0 = Date.now();
 
-<span class="kd">var</span> <span class="nx">velocity</span> <span class="o">=</span> <span class="p">[.</span><span class="mi">010</span><span class="p">,</span> <span class="p">.</span><span class="mi">005</span><span class="p">],</span>
-    <span class="nx">t0</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+var projection = d3.geo.orthographic()
+    .scale(height / 2 - 10);
 
-<span class="kd">var</span> <span class="nx">projection</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">geo</span><span class="p">.</span><span class="nx">orthographic</span><span class="p">()</span>
-    <span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">10</span><span class="p">);</span>
+var canvas = d3.select("#subdivision").append("canvas")
+    .attr("width", width)
+    .attr("height", height);
 
-<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"#subdivision"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"width"</span><span class="p">,</span> <span class="nx">width</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"height"</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+var context = canvas.node().getContext("2d");
 
-<span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">node</span><span class="p">().</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">);</span>
+context.strokeStyle = "#000";
+context.lineWidth = .5;
 
-<span class="nx">context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">"#000"</span><span class="p">;</span>
-<span class="nx">context</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="p">.</span><span class="mi">5</span><span class="p">;</span>
+var faces;
 
-<span class="kd">var</span> <span class="nx">faces</span><span class="p">;</span>
+var output = d3.select("output");
 
-<span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"output"</span><span class="p">);</span>
+var input = d3.select("input")
+    .on("input", function() { geodesic(+this.value); })
+    .on("change", function() { geodesic(+this.value); })
+    .each(function() { geodesic(+this.value); });
 
-<span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="s2">"input"</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"input"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">geodesic</span><span class="p">(</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span> <span class="p">})</span>
-    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"change"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">geodesic</span><span class="p">(</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span> <span class="p">})</span>
-    <span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">geodesic</span><span class="p">(</span><span class="o">+</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span> <span class="p">});</span>
+d3.timer(function() {
+  var time = Date.now() - t0;
+  projection.rotate([time * velocity[0], time * velocity[1]]);
+  redraw();
+});
 
-<span class="nx">d3</span><span class="p">.</span><span class="nx">timer</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">time</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()</span> <span class="o">-</span> <span class="nx">t0</span><span class="p">;</span>
-  <span class="nx">projection</span><span class="p">.</span><span class="nx">rotate</span><span class="p">([</span><span class="nx">time</span> <span class="o">*</span> <span class="nx">velocity</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">time</span> <span class="o">*</span> <span class="nx">velocity</span><span class="p">[</span><span class="mi">1</span><span class="p">]]);</span>
-  <span class="nx">redraw</span><span class="p">();</span>
-<span class="p">});</span>
+function redraw() {
+  context.clearRect(0, 0, width, height);
 
-<span class="kd">function</span> <span class="nx">redraw</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+  faces.forEach(function(d) {
+    d.polygon[0] = projection(d[0]);
+    d.polygon[1] = projection(d[1]);
+    d.polygon[2] = projection(d[2]);
+    if (d.visible = d.polygon.area() > 0) {
+      context.fillStyle = d.fill;
+      context.beginPath();
+      drawTriangle(d.polygon);
+      context.fill();
+    }
+  });
 
-  <span class="nx">faces</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">projection</span><span class="p">(</span><span class="nx">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">projection</span><span class="p">(</span><span class="nx">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">polygon</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">projection</span><span class="p">(</span><span class="nx">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">visible</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">polygon</span><span class="p">.</span><span class="nx">area</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">fill</span><span class="p">;</span>
-      <span class="nx">context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-      <span class="nx">drawTriangle</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">polygon</span><span class="p">);</span>
-      <span class="nx">context</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">});</span>
+  context.beginPath();
+  faces.forEach(function(d) {
+    if (d.visible) {
+      drawTriangle(d.polygon);
+    }
+  });
+  context.stroke();
+}
 
-  <span class="nx">context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-  <span class="nx">faces</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">visible</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">drawTriangle</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">polygon</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">});</span>
-  <span class="nx">context</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
-<span class="p">}</span>
+function drawTriangle(triangle) {
+  context.moveTo(triangle[0][0], triangle[0][1]);
+  context.lineTo(triangle[1][0], triangle[1][1]);
+  context.lineTo(triangle[2][0], triangle[2][1]);
+  context.closePath();
+}
 
-<span class="kd">function</span> <span class="nx">drawTriangle</span><span class="p">(</span><span class="nx">triangle</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">triangle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nx">triangle</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
-  <span class="nx">context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">triangle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nx">triangle</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
-  <span class="nx">context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">triangle</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="nx">triangle</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
-  <span class="nx">context</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
-<span class="p">}</span>
+function geodesic(subdivision) {
+  output.text(subdivision);
 
-<span class="kd">function</span> <span class="nx">geodesic</span><span class="p">(</span><span class="nx">subdivision</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">output</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">subdivision</span><span class="p">);</span>
+  faces = d3.geodesic.polygons(subdivision).map(function(d) {
+    d = d.coordinates[0];
+    d.pop(); // use an open polygon
+    d.fill = d3.hsl(d[0][0], 1, .5) + "";
+    d.polygon = d3.geom.polygon(d.map(projection));
+    return d;
+  });
 
-  <span class="nx">faces</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">geodesic</span><span class="p">.</span><span class="nx">polygons</span><span class="p">(</span><span class="nx">subdivision</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">d</span> <span class="o">=</span> <span class="nx">d</span><span class="p">.</span><span class="nx">coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span> <span class="c1">// use an open polygon</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">fill</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">hsl</span><span class="p">(</span><span class="nx">d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="p">.</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="s2">""</span><span class="p">;</span>
-    <span class="nx">d</span><span class="p">.</span><span class="nx">polygon</span> <span class="o">=</span> <span class="nx">d3</span><span class="p">.</span><span class="nx">geom</span><span class="p">.</span><span class="nx">polygon</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">projection</span><span class="p">));</span>
-    <span class="k">return</span> <span class="nx">d</span><span class="p">;</span>
-  <span class="p">});</span>
+  redraw();
+}
 
-  <span class="nx">redraw</span><span class="p">();</span>
-<span class="p">}</span>
+</script>
 
-<span class="nt">&lt;/script&gt;</span>
-</code></pre></div></div>
+<p>```</p>
 
   </div>
 

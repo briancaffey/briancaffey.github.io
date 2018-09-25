@@ -10,8 +10,8 @@
   <meta name="description" content="This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX ...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -102,50 +102,52 @@
 
 <p>The entire game state is stored in a JavaScript object. Here’s a simplified representation of the structure:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="s2">"map"</span><span class="p">:{</span>
-    <span class="s2">"0"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
-    <span class="s2">"1"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">player</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
-    <span class="s2">"2"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+var game = {
+  "map":{
+    "0":[tree, tree, tree,],
+    "1":[tree, player, tree,],
+    "2":[tree, tree, tree,],
+  }
+}
+</code></p>
 
 <p>The UI lets users manipulate the values of each row in the game state’s <code class="highlighter-rouge">map</code> property. The values of the row arrays are objects themselves, which contain information about which emoji they represent and how they interact with the player (for example, you can’t pass through a tree, so it has a <code class="highlighter-rouge">'wall':true</code> property).</p>
 
 <p>I added a “Save Game” button, which when clicked would fire a POST or PUT request to create or update the user’s game design. On the homepage of my personal website I includes a simple AJAX POST, so I first copied it over as boilerplate code to modify.</p>
 
-<pre><code class="language-HTML">$("#post-form").on('submit', function(event){
+<p>```HTML
+$(“#post-form”).on(‘submit’, function(event){
   event.preventDefault();
   var this_ = $(this)
-  var gb_endpoint = this_.attr("data-href")
+  var gb_endpoint = this_.attr(“data-href”)
   $.ajax({
     url: gb_endpoint,
-    type: "POST",
-    data: { message : $("#post-text").val(),
-            csrfmiddlewaretoken: '{{ csrf_token }}',
-            city: "some city",
-            state: "some state",
+    type: “POST”,
+    data: { message : $(“#post-text”).val(),
+            csrfmiddlewaretoken: ‘{{ csrf_token }}’,
+            city: “some city”,
+            state: “some state”,
     },
     success: function(json){
-      $('#post-text').val('');
-      $('#post-form').blur();
-      var gb_num = $("#gb-num").text();
+      $(‘#post-text’).val(‘’);
+      $(‘#post-form’).blur();
+      var gb_num = $(“#gb-num”).text();
       var new_gb_num = parseInt(gb_num) + 1
-      $("#gb-num").text(new_gb_num);
+      $(“#gb-num”).text(new_gb_num);</p>
 
-
-      if (1 == 1){
-        var user = json.user
-        $('#guest-book-items').prepend('&lt;div class="panel panel-success"&gt;&lt;div class="panel-heading"&gt;From {% if user.is_authenticated %}{{ user }}{% else %}someone{% endif %} in the ' + json.city + ', ' + json.state + ' area | just now&lt;/div&gt;&lt;div class="panel-body"&gt;' + json.message + '&lt;/div&gt;&lt;/div&gt;')
-      }
-    },
-  });
+<div class="highlighter-rouge"><pre class="highlight"><code>  if (1 == 1){
+    var user = json.user
+    $('#guest-book-items').prepend('&lt;div class="panel panel-success"&gt;&lt;div class="panel-heading"&gt;From {% if user.is_authenticated %}{{ user }}{% else %}someone{% endif %} in the ' + json.city + ', ' + json.state + ' area | just now&lt;/div&gt;&lt;div class="panel-body"&gt;' + json.message + '&lt;/div&gt;&lt;/div&gt;')
+  }
+},   }); ```
 </code></pre>
+</div>
 
 <p>Here’s the AJAX call that worked after lots of debugging:</p>
 
-<pre><code class="language-HTML">$("#save-level").click(function(event){
+<p><code class="highlighter-rouge">HTML
+$("#save-level").click(function(event){
   event.preventDefault();
   $.ajax({
     type : "POST",
@@ -164,70 +166,75 @@
       }
     });
   });
-</code></pre>
+</code></p>
 
 <h2 id="django-rest-framework-settings-and-api-endpoints">Django REST Framework settings and API endpoints</h2>
 
 <p>Before I started writing the AJAX call, I looked in the Django REST Framework documentation for instructions on how to post JSON data. Here are the REST Framework settings I added to <code class="highlighter-rouge">settings.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">REST_FRAMEWORK</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">'DEFAULT_RENDERER_CLASSES'</span><span class="p">:</span> <span class="p">(</span>
-        <span class="s">'rest_framework.renderers.JSONRenderer'</span><span class="p">,</span>
-    <span class="p">),</span>
-    <span class="s">'DEFAULT_PARSER_CLASSES'</span><span class="p">:</span> <span class="p">(</span>
-        <span class="s">'rest_framework.parsers.JSONParser'</span><span class="p">,</span>
-    <span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
+}
+</code></p>
 
 <p>I’m not sure if this was completely necessary, but I think the <a href="http://www.django-rest-framework.org/api-guide/renderers/#jsonrenderer"><code class="highlighter-rouge">JSONRenderer</code> helps with the serialization of Unicode data</a>, since earlier attempts returned Unicode representation of emoji rather than the emoji themselves (e.g., U+1F600 instead of 😀).</p>
 
 <p>I should also mention that I added a simple “Game” model in <code class="highlighter-rouge">models.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib.postgres.fields</span> <span class="kn">import</span> <span class="n">JSONField</span>
+<p>```python
+from django.contrib.postgres.fields import JSONField</p>
 
-<span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">game</span> <span class="o">=</span> <span class="n">JSONField</span><span class="p">()</span>
-</code></pre></div></div>
+<p>class Game(models.Model):
+    game = JSONField()
+```</p>
 
 <p>Next I added the views and serializers for the API endpoint (<code class="highlighter-rouge">/api/kings/save/</code>) for the POST request:</p>
 
 <p><em>kings/api/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
-<span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">GameSerializer</span>
+<p>```python
+from ..models import Game
+from .serializers import GameSerializer</p>
 
-<span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">CreateAPIView</span><span class="p">,</span> <span class="c"># ListAPIView</span>
-<span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
-<span class="kn">from</span> <span class="nn">rest_framework.response</span> <span class="kn">import</span> <span class="n">Response</span>
+<p>from rest_framework.generics import CreateAPIView, # ListAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response</p>
 
-<span class="k">class</span> <span class="nc">GameCreateAPIView</span><span class="p">(</span><span class="n">CreateAPIView</span><span class="p">):</span>
-    <span class="n">queryset</span> <span class="o">=</span> <span class="n">Game</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
-    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">GameSerializer</span>
-    <span class="k">def</span> <span class="nf">perform_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serializer</span><span class="p">):</span>
-        <span class="n">game</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">data</span>
-        <span class="n">_</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">game</span><span class="o">=</span><span class="n">game</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
+<p>class GameCreateAPIView(CreateAPIView):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    def perform_create(self, serializer):
+        game = self.request.data
+        _ = serializer.save(game=game)
+        return Response(_)</p>
 
-<span class="c"># class GameListAPIView(ListAPIView):</span>
-<span class="c">#     queryset = Game.objects.all()</span>
-<span class="c">#     serializer_class = GameSerializer</span>
-</code></pre></div></div>
+<h1 id="class-gamelistapiviewlistapiview">class GameListAPIView(ListAPIView):</h1>
+<p>#     queryset = Game.objects.all()
+#     serializer_class = GameSerializer
+```</p>
 
 <p><em>kings/api/serializers.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">ModelSerializer</span>
-<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
-<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
+<p>```python
+from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
+from ..models import Game</p>
 
-<span class="k">class</span> <span class="nc">GameSerializer</span><span class="p">(</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<p>class GameSerializer(ModelSerializer):</p>
 
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">Game</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s">'game'</span>
-        <span class="p">]</span>
-</code></pre></div></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>class Meta:
+    model = Game
+    fields = [
+        'game'
+    ] ```
+</code></pre>
+</div>
 
 <p>Writing this view was the first big hurdle. I was under the impression that the JSON data was to be accessed in <code class="highlighter-rouge">self.request.body</code>. The error message said <a href="https://github.com/encode/django-rest-framework/issues/2774">You cannot access body after reading from request’s data stream</a>, and there were some elaborate solutions that I didn’t think I would be able to implement.</p>
 
@@ -244,42 +251,47 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>I resolved the <code class="highlighter-rouge">415</code> error by adding the following to the AJAX call.</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>headers: {
+<p><code class="highlighter-rouge">html
+headers: {
   'Accept': 'application/json',
   'Content-Type': 'application/json'
   },
-</code></pre></div></div>
+</code></p>
 
 <p>One aspect of all of the debugging which was frustrating is that the sqlite3 database on my local environment does not support storing JSON data (as far as I know), so I committed and pushed code to my production server on Heroku (which uses PostgreSQL) for each step in the debug process. Eventually I realized that a <code class="highlighter-rouge">500</code> server error on my local environment meant that everything was working correctly except for the very last step: saving the <code class="highlighter-rouge">Game</code> object.</p>
 
 <p>At this point I thought I was pretty close. I could successfully POST data using the DRF web interface, and I got the following type of error messages (which were <code class="highlighter-rouge">HTTP 400 Bad Request</code>) when I tried to post malformed data:</p>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON parse error - Expecting value: line 2 column 13 (char 14)"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">json
+{
+    "detail": "JSON parse error - Expecting value: line 2 column 13 (char 14)"
+}
+</code></p>
 
 <p>To see what error message I was getting using AJAX, I found that jQuery makes the error message available in <code class="highlighter-rouge">XMLHttpRequest.responseText</code>. I then added the following to the AJAX <code class="highlighter-rouge">error</code> callback:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajax({
+<p><code class="highlighter-rouge">html
+$.ajax({
   ...
   error: function(XMLHttpRequest, textStatus, errorThrown) {
     alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
     }
   });
-</code></pre></div></div>
+</code></p>
 
 <p>This error message was saying:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ValueError: Expecting value: line 1 column 1 (char 0)
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+ValueError: Expecting value: line 1 column 1 (char 0)
+</code></p>
 
 <p>This led me to believe that there was an issue with the <code class="highlighter-rouge">data</code> attribute being passed into the AJAX call. It was particularly difficult to figure out how to write the JSONified version of JavaScript object. SO posts had many different ways, and I eventually found that the following worked:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajax({
+<p><code class="highlighter-rouge">html
+$.ajax({
   ...
   data : JSON.stringify({game:scene}),
-</code></pre></div></div>
+</code></p>
 
 <p>Since I named the <code class="highlighter-rouge">JSONField()</code> field in my Game model <code class="highlighter-rouge">game</code>, I believe that <code class="highlighter-rouge">game</code> needed to be the “main attribute” of the JSON in the POST request. <code class="highlighter-rouge">scene</code> is the name of the variable that held the JavaScript object I wanted to send. <code class="highlighter-rouge">JSON.stringify()</code> was a little confusing, and there was lots of confusion online about what it returns. Here’s the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify">MDN documentation</a> that was helpful in figuring out <code class="highlighter-rouge">JSON.stringify()</code>.</p>
 
@@ -287,30 +299,31 @@ If a client sends a request with a content-type that cannot be parsed then a Uns
 
 <p>At some point in all of this debugging I got a strange error message saying the CSRF Token was missing or incorrect. I had included <code class="highlighter-rouge">csrfmiddlewaretoken: "{{ csrf_token }}",</code> in the AJAX call, and it wasn’t an issue I had experienced with making my other POST request with AJAX. I found <a href="https://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request">this Stack Overflow answer</a> with 143 votes and 90,322 views, and was pleased that the proposed solution worked just fine. It involves adding <code class="highlighter-rouge">$.ajaxSetup()</code> before the AJAX call:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajaxSetup({
+<p><code class="highlighter-rouge">html
+$.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
              var cookieValue = null;
-             if (document.cookie <span class="err">&amp;&amp;</span> document.cookie != '') {
+             if (document.cookie &amp;&amp; document.cookie != '') {
                  var cookies = document.cookie.split(';');
-                 for (var i = 0; i <span class="nt">&lt;</span> <span class="nt">cookies</span><span class="err">.</span><span class="na">length</span><span class="err">;</span> <span class="na">i</span><span class="err">++)</span> <span class="err">{</span>
-                     <span class="na">var</span> <span class="na">cookie =</span><span class="err"> </span><span class="s">jQuery.trim(cookies[i]);</span>
-                     <span class="err">//</span> <span class="na">Does</span> <span class="na">this</span> <span class="na">cookie</span> <span class="na">string</span> <span class="na">begin</span> <span class="na">with</span> <span class="na">the</span> <span class="na">name</span> <span class="na">we</span> <span class="na">want</span><span class="err">?</span>
-                     <span class="na">if</span> <span class="err">(</span><span class="na">cookie</span><span class="err">.</span><span class="na">substring</span><span class="err">(</span><span class="na">0</span><span class="err">,</span> <span class="na">name</span><span class="err">.</span><span class="na">length</span> <span class="err">+</span> <span class="na">1</span><span class="err">)</span> <span class="err">==</span> <span class="err">(</span><span class="na">name</span> <span class="err">+</span> <span class="err">'='))</span> <span class="err">{</span>
-                         <span class="na">cookieValue =</span><span class="err"> </span><span class="s">decodeURIComponent(cookie.substring(name.length</span> <span class="err">+</span> <span class="na">1</span><span class="err">));</span>
-                         <span class="na">break</span><span class="err">;</span>
-                     <span class="err">}</span>
-                 <span class="err">}</span>
-             <span class="err">}</span>
-             <span class="na">return</span> <span class="na">cookieValue</span><span class="err">;</span>
-         <span class="err">}</span>
-         <span class="na">if</span> <span class="err">(!(/^</span><span class="na">http:</span><span class="err">.*/.</span><span class="na">test</span><span class="err">(</span><span class="na">settings</span><span class="err">.</span><span class="na">url</span><span class="err">)</span> <span class="err">||</span> <span class="err">/^</span><span class="na">https:</span><span class="err">.*/.</span><span class="na">test</span><span class="err">(</span><span class="na">settings</span><span class="err">.</span><span class="na">url</span><span class="err">)))</span> <span class="err">{</span>
-             <span class="err">//</span> <span class="na">Only</span> <span class="na">send</span> <span class="na">the</span> <span class="na">token</span> <span class="na">to</span> <span class="na">relative</span> <span class="na">URLs</span> <span class="na">i</span><span class="err">.</span><span class="na">e</span><span class="err">.</span> <span class="na">locally</span><span class="err">.</span>
-             <span class="na">xhr</span><span class="err">.</span><span class="na">setRequestHeader</span><span class="err">("</span><span class="na">X-CSRFToken</span><span class="err">",</span> <span class="na">getCookie</span><span class="err">('</span><span class="na">csrftoken</span><span class="err">'));</span>
-         <span class="err">}</span>
-     <span class="err">}</span>
-<span class="err">});</span>
-</code></pre></div></div>
+                 for (var i = 0; i &lt; cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     }
+});
+</code></p>
 
 <p>I won’t go into to much detail here, but you can read more about this issue which apparently also impacts Ruby on Rails as well. Here’s a <a href="https://www.djangoproject.com/weblog/2011/feb/08/security/">link to a security post on the Django Project blog</a>.</p>
 

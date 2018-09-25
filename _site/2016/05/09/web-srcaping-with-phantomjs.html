@@ -10,8 +10,8 @@
   <meta name="description" content="This is a short description of how I’ve used PhantomJS to scrape “hidden data” from a website. PhantomJS is a browser sans browser. There’s no GUI, but you c...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2016/05/09/web-srcaping-with-phantomjs.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2016/05/09/web-srcaping-with-phantomjs.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -100,17 +100,19 @@
 
 <p>I was interested in getting links that were displayed in lists on a many pages with URLs like <code class="highlighter-rouge">www.website.com/#page=1</code> with about 1,200 pages total. I started out using Python’s <a href="http://docs.python-requests.org/en/master/">Requests</a> library (HTTP for Humans), but I quickly found that the HTML I wanted wasn’t showing up. I expected to see the following:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"target-class"</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/link1"</span><span class="nt">&gt;</span>Link1<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-	<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/link2"</span><span class="nt">&gt;</span>Link2<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-	<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/link3"</span><span class="nt">&gt;</span>Link3<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
-<span class="nt">&lt;/ul&gt;</span>
+<p>```html</p>
+<ul class="target-class">
+	<li><a href="/link1">Link1</a></li>
+	<li><a href="/link2">Link2</a></li>
+	<li><a href="/link3">Link3</a></li>
+</ul>
 
-</code></pre></div></div>
-<p>But the HTML returned by Requests was just an empty unordered list:</p>
+<p>```
+But the HTML returned by Requests was just an empty unordered list:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"target-class"</span><span class="nt">&gt;&lt;/ul&gt;</span>
-</code></pre></div></div>
+<p>```html</p>
+<ul class="target-class"></ul>
+<p>```</p>
 
 <p>The view-source HTML was also missing the inner <code class="highlighter-rouge">&lt;li&gt;</code>’s I was hoping to scrape. But I was able see the HTML I wanted with the ‘Inspect’ function in Chrome Dev Tools. I later learned that in this case there is (most likely) <a href="http://stackoverflow.com/questions/15918402/information-not-visible-in-source-file-view">JavaScript modifying the DOM</a>, and that Dev Tools shows the <em>current state of the DOM</em>, whereas the ‘view-source’ shows the HTML as it is when it is first loaded by the browser. A quick search for “how to scrape hidden web data” lead me to <a href="http://phantomjs.org/">PhantomJS</a>.</p>
 
@@ -128,40 +130,42 @@
 
 <p>Here’s the bash script that I came up with outlining the process:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/use/bin/env bash</span>
+<p>```bash
+#!/use/bin/env bash</p>
 
-<span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span><span class="nb">seq </span>1 1200<span class="sb">`</span><span class="p">;</span>
-<span class="k">do 
-	</span>phantomjs scrape.js <span class="s2">"http://website.com/#page="</span><span class="nv">$i</span> <span class="o">&gt;</span> pages/pages_<span class="nv">$i</span>.txt
-	<span class="nv">delay</span><span class="o">=</span><span class="k">$(</span>python <span class="nt">-c</span> <span class="s2">"import random;print(random.uniform(61.0, 65.0))"</span><span class="k">)</span>
-	<span class="nb">sleep</span> <span class="nv">$delay</span>
-<span class="k">done</span>
-</code></pre></div></div>
+<p>for i in <code class="highlighter-rouge">seq 1 1200</code>;
+do 
+	phantomjs scrape.js “http://website.com/#page=”$i &gt; pages/pages_$i.txt
+	delay=$(python -c “import random;print(random.uniform(61.0, 65.0))”)
+	sleep $delay
+done
+```</p>
 
 <p>It’s a simple loop that feeds the page number into PhantomJS argument and saves that standard output to a text file containing the name of the page number, then pauses for a variable amount of time between 61 and 65 seconds (in accordance with the <code class="highlighter-rouge">robots.txt</code> of my target site).</p>
 
 <p>The the <code class="highlighter-rouge">scrape.js</code> argument is a JavaScript file with the instructions for accessing and returning the data I need. Here’s that file:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"use strict"</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">system</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'system'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">args</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webpage'</span><span class="p">).</span><span class="nx">create</span><span class="p">();</span>
-<span class="nx">page</span><span class="p">.</span><span class="nx">onConsoleMessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-<span class="p">};</span>
-<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-<span class="nx">page</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">status</span> <span class="o">===</span> <span class="s2">"success"</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">page</span><span class="p">.</span><span class="nx">evaluate</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="s1">'target-class'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">);</span>     
-        <span class="p">});</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"not success"</span><span class="p">);</span>  
-    <span class="p">}</span>
-<span class="nx">phantom</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="p">});</span>
-</code></pre></div></div>
-<p>Let’s take a closer look at what’s going in inside <code class="highlighter-rouge">scrape.js</code>. I’m very much a beginner with JavaScript, and I don’t fully understand how PhantomJS works, but I was able to get this working by using ‘boiler plate’ examples: <a href="https://github.com/ariya/phantomjs/blob/master/examples/phantomwebintro.js">one</a> that demonstrates how to read elements from a webpage, <a href="https://nicolas.perriault.net/code/2011/scrape-and-test-any-webpage-using-phantomjs/">another</a> that shows how to pass additional arguments into PhantomJS, and some <a href="http://www.w3schools.com/js/js_htmldom_elements.asp">reference material</a> from W3Schools.</p>
+<p><code class="highlighter-rouge">javascript
+"use strict";
+var system = require('system');
+var args = system.args;
+var page = require('webpage').create();
+page.onConsoleMessage = function(msg) {
+    console.log(msg);
+};
+var url = args[1];
+page.open(url, function(status) {
+    if (status === "success") {
+            page.evaluate(function() {
+                console.log(document.getElementsByClassName('target-class')[0].innerHTML);     
+        });
+    } else {
+      console.log("not success");  
+    }
+phantom.exit(0);
+});
+</code><br />
+Let’s take a closer look at what’s going in inside <code class="highlighter-rouge">scrape.js</code>. I’m very much a beginner with JavaScript, and I don’t fully understand how PhantomJS works, but I was able to get this working by using ‘boiler plate’ examples: <a href="https://github.com/ariya/phantomjs/blob/master/examples/phantomwebintro.js">one</a> that demonstrates how to read elements from a webpage, <a href="https://nicolas.perriault.net/code/2011/scrape-and-test-any-webpage-using-phantomjs/">another</a> that shows how to pass additional arguments into PhantomJS, and some <a href="http://www.w3schools.com/js/js_htmldom_elements.asp">reference material</a> from W3Schools.</p>
 
 <p>The key part of the script is the <code class="highlighter-rouge">page.evaluate()</code> function which logs the innerHTML of the element I want by its class name. This function is run inside the <code class="highlighter-rouge">page.open()</code> function that takes the argument (the URL) we passed in with our bash script above.</p>
 
@@ -169,21 +173,22 @@
 
 <p>Lastly, here’s the Python script with BeautifulSoup that returns a list of the relative URLs I wanted in the beginning:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<p>```python
+import os
+from bs4 import BeautifulSoup</p>
 
-<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s">'/Users/me/Documents/path/to/pages'</span><span class="p">)</span>
-<span class="n">all_links</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()):</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span>
-    <span class="n">html</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="n">b</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
-    <span class="n">links</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">'a'</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">"class"</span><span class="p">:</span><span class="s">"target-class"</span><span class="p">})</span>
-    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span> 
-        <span class="n">link</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span>
-        <span class="n">all_links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">all_links</span>
-</code></pre></div></div>
+<p>os.chdir(‘/Users/me/Documents/path/to/pages’)
+all_links = []
+for i in os.listdir(os.getcwd()):
+    text = open(i, “r”)
+    html = text.read()
+    b = BeautifulSoup(html)
+    links = b.findAll(‘a’, attrs={“class”:”target-class”})
+    for a in links: 
+        link = a[‘href’]
+        all_links.append(link)
+print all_links
+```</p>
 
 <p>This part is pretty straightforward: I navigate to the folder with the <code class="highlighter-rouge">pages_#.txt</code> files that were generated in the bash script, loop through each file and search for the <code class="highlighter-rouge">&lt;a&gt;</code> links (that share the same class as the target class). With better JavaScript skills I could probably return exactly what I want with <code class="highlighter-rouge">scrape.js</code>, but PhantomJS kept throwing errors so I just pulled out what I could and processed it with BeautifulSoup, a program with which I am much more familiar.</p>
 

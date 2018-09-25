@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -138,44 +138,47 @@
 
 <p>Next, we can run <code class="highlighter-rouge">mysql</code> in the terminal:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ mysql
+<p>```
+ $ mysql
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is 18
-Server version: 10.1.30-MariaDB MariaDB Server
+Server version: 10.1.30-MariaDB MariaDB Server</p>
 
-Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others.
+<p>Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others.</p>
 
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
-</code></pre></div></div>
+<p>Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.
+```</p>
 
 <h3 id="create-and-set-a-database-to-use">Create <em>and set</em> a database to use</h3>
 
 <p>The next step is to create a database. We can do the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MariaDB [(none)]&gt; create database sample_db default character set utf8 default collate utf8_bin;
+<p><code class="highlighter-rouge">
+MariaDB [(none)]&gt; create database sample_db default character set utf8 default collate utf8_bin;
 ERROR 1044 (42000): Access denied for user ''@'localhost' to database 'sample_db'
 MariaDB [(none)]&gt; Ctrl-C -- exit!
 Aborted
-</code></pre></div></div>
+</code></p>
 
 <p>If you see this error, it is because we aren’t using the correct user for SQL. We can use the default root user with no password instead. So here we will rerun the <code class="highlighter-rouge">mysql</code> command with additional arguments:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ mysql -u root
+<p>```
+ $ mysql -u root
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is 19
-Server version: 10.1.30-MariaDB MariaDB Server
+Server version: 10.1.30-MariaDB MariaDB Server</p>
 
-Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others.
+<p>Copyright (c) 2000, 2017, Oracle, MariaDB Corporation Ab and others.</p>
 
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+<p>Type ‘help;’ or ‘\h’ for help. Type ‘\c’ to clear the current input statement.</p>
 
-MariaDB [(none)]&gt; create database sample_db default character set utf8 default collate utf8_bin;
-Query OK, 1 row affected (0.01 sec)
+<p>MariaDB [(none)]&gt; create database sample_db default character set utf8 default collate utf8_bin;
+Query OK, 1 row affected (0.01 sec)</p>
 
-MariaDB [(none)]&gt; use sample_db
+<p>MariaDB [(none)]&gt; use sample_db
 Database changed
 MariaDB [sample_db]&gt; 
-</code></pre></div></div>
+```</p>
 
 <p>Great, no we are using the blank database called <code class="highlighter-rouge">sample_db</code> and we are using it, notice that <code class="highlighter-rouge">[sample_db]&gt;</code> has repaced <code class="highlighter-rouge">[(none)]&gt;</code> in the MariaDB prompt.</p>
 
@@ -183,112 +186,115 @@ MariaDB [sample_db]&gt;
 
 <p>Now we are read to get going with our questions. Before we write our queries, we need to get the data from the question into our database. To do this I wrote <code class="highlighter-rouge">insert.sql</code> and ran it in MariaDB. Here is the script:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE TABLE table_A (
+<p>```
+CREATE TABLE table_A (
   ID int,
   District_ID int
-  );
-  
-CREATE TABLE table_B (
+  );</p>
+
+<p>CREATE TABLE table_B (
   District_ID int,
   Congressional_District int
-  );
-  
-CREATE TABLE table_C (
+  );</p>
+
+<p>CREATE TABLE table_C (
   ID int,
   Gender CHAR(1)
-  );
-  
-INSERT INTO table_A (ID, District_ID) VALUES ('1', '3');
-INSERT INTO table_A (ID, District_ID) VALUES ('2', '3');
-INSERT INTO table_A (ID, District_ID) VALUES ('3', '4');
-INSERT INTO table_A (ID, District_ID) VALUES ('4', '4');
-INSERT INTO table_A (ID, District_ID) VALUES ('5', '3');
-INSERT INTO table_A (ID, District_ID) VALUES ('6', '4');
-INSERT INTO table_A (ID, District_ID) VALUES ('7', '4');
-INSERT INTO table_A (ID, District_ID) VALUES ('8', '3');
-INSERT INTO table_A (ID, District_ID) VALUES ('9', '4');
-INSERT INTO table_A (ID, District_ID) VALUES ('10', '3');
+  );</p>
 
-INSERT INTO table_B (District_ID, Congressional_District) VALUES ('1', '8');
-INSERT INTO table_B (District_ID, Congressional_District) VALUES ('2', '2');
-INSERT INTO table_B (District_ID, Congressional_District) VALUES ('3', '14');
-INSERT INTO table_B (District_ID, Congressional_District) VALUES ('4', '7');
-INSERT INTO table_B (District_ID, Congressional_District) VALUES ('5', '11');
+<p>INSERT INTO table_A (ID, District_ID) VALUES (‘1’, ‘3’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘2’, ‘3’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘3’, ‘4’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘4’, ‘4’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘5’, ‘3’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘6’, ‘4’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘7’, ‘4’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘8’, ‘3’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘9’, ‘4’);
+INSERT INTO table_A (ID, District_ID) VALUES (‘10’, ‘3’);</p>
 
-INSERT INTO table_C (ID, Gender) VALUES ('1', 'M');
-INSERT INTO table_C (ID, Gender) VALUES ('3', 'F');
-INSERT INTO table_C (ID, Gender) VALUES ('4', 'M');
-INSERT INTO table_C (ID, Gender) VALUES ('5', 'F');
-INSERT INTO table_C (ID, Gender) VALUES ('6', 'F');
-INSERT INTO table_C (ID, Gender) VALUES ('7', 'F');
-INSERT INTO table_C (ID, Gender) VALUES ('8', 'M');
-INSERT INTO table_C (ID, Gender) VALUES ('9', 'F');
-INSERT INTO table_C (ID, Gender) VALUES ('10', 'M');
-</code></pre></div></div>
+<p>INSERT INTO table_B (District_ID, Congressional_District) VALUES (‘1’, ‘8’);
+INSERT INTO table_B (District_ID, Congressional_District) VALUES (‘2’, ‘2’);
+INSERT INTO table_B (District_ID, Congressional_District) VALUES (‘3’, ‘14’);
+INSERT INTO table_B (District_ID, Congressional_District) VALUES (‘4’, ‘7’);
+INSERT INTO table_B (District_ID, Congressional_District) VALUES (‘5’, ‘11’);</p>
+
+<p>INSERT INTO table_C (ID, Gender) VALUES (‘1’, ‘M’);
+INSERT INTO table_C (ID, Gender) VALUES (‘3’, ‘F’);
+INSERT INTO table_C (ID, Gender) VALUES (‘4’, ‘M’);
+INSERT INTO table_C (ID, Gender) VALUES (‘5’, ‘F’);
+INSERT INTO table_C (ID, Gender) VALUES (‘6’, ‘F’);
+INSERT INTO table_C (ID, Gender) VALUES (‘7’, ‘F’);
+INSERT INTO table_C (ID, Gender) VALUES (‘8’, ‘M’);
+INSERT INTO table_C (ID, Gender) VALUES (‘9’, ‘F’);
+INSERT INTO table_C (ID, Gender) VALUES (‘10’, ‘M’);
+```</p>
 
 <p>Now we can run the script with the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MariaDB [sample_db]&gt; source my_sql_script.sql
-Query OK, 0 rows affected (0.08 sec)
+<p>```
+MariaDB [sample_db]&gt; source my_sql_script.sql
+Query OK, 0 rows affected (0.08 sec)</p>
 
-Query OK, 0 rows affected (0.07 sec)
+<p>Query OK, 0 rows affected (0.07 sec)</p>
 
-Query OK, 0 rows affected (0.06 sec)
+<p>Query OK, 0 rows affected (0.06 sec)</p>
 
-Query OK, 1 row affected (0.02 sec)
+<p>Query OK, 1 row affected (0.02 sec)</p>
 
-Query OK, 1 row affected (0.00 sec)
+<p>Query OK, 1 row affected (0.00 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.03 sec)
+<p>Query OK, 1 row affected (0.03 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.00 sec)
+<p>Query OK, 1 row affected (0.00 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.02 sec)
+<p>Query OK, 1 row affected (0.02 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-Query OK, 1 row affected (0.01 sec)
+<p>Query OK, 1 row affected (0.01 sec)</p>
 
-MariaDB [sample_db]&gt; 
-</code></pre></div></div>
+<p>MariaDB [sample_db]&gt; 
+```</p>
 
 <p>Great, now let’s test it out with a simple <code class="highlighter-rouge">select * from table_name</code> command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MariaDB [sample_db]&gt; select * from table_A;
+<p><code class="highlighter-rouge">
+MariaDB [sample_db]&gt; select * from table_A;
 +------+-------------+
 | ID   | District_ID |
 +------+-------------+
@@ -304,23 +310,25 @@ MariaDB [sample_db]&gt;
 |   10 |           3 |
 +------+-------------+
 10 rows in set (0.00 sec)
-</code></pre></div></div>
+</code></p>
 
 <p>This matches what we were given, so now let’s move on to the first task, creating one table from the three we are given.</p>
 
-<h4 id="1">1</h4>
+<h4 id="section">1</h4>
 
 <p>Using SQL please write the code to generate a table that includes all individuals on the file and contains the following fields: ID, Congressional District, and Gender</p>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">table_A</span><span class="p">.</span><span class="n">ID</span><span class="p">,</span> <span class="n">Congressional_District</span><span class="p">,</span> <span class="n">Gender</span> 
-<span class="k">from</span> <span class="n">table_A</span> 
-  <span class="k">left</span> <span class="k">join</span> <span class="n">table_B</span> 
-    <span class="k">on</span> <span class="n">table_A</span><span class="p">.</span><span class="n">District_ID</span> <span class="o">=</span> <span class="n">table_B</span><span class="p">.</span><span class="n">District_ID</span> 
-  <span class="k">left</span> <span class="k">join</span> <span class="n">table_C</span> 
-    <span class="k">on</span> <span class="n">table_A</span><span class="p">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">table_C</span><span class="p">.</span><span class="n">ID</span> <span class="k">order</span> <span class="k">by</span> <span class="n">ID</span><span class="p">;</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">sql
+select table_A.ID, Congressional_District, Gender 
+from table_A 
+  left join table_B 
+    on table_A.District_ID = table_B.District_ID 
+  left join table_C 
+    on table_A.ID = table_C.ID order by ID;
+</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+------+------------------------+--------+
+<p><code class="highlighter-rouge">
++------+------------------------+--------+
 | ID   | Congressional_District | Gender |
 +------+------------------------+--------+
 |    1 |                     14 | M      |
@@ -335,27 +343,29 @@ MariaDB [sample_db]&gt;
 |   10 |                     14 | M      |
 +------+------------------------+--------+
 10 rows in set (0.00 sec)
-</code></pre></div></div>
+</code></p>
 
-<h4 id="2">2</h4>
+<h4 id="section-1">2</h4>
 
 <p>Using SQL please write the code to generate a table that includes only individuals with a gender on file that have a DistrictID of 3. Also please convert the values for Gender from “M” and “F” to “Male” and “Female” respectively. Your final table should include only ID and the converted Gender.</p>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> 
-  <span class="n">table_A</span><span class="p">.</span><span class="n">ID</span><span class="p">,</span> 
-  <span class="k">case</span> 
-    <span class="k">when</span> <span class="n">Gender</span> <span class="o">=</span> <span class="nv">"M"</span> <span class="k">then</span> <span class="nv">"Male"</span> 
-    <span class="k">when</span> <span class="n">Gender</span> <span class="o">=</span> <span class="nv">"F"</span> <span class="k">then</span> <span class="nv">"Female"</span> 
-  <span class="k">end</span> <span class="k">as</span> <span class="n">Gender</span> 
-<span class="k">from</span> <span class="n">table_A</span> 
-  <span class="k">left</span> <span class="k">join</span> <span class="n">table_B</span> 
-    <span class="k">on</span> <span class="n">table_A</span><span class="p">.</span><span class="n">District_ID</span> <span class="o">=</span> <span class="n">table_B</span><span class="p">.</span><span class="n">District_ID</span> 
-  <span class="k">left</span> <span class="k">join</span> <span class="n">table_C</span> <span class="k">on</span> <span class="n">table_A</span><span class="p">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">table_C</span><span class="p">.</span><span class="n">ID</span> 
-<span class="k">where</span> <span class="n">table_A</span><span class="p">.</span><span class="n">District_ID</span> <span class="o">=</span> <span class="mi">3</span> <span class="k">and</span> <span class="n">table_C</span><span class="p">.</span><span class="n">Gender</span> <span class="k">is</span> <span class="k">not</span> <span class="k">null</span> 
-<span class="k">order</span> <span class="k">by</span> <span class="n">ID</span><span class="p">;</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">sql
+select 
+  table_A.ID, 
+  case 
+    when Gender = "M" then "Male" 
+    when Gender = "F" then "Female" 
+  end as Gender 
+from table_A 
+  left join table_B 
+    on table_A.District_ID = table_B.District_ID 
+  left join table_C on table_A.ID = table_C.ID 
+where table_A.District_ID = 3 and table_C.Gender is not null 
+order by ID;
+</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+------+--------+
+<p><code class="highlighter-rouge">
++------+--------+
 | ID   | Gender |
 +------+--------+
 |    1 | Male   |
@@ -364,25 +374,27 @@ MariaDB [sample_db]&gt;
 |   10 | Male   |
 +------+--------+
 4 rows in set (0.00 sec)
-</code></pre></div></div>
+</code></p>
 
-<h4 id="3">3</h4>
+<h4 id="section-2">3</h4>
 
 <p>Using SQL please generate the code to run a count of gender by Congressional District.</p>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> 
-  <span class="k">count</span><span class="p">(</span><span class="n">table_C</span><span class="p">.</span><span class="n">Gender</span><span class="p">)</span> <span class="k">Count</span><span class="p">,</span> 
-  <span class="n">Congressional_District</span><span class="p">,</span> 
-  <span class="n">Gender</span> 
-<span class="k">from</span> <span class="n">table_A</span> 
-  <span class="k">left</span> <span class="k">join</span> <span class="n">table_B</span> 
-    <span class="k">on</span> <span class="n">table_A</span><span class="p">.</span><span class="n">District_ID</span> <span class="o">=</span> <span class="n">table_B</span><span class="p">.</span><span class="n">District_ID</span> 
-  <span class="k">left</span> <span class="k">join</span> <span class="n">table_C</span> 
-    <span class="k">on</span> <span class="n">table_A</span><span class="p">.</span><span class="n">ID</span> <span class="o">=</span> <span class="n">table_C</span><span class="p">.</span><span class="n">ID</span> 
-<span class="k">group</span> <span class="k">by</span> <span class="n">Congressional_District</span><span class="p">,</span> <span class="n">Gender</span><span class="p">;</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">sql
+select 
+  count(table_C.Gender) Count, 
+  Congressional_District, 
+  Gender 
+from table_A 
+  left join table_B 
+    on table_A.District_ID = table_B.District_ID 
+  left join table_C 
+    on table_A.ID = table_C.ID 
+group by Congressional_District, Gender;
+</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+-------+------------------------+--------+
+<p><code class="highlighter-rouge">
++-------+------------------------+--------+
 | Count | Congressional_District | Gender |
 +-------+------------------------+--------+
 |     4 |                      7 | F      |
@@ -392,7 +404,7 @@ MariaDB [sample_db]&gt;
 |     3 |                     14 | M      |
 +-------+------------------------+--------+
 5 rows in set (0.00 sec)
-</code></pre></div></div>
+</code></p>
 
 <p>That’s it for the three SQL tasks. Here’s the bonus question:</p>
 

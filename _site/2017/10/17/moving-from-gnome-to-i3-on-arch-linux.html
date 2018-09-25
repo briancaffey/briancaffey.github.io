@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -118,14 +118,15 @@
 
 <p>Start out by installing <code class="highlighter-rouge">i3</code> with pacman as follows</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@archthinkpad ~]$</span> <span class="nb">sudo </span>pacman <span class="nt">-S</span> i3
-<span class="go">[sudo] password for brian: 
+<p>```terminal
+[brian@archthinkpad ~]$ sudo pacman -S i3
+[sudo] password for brian: 
 :: There are 4 members in group i3:
 :: Repository community
-   1) i3-wm  2) i3blocks  3) i3lock  4) i3status
+   1) i3-wm  2) i3blocks  3) i3lock  4) i3status</p>
 
-Enter a selection (default=all): 
-</span></code></pre></div></div>
+<p>Enter a selection (default=all): 
+```</p>
 
 <p>You won’t find <code class="highlighter-rouge">i3</code> with a regular search in the AUR because it is a package group, containing a number of packages that will help us do things with i3.</p>
 
@@ -145,14 +146,15 @@ Enter a selection (default=all):
 
 <p>You probably want to change this terminal right away. There’s a handy little program launcher that we can use for now called <code class="highlighter-rouge">dmenu</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@archthinkpad ~]$</span> <span class="nb">sudo </span>pacman <span class="nt">-Ss</span> dmenu
-<span class="go">[sudo] password for brian: 
+<p><code class="highlighter-rouge">terminal 
+[brian@archthinkpad ~]$ sudo pacman -Ss dmenu
+[sudo] password for brian: 
 community/dmenu 4.7-1 [installed]
     A generic menu for X
 community/pdmenu 1.3.2-2
     simple full screen menu program
-</span><span class="gp">[brian@archthinkpad ~]$</span> 
-</code></pre></div></div>
+[brian@archthinkpad ~]$ 
+</code></p>
 
 <p>Once you install <code class="highlighter-rouge">dmenu</code>, you can easily launch programs with <code class="highlighter-rouge">Mod1+d</code>.</p>
 
@@ -162,8 +164,9 @@ community/pdmenu 1.3.2-2
 
 <p>Most of the work you do in customizing i3 involves editing <code class="highlighter-rouge">i3</code>’s config file. To change the configuration of i3, copy <code class="highlighter-rouge">/etc/i3/config</code> to <code class="highlighter-rouge">~/.i3/config</code> with:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">cp /etc/i3/config ~/.i3/config
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+cp /etc/i3/config ~/.i3/config
+</code></p>
 
 <p>At this point I will reference my “Dotfiles” on github. Dotfiles is used to refer to hidden configuration folders and files prepended with a “.”, such as <code class="highlighter-rouge">~/.i3/config</code> or <code class="highlighter-rouge">~/.Xresources</code>.</p>
 
@@ -173,8 +176,9 @@ community/pdmenu 1.3.2-2
 
 <p><code class="highlighter-rouge">feh</code> will let us set a background image from the command line, and we can do so each time we launch <code class="highlighter-rouge">i3</code> by adding the following line to <code class="highlighter-rouge">~/.i3/config</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">exec_always feh --bg-scale ~/Pictures/image.jpg
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+exec_always feh --bg-scale ~/Pictures/image.jpg
+</code></p>
 
 <p>Now we can run the following command to restart i3 in place (without having to logout):</p>
 
@@ -182,8 +186,9 @@ community/pdmenu 1.3.2-2
 
 <p>You will see this shortcut in <code class="highlighter-rouge">~/.i3/config</code> in the following line:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">bindsym Mod1+Shift+r restart
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+bindsym Mod1+Shift+r restart
+</code></p>
 
 <p>This binds <code class="highlighter-rouge">Mod1</code>+<code class="highlighter-rouge">shift</code>+<code class="highlighter-rouge">r</code> to instructions that restart i3.</p>
 
@@ -197,9 +202,10 @@ community/pdmenu 1.3.2-2
 
 <p>First, install it with:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">sudo pacman -S rxvt-unicode
-</span></code></pre></div></div>
-<p>And then launch it with <code class="highlighter-rouge">urxvt</code></p>
+<p><code class="highlighter-rouge">terminal
+sudo pacman -S rxvt-unicode
+</code>
+And then launch it with <code class="highlighter-rouge">urxvt</code></p>
 
 <p>It probably looks equally bad to whatever default you were using, but we are about to fix it up so it looks and works great.</p>
 
@@ -211,8 +217,9 @@ community/pdmenu 1.3.2-2
 
 <p>For simplicity, I recommend that you copy the contents of <a href="https://raw.githubusercontent.com/briancaffey/.i3/master/.Xresources">this link</a> into you newly created <code class="highlighter-rouge">~/.Xresources</code> file and then run the following command to refresh the settings for <code class="highlighter-rouge">urxvt</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">xrdb ~/.Xresources
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+xrdb ~/.Xresources
+</code></p>
 
 <p>Now restart <code class="highlighter-rouge">urxvt</code> and you should see that it looks very different.</p>
 
@@ -224,46 +231,54 @@ community/pdmenu 1.3.2-2
 
 <p>Install it from the AUR:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">sudo pacman -S python-pywal
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+sudo pacman -S python-pywal
+</code></p>
 
 <p>Now we just need to add the following line to <code class="highlighter-rouge">~/.bashrc</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">#</span> pywal
-<span class="go">setsid wal -i ~/Pictures/image.jpg
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+# pywal
+setsid wal -i ~/Pictures/image.jpg
+</code></p>
 
 <p>Run <code class="highlighter-rouge">source ~/.bashrc</code> and reopen <code class="highlighter-rouge">urxvt</code> and it should have new color scheme that goes well with you background image. You can install another program called <code class="highlighter-rouge">neofetch</code> to print out the current colorscheme along with system information:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">yaourt -S neofetch
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+yaourt -S neofetch
+</code></p>
 
 <p>You can add the following line to the bottom of your <code class="highlighter-rouge">~/.bashrc</code> file and have neofetch run whenever you open a new terminal:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">setsid wal -r
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+setsid wal -r
+</code></p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">neofetch
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+neofetch
+</code></p>
 
 <p>Here are a few other customizations I have in my <code class="highlighter-rouge">~/.i3/config</code> file:</p>
 
 <p>Remove window boarders:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">for_window [class="^.*"] border pixel 0
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+for_window [class="^.*"] border pixel 0
+</code></p>
 
 <p>Enable smooth transitions with compton:</p>
 
 <p><code class="highlighter-rouge">compton</code> is a package that enables for nice transitions when navigating i3. First, install the compton package:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">yaourt -S compton
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+yaourt -S compton
+</code></p>
 
 <p>Next we need to add the following line to <code class="highlighter-rouge">~/.i3/config</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">exec compton -f
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+exec compton -f
+</code></p>
 
 <p>You might need to reboot to see how the effect that compton has.</p>
 
@@ -273,15 +288,17 @@ community/pdmenu 1.3.2-2
 
 <p>Install <code class="highlighter-rouge">i3-gaps</code> from the AUR:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">yaourt -S i3-gaps
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+yaourt -S i3-gaps
+</code></p>
 
 <p>Remove the packages in conflict and then add the following lines to <code class="highlighter-rouge">~/.i3/config</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">#</span> i3-gaps
-<span class="go">gaps inner 10
+<p><code class="highlighter-rouge">terminal
+# i3-gaps
+gaps inner 10
 gaps outer 0
-</span></code></pre></div></div>
+</code></p>
 
 <p>Refresh i3 and you should now see gaps in between your windows.</p>
 
@@ -293,38 +310,42 @@ gaps outer 0
 
 <p>Find the most recent release of FontAwesome <a href="https://github.com/FortAwesome/Font-Awesome/releases">here</a>, click on the zip download link and then run:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">unzip ~/Downloads/Font-Awesome-4.7.0
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+unzip ~/Downloads/Font-Awesome-4.7.0
+</code></p>
 
 <p>The release number may be different for you. Once you have unzipped the file, we want to move all of the files ending with <code class="highlighter-rouge">.ttf</code> to a folder that may or may not exist on your machine.</p>
 
 <p>First, run:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">mkdir ~/.fonts
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+mkdir ~/.fonts
+</code></p>
 
 <p>and then run:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">cp ~/Downloads/Font-Awesome-4.7.0/fonts/*.ttf ~/.fonts
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+cp ~/Downloads/Font-Awesome-4.7.0/fonts/*.ttf ~/.fonts
+</code></p>
 
 <p>Now that you have these fonts installed, go over to <a href="http://fontawesome.io/cheatsheet/">http://fontawesome.io/cheatsheet/</a> and you should see lots of icons that you might not have been able to see before.</p>
 
 <p>We will come back to the fonts in just a minute. First let’s change the bar by replacing <code class="highlighter-rouge">bar {...}</code> with the following:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">bar {
+<p><code class="highlighter-rouge">terminal
+bar {
   	position top
         status_command i3blocks -c /home/brian/.i3/i3blocks.conf
 	colors {
-</span><span class="gp">		background $</span>bg-color
-<span class="gp">	    	separator #</span>757575
-<span class="gp">		#</span>                  border             background         text
-<span class="gp">		focused_workspace  $</span>bg-color          <span class="nv">$bg</span><span class="nt">-color</span>          <span class="nv">$text</span><span class="nt">-color</span>
-<span class="gp">		inactive_workspace $</span>inactive-bg-color <span class="nv">$inactive</span><span class="nt">-bg-color</span> <span class="nv">$inactive</span><span class="nt">-text-color</span>
-<span class="gp">		urgent_workspace   $</span>urgent-bg-color   <span class="nv">$urgent</span><span class="nt">-bg-color</span>   <span class="nv">$text</span><span class="nt">-color</span>
-<span class="go">	}
+		background $bg-color
+	    	separator #757575
+		#                  border             background         text
+		focused_workspace  $bg-color          $bg-color          $text-color
+		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+	}
 }
-</span></code></pre></div></div>
+</code></p>
 
 <p>Don’t refresh i3 just yet. Let’s go through this block first.</p>
 
@@ -332,57 +353,59 @@ gaps outer 0
 
 <p>First, pull in the colors from my dotfiles before the bar block:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">set $</span>bg-color 	         <span class="c">#2f343f</span>
-<span class="gp">set $</span>inactive-bg-color   <span class="c">#2f343f</span>
-<span class="gp">set $</span>text-color          <span class="c">#f3f4f5</span>
-<span class="gp">set $</span>inactive-text-color <span class="c">#676E7D</span>
-<span class="gp">set $</span>urgent-bg-color     <span class="c">#E53935</span>
-<span class="go">
-</span><span class="gp">#</span> window colors
-<span class="gp">#</span>                       border              background         text                 indicator
-<span class="gp">client.focused          $</span>bg-color           <span class="nv">$bg</span><span class="nt">-color</span>          <span class="nv">$text</span><span class="nt">-color</span>          <span class="c">#00ff00</span>
-<span class="gp">client.unfocused        $</span>inactive-bg-color <span class="nv">$inactive</span><span class="nt">-bg-color</span> <span class="nv">$inactive</span><span class="nt">-text-color</span> <span class="c">#00ff00</span>
-<span class="gp">client.focused_inactive $</span>inactive-bg-color <span class="nv">$inactive</span><span class="nt">-bg-color</span> <span class="nv">$inactive</span><span class="nt">-text-color</span> <span class="c">#00ff00</span>
-<span class="gp">client.urgent           $</span>urgent-bg-color    <span class="nv">$urgent</span><span class="nt">-bg-color</span>   <span class="nv">$text</span><span class="nt">-color</span>          <span class="c">#00ff00</span>
-</code></pre></div></div>
+<p>```terminal
+set $bg-color 	         #2f343f
+set $inactive-bg-color   #2f343f
+set $text-color          #f3f4f5
+set $inactive-text-color #676E7D
+set $urgent-bg-color     #E53935</p>
+
+<h1 id="window-colors">window colors</h1>
+<p>#                       border              background         text                 indicator
+client.focused          $bg-color           $bg-color          $text-color          #00ff00
+client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
+client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color #00ff00
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
+```</p>
 
 <p>Next let’s take care of the i3blocks command. The <code class="highlighter-rouge">i3blocks</code> package was installed when we instaled i3, so we just need to provide an absolute path to a file as the argument for this command, as well as the <code class="highlighter-rouge">-c</code> flag. In this file we simply define what shows up in the bar. Here’s a simple version that shows date, time, CPU temperature and wifi:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">[wifi]
+<p>```terminal
+[wifi]
 label=
 command=iwgetid -r
 separator=true
-interval=3
+interval=3</p>
 
-</span><span class="gp">#</span><span class="o">[</span>volume]
-<span class="gp">#</span><span class="nv">label</span><span class="o">=</span>
-<span class="gp">#</span><span class="nv">interval</span><span class="o">=</span>1
-<span class="gp">#</span><span class="nv">separator</span><span class="o">=</span><span class="nb">true</span>
-<span class="gp">#</span><span class="nb">command</span><span class="o">=</span>amixer get Master | egrep <span class="nt">-o</span> <span class="s2">"[0-9]+%"</span> | <span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'2 p'</span>
-<span class="go">
-</span><span class="gp">#</span><span class="o">[</span>cpu]
-<span class="gp">#</span><span class="nv">label</span><span class="o">=</span>
-<span class="gp">#</span><span class="nv">interval</span><span class="o">=</span>10
-<span class="gp">#</span><span class="nv">separator</span><span class="o">=</span><span class="nb">true</span>
-<span class="go">
-[temperature]
-</span><span class="gp">command=T=$</span><span class="o">(</span><span class="nb">cat</span> /sys/class/thermal/thermal_zone0/temp<span class="o">)</span><span class="p">;</span> <span class="nb">echo</span> <span class="k">$((</span> <span class="nv">$T</span> <span class="o">/</span> <span class="m">1000</span> <span class="k">))</span>°C
-<span class="go">label=
+<h1 id="volume">[volume]</h1>
+<p>#label=
+#interval=1
+#separator=true
+#command=amixer get Master | egrep -o “[0-9]+%” | sed -n ‘2 p’</p>
+
+<h1 id="cpu">[cpu]</h1>
+<p>#label=
+#interval=10
+#separator=true</p>
+
+<p>[temperature]
+command=T=$(cat /sys/class/thermal/thermal_zone0/temp); echo $(( $T / 1000 ))°C
+label=
 interval=10
-separator=true
+separator=true</p>
 
-[time]
-command= date '+%H:%M:%S'
+<p>[time]
+command= date ‘+%H:%M:%S’
 interval=2
 label=
-separator=true
+separator=true</p>
 
-[day]
-command= date '+%a %b %e, %Y'
+<p>[day]
+command= date ‘+%a %b %e, %Y’
 interval=2
 label=
 separator=true
-</span></code></pre></div></div>
+```</p>
 
 <p>This is why it is called i3<em>blocks</em>, because each part of the bar is defined in a block that has a command, an interval in seconds that determines how often the command is run, and a label. You can choose any text or icon for the labels.</p>
 
@@ -390,62 +413,67 @@ separator=true
 
 <p>Add the following to your <code class="highlighter-rouge">~/.i3/config</code> file:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">set $</span>workspace10 <span class="s2">"H0me "</span>
-<span class="gp">set $</span>workspace1 <span class="s2">"F1rst "</span>
-<span class="gp">set $</span>workspace4 <span class="s2">"Edi4or "</span>
-<span class="gp">set $</span>workspace3 <span class="s2">"Brows3r "</span>
-<span class="gp">set $</span>workspace2 <span class="s2">"2erminal "</span>
-<span class="gp">set $</span>workspace5 <span class="s2">"Mu5ic "</span>
-<span class="gp">set $</span>workspace8 <span class="s2">"O8S "</span>
-<span class="go">
-</span><span class="gp">#</span> switch to workspace
-<span class="gp">bindsym Mod1+1 workspace $</span>workspace1
-<span class="gp">bindsym Mod1+2 workspace $</span>workspace2
-<span class="gp">bindsym Mod1+3 workspace $</span>workspace3
-<span class="gp">bindsym Mod1+4 workspace $</span>workspace4
-<span class="gp">bindsym Mod1+5 workspace $</span>workspace5
-<span class="go">bindsym Mod1+6 workspace 6
+<p>```terminal
+set $workspace10 “H0me ”
+set $workspace1 “F1rst ”
+set $workspace4 “Edi4or ”
+set $workspace3 “Brows3r ”
+set $workspace2 “2erminal ”
+set $workspace5 “Mu5ic ”
+set $workspace8 “O8S ”</p>
+
+<h1 id="switch-to-workspace">switch to workspace</h1>
+<p>bindsym Mod1+1 workspace $workspace1
+bindsym Mod1+2 workspace $workspace2
+bindsym Mod1+3 workspace $workspace3
+bindsym Mod1+4 workspace $workspace4
+bindsym Mod1+5 workspace $workspace5
+bindsym Mod1+6 workspace 6
 bindsym Mod1+7 workspace 7
-</span><span class="gp">bindsym Mod1+8 workspace $</span>workspace8
-<span class="go">bindsym Mod1+9 workspace 9
-</span><span class="gp">bindsym Mod1+0 workspace $</span>workspace10
-<span class="go">
-</span><span class="gp">#</span> move focused container to workspace
-<span class="gp">bindsym Mod1+Shift+1 move container to workspace $</span>workspace1
-<span class="gp">bindsym Mod1+Shift+2 move container to workspace $</span>workspace2
-<span class="gp">bindsym Mod1+Shift+3 move container to workspace $</span>workspace3
-<span class="gp">bindsym Mod1+Shift+4 move container to workspace $</span>workspace4
-<span class="gp">bindsym Mod1+Shift+5 move container to workspace $</span>workspace5
-<span class="go">bindsym Mod1+Shift+6 move container to workspace 6
+bindsym Mod1+8 workspace $workspace8
+bindsym Mod1+9 workspace 9
+bindsym Mod1+0 workspace $workspace10</p>
+
+<h1 id="move-focused-container-to-workspace">move focused container to workspace</h1>
+<p>bindsym Mod1+Shift+1 move container to workspace $workspace1
+bindsym Mod1+Shift+2 move container to workspace $workspace2
+bindsym Mod1+Shift+3 move container to workspace $workspace3
+bindsym Mod1+Shift+4 move container to workspace $workspace4
+bindsym Mod1+Shift+5 move container to workspace $workspace5
+bindsym Mod1+Shift+6 move container to workspace 6
 bindsym Mod1+Shift+7 move container to workspace 7
-</span><span class="gp">bindsym Mod1+Shift+8 move container to workspace $</span>workspace8
-<span class="go">bindsym Mod1+Shift+9 move container to workspace 9
-</span><span class="gp">bindsym Mod1+Shift+0 move container to workspace $</span>workspace10
-</code></pre></div></div>
+bindsym Mod1+Shift+8 move container to workspace $workspace8
+bindsym Mod1+Shift+9 move container to workspace 9
+bindsym Mod1+Shift+0 move container to workspace $workspace10
+```</p>
 
 <p>Things are looking pretty good at this point. Here are some other things that I have found to be very helpful:</p>
 
 <h3 id="brightness-controller">Brightness Controller</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S brightness-controller
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+yaourt -S brightness-controller
+</code></p>
 
 <p>Next we can add a shortcut for this package:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">bindsym Mod1+Ctrl+b exec brightness-controller 
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+bindsym Mod1+Ctrl+b exec brightness-controller 
+</code></p>
 
 <h3 id="ranger">Ranger</h3>
 
 <p><code class="highlighter-rouge">ranger</code> is a terminal-based file browser that is nice to use.</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">yaourt -S ranger
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+yaourt -S ranger
+</code></p>
 
 <p>There is a lot we can do to customize ranger, here are some important things that I do. First, run the following command:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">ranger --copy-config=all
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+ranger --copy-config=all
+</code></p>
 
 <p>This will create a file located here: <code class="highlighter-rouge">~/.config/ranger/rc.conf</code>.</p>
 
@@ -475,13 +503,15 @@ bindsym Mod1+Shift+7 move container to workspace 7
 
 <p><code class="highlighter-rouge">rofi</code> is a launcher similar to <code class="highlighter-rouge">dmenu</code> that we used in the beginnings, but it is better. Here’s how to install it:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">sudo pacman -S rofi
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+sudo pacman -S rofi
+</code></p>
 
 <p>Next we can add a key binding so we can quickly launch any program with rofi:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">bindsym Mod1+space exec rofi -show run
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+bindsym Mod1+space exec rofi -show run
+</code></p>
 
 <p>Be careful when you add new bindings! i3 will give you an error if you assign one binding to more than one command. I had to shuffle some of the default bindings around to use <code class="highlighter-rouge">Mod1+space</code>.</p>
 
@@ -495,8 +525,9 @@ bindsym Mod1+Shift+7 move container to workspace 7
 
 <p>Run the ibus daemon:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">ibus-daemon -xim&amp;
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+ibus-daemon -xim&amp;
+</code></p>
 
 <p>Install another Chinese font and set in <code class="highlighter-rouge">~/.Xresources</code></p>
 

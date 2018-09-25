@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -106,15 +106,16 @@
 
 <p>The pattern I have been following for Django uses <code class="highlighter-rouge">.gitignore</code> to keep local application settings out of the production codebase using the following logic:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
+<p>```python
+from .base import *</p>
 
-<span class="kn">from</span> <span class="nn">.production</span> <span class="kn">import</span> <span class="o">*</span>
+<p>from .production import *</p>
 
-<span class="k">try</span><span class="p">:</span>
-	<span class="kn">from</span> <span class="nn">.local</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="k">except</span><span class="p">:</span>
-	<span class="k">pass</span>
-</code></pre></div></div>
+<p>try:
+	from .local import *
+except:
+	pass
+```</p>
 
 <h2 id="ii-dependencies">II. Dependencies</h2>
 
@@ -122,9 +123,10 @@
 
 <p>Using python makes this easy and I have had success running <code class="highlighter-rouge">pip install -r requirements.txt</code>, or:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ADD ./requirements.txt /usr/src/app/requirements.txt
+<p><code class="highlighter-rouge">
+ADD ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
-</code></pre></div></div>
+</code></p>
 
 <p>when running Docker.</p>
 
@@ -146,17 +148,19 @@ RUN pip install -r requirements.txt
 
 <p>Heroku’s command line utilities make setting production environments very easy. I think I can improve the way I organize environment variables locally since I often have many different projects it would be easy for projects to accidentally share the same variable name. One idea I have thought about would be to have an untracked bash script that sets environment variables that I run when starting the development environment, something like:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">export SECRET_KEY="my_secret_key"
+<p><code class="highlighter-rouge">terminal
+export SECRET_KEY="my_secret_key"
 export DB_URL="postgres://my_db_url"
-</span></code></pre></div></div>
+</code></p>
 
 <p>Docker wins points again on this factor because environemnt variables can simple be defined in a development and production <code class="highlighter-rouge">docker-compose-*.yml</code> files:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    environment:
+<p><code class="highlighter-rouge">
+    environment:
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
-</code></pre></div></div>
+</code></p>
 
 <h2 id="iv-backing-services">IV. Backing services</h2>
 
@@ -170,29 +174,31 @@ export DB_URL="postgres://my_db_url"
 
 <p>This factor made me think of an interesting syntax that I saw for the first time when learning the microservices architecture with docker in <a href="https://github.com/jakewright/tutorials/tree/master/docker/02-docker-compose">this Docker example</a> that uses two Flask apps to provide 1) front-end templates and 2) API backend. When the front end calls the API backend, it does so by referencing the service name in the URL. Here is an example with PHP, but it would work similarly in any other framework:</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
-    <span class="nv">$json</span> <span class="o">=</span> <span class="nb">file_get_contents</span><span class="p">(</span><span class="s1">'http://product-service/'</span><span class="p">);</span>
-    <span class="nv">$obj</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$json</span><span class="p">);</span>
-    <span class="nv">$products</span> <span class="o">=</span> <span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">products</span><span class="p">;</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$products</span> <span class="k">as</span> <span class="nv">$product</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">"&lt;li&gt;</span><span class="nv">$product</span><span class="s2">&lt;/li&gt;"</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="cp">?&gt;</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">php
+&lt;?php
+    $json = file_get_contents('http://product-service/');
+    $obj = json_decode($json);
+    $products = $obj-&gt;products;
+    foreach ($products as $product) {
+        echo "&lt;li&gt;$product&lt;/li&gt;";
+    }
+?&gt;
+</code></p>
 
 <p>This front-end code hits the backend API endpoint <code class="highlighter-rouge">http://product-service/</code>, where <code class="highlighter-rouge">product-service</code> is the name of a service included in <code class="highlighter-rouge">docker-compose.yml</code>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3'
+<p>```
+version: ‘3’</p>
 
-services:
+<p>services:
   product-service:
     build: ./product
     volumes:
       - ./product:/usr/src/app
     ports:
-      - 5001:80
+      - 5001:80</p>
 
-  website:
+<p>website:
     image: php:apache
     volumes:
       - ./website:/var/www/html
@@ -200,18 +206,19 @@ services:
       - 5000:80
     depends_on:
       - product-service
-</code></pre></div></div>
+```</p>
 
 <p>This is docker-compose file creates a network that includes both <code class="highlighter-rouge">website</code> and <code class="highlighter-rouge">product-service</code> that can be accessed by simply creating a URL with the name of the service in the domain. Coming back to the fourth factor, <strong>The code for a twelve-factor app makes no distinction between local and third party services</strong>, multiple docker containers can be thought of as <em>separate services</em> even though they may be running on the same virtual environment in either development or production, and the unique domain cooresponding to the service name seems to reinforce this concept.</p>
 
 <p>This URL could also be referenced with environment variables:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">getUsers</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">REACT_APP_USERS_SERVICE_URL</span><span class="p">}</span><span class="s2">/users`</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span> <span class="p">})</span>
-  <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="p">})</span>
-<span class="p">}</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+getUsers() {
+  axios.get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
+  .then((res) =&gt; { console.log(res); })
+  .catch((err) =&gt; { console.log(err); })
+}
+</code></p>
 
 <h2 id="v-build-release-run">V. Build, release, run</h2>
 
@@ -219,8 +226,9 @@ services:
 
 <p>This is an important stage in getting from development to production. It is the handoff from a local repo to a live, running web application. Here’s the process live in action:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp"> $</span> git push heroku master
-<span class="go">Counting objects: 3, done.
+<p><code class="highlighter-rouge">terminal
+ $ git push heroku master
+Counting objects: 3, done.
 Delta compression using up to 4 threads.
 Compressing objects: 100% (3/3), done.
 Writing objects: 100% (3/3), 303 bytes | 303.00 KiB/s, done.
@@ -228,23 +236,23 @@ Total 3 (delta 2), reused 0 (delta 0)
 remote: Compressing source files... done.
 remote: Building source:
 remote: 
-</span><span class="gp">remote: -----&gt;</span> Python app detected
-<span class="gp">remote: -----&gt;</span> Installing requirements with pip
-<span class="go">remote: 
-</span><span class="gp">remote: -----&gt;</span> Discovering process types
-<span class="gp">remote:        Procfile declares types -&gt;</span> web
-<span class="go">remote: 
-</span><span class="gp">remote: -----&gt;</span> Compressing...
-<span class="go">remote:        Done: 193.7M
-</span><span class="gp">remote: -----&gt;</span> Launching...
-<span class="go">remote:        Released v410
+remote: -----&gt; Python app detected
+remote: -----&gt; Installing requirements with pip
+remote: 
+remote: -----&gt; Discovering process types
+remote:        Procfile declares types -&gt; web
+remote: 
+remote: -----&gt; Compressing...
+remote:        Done: 193.7M
+remote: -----&gt; Launching...
+remote:        Released v410
 remote:        https://briancaffey.herokuapp.com/ deployed to Heroku
 remote: 
 remote: Verifying deploy... done.
 To https://git.heroku.com/briancaffey.git
-</span><span class="gp">   cd6ce76..d8981a3  master -&gt;</span> master
-<span class="go">(briancaffey) brian@archthinkpad ~/Documents/github/briancaffey/src
-</span></code></pre></div></div>
+   cd6ce76..d8981a3  master -&gt; master
+(briancaffey) brian@archthinkpad ~/Documents/github/briancaffey/src
+</code></p>
 
 <h2 id="vi-processes">VI. Processes</h2>
 
@@ -252,8 +260,9 @@ To https://git.heroku.com/briancaffey.git
 
 <p>This is handled in Heroku by the Procfile. For simple Django apps on Heroku this is usually always the same one line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>web: gunicorn projectname.wsgi --log-file -
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+web: gunicorn projectname.wsgi --log-file -
+</code></p>
 
 <p>Here’s what the Django project says about using gunicorn:</p>
 
@@ -271,14 +280,15 @@ To https://git.heroku.com/briancaffey.git
 
 <p>In a Django project, the <code class="highlighter-rouge">wsgi.py</code> file in the main folder of the project root directory has the following contents:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<p>```python
+import os</p>
 
-<span class="kn">from</span> <span class="nn">django.core.wsgi</span> <span class="kn">import</span> <span class="n">get_wsgi_application</span>
+<p>from django.core.wsgi import get_wsgi_application</p>
 
-<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">"DJANGO_SETTINGS_MODULE"</span><span class="p">,</span> <span class="s">"brianblog.settings"</span><span class="p">)</span>
+<p>os.environ.setdefault(“DJANGO_SETTINGS_MODULE”, “brianblog.settings”)</p>
 
-<span class="n">application</span> <span class="o">=</span> <span class="n">get_wsgi_application</span><span class="p">()</span>
-</code></pre></div></div>
+<p>application = get_wsgi_application()
+```</p>
 
 <h2 id="vi-port-binding">VI. Port binding</h2>
 
@@ -294,7 +304,8 @@ To https://git.heroku.com/briancaffey.git
 
 <p>The following are examples of how this could work:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ports:
+<p><code class="highlighter-rouge">
+ports:
  - "3000"
  - "3000-3005"
  - "8000:8000"
@@ -303,7 +314,7 @@ To https://git.heroku.com/briancaffey.git
  - "127.0.0.1:8001:8001"
  - "127.0.0.1:5000-5010:5000-5010"
  - "6060:6060/udp"
-</code></pre></div></div>
+</code></p>
 
 <h2 id="viii-concurrency">VIII. Concurrency</h2>
 
@@ -311,8 +322,9 @@ To https://git.heroku.com/briancaffey.git
 
 <p>This is an important area, but it is something I haven’t had to be aware of since the apps I have developed don’t require scaling processes. I belive that Heroku makes this fairly simple by allowing you to increase the number of web or worker processes through the CLI:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">heroku ps:scale web=1 worker=5
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+heroku ps:scale web=1 worker=5
+</code></p>
 
 <p>I haven’t covered Part 5 of testdriven.io yet, but it has a section on Elastic Load Balancing with EC2 which should cover this area.</p>
 

@@ -10,8 +10,8 @@
   <meta name="description" content="Arch Linux provides packages through the official Arch Linux repositories and the Arch User Repository (AUR). I recently gathered data on ~50,000 packages fr...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/12/02/arch-linux-package-data-analysis.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/12/02/arch-linux-package-data-analysis.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -104,17 +104,18 @@
 
 <p><img src="/static/aur_packages.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="o">.</span><span class="nb">set</span><span class="p">()</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'First Submitted'</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
-<span class="n">df</span><span class="p">[</span><span class="s">"First Submitted"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'First Submitted'</span><span class="p">])</span>
-<span class="n">list_of_dates</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">"First Submitted"</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
-<span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_dates</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">list_of_dates</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'AUR Packages over time'</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Date'</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Packages'</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+sns.set()
+df = df[df['First Submitted'].notnull()]
+df["First Submitted"] = pd.to_datetime(df['First Submitted'])
+list_of_dates = df["First Submitted"].sort_values()
+counts = np.arange(0, len(list_of_dates))
+plt.figure(figsize=(10, 5))
+_ = plt.plot(list_of_dates, counts)
+_ = plt.title('AUR Packages over time')
+_ = plt.xlabel('Date')
+_ = plt.ylabel('Packages')
+</code></p>
 
 <p>It looks like there was a big boost in the number of packages submitted in mid-2015 and that number has been growing consistantly since then.</p>
 
@@ -158,41 +159,46 @@
   <li>Create a dictionary from my data base with packages keys and a list of dependencies as values:</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">graph_dict</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-    <span class="n">graph_dict</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="s">"package_name"</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s">"pkgdeps"</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+graph_dict = {}
+for _, i in df.iterrows():
+    graph_dict[i["package_name"]] = i["pkgdeps"]
+</code></p>
 
 <ul>
   <li>Create a NetworkX graph with the dictionary created in the previous step:</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">graph_dict</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+G = nx.Graph(graph_dict)
+</code></p>
 
 <ul>
   <li>Export the NetworkX graph to JSON using a built-in NetworkX function:</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">networkx.readwrite</span> <span class="kn">import</span> <span class="n">json_graph</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">json_graph</span><span class="o">.</span><span class="n">node_link_data</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+from networkx.readwrite import json_graph
+data = json_graph.node_link_data(G)
+</code></p>
 
 <ul>
   <li>Add a group number to each node element cooresponding to the repository it belongs to.</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s">'nodes'</span><span class="p">]:</span>
-    <span class="n">n</span><span class="p">[</span><span class="s">'group'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">package_name</span> <span class="o">==</span> <span class="n">n</span><span class="p">[</span><span class="s">"id"</span><span class="p">]),</span> <span class="s">"repo_number"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+for n in data['nodes']:
+    n['group'] = int(df.loc[(df.package_name == n["id"]), "repo_number"].iloc[0])
+</code></p>
 
 <ul>
   <li>Save the JSON to a file:</li>
 </ul>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'/home/brian/Documents/github/briancaffey.github.io/aur/data.json'</span><span class="p">,</span> <span class="s">'w'</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
-    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+with open('/home/brian/Documents/github/briancaffey.github.io/aur/data.json', 'w') as outfile:
+    json.dump(data, outfile)
+</code></p>
 
 <ul>
   <li>
@@ -203,11 +209,12 @@
   </li>
 </ul>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'script'</span><span class="p">);</span>
-<span class="nx">e</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">'src'</span><span class="p">,</span> <span class="s1">'https://nytimes.github.io/svg-crowbar/svg-crowbar.js'</span><span class="p">);</span> 
-<span class="nx">e</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">'class'</span><span class="p">,</span> <span class="s1">'svg-crowbar'</span><span class="p">);</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">javascript
+var e = document.createElement('script');
+e.setAttribute('src', 'https://nytimes.github.io/svg-crowbar/svg-crowbar.js'); 
+e.setAttribute('class', 'svg-crowbar');
+document.body.appendChild(e);
+</code></p>
 
 <p>Let’s take one more look at how tightly</p>
 
@@ -287,40 +294,41 @@
 
 <p>Here’s the setup for this bokeh graph:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">bokeh.plotting</span> <span class="kn">import</span> <span class="n">figure</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">show</span><span class="p">,</span> <span class="n">ColumnDataSource</span>
-<span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">HoverTool</span>
-<span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">output_notebook</span>
-<span class="n">output_notebook</span><span class="p">()</span>
+<p>```python
+from bokeh.plotting import figure, output_file, show, ColumnDataSource
+from bokeh.models import HoverTool
+from bokeh.io import output_notebook
+output_notebook()</p>
 
-<span class="n">output_file</span><span class="p">(</span><span class="s">"/home/brian/Documents/github/briancaffey.github.io/_includes/package_sizes.html"</span><span class="p">)</span>
+<p>output_file(“/home/brian/Documents/github/briancaffey.github.io/_includes/package_sizes.html”)</p>
 
-<span class="n">source</span> <span class="o">=</span> <span class="n">ColumnDataSource</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">package_size</span><span class="p">,</span>
-            <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">installed_size</span><span class="p">,</span>
-            <span class="n">desc</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">Description</span><span class="p">,</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">package_name</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
+<p>source = ColumnDataSource(
+        data=dict(
+            x=df.package_size,
+            y=df.installed_size,
+            desc=df.Description,
+            name=df.package_name
+        )
+    )</p>
 
-<span class="n">hover</span> <span class="o">=</span> <span class="n">HoverTool</span><span class="p">(</span>
-        <span class="n">tooltips</span><span class="o">=</span><span class="p">[</span>
-            <span class="p">(</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"@name"</span><span class="p">),</span>
-            <span class="p">(</span><span class="s">"Package Size"</span><span class="p">,</span> <span class="s">"@x MB"</span><span class="p">),</span>
-            <span class="p">(</span><span class="s">"Installed Size"</span><span class="p">,</span> <span class="s">"@y MB"</span><span class="p">),</span>
-            <span class="p">(</span><span class="s">"Description"</span><span class="p">,</span> <span class="s">"@desc"</span><span class="p">),</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
+<p>hover = HoverTool(
+        tooltips=[
+            (“Name”, “@name”),
+            (“Package Size”, “@x MB”),
+            (“Installed Size”, “@y MB”),
+            (“Description”, “@desc”),
+        ]
+    )</p>
 
-<span class="n">TOOLS</span> <span class="o">=</span> <span class="s">'box_zoom,box_select,reset,pan,wheel_zoom'</span>
+<p>TOOLS = ‘box_zoom,box_select,reset,pan,wheel_zoom’</p>
 
-<span class="n">p</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="n">plot_width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">plot_height</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">tools</span><span class="o">=</span><span class="p">[</span><span class="n">TOOLS</span><span class="p">,</span> <span class="n">hover</span><span class="p">],</span>
-           <span class="n">title</span><span class="o">=</span><span class="s">"Packages Size vs. Installed Size"</span><span class="p">,</span> <span class="n">sizing_mode</span><span class="o">=</span><span class="s">'scale_width'</span><span class="p">)</span>
+<p>p = figure(plot_width=400, plot_height=400, tools=[TOOLS, hover],
+           title=”Packages Size vs. Installed Size”, sizing_mode=’scale_width’)</p>
 
-<span class="n">p</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="s">'x'</span><span class="p">,</span> <span class="s">'y'</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-<span class="n">p</span><span class="o">.</span><span class="n">toolbar</span><span class="o">.</span><span class="n">logo</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="n">show</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-</code></pre></div></div>
+<p>p.circle(‘x’, ‘y’, size=5, source=source, alpha=0.2)
+p.toolbar.logo = None
+show(p)
+```</p>
 
 <h2 id="aur-word-cloud">AUR Word Cloud</h2>
 
@@ -330,33 +338,34 @@
 
 <p>We can use a popular python package for making word clouds. Here’s the code:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<p>```python
+import numpy as np
+from PIL import Image
+from os import path
+import matplotlib.pyplot as plt
+import random</p>
 
-<span class="kn">from</span> <span class="nn">wordcloud</span> <span class="kn">import</span> <span class="n">WordCloud</span><span class="p">,</span> <span class="n">STOPWORDS</span>
+<p>from wordcloud import WordCloud, STOPWORDS</p>
 
-<span class="k">def</span> <span class="nf">grey_color_func</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">font_size</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">orientation</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
-                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">"hsl(0, 0</span><span class="si">%%</span><span class="s">, </span><span class="si">%</span><span class="s">d</span><span class="si">%%</span><span class="s">)"</span> <span class="o">%</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<p>def grey_color_func(word, font_size, position, orientation, random_state=None,
+                    **kwargs):
+    return “hsl(0, 0%%, %d%%)” % random.randint(60, 100)</p>
 
-<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="nb">open</span><span class="p">(</span><span class="s">"/home/brian/Documents/aur/images/arch_logo.png"</span><span class="p">))</span>
+<p>mask = np.array(Image.open(“/home/brian/Documents/aur/images/arch_logo.png”))</p>
 
-<span class="n">text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">"/home/brian/Documents/aur/ipynb/package_descriptions.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<p>text = open(“/home/brian/Documents/aur/ipynb/package_descriptions.txt”).read()</p>
 
-<span class="n">wc</span> <span class="o">=</span> <span class="n">WordCloud</span><span class="p">(</span><span class="n">max_words</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="n">stopwords</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-               <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<p>wc = WordCloud(max_words=1000, mask=mask, stopwords=stopwords, margin=10,
+               random_state=1).generate(text)</p>
 
-<span class="n">default_colors</span> <span class="o">=</span> <span class="n">wc</span><span class="o">.</span><span class="n">to_array</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wc</span><span class="o">.</span><span class="n">recolor</span><span class="p">(</span><span class="n">color_func</span><span class="o">=</span><span class="n">grey_color_func</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
-           <span class="n">interpolation</span><span class="o">=</span><span class="s">"bilinear"</span><span class="p">)</span>
-<span class="n">wc</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s">"arch_word_cloud.png"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">"off"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</code></pre></div></div>
+<p>default_colors = wc.to_array()
+plt.figure(figsize=(20, 20))
+plt.imshow(wc.recolor(color_func=grey_color_func, random_state=3),
+           interpolation=”bilinear”)
+wc.to_file(“arch_word_cloud.png”)
+plt.axis(“off”)
+plt.show()
+```</p>
 
 <h2 id="arch-wiki-members">Arch Wiki Members</h2>
 
@@ -364,19 +373,20 @@
 
 <p><img src="/aur/wiki_users.png" alt="png" /></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="o">.</span><span class="nb">set</span><span class="p">()</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s">'registered'</span><span class="p">]</span><span class="o">.</span><span class="n">notnull</span><span class="p">()]</span>
-<span class="n">df</span><span class="p">[</span><span class="s">"registered"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s">'registered'</span><span class="p">])</span>
-<span class="n">list_of_dates</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">"registered"</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
-<span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_dates</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">list_of_dates</span><span class="p">,</span> <span class="n">counts</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">'Registered Arch Wiki members over time'</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">'Date'</span><span class="p">)</span>
-<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">'Members'</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">'/home/brian/Documents/github/briancaffey.github.io/aur/wiki_users.png'</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+sns.set()
+df = df[df['registered'].notnull()]
+df["registered"] = pd.to_datetime(df['registered'])
+list_of_dates = df["registered"].sort_values()
+counts = np.arange(0, len(list_of_dates))
+plt.figure(figsize=(10, 5))
+_ = plt.plot(list_of_dates, counts)
+_ = plt.title('Registered Arch Wiki members over time')
+_ = plt.xlabel('Date')
+_ = plt.ylabel('Members')
+plt.show()
+plt.savefig('/home/brian/Documents/github/briancaffey.github.io/aur/wiki_users.png')
+</code></p>
 
 <p>There is a massive amount of data in the Wiki that I haven’t obtained for this article. You can also find some interesting statistics on the Arch Wiki site <a href="https://wiki.archlinux.org/index.php/ArchWiki:Statistics#Histograms">here</a>.</p>
 

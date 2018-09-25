@@ -10,8 +10,8 @@
   <meta name="description" content="">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2018/01/02/checking-poker-hands-with-python.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2018/01/02/checking-poker-hands-with-python.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -117,64 +117,55 @@ Diamonds D</p>
 
 <p>2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>values = {"2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":11, "Q":12, "K":13, "A":14}
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+values = {"2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":11, "Q":12, "K":13, "A":14}
+</code></p>
 
 <h2 id="hands">Hands</h2>
 
 <p>Here are the hands of poker</p>
 
 <ol>
-  <li>Royal flush (the problem didn’t ask me to consider Royal Flush)
-    <blockquote>
-      <p>A, K, Q, J, 10, all the same suit.</p>
-    </blockquote>
+  <li>
+    <p>Royal flush (the problem didn’t ask me to consider Royal Flush)
+&gt; A, K, Q, J, 10, all the same suit.</p>
   </li>
-  <li>Straight flush
-    <blockquote>
-      <p>Five cards in a sequence, all in the same suit. <strong>Ace can either come before 2 or come after King.</strong></p>
-    </blockquote>
+  <li>
+    <p>Straight flush
+&gt; Five cards in a sequence, all in the same suit. <strong>Ace can either come before 2 or come after King.</strong></p>
   </li>
-  <li>Four of a kind
-    <blockquote>
-      <p>All four cards of the same rank.</p>
-    </blockquote>
+  <li>
+    <p>Four of a kind
+&gt; All four cards of the same rank.</p>
   </li>
-  <li>Full house
-    <blockquote>
-      <p>Three of a kind with a pair.</p>
-    </blockquote>
+  <li>
+    <p>Full house
+&gt; Three of a kind with a pair.</p>
   </li>
-  <li>Flush
-    <blockquote>
-      <p>Any five cards of the same suit, but not in a sequence.</p>
-    </blockquote>
+  <li>
+    <p>Flush
+&gt; Any five cards of the same suit, but not in a sequence.</p>
   </li>
-  <li>Straight
-    <blockquote>
-      <p>Five cards in a sequence, but not of the same suit.</p>
-    </blockquote>
+  <li>
+    <p>Straight
+&gt; Five cards in a sequence, but not of the same suit.</p>
   </li>
-  <li>Three of a kind
-    <blockquote>
-      <p>Three cards of the same rank.</p>
-    </blockquote>
+  <li>
+    <p>Three of a kind
+&gt; Three cards of the same rank.</p>
   </li>
-  <li>Two pair
-    <blockquote>
-      <p>Two different pairs.</p>
-    </blockquote>
+  <li>
+    <p>Two pair
+&gt; Two different pairs.</p>
   </li>
-  <li>Pair
-    <blockquote>
-      <p>Two cards of the same rank.</p>
-    </blockquote>
+  <li>
+    <p>Pair
+&gt; Two cards of the same rank.</p>
   </li>
-  <li>High Card
-    <blockquote>
-      <p>When you haven’t made any of the hands above, the highest card plays.
+  <li>
+    <p>High Card
+&gt; When you haven’t made any of the hands above, the highest card plays.
 In the example below, the jack plays as the highest card.</p>
-    </blockquote>
   </li>
 </ol>
 
@@ -184,8 +175,9 @@ In the example below, the jack plays as the highest card.</p>
 
 <p>Here’s a sample hand:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hand</span> <span class="o">=</span> <span class="p">[</span><span class="s">"3S"</span><span class="p">,</span> <span class="s">"JC"</span><span class="p">,</span> <span class="s">"QD"</span><span class="p">,</span> <span class="s">"5D"</span><span class="p">,</span> <span class="s">"AH"</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+hand = ["3S", "JC", "QD", "5D", "AH"]
+</code></p>
 
 <p>To write functions, I reached for using 2 important python features: <code class="highlighter-rouge">set</code> and <code class="highlighter-rouge">defaultdict</code>.</p>
 
@@ -193,13 +185,14 @@ In the example below, the jack plays as the highest card.</p>
 
 <h2 id="checking-a-flush">Checking a flush</h2>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_flush</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">suits</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">suits</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="k">return</span> <span class="bp">False</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+def check_flush(hand):
+    suits = [h[1] for h in hand]
+    if len(set(suits)) == 1:
+      return True
+    else:
+      return False
+</code></p>
 
 <p>This function creates a list of the suits in our hand, and then counts the unique elements in that list by making it a set. If the length of the set is 1, then all the cards in the hand must be of the same suit.</p>
 
@@ -207,19 +200,21 @@ In the example below, the jack plays as the highest card.</p>
 
 <p>Here’s the <code class="highlighter-rouge">check_hand</code> function:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">check_hand</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">check_straight_flush</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">9</span>
-    <span class="k">if</span> <span class="n">check_four_of_a_kind</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">8</span>
+<p>```python
+def check_hand(hand):
+    if check_straight_flush(hand):
+        return 9
+    if check_four_of_a_kind(hand):
+        return 8</p>
 
-    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">check_two_pair</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">3</span>
-    <span class="k">if</span> <span class="n">check_pair</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mi">2</span>
-    <span class="k">return</span> <span class="mi">1</span>
-</code></pre></div></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>[...]
+if check_two_pair(hand):
+    return 3
+if check_pair(hand):
+    return 2
+return 1 ```
+</code></pre>
+</div>
 
 <p>This function starts checking the most valuable hands. After it checks the second to lowest hand (pair), it returns a value of 1. This value of 1 corresponds to the “highest card” hand. Since I’m not comparing the relative value of hands, it doesn’t matter what the highest card is, so the number just represents the <em>type</em> of hand that is the strongest.</p>
 
@@ -227,84 +222,85 @@ In the example below, the jack plays as the highest card.</p>
 
 <p>Here are the all of the functions I used to detect hands:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">card_order_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">"2"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">"3"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">"4"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s">"5"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="s">"6"</span><span class="p">:</span><span class="mi">6</span><span class="p">,</span> <span class="s">"7"</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span> <span class="s">"8"</span><span class="p">:</span><span class="mi">8</span><span class="p">,</span> <span class="s">"9"</span><span class="p">:</span><span class="mi">9</span><span class="p">,</span> <span class="s">"T"</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="s">"J"</span><span class="p">:</span><span class="mi">11</span><span class="p">,</span> <span class="s">"Q"</span><span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="s">"K"</span><span class="p">:</span><span class="mi">13</span><span class="p">,</span> <span class="s">"A"</span><span class="p">:</span><span class="mi">14</span><span class="p">}</span>
+<p>```python
+card_order_dict = {“2”:2, “3”:3, “4”:4, “5”:5, “6”:6, “7”:7, “8”:8, “9”:9, “T”:10,”J”:11, “Q”:12, “K”:13, “A”:14}</p>
 
-<span class="k">def</span> <span class="nf">check_straight_flush</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">check_flush</span><span class="p">(</span><span class="n">hand</span><span class="p">)</span> <span class="ow">and</span> <span class="n">check_straight</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
+<p>def check_straight_flush(hand):
+    if check_flush(hand) and check_straight(hand):
+        return True
+    else:
+        return False</p>
 
-<span class="k">def</span> <span class="nf">check_four_of_a_kind</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="n">value_counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span> 
-        <span class="n">value_counts</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">return</span> <span class="bp">False</span>
+<p>def check_four_of_a_kind(hand):
+    values = [i[0] for i in hand]
+    value_counts = defaultdict(lambda:0)
+    for v in values: 
+        value_counts[v]+=1
+    if sorted(value_counts.values()) == [1,4]:
+        return True
+    return False</p>
 
-<span class="k">def</span> <span class="nf">check_full_house</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="n">value_counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span> 
-        <span class="n">value_counts</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">return</span> <span class="bp">False</span>
+<p>def check_full_house(hand):
+    values = [i[0] for i in hand]
+    value_counts = defaultdict(lambda:0)
+    for v in values: 
+        value_counts[v]+=1
+    if sorted(value_counts.values()) == [2,3]:
+        return True
+    return False</p>
 
-<span class="k">def</span> <span class="nf">check_flush</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">suits</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">suits</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
+<p>def check_flush(hand):
+    suits = [i[1] for i in hand]
+    if len(set(suits))==1:
+        return True
+    else:
+        return False</p>
 
-<span class="k">def</span> <span class="nf">check_straight</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="n">value_counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-        <span class="n">value_counts</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">rank_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">card_order_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
-    <span class="n">value_range</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">rank_values</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">rank_values</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value_range</span><span class="o">==</span><span class="mi">4</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span> 
-        <span class="c">#check straight with low Ace</span>
-        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="s">"A"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">,</span> <span class="s">"4"</span><span class="p">,</span> <span class="s">"5"</span><span class="p">]):</span>
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="k">return</span> <span class="bp">False</span>
+<p>def check_straight(hand):
+    values = [i[0] for i in hand]
+    value_counts = defaultdict(lambda:0)
+    for v in values:
+        value_counts[v] += 1
+    rank_values = [card_order_dict[i] for i in values]
+    value_range = max(rank_values) - min(rank_values)
+    if len(set(value_counts.values())) == 1 and (value_range==4):
+        return True
+    else: 
+        #check straight with low Ace
+        if set(values) == set([“A”, “2”, “3”, “4”, “5”]):
+            return True
+        return False</p>
 
-<span class="k">def</span> <span class="nf">check_three_of_a_kind</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="n">value_counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-        <span class="n">value_counts</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">]):</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
+<p>def check_three_of_a_kind(hand):
+    values = [i[0] for i in hand]
+    value_counts = defaultdict(lambda:0)
+    for v in values:
+        value_counts[v]+=1
+    if set(value_counts.values()) == set([3,1]):
+        return True
+    else:
+        return False</p>
 
-<span class="k">def</span> <span class="nf">check_two_pairs</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="n">value_counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-        <span class="n">value_counts</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">==</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
+<p>def check_two_pairs(hand):
+    values = [i[0] for i in hand]
+    value_counts = defaultdict(lambda:0)
+    for v in values:
+        value_counts[v]+=1
+    if sorted(value_counts.values())==[1,2,2]:
+        return True
+    else:
+        return False</p>
 
-<span class="k">def</span> <span class="nf">check_one_pairs</span><span class="p">(</span><span class="n">hand</span><span class="p">):</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hand</span><span class="p">]</span>
-    <span class="n">value_counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-        <span class="n">value_counts</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
-    <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">value_counts</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">False</span>
-</code></pre></div></div>
+<p>def check_one_pairs(hand):
+    values = [i[0] for i in hand]
+    value_counts = defaultdict(lambda:0)
+    for v in values:
+        value_counts[v]+=1
+    if 2 in value_counts.values():
+        return True
+    else:
+        return False
+```</p>
 
 <p><code class="highlighter-rouge">defaultdict</code> is a great built-in that is good to use when you don’t know what elements will be in your dictionary, but you know what the initial values of any key that could be added should be. We don’t need it here, but the alternative would be to write a very long dictionary where keys are the possible card values and the values of each key is 0.</p>
 
@@ -314,46 +310,51 @@ In the example below, the jack plays as the highest card.</p>
 
 <p>The next step in the problem is to determine the best possible hand we can get given the hand we are dealt and the 5 cards on top of the deck. I decided to first solve this problem with brute force. Here was my logic for this part: use <code class="highlighter-rouge">itertools</code> to get all combinations of groups of 0, 1, 2, 3, 4 and 5 cards from my hand and add the first <code class="highlighter-rouge">5 - n</code> cards from the deck so we get a five card deck. For each combination of cards we can run <code class="highlighter-rouge">check_hand()</code> and keep track of the highest rank hand, and then return that hand as the best hand. Here’s the code I wrote for this part of the problem:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<p>```python
+from itertools import combinations</p>
 
-<span class="n">hand_dict</span> <span class="o">=</span> <span class="p">{</span><span class="mi">9</span><span class="p">:</span><span class="s">"straight-flush"</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="s">"four-of-a-kind"</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span><span class="s">"full-house"</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span><span class="s">"flush"</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span><span class="s">"straight"</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="s">"three-of-a-kind"</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="s">"two-pairs"</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="s">"one-pair"</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="s">"highest-card"</span><span class="p">}</span>
+<p>hand_dict = {9:”straight-flush”, 8:”four-of-a-kind”, 7:”full-house”, 6:”flush”, 5:”straight”, 4:”three-of-a-kind”, 3:”two-pairs”, 2:”one-pair”, 1:”highest-card”}</p>
 
-<span class="c">#exhaustive search using itertools.combinations</span>
-<span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="n">cards</span><span class="p">):</span>
-    <span class="n">hand</span> <span class="o">=</span> <span class="n">cards</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
-    <span class="n">deck</span> <span class="o">=</span> <span class="n">cards</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
-    <span class="n">best_hand</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
-        <span class="n">possible_combos</span> <span class="o">=</span> <span class="n">combinations</span><span class="p">(</span><span class="n">hand</span><span class="p">,</span> <span class="mi">5</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">possible_combos</span><span class="p">:</span> 
-            <span class="n">current_hand</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="n">deck</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">hand_value</span> <span class="o">=</span> <span class="n">check_hand</span><span class="p">(</span><span class="n">current_hand</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">hand_value</span> <span class="o">&gt;</span> <span class="n">best_hand</span><span class="p">:</span>
-                <span class="n">best_hand</span> <span class="o">=</span> <span class="n">hand_value</span>
-                
-    <span class="k">return</span> <span class="n">hand_dict</span><span class="p">[</span><span class="n">best_hand</span><span class="p">]</span>
-</code></pre></div></div>
+<h1 id="exhaustive-search-using-itertoolscombinations">exhaustive search using itertools.combinations</h1>
+<p>def play(cards):
+    hand = cards[:5]
+    deck = cards[5:]
+    best_hand = 0
+    for i in range(6):
+        possible_combos = combinations(hand, 5-i)
+        for c in possible_combos: 
+            current_hand = list(c) + deck[:i]
+            hand_value = check_hand(current_hand)
+            if hand_value &gt; best_hand:
+                best_hand = hand_value</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>return hand_dict[best_hand] ```
+</code></pre>
+</div>
 
 <h1 id="checking-test-cases">Checking test cases</h1>
 
 <p>Lastly, I need to check each hand and print out the best hand possible. Here’s the loop I wrote to do this:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-    <span class="n">cards</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">()))</span>
-    <span class="n">hand</span> <span class="o">=</span> <span class="n">cards</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
-    <span class="n">deck</span> <span class="o">=</span> <span class="n">cards</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"Hand:"</span><span class="p">,</span> <span class="s">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hand</span><span class="p">),</span> <span class="s">"Deck:"</span><span class="p">,</span> <span class="s">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">deck</span><span class="p">),</span> <span class="s">"Best hand:"</span><span class="p">,</span> <span class="n">play</span><span class="p">(</span><span class="n">cards</span><span class="p">))</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+for i in sys.stdin.readlines():
+    cards = list(map(lambda x:x, i.split()))
+    hand = cards[:5]
+    deck = cards[5:]
+    print("Hand:", " ".join(hand), "Deck:", " ".join(deck), "Best hand:", play(cards))
+</code></p>
 
 <p>This will accept one round of cards per line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2C 3D 4S 5D 7H KD QH 6C JH 2D
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+2C 3D 4S 5D 7H KD QH 6C JH 2D
+</code></p>
 
 <p>and it will output the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hand: 2C 3D 4S 5D 7H Deck: KD QH 6C JH 2D Best hand: straight
-</code></pre></div></div>
+<p><code class="highlighter-rouge">
+Hand: 2C 3D 4S 5D 7H Deck: KD QH 6C JH 2D Best hand: straight
+</code></p>
 
 <h1 id="optimization">Optimization</h1>
 

@@ -10,8 +10,8 @@
   <meta name="description" content="On my other personal website, briancaffey.com, I have a blog. The content on that blog has mostly mirrored what I put on this github pages site, briancaffey....">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/10/17/reading-rss-with-python.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/10/17/reading-rss-with-python.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -100,36 +100,40 @@
 
 <p>First, install it with:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">feedparser</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+pip install feedparser
+</code></p>
 
 <p>Here’s the setup that I will be using in utility a function that will be imported to <code class="highlighter-rouge">views.py</code> and called in the <code class="highlighter-rouge">home()</code> function that renders the homepage for briancaffey.com:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import feedparser
+<p>```
+import feedparser</p>
 
-def get_blog_posts(number_of_posts):
-    url = "http://briancaffey.github.io/feed"
+<p>def get_blog_posts(number_of_posts):
+    url = “http://briancaffey.github.io/feed”
     feed = feedparser.parse(url)
-    posts = feed['items'][:number_of_posts]
-    return posts
-    
-</code></pre></div></div>
+    posts = feed[‘items’][:number_of_posts]
+    return posts</p>
+
+<p>```</p>
 
 <p>Next, in <code class="highlighter-rouge">views.py</code>, we just need to import the function, call it with the number of articles we want to show, save the returned value to a variable and then pass that to <code class="highlighter-rouge">context</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">get_blog_posts</span>
-<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="o">...</span>
-    <span class="n">posts</span> <span class="o">=</span> <span class="n">get_blog_posts</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<p>```python 
+from utils import get_blog_posts
+def home(request):
+    …
+    posts = get_blog_posts(4)</p>
 
-    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="o">...</span>
-        <span class="s">'recent_posts'</span><span class="p">:</span> <span class="n">posts</span><span class="p">,</span>
-        <span class="o">...</span>
-    <span class="p">}</span>
-    
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'home.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</code></pre></div></div>
+<div class="highlighter-rouge"><pre class="highlight"><code>context = {
+    ...
+    'recent_posts': posts,
+    ...
+}
+
+return render(request, 'home.html', context) ```
+</code></pre>
+</div>
 
 <p>In the context, we can access the following data for each item:</p>
 

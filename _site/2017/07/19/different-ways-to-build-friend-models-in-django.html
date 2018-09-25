@@ -10,8 +10,8 @@
   <meta name="description" content="This post will briefly explore two different methods of creating models in Django for friends, relationships, followers or connections on a social network. T...">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/07/19/different-ways-to-build-friend-models-in-django.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/07/19/different-ways-to-build-friend-models-in-django.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -96,58 +96,62 @@
   <div class="post-content" itemprop="articleBody">
     <p>This post will briefly explore two different methods of creating models in Django for friends, relationships, followers or connections on a social network. The first method is one I learned from <a href="https://www.youtube.com/watch?v=IXJ46DitsIg&amp;index=55&amp;list=PLw02n0FEB3E3VSHjyYMcFadtQORvl1Ssj">this youtube tutorial series</a> by <a href="https://github.com/maxg203">Max Goodridge</a> when I first started learning Django.</p>
 
-<h2 id="1st-method-manytomanyfield-to-store-friends">1st Method: <strong>ManytoManyField</strong> to store friends</h2>
+<h2 id="st-method-manytomanyfield-to-store-friends">1st Method: <strong>ManytoManyField</strong> to store friends</h2>
 
 <p>Using Django’s <code class="highlighter-rouge">ManyToManyField</code>, we can define the following <code class="highlighter-rouge">Friend</code> model:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
-<span class="kn">from</span> <span class="nn">accounts.models</span> <span class="kn">import</span> <span class="n">UserProfile</span>
+<p>```python
+from django.db import models
+from accounts.models import UserProfile</p>
 
-<span class="k">class</span> <span class="nc">Friend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">users</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">)</span>
-    <span class="n">current_user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">"owner"</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<p>class Friend(models.Model):
+    users = models.ManyToManyField(UserProfile)
+    current_user = models.ForeignKey(UserProfile, related_name=”owner”, null=True)</p>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">make_friend</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">):</span>
-        <span class="n">friend</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
-            <span class="n">current_user</span> <span class="o">=</span> <span class="n">current_user</span>
-        <span class="p">)</span>
-        <span class="n">friend</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_friend</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>@classmethod
+def make_friend(cls, current_user, new_friend):
+    friend, created = cls.objects.get_or_create(
+        current_user = current_user
+    )
+    friend.users.add(new_friend)
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">remove_friend</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">):</span>
-        <span class="n">friend</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
-            <span class="n">current_user</span> <span class="o">=</span> <span class="n">current_user</span>
-        <span class="p">)</span>
-        <span class="n">friend</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">new_friend</span><span class="p">)</span>
+@classmethod
+def remove_friend(cls, current_user, new_friend):
+    friend, created = cls.objects.get_or_create(
+        current_user = current_user
+    )
+    friend.users.remove(new_friend)
 
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_user</span><span class="p">)</span>
-</code></pre></div></div>
+def __str__(self):
+    return str(self.current_user) ```
+</code></pre>
+</div>
 
 <p>With this type of model, we define the following views to add and remove friends:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
-<span class="kn">from</span> <span class="nn">accounts.models</span> <span class="kn">import</span> <span class="n">UserProfile</span>
-<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
-<span class="kn">from</span> <span class="nn">friends.models</span> <span class="kn">import</span> <span class="n">Friend</span>
-<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<p>```python
+from django.shortcuts import render, get_object_or_404, redirect
+from accounts.models import UserProfile
+from django.contrib.auth.models import User
+from friends.models import Friend
+from django.contrib.auth.decorators import login_required</p>
 
-<span class="nd">@login_required</span>
-<span class="k">def</span> <span class="nf">add_or_remove_friends</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">verb</span><span class="p">):</span>
-    <span class="n">n_f</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
-    <span class="n">owner</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span>
-    <span class="n">new_friend</span> <span class="o">=</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">n_f</span><span class="p">)</span>
+<p>@login_required
+def add_or_remove_friends(request, username, verb):
+    n_f = get_object_or_404(User, username=username)
+    owner = request.user.userprofile
+    new_friend = UserProfile.objects.get(user=n_f)</p>
 
-    <span class="k">if</span> <span class="n">verb</span> <span class="o">==</span> <span class="s">"add"</span><span class="p">:</span>
-        <span class="n">new_friend</span><span class="o">.</span><span class="n">followers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
-        <span class="n">Friend</span><span class="o">.</span><span class="n">make_friend</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">new_friend</span><span class="o">.</span><span class="n">followers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
-        <span class="n">Friend</span><span class="o">.</span><span class="n">remove_friend</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>if verb == "add":
+    new_friend.followers.add(owner)
+    Friend.make_friend(owner, new_friend)
+else:
+    new_friend.followers.remove(owner)
+    Friend.remove_friend(owner, new_friend)
 
-    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">new_friend</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">())</span>
-</code></pre></div></div>
+return redirect(new_friend.get_absolute_url()) ```
+</code></pre>
+</div>
 
 <p>The <code class="highlighter-rouge">Friend</code> model has a <code class="highlighter-rouge">ForeignKey</code> relationship (“owner”), a given user, and a <code class="highlighter-rouge">ManyToManyField</code> relationship with other <code class="highlighter-rouge">UserProfile</code> objects.</p>
 
@@ -161,46 +165,51 @@
 
 <p>This approach is helpful when you want to track the users someone is following and the followers of any given user. For example, to get the users that follow a particular user, we can do the following in a template:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-</code></pre></div></div>
+<p>```html</p>
+
+<p>```</p>
 
 <p>To get the users that a user follows, we could access the friend model in a view and then get a list of users in the <code class="highlighter-rouge">ManyToManyField</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">list_friends</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-    <span class="n">friend_object</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Friend</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">current_user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">)</span>
-    <span class="n">friends</span> <span class="o">=</span> <span class="p">[</span><span class="n">friend</span> <span class="k">for</span> <span class="n">friend</span> <span class="ow">in</span> <span class="n">friend_object</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span> <span class="k">if</span> <span class="n">friend</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'template.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">"friends"</span><span class="p">:</span><span class="n">friends</span><span class="p">})</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+def list_friends(request):
+    friend_object, created = Friend.objects.get_or_create(current_user=request.user.userprofile)
+    friends = [friend for friend in friend_object.users.all() if friend != request.user.userprofile]
+    return render(request, 'template.html', {"friends":friends})
+</code></p>
 
 <p>Alternatively, we could write a class method to do this for is in the friend model.</p>
 
 <p>This is a good way to track relationships if relationships is the only piece of information we need to track. However, if we want to track more information about a relationship, such as the date and time the relationship was formed, we will quickly see the limits of this model schema. The next method provides another way that allows us to store more information about each relationship.</p>
 
-<h2 id="2nd-method-foreignkey-with-one-relationship-per-object">2nd Method: <strong>ForeignKey</strong> with one relationship per object</h2>
+<h2 id="nd-method-foreignkey-with-one-relationship-per-object">2nd Method: <strong>ForeignKey</strong> with one relationship per object</h2>
 
 <p>Another popular solution for making a <code class="highlighter-rouge">Friend</code> model in Django discussions around the internet describes the following method (originally seen on Stack Overflow in <a href="https://stackoverflow.com/questions/4564760/best-way-to-make-djangos-user-system-have-friends">this post</a>). Let’s call this model <code class="highlighter-rouge">Connection</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Connection</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">created</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-    <span class="n">creator</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">"friendship_creator_set"</span><span class="p">)</span>
-    <span class="n">following</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">"friend_set"</span><span class="p">)</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+class Connection(models.Model):
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    creator = models.ForeignKey(User, related_name="friendship_creator_set")
+    following = models.ForeignKey(User, related_name="friend_set")
+</code></p>
 
 <p>With this model, we would want to create additional class methods on our <code class="highlighter-rouge">UserProfile</code> model to easily get a list of connections (users the user is following) and followers (users following the user) in a template or view:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">friends.models</span> <span class="kn">import</span> <span class="n">Friendship</span>
-<span class="k">class</span> <span class="nc">UserProfile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<p>```python
+from friends.models import Friendship
+class UserProfile(models.Model):</p>
 
-    <span class="o">...</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>...
 
-    <span class="k">def</span> <span class="nf">get_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-  		<span class="n">connections</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
-  		<span class="k">return</span> <span class="n">connections</span>
-          
-    <span class="k">def</span> <span class="nf">get_followers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">followers</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">following</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">followers</span>
-</code></pre></div></div>
+def get_connections(self):
+  		connections = Connection.objects.filter(creator=self.user)
+  		return connections
+      
+def get_followers(self):
+    followers = Connection.objects.filter(following=self.user)
+    return followers ```
+</code></pre>
+</div>
 
 <h2 id="accessing-connection-information-in-api-data">Accessing Connection Information in API Data</h2>
 
@@ -216,115 +225,119 @@
 
 <p><em>api/views.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UserListAPIView</span><span class="p">(</span><span class="n">ListAPIView</span><span class="p">):</span>
-    <span class="n">queryset</span> <span class="o">=</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
-    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">UserListSerializer</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+class UserListAPIView(ListAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserListSerializer
+</code></p>
 
 <p><em>api/serializers.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">UserProfile</span><span class="p">,</span> <span class="n">Connection</span>
-<span class="k">class</span> <span class="nc">UserListSerializer</span><span class="p">(</span><span class="n">ModelSerializer</span><span class="p">):</span>
+<p>```python
+from ..models import UserProfile, Connection
+class UserListSerializer(ModelSerializer):</p>
 
-    <span class="n">following</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
-    <span class="n">follows_requesting_user</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>following = serializers.SerializerMethodField()
+follows_requesting_user = serializers.SerializerMethodField()
 
-    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">UserProfile</span>
-        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s">'user'</span><span class="p">,</span>
-            <span class="s">'first_name'</span><span class="p">,</span>
-            <span class="s">'last_name'</span><span class="p">,</span>
-            <span class="s">'bio'</span><span class="p">,</span>
-            <span class="o">...</span>
-            <span class="s">'following'</span><span class="p">,</span>
-            <span class="s">'follows_requesting_user'</span><span class="p">,</span>
-            <span class="s">'follow_link'</span><span class="p">,</span>
-        <span class="p">]</span>
+class Meta:
+    model = UserProfile
+    fields = [
+        'user',
+        'first_name',
+        'last_name',
+        'bio',
+        ...
+        'following',
+        'follows_requesting_user',
+        'follow_link',
+    ]
 
-    <span class="k">def</span> <span class="nf">get_following</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="n">creator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">'request'</span><span class="p">]</span><span class="o">.</span><span class="n">user</span>
-        <span class="n">following</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">user</span>
-        <span class="n">connected</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span> <span class="n">following</span><span class="o">=</span><span class="n">following</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">connected</span><span class="p">)</span>
+def get_following(self, obj):
+    creator = self.context['request'].user
+    following = obj.user
+    connected = Connection.objects.filter(creator=creator, following=following)
+    return len(connected)
 
-    <span class="k">def</span> <span class="nf">get_follows_requesting_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="n">creator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">'request'</span><span class="p">]</span><span class="o">.</span><span class="n">user</span>
-        <span class="n">following</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">user</span>
-        <span class="n">connected</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="n">following</span><span class="p">,</span> <span class="n">following</span><span class="o">=</span><span class="n">creator</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">connected</span><span class="p">)</span>
-</code></pre></div></div>
+def get_follows_requesting_user(self, obj):
+    creator = self.context['request'].user
+    following = obj.user
+    connected = Connection.objects.filter(creator=following, following=creator)
+    return len(connected) ```
+</code></pre>
+</div>
 
 <p>Finally, here’s look into the <code class="highlighter-rouge">index.js</code> file that includes the React component which consumes this API data:</p>
 
 <p><em>assets/js/index.js</em></p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<p>```js
+…</p>
 
-<span class="k">if</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'users-container'</span><span class="p">))</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">UserList</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
-    <span class="na">loadUsersFromServer</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'something'</span><span class="p">)</span>
-      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-        <span class="na">url</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
-        <span class="na">datatype</span><span class="p">:</span> <span class="s1">'json'</span><span class="p">,</span>
-        <span class="na">cache</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-        <span class="na">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-          <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="na">data</span><span class="p">:</span><span class="nx">data</span><span class="p">});</span>
-        <span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
-      <span class="p">})</span>
-    <span class="p">},</span>
+<p>if(document.getElementById(‘users-container’)) {
+  var UserList = React.createClass({
+    loadUsersFromServer: function(){
+      console.log(‘something’)
+      $.ajax({
+        url: this.props.url,
+        datatype: ‘json’,
+        cache: false,
+        success: function(data){
+          this.setState({data:data});
+        }.bind(this)
+      })
+    },</p>
 
-    <span class="na">getInitialState</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="k">return</span> <span class="p">{</span><span class="na">data</span><span class="p">:</span> <span class="p">[]};</span>
-    <span class="p">},</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>getInitialState: function(){
+  return {data: []};
+},
 
-    <span class="na">componentDidMount</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">loadUsersFromServer</span><span class="p">();</span>
-      <span class="nx">setInterval</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">loadUsersFromServer</span><span class="p">,</span>
-                  <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">pollInterval</span><span class="p">)</span>
-    <span class="p">},</span>
-    <span class="na">render</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">data</span><span class="p">){</span>
-        <span class="kd">var</span> <span class="nx">userNodes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">){</span>
-          <span class="k">return</span> <span class="p">(</span>
-            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"thumbnail"</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">user</span><span class="p">}</span><span class="o">&gt;</span>
-            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"caption post-detail-item"</span><span class="o">&gt;</span>
-              <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"row"</span><span class="o">&gt;</span>
-              <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"col-md-3"</span><span class="o">&gt;</span>
-                <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"img-responsive"</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">photo_url</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
-</span>                <span class="o">&lt;</span><span class="nx">br</span> <span class="o">/&gt;</span>
-                <span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">following</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">?</span> <span class="o">&lt;</span><span class="nx">label</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"label label-primary"</span><span class="o">&gt;</span><span class="nx">following</span><span class="o">&lt;</span><span class="sr">/label&gt; : &lt;a className="btn btn-warning" href={'/</span><span class="s1">'+user.follow_link}&gt;Follow&lt;/a&gt;}&lt;br /&gt;
-                {user.follows_requesting_user == 1 ? &lt;label className="label label-primary"&gt;follows you&lt;/label&gt; : ''}
-              &lt;/div&gt;
-                &lt;div className="col-md-9"&gt;
-                &lt;h2&gt;{user.first_name} {user.last_name}&lt;/h2&gt;
-                &lt;h4&gt;{user.job_title} @ {user.current_company}&lt;/h4&gt;
-                {user.is_facebook_connected ? &lt;button className="btn btn-default"&gt;Facebook: Connected&lt;/button&gt; :''}
-                {user.is_linkedin_connected ? &lt;button className="btn btn-default"&gt;LinkedIn: Connected&lt;/button&gt; :''}
-                &lt;br /&gt;&lt;br /&gt;
-                &lt;a className="btn btn-primary" href={"/"+user.user_profile_url}&gt;View&lt;/a&gt;
-                &lt;/div&gt;
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;)
-        })
-      }
+componentDidMount: function(){
+  this.loadUsersFromServer();
+  setInterval(this.loadUsersFromServer,
+              this.props.pollInterval)
+},
+render: function(){
+  if (this.state.data){
+    var userNodes = this.state.data.map(function(user){
       return (
-        &lt;div&gt;
-          &lt;h1&gt;Women in the Lead Network&lt;/h1&gt;
-            {userNodes}
+        &lt;div className="thumbnail" key={user.user}&gt;
+        &lt;div className="caption post-detail-item"&gt;
+          &lt;div className="row"&gt;
+          &lt;div className="col-md-3"&gt;
+            &lt;img className="img-responsive" src={user.photo_url}/&gt;
+            &lt;br /&gt;
+            {user.following == 1 ? &lt;label className="label label-primary"&gt;following&lt;/label&gt; : &lt;a className="btn btn-warning" href={'/'+user.follow_link}&gt;Follow&lt;/a&gt;}&lt;br /&gt;
+            {user.follows_requesting_user == 1 ? &lt;label className="label label-primary"&gt;follows you&lt;/label&gt; : ''}
+          &lt;/div&gt;
+            &lt;div className="col-md-9"&gt;
+            &lt;h2&gt;{user.first_name} {user.last_name}&lt;/h2&gt;
+            &lt;h4&gt;{user.job_title} @ {user.current_company}&lt;/h4&gt;
+            {user.is_facebook_connected ? &lt;button className="btn btn-default"&gt;Facebook: Connected&lt;/button&gt; :''}
+            {user.is_linkedin_connected ? &lt;button className="btn btn-default"&gt;LinkedIn: Connected&lt;/button&gt; :''}
+            &lt;br /&gt;&lt;br /&gt;
+            &lt;a className="btn btn-primary" href={"/"+user.user_profile_url}&gt;View&lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
         &lt;/div&gt;
-      )
-    }
-  })
+      &lt;/div&gt;)
+    })
+  }
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Women in the Lead Network&lt;/h1&gt;
+        {userNodes}
+    &lt;/div&gt;
+  )
+}   })
+</code></pre>
+</div>
 
+<p>ReactDOM.render(&lt;UserList url=’/api/users/’ pollInterval={10000} /&gt;,
+  document.getElementById(‘users-container’))</p>
 
-  ReactDOM.render(&lt;UserList url='</span><span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">users</span><span class="o">/</span><span class="s1">' pollInterval={10000} /&gt;,
-  document.getElementById('</span><span class="nx">users</span><span class="o">-</span><span class="nx">container</span><span class="s1">'))
-
-}
-</span></code></pre></div></div>
+<p>}
+```</p>
 
 <h2 id="a-third-way">A third way?</h2>
 

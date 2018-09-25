@@ -10,8 +10,8 @@
   <meta name="description" content="This is a simple guide to setting up a Django project on Heroku.">
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/2017/03/04/settinging-up-django-with-heroku.html">
-  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="/2017/03/04/settinging-up-django-with-heroku.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
   <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
   <script>
@@ -98,68 +98,75 @@
 
 <p>The first step is to create a virutal environment in a new directory:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">mkdir </span>proj <span class="o">&amp;&amp;</span> <span class="nb">cd </span>proj
-<span class="gp">$</span> virtualenv <span class="nt">-p</span> python3 <span class="nb">.</span>
-<span class="gp">$</span> <span class="nb">source </span>bin/activate
-<span class="gp">(proj) $</span> <span class="nb">mkdir </span>src
-<span class="gp">(proj) $</span> <span class="nb">cd </span>src
-<span class="gp">(proj) $</span> pip <span class="nb">install </span><span class="nv">django</span><span class="o">==</span>1.10.5
-<span class="gp">(proj) $</span> django-admin.py startproject myproj <span class="nb">.</span>
-<span class="gp">(proj) $</span> <span class="nb">ls</span>
-<span class="go">myproj        manage.py
-</span></code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+$ mkdir proj &amp;&amp; cd proj
+$ virtualenv -p python3 .
+$ source bin/activate
+(proj) $ mkdir src
+(proj) $ cd src
+(proj) $ pip install django==1.10.5
+(proj) $ django-admin.py startproject myproj .
+(proj) $ ls
+myproj        manage.py
+</code></p>
 
 <p>This sets up a virtual environment and creates an empty Django project. The next step is to create a settings module.</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> <span class="nb">cd </span>myproj
-<span class="gp">(proj) $</span> <span class="nb">mkdir </span>settings <span class="o">&amp;&amp;</span> <span class="nb">cd </span>settings
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ cd myproj
+(proj) $ mkdir settings &amp;&amp; cd settings
+</code></p>
 
 <p>Next we want to add <code class="highlighter-rouge">__init__.py</code> to settings to make it a python module.</p>
 
 <p><em>src/myproj/settings/<strong>init</strong>.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="o">*</span>
+<p>```python
+from .base import *</p>
 
-<span class="kn">from</span> <span class="nn">.production</span> <span class="kn">import</span> <span class="o">*</span>
+<p>from .production import *</p>
 
-<span class="k">try</span><span class="p">:</span>
-	<span class="kn">from</span> <span class="nn">.local</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="k">except</span><span class="p">:</span>
-	<span class="k">pass</span>
-</code></pre></div></div>
+<p>try:
+	from .local import *
+except:
+	pass
+```</p>
 
 <p>Next we want to change the <code class="highlighter-rouge">BASE_DIR</code> (base directory) in <code class="highlighter-rouge">settings.py</code>:</p>
 
 <p><em>settings.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="c"># Build paths inside the project like this: os.path.join(BASE_DIR, ...)</span>
-<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))))</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">python
+[...]
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+[...]
+</code></p>
 
 <p>Next we need to move <code class="highlighter-rouge">settings.py</code> into the <code class="highlighter-rouge">settings</code> folder and rename it <code class="highlighter-rouge">base.py</code> and then copy <code class="highlighter-rouge">base.py</code> twice as <code class="highlighter-rouge">local.py</code> and <code class="highlighter-rouge">production.py</code> these three files will live in <code class="highlighter-rouge">settings</code>.</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> <span class="nb">mv </span>settings.py settings
-<span class="gp">(proj) $</span> <span class="nb">cd </span>settings
-<span class="gp">(proj) $</span> <span class="nb">mv </span>settings.py base.py
-<span class="gp">(proj) $</span> <span class="nb">cp </span>base.py local.py
-<span class="gp">(proj) $</span> <span class="nb">cp </span>base.py production.py
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ mv settings.py settings
+(proj) $ cd settings
+(proj) $ mv settings.py base.py
+(proj) $ cp base.py local.py
+(proj) $ cp base.py production.py
+</code></p>
 
 <p>Next we need to install PostgreSQL:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> pip <span class="nb">install </span>psycopg2
-<span class="gp">(proj) $</span> pip <span class="nb">install </span>gunicorn dj-database-url
-<span class="gp">(proj) $</span> pip <span class="nb">install </span>django-crispy-forms
-<span class="gp">(proj) $</span> pip <span class="nb">install </span>pillow
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ pip install psycopg2
+(proj) $ pip install gunicorn dj-database-url
+(proj) $ pip install django-crispy-forms
+(proj) $ pip install pillow
+</code></p>
 
 <p>At this point we can check to see if everything installed correctly:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> pip freeze
-<span class="go">appdirs==1.4.3
+<p><code class="highlighter-rouge">terminal
+(proj) $ pip freeze
+appdirs==1.4.3
 dj-database-url==0.4.2
 Django==1.10.5
 django-crispy-forms==1.6.1
@@ -170,42 +177,48 @@ Pillow==4.0.0
 psycopg2==2.7.1
 pyparsing==2.2.0
 six==1.10.0
-</span></code></pre></div></div>
-<p>And then we can add these to a file in our base directory called <code class="highlighter-rouge">requirements.txt</code>:</p>
+</code>
+And then we can add these to a file in our base directory called <code class="highlighter-rouge">requirements.txt</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> pip freeze <span class="o">&gt;</span> requirements.txt
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ pip freeze &gt; requirements.txt
+</code></p>
 
 <p>Next we can run migrations and create a superuser:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> python manage.py migrate
-<span class="gp">(proj) $</span> python manage.py createsuperuser
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ python manage.py migrate
+(proj) $ python manage.py createsuperuser
+</code></p>
 
 <p>Next we need to initialize our git repository and create <code class="highlighter-rouge">.gitignore</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> git init
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ git init
+</code></p>
 
 <p>We can put <code class="highlighter-rouge">.gitignore</code> in our base directory and add the following:</p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myproj/settings/local.py
-</code></pre></div></div>
+<p><code class="highlighter-rouge">text
+myproj/settings/local.py
+</code></p>
 
 <p>We also want to ignore several other python-related files in our directory. An easy way to do this is to add python gitignore. This can be found <a href="https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore">here</a>.</p>
 
 <p>Next we can make our first commit:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> git add <span class="nt">--all</span>
-<span class="gp">(proj) $</span> git commit <span class="nt">-m</span> <span class="s2">"initial commit"</span>
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ git add --all
+(proj) $ git commit -m "initial commit"
+</code></p>
 
 <p>The next step involves setting up Heroku. First we need to create a <code class="highlighter-rouge">Procfile</code> in our base directory:</p>
 
 <p><em>Procfile</em></p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>web: gunicorn myproj.wsgi --log-file -
-</code></pre></div></div>
+<p><code class="highlighter-rouge">text
+web: gunicorn myproj.wsgi --log-file -
+</code></p>
 
 <p>Next we can try to run Heroku locally, but first we need to add <code class="highlighter-rouge">0.0.0.0</code> to <code class="highlighter-rouge">ALLOWED_HOSTS</code> in <code class="highlighter-rouge">production.py</code>, <code class="highlighter-rouge">base.py</code> and <code class="highlighter-rouge">local.py</code>.</p>
 
@@ -213,9 +226,10 @@ six==1.10.0
 
 <p>Next we need to create the project on Heroku:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> heroku login
-<span class="gp">(proj) $</span> heroku create my-unique-project-name-123
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ heroku login
+(proj) $ heroku create my-unique-project-name-123
+</code></p>
 
 <p>Now we can see our project at <code class="highlighter-rouge">my-unique-project-name-123.herokuapp.com</code>, and it should say <code class="highlighter-rouge">Heroku | Welcome to your new app!</code></p>
 
@@ -223,27 +237,31 @@ six==1.10.0
 
 <p>The very last step is to add the specific version of Python to a file called <code class="highlighter-rouge">runtime.txt</code> in our base directory:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> python <span class="nt">-V</span>
-<span class="go">Python 3.4.3
-</span><span class="gp">(proj) $</span> <span class="nb">echo</span> <span class="s2">"python-3.4.3"</span> <span class="o">&gt;</span> runtime.txt
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ python -V
+Python 3.4.3
+(proj) $ echo "python-3.4.3" &gt; runtime.txt
+</code></p>
 
 <p>Before we push to Heroku we need to change a setting on Heroku related to static files:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> heroku config:set <span class="nv">DISABLE_COLLECTSTATIC</span><span class="o">=</span>1
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ heroku config:set DISABLE_COLLECTSTATIC=1
+</code></p>
 
 <p>Now we can finally push the git repository to Heroku:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> git push heroku master
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ git push heroku master
+</code></p>
 
 <p>Now if we go to our site on heroku we should see:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Not Found  
+<p>```
+Not Found</p>
 
-The requested URL / was not found on this server.
-</code></pre></div></div>
+<p>The requested URL / was not found on this server.
+```</p>
 
 <p>There is a helpful guide on deploying Python and Django apps on Heroku’s website <a href="https://devcenter.heroku.com/articles/deploying-python">here</a>.</p>
 
@@ -254,153 +272,170 @@ The requested URL / was not found on this server.
 No add-ons are automatically provisioned if a pure Python application is detected. If you need a SQL database for your app, add one explicitly:</p>
 </blockquote>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> heroku addons:create heroku-postgresql:hobby-dev
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+$ heroku addons:create heroku-postgresql:hobby-dev
+</code></p>
 
 <p>So we need to run this command:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">
-</span><span class="gp">(proj) $</span> heroku addons:create heroku-postgresql:hobby-dev
-<span class="go">
-</span></code></pre></div></div>
+<p>```terminal</p>
+
+<p>(proj) $ heroku addons:create heroku-postgresql:hobby-dev</p>
+
+<p>```</p>
 
 <p>Next we need to access the terminal on our Heroku server:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> heroku run bash
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ heroku run bash
+</code></p>
 
 <p>Next we need to add database-related information to <code class="highlighter-rouge">production.py</code> under the <code class="highlighter-rouge">DATABASES</code> section:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="kn">import</span> <span class="nn">dj_database_url</span>
+<p>```python
+[…]
+import dj_database_url</p>
 
-<span class="n">db_from_env</span> <span class="o">=</span> <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">()</span>
-<span class="n">DATABASES</span><span class="p">[</span><span class="s">'default'</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">db_from_env</span><span class="p">)</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
+<p>db_from_env = dj_database_url.config()
+DATABASES[‘default’].update(db_from_env)
+[…]
+```</p>
 
 <p>Now we can push to Heroku:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> git push heroku master
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ git push heroku master
+</code></p>
 
 <p>Next we can run our migrations:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> heroku run python manage.py makemigrations
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ heroku run python manage.py makemigrations
+</code></p>
 
 <p>Next we can run <code class="highlighter-rouge">migrate</code> and <code class="highlighter-rouge">createsuperuser</code> on our Heroku server:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> heroku run python manage.py migrate <span class="o">&amp;&amp;</span> heroku run python manage.py createsuperuser
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ heroku run python manage.py migrate &amp;&amp; heroku run python manage.py createsuperuser
+</code></p>
 
 <p>Now we should be able to login to the admin page with the account we just created, but CSS is still not working at this point. Here’s how we configure static files to get CSS to work:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> pip <span class="nb">install </span>whitenoise
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ pip install whitenoise
+</code></p>
 
 <p><code class="highlighter-rouge">whitenoise</code> is needed so Heroku can run our static files.</p>
 
 <p>Next we want to make sure to include <code class="highlighter-rouge">whitenoise</code> in <code class="highlighter-rouge">requirements.txt</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> pip freeze <span class="o">&gt;</span> requirements.txt
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ pip freeze &gt; requirements.txt
+</code></p>
 
 <p>Next we need to add the following item to the list of <code class="highlighter-rouge">MIDDLEWARE</code> components. This needs to be added to BOTH <code class="highlighter-rouge">production.py</code> AND <code class="highlighter-rouge">base.py</code> in order for the local files to show on both our heroku site and the locally served site with <code class="highlighter-rouge">heroku local web</code>:</p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MIDDLEWARE = [
+<p><code class="highlighter-rouge">text
+MIDDLEWARE = [
 [...]
 'whitenoise.middleware.WhiteNoiseMiddleware',
 [...]
 ]
-</code></pre></div></div>
+</code></p>
 
 <p>Next we have a few more items to add to our settings files:</p>
 
 <p><em>production.py</em></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"static"</span><span class="p">),</span>
-<span class="p">)</span>
+<p>```python</p>
 
-<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"live-static"</span><span class="p">,</span> <span class="s">"static-root"</span><span class="p">)</span>
+<p>STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, “static”),
+)</p>
 
-<span class="n">STATICFILES_STORAGE</span> <span class="o">=</span> <span class="s">'whitenoise.django.GzipManifestStaticFilesStorage'</span>
+<p>STATIC_ROOT = os.path.join(BASE_DIR, “live-static”, “static-root”)</p>
 
-<span class="c">#STATIC_ROOT = "/home/cfedeploy/webapps/cfehome_static_root/"</span>
+<p>STATICFILES_STORAGE = ‘whitenoise.django.GzipManifestStaticFilesStorage’</p>
 
-<span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">"/media/"</span>
+<h1 id="staticroot--homecfedeploywebappscfehomestaticroot">STATIC_ROOT = “/home/cfedeploy/webapps/cfehome_static_root/”</h1>
 
-<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"live-static"</span><span class="p">,</span> <span class="s">"media-root"</span><span class="p">)</span>
+<p>MEDIA_URL = “/media/”</p>
 
-</code></pre></div></div>
+<p>MEDIA_ROOT = os.path.join(BASE_DIR, “live-static”, “media-root”)</p>
+
+<p>```</p>
 
 <p>And we also need to add some files to our base directory that will hold our static files:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> <span class="nb">mkdir </span>static
-<span class="gp">(proj) $</span> <span class="nb">echo</span> <span class="s2">"body {color:#000;}"</span> <span class="o">&gt;</span> static/main.css
-<span class="gp">(proj) $</span> <span class="nb">mkdir </span>live-static
-<span class="gp">(proj) $</span> <span class="nb">mkdir </span>live-static/static-root
-<span class="gp">(proj) $</span> <span class="nb">mkdir </span>live-static/media-root
-<span class="gp">(proj) $</span>
-<span class="gp">(proj) $</span>
-<span class="go">
-</span></code></pre></div></div>
+<p>```terminal
+(proj) $ mkdir static
+(proj) $ echo “body {color:#000;}” &gt; static/main.css
+(proj) $ mkdir live-static
+(proj) $ mkdir live-static/static-root
+(proj) $ mkdir live-static/media-root
+(proj) $
+(proj) $</p>
+
+<p>```</p>
 
 <p>And we also need to add the following to the end of <code class="highlighter-rouge">production.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">'/static/'</span>
+<p>```python
+[…]
+STATIC_URL = ‘/static/’</p>
 
-<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"static"</span><span class="p">),</span>
-<span class="p">)</span>
+<p>STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, “static”),
+)</p>
 
-<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"live-static"</span><span class="p">,</span> <span class="s">"static-root"</span><span class="p">)</span>
+<p>STATIC_ROOT = os.path.join(BASE_DIR, “live-static”, “static-root”)</p>
 
-<span class="n">STATICFILES_STORAGE</span> <span class="o">=</span> <span class="s">'whitenoise.django.GzipManifestStaticFilesStorage'</span>
+<p>STATICFILES_STORAGE = ‘whitenoise.django.GzipManifestStaticFilesStorage’</p>
 
-<span class="c">#STATIC_ROOT = "/home/cfedeploy/webapps/cfehome_static_root/"</span>
+<h1 id="staticroot--homecfedeploywebappscfehomestaticroot-1">STATIC_ROOT = “/home/cfedeploy/webapps/cfehome_static_root/”</h1>
 
-<span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">"/media/"</span>
+<p>MEDIA_URL = “/media/”</p>
 
-<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"live-static"</span><span class="p">,</span> <span class="s">"media-root"</span><span class="p">)</span>
-</code></pre></div></div>
+<p>MEDIA_ROOT = os.path.join(BASE_DIR, “live-static”, “media-root”)
+```</p>
 
 <p><code class="highlighter-rouge">base.py</code> and <code class="highlighter-rouge">local.py</code> should have the following:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">'/static/'</span>
+<p>```python
+STATIC_URL = ‘/static/’</p>
 
-<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"static"</span><span class="p">),</span>
-<span class="p">)</span>
+<p>STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, “static”),
+)</p>
 
-<span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"live-static"</span><span class="p">,</span> <span class="s">"static-root"</span><span class="p">)</span>
+<p>STATIC_ROOT = os.path.join(BASE_DIR, “live-static”, “static-root”)</p>
 
-<span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">"/media/"</span>
+<p>MEDIA_URL = “/media/”</p>
 
-<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"live-static"</span><span class="p">,</span> <span class="s">"media-root"</span><span class="p">)</span>
-</code></pre></div></div>
+<p>MEDIA_ROOT = os.path.join(BASE_DIR, “live-static”, “media-root”)
+```</p>
 
 <p>Next we want to run <code class="highlighter-rouge">collectstatic</code> locally:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> python manage.py collectstatic
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ python manage.py collectstatic
+</code></p>
 
 <p>We also want to add a blank file to <code class="highlighter-rouge">live-static/media-root</code> so that it becomes tracked in git:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> <span class="nb">echo</span> <span class="s2">"some text"</span> <span class="o">&gt;</span> live-static/media-root/blank.txt
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ echo "some text" &gt; live-static/media-root/blank.txt
+</code></p>
 
 <p>Next we can commit these changes and push to Heroku, and check to see if the static files are working in the admin panel. We also want to set <code class="highlighter-rouge">DISABLE_COLLECTSTATIC</code> to <code class="highlighter-rouge">0</code>:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> git add <span class="nt">--all</span>
-<span class="gp">(proj) $</span> git commit <span class="nt">-m</span> <span class="s2">"added static files"</span>
-<span class="gp">(proj) $</span> git push heroku master
-<span class="gp">(proj) $</span> heroku config:set <span class="nv">DISABLE_COLLECTSTATIC</span><span class="o">=</span>0
-</code></pre></div></div>
-<p>Now we should be able to see the admin panel with working CSS on both the live and local heroku sites.</p>
+<p><code class="highlighter-rouge">terminal
+(proj) $ git add --all
+(proj) $ git commit -m "added static files"
+(proj) $ git push heroku master
+(proj) $ heroku config:set DISABLE_COLLECTSTATIC=0
+</code>
+Now we should be able to see the admin panel with working CSS on both the live and local heroku sites.</p>
 
 <h1 id="adding-an-app-and-configuring-bootstrap">Adding an app and configuring Bootstrap</h1>
 
@@ -408,101 +443,109 @@ No add-ons are automatically provisioned if a pure Python application is detecte
 
 <p>Let’s start by creating a new app:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> python manage.py startapp pages
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ python manage.py startapp pages
+</code></p>
 
 <p><code class="highlighter-rouge">pages</code> will be the name of an app that we create here.</p>
 
 <p>In <code class="highlighter-rouge">pages/views.py</code> we can add a class-based view that will serve as the homepage:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">View</span>
-<span class="c"># Create your views here.</span>
+<p>```python
+from django.shortcuts import render
+from django.views.generic import View
+# Create your views here.</p>
 
-<span class="k">class</span> <span class="nc">HomeView</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
-	<span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-		<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'pages/home.html'</span><span class="p">,</span> <span class="p">{})</span>
+<p>class HomeView(View):
+	def get(self, request, *args, **kwargs):
+		return render(request, ‘pages/home.html’, {})</p>
 
-</code></pre></div></div>
+<p>```</p>
 
 <p>We then update <code class="highlighter-rouge">urls.py</code> to include our new view:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
-<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
-<span class="kn">from</span> <span class="nn">services.views</span> <span class="kn">import</span> <span class="n">HomeView</span>
+<p>```python
+from django.conf.urls import url
+from django.contrib import admin
+from services.views import HomeView</p>
 
-<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">url</span><span class="p">(</span><span class="s">r'^admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
-    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">HomeView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span>
-<span class="p">]</span>
+<p>urlpatterns = [
+    url(r’^admin/’, admin.site.urls),
+    url(r’^$’, HomeView.as_view(), name=’home’),
+]</p>
 
-</code></pre></div></div>
-<p>Next we have to add <code class="highlighter-rouge">pages</code> to <code class="highlighter-rouge">INSTALLED_APPS</code> in both <code class="highlighter-rouge">production.py</code> and <code class="highlighter-rouge">local.py</code>.</p>
+<p>```
+Next we have to add <code class="highlighter-rouge">pages</code> to <code class="highlighter-rouge">INSTALLED_APPS</code> in both <code class="highlighter-rouge">production.py</code> and <code class="highlighter-rouge">local.py</code>.</p>
 
 <p>Next we need to make some folders within our new <code class="highlighter-rouge">pages</code> app:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> <span class="nb">mkdir </span>page/templates <span class="o">&amp;&amp;</span> <span class="nb">cd </span>pages/templates
-<span class="gp">(proj) $</span> <span class="nb">mkdir </span>pages
-<span class="gp">(proj) $</span> <span class="nb">touch </span>home.html
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ mkdir page/templates &amp;&amp; cd pages/templates
+(proj) $ mkdir pages
+(proj) $ touch home.html
+</code></p>
 
 <p>Then we need to add the following to <code class="highlighter-rouge">home.html</code>:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% extends "base.html" %}
+<p>```html
+{% extends “base.html” %}</p>
 
-{% block content %}
+<p>{% block content %}</p>
 
-{% endblock content%}
-</code></pre></div></div>
+<p>{% endblock content%}
+```</p>
 
 <p>Next we need to update <code class="highlighter-rouge">DIR</code> in <code class="highlighter-rouge">TEMPLATES</code> in <code class="highlighter-rouge">base.py</code>, <code class="highlighter-rouge">local.py</code> and <code class="highlighter-rouge">production.py</code>:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'templates'</span><span class="p">)],</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-</code></pre></div></div>
-<p>Next we need to add a <code class="highlighter-rouge">templates</code> folder to the root of our project:</p>
+<p><code class="highlighter-rouge">python
+[...]
+'DIRS': [os.path.join(BASE_DIR, 'templates')],
+[...]
+</code>
+Next we need to add a <code class="highlighter-rouge">templates</code> folder to the root of our project:</p>
 
-<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">(proj) $</span> <span class="nb">mkdir </span>templates
-<span class="gp">(proj) $</span> <span class="nb">touch </span>tempates/base.html
-</code></pre></div></div>
+<p><code class="highlighter-rouge">terminal
+(proj) $ mkdir templates
+(proj) $ touch tempates/base.html
+</code></p>
 
 <p>Next we can add a basic Bootstrap template to <code class="highlighter-rouge">base.html</code>:</p>
 
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content=</span><span class="s">"IE=edge"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1"</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags --&gt;</span>
-    <span class="nt">&lt;title&gt;</span>Bootstrap 101 Template<span class="nt">&lt;/title&gt;</span>
+<p>```html
+&lt;!DOCTYPE html&gt;</p>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Bootstrap 101 Template</title>
 
-	<span class="c">&lt;!-- Latest compiled and minified CSS --&gt;</span>
-	<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"</span> <span class="na">integrity=</span><span class="s">"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
 
-		<span class="c">&lt;!-- Optional theme --&gt;</span>
-	<span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"</span> <span class="na">integrity=</span><span class="s">"sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;</span>
+		<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" />
 
 
-    <span class="c">&lt;!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --&gt;</span>
-    <span class="c">&lt;!-- WARNING: Respond.js doesn't work if you view the page via file:// --&gt;</span>
-    <span class="c">&lt;!--[if lt IE 9]&gt;
-      &lt;script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"&gt;&lt;/script&gt;
-      &lt;script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"&gt;&lt;/script&gt;
-    &lt;![endif]--&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-  <span class="nt">&lt;body&gt;</span>
-    <span class="nt">&lt;h1&gt;</span>Hello, world!<span class="nt">&lt;/h1&gt;</span>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <h1>Hello, world!</h1>
 
-    <span class="c">&lt;!-- jQuery (necessary for Bootstrap's JavaScript plugins) --&gt;</span>
-    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
-    <span class="c">&lt;!-- Include all compiled plugins (below), or include individual files as needed --&gt;</span>
-    <span class="c">&lt;!-- Latest compiled and minified JavaScript --&gt;</span>
-	<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"</span> <span class="na">integrity=</span><span class="s">"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"</span> <span class="na">crossorigin=</span><span class="s">"anonymous"</span><span class="nt">&gt;&lt;/script&gt;</span>
-  <span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre></div></div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  </body>
+</html>
+<p>```</p>
 
 <p>This html was taken from <a href="http://getbootstrap.com/getting-started/">Bootstrap’s ‘Get Started’ page</a>.</p>
 
