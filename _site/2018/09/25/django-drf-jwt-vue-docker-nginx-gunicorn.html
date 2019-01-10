@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Build a Django/VueJS application with Docker</title>
+  <meta name="description" content="This article will describe the process of settinging up, developing, deploying and maintaining a full-stack web application. I’ll be using Django, Django Res...">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2018/09/25/django-drf-jwt-vue-docker-nginx-gunicorn.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+          <a class="page-link" href="/my-other-site">My Other Website</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
+          <a class="page-link" href="/resume">Resume</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Build a Django/VueJS application with Docker</h1>
+    <p class="post-meta"><time datetime="2018-09-25T00:00:00-04:00" itemprop="datePublished">Sep 25, 2018</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>This article will describe the process of settinging up, developing, deploying and maintaining a full-stack web application. I’ll be using Django, Django Rest Framework, VueJS, docker, nginx and gunicorn. I’ll try to share my tooling process.</p>
+
+<p>I’m developing on an X1 Carbon 6th Generation Lenovo ThinkPad with Ubuntu Desktop 16.04.</p>
+
+<h2 id="docker">Docker</h2>
+
+<p>First, let’s set up docker according to Docker’s official <a href="https://docs.docker.com/compose/django/#define-the-project-components">Django and Postgres</a> sample application.</p>
+
+<p>Let’s start with a Dockerfile in an empty directory:</p>
+
+<p><code class="highlighter-rouge">
+FROM python:3.6 # &lt;-- I changed this from 3 to 3.6 (more on this later)
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+ADD requirements.txt /code/
+RUN pip install -r requirements.txt
+ADD . /code/
+</code>
+Next, let’s add our <code class="highlighter-rouge">requirements.txt</code> file that will define which Python packages we will install in our Docker container:</p>
+
+<p><code class="highlighter-rouge">
+Django
+psycopg2
+</code>
+We will add more packages to this file later.</p>
+
+<p>Next, we will create a new file called <code class="highlighter-rouge">docker-compose.yml</code>. Also, you need to <a href="">install docker-compose</a>.</p>
+
+<p>```yml
+version: ‘3’</p>
+
+<p>services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - “8000:8000”
+    depends_on:
+      - db
+```</p>
+
+<p>We will change this file later. Following along with the Docker sample application, they recommend to run this command:</p>
+
+<p><code class="highlighter-rouge">
+sudo docker-compose run web django-admin.py startproject composeexample .
+</code></p>
+
+<p>Instead, let’s the following command:</p>
+
+<p><code class="highlighter-rouge">bash
+sudo docker-compose run web django-admin.py startproject backend
+</code></p>
+
+<p>This will create the Django project in a new folder called <code class="highlighter-rouge">backend</code>. We don’t want to include the <code class="highlighter-rouge">.</code> at the end of the command, because this will place several different files from our Django app in the top level folder. This will help keep things clean as we add more to our application later.</p>
+
+<p>Here’s what we should see:</p>
+
+<p><code class="highlighter-rouge">shell
+$ sudo docker-compose run web django-admin.py startproject backend
+Creating network "sept25_default" with the default driver
+Creating sept25_db_1 ... done
+Building web
+Step 1/7 : FROM python:3.6
+ ---&gt; 4f13b7f2138e
+Step 2/7 : ENV PYTHONUNBUFFERED 1
+ ---&gt; Using cache
+ ---&gt; 100dd88c5005
+Step 3/7 : RUN mkdir /code
+ ---&gt; Using cache
+ ---&gt; f47eeb84babf
+Step 4/7 : WORKDIR /code
+ ---&gt; Using cache
+ ---&gt; d6173cfaffb9
+Step 5/7 : ADD requirements.txt /code/
+ ---&gt; d926dad0292a
+Step 6/7 : RUN pip install -r requirements.txt
+ ---&gt; Running in 32c2f8766d9a
+Collecting Django (from -r requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/ca/7e/fc068d164b32552ae3a8f8d5d0280c083f2e8d553e71ecacc21927564561/Django-2.1.1-py3-none-any.whl (7.3MB)
+Collecting psycopg2 (from -r requirements.txt (line 2))
+  Downloading https://files.pythonhosted.org/packages/5e/d0/9e2b3ed43001ebed45caf56d5bb9d44ed3ebd68e12b87845bfa7bcd46250/psycopg2-2.7.5-cp36-cp36m-manylinux1_x86_64.whl (2.7MB)
+Collecting pytz (from Django-&gt;-r requirements.txt (line 1))
+  Downloading https://files.pythonhosted.org/packages/30/4e/27c34b62430286c6d59177a0842ed90dc789ce5d1ed740887653b898779a/pytz-2018.5-py2.py3-none-any.whl (510kB)
+Installing collected packages: pytz, Django, psycopg2
+Successfully installed Django-2.1.1 psycopg2-2.7.5 pytz-2018.5
+Removing intermediate container 32c2f8766d9a
+ ---&gt; 43c00adba024
+Step 7/7 : ADD . /code/
+ ---&gt; 5705e24339cc
+Successfully built 5705e24339cc
+Successfully tagged sept25_web:latest
+WARNING: Image for service web was built because it did not already exist. To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+</code></p>
+
+<p>Next, we will need to change the ownership of some of the files that we just created:</p>
+
+<p><code class="highlighter-rouge">bash
+$ sudo chown -R $USER:$USER .
+</code></p>
+
+<p>This command changes the permission of all files in the current directory (<code class="highlighter-rouge">.</code>), recursively to the current user (<code class="highlighter-rouge">$USER</code>, or yourself), and the group (also <code class="highlighter-rouge">$USER</code>, the group that you and only you belong to). And we user <code class="highlighter-rouge">sudo</code> on this command so that we can change the files that are owned by root.</p>
+
+<p>Now, you should see something like this:</p>
+
+<p><code class="highlighter-rouge">s
+$ l -l
+total 16
+drwxr-xr-x 3 brian brian 4096 Sep 25 19:47 backend/
+-rw-rw-r-- 1 brian brian  210 Sep 25 19:46 docker-compose.yml
+-rw-rw-r-- 1 brian brian  146 Sep 25 19:17 Dockerfile
+-rw-rw-r-- 1 brian brian   15 Sep 25 19:16 requirements.txt
+</code></p>
+
+<p>Next, we are going to start changing some of the settings in our Django file.</p>
+
+<p>In <code class="highlighter-rouge">backend/backend/settings.py</code>, remove the value of <code class="highlighter-rouge">DATABASES</code> and replace it with this:</p>
+
+<p><code class="highlighter-rouge">python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
+    }
+}
+</code></p>
+
+<p>These settings tell Django how to connect to the postgres database. Notice that <code class="highlighter-rouge">'HOST': 'db'</code> refers to the <code class="highlighter-rouge">db</code> listed under <code class="highlighter-rouge">services</code> in our <code class="highlighter-rouge">docker-compose.yml</code> file. Now we are ready to start our two docker containers. This is where docker-compose comes in. The following command will start a Django server and a postgres container where our database will be running and ready to accept connections from our Django application.</p>
+
+<p>We will make one small change to our docker-compose file for this to work:</p>
+
+<p><code class="highlighter-rouge">
+command: python3 manage.py runserver 0.0.0.0:8000
+</code></p>
+
+<p>This line should be:</p>
+
+<p><code class="highlighter-rouge">
+command: python3 backend/manage.py runserver 0.0.0.0:8000
+</code></p>
+
+<p>We will actually be changing this line <em>again</em> soon. Let’s run the command and check out our docker containers in action.</p>
+
+<p>Here’s what I see in my terminal after running this command:</p>
+
+<p>```bash
+$ docker-compose up
+Starting sept25_db_1 … done
+Recreating sept25_web_1 … done
+Attaching to sept25_db_1, sept25_web_1
+db_1   | 2018-09-26 00:15:05.206 UTC [1] LOG:  listening on IPv4 address “0.0.0.0”, port 5432
+db_1   | 2018-09-26 00:15:05.206 UTC [1] LOG:  listening on IPv6 address “::”, port 5432
+db_1   | 2018-09-26 00:15:05.216 UTC [1] LOG:  listening on Unix socket “/var/run/postgresql/.s.PGSQL.5432”
+db_1   | 2018-09-26 00:15:05.233 UTC [25] LOG:  database system was shut down at 2018-09-26 00:15:02 UTC
+db_1   | 2018-09-26 00:15:05.238 UTC [1] LOG:  database system is ready to accept connections
+web_1  | /usr/local/lib/python3.6/site-packages/psycopg2/<strong>init</strong>.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use “pip install psycopg2-binary” instead. For details see: <a href="http://initd.org/psycopg/docs/install.html#binary-install-from-pypi">http://initd.org/psycopg/docs/install.html#binary-install-from-pypi</a>.
+web_1  |   “””)
+web_1  | /usr/local/lib/python3.6/site-packages/psycopg2/<strong>init</strong>.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use “pip install psycopg2-binary” instead. For details see: <a href="http://initd.org/psycopg/docs/install.html#binary-install-from-pypi">http://initd.org/psycopg/docs/install.html#binary-install-from-pypi</a>.
+web_1  |   “””)
+web_1  | Performing system checks…
+web_1  | 
+web_1  | System check identified no issues (0 silenced).
+web_1  | 
+web_1  | You have 15 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+web_1  | Run ‘python manage.py migrate’ to apply them.
+web_1  | September 26, 2018 - 00:15:06
+web_1  | Django version 2.1.1, using settings ‘backend.settings’
+web_1  | Starting development server at http://0.0.0.0:8000/
+web_1  | Quit the server with CONTROL-C.</p>
+
+<p>```</p>
+
+<p>We get a few warning, let’s address these now.</p>
+
+<p>First, notice that <code class="highlighter-rouge">web_1</code> says:</p>
+
+<p><code class="highlighter-rouge">
+UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use "pip install psycopg2-binary" instead. For details see: &lt;http://initd.org/psycopg/docs/install.html#binary-install-from-pypi&gt;.
+</code></p>
+
+<p>Let’s change <code class="highlighter-rouge">psycopg2</code> to <code class="highlighter-rouge">psycopg2-binary</code> in our <code class="highlighter-rouge">requirements.txt</code> file, and then run <code class="highlighter-rouge">docker-compose up --build</code>. The <code class="highlighter-rouge">--build</code> is important. If you want, you can try to run the command without build, and you will see the warning again.</p>
+
+<p>Next, let’s fix the warning about migrations in the output of <code class="highlighter-rouge">web_1</code>:</p>
+
+<p><code class="highlighter-rouge">
+web_1  | You have 15 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+web_1  | Run 'python manage.py migrate' to apply them.
+</code></p>
+
+<p>To fix this error, let’s change the <code class="highlighter-rouge">command</code> line for <code class="highlighter-rouge">web</code> to this:</p>
+
+<p><code class="highlighter-rouge">yaml
+    command: &gt;
+      bash -c '
+      python3 backend/manage.py makemigrations &amp;&amp;
+      python3 backend/manage.py migrate &amp;&amp;
+      python3 backend/manage.py runserver 0.0.0.0:8000'
+</code></p>
+
+<p>Here’s what we get:</p>
+
+<p><code class="highlighter-rouge">
+$ docker-compose up --build
+Building web
+Step 1/7 : FROM python:3.6
+ ---&gt; 4f13b7f2138e
+Step 2/7 : ENV PYTHONUNBUFFERED 1
+ ---&gt; Using cache
+ ---&gt; 100dd88c5005
+Step 3/7 : RUN mkdir /code
+ ---&gt; Using cache
+ ---&gt; f47eeb84babf
+Step 4/7 : WORKDIR /code
+ ---&gt; Using cache
+ ---&gt; d6173cfaffb9
+Step 5/7 : ADD requirements.txt /code/
+ ---&gt; Using cache
+ ---&gt; 353c71cb52f8
+Step 6/7 : RUN pip install -r requirements.txt
+ ---&gt; Using cache
+ ---&gt; 9759a5a3f613
+Step 7/7 : ADD . /code/
+ ---&gt; 01f55f7fb286
+Successfully built 01f55f7fb286
+Successfully tagged sept25_web:latest
+Starting sept25_db_1 ... done
+Recreating sept25_web_1 ... done
+Attaching to sept25_db_1, sept25_web_1
+db_1   | 2018-09-26 00:26:01.928 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db_1   | 2018-09-26 00:26:01.928 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db_1   | 2018-09-26 00:26:01.937 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db_1   | 2018-09-26 00:26:01.952 UTC [25] LOG:  database system was shut down at 2018-09-26 00:25:58 UTC
+db_1   | 2018-09-26 00:26:01.957 UTC [1] LOG:  database system is ready to accept connections
+web_1  | No changes detected
+web_1  | Operations to perform:
+web_1  |   Apply all migrations: admin, auth, contenttypes, sessions
+web_1  | Running migrations:
+web_1  |   Applying contenttypes.0001_initial... OK
+web_1  |   Applying auth.0001_initial... OK
+web_1  |   Applying admin.0001_initial... OK
+web_1  |   Applying admin.0002_logentry_remove_auto_add... OK
+web_1  |   Applying admin.0003_logentry_add_action_flag_choices... OK
+web_1  |   Applying contenttypes.0002_remove_content_type_name... OK
+web_1  |   Applying auth.0002_alter_permission_name_max_length... OK
+web_1  |   Applying auth.0003_alter_user_email_max_length... OK
+web_1  |   Applying auth.0004_alter_user_username_opts... OK
+web_1  |   Applying auth.0005_alter_user_last_login_null... OK
+web_1  |   Applying auth.0006_require_contenttypes_0002... OK
+web_1  |   Applying auth.0007_alter_validators_add_error_messages... OK
+web_1  |   Applying auth.0008_alter_user_username_max_length... OK
+web_1  |   Applying auth.0009_alter_user_last_name_max_length... OK
+web_1  |   Applying sessions.0001_initial... OK
+web_1  | Performing system checks...
+web_1  | 
+web_1  | System check identified no issues (0 silenced).
+web_1  | September 26, 2018 - 00:26:04
+web_1  | Django version 2.1.1, using settings 'backend.settings'
+web_1  | Starting development server at http://0.0.0.0:8000/
+web_1  | Quit the server with CONTROL-C.
+</code></p>
+
+<p>This is great. Now, when we run <code class="highlighter-rouge">docker-compose up</code>, we see the following:</p>
+
+<p><code class="highlighter-rouge">
+$ docker-compose up
+Starting sept25_db_1 ... done
+Starting sept25_web_1 ... done
+Attaching to sept25_db_1, sept25_web_1
+db_1   | 2018-09-26 00:37:37.059 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+db_1   | 2018-09-26 00:37:37.059 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+db_1   | 2018-09-26 00:37:37.067 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db_1   | 2018-09-26 00:37:37.101 UTC [25] LOG:  database system was interrupted; last known up at 2018-09-26 00:37:14 UTC
+db_1   | 2018-09-26 00:37:37.190 UTC [25] LOG:  database system was not properly shut down; automatic recovery in progress
+db_1   | 2018-09-26 00:37:37.194 UTC [25] LOG:  redo starts at 0/16B98C8
+db_1   | 2018-09-26 00:37:37.194 UTC [25] LOG:  invalid record length at 0/16B9900: wanted 24, got 0
+db_1   | 2018-09-26 00:37:37.194 UTC [25] LOG:  redo done at 0/16B98C8
+db_1   | 2018-09-26 00:37:37.216 UTC [1] LOG:  database system is ready to accept connections
+web_1  | No changes detected
+web_1  | Operations to perform:
+web_1  |   Apply all migrations: admin, auth, contenttypes, sessions
+web_1  | Running migrations:
+web_1  |   No migrations to apply.
+web_1  | Performing system checks...
+web_1  | 
+web_1  | System check identified no issues (0 silenced).
+web_1  | September 26, 2018 - 00:37:38
+web_1  | Django version 2.1.1, using settings 'backend.settings'
+web_1  | Starting development server at http://0.0.0.0:8000/
+web_1  | Quit the server with CONTROL-C.
+</code></p>
+
+<p>Great, now when we go to <code class="highlighter-rouge">http://0.0.0.0:8000/</code> in our browser, we see the Django rocket ship ready to take off.</p>
+
+<p>Next, let’s see if we can access the django-admin. Django’s has a built-in admin interface that can help you add and remove data from your database.</p>
+
+<p>If you go <code class="highlighter-rouge">http://localhost:8000/admin/login/</code>, we are presented with the login screen. There is no default admin user, so we will need to add a user.</p>
+
+<p>To do this, we have a few options. Let’s shell into the container where Django is running and then issue a <code class="highlighter-rouge">createsuperuser</code> command.</p>
+
+<p>To shell into the container, let’s first run <code class="highlighter-rouge">docker ps</code> to list the currently running containers:</p>
+
+<p><code class="highlighter-rouge">
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+639149cc364d        sept25_web          "bash -c ' python3 b…"   21 minutes ago      Up 9 minutes        0.0.0.0:8000-&gt;8000/tcp   sept25_web_1
+840c7efd211c        postgres            "docker-entrypoint.s…"   About an hour ago   Up 9 minutes        5432/tcp                 sept25_db_1
+</code>
+Let’s copy the <code class="highlighter-rouge">CONTAINER ID</code> of the <code class="highlighter-rouge">web</code> container, <code class="highlighter-rouge">639149cc364d</code>, and use it in the following command.</p>
+
+<p><code class="highlighter-rouge">
+$ docker exec -it 639149cc364d /bin/bash
+</code></p>
+
+<p>Now we see this:</p>
+
+<p><code class="highlighter-rouge">
+$ docker exec -it 639149cc364d /bin/bash
+root@639149cc364d:/code# 
+</code></p>
+
+<p>We have shelled into the docker container where our Django app lives and is currently running. From here, we can run <code class="highlighter-rouge">createsuperuser</code>:</p>
+
+<p><code class="highlighter-rouge">
+root@639149cc364d:/code# backend/manage.py createsuperuser
+Username (leave blank to use 'root'): brian
+Email address: 
+Password: 
+Password (again): 
+Superuser created successfully.
+root@639149cc364d:/code# 
+</code></p>
+
+<p>Now let’s go back to the Django admin in the browser and try to log in with the new user we created. You can exit the docker container shell by running <code class="highlighter-rouge">exit</code>:</p>
+
+<p><code class="highlighter-rouge">
+root@639149cc364d:/code# exit
+exit
+brian@brian-ThinkPad-X1-Carbon-6th:~/dock/sept25$ 
+</code></p>
+
+<h2 id="django-rest-framework">Django Rest Framework</h2>
+
+<p>Now let’s install the <a href="http://www.django-rest-framework.org/#installation">Django Rest Framework</a>. Let’s follow the basic instructions for installing the Django Rest Framework:</p>
+
+<p>Add the following to our <code class="highlighter-rouge">requirements.txt</code> file:</p>
+
+<p>```
+Django
+psycopg2-binary</p>
+
+<p>djangorestframework
+markdown
+django-filter
+```</p>
+
+<p>Then, add ` ‘rest_framework’<code class="highlighter-rouge"> to </code>INSTALLED_APPS`.</p>
+
+<p>At this point we can add one more package that will provide JSON Web Token support for th Django Rest Framework. This will be useful soon when we add VueJS.</p>
+
+<p>Add <code class="highlighter-rouge">djangorestframework-jwt</code> to the end of <code class="highlighter-rouge">requirements.txt</code>, and then add the following to <code class="highlighter-rouge">settings.py</code> right after the <code class="highlighter-rouge">DATABASES</code> value we added earlier:</p>
+
+<p><code class="highlighter-rouge">python
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+</code></p>
+
+<p>Next let’s add an endpoint that will be used to “log in”. Instead of “logging in”, what we are actually doing is making a POST request with our username and password for the user I created earlier, and if the username and password are correct, we should receive a JSON web token (JWT) that will be stored in our browser’s storage and in our app’s state. This way, as long as we have a valid token, we will pass this token along with all other requests that might be used to make other requests for protected information.</p>
+
+<p>Let’s create a new app in our Django project by running the following command:</p>
+
+<p><code class="highlighter-rouge">
+$ docker exec -it 4983514567bb /bin/bash
+root@4983514567bb:/code# cd backend
+root@4983514567bb:/code/backend# django-admin startproject accounts
+</code></p>
+
+<p>We will need to run the <code class="highlighter-rouge">chown</code> command once again to change the permissions of the files created on our local machine. Exit the docker container and then run:</p>
+
+<p><code class="highlighter-rouge">
+$ sudo chown -R $USER:$USER .
+</code></p>
+
+<p>Let’s hook up our <code class="highlighter-rouge">accounts</code> app. Add <code class="highlighter-rouge">'accounts'</code> to <code class="highlighter-rouge">INSTALLED_APPS</code> and add the following to the <code class="highlighter-rouge">urls.py</code> file in <code class="highlighter-rouge">backend</code>:</p>
+
+<p>```python
+from django.contrib import admin
+from django.urls import path, re_path, include</p>
+
+<p>urlpatterns = [
+    path(‘’, include(‘accounts.urls’)),
+    path(‘admin/’, admin.site.urls),
+]
+```</p>
+
+<p>Now, to the <code class="highlighter-rouge">urls.py</code> file in the <code class="highlighter-rouge">accounts</code> app, add the following:</p>
+
+<p>```python
+from django.urls import path, re_path
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token</p>
+
+<p>urlpatterns = [
+    re_path(r’^auth/obtain_token/’, obtain_jwt_token, name=’api-jwt-auth’),
+    re_path(r’^auth/refresh_token/’, refresh_jwt_token, name=’api-jwt-refresh’),
+    re_path(r’^auth/verify_token/’, verify_jwt_token, name=’api-jwt-verify’),
+]
+```</p>
+
+<p>Before we add these routes, let’s write some tests to think about what it is we want to do, and what we expect to happen:</p>
+
+<p>```python
+from django.test import TestCase</p>
+
+<h1 id="create-your-tests-here">Create your tests here.</h1>
+<p>from django.urls import reverse
+from rest_framework.test import APITestCase
+from rest_framework import status</p>
+
+<p>from django.contrib.auth.models import User</p>
+
+<p>class AccountsTests(APITestCase):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>def test_obtain_jwt(self):
+
+    url = reverse('api-jwt-auth')
+    u = User.objects.create_user(username='user', email='user@foo.com', password='pass')
+    u.is_active = False
+    u.save()
+
+    resp = self.client.post(url, {'email':'user@foo.com', 'password':'pass'}, format='json')
+    self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+    u.is_active = True
+    u.save()
+    resp = self.client.post(url, {'username':'user', 'password':'pass'}, format='json')
+    self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    self.assertTrue('token' in resp.data)
+    token = resp.data['token']
+    print(token) ```
+</code></pre>
+</div>
+
+<p>Now, shell into the running container and run the the test:</p>
+
+<p>```
+brian@brian-ThinkPad-X1-Carbon-6th:~/dock/sept25$ docker exec -it a7b46628b7ae /bin/bash
+root@a7b46628b7ae:/code# cd backend/
+root@a7b46628b7ae:/code/backend# ./manage.py test
+Creating test database for alias ‘default’…
+System check identified no issues (0 silenced).
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InVzZXIiLCJleHAiOjE1Mzc5Mjg0NzMsImVtYWlsIjoidXNlckBmb28uY29tIn0.HIT4i7_ixaxw1wFpXcOXygyfLlATo2GDASjc2XnFlh0
+.
+———————————————————————-
+Ran 1 test in 0.161s</p>
+
+<p>OK
+Destroying test database for alias ‘default’…
+root@a7b46628b7ae:/code/backend# 
+```</p>
+
+<p>We see that the account was printed out and the test passed.</p>
+
+<p>Let’s take this idea a little bit further with another model, blog posts. For simplicity, let’s say we only want posts to be visible to authenticated users.</p>
+
+<p>First, let’s create a blog post. I’m going to borrow code from <a href="https://wsvincent.com/django-rest-framework-tutorial/">this Django Rest Framework tutorial</a>.</p>
+
+<p>Create a <code class="highlighter-rouge">posts</code> app in our Django project through <code class="highlighter-rouge">docker exec</code> as we did before, add <code class="highlighter-rouge">posts</code> to <code class="highlighter-rouge">INSTALLED_APPS</code>, and link up the urls in <code class="highlighter-rouge">backend</code> with:</p>
+
+<p><code class="highlighter-rouge">python
+urlpatterns = [
+  ...
+  path('api/posts/', include('posts.urls')),
+]
+</code></p>
+
+<p>Now we can add the model:</p>
+
+<p>```python
+from django.db import models</p>
+
+<p>class Post(models.Model):
+    title = models.CharField(max_length=50)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>def __str__(self):
+    return self.title ```
+</code></pre>
+</div>
+
+<p>Next let’s register this app with the Django admin:</p>
+
+<p>```python
+from django.contrib import admin
+from . models import Post</p>
+
+<p>admin.site.register(Post)
+```</p>
+
+<p>Then add a serializer for this model by creating <code class="highlighter-rouge">serializers.py</code> in the <code class="highlighter-rouge">posts</code> folder:</p>
+
+<p>```python
+from rest_framework import serializers
+from . import models</p>
+
+<p>class PostSerializer(serializers.ModelSerializer):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>class Meta:
+    fields = ('id', 'title', 'content', 'created_at', 'updated_at',)
+    model = models.Post
+</code></pre>
+</div>
+
+<p>```</p>
+
+<p>We will need to add <code class="highlighter-rouge">urls.py</code> to <code class="highlighter-rouge">posts</code> with the following:</p>
+
+<p>```python
+from django.urls import path</p>
+
+<p>from . import views</p>
+
+<p>urlpatterns = [
+    path(‘’, views.PostList.as_view()),
+    path(‘<int:pk>/', views.PostDetail.as_view()),
+]
+```</int:pk></p>
+
+<p>Finally, we will add two views:</p>
+
+<p>```python
+from rest_framework import generics</p>
+
+<p>from .models import Post
+from .serializers import PostSerializer</p>
+
+<p>class PostList(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer</p>
+
+<p>class PostDetail(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+```</p>
+
+<p>Create some posts in the admin interface. Using the browsable API, check that you can see the posts in list view and detail view by navigating to <code class="highlighter-rouge">localhost:8000/api/posts/</code> and <code class="highlighter-rouge">localhost:8000/api/posts/1/</code>.</p>
+
+<p>Next let’s look at how we can make Post objects visible to anyone with a JWT Token in the request header.</p>
+
+<p>Keep in mind that we have defined default permission and authentication classes in <code class="highlighter-rouge">settings.py</code>.</p>
+
+<p>We can remove these, and define <code class="highlighter-rouge">permission_classes</code> and <code class="highlighter-rouge">authentication_classes</code> for each</p>
+
+<h2 id="vuejs-frontend">VueJS Frontend</h2>
+
+<p>Let’s create a frontend for our application. The frontend will make calls to the backend.</p>
+
+<ul>
+  <li>Install packages</li>
+</ul>
+
+<p>We want to setup Django and Vue so they can both do hot reloading while we are developing</p>
+
+<ul>
+  <li>We can also refernce https://vuejs.org/v2/cookbook/dockerize-vuejs-app.html</li>
+</ul>
+
+<p>First, let’s create a project in our top-level directory called <code class="highlighter-rouge">frontend</code> using <code class="highlighter-rouge">vue ui</code>. This is a great tool that offers a GUI for configuring and setting up a VueJS application with options for routing, state management, service workers, testing frameworks and more.</p>
+
+<p>Once we have created the Vue project, run the following commands:</p>
+
+<p><code class="highlighter-rouge">
+cd frontend
+npm run serve
+</code></p>
+
+<p>This will start a development server for our Vue app on <code class="highlighter-rouge">http://localhost:8080/</code>. It will hot reload, and it should be able to communicate with out Django app. Let’s test that now.</p>
+
+<p>Let’s replace the <code class="highlighter-rouge">About</code> page with a <code class="highlighter-rouge">Posts</code> page where we will display our posts.</p>
+
+<p>Let’s right some logic that will display our posts:</p>
+
+<p><code class="highlighter-rouge">
+vue
+</code></p>
+
+<p>Now, if we navigate the that page in our Vue app, we see the following error:</p>
+
+<blockquote>
+  <p>Failed to load http://localhost:8000/api/posts/: No ‘Access-Control-Allow-Origin’ header is present on the requested resource. Origin ‘http://localhost:8080’ is therefore not allowed access. If an opaque response serves your needs, set the request’s mode to ‘no-cors’ to fetch the resource with CORS disabled.</p>
+</blockquote>
+
+<p>Let’s enable CORS on our Django app. First, add <code class="highlighter-rouge">django-cors-headers</code> to <code class="highlighter-rouge">requirements.txt</code>. Then, add <code class="highlighter-rouge">'corsheaders'</code> to <code class="highlighter-rouge">INSTALLED_APPS</code>. Finally, add the middleware:</p>
+
+<p><code class="highlighter-rouge">python
+MIDDLEWARE = [ 
+    ...
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    ...
+]
+</code></p>
+
+<p>Also, add this to settings.py:</p>
+
+<p>CORS_ORIGIN_ALLOW_ALL = True</p>
+
+<p>Cool, now we can see our posts that are coming from our Django app. But we still have an issue of the <code class="highlighter-rouge">fetch</code> command taking <code class="highlighter-rouge">'http://localhost:8000/api/posts/'</code>, a hardcoded URL. We want to be able to specify our Django web app for APIs.</p>
+
+<p>I think there are a few ways to do this. We can specify a base URL in Webpack (which we aren’t using now, I don’t think). Or we can use Vue.http and set a default base_url.</p>
+
+<p>I think the best way is to use nginx to direct API traffic. When we set up the Dockerfile and nginx configuruation file, we can serve the production-ready files directly from nginx, but all requests that start with <code class="highlighter-rouge">/api/</code> will be proxied to gunicorn which will be serving our Django application.</p>
+
+<h2 id="gunicorn">GUNICORN</h2>
+
+<p>Let’s add gunicorn now. Here’s a <a href="https://docs.djangoproject.com/en/2.1/ref/django-admin/#django-admin-runserver">link</a> to the Django docs section on <code class="highlighter-rouge">manage.py</code> and the <code class="highlighter-rouge">runserver</code> command:</p>
+
+<blockquote>
+  <p>DO NOT USE THIS SERVER IN A PRODUCTION SETTING. It has not gone through security audits or performance tests. (And that’s how it’s gonna stay. We’re in the business of making Web frameworks, not Web servers, so improving this server to be able to handle a production environment is outside the scope of Django.)</p>
+</blockquote>
+
+<p>Add <code class="highlighter-rouge">gunicorn</code> to <code class="highlighter-rouge">requirements.txt</code>. Then add the following line to <code class="highlighter-rouge">docker-compose.yml</code>:</p>
+
+<p><code class="highlighter-rouge">yml
+services:
+  ...
+  web:
+    build: .
+    command: &gt;
+      bash -c '
+      cd backend &amp;&amp;
+      python3 manage.py makemigrations &amp;&amp;
+      python3 manage.py migrate --no-input &amp;&amp;
+      gunicorn backend.wsgi -b 0.0.0.0:8000' 
+    ...
+  ...
+</code></p>
+
+<h2 id="adding-a-form-to-create-a-new-blog-post">Adding a form to create a new blog post</h2>
+
+<p>Let’s try to add a form that will create a new blog post and then update the list instantly.</p>
+
+<p>It would be good to add a form above the list of posts.</p>
+
+<h3 id="front-end-testing">Front End Testing</h3>
+
+<p>Let’s use the testing frameworks for our view project.</p>
+
+<h2 id="nginx">NGINX</h2>
+
+<p>Let’s add NGINX. Again, the plan is to…</p>
+
+<h2 id="authentication-in-vuejs">Authentication in VueJS</h2>
+
+<p>https://blog.sqreen.io/authentication-best-practices-vue/</p>
+
+<p>Let’s add a login page for our users.</p>
+
+<h2 id="problems">Problems</h2>
+
+<ul>
+  <li>
+    <p>We have solved nginx, but we lost our hotreloading feature.</p>
+  </li>
+  <li>
+    <p>Should we make another <code class="highlighter-rouge">docker-compose-dev.yml</code> that we can use for fast iteration on our view app?</p>
+  </li>
+</ul>
+
+<p>Now we have two <code class="highlighter-rouge">docker-compose</code> files.</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">docker-compose-dev.yml</code> for hot reloading that uses <code class="highlighter-rouge">runserver</code> and requires us to run <code class="highlighter-rouge">npm run serve</code> outside on our local machine (not through docker), and this communicates with the django/postgres containers.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">docker-compose.yml</code> will run production builds of our VueJS on nginx, hot reloading will work for our Django app, but not for VueJS.</p>
+  </li>
+</ul>
+
+<h2 id="s3">S3</h2>
+
+<p>Now let’s think about how to setup AWS S3 in our project. There is a great walkthrough tutorial</p>
+
+<h1 id="other-resources-for-further-ideas">Other Resources for further ideas</h1>
+
+<ul>
+  <li>Auth0 - Where to store your JWTs</li>
+</ul>
+
+<p>https://auth0.com/docs/security/store-tokens#where-to-store-your-jwts</p>
+
+<ul>
+  <li>SSL using Let’s Encrypt</li>
+</ul>
+
+<h2 id="file-upload">File Upload</h2>
+
+<p>https://medium.com/@jxstanford/django-rest-framework-file-upload-e4bc8de669c0</p>
+
+<h2 id="vue-analytics-google-analytics-package-for-vue">vue-analytics Google Analytics package for Vue</h2>
+
+<p>https://github.com/MatteoGabriele/vue-analytics</p>
+
+<h2 id="creating-millions-of-posts-and-using-elasticsearch">Creating millions of posts and using ElasticSearch</h2>
+
+<p>Django-Docker-Seed</p>
+
+<p>https://github.com/mordaha/django-docker-seed/blob/master/run-in-production.sh</p>
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2018/09/25/django-drf-jwt-vue-docker-nginx-gunicorn.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="http://briancaffey.com" target="_blank">briancaffey.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://steemit.com/@mrbrian">
+    <span class="so-icon icon--github">
+        <svg viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><title>steem</title><desc>Created with Sketch.</desc><defs></defs><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="steem" fill-rule="nonzero" fill="#07DFB0"><g id="Group-9"><g id="SteemIt_LogoType_Logo" transform="translate(0.122180, 0.120594)"><path d="M26.220401,8.97838251 C24.9619868,7.74033201 23.4972752,6.83444139 21.9397298,6.25064522 C22.8474384,3.62356245 26.065678,2.66734458 26.065678,2.66734458 C26.065678,2.66734458 18.5564522,-1.16759234 10.2632962,0.362356245 C7.49891092,0.795170648 4.84798918,2.46603555 2.90879351,4.67036938 C-1.29967369,9.45145872 -0.742670683,16.6482564 4.15689285,20.7549605 C4.9098784,21.3890839 5.72475318,21.9024219 6.57057257,22.3151054 C6.5602577,22.30504 6.5602577,22.284909 6.54994283,22.2748436 C6.57057257,22.3251709 6.59120231,22.3754981 6.62214692,22.4258254 C5.51845577,25.183759 1.99077002,25.9386679 1.99077002,25.9386679 C1.99077002,25.9386679 6.65309153,28.8073215 12.914218,29.5521648 C14.5749121,29.7534739 16.338755,29.8038011 18.1644871,29.6125576 C21.0629658,29.3810522 23.9511295,27.8712345 26.148197,25.7474243 C30.9033523,21.1374476 30.9446118,13.628621 26.220401,8.97838251 Z M24.074908,23.9155122 C22.3007502,25.6266389 19.6498285,26.7137076 17.6074841,26.8646894 C17.5868544,26.8646894 17.5662246,26.8646894 17.5559098,26.8646894 C16.1634022,27.0056057 14.6161716,27.0257366 13.1308303,26.8445585 C10.9440777,26.5828567 9.3659025,25.9889951 7.81867191,25.4152644 C8.60260207,24.670421 9.38653224,23.643745 9.70629323,22.7579853 C9.91259064,22.2345818 9.8919609,21.6507856 9.644404,21.1374476 C7.98370984,17.7755869 8.70575078,13.7494064 11.4391915,11.1323891 C13.4196466,9.23001879 16.1427725,8.33419363 18.9071578,8.66635352 C20.9391873,8.90792435 22.7855491,9.78361861 24.229631,11.2028472 C27.736687,14.6653625 27.6129086,20.5234551 24.074908,23.9155122 Z" id="Shape"></path></g></g></g></g></svg>
+    </span>
+    <span class="username">
+        mrbrian
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-col footer-col-3">
+        <p>Thanks for visiting my site, please take a minute to look around!
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
