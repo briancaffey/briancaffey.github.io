@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Simple Jekyll tutorial with Github Pages</title>
+  <meta name="description" content="">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2016/03/17/jekyll-tutorial.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Simple Jekyll tutorial with Github Pages</h1>
+    <p class="post-meta"><time datetime="2016-03-17T00:00:00-05:00" itemprop="datePublished">Mar 17, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><img src="/static/jekyll_github.png" alt="png" /></p>
+
+<p>I’m absolutely loving my new Jekyll blog, but getting it setup wasn’t that easy. Finding useful and accessible information on how everything works was very difficult. In the end, faithfully following tutorials and crashing around on Github resulted in this functional blog.</p>
+
+<p>This post will provide a Jekyll blog setup tutorial assuming very little knowledge of the languages and technologies it is built on (Github, git, HTML, Markdown, Jekyll, Ruby, Liquid templates). Casually surveying friends and colleagues, it seems that many people have heard of Github Pages, but haven’t explored it for a number of reasons. Here is what I hope to accomplish:</p>
+
+<ul>
+  <li>Help you get setup with everything you will need before you start building a Jekyll blog</li>
+  <li>Build a clean, professional site that let’s you show off your resume, link to your social media accounts and build blog posts to catalog your ideas and share your opinions</li>
+  <li>Provide links to more in depth resources on the basics as well as links to more advanced topics</li>
+  <li>(I’ve written this tutorial assuming you are using an Apple computer)</li>
+</ul>
+
+<p>The first few steps are the easiest. So let’s jump right in!</p>
+
+<h2 id="step-1-github-pages">Step 1: <a href="https://pages.github.com/">Github Pages</a></h2>
+
+<p>Check out the instructions that Github offers on their <a href="https://pages.github.com/">Github Pages</a> site. If you don’t already have a Github account, <a href="https://github.com/join">get one first</a>.</p>
+
+<p>The username you choose on Github will be the first part of the URL that your site uses, but you can <a href="https://help.github.com/articles/about-supported-custom-domains/">change this later</a>. For example, if your name is Art Vandelay and you select <em>artvandelay</em> as your Github username, your site’s URL will be <em>artvandelay.github.io</em>.</p>
+
+<p>As the Github pages guide instructs you to do, create a repository titled <em>username</em>.github.io (where <em>username</em> is your Github account name). You don’t need to initialize the repository with the ReadMe.md file. This step is very important and any variation in the name of this repository will not result in a successful Github Pages site.</p>
+
+<p>Select “A terminal” when you see the question <em>“What git client are you using?”</em> (it should already be selected). You may be asking yourself, “what is git?” For now, just think of it as a version control manager.</p>
+
+<p>This next step is where I ran into a few difficulties, so I’m going to clarify a few things. Eventually, your newly created repository <em>username</em>.github.io will house all of the files that will run your blog, including the HTML, CSS files, etc. What you need to do next is create a folder on your computer where you will keep a copy of all of your site’s files. You will use git to push files from this local folder on your computer to your repository that is ‘hosting’ your Jekyll site. We will talk about what “using git” means in just a bit.</p>
+
+<p>I keep mine in a folder at the location <code class="highlighter-rouge">~/Github/briancaffey.github.io</code> (where <code class="highlighter-rouge">~</code> references my ‘Home’ folder). If you are not familiar with Github, read the next few paragraphs carefully before doing anything. The command listed in step 2 of the <a href="https://pages.github.com/">Github Pages</a> instructions tells you to run the following command in your terminal:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> git clone https://github.com/username/username.github.io
+</code></pre></div></div>
+
+<p>This will create a file named username.github.io <em>inside</em> whatever folder you are currently in. Open up terminal and type in the following command, then press enter. (Don’t type the <code class="highlighter-rouge">$</code>, just type <code class="highlighter-rouge">pwd</code>; the <code class="highlighter-rouge">$</code> signifies that you are in the terminal).</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">pwd</span>
+<span class="go">User/yourmaclogin/
+</span></code></pre></div></div>
+<p>You should see a file path, something like <code class="highlighter-rouge">Users/yourmaclogin</code> on the following line. <code class="highlighter-rouge">pwd</code> means “Print Working Directory”, and that’s just what you did. Your “working directory” is the directory you are “at” (sorry about the poor English, but this is the easiest way to communicate this idea).</p>
+
+<p>So, you should choose the folder that you want to “clone” (copy) your empty <em>username</em>.github.io repository into. We will learn two more commands that will help us “navigate” our file system.</p>
+
+<p>Suppose you have a folder named <code class="highlighter-rouge">main</code> with the following files inside that folder: <code class="highlighter-rouge">sub1</code> and <code class="highlighter-rouge">sub2</code>. Inside <code class="highlighter-rouge">sub1</code> and <code class="highlighter-rouge">sub2</code>, suppose you have some text files: <code class="highlighter-rouge">sub1_example.txt</code> inside the folder <code class="highlighter-rouge">sub1</code> and <code class="highlighter-rouge">sub2_example.txt</code> inside <code class="highlighter-rouge">sub2</code>. If your current working directory is <code class="highlighter-rouge">main</code>, then we can list all of the file and folder that are directly inside of <code class="highlighter-rouge">main</code> with the following command:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">ls</span>
+<span class="go">sub1 sub2
+</span></code></pre></div></div>
+
+<p><code class="highlighter-rouge">ls</code> is short for “list” and it simply lists files and folders that are directly inside a file. It won’t list either of the text files, because those are not directly inside of <code class="highlighter-rouge">main</code>, even though they technically are located “within” it.</p>
+
+<p>In order to see these text files, you will need to change our working directory. You can do this with the “change directory” command that is conveniently called <code class="highlighter-rouge">cd</code>:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">cd </span>sub1
+<span class="gp">$</span> <span class="nb">ls</span> 
+<span class="go">sub1_example.txt
+</span></code></pre></div></div>
+
+<p>Great! Now what about sub2? The <code class="highlighter-rouge">cd &lt;folder&gt;</code> command takes us inside a folder that is in our working directory. It can also take us to the folder that <em>contains</em> out working directory. Check out this example:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">cd</span> ..
+<span class="gp">$</span> <span class="nb">pwd</span> 
+<span class="go">/main
+</span></code></pre></div></div>
+
+<p><code class="highlighter-rouge">cd ..</code> takes us from <code class="highlighter-rouge">sub1</code> to <code class="highlighter-rouge">main</code>. If you are not sure where you are, just run the <code class="highlighter-rouge">ls</code> command and you can see the contents of your working directory.</p>
+
+<p>Ok, once you have a handle on this, run the following command in the terminal. Be sure to replace <em>username</em> with your actual Github username in both places, otherwise you will see an error. So go ahead and run:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> git clone https://github.com/username/username.github.io
+</code></pre></div></div>
+
+<p>This concludes the first step, let’s move on to Step 2: Jekyll.</p>
+
+<h2 id="step-2-jekyll">Step 2: <a href="https://jekyllrb.com/">Jekyll</a></h2>
+
+<p>So what exactly is Jekyll? Here an explanation from Jekyll’s <a href="https://jekyllrb.com/docs/home/">website</a>:</p>
+
+<blockquote>
+  <p><em>Jekyll is a simple, blog-aware, static site generator. It takes a template directory containing raw text files in various formats, runs it through a converter (like Markdown) and our Liquid renderer, and spits out a complete, ready-to-publish static website suitable for serving with your favorite web server. Jekyll also happens to be the engine behind GitHub Pages, which means you can use Jekyll to host your project’s page, blog, or website from GitHub’s servers for free.</em></p>
+</blockquote>
+
+<p>This explanation didn’t make much sense to me when I first attempted to make my Jekyll site, so let me try to explain it in another way. Jekyll is a system of folders and files that allow you to make simple web pages. When you put this system of folders and file system on Github, it generates a website that is absolutely free. Instead of writing HTML, you write content in template documents (Markdown files) that are automatically converted to beautiful HTML pages with mobile-friendly responsiveness.</p>
+
+<p>Let’s go ahead with out website setup! Go back to Jekyll’s website and look at the very simple instructions they provide for quick-start installation, but don’t run them just yet!</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> gem install jekyll
+<span class="gp">$</span> jekyll new my-awesome-site
+<span class="gp">$</span> <span class="nb">cd </span>my-awesome-site
+<span class="gp">$</span> jekyll serve
+<span class="gp">#</span> <span class="o">=&gt;</span> Now browse to http://localhost:4000
+</code></pre></div></div>
+
+<p>We will be modifying these commands slightly to get our website up and running. The first command installs Jekyll onto your computer. Go ahead and do this, then navigate to your <em>username</em>.github.io folder that you have cloned from Github in <a href="#">Step 1</a>. Run the <code class="highlighter-rouge">pwd</code> command to make sure you are in the correct working directory. The needs to be empty for this next step to work, so go ahead and run our <code class="highlighter-rouge">ls</code> command to make sure that there is nothing inside.</p>
+
+<p>At this point we are ready to install Jekyll! Run the following command:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> jekyll new
+</code></pre></div></div>
+
+<p>Then run the <code class="highlighter-rouge">ls</code> command and you should see the following:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">ls</span>
+<span class="go">_config.yml	_layouts	_sass		css		index.html
+_includes	_posts		about.md	feed.xml
+</span></code></pre></div></div>
+
+<p>You have installed Jekyll! At this point we can give it a test run! We are going to view our new website in our browser, but we will be running the site locally (i.e. it will not be available at <em>username</em>.github.io).</p>
+
+<p>The next command will start running our website:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> jekyll serve
+</code></pre></div></div>
+
+<p>After you run this command, several lines will be printed out in the terminal. Look for one that looks like this:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">Server address: http://127.0.0.1:4000/
+</span></code></pre></div></div>
+
+<p>This address may be different on your computer, so copy it exactly from your terminal and run it in your browser, or run <code class="highlighter-rouge">localhost:40001</code> in your browser if that doesn’t work. You should see your website!</p>
+
+<p>For now it is mostly filler content, but we will learn how to edit this content in the next few steps.</p>
+
+<h2 id="step-3-github">Step 3: <a href="https://github.com/">Github</a></h2>
+
+<p>This next step will move your entire website onto the web and will make it available at <em>username</em>.github.io.</p>
+
+<p>Confirm you are still in you <em>username</em>.github.io folder (<code class="highlighter-rouge">pwd</code> command) and run the following commands:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> git init
+<span class="gp">$</span> git add <span class="nb">.</span>
+<span class="gp">$</span> git commit <span class="nt">-m</span> <span class="s2">"initial commit"</span>
+<span class="gp">$</span> git push origin master
+</code></pre></div></div>
+
+<p>You will have to enter your Github username and password for the last step to work. Now, if you did not get any error messages in your terminal after running the above commands, open up <em>username</em>.github.io in your browser. You, and anyone with the link, should be able to see your website!</p>
+
+<p>As you make changes and additions to the <em>username</em>.github.io file system, you can repeat this step to refresh the content of your website.</p>
+
+<h2 id="step-4-making-pages-in-jekyll">Step 4: Making Pages in Jekyll</h2>
+
+<p>At this point, the first thing I wanted to do was to create both a simple “Contact” page and a “Resume” page. The process of creating pages is simple, but there are few tutorials that explain what the simple process is in its entirety. Here’s how I understand it:</p>
+
+<p>Create a “top level” Markdown file in our <em>username</em>.github.io folder. “Top level” means that it is directly inside our <em>username</em>.github.io file and not in any subfolders. To create this folder, you will need a text editor. The number one search result for text editor in Google is <a href="https://www.sublimetext.com/">Sublime Text</a>, which is the text editor that I prefer. You can open your entire <em>username</em>.github.io folder with Sublime Text to easily move between files.</p>
+
+<p>Let’s create a contact page first. Create a new file called <code class="highlighter-rouge">contact.md</code>. The <code class="highlighter-rouge">.md</code> stands for Markdown and it is the type of file that you will be working with the most in Jekyll. Add the following content to this file:</p>
+
+<pre><code class="language-Markdown">---
+layout: page
+title: "Contact"
+---
+Hi, my name is Art Vandelay. Welcome to my website! 
+Follow me on twitter at [@artvandelay](http://www.twitter.com)
+Connect with me on [LinkedIn](http://www.linkedin.com)
+</code></pre>
+
+<p>Save this file, and head back over to <code class="highlighter-rouge">localhost:4000</code>, reload the page and check to see if your page was added to your site.</p>
+
+<p>Our <code class="highlighter-rouge">contact.md</code> file starts with something called Front Matter, enclosed between two <code class="highlighter-rouge">---</code> bars. In this space, you specify the type of page you are creating. In this example, wrote <code class="highlighter-rouge">layout: page</code> because this is a regular page. In the following examples, we will set the <code class="highlighter-rouge">layout</code> variable to <code class="highlighter-rouge">post</code> when we want to create a blog post.</p>
+
+<p>Links are pretty easy to make in Markdown. Simply wrap the clickable link text you want displayed in brackets, immediately followed by the URL in parentheses. For example, <code class="highlighter-rouge">[Google](http://www.google.com)</code> would result in <a href="http://www.google.com">Google</a>. Be sure to include <code class="highlighter-rouge">http://</code> at the beginning of your links. If you don’t, it will create a link relative to the page. For example, <code class="highlighter-rouge">[Google](google.com)</code> would result in <code class="highlighter-rouge">username.github.io/google.com</code> which would not go anywhere.</p>
+
+<p>For the next example, create a top-level folder in your <em>username</em>.github.io folder called <code class="highlighter-rouge">docs</code> (or some other name) where you will store static files like PDFs for your site. Now put your resume in it. Next, copy the following code into a new top-level file in your <em>username</em>.github.io folder called <code class="highlighter-rouge">resume</code> (not in the <code class="highlighter-rouge">docs</code> folder you just created, we are making a page here just like we did with the “Contact” page).</p>
+
+<pre><code class="language-Markdown">---
+layout: page
+title: Resume
+---
+Here's a link to a PDF of [my resume](/docs/my_resume.pdf).
+</code></pre>
+
+<p>At this point it would be good to introduce the simple and powerful formating that you can do with Markdown. Suppose you want to include the text of your resume in a neatly organized way below the download link for your resume as I have done for <a href="/CV.html">my Resume page</a>. Markdown makes this very easy.</p>
+
+<p>There are many ways to structure and organize content in Markdown, so I’ll show you how I did it and point you in the direction of some useful resources and cheat sheets. <a href="https://raw.githubusercontent.com/briancaffey/briancaffey.github.io/master/CV.md">Here</a> is the Markdown file I used for my resume page, feel free to copy my exact formatting as I copied it from someone else! Also check out <a href="http://assemble.io/docs/Cheatsheet-Markdown.html">this Markdown cheat sheet</a>.</p>
+
+<h2 id="step-5-making-blog-posts-in-jekyll">Step 5: Making blog posts in Jekyll</h2>
+
+<p>Making blog posts in Jekyll is slightly different from making pages in Jekyll. There are a few things you need to do to create a blog post.</p>
+
+<ol>
+  <li>Create a Markdown file with the following naming convention: YYYY-MM-DD-post-name.md</li>
+  <li>In this file’s Front Matter, set the <code class="highlighter-rouge">layout</code> to <code class="highlighter-rouge">post</code> by writing <code class="highlighter-rouge">layout: post</code></li>
+  <li>Set the <code class="highlighter-rouge">date</code> and <code class="highlighter-rouge">title</code> of the post in the Front Matter</li>
+  <li>Place this file in the <code class="highlighter-rouge">_posts</code> folder</li>
+</ol>
+
+<p>You should see the blog post listed on your home page and your “Blog” page that comes pre-loaded with a new Jekyll site.</p>
+
+<p>We will talk about how to change the layout of your sites homepage, pages and posts later on. The next step will show you how allow comments using Disqus on a per-post basis.</p>
+
+<h2 id="step-6-adding-comments-to-your-posts">Step 6: Adding comments to your posts</h2>
+
+<p>To enable comments on your blog, I recommend using a free and popular comment service called <a href="https://disqus.com/home/">Disqus</a>.</p>
+
+<p>To enable comments with Disqus, we need to explore a new folder in our file system. In the <code class="highlighter-rouge">_includes</code> folder you will find a number of files that are “snippets” of HTML code including <code class="highlighter-rouge">header.html</code> and <code class="highlighter-rouge">footer.html</code>. <code class="highlighter-rouge">_includes</code> is a folder where you will keep reusable snippets of code that will want to include in many different places in your site.</p>
+
+<p>Let’s make a code snippet titled <code class="highlighter-rouge">comments.html</code>. In this file, add the following code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% if page.comments %}
+
+
+
+{% endif %}
+</code></pre></div></div>
+
+<p>Any code in between these two lines will be included if <code class="highlighter-rouge">pages.comments</code> is set to <code class="highlighter-rouge">true</code>. You will set this variable value in the Front Matter as you create new posts. Next, add the following code between these two lines above:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c">&lt;!--</span> <span class="nx">Add</span> <span class="nx">Disqus</span> <span class="nx">comments</span><span class="p">.</span> <span class="o">--&gt;</span>
+<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"disqus_thread"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/javascript"</span><span class="o">&gt;</span>
+  <span class="cm">/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */</span>
+  <span class="kd">var</span> <span class="nx">disqus_shortname</span> <span class="o">=</span> <span class="s1">'YOUR_DISQUS_USERNAME'</span><span class="p">;</span> <span class="c1">// required: replace example with your forum shortname</span>
+  <span class="kd">var</span> <span class="nx">disqus_identifier</span> <span class="o">=</span> <span class="s2">"{{ site.disqusid }}{{ page.url | replace:'index.html','' }}"</span><span class="p">;</span>
+
+  <span class="cm">/* * * DON'T EDIT BELOW THIS LINE * * */</span>
+  <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">dsq</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'script'</span><span class="p">);</span> <span class="nx">dsq</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">'text/javascript'</span><span class="p">;</span> <span class="nx">dsq</span><span class="p">.</span><span class="k">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="nx">dsq</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">'//'</span> <span class="o">+</span> <span class="nx">disqus_shortname</span> <span class="o">+</span> <span class="s1">'.disqus.com/embed.js'</span><span class="p">;</span>
+    <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'head'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'body'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dsq</span><span class="p">);</span>
+  <span class="p">})();</span>
+<span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="nx">noscript</span><span class="o">&gt;</span><span class="nx">Please</span> <span class="nx">enable</span> <span class="nx">JavaScript</span> <span class="nx">to</span> <span class="nx">view</span> <span class="nx">the</span> <span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">"http://disqus.com/?ref_noscript"</span><span class="o">&gt;</span><span class="nx">comments</span> <span class="nx">powered</span> <span class="nx">by</span> <span class="nx">Disqus</span><span class="p">.</span><span class="o">&lt;</span><span class="sr">/a&gt;&lt;/</span><span class="nx">noscript</span><span class="o">&gt;</span></code></pre></figure>
+
+<p>Pay attention to the line that reads:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">disqus_shortname</span> <span class="o">=</span> <span class="s1">'YOUR_DISQUS_USERNAME'</span><span class="p">;</span> <span class="c1">// required: replace example with your forum shortname</span></code></pre></figure>
+
+<p>You will need to replace <code class="highlighter-rouge">YOUR_DISQUS_USERNAME</code> with the name you have selected for your Disqus account. Be sure to enclose it in single quotes.</p>
+
+<p>Next we have to learn how to include this code snippet into all posts. Look in the <code class="highlighter-rouge">_layouts</code> folder and open up the <code class="highlighter-rouge">post.html</code> file.</p>
+
+<p>This is a template document that will determine the format of each blog post. When we specified <code class="highlighter-rouge">layout: page</code> in the Front Matter of our Resume and Contact pages, this caused Jekyll to use the <code class="highlighter-rouge">page.html</code> layout. As I mentioned before, in our posts, we will specify <code class="highlighter-rouge">layout: post</code> in the Front Matter of our posts to use the <code class="highlighter-rouge">post.html</code> template.</p>
+
+<p>In this layout, we will add one line of code right before the last line of the <code class="highlighter-rouge">post.html</code> layout template directly above the closing <code>&lt;/article&gt;</code> tag:</p>
+
+<p><code class="highlighter-rouge">{% include comments.html %}</code></p>
+
+<p>Now, let’s make a new blog post. Title it something like <code class="highlighter-rouge">2016-03-18-my-first-post.md</code>. Let’s add Front Matter so Jekyll knows what to do with our post.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+layout: post
+title: My First Post
+date: 2016-03-18
+comments: true
+---
+This is the body of my first blog post on my Jekyll blog! I hope it gets some good comments!
+</code></pre></div></div>
+
+<p>Great, now you should have a new blog post with Disqus comments enabled on it. You may not be getting a lot of comments on your articles, but you still could have lots of readers. The next section will cover how to add Google Analytics to our site so we can easily track visitors and page views.</p>
+
+<h2 id="step-7-adding-google-analytics-to-your-jekyll-blog">Step 7: Adding Google Analytics to your Jekyll blog</h2>
+
+<p>Now that we know how to include a short snippet of code in multiple pages on our blog, adding one more little snippet for Google to track page views will be very easy. If you don’t know about Google Analytics, it probably the most powerful tool for tracking visitors to your website. Google makes it very easy, and only requires that we include a short snippet of JavaScript on each page we want to track.</p>
+
+<p>Let’s create another HTML snippet in our <code class="highlighter-rouge">_includes</code> folder called <code class="highlighter-rouge">google-analytics.html</code>. You are only going to put a tracking code that will be unique to your site. Head over to <a href="http://analytics.google.com">Google Analytics</a> to get your tracking code. After filling out a few simple forms, you should get your tracking code. It should look something like this:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+  <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span><span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="kr">arguments</span><span class="p">)},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span><span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span>
+  <span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="nx">a</span><span class="p">.</span><span class="k">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span><span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
+  <span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
+
+  <span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'&lt;YOUR_TRACKING_CODE&gt;'</span><span class="p">,</span> <span class="s1">'auto'</span><span class="p">);</span>
+  <span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
+
+<span class="o">&lt;</span><span class="sr">/script&gt;</span></code></pre></figure>
+
+<p>Next we will need to insert this <code class="highlighter-rouge">google_analytics.html</code> snippet each page of our site. Doing this is very easy, just add <code class="highlighter-rouge">{% include google_analytics.html %}</code> in between the opening <code class="highlighter-rouge"><span class="nt">&lt;html&gt;</span></code> and <code class="highlighter-rouge">&lt;body&gt;</code> tags of the <code class="highlighter-rouge">default.html</code> file in the <code class="highlighter-rouge">_layouts</code> folder.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I hope you have found this tutorial helpful. At times I probably over-explained things, and there may be some areas that need clarification, so I’ll add updates and create more posts in the future as I learn more about Jekyll myself.</p>
+
+<p>My Jekyll blog is big experiment. It’s been both challenging and fun, but most of all I love the fact that it is totally free. I hope that anyone reading this post who wants to put together a Jekyll blog hosted with Github Pages has success in doing so. Please let me know in the comments if there are any areas that I should change, elaborate on or take out. Thanks!</p>
+
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2016/03/17/jekyll-tutorial.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="https://briancaffey.github.io">briancaffey.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://gitlab.com/briancaffey">
+    <span class="gitlab-fox">
+        
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="210px" height="194px" viewBox="0 0 210 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Fill-1-+-Group-24" sketch:type="MSLayerGroup">
+            <g id="Group-24" sketch:type="MSShapeGroup">
+                <g id="Group">
+                    <path d="M105.0614,193.655 L105.0614,193.655 L143.7014,74.734 L66.4214,74.734 L105.0614,193.655 L105.0614,193.655 Z" id="Fill-4" fill="#E24329"></path>
+                    <path id="Fill-6" fill="#FC6D26"></path>
+                    <path d="M105.0614,193.6548 L66.4214,74.7338 L12.2684,74.7338 L105.0614,193.6548 Z" id="Fill-8" fill="#FC6D26"></path>
+                    <path id="Fill-10" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7341 L12.2685,74.7341 L0.5265,110.8731 C-0.5445,114.1691 0.6285,117.7801 3.4325,119.8171 L105.0615,193.6551 L12.2685,74.7341 Z" id="Fill-12" fill="#FCA326"></path>
+                    <path id="Fill-14" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7342 L66.4215,74.7342 L43.1485,3.1092 C41.9515,-0.5768 36.7375,-0.5758 35.5405,3.1092 L12.2685,74.7342 Z" id="Fill-16" fill="#E24329"></path>
+                    <path d="M105.0614,193.6548 L143.7014,74.7338 L197.8544,74.7338 L105.0614,193.6548 Z" id="Fill-18" fill="#FC6D26"></path>
+                    <path d="M197.8544,74.7341 L197.8544,74.7341 L209.5964,110.8731 C210.6674,114.1691 209.4944,117.7801 206.6904,119.8171 L105.0614,193.6551 L197.8544,74.7341 Z" id="Fill-20" fill="#FCA326"></path>
+                    <path d="M197.8544,74.7342 L143.7014,74.7342 L166.9744,3.1092 C168.1714,-0.5768 173.3854,-0.5758 174.5824,3.1092 L197.8544,74.7342 Z" id="Fill-22" fill="#E24329"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-col footer-col-3">
+        <p>my personal site</p>
+      </div>
+      
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

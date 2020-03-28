@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Comparing different ways to build friend objects in Django</title>
+  <meta name="description" content="This post will briefly explore two different methods of creating models in Django for friends, relationships, followers or connections on a social network. T...">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2017/07/19/different-ways-to-build-friend-models-in-django.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Comparing different ways to build friend objects in Django</h1>
+    <p class="post-meta"><time datetime="2017-07-19T00:00:00-05:00" itemprop="datePublished">Jul 19, 2017</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>This post will briefly explore two different methods of creating models in Django for friends, relationships, followers or connections on a social network. The first method is one I learned from <a href="https://www.youtube.com/watch?v=IXJ46DitsIg&amp;index=55&amp;list=PLw02n0FEB3E3VSHjyYMcFadtQORvl1Ssj">this youtube tutorial series</a> by <a href="https://github.com/maxg203">Max Goodridge</a> when I first started learning Django.</p>
+
+<h2 id="1st-method-manytomanyfield-to-store-friends">1st Method: <strong>ManytoManyField</strong> to store friends</h2>
+
+<p>Using Django’s <code class="highlighter-rouge">ManyToManyField</code>, we can define the following <code class="highlighter-rouge">Friend</code> model:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">accounts.models</span> <span class="kn">import</span> <span class="n">UserProfile</span>
+
+<span class="k">class</span> <span class="nc">Friend</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">)</span>
+    <span class="n">current_user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">"owner"</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">make_friend</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">):</span>
+        <span class="n">friend</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+            <span class="n">current_user</span> <span class="o">=</span> <span class="n">current_user</span>
+        <span class="p">)</span>
+        <span class="n">friend</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_friend</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">remove_friend</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">):</span>
+        <span class="n">friend</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span>
+            <span class="n">current_user</span> <span class="o">=</span> <span class="n">current_user</span>
+        <span class="p">)</span>
+        <span class="n">friend</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">new_friend</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_user</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>With this type of model, we define the following views to add and remove friends:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">accounts.models</span> <span class="kn">import</span> <span class="n">UserProfile</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">friends.models</span> <span class="kn">import</span> <span class="n">Friend</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">add_or_remove_friends</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">verb</span><span class="p">):</span>
+    <span class="n">n_f</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span>
+    <span class="n">new_friend</span> <span class="o">=</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">n_f</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verb</span> <span class="o">==</span> <span class="s">"add"</span><span class="p">:</span>
+        <span class="n">new_friend</span><span class="o">.</span><span class="n">followers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+        <span class="n">Friend</span><span class="o">.</span><span class="n">make_friend</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_friend</span><span class="o">.</span><span class="n">followers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
+        <span class="n">Friend</span><span class="o">.</span><span class="n">remove_friend</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">new_friend</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">new_friend</span><span class="o">.</span><span class="n">get_absolute_url</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">Friend</code> model has a <code class="highlighter-rouge">ForeignKey</code> relationship (“owner”), a given user, and a <code class="highlighter-rouge">ManyToManyField</code> relationship with other <code class="highlighter-rouge">UserProfile</code> objects.</p>
+
+<p>I am using a UserProfile model to build the <code class="highlighter-rouge">Friend</code> model and view. This is a common practice in Django, you can read more about it <a href="https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html">this article about extending the user model</a>.</p>
+
+<p>In this example, the <code class="highlighter-rouge">UserProfile</code> also has a <code class="highlighter-rouge">ManyToManyField</code> called followers that store the users following that user. I access this field in the <code class="highlighter-rouge">add_or_remove_friends</code> method.</p>
+
+<p>Because I am using <code class="highlighter-rouge">UserProfile</code> model in the <code class="highlighter-rouge">ManyToManyField</code> and <code class="highlighter-rouge">ForeignKey</code> relationships in the <code class="highlighter-rouge">Friend</code> model, in the <code class="highlighter-rouge">add_or_remove_friends</code> view I need to first get the <code class="highlighter-rouge">User</code> model by username, and then find the <code class="highlighter-rouge">UserProfile</code> model.</p>
+
+<p>The class methods in the <code class="highlighter-rouge">Friend</code> model make use of a very helpful method called <code class="highlighter-rouge">get_or_create</code>. This method returns the existing or new model, and a boolean value indicating whether or not a new object was created.</p>
+
+<p>This approach is helpful when you want to track the users someone is following and the followers of any given user. For example, to get the users that follow a particular user, we can do the following in a template:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+
+<p>To get the users that a user follows, we could access the friend model in a view and then get a list of users in the <code class="highlighter-rouge">ManyToManyField</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">list_friends</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">friend_object</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">Friend</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">current_user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">)</span>
+    <span class="n">friends</span> <span class="o">=</span> <span class="p">[</span><span class="n">friend</span> <span class="k">for</span> <span class="n">friend</span> <span class="ow">in</span> <span class="n">friend_object</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span> <span class="k">if</span> <span class="n">friend</span> <span class="o">!=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'template.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">"friends"</span><span class="p">:</span><span class="n">friends</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p>Alternatively, we could write a class method to do this for is in the friend model.</p>
+
+<p>This is a good way to track relationships if relationships is the only piece of information we need to track. However, if we want to track more information about a relationship, such as the date and time the relationship was formed, we will quickly see the limits of this model schema. The next method provides another way that allows us to store more information about each relationship.</p>
+
+<h2 id="2nd-method-foreignkey-with-one-relationship-per-object">2nd Method: <strong>ForeignKey</strong> with one relationship per object</h2>
+
+<p>Another popular solution for making a <code class="highlighter-rouge">Friend</code> model in Django discussions around the internet describes the following method (originally seen on Stack Overflow in <a href="https://stackoverflow.com/questions/4564760/best-way-to-make-djangos-user-system-have-friends">this post</a>). Let’s call this model <code class="highlighter-rouge">Connection</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Connection</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">created</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">editable</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">creator</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">"friendship_creator_set"</span><span class="p">)</span>
+    <span class="n">following</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">"friend_set"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>With this model, we would want to create additional class methods on our <code class="highlighter-rouge">UserProfile</code> model to easily get a list of connections (users the user is following) and followers (users following the user) in a template or view:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">friends.models</span> <span class="kn">import</span> <span class="n">Friendship</span>
+<span class="k">class</span> <span class="nc">UserProfile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+
+    <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">get_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+  		<span class="n">connections</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+  		<span class="k">return</span> <span class="n">connections</span>
+          
+    <span class="k">def</span> <span class="nf">get_followers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">followers</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">following</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">followers</span>
+</code></pre></div></div>
+
+<h2 id="accessing-connection-information-in-api-data">Accessing Connection Information in API Data</h2>
+
+<p>In a recent project I have been looking for a way to display all users in a network, and also show the connection status between each user listed and the currently logged-in user. This could be done by writing additional model methods on the UserProfile model and then access these methods in the template. Since I am using React.js to display the user list, I can’t access a model method in the template. Instead, I will have get the connection data inside of the API. Using the Django REST Framework, this can be accomplished with <code class="highlighter-rouge">SerializerMethodField</code>.</p>
+
+<p>Here’s a quick description of <code class="highlighter-rouge">SerializerMethodField</code> from the <a href="http://www.django-rest-framework.org/api-guide/fields/#serializermethodfield">Django REST Framework documentation</a>:</p>
+
+<blockquote>
+  <p>This is a read-only field. It gets its value by <strong>calling a method on the serializer class it is attached to</strong>. It can be used to add any sort of data to the serialized representation of your object.</p>
+</blockquote>
+
+<p>Here’s a view and serializer that I use to show all users in a social network, along with Boolean Fields that indicate if each user is following or followed by the logged-in user making the request.</p>
+
+<p><em>api/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UserListAPIView</span><span class="p">(</span><span class="n">ListAPIView</span><span class="p">):</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">UserListSerializer</span>
+</code></pre></div></div>
+
+<p><em>api/serializers.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">UserProfile</span><span class="p">,</span> <span class="n">Connection</span>
+<span class="k">class</span> <span class="nc">UserListSerializer</span><span class="p">(</span><span class="n">ModelSerializer</span><span class="p">):</span>
+
+    <span class="n">following</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+    <span class="n">follows_requesting_user</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">SerializerMethodField</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">UserProfile</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">'user'</span><span class="p">,</span>
+            <span class="s">'first_name'</span><span class="p">,</span>
+            <span class="s">'last_name'</span><span class="p">,</span>
+            <span class="s">'bio'</span><span class="p">,</span>
+            <span class="o">...</span>
+            <span class="s">'following'</span><span class="p">,</span>
+            <span class="s">'follows_requesting_user'</span><span class="p">,</span>
+            <span class="s">'follow_link'</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get_following</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">creator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">'request'</span><span class="p">]</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">following</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">connected</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span> <span class="n">following</span><span class="o">=</span><span class="n">following</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">connected</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_follows_requesting_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">creator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">[</span><span class="s">'request'</span><span class="p">]</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">following</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">user</span>
+        <span class="n">connected</span> <span class="o">=</span> <span class="n">Connection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">creator</span><span class="o">=</span><span class="n">following</span><span class="p">,</span> <span class="n">following</span><span class="o">=</span><span class="n">creator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">connected</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Finally, here’s look into the <code class="highlighter-rouge">index.js</code> file that includes the React component which consumes this API data:</p>
+
+<p><em>assets/js/index.js</em></p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+
+<span class="k">if</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'users-container'</span><span class="p">))</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">UserList</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+    <span class="na">loadUsersFromServer</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'something'</span><span class="p">)</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+        <span class="na">url</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span>
+        <span class="na">datatype</span><span class="p">:</span> <span class="s1">'json'</span><span class="p">,</span>
+        <span class="na">cache</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="na">success</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="na">data</span><span class="p">:</span><span class="nx">data</span><span class="p">});</span>
+        <span class="p">}.</span><span class="nx">bind</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+      <span class="p">})</span>
+    <span class="p">},</span>
+
+    <span class="na">getInitialState</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="p">{</span><span class="na">data</span><span class="p">:</span> <span class="p">[]};</span>
+    <span class="p">},</span>
+
+    <span class="na">componentDidMount</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">loadUsersFromServer</span><span class="p">();</span>
+      <span class="nx">setInterval</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">loadUsersFromServer</span><span class="p">,</span>
+                  <span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">pollInterval</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="na">render</span><span class="p">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">data</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">userNodes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">){</span>
+          <span class="k">return</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"thumbnail"</span> <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">user</span><span class="p">}</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"caption post-detail-item"</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"row"</span><span class="o">&gt;</span>
+              <span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"col-md-3"</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="nx">img</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"img-responsive"</span> <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">photo_url</span><span class="p">}</span><span class="sr">/</span><span class="err">&gt;
+</span>                <span class="o">&lt;</span><span class="nx">br</span> <span class="o">/&gt;</span>
+                <span class="p">{</span><span class="nx">user</span><span class="p">.</span><span class="nx">following</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">?</span> <span class="o">&lt;</span><span class="nx">label</span> <span class="nx">className</span><span class="o">=</span><span class="s2">"label label-primary"</span><span class="o">&gt;</span><span class="nx">following</span><span class="o">&lt;</span><span class="sr">/label&gt; : &lt;a className="btn btn-warning" href={'/</span><span class="s1">'+user.follow_link}&gt;Follow&lt;/a&gt;}&lt;br /&gt;
+                {user.follows_requesting_user == 1 ? &lt;label className="label label-primary"&gt;follows you&lt;/label&gt; : ''}
+              &lt;/div&gt;
+                &lt;div className="col-md-9"&gt;
+                &lt;h2&gt;{user.first_name} {user.last_name}&lt;/h2&gt;
+                &lt;h4&gt;{user.job_title} @ {user.current_company}&lt;/h4&gt;
+                {user.is_facebook_connected ? &lt;button className="btn btn-default"&gt;Facebook: Connected&lt;/button&gt; :''}
+                {user.is_linkedin_connected ? &lt;button className="btn btn-default"&gt;LinkedIn: Connected&lt;/button&gt; :''}
+                &lt;br /&gt;&lt;br /&gt;
+                &lt;a className="btn btn-primary" href={"/"+user.user_profile_url}&gt;View&lt;/a&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;)
+        })
+      }
+      return (
+        &lt;div&gt;
+          &lt;h1&gt;Women in the Lead Network&lt;/h1&gt;
+            {userNodes}
+        &lt;/div&gt;
+      )
+    }
+  })
+
+
+  ReactDOM.render(&lt;UserList url='</span><span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">users</span><span class="o">/</span><span class="s1">' pollInterval={10000} /&gt;,
+  document.getElementById('</span><span class="nx">users</span><span class="o">-</span><span class="nx">container</span><span class="s1">'))
+
+}
+</span></code></pre></div></div>
+
+<h2 id="a-third-way">A third way?</h2>
+
+<p>There is a lot you can do with Connection models. This models explored here are fairly simple “following” relationships. The following process does not require that the user being followed accepts the initiating users “follow”. Since I am designing this for a small, invite-only social-network, it is ok to keep things relatively simple for now.</p>
+
+<p>The major difference between the first and second methods of building friendship/follower/connection models is that you can store more detailed information about each relationship. However, if we wanted to store data about the non-directional relationship between two people, we would have to make another model (perhaps with signals), or update the information in both Connection models (a -&gt; b and b -&gt; a).</p>
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017/07/19/different-ways-to-build-friend-models-in-django.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="https://briancaffey.github.io">briancaffey.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://gitlab.com/briancaffey">
+    <span class="gitlab-fox">
+        
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="210px" height="194px" viewBox="0 0 210 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Fill-1-+-Group-24" sketch:type="MSLayerGroup">
+            <g id="Group-24" sketch:type="MSShapeGroup">
+                <g id="Group">
+                    <path d="M105.0614,193.655 L105.0614,193.655 L143.7014,74.734 L66.4214,74.734 L105.0614,193.655 L105.0614,193.655 Z" id="Fill-4" fill="#E24329"></path>
+                    <path id="Fill-6" fill="#FC6D26"></path>
+                    <path d="M105.0614,193.6548 L66.4214,74.7338 L12.2684,74.7338 L105.0614,193.6548 Z" id="Fill-8" fill="#FC6D26"></path>
+                    <path id="Fill-10" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7341 L12.2685,74.7341 L0.5265,110.8731 C-0.5445,114.1691 0.6285,117.7801 3.4325,119.8171 L105.0615,193.6551 L12.2685,74.7341 Z" id="Fill-12" fill="#FCA326"></path>
+                    <path id="Fill-14" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7342 L66.4215,74.7342 L43.1485,3.1092 C41.9515,-0.5768 36.7375,-0.5758 35.5405,3.1092 L12.2685,74.7342 Z" id="Fill-16" fill="#E24329"></path>
+                    <path d="M105.0614,193.6548 L143.7014,74.7338 L197.8544,74.7338 L105.0614,193.6548 Z" id="Fill-18" fill="#FC6D26"></path>
+                    <path d="M197.8544,74.7341 L197.8544,74.7341 L209.5964,110.8731 C210.6674,114.1691 209.4944,117.7801 206.6904,119.8171 L105.0614,193.6551 L197.8544,74.7341 Z" id="Fill-20" fill="#FCA326"></path>
+                    <path d="M197.8544,74.7342 L143.7014,74.7342 L166.9744,3.1092 C168.1714,-0.5768 173.3854,-0.5758 174.5824,3.1092 L197.8544,74.7342 Z" id="Fill-22" fill="#E24329"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-col footer-col-3">
+        <p>my personal site</p>
+      </div>
+      
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

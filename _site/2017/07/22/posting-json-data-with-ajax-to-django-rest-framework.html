@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Posting JSON data to the Django REST Framework with AJAX</title>
+  <meta name="description" content="This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX ...">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Posting JSON data to the Django REST Framework with AJAX</h1>
+    <p class="post-meta"><time datetime="2017-07-22T00:00:00-05:00" itemprop="datePublished">Jul 22, 2017</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>This article will explore the challenges I faced recently while trying to make POST requests with JSON data to the Django REST Framework using jQuery’s AJAX function. After tracing down all of the error messages into the documentation for Django, Django REST Framework, jQuery and JavaScript and many Stack Overflow questions, I was finally able to see my “It worked!” alert pop up from the <code class="highlighter-rouge">success</code> callback.</p>
+
+<h2 id="context">Context</h2>
+
+<p>This issue came up over the weekend while working on a JavaScript game I started several months ago. The game is a ‘<a href="https://en.wikipedia.org/wiki/Dungeon_crawl">dungeon crawler</a>’ where the characters and environment are represented by Unicode emoji. In the initial version, you control a character who roams through a forest, slays a dragon that threatens a princess in distress, and then meet the King of the Land, hence the name of the game “King’s Encounter”. I wanted an easier way to design levels, and also wanted to let users create and share their own worlds and adventures.</p>
+
+<p>The entire game state is stored in a JavaScript object. Here’s a simplified representation of the structure:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">game</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">"map"</span><span class="p">:{</span>
+    <span class="s2">"0"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
+    <span class="s2">"1"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">player</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
+    <span class="s2">"2"</span><span class="p">:[</span><span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,</span> <span class="nx">tree</span><span class="p">,],</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The UI lets users manipulate the values of each row in the game state’s <code class="highlighter-rouge">map</code> property. The values of the row arrays are objects themselves, which contain information about which emoji they represent and how they interact with the player (for example, you can’t pass through a tree, so it has a <code class="highlighter-rouge">'wall':true</code> property).</p>
+
+<p>I added a “Save Game” button, which when clicked would fire a POST or PUT request to create or update the user’s game design. On the homepage of my personal website I includes a simple AJAX POST, so I first copied it over as boilerplate code to modify.</p>
+
+<pre><code class="language-HTML">$("#post-form").on('submit', function(event){
+  event.preventDefault();
+  var this_ = $(this)
+  var gb_endpoint = this_.attr("data-href")
+  $.ajax({
+    url: gb_endpoint,
+    type: "POST",
+    data: { message : $("#post-text").val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}',
+            city: "some city",
+            state: "some state",
+    },
+    success: function(json){
+      $('#post-text').val('');
+      $('#post-form').blur();
+      var gb_num = $("#gb-num").text();
+      var new_gb_num = parseInt(gb_num) + 1
+      $("#gb-num").text(new_gb_num);
+
+
+      if (1 == 1){
+        var user = json.user
+        $('#guest-book-items').prepend('&lt;div class="panel panel-success"&gt;&lt;div class="panel-heading"&gt;From {% if user.is_authenticated %}{{ user }}{% else %}someone{% endif %} in the ' + json.city + ', ' + json.state + ' area | just now&lt;/div&gt;&lt;div class="panel-body"&gt;' + json.message + '&lt;/div&gt;&lt;/div&gt;')
+      }
+    },
+  });
+</code></pre>
+
+<p>Here’s the AJAX call that worked after lots of debugging:</p>
+
+<pre><code class="language-HTML">$("#save-level").click(function(event){
+  event.preventDefault();
+  $.ajax({
+    type : "POST",
+    url : "/api/kings/save/",
+    csrfmiddlewaretoken: "{{ csrf_token }}",
+    data : JSON.stringify({game:scene}),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      },
+    success: function(){
+        alert("Saved! It worked.");
+      },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
+      }
+    });
+  });
+</code></pre>
+
+<h2 id="django-rest-framework-settings-and-api-endpoints">Django REST Framework settings and API endpoints</h2>
+
+<p>Before I started writing the AJAX call, I looked in the Django REST Framework documentation for instructions on how to post JSON data. Here are the REST Framework settings I added to <code class="highlighter-rouge">settings.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">REST_FRAMEWORK</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'DEFAULT_RENDERER_CLASSES'</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s">'rest_framework.renderers.JSONRenderer'</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s">'DEFAULT_PARSER_CLASSES'</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s">'rest_framework.parsers.JSONParser'</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I’m not sure if this was completely necessary, but I think the <a href="http://www.django-rest-framework.org/api-guide/renderers/#jsonrenderer"><code class="highlighter-rouge">JSONRenderer</code> helps with the serialization of Unicode data</a>, since earlier attempts returned Unicode representation of emoji rather than the emoji themselves (e.g., U+1F600 instead of 😀).</p>
+
+<p>I should also mention that I added a simple “Game” model in <code class="highlighter-rouge">models.py</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib.postgres.fields</span> <span class="kn">import</span> <span class="n">JSONField</span>
+
+<span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">game</span> <span class="o">=</span> <span class="n">JSONField</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Next I added the views and serializers for the API endpoint (<code class="highlighter-rouge">/api/kings/save/</code>) for the POST request:</p>
+
+<p><em>kings/api/views.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
+<span class="kn">from</span> <span class="nn">.serializers</span> <span class="kn">import</span> <span class="n">GameSerializer</span>
+
+<span class="kn">from</span> <span class="nn">rest_framework.generics</span> <span class="kn">import</span> <span class="n">CreateAPIView</span><span class="p">,</span> <span class="c"># ListAPIView</span>
+<span class="kn">from</span> <span class="nn">rest_framework.views</span> <span class="kn">import</span> <span class="n">APIView</span>
+<span class="kn">from</span> <span class="nn">rest_framework.response</span> <span class="kn">import</span> <span class="n">Response</span>
+
+<span class="k">class</span> <span class="nc">GameCreateAPIView</span><span class="p">(</span><span class="n">CreateAPIView</span><span class="p">):</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">Game</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">GameSerializer</span>
+    <span class="k">def</span> <span class="nf">perform_create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serializer</span><span class="p">):</span>
+        <span class="n">game</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">game</span><span class="o">=</span><span class="n">game</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
+
+<span class="c"># class GameListAPIView(ListAPIView):</span>
+<span class="c">#     queryset = Game.objects.all()</span>
+<span class="c">#     serializer_class = GameSerializer</span>
+</code></pre></div></div>
+
+<p><em>kings/api/serializers.py</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">rest_framework.serializers</span> <span class="kn">import</span> <span class="n">ModelSerializer</span>
+<span class="kn">from</span> <span class="nn">rest_framework</span> <span class="kn">import</span> <span class="n">serializers</span>
+<span class="kn">from</span> <span class="nn">..models</span> <span class="kn">import</span> <span class="n">Game</span>
+
+<span class="k">class</span> <span class="nc">GameSerializer</span><span class="p">(</span><span class="n">ModelSerializer</span><span class="p">):</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Game</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">'game'</span>
+        <span class="p">]</span>
+</code></pre></div></div>
+
+<p>Writing this view was the first big hurdle. I was under the impression that the JSON data was to be accessed in <code class="highlighter-rouge">self.request.body</code>. The error message said <a href="https://github.com/encode/django-rest-framework/issues/2774">You cannot access body after reading from request’s data stream</a>, and there were some elaborate solutions that I didn’t think I would be able to implement.</p>
+
+<p><a href="http://www.django-rest-framework.org/api-guide/requests/#request-parsing">This topic</a> in the DRF documentation describes the <code class="highlighter-rouge">.data</code> method for parsing requests.</p>
+
+<h2 id="debugging-the-ajax-call-and-formatting-json-data">Debugging the AJAX call and formatting JSON data</h2>
+
+<p>The next important clue came from a footnote in this section about requests:</p>
+
+<blockquote>
+  <p>Note: If a client sends malformed content, then accessing request.data may raise a ParseError. By default REST framework’s APIView class or @api_view decorator will catch the error and return a 400 Bad Request response.
+If a client sends a request with a content-type that cannot be parsed then a UnsupportedMediaType exception will be raised, which by default will be caught and return a 415 Unsupported Media Type response.</p>
+</blockquote>
+
+<p>I resolved the <code class="highlighter-rouge">415</code> error by adding the following to the AJAX call.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>headers: {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+  },
+</code></pre></div></div>
+
+<p>One aspect of all of the debugging which was frustrating is that the sqlite3 database on my local environment does not support storing JSON data (as far as I know), so I committed and pushed code to my production server on Heroku (which uses PostgreSQL) for each step in the debug process. Eventually I realized that a <code class="highlighter-rouge">500</code> server error on my local environment meant that everything was working correctly except for the very last step: saving the <code class="highlighter-rouge">Game</code> object.</p>
+
+<p>At this point I thought I was pretty close. I could successfully POST data using the DRF web interface, and I got the following type of error messages (which were <code class="highlighter-rouge">HTTP 400 Bad Request</code>) when I tried to post malformed data:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"detail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JSON parse error - Expecting value: line 2 column 13 (char 14)"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To see what error message I was getting using AJAX, I found that jQuery makes the error message available in <code class="highlighter-rouge">XMLHttpRequest.responseText</code>. I then added the following to the AJAX <code class="highlighter-rouge">error</code> callback:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajax({
+  ...
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+    alert("some error " + String(errorThrown) + String(textStatus) + String(XMLHttpRequest.responseText));
+    }
+  });
+</code></pre></div></div>
+
+<p>This error message was saying:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ValueError: Expecting value: line 1 column 1 (char 0)
+</code></pre></div></div>
+
+<p>This led me to believe that there was an issue with the <code class="highlighter-rouge">data</code> attribute being passed into the AJAX call. It was particularly difficult to figure out how to write the JSONified version of JavaScript object. SO posts had many different ways, and I eventually found that the following worked:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajax({
+  ...
+  data : JSON.stringify({game:scene}),
+</code></pre></div></div>
+
+<p>Since I named the <code class="highlighter-rouge">JSONField()</code> field in my Game model <code class="highlighter-rouge">game</code>, I believe that <code class="highlighter-rouge">game</code> needed to be the “main attribute” of the JSON in the POST request. <code class="highlighter-rouge">scene</code> is the name of the variable that held the JavaScript object I wanted to send. <code class="highlighter-rouge">JSON.stringify()</code> was a little confusing, and there was lots of confusion online about what it returns. Here’s the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify">MDN documentation</a> that was helpful in figuring out <code class="highlighter-rouge">JSON.stringify()</code>.</p>
+
+<h2 id="cross-site-request-forgery-issue-when-using-ajax-with-django">Cross-site Request Forgery issue when using AJAX with Django</h2>
+
+<p>At some point in all of this debugging I got a strange error message saying the CSRF Token was missing or incorrect. I had included <code class="highlighter-rouge">csrfmiddlewaretoken: "{{ csrf_token }}",</code> in the AJAX call, and it wasn’t an issue I had experienced with making my other POST request with AJAX. I found <a href="https://stackoverflow.com/questions/5100539/django-csrf-check-failing-with-an-ajax-post-request">this Stack Overflow answer</a> with 143 votes and 90,322 views, and was pleased that the proposed solution worked just fine. It involves adding <code class="highlighter-rouge">$.ajaxSetup()</code> before the AJAX call:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$.ajaxSetup({
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie <span class="err">&amp;&amp;</span> document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i <span class="nt">&lt;</span> <span class="nt">cookies</span><span class="err">.</span><span class="na">length</span><span class="err">;</span> <span class="na">i</span><span class="err">++)</span> <span class="err">{</span>
+                     <span class="na">var</span> <span class="na">cookie =</span><span class="err"> </span><span class="s">jQuery.trim(cookies[i]);</span>
+                     <span class="err">//</span> <span class="na">Does</span> <span class="na">this</span> <span class="na">cookie</span> <span class="na">string</span> <span class="na">begin</span> <span class="na">with</span> <span class="na">the</span> <span class="na">name</span> <span class="na">we</span> <span class="na">want</span><span class="err">?</span>
+                     <span class="na">if</span> <span class="err">(</span><span class="na">cookie</span><span class="err">.</span><span class="na">substring</span><span class="err">(</span><span class="na">0</span><span class="err">,</span> <span class="na">name</span><span class="err">.</span><span class="na">length</span> <span class="err">+</span> <span class="na">1</span><span class="err">)</span> <span class="err">==</span> <span class="err">(</span><span class="na">name</span> <span class="err">+</span> <span class="err">'='))</span> <span class="err">{</span>
+                         <span class="na">cookieValue =</span><span class="err"> </span><span class="s">decodeURIComponent(cookie.substring(name.length</span> <span class="err">+</span> <span class="na">1</span><span class="err">));</span>
+                         <span class="na">break</span><span class="err">;</span>
+                     <span class="err">}</span>
+                 <span class="err">}</span>
+             <span class="err">}</span>
+             <span class="na">return</span> <span class="na">cookieValue</span><span class="err">;</span>
+         <span class="err">}</span>
+         <span class="na">if</span> <span class="err">(!(/^</span><span class="na">http:</span><span class="err">.*/.</span><span class="na">test</span><span class="err">(</span><span class="na">settings</span><span class="err">.</span><span class="na">url</span><span class="err">)</span> <span class="err">||</span> <span class="err">/^</span><span class="na">https:</span><span class="err">.*/.</span><span class="na">test</span><span class="err">(</span><span class="na">settings</span><span class="err">.</span><span class="na">url</span><span class="err">)))</span> <span class="err">{</span>
+             <span class="err">//</span> <span class="na">Only</span> <span class="na">send</span> <span class="na">the</span> <span class="na">token</span> <span class="na">to</span> <span class="na">relative</span> <span class="na">URLs</span> <span class="na">i</span><span class="err">.</span><span class="na">e</span><span class="err">.</span> <span class="na">locally</span><span class="err">.</span>
+             <span class="na">xhr</span><span class="err">.</span><span class="na">setRequestHeader</span><span class="err">("</span><span class="na">X-CSRFToken</span><span class="err">",</span> <span class="na">getCookie</span><span class="err">('</span><span class="na">csrftoken</span><span class="err">'));</span>
+         <span class="err">}</span>
+     <span class="err">}</span>
+<span class="err">});</span>
+</code></pre></div></div>
+
+<p>I won’t go into to much detail here, but you can read more about this issue which apparently also impacts Ruby on Rails as well. Here’s a <a href="https://www.djangoproject.com/weblog/2011/feb/08/security/">link to a security post on the Django Project blog</a>.</p>
+
+<p>Finally, I pressing the <code class="highlighter-rouge">Save Game</code> button gave me the long-awaited succss message: <code class="highlighter-rouge">Saved! It worked.</code></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I still have quite a bit of work to do before the “level-building” feature is complete for this game. Hopefully there are not as many issues in retrieving JSON data stored in the database.</p>
+
+<p>It would probably make more sense to build this type of game with a JS backend and a NoSQL database, but it is good to know that Django + DRF + PostgreSQL can handle this.</p>
+
+<p>A live demo of the level-building is available here: <a href="http://briancaffey.com/kings/kingsencounter/level_builder">http://briancaffey.com/kings/kingsencounter/level_builder</a>, and you can find a demo of the game here: <a href="http://briancaffey.com/kings/kingsencounter/">http://briancaffey.com/kings/kingsencounter/</a>. Here’s what the game looks like:</p>
+
+<p><img src="/img/kings_encounter.png" alt="png" /></p>
+
+<p>If you save your game, you can see the JSON in the list of all saved games using the DRF web UI: <a href="http://briancaffey.com/api/kings/games/">http://briancaffey.com/api/kings/games/</a>. One of the very next things I need to do on the backend assign a unique URL to each <code class="highlighter-rouge">Game</code> object and update that <code class="highlighter-rouge">Game</code> model rather than creating new games with each request. This will involve something like <code class="highlighter-rouge">UpdateAPIView</code> in the REST Framework.</p>
+
+<p>Hopefully this article is helpful if you are struggling with making an AJAX POST request to DRF on the backend. Thanks for reading and feel free to leave a comment if you have any thoughts or questions or can point out something I can improve.</p>
+
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017/07/22/posting-json-data-with-ajax-to-django-rest-framework.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="https://briancaffey.github.io">briancaffey.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://gitlab.com/briancaffey">
+    <span class="gitlab-fox">
+        
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="210px" height="194px" viewBox="0 0 210 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Fill-1-+-Group-24" sketch:type="MSLayerGroup">
+            <g id="Group-24" sketch:type="MSShapeGroup">
+                <g id="Group">
+                    <path d="M105.0614,193.655 L105.0614,193.655 L143.7014,74.734 L66.4214,74.734 L105.0614,193.655 L105.0614,193.655 Z" id="Fill-4" fill="#E24329"></path>
+                    <path id="Fill-6" fill="#FC6D26"></path>
+                    <path d="M105.0614,193.6548 L66.4214,74.7338 L12.2684,74.7338 L105.0614,193.6548 Z" id="Fill-8" fill="#FC6D26"></path>
+                    <path id="Fill-10" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7341 L12.2685,74.7341 L0.5265,110.8731 C-0.5445,114.1691 0.6285,117.7801 3.4325,119.8171 L105.0615,193.6551 L12.2685,74.7341 Z" id="Fill-12" fill="#FCA326"></path>
+                    <path id="Fill-14" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7342 L66.4215,74.7342 L43.1485,3.1092 C41.9515,-0.5768 36.7375,-0.5758 35.5405,3.1092 L12.2685,74.7342 Z" id="Fill-16" fill="#E24329"></path>
+                    <path d="M105.0614,193.6548 L143.7014,74.7338 L197.8544,74.7338 L105.0614,193.6548 Z" id="Fill-18" fill="#FC6D26"></path>
+                    <path d="M197.8544,74.7341 L197.8544,74.7341 L209.5964,110.8731 C210.6674,114.1691 209.4944,117.7801 206.6904,119.8171 L105.0614,193.6551 L197.8544,74.7341 Z" id="Fill-20" fill="#FCA326"></path>
+                    <path d="M197.8544,74.7342 L143.7014,74.7342 L166.9744,3.1092 C168.1714,-0.5768 173.3854,-0.5758 174.5824,3.1092 L197.8544,74.7342 Z" id="Fill-22" fill="#E24329"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-col footer-col-3">
+        <p>my personal site</p>
+      </div>
+      
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

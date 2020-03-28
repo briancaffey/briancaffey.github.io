@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Arch Linux Installation Guide</title>
+  <meta name="description" content="This post will be a comprehensive guide to installing Arch Linux. I will be installing Arch Linux on a refurbished ThinkPad T430 Laptop, first as a guest OS ...">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2017/08/03/arch-linux-installation-guide.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Arch Linux Installation Guide</h1>
+    <p class="post-meta"><time datetime="2017-08-03T00:00:00-05:00" itemprop="datePublished">Aug 3, 2017</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>This post will be a comprehensive guide to installing Arch Linux. I will be installing Arch Linux on a refurbished <a href="http://www3.lenovo.com/us/en/laptops/thinkpad/t-series/t430/">ThinkPad T430 Laptop</a>, first as a guest OS on a Windows 10 Pro host, and then on a secondary SSD that will replace the optical drive. I will try to cover absolutely everything you need from creating a bootable USB drive to customizing the desktop interface and installing development environments and tools.</p>
+
+<h2 id="put-arch-linux-on-a-usb-drive">Put Arch Linux on a USB drive</h2>
+
+<p>I recommend that you download a BitTorrent client such as <a href="http://dev.deluge-torrent.org/wiki/Download">Deluge</a>, and then grab the ISO magnet link from <a href="https://www.archlinux.org/download/">https://www.archlinux.org/download/</a>. It should take just a few minutes to complete the download via BitTorrent.</p>
+
+<p>If you are using a Mac to build the bootable drive, I have read that you can use the <code class="highlighter-rouge">dd</code> command. This didn’t work for me.</p>
+
+<p>I found out that my 2011 MacBook Air is not capable of creating Windows 10 bootable media. Only the options for Windows 7 and 8 were available in Boot Camp Assistant (the Mac utility for installing Windows and creating bootable media). I also found that the latest MacBooks can’t create bootable media. I was able to find another Mac that had the option for creating “Windows 7 or later”, and this finally worked.</p>
+
+<p>Another solution that is probably much faster is using Rufus, a Windows/Linux utility for burning ISO images to bootable media. The Arch Wiki has a highlighted note about using Rufus:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Note: Be sure to select DD mode or the image will be transferred incorrectly.
+</code></pre></div></div>
+
+<p>A problem I found is that you can’t select the ISO with DD mode selected. I was able to select ISO (in ISO mode), choose the ISO file in my downloads folder, and then select DD mode.</p>
+
+<h1 id="virtualbox">VirtualBox</h1>
+
+<p>The T430 came with a copy of Windows Pro, which I installed right away. I also picked up a SSD sleeve that can replace the optical drive for dual booting or additional storage. I have installed Arch Linux on my Windows desktop machine, as well as my MacBook Air. Land of Linux has a <a href="http://landoflinux.com/linux_install_archlinux_process.html">great tutorial on installing Arch Linux in Virtual Box</a>, but it is frustrating because there is no date and no comments. This part of the guide will closely follow this guide and provide some corrections where you might get stuck following the directions command for command.</p>
+
+<p>First we want to set up a new virtual machine with the options Linx / ArchLinux / 64-bit. You are probably using a 64-bit machine (although some old netbooks are 32-bit). The first obstacle is you will probably face with VirtualBox is that there are no options for 64-bit. This is because Intel Virtualization is often disabled by default. You will need to go into the BIOS (by pressing <code class="highlighter-rouge">delete</code> of <code class="highlighter-rouge">F10</code>/<code class="highlighter-rouge">F12</code> at boot time) and then change this option, save the BIOS settings and restart. With this done, you will want to create a virtual machine with at at least 20GB of storage and around 4GB of memory.</p>
+
+<h4 id="quick-note-about-fonts">Quick note about fonts</h4>
+
+<p>The default font when installing Arch Linux is quite small, so you may want to increase the font size.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls /usr/share/kbd/consolefonts/
+</code></pre></div></div>
+
+<p>This command will list the available fonts. To set a font, run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setfont sun12x22
+</code></pre></div></div>
+
+<p>To revert back to the default font, just run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setfont
+</code></pre></div></div>
+
+<p>You can also view the current font with</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>showconsolefont
+</code></pre></div></div>
+
+<h3 id="using-fdisk-for-partitioning">Using <code class="highlighter-rouge">fdisk</code> for partitioning</h3>
+
+<blockquote>
+  <p>fdisk is a dialogue-driven program for creation and manipulation of partition tables.</p>
+</blockquote>
+
+<p>This part of the guide will be similar for installation on virtual machines and regular installions (on harddrives in desktops and laptops). If you are installing on a physical machine that has other disks of similar size to your target disk, I recommend that you first remove all other drives so you don’t accidentaly format partitions (I did this by accident, but luckily it was just my Windows Boot Partition and I was able to recover my Windows installation).</p>
+
+<p>We want to run fdisk and enter the device we want to work with as the first argument after the command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fdisk /dev/sda
+</code></pre></div></div>
+
+<p>On your Virtual Machine it will most likely be <strong>sda</strong>, but on a physical machine it could vary slightly.</p>
+
+<h4 id="note-about-fdisk">Note about fdisk</h4>
+
+<p>When installing Arch Linux on a disk that has Windows or Linux installed (and you want delete the existing Windows or Linux completely to make room for a fresh Arch Linux istallation), you can delete the partitions on the drive (which is usually labeled <code class="highlighter-rouge">/dev/sda</code> or <code class="highlighter-rouge">/dev/sdb</code> or <code class="highlighter-rouge">/dev/sdc</code>). Run <code class="highlighter-rouge">lsblk</code> to determine which drive you want to format, then run <code class="highlighter-rouge">fdisk /dev/sdX</code> where <code class="highlighter-rouge">X</code> corresponds to the drive we will be using. You should be inside the fdisk menu. Press <code class="highlighter-rouge">d</code> to start deleting partitions. You may get some warnings about a partition containing some type of trace (such as ext4). This is fine. You can delete all of the partitions.</p>
+
+<h3 id="create-a-root-partition">Create a root partition</h3>
+
+<p>Press <code class="highlighter-rouge">n</code> and then <code class="highlighter-rouge">p</code>. When prompted for <code class="highlighter-rouge">first sector</code> press <code class="highlighter-rouge">ENTER</code>, and for <code class="highlighter-rouge">last sector</code> enter <code class="highlighter-rouge">+10G</code> for a 10GB partition.</p>
+
+<h3 id="create-a-swap-partition">Create a SWAP partition</h3>
+
+<p>Press <code class="highlighter-rouge">n</code> for a new partition, press <code class="highlighter-rouge">p</code> for primary partition. Select partition number <code class="highlighter-rouge">2</code>. Press <code class="highlighter-rouge">ENTER</code> to select the default start sector, and then type <code class="highlighter-rouge">+1G</code> to create a 1GB swap partition. Press <code class="highlighter-rouge">t</code> to indicate the type of partition this will be. Specify that we are still working with partition <code class="highlighter-rouge">2</code>, and then enter <code class="highlighter-rouge">82</code>, the code for SWAP partition.</p>
+
+<h3 id="create-home-partition">Create home partition</h3>
+
+<p>Enter the following <code class="highlighter-rouge">fdisk</code> commands:</p>
+
+<p><code class="highlighter-rouge">n</code>, <code class="highlighter-rouge">p</code>, <code class="highlighter-rouge">3</code>, <code class="highlighter-rouge">ENTER</code>, <code class="highlighter-rouge">ENTER</code>, <code class="highlighter-rouge">t</code>, <code class="highlighter-rouge">3</code>, <code class="highlighter-rouge">83</code>.</p>
+
+<p>Before exiting the <code class="highlighter-rouge">fdisk</code> interface, enter the <code class="highlighter-rouge">w</code> command to write the proposed changes.</p>
+
+<p>We should see the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+</code></pre></div></div>
+
+<h3 id="create-filesystems-and-format-partitions">Create Filesystems and Format Partitions</h3>
+
+<p>Make filesystems for partitions 1 and 3:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkfs.ext4 /dev/sda1
+mkfs.ext4 /dev/sda3
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkswap /dev/sda2
+swapon /dev/sda2
+</code></pre></div></div>
+
+<h3 id="verify-our-layout-with-lsblk">Verify our layout with <code class="highlighter-rouge">lsblk</code></h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsblk
+</code></pre></div></div>
+
+<h3 id="mount-filesystems">Mount Filesystems</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mount /dev/sda1 /mnt
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /mnt/home
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mount /dev/sda3 /mnt/home
+</code></pre></div></div>
+
+<p>(The swap partition has already been initialized.)</p>
+
+<h3 id="backup-mirrorlist">Backup mirrorlist</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp -vf /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+</code></pre></div></div>
+
+<p>We can edit the mirrorlist to select the closest mirror, but this is not necessary.</p>
+
+<h3 id="install-reflector">Install reflector</h3>
+
+<p>This synchronizes package databases:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -Syy
+</code></pre></div></div>
+
+<p>Next we want to install our first package: <code class="highlighter-rouge">reflector</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -S reflector
+</code></pre></div></div>
+
+<p>The following command will sort the five best mirrors based on your location:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reflector --verbose -l 5 --sort rate --save /etc/pacman.d/mirrorlist
+</code></pre></div></div>
+
+<p>Re-issue the sync command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -Syy
+</code></pre></div></div>
+
+<h3 id="installing-the-base">Installing the base</h3>
+
+<p>The base installation is installed using a special script called <code class="highlighter-rouge">pacstrap</code>.</p>
+
+<p>We will be using the <code class="highlighter-rouge">base</code> group and also the <code class="highlighter-rouge">base-devel</code> group that we will need later.</p>
+
+<p>Issue the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacstrap /mnt base base-devel
+</code></pre></div></div>
+
+<p>This will install lots of packages; it takes a few minutes. It took me <code class="highlighter-rouge">4:27.06</code> on my MacBook Air and about 2.5 minutes on my ThinkPad.</p>
+
+<h3 id="create-etcfstab">Create /etc/fstab</h3>
+
+<p>The next step is to create a mount table that will be responsible for automatically mounting filesystems at boot time.</p>
+
+<p>Issue the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>genfstab -U -p /mnt &gt;&gt; /mnt/etc/fstab
+</code></pre></div></div>
+
+<p>We can verify the entries with <code class="highlighter-rouge">cat /mnt/etc/fstab</code>, or <code class="highlighter-rouge">blkid /dev/sd#</code> where <code class="highlighter-rouge">#</code> is the partition number.</p>
+
+<h3 id="chroot---configuring-the-base-system">Chroot - Configuring the base system</h3>
+
+<p>To configure our new installation, we need to issue the <code class="highlighter-rouge">arch-chroot</code> command. This command is used as follows: <code class="highlighter-rouge">arch-chroot</code> followed by the new root directory as the first argument.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@archiso ~ # arch-chroot /mnt /bin/bash
+[root@archiso /]#
+</code></pre></div></div>
+
+<p>We could pass in additional arguments to specify a particular shell, but here we are using <code class="highlighter-rouge">bash</code>.</p>
+
+<h3 id="configuring-locale-settings">Configuring locale settings</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nano /etc/locale.gen
+</code></pre></div></div>
+
+<p>Uncomment <code class="highlighter-rouge">en_US.UTF-8 UTF-8</code> for US English.</p>
+
+<p>Once the desired locales have been uncommented, run <code class="highlighter-rouge">local-gen</code>.</p>
+
+<p>Next we will create <code class="highlighter-rouge">/etc/locale.conf</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo LANG=en_US.UTF-8 &gt; /etc/locale.conf
+export LANG=en_US.UTF-8
+</code></pre></div></div>
+
+<p>Create the following file: <code class="highlighter-rouge">/etc/vconsole.conf</code> and add the following line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>KEYMAP=us
+</code></pre></div></div>
+
+<p>To configure the time zone, we need to create a link to a file called <code class="highlighter-rouge">/etc/localtime</code>.</p>
+
+<p>The following command won’t work, we will do this in a later step, so skip the following command for now.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
+</code></pre></div></div>
+
+<p>This worked on my MacBook Air in VirtualBox, but in doing this on my Windows host in VirtualBox trying to link to the file <code class="highlighter-rouge">/etc/localtime</code> gave an error that the file already existed. Skipping this step on my ThinkPad was OK. Looking in the file, it seemed that UTC was already configured.</p>
+
+<h3 id="set-the-hardware-clock">Set the Hardware Clock</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hwclock --systohc --utc
+</code></pre></div></div>
+
+<h3 id="set-the-host-name-for-the-system">Set the Host Name for the System</h3>
+
+<p>I’m using the hostname <code class="highlighter-rouge">archthinkpad</code>, you can pick whatever host name you want.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo archthinkpad &gt; /etc/hostname
+</code></pre></div></div>
+
+<h3 id="enable-multilib-repository">Enable Multilib Repository</h3>
+
+<p>Add the following to <code class="highlighter-rouge">/etc/pacman.conf</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[multilib]
+Include = /etc/pacman.d/mirrorlist
+</code></pre></div></div>
+
+<p>And then run</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -Syy
+</code></pre></div></div>
+
+<h3 id="add-support-for-yaourt-package-tool">Add support for Yaourt Package Tool</h3>
+
+<p>Add the following to the end of <code class="highlighter-rouge">/etc/pacman.conf</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[archlinuxfr]
+SigLevel = Never
+Server = http://repo.archlinux.fr/$arch
+</code></pre></div></div>
+
+<p>Then run <code class="highlighter-rouge">pacman -Syy</code>.</p>
+
+<h3 id="synchronize-and-update-database-packages">Synchronize and Update Database Packages</h3>
+
+<p>Run the “update system” command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -Syu
+</code></pre></div></div>
+
+<h3 id="create-a-password-for-the-root-account">Create a password for the root account</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+</code></pre></div></div>
+
+<p>and enter a password for the root user.</p>
+
+<h3 id="add-a-new-user-with-sudo-privileges">Add a new user with sudo privileges</h3>
+
+<p>To add a new user we issue <code class="highlighter-rouge">useradd</code> along with primary and secondary groups. <code class="highlighter-rouge">wheel</code> group members will be able to issue commands prefixed with <code class="highlighter-rouge">sudo</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>useradd -mg users -G wheel,storage,power -s /bin/bash brian
+</code></pre></div></div>
+
+<p>Then set a password for this user:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd brian
+</code></pre></div></div>
+
+<h3 id="install-sudo-package">Install sudo Package</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -S sudo
+</code></pre></div></div>
+
+<h3 id="configuring-a-sudo---adding-user-to-wheel-group">Configuring a sudo - adding user to wheel group</h3>
+
+<p>We now need to configure the sudo configuration file. In order to edit this file we must use a special command called <code class="highlighter-rouge">visudo</code>.</p>
+
+<p>This is an editor like <code class="highlighter-rouge">vi</code> or <code class="highlighter-rouge">vim</code> and it edits the sudo config file.</p>
+
+<p>When we run <code class="highlighter-rouge">visudo</code>, we might see the follwoing error:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>visudo: specified editor (vim) doesn't exist.
+</code></pre></div></div>
+
+<p>Let’s install vim:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -S vim
+</code></pre></div></div>
+
+<p>Now we should be able to run <code class="highlighter-rouge">visudo</code>.</p>
+
+<p>We need to uncomment the following line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># %wheel ALL=(ALL) ALL
+</code></pre></div></div>
+
+<p>To do this, press the down arrow until we are on the line we need to uncomment, then press <code class="highlighter-rouge">i</code>, then remove the <code class="highlighter-rouge">#</code> and space. Next, press <code class="highlighter-rouge">esc</code> and then press <code class="highlighter-rouge">:</code> and then <code class="highlighter-rouge">x</code> and then press <code class="highlighter-rouge">ENTER</code>. That should save our changes. Arch Linux warns that this file ONLY be edited with <code class="highlighter-rouge">vim</code>.</p>
+
+<h3 id="installing-a-bootloader">Installing a bootloader</h3>
+
+<p>At this point the directions will fork based on your motherboard firmware. By default grub-install uses target x86_64-efi. If you don’t have a UEFI system you should use the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -S grub
+grub-install --target=i386-pc --recheck /dev/sdb
+</code></pre></div></div>
+
+<p>If this works properly you should see the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Installing for i386-pc platform.
+Installation finished. No error reported.
+</code></pre></div></div>
+
+<blockquote>
+  <p>–target=i386-pc instructs grub-install to install for BIOS systems only. It is recommended to always use this option to remove ambiguity in grub-install.</p>
+</blockquote>
+
+<p>Here is <a href="https://wiki.archlinux.org/index.php/GRUB">more information about GRUB</a> from the Arch Wiki.</p>
+
+<p>Finally run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grub-mkconfig -o /boot/grub/grub.cfg
+</code></pre></div></div>
+
+<p>[Note: If you had a multi OS environment, you could install the “os-prober” package with “pacman -S os-prober” before running the “grub-mkconfig” command. Os-prober will detect other operating systems when generating the grub.cfg file.]</p>
+
+<h3 id="arch-linux-is-now-installed">Arch Linux is now installed</h3>
+
+<p>Issue the following commands to exit:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exit
+umount /mnt/home
+umount /mnt
+reboot
+</code></pre></div></div>
+
+<h3 id="boot-from-existing-os">Boot from existing OS</h3>
+
+<p>At the startup screen, select “Boot existing OS”.</p>
+
+<p>I got a strange error message at login:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arch20815 login: [9.921142] piix4_smbus 0000:00:07.0: SMBus base address uninitialized - upgrade BIOS or use force_addr=0xaddr
+</code></pre></div></div>
+
+<p>Press <code class="highlighter-rouge">ENTER</code> to return to the login prompt.</p>
+
+<p>Login with the <code class="highlighter-rouge">sudo</code> user we created.</p>
+
+<p>We can check to see if this user was setup properly by running:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[brian@arch20815 ~]$ sudo whoami
+
+We trust you have received the usual lecture from the local System Administrator. It usually boils down to these three things:
+
+    #1) Respect the privacy of others.
+    #2) Think before you type.
+    #3) With great power comes great responsibility.
+
+[sudo] password for brian:
+root
+[brian@arch20815 ~]$
+</code></pre></div></div>
+
+<h3 id="configuring-the-network">Configuring the Network</h3>
+
+<p>After the reboot we will have lost network connectivity. We need to create a new definition to our interface. We can isssue the command <code class="highlighter-rouge">ip link</code>.</p>
+
+<p>Run <code class="highlighter-rouge">sudo vi /etc/systemd/network/enp0s3.netork</code> and add the following to this file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Match]
+Name=en*
+
+[Network]
+DHCP=yes
+</code></pre></div></div>
+
+<p>Then we need to run the following commands:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl restart systemd-networkd
+sudo systemctl enable systemd-networkd
+</code></pre></div></div>
+
+<p>Next issue the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi /etc/resolv.conf
+</code></pre></div></div>
+
+<p>And add the following to this file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nameserver 8.8.8.8
+nameserver 8.8.4.4
+</code></pre></div></div>
+
+<p>Next we can check connectivity:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip a s
+ping -c 3 www.google.com
+</code></pre></div></div>
+
+<p>We should see that we have been assigned an IP address and that we can ping google.com.</p>
+
+<h3 id="run-a-full-system-update">Run a full System update</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -Syu
+</code></pre></div></div>
+
+<h3 id="installing-the-x-environment">Installing the X Environment</h3>
+
+<p>I have had problems with this step in the past.</p>
+
+<p>The next step in the tutorial is to run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S xorg-server xorg-xinit xorg-utils xorg-server-utils mesa xorg-twm xterm xorg-xclock
+</code></pre></div></div>
+
+<p>But this will result in:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: target not found: xorg-utils
+error: target not found: xorg-server-utils
+</code></pre></div></div>
+
+<p>It seems that these packages have been deprecated. I think a solution to this is to run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S xorg-apps
+</code></pre></div></div>
+
+<p>and then install the remaining packages:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S xorg-server xorg-xinit mesa xorg-twm xterm xorg-xclock
+</code></pre></div></div>
+
+<p>Select option <code class="highlighter-rouge">1</code> (don’t select the options that include the word nvidia).</p>
+
+<p>Next we need to install <code class="highlighter-rouge">linux-headers</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S linux-headers
+</code></pre></div></div>
+
+<p>Next we need to install some VirtualBox packages:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S virtualbox-guest-utils virtualbox-guest-dkms
+</code></pre></div></div>
+
+<p>The tutorial didn’t mention the <code class="highlighter-rouge">linux-headers</code> package, but the error message that comes up if you skip this step say that this package is needed.</p>
+
+<p><code class="highlighter-rouge">xorg-server-utils</code> seems to have been removed, but it was a meta-package that simply included the following:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xorg-iceauth xorg-sessreg xorg-xcmsdb xorg-xbacklight xorg-xgamma xorg-xhost xorg-xinput xorg-xmodmap xorg-xrandr xorg-xrdb xorg-xrefresh xorg-xset xorg-xsetroot
+</code></pre></div></div>
+<p>Installing these packages individually did not help.</p>
+
+<p>This does a full install of xorg (reinstalling many packages I just installed). After running this command, running <code class="highlighter-rouge">startx</code> gives no errors and lets me enter the X environment.</p>
+
+<h3 id="installing-gnome-desktop">Installing GNOME Desktop</h3>
+
+<p>Next, let’s install <code class="highlighter-rouge">GNOME</code> desktop. Issue the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S gnome gnome-extra gdm
+</code></pre></div></div>
+
+<p>Accept all of the defaults and then confirm by pressing <code class="highlighter-rouge">Y</code>.</p>
+
+<h3 id="installing-networking-tools">Installing Networking Tools</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S net-tools
+</code></pre></div></div>
+
+<h3 id="installing-popular-packages">Installing popular packages</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S pulseaudio pulseaudio-alsa pavucontrol gnome-terminal firefox flashplugin vlc deluge smplayer audacious qmmp gimp xfburn gedit gnome-system-monitor
+</code></pre></div></div>
+
+<h3 id="installing-codecs-for-audio-and-video">Installing codecs for audio and video</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv wavpack x264 xvidcore
+</code></pre></div></div>
+
+<h3 id="install-yaourt">Install Yaourt</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S yaourt
+</code></pre></div></div>
+
+<p><strong>NEVER run yaourt with sudo or as root</strong></p>
+
+<p>Finally, enable GNOME to start automatically at boot:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable gdm
+</code></pre></div></div>
+
+<p>The last issue I had was getting GNOME Desktop to display in full-screen in VirtualBox. To do this, click on the Devices Tab and then Insert Guest Additions Image.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reboot
+</code></pre></div></div>
+
+<p>Login with the user account that you created. At this point, trying to open Terminal will probably not work. This is because of an issue mentioned earlier about a locale file. Let’s look at <code class="highlighter-rouge">/etc/locale.conf</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/locale.conf
+</code></pre></div></div>
+
+<p>We just need to make sure that the language we want is uncommented in <code class="highlighter-rouge">/etc/locale.gen</code>. We did this previously. Now we need to run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo locale-gen
+</code></pre></div></div>
+
+<p>This should allow us to access the terminal.</p>
+
+<h3 id="enable-wi-fi">Enable Wi-Fi</h3>
+
+<p>To enable Wi-Fi, first check <code class="highlighter-rouge">lspci -k</code> if you have an onboard wifi card or <code class="highlighter-rouge">lsusb -v</code> if you have a USB wifi adapter.</p>
+
+<p>Next run <code class="highlighter-rouge">ip link</code> and see if there is an entry that starts with <code class="highlighter-rouge">w</code>. This is wireless interface. If you don’t have WiFi working it probably says <code class="highlighter-rouge">state DOWN</code> in the description.</p>
+
+<p>We need to run the following command to bring it up:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ip link set &lt;the code that starts with w&gt; up
+</code></pre></div></div>
+
+<p>If we go to “Settings” we will see an error that says “NetworkManager needs to be running.”</p>
+
+<p>To get NetworkManager running, issue the following commands:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable NetworkManager.service
+sudo systemctl start NetworkManager.service
+</code></pre></div></div>
+
+<p>This will prompt you for authentication, then you can go back to <code class="highlighter-rouge">Settings &gt; Network</code> and you should be able to find any available Wi-Fi networks.</p>
+
+<h3 id="customizing-gnome-desktop">Customizing GNOME Desktop</h3>
+
+<p>Next let’s work on customizing our GUI.</p>
+
+<p>We will now start making use of the <code class="highlighter-rouge">yaourt</code> utility to build packages for programs we want to install.</p>
+
+<p>Yaourt gives us a useful flag to search packages:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -Ss search_term1 search_term2
+</code></pre></div></div>
+
+<p>This returns a list of packages which match search terms either in their title or description. When you find the right package you can copy the exact name and then download it with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S package_name
+</code></pre></div></div>
+
+<p>Let’s start with nice custom theme, numix.</p>
+
+<p>Run the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -Ss numix
+</code></pre></div></div>
+
+<p>We will see many packages, and there are three that we should install:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">numix-gtk-theme</code></li>
+  <li><code class="highlighter-rouge">numix-circle-theme-git</code></li>
+  <li><code class="highlighter-rouge">numix-cursor-theme-git</code></li>
+</ul>
+
+<p>The installations process for <code class="highlighter-rouge">numix-gtk-theme</code> is quite long. You need to confirm <code class="highlighter-rouge">Yes</code> and it will also ask you the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Edit PKGBUILD with:
+</code></pre></div></div>
+
+<p>Here you can type <code class="highlighter-rouge">nano</code> and press <code class="highlighter-rouge">ENTER</code>. It will then show you a file in <code class="highlighter-rouge">nano</code> or the editor you select. You can press <code class="highlighter-rouge">Ctrl-X</code> and the installation script will continue running.</p>
+
+<p>You will also see the following message before being prompted to select an editor:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Please add $VISUAL to your environment variables.
+</code></pre></div></div>
+
+<p>Let’s do that now so we are not prompted to do it later:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano ~/.bashrc
+</code></pre></div></div>
+
+<p>Add the following line to the end of the file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export VISUAL="nano"
+</code></pre></div></div>
+
+<p>You could also set <code class="highlighter-rouge">VISUAL="vim"</code> or some other editor.</p>
+
+<p>Now that we have installed the themes, let’s activate them. Press <code class="highlighter-rouge">ALT F2</code> and type <code class="highlighter-rouge">gnome-tweak-tool</code>. Under the appearance tab you can select the newly installed GTK+ theme, icons and cursor.</p>
+
+<h3 id="gnome-shell-extensions">GNOME Shell Extensions</h3>
+
+<p>You can do a lot of neat customization with extensions. You will see an <code class="highlighter-rouge">Extensions</code> tab in the Tweak Tool. Click on “Get more extensions”. This will take you to the <a href="https://extensions.gnome.org">GNOME Shell Extensions</a> site. Before you start using extensions, you need to add a Firefox extensions and install a package. Click the link in the blue bar at the top of the page and install the plugin.</p>
+
+<p>Next you need to install the following package:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S chrome-gnome-shell-git
+</code></pre></div></div>
+
+<p>Now refresh the GNOME Shell Extensions page and the blue message should go away. Here are the extensions I use:</p>
+
+<ul>
+  <li>Applications menu</li>
+  <li>Removable Drive menu</li>
+  <li>Dash to Dock</li>
+  <li>Drop Down Terminal</li>
+  <li>Dynamic Top Bar</li>
+  <li>User Themes</li>
+  <li>System Monitor</li>
+  <li>Sensory Perception</li>
+  <li>Screen Saver and hibernate buttons (requires <code class="highlighter-rouge">gnome-screensaver</code> package and a GNOME Shell Extension called “Suspend and Lock Button”)</li>
+</ul>
+
+<p>Dash to Dock lets you place the dock wherever you want, you can also change its appearance and behavior.</p>
+
+<h3 id="screenfetch">Screenfetch</h3>
+
+<p>I like to use Screenfetch, a package that prints out ASCII art for your distro and some customizable system information.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S screenfetch
+</code></pre></div></div>
+
+<p>Now edit <code class="highlighter-rouge">~/.bashrc</code> by adding the following line at the bottom of the file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>screenfetch
+</code></pre></div></div>
+
+<p>Screefetch can be further customized, check out <code class="highlighter-rouge">man screenfetch</code> for more options. For example, you can exlude certain lines about system information or add custom lines like the model of your PC, etc:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                  -`                 
+                 .o+`                 brian@archthinkpad
+                `ooo/                 OS: Arch Linux
+               `+oooo:                Kernel: x86_64 Linux 4.12.5-1-ARCH
+              `+oooooo:               Uptime: 5h 8m
+              -+oooooo+:              Packages: 1044
+            `/:-:++oooo+:             Shell: bash 4.4.12
+           `/++++/+++++++:            Resolution: 1366x768
+          `/++++++++++++++:           DE: GNOME
+         `/+++ooooooooooooo/`         WM: GNOME Shell
+        ./ooosssso++osssssso+`        GTK Theme: Numix [GTK2/3]
+       .oossssso-````/ossssss+`       Icon Theme: Numix-Circle
+      -osssssso.      :ssssssso.      Font: Cantarell 11
+     :osssssss/        osssso+++.     CPU: Intel Core i5-3320M @ 4x 3.3GHz [44.0°C]
+    /ossssssss/        +ssssooo/-     GPU: intel
+  `/ossssso+/:-        -:/+osssso+-   RAM: 4315MiB / 7685MiB
+  `+sso+:-`                 `.-/+oso:
+ `++:.                           `-/+/
+.`                                 `/
+
+
+</code></pre></div></div>
+
+<h4 id="quick-note-on-terminal-colors">Quick Note on Terminal Colors</h4>
+
+<p>I don’t like the default white background of the terminal, so you can change this by editing the default profile. Unselect “Use colors from system theme” and select “Solarized Dark” (my preferred color scheme).</p>
+
+<h4 id="quick-note-on-yaourt">Quick Note on yaourt</h4>
+
+<p>You can add a <code class="highlighter-rouge">--no-confirm</code> flag to yaourt that will prevent it from asking you if you want to proceed with each step of the installation process.</p>
+
+<h3 id="window-options">Window options</h3>
+
+<p>By default, GNOME only shows the <code class="highlighter-rouge">X</code> in the top right corner of windows. You can add the maximize and minimize buttons in the <code class="highlighter-rouge">Windows</code> tab of the GNOME Tweak Tool.</p>
+
+<h3 id="icons-on-desktop">Icons on Desktop</h3>
+
+<p>Another default setting that may be strange for you is “Icons on Desktop” which is set to <code class="highlighter-rouge">OFF</code> by default. The is found under the Desktop tab in the GNOME Tweak Tool.</p>
+
+<h3 id="my-other-setup-notes">My other setup notes</h3>
+
+<p>I install Chromium and set it to my default browser. My must have extension for Chrome (and any other browser) is Last Pass for account and password management.</p>
+
+<h2 id="default-applications">Default Applications</h2>
+
+<p>You can set default applications by opening <code class="highlighter-rouge">Settings &gt; Details &gt; Default Applications</code>. I use Image Viewer for photos instead of GIMP and VLC for Video.</p>
+
+<p><code class="highlighter-rouge">pacman</code> offers similar functionality, and so does <code class="highlighter-rouge">pacaur</code>. There are several options for how to download software with Arch Linux.</p>
+
+<h3 id="other-packages">Other packages</h3>
+
+<p>Here’s a list of other helpful packages:</p>
+
+<ul>
+  <li>htop (system monitoring)</li>
+</ul>
+
+<p>htop can be customized to show some helpful information. Press F2 or click in the terminal where it says “Setup” and you will open a menu to select custom options for htop.</p>
+
+<ul>
+  <li>
+    <p>blender (video editing and 3d modeling)</p>
+  </li>
+  <li>
+    <p>OBS (screen recording and streaming software)</p>
+  </li>
+</ul>
+
+<p>OBS took a little bit of configuring to get right. Out of the box, doing a screen capture showed just a black screen. I think the solution is to install <code class="highlighter-rouge">obs-studio-git</code> and then reboot your computer.</p>
+
+<ul>
+  <li>Dropbox</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S dropbox
+</code></pre></div></div>
+
+<p>Run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dropbox
+</code></pre></div></div>
+
+<p>And then follow the dialogue to sign into your Dropbox account. You will see a Dropbox folder in the File Manager.</p>
+
+<ul>
+  <li>Google Drive</li>
+</ul>
+
+<p>You can get access to Google Drive by going into:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Settings &gt; Online Accounts &gt; Google
+</code></pre></div></div>
+
+<p>If you have <code class="highlighter-rouge">Files</code> set to <code class="highlighter-rouge">ON</code>, you will find your Google Drive Folder in the side bar of the File Viewer. Clicking on the icon mounts your Google Drive and gives you access to the files.</p>
+
+<ul>
+  <li>hexchat (IRC client)</li>
+</ul>
+
+<p>Internet Relay Chat (IRC) is an easy way to start talking to people in real-time about any topic you can think of. Hexchat is a popular GUI client for IRC. Here is how to install hexchat:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S hexchat
+</code></pre></div></div>
+
+<p>Once you have installed hexchat, you will want to register a nickname. <a href="https://freenode.net/kb/answer/registration">This article</a> says that the steps for registering a nickname are to:</p>
+
+<p>Send the following message to <code class="highlighter-rouge">freenode</code> (replace <code class="highlighter-rouge">some_password</code> with a secure password of your choice and <code class="highlighter-rouge">youremail@example.com</code> with your email address):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/msg NickServ REGISTER some_password youremail@example.com
+</code></pre></div></div>
+
+<p>After you send this message, check your email and you will see instructions to confirm your email that look like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/msg NickServ VERIFY REGISTER &lt;your_name&gt; &lt;some_code_they_give_you&gt;
+</code></pre></div></div>
+
+<p>This should confirm your nickname. Now you can start chatting on channels. Press <code class="highlighter-rouge">Alt + S</code>, and then <code class="highlighter-rouge">J</code>, and then type the name of the channel you want to join.</p>
+
+<h3 id="configure-vpn">Configure VPN</h3>
+
+<p>I setup TorGuard VPN service by installing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S torguard
+</code></pre></div></div>
+
+<h2 id="setting-up-development-tools">Setting Up Development Tools</h2>
+
+<h3 id="atom-and-other-text-editors">Atom and other text editors</h3>
+
+<p>My preferred text editor is Atom:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S atom
+</code></pre></div></div>
+
+<p>Spell checker didn’t seem to be working for me, and this seems to be a <a href="https://github.com/atom/spell-check/issues/129">known issue</a>, so I recommend you install the <code class="highlighter-rouge">atom/spell-checker</code> package if you like to use atom and want spell checking.</p>
+
+<p>The Arch Linux installation also came with an interesting editor called <code class="highlighter-rouge">Builder</code> which seems pretty interesting as well.</p>
+
+<h3 id="virtualbox-1">VirtualBox</h3>
+
+<p><em>Skip this step if you are installing Arch Linux as guest OS in a VirtualBox (you can’t run a virtual machine in a virtual machine).</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S virtualbox
+</code></pre></div></div>
+
+<p>You will see a message that says:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:: There are 2 providers available for VIRTUALBOX-HOST-MODULES
+:: Repository community
+   1) virtualbox-host-dkms 2) virtualbox-host-modules-arch
+</code></pre></div></div>
+
+<p><strong>Select option 2, continue the installation process and then reboot.</strong></p>
+
+<h3 id="quick-note-on-deluge">Quick note on deluge</h3>
+
+<p>You will probably want to use a BitTorrent client to download ISO images for virtual machines you want to run. Deluge works well for this, and we already downloaded it during setup. We can add one more package for a theme that Deluge uses:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S gtk-engine-murrine
+</code></pre></div></div>
+
+<p>Now grab a torrent link or file for an OS you want to download and add it to Deluge.</p>
+
+<p>When it is finished we can launch VirtualBox and create a virtual machine with our ISO.</p>
+
+<h3 id="npm-and-nodejs">npm and node.js</h3>
+
+<p>Here’s <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">a helpful article</a> that is important to following when setting up npm and node.js. Be very careful here as some of the steps can completely mess up permissions on your entire system.</p>
+
+<p>Here’s a walkthrough of the steps to get <code class="highlighter-rouge">npm</code> setup correctly.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S npm
+</code></pre></div></div>
+
+<p>Next run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm config get prefix
+</code></pre></div></div>
+
+<p>The output of this command is probably:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr
+</code></pre></div></div>
+
+<p>If this is the case, we MUST follow the following steps (option 2 from <a href="https://docs.npmjs.com/getting-started/fixing-npm-permissions">this article</a>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+</code></pre></div></div>
+
+<p>If you don’t already have a <code class="highlighter-rouge">~/.profile</code> file, make one, and then add the following line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export PATH=~/.npm-global/bin:$PATH
+</code></pre></div></div>
+
+<p>Then run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source ~/.profile
+</code></pre></div></div>
+
+<p>This will “refresh” <code class="highlighter-rouge">~/.profile</code> so that using the <code class="highlighter-rouge">npm</code> command will work without needing sudo.</p>
+
+<p>Next we can test that <code class="highlighter-rouge">npm</code> works by trying to install a package:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g jshint
+</code></pre></div></div>
+
+<p>This should install the package with no errors.</p>
+
+<h3 id="heroku">Heroku</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S heroku-cli
+</code></pre></div></div>
+
+<p>Then run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>heroku keys:add
+</code></pre></div></div>
+
+<p>and then type <code class="highlighter-rouge">yes</code> at the prompt. This will your computer’s public key to your Heroku account.</p>
+
+<h4 id="note-about-python-versions-on-heroku">Note about Python versions on Heroku</h4>
+
+<p>I have only been able to deploy with Python 3.5.2.</p>
+
+<h3 id="redis">Redis</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S redis
+</code></pre></div></div>
+
+<p>Next, start and enable  <code class="highlighter-rouge">redis.service</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl start redis.service
+sudo systemctl enable redis.service
+</code></pre></div></div>
+
+<h3 id="ssh">SSH</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S openssh
+</code></pre></div></div>
+
+<h3 id="autoenv-github">autoenv (<a href="https://github.com/kennethreitz/autoenv">GitHub</a>)</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S autoenv
+</code></pre></div></div>
+
+<p>You need to source activate.sh in your bashrc afterwards:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo 'source /usr/share/autoenv/activate.sh' &gt;&gt; ~/.bashrc
+</code></pre></div></div>
+
+<h3 id="ruby-and-jekyll">Ruby and Jekyll</h3>
+
+<p>I use Jekyll for my personal site and blog, which is a static site generator written in Ruby. To start using Jekyll we need to install a ruby gem, and to install the gem we will need to first install ruby. Here is the <a href="https://wiki.archlinux.org/index.php/ruby">ruby page from the Arch Wiki</a>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S ruby
+</code></pre></div></div>
+
+<p>Next we can install the Jekyll gem:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install jekyll bundler
+</code></pre></div></div>
+
+<p>It should say something like “20 gems installed” if everything was successful. You can read more about Jekyll <a href="https://jekyllrb.com/">here</a>.</p>
+
+<p>For now I will not be installing RVM (Ruby Version Manager), but the Arch Wiki has good notes on how this can be installed.</p>
+
+<p>Before we use the Jekyll gem, we need to add the following to our <code class="highlighter-rouge">~/.bashrc</code> file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+</code></pre></div></div>
+
+<p>This will allow you to run Jekyll commands.</p>
+
+<h3 id="python">Python</h3>
+
+<p>In the installation pIssuesrocess, the latest versions of Python has been installed (3.6.2 at the time of writing this tutorial). We need to get <code class="highlighter-rouge">pip</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S python-pip
+</code></pre></div></div>
+
+<p>Here’s <a href="https://docs.python.org/3/library/venv.html">an article from the Python documentation</a> that covers creating virtual environments.</p>
+
+<p>Here is <a href="https://packaging.python.org/tutorials/installing-packages/">another article</a> about creating virtual environments in python.</p>
+
+<blockquote>
+  <p>Currently, there are two viable tools for creating Python virtual environments:
+venv is available by default in Python 3.3 and later, and installs pip and setuptools into created virtual environments in Python 3.4 and later.
+virtualenv needs to be installed separately, but supports Python 2.6+ and Python 3.3+, and pip, setuptools and wheel are always installed into created virtual environments by default (regardless of Python version).
+The basic usage is like so:
+Using virtualenv:</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>virtualenv &lt;DIR&gt;
+source &lt;DIR&gt;/bin/activate
+</code></pre></div></div>
+
+<blockquote>
+  <p>Using venv:</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 -m venv &lt;DIR&gt;
+source &lt;DIR&gt;/bin/activate
+</code></pre></div></div>
+<p>For more information, see the virtualenv docs or the venv docs.</p>
+
+<h4 id="jupyter-notebook-and-ipython-notebook">Jupyter Notebook and IPython Notebook</h4>
+
+<p>IPython notebooks (also known as Jupyter notebooks), provide a nice environment for combining python runtime environments, Markdown, images, graphs and other interactive Python tools such as Bokeh. You can install both Jupyter Notebooks and IPython Notebooks:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaort -S jupyter-notebook
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S ipython2-notebook
+</code></pre></div></div>
+
+<p>You can launch either of these with <code class="highlighter-rouge">jupyter notebook</code> or <code class="highlighter-rouge">ipython notebook</code> from the terminal.</p>
+
+<p><em>There seems to be an issue with LaTeX</em></p>
+
+<h4 id="anaconda-distribution-from-continuum-analytics">Anaconda Distribution from Continuum Analytics</h4>
+
+<p>If you are doing scientific computing, statistical analysis or an type of machine learning, you will want to download the Anaconda distribution. This is Python bundled with a bunch of great packages and C libraries for doing heavy lifting. Anaconda uses a slightly different tool for managing virtual environments and package management, but it is very easy to do both using the <code class="highlighter-rouge">conda</code> command.</p>
+
+<h3 id="postgresql">PostgreSQL</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S postgresql
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -u postgres -i
+</code></pre></div></div>
+
+<p>This switches you to the PostgreSQL user.</p>
+
+<p>Before PostgreSQL can function correctly, the database cluster must be initialized:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+</code></pre></div></div>
+
+<p>You should see the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[postgres@archthinkpad ~]$ initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.UTF-8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgres/data ... ok
+creating subdirectories ... ok
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting dynamic shared memory implementation ... posix
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+WARNING: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgres/data -l logfile start
+</code></pre></div></div>
+<p>Now type <code class="highlighter-rouge">exit</code> to return to your regular user.</p>
+
+<p>Next, start and enable <code class="highlighter-rouge">postgresql.service</code> as root:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[brian@archthinkpad ~]$ sudo systemctl start postgresql.service
+[sudo] password for brian:
+[brian@archthinkpad ~]$ sudo systemctl enable postgresql.service
+Created symlink /etc/systemd/system/multi-user.target.wants/postgresql.service → /usr/lib/systemd/system/postgresql.service.
+[brian@archthinkpad ~]$
+</code></pre></div></div>
+
+<p>See the <a href="https://wiki.archlinux.org/index.php/PostgreSQL">Arch Wiki article on PostgreSQL</a> for more information.</p>
+
+<h3 id="tmux">tmux</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S tmux
+</code></pre></div></div>
+
+<h3 id="tree">tree</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S tree
+</code></pre></div></div>
+
+<h3 id="languages-and-input-sources">Languages and Input Sources</h3>
+
+<p>Here is how to add support for Chinese characters and also Chinese pinyin input:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S adobe-source-han-sans-cn-fonts
+</code></pre></div></div>
+
+<p>This will make Chinese characters visible. In order to type Chinese using the pinyin input method, run the following commands:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S ibus
+sudo pacman -S ibus-libpinyin
+</code></pre></div></div>
+
+<p>可以打汉字了！其它语言和文字packages可以参考<a href="">这个Arch Wiki文章</a>。</p>
+
+<p>Next you can go into:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Settings &gt; Region &amp; Language &gt; Input Source &gt; + &gt; Other
+</code></pre></div></div>
+<p>Select Chinese (Intelligent Pin Yin) from the list and you should see a language menu in the top bar. At this point I was able to see both English and Chinese in Language menu in the top bar, but the Chinese pinyin only worked after rebooting.</p>
+
+<h3 id="spotify">Spotify</h3>
+
+<p>Get some tunes going with the Spotfy app. It is not officially supported, but it seems to work alright. Facebook login did not work for me. You can create a new account with your existing email like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>youremail+spotify@email.com
+</code></pre></div></div>
+
+<p>Using my main email to sign up for a new account didn’t work because that email was linked to the Facebook login.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S spotify
+</code></pre></div></div>
+
+<h3 id="word-processing-libre-office">Word Processing (Libre Office)</h3>
+
+<p>Libre Office is an open-source Office Suite similar in functionality to Microsoft Word.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pacman -S libreoffice-fresh
+</code></pre></div></div>
+
+<p>You can also install any language packs you may need for Libre Office:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S libreoffice-fresh-zh-CN
+</code></pre></div></div>
+
+<h3 id="disk-usage-visualizations">Disk Usage Visualizations</h3>
+
+<p>You can get disk usage with the <code class="highlighter-rouge">du</code> command. There are other programs for disk space visualizations, so far I have found <code class="highlighter-rouge">gdmap</code> and <code class="highlighter-rouge">filelight</code> to be helpful. Both are available in the AUR:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yaourt -S gdmap filelight
+</code></pre></div></div>
+
+<h3 id="sign-up-for-the-arch-wiki">Sign up for the Arch Wiki</h3>
+
+<p>The best way to ask for help is to ask the community. You should sign up for the Arch Wiki and post any questions you have after doing research and trying a few different solutions. The more detailed you are in your post, the better help you will get.</p>
+
+<h2 id="miscelaneous-items">Miscelaneous Items</h2>
+
+<p>I have experienced unexpected behavior with some programs. Here’s a list of some major issues and workarounds I have found:</p>
+
+<ul>
+  <li><strong>Google Hangouts</strong>: I use Google Hangouts a lot for screen sharing and video conferencing. Trying to share my screen only showed a black screen with a cursor, although sharing invidual windows seemed to work fine (similar to what was happening with OBS). I found a <a href="https://superuser.com/questions/1166765/google-hangouts-screen-share-black-screen-error">Superuser thread</a> describing the same issue. The solution is simply to select an Xorg session on login (instead of GNOME Classic or regular GNOME session). This is something I still don’t know much about, but the solution worked for me and I have been able to share my entire screen in Google Hangouts.</li>
+</ul>
+
+<p>You can check which session type you are using with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo $XDG_SESSION_TYPE
+</code></pre></div></div>
+
+<p>and you should either see <code class="highlighter-rouge">x11</code> or <code class="highlighter-rouge">wayland</code>.</p>
+
+<h3 id="keyboard-shortcuts">Keyboard shortcuts</h3>
+
+<p>You can configure keyboard shortcuts by going into:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Settings &gt; Keyboard
+</code></pre></div></div>
+
+<p>Search for or find the setting that says “Hide all normal windows”. I set mine to <code class="highlighter-rouge">Shift + Alt + D</code>. You can configure other keyboard shortcuts here.</p>
+
+<h3 id="night-light">Night Light</h3>
+
+<p>If you are coming from Mac or Windows, you might be used to using f.lux to dim the blue colors from your screen. There are few options for Linux such as Red Shift and xflux. I finf that in GNOME, using the built in Nigh Light works the best for reduce eye strain. Just go into:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Settings &gt; Displays
+</code></pre></div></div>
+
+<p>and click on Night Light. Like flux, you can set it for regular hours. There aren’t as many modes or options, but it does a pretty goog job of what I need it to do.</p>
+
+<h3 id="helpful-commands">Helpful Commands</h3>
+
+<p>To view all available commands, run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>compgen -c
+</code></pre></div></div>
+
+<p>To view all installed packages, run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pacman -Q
+</code></pre></div></div>
+
+<h2 id="conclusion-and-next-steps">Conclusion and Next Steps</h2>
+
+<p>Installing Arch Linux is like trying to build a house with just a spoon. You won’t get very far with a spoon, but you have the benefit of being able to order unlimited copies of free parts and materials online (the AUR, or Arch User Repository), and a great community of people that are extremely knowledgable about “building houses”. Pretty soon you are able to quickly put together a foundation, scaffolding, wiring, appliances and yes even wallpaper. Arch Linux stays with its rolling release cycle, so you don’t have to rebuild your house every 9 months to stay current.</p>
+
+<p>Arch Linux is a lot of work to set up compared to popular Linux distributions like Ubuntu. Just like everyone says, you learn a lot by going through the process, breaking things and starting the installations process from scratch. I totally messed up my permissions while installing and quickly found that the only solutions was to reinstall Arch. This guide is primarily for personal use, and I am sure there are things that can be improved and even done completely differently. Here’s a list of things I can start with:</p>
+
+<ul>
+  <li>
+    <p><strong>Fix OBS Studio</strong>: <del>I got this to work in my earlier install and can’t seem to remember how I fixed it. Currently OBS displays a black screen when set to <code class="highlighter-rouge">Screen Capture</code></del>. I finally got OBS studio to work and I think the issue was as simple as rebooting (or possibly an update with <code class="highlighter-rouge">sudo pacman -Syu</code>).</p>
+  </li>
+  <li>
+    <p><strong>Encrypting the home folder</strong>: this is good practice and will make my computer more secure, it shouldnt be too difficult either.</p>
+  </li>
+  <li>
+    <p><strong>Adding a boot partition and fixing GRUB</strong>: the guides I worked off of didn’t include this, and I think it would be very important to figure out how this works if I want to include Windows 10 for doing Windows-specific tasks on my laptop as well without having to go into the bios each time I want to switch OSs.</p>
+  </li>
+  <li>
+    <p><strong>Using HDDs</strong>: On my desktop I would like to be able to figure out how to mount my HDD that I use for mass file storage on my Windows machine. For simplicity I have kept everything on one SSD, but it would be good to figure out how to easily add additional disks at boot time.</p>
+  </li>
+  <li>
+    <p><strong>NVIDIA drivers</strong>: this does not apply to my laptop, but I would like to figure out how I can get the best drivers in Arch Linux for my NVIDIA GPU on my desktop machine. This is one thing that running Linux in a Virtual Machine really doesn’t allow you to do (pass a GPU through a VM), as far as I know.</p>
+  </li>
+  <li>
+    <p><strong>All other drivers</strong>: I still have lots of questions about how to make sure that I am running things properly on my desktop PC. I feel like drivers for the laptop install were pretty automatic, but this may not be the case with additional hardware components on my desktop, such a closed-loop water cooler.</p>
+  </li>
+  <li>
+    <p><strong>Additional Customization, Themes, Window Managers, etc.</strong>: There is so much that can be done with Arch Linux in terms of GUI. I love the setup I have but it would be interesting to explore some additional options like i3, for example.</p>
+  </li>
+  <li>
+    <p><strong>Cusomt kernels</strong>: I am also interested in learning how I could swap out kernels. I have seen people add LTS kernels to Arch Linux for various reasons, and I’m interested to learn how this works.</p>
+  </li>
+  <li>
+    <p><strong>Maximzing battery life</strong>: During the install process I saw the topic discussed but didn’t look into it. It would be nice to see if I could make changes to get more out of the battery in my refurbished ThinkPad.</p>
+  </li>
+  <li>
+    <p><strong>Other areas for improvement</strong>: [add here]</p>
+  </li>
+  <li>
+    <p>Install RVM</p>
+  </li>
+  <li>
+    <p>Install EMACS</p>
+  </li>
+</ul>
+
+<p>-</p>
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017/08/03/arch-linux-installation-guide.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="https://briancaffey.github.io">briancaffey.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://gitlab.com/briancaffey">
+    <span class="gitlab-fox">
+        
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="210px" height="194px" viewBox="0 0 210 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Fill-1-+-Group-24" sketch:type="MSLayerGroup">
+            <g id="Group-24" sketch:type="MSShapeGroup">
+                <g id="Group">
+                    <path d="M105.0614,193.655 L105.0614,193.655 L143.7014,74.734 L66.4214,74.734 L105.0614,193.655 L105.0614,193.655 Z" id="Fill-4" fill="#E24329"></path>
+                    <path id="Fill-6" fill="#FC6D26"></path>
+                    <path d="M105.0614,193.6548 L66.4214,74.7338 L12.2684,74.7338 L105.0614,193.6548 Z" id="Fill-8" fill="#FC6D26"></path>
+                    <path id="Fill-10" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7341 L12.2685,74.7341 L0.5265,110.8731 C-0.5445,114.1691 0.6285,117.7801 3.4325,119.8171 L105.0615,193.6551 L12.2685,74.7341 Z" id="Fill-12" fill="#FCA326"></path>
+                    <path id="Fill-14" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7342 L66.4215,74.7342 L43.1485,3.1092 C41.9515,-0.5768 36.7375,-0.5758 35.5405,3.1092 L12.2685,74.7342 Z" id="Fill-16" fill="#E24329"></path>
+                    <path d="M105.0614,193.6548 L143.7014,74.7338 L197.8544,74.7338 L105.0614,193.6548 Z" id="Fill-18" fill="#FC6D26"></path>
+                    <path d="M197.8544,74.7341 L197.8544,74.7341 L209.5964,110.8731 C210.6674,114.1691 209.4944,117.7801 206.6904,119.8171 L105.0614,193.6551 L197.8544,74.7341 Z" id="Fill-20" fill="#FCA326"></path>
+                    <path d="M197.8544,74.7342 L143.7014,74.7342 L166.9744,3.1092 C168.1714,-0.5768 173.3854,-0.5758 174.5824,3.1092 L197.8544,74.7342 Z" id="Fill-22" fill="#E24329"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-col footer-col-3">
+        <p>my personal site</p>
+      </div>
+      
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

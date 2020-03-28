@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Installing the GPU version of Tensorflow with Docker on Arch Linux</title>
+  <meta name="description" content="I’ve tried installing the GPU version of Tensorflow a few times before and failed. There seems to be lots of confusion about the build process, of which ther...">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Installing the GPU version of Tensorflow with Docker on Arch Linux</h1>
+    <p class="post-meta"><time datetime="2017-11-19T00:00:00-06:00" itemprop="datePublished">Nov 19, 2017</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>I’ve tried installing the GPU version of Tensorflow a few times before and failed. There seems to be lots of confusion about the build process, of which there are many. Also, over the last few years there have been many new versions of the software needed to support the GPU version of Tensorflow as well as the first official release of Tensorflow itself (which is now on version 1.4), such as CUDA and cudnn, and different version of python. This is one more attempt at installing the GPU version of Tensor Flow on my Desktop PC that is currently dual booting with Arch Linux and Windows 10. I’ve decided to try going the docker route because it should eliminate some of the headache of missing depedencies. Here are the specs for my computer:</p>
+
+<ul>
+  <li>i7-6700K</li>
+  <li>NVIDIA GTX 1080</li>
+  <li>Asus Hero VIII motherboard</li>
+  <li>Arch Linux on a 128 GB SSD (Windows 10 is installed on a separate SSD)</li>
+</ul>
+
+<h2 id="installing-cuda-and-cudnn">Installing CUDA and cudnn</h2>
+
+<p>We don’t need to install these when installing Tensorflow with Docker. Read to the bottom for more info.</p>
+
+<h2 id="installing-docker">Installing Docker</h2>
+
+<p>To install docker on our machine, let’s start with the <a href="https://wiki.archlinux.org/index.php/Docker">Arch Wiki article on docker</a>.</p>
+
+<p>We need to add the Loopback module to the Linux Kernel, so we run:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">#</span> tee /etc/modules-load.d/loop.conf <span class="o">&lt;&lt;&lt;</span> <span class="s2">"loop"</span>
+<span class="gp">#</span> modprobe loop
+<span class="gp">$</span> reboot
+</code></pre></div></div>
+
+<p>Ater rebooting we can install docker:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">yaourt -S docker
+</span></code></pre></div></div>
+
+<p>Now we want to add ourself to the docker group with the following command:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> <span class="nb">sudo </span>gpasswd <span class="nt">-a</span> brian docker
+<span class="go">[sudo] password for brian: 
+Adding user brian to group docker
+</span></code></pre></div></div>
+
+<p>If you run <code class="highlighter-rouge">groups</code>, you won’t see docker listed in the groups you (brian) belong to. Run <code class="highlighter-rouge">newgrp docker</code> and then re-run docker and you should see <code class="highlighter-rouge">docker</code> listed with any other groups you belong to:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">[brian@a1arch ~]$</span> groups
+<span class="go">wheel storage power users
+</span><span class="gp">[brian@a1arch ~]$</span> newgrp docker
+<span class="go">                   -`                    brian@a1arch
+                  .o+`                   ------------
+                 `ooo/                   OS: Arch Linux x86_64
+                `+oooo:                  Kernel: 4.12.8-2-ARCH
+               `+oooooo:                 Uptime: 6 mins
+               -+oooooo+:                Packages: 1127
+             `/:-:++oooo+:               Shell: bash 4.4.12
+            `/++++/+++++++:              Resolution: 1920x1080
+           `/++++++++++++++:             WM: i3
+          `/+++ooooooooooooo/`           Theme: Adwaita [GTK2]
+         ./ooosssso++osssssso+`          Icons: Adwaita [GTK2]
+        .oossssso-````/ossssss+`         Terminal: urxvt
+       -osssssso.      :ssssssso.        Terminal Font: Inconsolata-12
+      :osssssss/        osssso+++.       CPU: Intel i7-6700K (8) @ 4.200GHz
+     /ossssssss/        +ssssooo/-       GPU: NVIDIA GeForce GTX 1080
+   `/ossssso+/:-        -:/+osssso+-     Memory: 3289MiB / 15975MiB
+  `+sso+:-`                 `.-/+oso: 
+ `++:.                           `-/+/                           
+ .`                                 `/ 
+
+</span><span class="gp">[brian@a1arch ~]$</span> groups
+<span class="go">docker wheel storage power users
+</span></code></pre></div></div>
+
+<p>Doing this prevents us from having to write sudo each time we run docker.</p>
+
+<p>Next we need to start the docker daemon.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ systemctl start docker
+==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
+Authentication is required to start 'docker.service'.
+Authenticating as: brian
+Password: 
+==== AUTHENTICATION COMPLETE ====
+$
+</code></pre></div></div>
+
+<h3 id="side-note">Side note</h3>
+
+<p>There seems to be an <a href="https://github.com/moby/moby/issues/23289">Arch Linux-specific bug</a> which prevents us from enabling docker (and nvidia-docker which we will get next). There is a solution to downgrade to an older version of docker, or you can just start the docker service and the nvidia-docker service when you want to use them. I have found it faster to first start nvidia-docker and then start docker services.</p>
+
+<p>So far so good. Next let’s look at the Tensorflow documentation for installing Tensorflow with docker.</p>
+
+<p>We need to install <code class="highlighter-rouge">nvidia-docker</code>:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> yaourt <span class="nt">-S</span> nvidia-docker
+<span class="go">[...]
+[sudo] password for brian: 
+loading packages...
+resolving dependencies...
+looking for conflicting packages...
+
+Packages (1) nvidia-docker-1.0.1-1
+
+Total Installed Size:  13.34 MiB
+
+:: Proceed with installation? [Y/n] 
+</span><span class="gp">(1/1) checking keys in keyring                                 [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) checking package integrity                               [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) loading package files                                    [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) checking for file conflicts                              [#</span><span class="c">#################################] 100%</span>
+<span class="gp">(1/1) checking available disk space                            [#</span><span class="c">#################################] 100%</span>
+<span class="go">:: Processing package changes...
+</span><span class="gp">(1/1) installing nvidia-docker                                 [#</span><span class="c">#################################] 100%</span>
+<span class="gp">=&gt;</span> Prior to running <span class="s1">'CUDA'</span><span class="nt">-containers</span>, ensure that the nvidia-docker-plugin
+<span class="gp">   is loaded. -&gt;</span> https://github.com/NVIDIA/nvidia-docker#other-distributions
+<span class="go">
+</span><span class="gp">*) manually;</span> <span class="nb">sudo</span> <span class="nt">-b</span> nohup nvidia-docker-plugin <span class="o">&gt;</span> /tmp/nvidia-docker.log
+<span class="go">
+</span><span class="gp">*) automatically at startup;</span> systemctl <span class="nb">enable </span>nvidia-docker.service
+<span class="go">Optional dependencies for nvidia-docker
+    cuda [installed]
+    nvidia [installed]
+    opencl-nvidia [installed]
+:: Running post-transaction hooks...
+(1/1) Arming ConditionNeedsUpdate...
+</span></code></pre></div></div>
+
+<p>Next it says: Launch a Docker container that contains one of the TensorFlow binary images. Those images are available <a href="https://hub.docker.com/r/tensorflow/tensorflow/tags/">here</a>.</p>
+
+<p>Next I pulled the container with the <code class="highlighter-rouge">gpu-latest</code> tag and it started to download the container:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> docker pull tensorflow/tensorflow:gpu-latest
+<span class="go">[sudo] password for brian: 
+latest-gpu: Pulling from tensorflow/tensorflow
+ae79f2514705: Pull complete 
+c59d01a7e4ca: Pull complete 
+41ba73a9054d: Pull complete 
+f1bbfd495cc1: Pull complete 
+0c346f7223e2: Pull complete 
+5dcd01667896: Pull complete 
+ca677f607487: Downloading  180.7MB/453MB
+b4637619a887: Download complete 
+8c644ff287da: Downloading    224MB/465.6MB
+119c5f576e79: Download complete 
+009f82e71a7c: Download complete 
+dbc0fb5872c7: Downloading  17.83MB/66.54MB
+5ef01389c5b2: Waiting 
+04f824004b76: Waiting 
+5861b82f52e5: Waiting 
+a495a3b4e6e1: Waiting 
+3a0a25b1bbaf: Pulling fs layer 
+b76a0afeb1e1: Waiting 
+</span></code></pre></div></div>
+
+<p>It finished after several minutes:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">ca677f607487: Pull complete 
+b4637619a887: Pull complete 
+8c644ff287da: Pull complete 
+119c5f576e79: Pull complete 
+009f82e71a7c: Pull complete 
+dbc0fb5872c7: Pull complete 
+5ef01389c5b2: Pull complete 
+04f824004b76: Pull complete 
+5861b82f52e5: Pull complete 
+a495a3b4e6e1: Pull complete 
+3a0a25b1bbaf: Pull complete 
+b76a0afeb1e1: Pull complete 
+Digest: sha256:90e27448121b321c5ec66069fb2c718301df2ddaf25ba916b6f53719141572b0
+Status: Downloaded newer image for tensorflow/tensorflow:latest-gpu
+</span><span class="gp">$</span> 
+</code></pre></div></div>
+
+<p>Let’s verify that it has the image:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> docker images
+<span class="go">REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+tensorflow/tensorflow   latest-gpu          2f243a16ff63        13 days ago         3.36GB
+</span></code></pre></div></div>
+
+<p>Next let’s start the <code class="highlighter-rouge">nvidia-docker</code> service:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> systemctl start nvidia-docker
+<span class="go">==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ====
+Authentication is required to start 'nvidia-docker.service'.
+Authenticating as: brian
+Password: 
+==== AUTHENTICATION COMPLETE ====
+</span><span class="gp">$</span> 
+</code></pre></div></div>
+
+<p>OK, we should be ready to launch the image:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> nvidia-docker run <span class="nt">-it</span> tensorflow/tensorflow:latest-gpu bash
+<span class="gp">root@761a62c1cff1:/notebooks#</span> 
+</code></pre></div></div>
+
+<p>This is looking good. Let’s try to start python:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@761a62c1cff1:/notebooks#</span> python
+<span class="go">Python 2.7.12 (default, Nov 19 2016, 06:48:10) 
+[GCC 5.4.0 20160609] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+</span><span class="gp">&gt;</span><span class="o">&gt;&gt;</span> import tensorflow as tf
+<span class="gp">&gt;</span><span class="o">&gt;&gt;</span> 
+</code></pre></div></div>
+
+<p>That works! Let’s try out the classic MNIST hand-written digit classification problem that comes packaged as a notebook with the container image:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span> nvidia-docker run <span class="nt">-it</span> <span class="nt">-p</span> 8888:8888 tensorflow/tensorflow:latest-gpu
+<span class="go">[sudo] password for brian: 
+[I 21:54:26.671 NotebookApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
+[W 21:54:26.689 NotebookApp] WARNING: The notebook server is listening on all IP addresses and not using encryption. This is not recommended.
+[I 21:54:26.693 NotebookApp] Serving notebooks from local directory: /notebooks
+[I 21:54:26.693 NotebookApp] 0 active kernels
+[I 21:54:26.693 NotebookApp] The Jupyter Notebook is running at:
+[I 21:54:26.693 NotebookApp] http://[all ip addresses on your system]:8888/?token=cda89aff96a3d4a9741cc755aac07f65f3aa372f60a198bd
+[I 21:54:26.693 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 21:54:26.693 NotebookApp] 
+    
+    Copy/paste this URL into your browser when you connect for the first time,
+    to login with a token:
+        http://localhost:8888/?token=cda89aff96a3d4a9741cc755aac07f65f3aa372f60a198bd
+[I 21:54:34.489 NotebookApp] 302 GET /?token=cda89aff96a3d4a9741cc755aac07f65f3aa372f60a198bd (172.17.0.1) 0.32ms
+[I 21:54:59.019 NotebookApp] Writing notebook-signing key to /root/.local/share/jupyter/notebook_secret
+[W 21:54:59.023 NotebookApp] Notebook 3_mnist_from_scratch.ipynb is not trusted
+[W 21:54:59.049 NotebookApp] 404 GET /nbextensions/widgets/notebook/js/extension.js?v=20171119215426 (172.17.0.1) 4.38ms referer=http://localhost:8888/notebooks/3_mnist_from_scratch.ipynb
+[I 21:54:59.813 NotebookApp] Kernel started: 00027a3e-59ae-47ce-90a5-752a9d1fe075
+[I 21:55:00.199 NotebookApp] Adapting to protocol v5.1 for kernel 00027a3e-59ae-47ce-90a5-752a9d1fe075
+[I 21:56:59.815 NotebookApp] Saving file at /3_mnist_from_scratch.ipynb
+[W 21:56:59.816 NotebookApp] Notebook 3_mnist_from_scratch.ipynb is not trusted
+2017-11-19 21:57:03.988627: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2017-11-19 21:57:04.070873: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:892] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2017-11-19 21:57:04.071129: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties: 
+name: GeForce GTX 1080 major: 6 minor: 1 memoryClockRate(GHz): 1.7335
+pciBusID: 0000:01:00.0
+totalMemory: 7.92GiB freeMemory: 7.44GiB
+</span><span class="gp">2017-11-19 21:57:04.071143: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1120] Creating TensorFlow device (/device:GPU:0) -&gt;</span> <span class="o">(</span>device: 0, name: GeForce GTX 1080, pci bus id: 0000:01:00.0, compute capability: 6.1<span class="o">)</span>
+</code></pre></div></div>
+
+<p>I was only able to get the entire notebook to run after making a few small configuration tweaks to the tensorflow Interactive Session to fix some memory issues:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">gpu_options</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">GPUOptions</span><span class="p">(</span><span class="n">per_process_gpu_memory_fraction</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">InteractiveSession</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">ConfigProto</span><span class="p">(</span><span class="n">gpu_options</span><span class="o">=</span><span class="n">gpu_options</span><span class="p">))</span>
+
+<span class="c"># Use our newly created session as the default for </span>
+<span class="c"># subsequent operations.</span>
+<span class="n">s</span><span class="o">.</span><span class="n">as_default</span><span class="p">()</span>
+
+<span class="c"># Initialize all the variables we defined above.</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">global_variables_initializer</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Without setting <code class="highlighter-rouge">gpu_options</code>, Tensorflow allocates 95% of available GPU memory (according to <a href="https://stackoverflow.com/questions/34514324/error-using-tensorflow-with-gpu">this SO question</a>).</p>
+
+<p>Setting it to <code class="highlighter-rouge">0.333</code> was too low and didn’t allow for training to complete, but setting it to <code class="highlighter-rouge">0.75</code> seemed to work just fine.</p>
+
+<p>You can monitor GPU memory usage on NVIDIA cards with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ nvidia-smi
+Sun Nov 19 17:03:03 2017       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 384.59                 Driver Version: 384.59                    |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1080    Off  | 00000000:01:00.0  On |                  N/A |
+| 27%   32C    P8    10W / 180W |   6707MiB /  8105MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID  Type  Process name                               Usage      |
+|=============================================================================|
+|    0       350    C   /usr/bin/python                               6365MiB |
+|    0       554    G   /usr/lib/xorg-server/Xorg                       19MiB |
+|    0       588    G   /usr/bin/gnome-shell                            28MiB |
+|    0       853    G   /usr/lib/xorg-server/Xorg                      186MiB |
+|    0       873    G   compton                                          2MiB |
+|    0      1114    G   ...el-token=A50C2F183DB4F79482A2D8768ED1B285    64MiB |
+|    0      2190    G   ...el-token=1AC796A35DBDCDBE07AEC2FC1E8026C4    35MiB |
++-----------------------------------------------------------------------------+
+</code></pre></div></div>
+
+<p>I think this was a success! I’m fairly certain that we were leveraging the GPU to run the MNIST hand-written digit notebook. I didn’t see messages that CUDNN loaded, but I can find versions of both CUDNN and CUDA in the docker image:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@80f65a971e9a:/#</span> <span class="nb">ls</span> /usr/include/x86_64-linux-gnu/                                  
+<span class="go">a.out.h  bits  cudnn_v6.h      fpu_control.h  gnu        python2.7
+asm      c++   expat_config.h  freetype2      ieee754.h  sys
+</span></code></pre></div></div>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@80f65a971e9a:/#</span> nvcc <span class="nt">--version</span>
+<span class="go">nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2016 NVIDIA Corporation
+Built on Tue_Jan_10_13:22:03_CST_2017
+Cuda compilation tools, release 8.0, V8.0.61
+</span></code></pre></div></div>
+
+<p>In previous attempts I had to register for an NVIDIA developer account and install these packages, but they seem to be packaged with the container.</p>
+
+<p>Finally, we can check the installed python packages:</p>
+
+<div class="language-terminal highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">root@80f65a971e9a:~#</span> pip freeze | <span class="nb">grep </span>tensorflow
+<span class="go">tensorflow-gpu==1.4.0
+tensorflow-tensorboard==0.4.0rc2
+</span><span class="gp">root@80f65a971e9a:~#</span> 
+</code></pre></div></div>
+
+<p>This looks good, but I’m still not 100% sure that everything was done properly. I would like to learn more about Tensorflow and also play around with some examples using Tensorboard. Let me know if you have any questions or comments about this setup, I’m still learning! Thanks for reading.</p>
+
+<p>Just for fun, here’s a DeepDream rendering of a famous Donald Trump picture using Google’s pre-trained <a href="https://github.com/google/inception">Inception model</a>:</p>
+
+<p><img src="/static/trump.png" alt="png" /></p>
+
+<p>For comparison, here is the original image:</p>
+
+<p><img src="/static/trump_original.jpg" alt="png" /></p>
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="https://briancaffey.github.io">briancaffey.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://gitlab.com/briancaffey">
+    <span class="gitlab-fox">
+        
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="210px" height="194px" viewBox="0 0 210 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Fill-1-+-Group-24" sketch:type="MSLayerGroup">
+            <g id="Group-24" sketch:type="MSShapeGroup">
+                <g id="Group">
+                    <path d="M105.0614,193.655 L105.0614,193.655 L143.7014,74.734 L66.4214,74.734 L105.0614,193.655 L105.0614,193.655 Z" id="Fill-4" fill="#E24329"></path>
+                    <path id="Fill-6" fill="#FC6D26"></path>
+                    <path d="M105.0614,193.6548 L66.4214,74.7338 L12.2684,74.7338 L105.0614,193.6548 Z" id="Fill-8" fill="#FC6D26"></path>
+                    <path id="Fill-10" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7341 L12.2685,74.7341 L0.5265,110.8731 C-0.5445,114.1691 0.6285,117.7801 3.4325,119.8171 L105.0615,193.6551 L12.2685,74.7341 Z" id="Fill-12" fill="#FCA326"></path>
+                    <path id="Fill-14" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7342 L66.4215,74.7342 L43.1485,3.1092 C41.9515,-0.5768 36.7375,-0.5758 35.5405,3.1092 L12.2685,74.7342 Z" id="Fill-16" fill="#E24329"></path>
+                    <path d="M105.0614,193.6548 L143.7014,74.7338 L197.8544,74.7338 L105.0614,193.6548 Z" id="Fill-18" fill="#FC6D26"></path>
+                    <path d="M197.8544,74.7341 L197.8544,74.7341 L209.5964,110.8731 C210.6674,114.1691 209.4944,117.7801 206.6904,119.8171 L105.0614,193.6551 L197.8544,74.7341 Z" id="Fill-20" fill="#FCA326"></path>
+                    <path d="M197.8544,74.7342 L143.7014,74.7342 L166.9744,3.1092 C168.1714,-0.5768 173.3854,-0.5758 174.5824,3.1092 L197.8544,74.7342 Z" id="Fill-22" fill="#E24329"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="footer-col footer-col-3">
+        <p>my personal site</p>
+      </div>
+      
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,54 @@
+<footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">{{ site.title }}</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>{{ site.title }}</li>
+          <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          <li><a href="https://briancaffey.github.io">briancaffey.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          {% if site.github_username %}
+          <li>
+            {% include purple-icon-github.html username=site.github_username %}
+          </li>
+          {% endif %}
+          {% if site.gitlab_username %}
+          <li>
+            {% include gitlab-fox.html username=site.gitlab_username %}
+          </li>
+          {% endif %}
+          {% if site.twitter_username %}
+          <li>
+            {% include icon-twitter.html username=site.twitter_username %}
+          </li>
+          {% endif %}
+          {% if site.linkedin_username %}
+          <li>
+            {% include linkedin.html %}
+          </li>
+          {% endif %}
+          {% if site.so_link %}
+          <li>
+            {% include so.html so_link=site.so_link username=site.so_username %}
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+      {% if site.description %}
+      <div class="footer-col footer-col-3">
+        <p>{{ site.description }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+
+</footer>
