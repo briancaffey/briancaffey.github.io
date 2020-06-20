@@ -12,7 +12,7 @@ email: briancaffey2010@gmail.com
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site
 twitter_username: briancaffey
-github_username:  briancaffey
+github_username: briancaffey
 gitlab_username: briancaffey
 linkedin_username: brian-caffey-06b22a18
 linkedin_name: Brian Caffey
@@ -24,6 +24,8 @@ steemit_username: mrbrian
 # Build settings
 markdown: kramdown
 highlighter: rouge
+
+repository: briancaffey.github.io
 
 #gems:
 #  - jekyll-assets
