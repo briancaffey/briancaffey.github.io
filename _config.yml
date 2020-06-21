@@ -10,7 +10,7 @@ title: Brian Caffey
 email: briancaffey2010@gmail.com
 
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site
+url: "https://briancaffey.github.io" # the base hostname & protocol for your site
 twitter_username: briancaffey
 github_username: briancaffey
 gitlab_username: briancaffey

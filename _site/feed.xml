@@ -3,10 +3,10 @@
   <channel>
     <title>Brian Caffey</title>
     <description></description>
-    <link>/</link>
-    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 20 Jun 2020 19:49:34 -0400</pubDate>
-    <lastBuildDate>Sat, 20 Jun 2020 19:49:34 -0400</lastBuildDate>
+    <link>https://briancaffey.github.io/</link>
+    <atom:link href="https://briancaffey.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 20 Jun 2020 20:03:47 -0400</pubDate>
+    <lastBuildDate>Sat, 20 Jun 2020 20:03:47 -0400</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
     
       <item>
@@ -35,8 +35,8 @@
 &lt;p&gt;Extensive documentation for this project can be found at &lt;a href=&quot;https://verbose-equals-true.tk/docs&quot;&gt;https://verbose-equals-true.tk/docs&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Wed, 09 Jan 2019 00:00:00 -0500</pubDate>
-        <link>/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html</link>
-        <guid isPermaLink="true">/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html</guid>
+        <link>https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html</guid>
         
         
       </item>
@@ -65,8 +65,8 @@ google-chrome http://subdomain.domain.com:8222/admin/
 &lt;p&gt;This script opens a &lt;code class=&quot;highlighter-rouge&quot;&gt;gnome-terminal&lt;/code&gt; window with 5 tabs, one for a Django app, another for a Django shell, 2 for celery workers and one to run flower. Additionally, we specify a name for the tabs with &lt;code class=&quot;highlighter-rouge&quot;&gt;\033]0;Django - Shell\007\&quot;&lt;/code&gt;. I then launch VS Code and open up my Django app and I’m all ready to go. This might only take minute or two to do manually each morning, but the script can be launched at startup so that my development environment is set as soon as I turn on my computer. An easy way to do this on Ubuntu is to use &lt;code class=&quot;highlighter-rouge&quot;&gt;Startup Applications&lt;/code&gt;.&lt;/p&gt;
 </description>
         <pubDate>Mon, 20 Aug 2018 00:00:00 -0400</pubDate>
-        <link>/2018/08/20/startup-script-for-work.html</link>
-        <guid isPermaLink="true">/2018/08/20/startup-script-for-work.html</guid>
+        <link>https://briancaffey.github.io/2018/08/20/startup-script-for-work.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/08/20/startup-script-for-work.html</guid>
         
         
       </item>
@@ -439,8 +439,8 @@ sudo systemctl enable timidity.service
 
 </description>
         <pubDate>Thu, 26 Apr 2018 00:00:00 -0400</pubDate>
-        <link>/2018/04/26/generating-music-from-guitar-tabs-with-python.html</link>
-        <guid isPermaLink="true">/2018/04/26/generating-music-from-guitar-tabs-with-python.html</guid>
+        <link>https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python.html</guid>
         
         
       </item>
@@ -840,8 +840,8 @@ $ sudo apt install neofetch
 &lt;p&gt;Here’s an &lt;a href=&quot;https://askubuntu.com/questions/135540/what-is-the-whoopsie-process-and-how-can-i-remove-it&quot;&gt;Ask Ubuntu post about how to disable &lt;code class=&quot;highlighter-rouge&quot;&gt;whoopsie&lt;/code&gt;&lt;/a&gt;, an error reporting daemon that ships with Ubuntu.&lt;/p&gt;
 </description>
         <pubDate>Thu, 01 Mar 2018 00:00:00 -0500</pubDate>
-        <link>/2018/03/01/ubuntu-installation-and-setup-notes.html</link>
-        <guid isPermaLink="true">/2018/03/01/ubuntu-installation-and-setup-notes.html</guid>
+        <link>https://briancaffey.github.io/2018/03/01/ubuntu-installation-and-setup-notes.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/03/01/ubuntu-installation-and-setup-notes.html</guid>
         
         
       </item>
@@ -1472,8 +1472,8 @@ $ sudo apt install neofetch
 &lt;p&gt;For now, you can view the live project on DigitalOcean here: &lt;a href=&quot;http://159.89.235.193/books/&quot;&gt;http://159.89.235.193/books/&lt;/a&gt;. In the future I would like to use this Droplet to do more demo apps like this one as I continue to learn the ins and outs of using Django and more frontend tools. Thanks for reading to the end and let me know if you have any comments or critiques on how I went about this project, I would be happy to hear from you!&lt;/p&gt;
 </description>
         <pubDate>Mon, 19 Feb 2018 00:00:00 -0500</pubDate>
-        <link>/2018/02/19/leaflet-maps-with-django.html</link>
-        <guid isPermaLink="true">/2018/02/19/leaflet-maps-with-django.html</guid>
+        <link>https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django.html</guid>
         
         
       </item>
@@ -1848,8 +1848,8 @@ Quit the server with CONTROL-C.
 &lt;p&gt;For the full repo, please find it on my github account: &lt;a href=&quot;https://github.com/briancaffey/django-news-app&quot;&gt;https://github.com/briancaffey/django-news-app&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Fri, 09 Feb 2018 00:00:00 -0500</pubDate>
-        <link>/2018/02/09/a-sample-django-news-app.html</link>
-        <guid isPermaLink="true">/2018/02/09/a-sample-django-news-app.html</guid>
+        <link>https://briancaffey.github.io/2018/02/09/a-sample-django-news-app.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/02/09/a-sample-django-news-app.html</guid>
         
         
       </item>
@@ -2024,8 +2024,8 @@ print(df[[&quot;CUSIP&quot;, &quot;NAME_OF_ISSUER&quot;, &quot;TICKER&quot;]].he
 
 </description>
         <pubDate>Tue, 30 Jan 2018 00:00:00 -0500</pubDate>
-        <link>/2018/01/30/reading-13f-sec-filings-with-python.html</link>
-        <guid isPermaLink="true">/2018/01/30/reading-13f-sec-filings-with-python.html</guid>
+        <link>https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python.html</guid>
         
         
       </item>
@@ -2341,8 +2341,8 @@ MariaDB [sample_db]&amp;gt;
 &lt;p&gt;Think about it for a minute. I have hidden my answer at the end of the URL for this article.&lt;/p&gt;
 </description>
         <pubDate>Sun, 28 Jan 2018 00:00:00 -0500</pubDate>
-        <link>/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0</link>
-        <guid isPermaLink="true">/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0</guid>
+        <link>https://briancaffey.github.io/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0</guid>
         
         
       </item>
@@ -2627,8 +2627,8 @@ In the example below, the jack plays as the highest card.&lt;/p&gt;
 &lt;p&gt;I’m not sure if there is faster way to find the best hand than the brute force method I implemented.&lt;/p&gt;
 </description>
         <pubDate>Tue, 02 Jan 2018 00:00:00 -0500</pubDate>
-        <link>/2018/01/02/checking-poker-hands-with-python.html</link>
-        <guid isPermaLink="true">/2018/01/02/checking-poker-hands-with-python.html</guid>
+        <link>https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python.html</guid>
         
         
       </item>
@@ -2706,8 +2706,8 @@ In the example below, the jack plays as the highest card.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Fri, 22 Dec 2017 00:00:00 -0500</pubDate>
-        <link>/2017/12/22/getting-started-with-twisted.html</link>
-        <guid isPermaLink="true">/2017/12/22/getting-started-with-twisted.html</guid>
+        <link>https://briancaffey.github.io/2017/12/22/getting-started-with-twisted.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2017/12/22/getting-started-with-twisted.html</guid>
         
         
       </item>
