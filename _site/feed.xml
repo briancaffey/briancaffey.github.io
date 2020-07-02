@@ -5,9 +5,768 @@
     <description></description>
     <link>https://briancaffey.github.io/</link>
     <atom:link href="https://briancaffey.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 01 Jul 2020 20:33:35 -0400</pubDate>
-    <lastBuildDate>Wed, 01 Jul 2020 20:33:35 -0400</lastBuildDate>
+    <pubDate>Wed, 01 Jul 2020 21:51:21 -0400</pubDate>
+    <lastBuildDate>Wed, 01 Jul 2020 21:51:21 -0400</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Using AWS CDK, GitLab, Fargate and CloudFront for Django + Vue.js applications</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;This article was originally posted on &lt;a href=&quot;https://dev.to/briancaffey/building-a-django-vue-js-application-with-aws-cdk-and-gitlab-ci-also-how-to-scale-celery-workers-to-zero-1o6i&quot;&gt;https://dev.to/briancaffey/building-a-django-vue-js-application-with-aws-cdk-and-gitlab-ci-also-how-to-scale-celery-workers-to-zero-1o6i&lt;/a&gt;. It is also available on the documentation site for the project: &lt;a href=&quot;https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/start/overview/&quot;&gt;https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/start/overview/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;project-overview&quot;&gt;Project Overview&lt;/h1&gt;
+
+&lt;p&gt;This is an overview of a Proof-of-Concept web application I’m working on called &lt;code class=&quot;highlighter-rouge&quot;&gt;django-postgres-vue-gitlab-ecs&lt;/code&gt;. This project aims to demonstrate the development and deployment of a web application using some of my favorite tools, languages and frameworks including:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Python&lt;/li&gt;
+  &lt;li&gt;Django&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+  &lt;li&gt;Vue.js/Quasar Framework&lt;/li&gt;
+  &lt;li&gt;GitLab&lt;/li&gt;
+  &lt;li&gt;AWS&lt;/li&gt;
+  &lt;li&gt;and last but not least, &lt;strong&gt;AWS Cloud Development Kit (CDK)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This README will start by describing some features of the application I’m building and how the different technologies are used together. I also share my experience in adopting CDK for managing cloud infrastructure on AWS. Finally, I discuss my solution to a specific question I have been trying to answer: what’s the best way to scale Celery workers to zero to reduce Total Cost of Ownership?&lt;/p&gt;
+
+&lt;h2 id=&quot;development-philosophies-and-best-practices&quot;&gt;Development Philosophies and Best Practices&lt;/h2&gt;
+
+&lt;p&gt;Here are some of the best practices that this project aims to use:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Open-source, MIT-Licensed&lt;/li&gt;
+  &lt;li&gt;12 Factor App&lt;/li&gt;
+  &lt;li&gt;Infrastructure as Code&lt;/li&gt;
+  &lt;li&gt;Containerization with Docker&lt;/li&gt;
+  &lt;li&gt;Testing&lt;/li&gt;
+  &lt;li&gt;GitOps&lt;/li&gt;
+  &lt;li&gt;Serverless* &lt;strong&gt;[1]&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Project documentation&lt;/li&gt;
+  &lt;li&gt;Cost containment and tracking&lt;/li&gt;
+  &lt;li&gt;KISS &amp;amp; DRY&lt;/li&gt;
+  &lt;li&gt;Initial AWS console interaction is strictly limited to what can &lt;em&gt;only&lt;/em&gt; be done through the AWS console, otherwise AWS CDK and AWS CLI (preferably in CI/CD pipelines) are the primary means of interacting with AWS resources and the AWS Console is treated as a “read-only” convenience.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;topics&quot;&gt;Topics&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/architecture_verbose_equals_true.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;legend&quot;&gt;Legend&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;This diagram was created with draw.io. Here’s the link to the a read-only version of the diagram on draw.io: https://drive.google.com/file/d/1gU61zjoW80fCusUcswU1zhEE5VFB1Z5U/view?usp=sharing&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;1 - GitLab is used to host the source code, test the source code and deploy the application to AWS.&lt;/p&gt;
+
+&lt;p&gt;2 - Unit testing (see .gitlab-ci.yml)&lt;/p&gt;
+
+&lt;p&gt;2a - Pytest&lt;/p&gt;
+
+&lt;p&gt;2b - Jest&lt;/p&gt;
+
+&lt;p&gt;2c - Cypress&lt;/p&gt;
+
+&lt;p&gt;3 - Deployment phase (see /gitlab-ci/aws/cdk.yml)&lt;/p&gt;
+
+&lt;p&gt;3a - Quasar PWA assets are built if there are changes in the quasar directory&lt;/p&gt;
+
+&lt;p&gt;3b - AWS Cloud Development Kit (CDK) defines all infrastructure in AWS (4a - 12)&lt;/p&gt;
+
+&lt;p&gt;3c - AWS CLI is used to run Fargate tasks through manual GitLab CI jobs&lt;/p&gt;
+
+&lt;p&gt;4 - CDK Assets (ECR and S3 buckets that CDK uses internally to manage build assets and artifacts)&lt;/p&gt;
+
+&lt;p&gt;4a - Elastic Container Repository is used to manage the Django docker image used in various parts of the application&lt;/p&gt;
+
+&lt;p&gt;4b - S3 bucket used to store files associated with CDK and CloudFormation&lt;/p&gt;
+
+&lt;p&gt;5 - Route53 is used to route traffic to the CloudFront distribution&lt;/p&gt;
+
+&lt;p&gt;6 - CloudFront distribution that serves as the “front desk” of the application. It routes requests to to the correct CloudFront Origin&lt;/p&gt;
+
+&lt;p&gt;7 - CloudFront Origin Configurations&lt;/p&gt;
+
+&lt;p&gt;7a - S3 bucket for Quasar PWA assets&lt;/p&gt;
+
+&lt;p&gt;7b - Application Load Balancer for Django application (/api/, /admin/, /flower/, /ws/, /graphql/)&lt;/p&gt;
+
+&lt;p&gt;7c - S3 bucket for Django assets (static files, public media and private media)&lt;/p&gt;
+
+&lt;p&gt;8 - Web server and websocket servers&lt;/p&gt;
+
+&lt;p&gt;8a - Fargate service running uvicorn process (REST, GraphQL, Django Channels)&lt;/p&gt;
+
+&lt;p&gt;8b - Autoscaling Group for Fargate Service that serves Django API&lt;/p&gt;
+
+&lt;p&gt;9 - Celery and celery worker autoscaling&lt;/p&gt;
+
+&lt;p&gt;9a - Fargate service that is autoscaled between 0 and N Fargate tasks for a given celery queue&lt;/p&gt;
+
+&lt;p&gt;9b - Scheduled Event that triggers a Lambda to make a request to Django backend which collects celery queue metrics and published
+metrics to CloudWatch using boto3&lt;/p&gt;
+
+&lt;p&gt;9c - Lambda event the makes a request to /api/celery-metrics/&lt;/p&gt;
+
+&lt;p&gt;9d - CloudWatch alarm that is used to scale the Fargate service for a celery queue&lt;/p&gt;
+
+&lt;p&gt;9e - Autoscaling group for celery Fargate service&lt;/p&gt;
+
+&lt;p&gt;10 - Fargate tasks that run Django management commands such as migrate and collectstatic. These are triggered from manual GitLab CI
+jobs using the AWS CLI (3c)&lt;/p&gt;
+
+&lt;p&gt;11 - ElastiCache for Redis, used for Caching, Celery Broker, Channels Layer, etc.&lt;/p&gt;
+
+&lt;p&gt;12 - Aurora Postgres Serverless&lt;/p&gt;
+
+&lt;p&gt;Here’s a list of some of the major topics covered:&lt;/p&gt;
+
+&lt;h3 id=&quot;local-development&quot;&gt;Local development&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Setting up a local development environment using docker with one easy command: &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Hot-reloading for all parts of the application in local development&lt;/li&gt;
+  &lt;li&gt;Structuring a Django application (apps, settings modules, environment variables)&lt;/li&gt;
+  &lt;li&gt;Automatic code formatting with black and prettier&lt;/li&gt;
+  &lt;li&gt;Monitoring services (flower, pgadmin4, redis-commander)&lt;/li&gt;
+  &lt;li&gt;VSCode settings and extensions&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;gitlab-ci&quot;&gt;GitLab CI&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;GitLab CI for running unit and integration tests&lt;/li&gt;
+  &lt;li&gt;GitLab CI configuration for deployment to multiple environments (dev, prod) using AWS CDK&lt;/li&gt;
+  &lt;li&gt;GitLab CI scheduled jobs for updating all project dependencies through automated merge requests with Renovate&lt;/li&gt;
+  &lt;li&gt;GitLab CI manual jobs for running admin and management commands (database migrations, collectstatic, etc.)&lt;/li&gt;
+  &lt;li&gt;How to deploy to multiple environments (master -&amp;gt; staging, tags -&amp;gt; prod pattern as well as optional ephemeral environments per commit) using the new GitLab CI &lt;code class=&quot;highlighter-rouge&quot;&gt;rules&lt;/code&gt; syntax&lt;/li&gt;
+  &lt;li&gt;Recording Cypress test videos with GitLab CI artifacts for manual review&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;aws&quot;&gt;AWS&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Initial account setup&lt;/li&gt;
+  &lt;li&gt;Generating keys used in GitLab CI for deployment&lt;/li&gt;
+  &lt;li&gt;Opting in to new ARN format for ECS services and tasks (used for resource tagging) and container insights&lt;/li&gt;
+  &lt;li&gt;AWS Cloud Development Kit (CDK) for Infrastructure as Code to manage all AWS resources with CloudFormation Stacks - Nested stacks for grouping related resources under parent tasks (one parent task represent on environment for the application, such as production)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;aws-resources&quot;&gt;AWS Resources&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Automated provisioning of Amazon Certificate Manager certificates for TLS (HTTPS)&lt;/li&gt;
+  &lt;li&gt;Multi-AZ VPC with security groups and NACLs (no NAT Gateways/NAT instances used* &lt;strong&gt;[2]&lt;/strong&gt;)&lt;/li&gt;
+  &lt;li&gt;S3 buckets for static site hosting and Django static and media assets&lt;/li&gt;
+  &lt;li&gt;CloudFront for serving Vue.js SPA (PWA) static assets, Django static/media files and proxy to Application Load Balancer which forwards to ECS&lt;/li&gt;
+  &lt;li&gt;Fargate for multiple Django processes: gunicorn for backend API, daphne for Django Channels, celery for asynchronous tasks and celery beat for scheduled tasks&lt;/li&gt;
+  &lt;li&gt;Autoscaling (between 0 and N Fargate tasks) for infrequent, compute/memory intensive and long-running celery tasks with custom CloudWatch metrics&lt;/li&gt;
+  &lt;li&gt;Hosted Redis with ElastiCache for celery broker, application caching, django-constance, etc.&lt;/li&gt;
+  &lt;li&gt;Aurora Postgres and Aurora Postgres Serverless for cost savings in staging environments&lt;/li&gt;
+  &lt;li&gt;CDK Assets for automating S3 asset deployment and automated container building during deployment with AWS CDK&lt;/li&gt;
+  &lt;li&gt;Thorough resource tagging by both application and environment (dev, prod, etc.) for comprehensive cost tracking&lt;/li&gt;
+  &lt;li&gt;Optional bastion host for SSH access to bring up a Django shell in a container running on a container instance (this requires an EC2 instance)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;django-application&quot;&gt;Django Application&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Django REST Framework&lt;/li&gt;
+  &lt;li&gt;JWT-based authentication with django-rest-framework-simplejwt&lt;/li&gt;
+  &lt;li&gt;Custom user model with email as username&lt;/li&gt;
+  &lt;li&gt;Social authentication with &lt;code class=&quot;highlighter-rouge&quot;&gt;python-social-auth&lt;/code&gt; (Google, Facebook, GitHub)&lt;/li&gt;
+  &lt;li&gt;Pytest for unit testing&lt;/li&gt;
+  &lt;li&gt;Settings broken into separate modules (development, ci, production)&lt;/li&gt;
+  &lt;li&gt;Django apps organized in &lt;code class=&quot;highlighter-rouge&quot;&gt;apps&lt;/code&gt; directory&lt;/li&gt;
+  &lt;li&gt;S3 for static assets, public media and private media files in production, local file system for assets in local development&lt;/li&gt;
+  &lt;li&gt;Multiple Celery queues for asynchronous tasks&lt;/li&gt;
+  &lt;li&gt;Django Channels for websocket support with daphne&lt;/li&gt;
+  &lt;li&gt;Graphene for GraphQL&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;vuejs-application&quot;&gt;Vue.js application&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Quasar Framework for creating a Vue.js app with multiple build targets (SPA, PWA, Electron, SSR and Cordova)&lt;/li&gt;
+  &lt;li&gt;Internationalization&lt;/li&gt;
+  &lt;li&gt;Dark/Light mode&lt;/li&gt;
+  &lt;li&gt;Vuex for state management&lt;/li&gt;
+  &lt;li&gt;vue-router&lt;/li&gt;
+  &lt;li&gt;axios&lt;/li&gt;
+  &lt;li&gt;Vue Apollo&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;aws--django--vuejs&quot;&gt;AWS ∩ Django ∩ Vue.js&lt;/h3&gt;
+
+&lt;p&gt;CloudFront is used as a CDN and proxy in order to serve the frontend Vue.js PWA* &lt;strong&gt;[3]&lt;/strong&gt;, static and media assets, Django API and other monitoring services all on the same URL with environments namespaced by subdomain (or a combination of domain and subdomains by production and non-production environments, respectively). The PWA uses Workbox to route certain URL paths to network only (not served by the local cache).&lt;/p&gt;
+
+&lt;p&gt;Here are some examples:&lt;/p&gt;
+
+&lt;h4 id=&quot;staging-environment-urls&quot;&gt;Staging environment URLs&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev.mysite.com/api/*&lt;/code&gt; - Django REST Framework&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev.mysite.com/admin/*&lt;/code&gt; - Django Admin&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev.mysite.com/graphql/&lt;/code&gt; - Graphene/GraphQL&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev.mysite.com/flower/*&lt;/code&gt; - Flower (Celery monitoring utility)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev.mysite.com/media/private/private-file.csv&lt;/code&gt; - private media files&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://dev.mysite.com/*&lt;/code&gt; - Vue.js PWA (all other routes load &lt;code class=&quot;highlighter-rouge&quot;&gt;index.html&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;production-environment-urls&quot;&gt;Production environment URLs&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://mysite.com/api/*&lt;/code&gt; - Django REST Framework&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://mysite.com/admin/*&lt;/code&gt; - Django Admin&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://mysite.com/graphql/&lt;/code&gt; - Graphene/GraphQL&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://mysite.com/flower/*&lt;/code&gt; - Flower (Celery monitoring utility)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://mysite.com/media/private/private-file.csv&lt;/code&gt; - private media files&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;https://mysite.com&lt;/code&gt; - Vue.js PWA (all other routes load &lt;code class=&quot;highlighter-rouge&quot;&gt;index.html&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Alternatively, the production domain name could be configured to use a dedicated subdomain such as &lt;code class=&quot;highlighter-rouge&quot;&gt;https://app.mysite.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;sample-application-logic&quot;&gt;Sample application logic&lt;/h3&gt;
+
+&lt;p&gt;While this is mostly a Proof-of-Concept project that focuses on architecture, I have included some light-weight examples of what you can do with this application. These examples are all WIP.&lt;/p&gt;
+
+&lt;h4 id=&quot;social-authentication&quot;&gt;Social Authentication&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Uses &lt;code class=&quot;highlighter-rouge&quot;&gt;python-social-auth&lt;/code&gt; to allow users to Sign Up/Login with Google, Facebook and GitHub accounts&lt;/li&gt;
+  &lt;li&gt;Makes use of the custom user model&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;credit-card-statement-app&quot;&gt;Credit Card Statement App&lt;/h4&gt;
+
+&lt;p&gt;This is a simple application for users to upload credit card statements in CSV format.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Credit card transactions in CSV files are created using bulk inserts via the Django ORM in a celery task&lt;/li&gt;
+  &lt;li&gt;CSV files are saved in private S3 storage&lt;/li&gt;
+  &lt;li&gt;Basic visualization of spend over time&lt;/li&gt;
+  &lt;li&gt;Download consolidated CSV file&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;hacker-news-clone&quot;&gt;Hacker News Clone&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;An implementation of the application from this tutorial: https://www.howtographql.com/graphql-python/0-introduction/&lt;/li&gt;
+  &lt;li&gt;Uses Vue Apollo GraphQL client&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;testing&quot;&gt;Testing&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Unit testing with pytest and Jest&lt;/li&gt;
+  &lt;li&gt;Test coverage reports&lt;/li&gt;
+  &lt;li&gt;Integration testing with Cypress&lt;/li&gt;
+  &lt;li&gt;Capture integration test run recordings as GitLab CI job artifacts&lt;/li&gt;
+  &lt;li&gt;Testing GitLab CI jobs locally with &lt;code class=&quot;highlighter-rouge&quot;&gt;gitlab-runner&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Tests for CDK?* &lt;strong&gt;[4]&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;caveats-questions-confusion-and-footnotes&quot;&gt;Caveats, Questions, Confusion and Footnotes&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;In the context of this project, it is serverless in the sense that AWS Fargate is serverless: there are no EC2 instances to manage. It is not serverless in the way that Zappa can deploy a Django application as an AWS Lambda function with one invocation per request. There are “always on” processes that listen for incoming requests. I’m interested in trying Zappa, but I’m confused about how CDK, zappa-cli, SAM and Serverless Framework would all play together. Aurora Postgres Serverless is another nice “serverless” aspect of this project and contributes significantly to cost savings.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;This project currently uses no NAT Gateways. The Fargate services and tasks running Django processes (gunicorn, celery, daphne as well as migration, collectstatic and other management commands) are launched in public subnets and the databases (RDS and ElastiCache) are placed in private subnets. This is primarily done to avoid the cost of running a NAT Gateway.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;I think it would fairly easy to switch to using a NAT Gatway to add an additional layer of security that is recommended in this article: https://aws.amazon.com/blogs/compute/task-networking-in-aws-fargate/.&lt;/li&gt;
+  &lt;li&gt;I asked a question about this on the Stack Exchange Information Security forum: https://security.stackexchange.com/questions/232055/security-implications-of-using-public-subnets-in-aws-vpc-for-hosting-web-and-job
+I’m curious to know if this is a reasonable tradeoff to make, as well as how secure the proposed solution is (using security groups and network ACLs).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;I’m not focusing on SEO in this project. I’m using &lt;code class=&quot;highlighter-rouge&quot;&gt;index.html&lt;/code&gt; as the error document for the S3 website that CloudFront uses as the default behavior. This means that nested routes for the PWA have 404 response codes. I have heard about using lambda@edge to rewrite the the response code, I’m also curious about using this project in SSR mode (and also “serverless-side rendering”), but for now that is outside of the scope of what I want to do with this project.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;CDK is an awesome tool!&lt;/strong&gt; Here is a great introduction by Nathan Peck, Senior Developer Advocate at Amazon Web Services: https://www.youtube.com/watch?v=184S7ki6fJA.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;my-experience-with-aws-cdk&quot;&gt;My experience with AWS CDK&lt;/h2&gt;
+
+&lt;p&gt;Having worked with CloudFormation for almost a year, I was not looking forward to learning a another Infrastructure as Code (IaC) tool. I struggled with CloudFormation and the whole concept of using an extended version of YAML to define infrastructure for multiple environments. I have limited experience with Terraform, but learning another DSL seemed like a lateral move that didn’t seem worth it. I’m glad I did spend time learning and using CloudFormation, because CDK is an abstraction layer over CloudFormation. Here are some of my thoughts on adopting CDK.&lt;/p&gt;
+
+&lt;h3 id=&quot;start-here-httpscdkworkshopcom&quot;&gt;Start here: https://cdkworkshop.com&lt;/h3&gt;
+
+&lt;p&gt;This is a great resource that was my first exposure to CDK. It focuses on using Lambda, DynamoDB and API Gateway, three technologies that I haven’t used in production environments. In my mind this stack is the antithesis of the stack paradigm I am most experienced with: EC2, RDS and ELB. Regardless, I went ahead with it and was pretty much instantly hooked on CDK.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-stack-is-defined-by-a-small-number-of-inputs-used-for-namespacing&quot;&gt;The stack is defined by a small number of inputs used for namespacing&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;awscdk/app.py&lt;/code&gt; is the entrypoint for &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk&lt;/code&gt; commands. Here’s what it contains:&lt;/p&gt;
+
+&lt;p&gt;Here are the main parameters for &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationStack&lt;/code&gt;, which represents all of the resources for a specific environment environment. Each value is composed of environment variables set in GitLab CI when &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; is called:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;environment_name&lt;/code&gt; - Possible examples could be &lt;code class=&quot;highlighter-rouge&quot;&gt;dev&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;qa&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;some-feature-branch&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;prod&lt;/code&gt;, etc.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;base_domain_name&lt;/code&gt; - The domain name of the Hosted Zone that needs to be setup manually in Route53&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;full_domain_name&lt;/code&gt; - &lt;code class=&quot;highlighter-rouge&quot;&gt;f&quot;{environment_name}.{base_domain_name}&quot;&lt;/code&gt; or optionally just &lt;code class=&quot;highlighter-rouge&quot;&gt;base_domain_name&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;base_app_name&lt;/code&gt; - Based on the &lt;code class=&quot;highlighter-rouge&quot;&gt;base_domain_name&lt;/code&gt;, but &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; is replaced with &lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt; in order to be used for naming certain AWS resources, used for resources tagging so we can easily look at the costs of all environments for our application with one tag.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;full_app_name&lt;/code&gt; - Base on &lt;code class=&quot;highlighter-rouge&quot;&gt;full_domain_name&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; replaced with &lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt; as well.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;aws_region&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Expand to the following to view &lt;code class=&quot;highlighter-rouge&quot;&gt;awscdk/app.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;details&gt;
+
+```python
+#!/usr/bin/env python3
+import os
+
+from aws_cdk import core
+
+from awscdk.cdk_app_root import ApplicationStack
+
+# naming conventions, also used for ACM certs, DNS Records, resource naming
+# Dynamically generated resource names created in CDK are used in GitLab CI
+# such as cluster name, task definitions, etc.
+environment_name = f&quot;{os.environ.get(&#39;ENVIRONMENT&#39;, &#39;dev&#39;)}&quot;
+base_domain_name = os.environ.get(&quot;DOMAIN_NAME&quot;, &quot;mysite.com&quot;)
+# if the the production environent subdomain should nott be included in the URL
+# redefine `full_domain_name` to `base_domain_name` for that environment
+full_domain_name = f&quot;{environment_name}.{base_domain_name}&quot;  # dev.mysite.com
+# if environment_name == &quot;prod&quot;:
+#     full_domain_name = base_domain_name
+base_app_name = os.environ.get(&quot;APP_NAME&quot;, &quot;mysite-com&quot;)
+full_app_name = f&quot;{environment_name}-{base_app_name}&quot;  # dev-mysite-com
+aws_region = os.environ.get(&quot;AWS_DEFAULT_REGION&quot;, &quot;us-east-1&quot;)
+
+
+app = core.App()
+stack = ApplicationStack(
+    app,
+    f&quot;{full_app_name}-stack&quot;,
+    environment_name=environment_name,
+    base_domain_name=base_domain_name,
+    full_domain_name=full_domain_name,
+    base_app_name=base_app_name,
+    full_app_name=full_app_name,
+    env={&quot;region&quot;: aws_region},
+)
+
+# in order to be able to tag ECS resources, you need to go to
+# the ECS Console &amp;gt; Account Settings &amp;gt; Amazon ECS ARN and resource ID settings
+# and enable at least Service and Task. Optionally enable
+# CloudWatch Container Insights
+stack.node.apply_aspect(core.Tag(&quot;StackName&quot;, full_app_name))
+stack.node.apply_aspect(core.Tag(&quot;StackName&quot;, base_app_name))
+
+app.synth()
+```
+
+&lt;/details&gt;
+
+&lt;h3 id=&quot;using-cdk-synth-in-development&quot;&gt;Using &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk synth&lt;/code&gt; in development&lt;/h3&gt;
+
+&lt;p&gt;When I first started using CDK, I defined a root stack containing multiple CDK constructs that each included groups of related CDK resources. For example, I had an &lt;code class=&quot;highlighter-rouge&quot;&gt;RDSConstruct&lt;/code&gt; that contained a &lt;code class=&quot;highlighter-rouge&quot;&gt;Secret&lt;/code&gt;, a &lt;code class=&quot;highlighter-rouge&quot;&gt;StringParameter&lt;/code&gt;, a &lt;code class=&quot;highlighter-rouge&quot;&gt;CfnSecurityGroup&lt;/code&gt;, a &lt;code class=&quot;highlighter-rouge&quot;&gt;CfnDBSubnetGroup&lt;/code&gt; and a &lt;code class=&quot;highlighter-rouge&quot;&gt;CfnDBCluster&lt;/code&gt;. Whenever I added a new section of CDK code, I would run &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk synth &amp;gt; stack.yml&lt;/code&gt; to generate a “snapshot” of my infrastructure in one file. &lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt; was committed in my repo, and I could easily see how changes in CDK code changed the resulting CloudFormation YAML by repeating this &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk synth&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;h3 id=&quot;nestedstacks&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt;s&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt; grew larger and larger as I added more resources in my main “master stack” or “skeleton stack”, and I realized that I was going to reach the hard limit of 200 resources per CloudFormation stack. Refactoring to use &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt;s was pretty straightforward, all I had to do was replace &lt;code class=&quot;highlighter-rouge&quot;&gt;core.Construct&lt;/code&gt; with &lt;code class=&quot;highlighter-rouge&quot;&gt;cloudformation.NestedStack&lt;/code&gt;. With nested stacks, running &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk synth &amp;gt; stack.yml&lt;/code&gt; references the &lt;code class=&quot;highlighter-rouge&quot;&gt;AWS::CloudFormation::Stack&lt;/code&gt;s that are created, with &lt;code class=&quot;highlighter-rouge&quot;&gt;TemplateURL&lt;/code&gt; and parameters from other stacks. It is more useful to look into contents of &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk.out&lt;/code&gt; when working with &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt;s. The following command (executed from the root of the project) update the contents of the &lt;code class=&quot;highlighter-rouge&quot;&gt;awscdk/cdk.out&lt;/code&gt; directory with templates for each of the &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt;s:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cdk synth --app awscdk/app.py --output awscdk/cdk.out
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The result is JSON, not YAML, and &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk.out&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt;d, but it can still be helpful in verifying that your CDK code is generating the correct CloudFormation templates. (&lt;code class=&quot;highlighter-rouge&quot;&gt;cdk diff&lt;/code&gt; may be the best option for seeing how CDK code changes will change your infrastructure).&lt;/p&gt;
+
+&lt;h3 id=&quot;cdk-deploy-and-cdk-in-gitlab-ci-pipelines&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; and CDK in GitLab CI pipelines&lt;/h3&gt;
+
+&lt;p&gt;I like how &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;tail&lt;/code&gt;s the output of CloudFormation events until the stack update finishes or fails. I previously had been using the AWS CLI to call &lt;code class=&quot;highlighter-rouge&quot;&gt;aws cloudformation update-stack&lt;/code&gt;. This command kicks off a stack update and the GitLab pipeline will succeed regardless of the success of failure of the &lt;code class=&quot;highlighter-rouge&quot;&gt;update-stack&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;With CDK, the CI pipeline that calls &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; fails if &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; results in a stack rollback.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I couldn’t find any examples of how to run &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; in a GitLab CI pipeline (using the Python version of CDK, or any version of CDK). It would be nice if there was an official image maintained for the different languages that are ready to run CDK deploy. Here’s how I got &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; working correctly in my CI/CD pipline:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;cdk deploy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker:19.03.1&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker:19.03.5-dind&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;deploy&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;only&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;master&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;variables&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;ENVIRONMENT&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;dev&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;DOCKER_TLS_CERTDIR&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;before_script&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;apk add nodejs-current npm&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;npm i -g aws-cdk&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;apk add --no-cache python3&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;pip3 install -e awscdk&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cdk bootstrap --app awscdk/app.py aws://$AWS_ACCOUNT_ID/$AWS_DEFAULT_REGION&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cdk deploy --app awscdk/app.py --require-approval never&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I have all of my CDK code in a top level directory called &lt;code class=&quot;highlighter-rouge&quot;&gt;awscdk&lt;/code&gt;, my Django code is in the top level &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; directory and my frontend code is in the top level &lt;code class=&quot;highlighter-rouge&quot;&gt;quasar&lt;/code&gt; directory. This directory structure is important, I’ll come back to it shortly. Here are some things to note about this GitLab CI job definition:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;It uses the base &lt;code class=&quot;highlighter-rouge&quot;&gt;docker&lt;/code&gt; image with &lt;code class=&quot;highlighter-rouge&quot;&gt;docker:dind&lt;/code&gt; as a dependent service. This is necessary only if you hare using CDK constructs that build docker images and make use of &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk bootstrap&lt;/code&gt;, such as the &lt;code class=&quot;highlighter-rouge&quot;&gt;aws_ecs.AssetImage&lt;/code&gt; that I use to define &lt;code class=&quot;highlighter-rouge&quot;&gt;self.image&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationStack&lt;/code&gt; class that defines that main stack of my application.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;It requires node, npm python and pip, so these all need to be installed via &lt;code class=&quot;highlighter-rouge&quot;&gt;apk&lt;/code&gt;, the package manager for Alpine Linux. These are done in the &lt;code class=&quot;highlighter-rouge&quot;&gt;before_script&lt;/code&gt;, the setup for the main “script” where &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk deploy&lt;/code&gt; is called.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The main &lt;code class=&quot;highlighter-rouge&quot;&gt;script&lt;/code&gt; section calls &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk bootstrap&lt;/code&gt;. You only need to call &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk bootstrap&lt;/code&gt; once to initialize resources that CDK will use, so placing it here in my CI script is more of a reminder that we are using CDK assets (S3 buckets and ECR images); calling it again once it has been called initially on your AWS account does nothing, and you will see a message that communicates this:&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ cdk bootstrap --app awscdk/app.py aws://$AWS_ACCOUNT_ID/$AWS_DEFAULT_REGION
+  ⏳  Bootstrapping environment aws://XXXXXXXXXXXX/us-east-1...
+  ✅  Environment aws://XXXXXXXXXXXX/us-east-1 bootstrapped (no changes).
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;cdk-bootstap&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cdk bootstap&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cdk bootstrap&lt;/code&gt; is one of my favorite features of CDK. As I mentioned earlier, it is used with S3 and ECR.&lt;/p&gt;
+
+&lt;h4 id=&quot;s3-assets&quot;&gt;S3 Assets&lt;/h4&gt;
+
+&lt;p&gt;With S3, it allows you to populate the contents of an S3 bucket. Here’s an example from &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationStack&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isdir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./quasar/dist/pwa&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;s3_deployment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BucketDeployment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;s&quot;&gt;&quot;BucketDeployment&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;destination_bucket&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;static_site_bucket&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;sources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s3_deployment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./quasar/dist/pwa&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)],&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;distribution&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cloudfront&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;distribution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If the directory &lt;code class=&quot;highlighter-rouge&quot;&gt;./quasar/dist/pwa&lt;/code&gt; exists, CDK will upload the contents of that directory to the &lt;code class=&quot;highlighter-rouge&quot;&gt;static_site_bucket&lt;/code&gt; and then invalidate the cache for &lt;code class=&quot;highlighter-rouge&quot;&gt;self.cloudfront.distribution&lt;/code&gt;, all in one shot. &lt;code class=&quot;highlighter-rouge&quot;&gt;./quasar/dist/pwa&lt;/code&gt; is the directory where assets from my frontend PWA are placed when compiled. GitLab CI passes these files between the jobs using artifacts:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;artifacts&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;paths&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;quasar/dist/pwa&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The job to build PWA assets can be set to only run when there are changes in the &lt;code class=&quot;highlighter-rouge&quot;&gt;quasar&lt;/code&gt; directory, so the &lt;code class=&quot;highlighter-rouge&quot;&gt;.quasar/dist/pwa&lt;/code&gt; directory will only exist if the job is executed. This helps speed up our CI/CD pipeline.&lt;/p&gt;
+
+&lt;h4 id=&quot;ecr-assets&quot;&gt;ECR Assets&lt;/h4&gt;
+
+&lt;p&gt;I use &lt;code class=&quot;highlighter-rouge&quot;&gt;cdk boostrap&lt;/code&gt; and CDK assets in a similar way for building and pushing my application container. In &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationStack&lt;/code&gt;, I define the following:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ecs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AssetImage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;./backend&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;scripts/prod/Dockerfile&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;production&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This image is then referenced by multiple &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt;s that define Fargate services and tasks (&lt;code class=&quot;highlighter-rouge&quot;&gt;gunicorn&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;daphne&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;celery&lt;/code&gt; workers, etc.) This keeps our CDK code DRY.. Don’t Repeat Yourself! Similarly, we aren’t rebuilding, pushing and pulling the backend container when there are no changes to the code in &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; directory.&lt;/p&gt;
+
+&lt;p&gt;I’m not setting up an ECR image repository for my application, but I believe there is a way to do this. One question that I have about using &lt;code class=&quot;highlighter-rouge&quot;&gt;ecs.AssetImage&lt;/code&gt; is about image lifecycle management. I know that you can implement rules about how many images you want to keep in an ECR image repository, but &lt;strong&gt;I’m not sure how this works with CDK Image Assets&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;quick-tour-of-applicationstack&quot;&gt;Quick tour of &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationStack&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;Here’s a very quick look at the structure of my CDK code, focusing on the &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationStack&lt;/code&gt;, the “master stack” or “skeleton stack” that contains.&lt;/p&gt;
+
+&lt;h4 id=&quot;hosted_zone&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hosted_zone&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;We get the hosted zone using the &lt;code class=&quot;highlighter-rouge&quot;&gt;DOMAIN_NAME&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;HOSTED_ZONE_ID&lt;/code&gt;. This is not a nested stack.&lt;/p&gt;
+
+&lt;h4 id=&quot;site_certificate&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;site_certificate&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;The ACM Certificate that will be used for the given environment. This references the &lt;code class=&quot;highlighter-rouge&quot;&gt;full_domain_name&lt;/code&gt; (environment + application).&lt;/p&gt;
+
+&lt;h4 id=&quot;vpc_stack&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;vpc_stack&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt; for defining VPC resources. This construct generates lots of CloudFormation resources. I currently have &lt;code class=&quot;highlighter-rouge&quot;&gt;nat_gateways&lt;/code&gt; set to zero, and I’m &lt;code class=&quot;highlighter-rouge&quot;&gt;PUBLIC&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;PRIVATE&lt;/code&gt; subnets spread over 2 AZs. As I mentioned earlier, this is primarily for cost considerations and it is a best practice to use the tiered security model and run our Fargate tasks in private subnets instead of public subnets. I think I need to add NACL resources in this &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;alb_stack&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;alb_stack&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This defines the load balancer, configures that will send traffic to our Fargate services (such as our Django API). I was a little bit unclear about needing a &lt;code class=&quot;highlighter-rouge&quot;&gt;listener&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;https_listener&lt;/code&gt;. I might be able to get away with removing the &lt;code class=&quot;highlighter-rouge&quot;&gt;listener&lt;/code&gt; and only using &lt;code class=&quot;highlighter-rouge&quot;&gt;https_listener&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;static_site_stack&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;static_site_stack&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This stack defines the S3 bucket and policies that will be used for hosting our static site (Quasar PWA).&lt;/p&gt;
+
+&lt;h4 id=&quot;backend_assets&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;backend_assets&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This stack defines the bucket and policies for managing the bucket that holds static and media assets for Django.&lt;/p&gt;
+
+&lt;h4 id=&quot;cloudfront&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;cloudfront&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This defines the CloudFront distribution that ties together several different parts of the application. It is the “front desk” of the application, and acts as a CDN and proxy. There is a separate CloudFront distribution for each environment (dev, staging, production). This stack also defines the Route53 &lt;code class=&quot;highlighter-rouge&quot;&gt;ARecord&lt;/code&gt; that will be used to send traffic to a specific subdomain to the correct CloudFront distribution.&lt;/p&gt;
+
+&lt;p&gt;There are three &lt;code class=&quot;highlighter-rouge&quot;&gt;origin_configs&lt;/code&gt; for each distribution:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CustomOriginConfig&lt;/code&gt; for the ALB&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CustomOriginConfig&lt;/code&gt; for the S3 bucket website&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;S3OriginConfig&lt;/code&gt; for the Django static assets&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Note that these &lt;code class=&quot;highlighter-rouge&quot;&gt;origin_configs&lt;/code&gt; each have different &lt;code class=&quot;highlighter-rouge&quot;&gt;behaviors&lt;/code&gt;, and that list comprehension is used to keep this code DRY.&lt;/p&gt;
+
+&lt;h4 id=&quot;bucketdeployment&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BucketDeployment&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This will deploy our static site assets to the S3 bucket defined in &lt;code class=&quot;highlighter-rouge&quot;&gt;static_site_stack&lt;/code&gt; if the static site assets are present at the time of deployment. If they are not present, this means that there were no changes made to the frontend site.&lt;/p&gt;
+
+&lt;h4 id=&quot;ecs&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ecs&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;Defines the ECS Cluster.&lt;/p&gt;
+
+&lt;h4 id=&quot;rds&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rds&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;There is no L2 construct for &lt;code class=&quot;highlighter-rouge&quot;&gt;DBCluster&lt;/code&gt;, so I used &lt;code class=&quot;highlighter-rouge&quot;&gt;CfnDBCluster&lt;/code&gt; in order to use the Aurora Postgres &lt;code class=&quot;highlighter-rouge&quot;&gt;engine&lt;/code&gt; and the &lt;code class=&quot;highlighter-rouge&quot;&gt;serverless&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;engine_mode&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;elasticache&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;elasticache&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;I also had to use L1 constructs for ElastiCache, but this one is pretty straightforward.&lt;/p&gt;
+
+&lt;p&gt;For both RDS and ElastiCache I used the &lt;code class=&quot;highlighter-rouge&quot;&gt;vpc_default_security_group&lt;/code&gt; as the &lt;code class=&quot;highlighter-rouge&quot;&gt;source_security_group&lt;/code&gt;. It might be a better idea to define another security group altogether, but this approach works.&lt;/p&gt;
+
+&lt;h4 id=&quot;assetimage&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AssetImage&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;The docker image that references Django application code in the &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; directory. This image is referenced in Fargate services and tasks.&lt;/p&gt;
+
+&lt;h4 id=&quot;variables&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;variables&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This section defines and organizes all of the environment variables and secrets for my application.&lt;/p&gt;
+
+&lt;h4 id=&quot;backend_service&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;backend_service&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;It might be a better idea to replace this with &lt;code class=&quot;highlighter-rouge&quot;&gt;NetworkLoadBalancedFargateService&lt;/code&gt;, but instead I implemented this with lower-level constructs just to be clear about what I’m doing. To add a load balanced service, here is what I did:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Define the Fargate task&lt;/li&gt;
+  &lt;li&gt;Add the container to this task with other information (secrets, logging, &lt;code class=&quot;highlighter-rouge&quot;&gt;command&lt;/code&gt;, etc.)&lt;/li&gt;
+  &lt;li&gt;Give the task role permissions it needs such as access to Secrets, S3 permissions. (It might be a good idea to refactor this into a function that can be called on &lt;code class=&quot;highlighter-rouge&quot;&gt;task_role&lt;/code&gt;, but for now I am explicitly granting all permissions)&lt;/li&gt;
+  &lt;li&gt;Create and add a port mapping&lt;/li&gt;
+  &lt;li&gt;Define an ECS Fargate Service that reference the previously defined Fargate task, configure security group&lt;/li&gt;
+  &lt;li&gt;Add the service as a target to the &lt;code class=&quot;highlighter-rouge&quot;&gt;https_listener&lt;/code&gt; defined previously in &lt;code class=&quot;highlighter-rouge&quot;&gt;alb_stack&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Optionally configure autoscaling for the Fargate service&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;flower_service&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;flower_service&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;Flower is a monitoring utility for Celery. I had trouble getting this to work correctly, but I managed to make it work by adding a simple nginx container that passes traffic to the flower container running in the same task. https://flower.readthedocs.io/en/latest/reverse-proxy.html&lt;/p&gt;
+
+&lt;h4 id=&quot;celery_default_service&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;celery_default_service&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This stack defines the default celery queue. This is discussed later in more detail, but the basic idea is to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Define the Fargate task&lt;/li&gt;
+  &lt;li&gt;Add the container&lt;/li&gt;
+  &lt;li&gt;Define the Fargate service&lt;/li&gt;
+  &lt;li&gt;Grant permissions&lt;/li&gt;
+  &lt;li&gt;Configure autoscaling&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;celery_autoscaling&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;celery_autoscaling&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;This stack defines the Lambda function and schedule on which this Lambda is called. This stack is discussed in more detail later on.&lt;/p&gt;
+
+&lt;h4 id=&quot;backend_tasks&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;backend_tasks&lt;/code&gt;&lt;/h4&gt;
+
+&lt;p&gt;These are administrative tasks that are executed by running manual GitLab CI jobs such as &lt;code class=&quot;highlighter-rouge&quot;&gt;migrate&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;collectstatic&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;createsuperuser&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-x-why-not-y&quot;&gt;Why &lt;code class=&quot;highlighter-rouge&quot;&gt;X&lt;/code&gt;? Why not &lt;code class=&quot;highlighter-rouge&quot;&gt;Y&lt;/code&gt;?&lt;/h2&gt;
+
+&lt;p&gt;This section will compare some of the technology choices I have made in this project to other popular alternatives.&lt;/p&gt;
+
+&lt;h3 id=&quot;why-ecs-why-not-kubernetes&quot;&gt;Why ECS? Why not Kubernetes?&lt;/h3&gt;
+
+&lt;p&gt;I like Kubernetes. I have never used it to support production workloads, but I have explored it in a limited capacity. I have set up this project in Kubernetes locally using &lt;code class=&quot;highlighter-rouge&quot;&gt;minikube&lt;/code&gt;, there is an article on this in the documentation. There are also lots of options for how you do Kubernetes, here are a few off of the top of my head:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;KOPS&lt;/li&gt;
+  &lt;li&gt;EKS&lt;/li&gt;
+  &lt;li&gt;k3s&lt;/li&gt;
+  &lt;li&gt;cdk8s&lt;/li&gt;
+  &lt;li&gt;Kubernetes on Fargate&lt;/li&gt;
+  &lt;li&gt;“Kuberetes the Hard Way”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;With any of these options you are probably going to want to use Helm to do deployments, which adds another layer of abstraction that also has several different ways to be managed. On the other hand, ECS is “just ECS”; there are not a lot of other considerations to make when running workloads in ECS. You have to choose between the two available launch types: EC2 and Fargate. Comparisons of ECS and Kubernetes often mention that ECS integrates nicely with other AWS Services, something I have generally found to be true in setting up this project. Granting permissions to S3 buckets or CloudWatch, or using security groups to give ECS tasks access to certain resources in your VPC are some examples of what this “tight integration” has meant for me so far.&lt;/p&gt;
+
+&lt;h3 id=&quot;why-django-why-not-flask&quot;&gt;Why Django? Why not Flask?&lt;/h3&gt;
+
+&lt;p&gt;I like Django for lots of reasons. I get why people say it can be “overkill”, and there are definitely lots of parts of Django that don’t use. I use Django primarily for the ORM, migrations system and the Django Admin. I also use the Django REST Framework, which gives me another big productivity boost when building APIs. I dislike Django Forms and Django templates, but that wasn’t always the case. Before that, I disliked JavaScript frameworks and single page applications. That changes when I started working with Vue.js and Quasar.&lt;/p&gt;
+
+&lt;h3 id=&quot;why-quasar-framework-why-not-nuxtjs-or-vanilla-vuejs-why-not-react&quot;&gt;Why Quasar Framework? Why not Nuxt.js or vanilla Vue.js? Why not React?&lt;/h3&gt;
+
+&lt;p&gt;Quasar Framework is a few different things, and just like Vue.js itself, Quasar can be incrementally adopted. Primarily, Quasar is a CLI for creating Vue.js projects. It offers some opinions on how to organize files and folders. It handles SPA, PWA, SSR, Electron, Cordova and other build targets. It implements the MaterialUI spec and it has an awesome and active community (but Django, GitLab and AWS do, too!)&lt;/p&gt;
+
+&lt;p&gt;Quasar does things a little bit differently than vanilla Vue.js. There is no &lt;code class=&quot;highlighter-rouge&quot;&gt;main.js&lt;/code&gt; file in a typical Quasar application. Instead, bootfiles are used to initialize things that would typically go into &lt;code class=&quot;highlighter-rouge&quot;&gt;main.js&lt;/code&gt;. I believe this helps Quasar manage multiple build targets easily.&lt;/p&gt;
+
+&lt;p&gt;I really haven’t worked a lot with Nuxt.js, but I would probably be drawn to it if Quasar was not an option. I like how it helps structure your application. In the same way that Django is “batteries included”, Quasar is also very much “batteries included”.&lt;/p&gt;
+
+&lt;p&gt;I think React is neat, but I have similar feelings between React and Vue that I have between Django and Flask. One requires you make more decisions and therefore has a heavy mental load. The biggest example of this is the tight integration of an official router and state management system for Vue (&lt;code class=&quot;highlighter-rouge&quot;&gt;vue-router&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;vuex&lt;/code&gt;).&lt;/p&gt;
+
+&lt;h3 id=&quot;why-celery-why-not-heuy-or-django-rq&quot;&gt;Why Celery? Why not Heuy or django-rq?&lt;/h3&gt;
+
+&lt;p&gt;I think celery is probably the most heavy-weight option for managing asynchronous tasks in Django. It is very flexible and “pluggable” which makes it slightly more challenging to get setup. I would be interested in trying another option, but celery is a mature option that has a large community of users.&lt;/p&gt;
+
+&lt;h2 id=&quot;scaling-celery-workers-to-zero&quot;&gt;Scaling Celery workers to zero&lt;/h2&gt;
+
+&lt;p&gt;Django is used in a few different ways in this application:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a backend API supported by Django REST Framework, Postgres and static files stored in AWS S3, served over CloudFront&lt;/li&gt;
+  &lt;li&gt;a websocket server supported by Django Channels&lt;/li&gt;
+  &lt;li&gt;an administrative backend that is automatically generated by Django (Django Admin)&lt;/li&gt;
+  &lt;li&gt;asynchronous task workers supported by Celery&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The API server, websocket server and Django admin can technically be served by the same &lt;code class=&quot;highlighter-rouge&quot;&gt;daphne&lt;/code&gt; process. In terms of our application and AWS architecture, this means that requests for URLs starting with &lt;code class=&quot;highlighter-rouge&quot;&gt;/api/&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;/ws/&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;/admin/&lt;/code&gt; can all be sent to the same Fargate service target group.&lt;/p&gt;
+
+&lt;p&gt;Alternatively, we could split these up into two or three different process that can then be scaled individually.&lt;/p&gt;
+
+&lt;p&gt;Celery processes should be run as separate processes. If you have multiple queues, you may have workers that are dedicated to processing tasks from certain queues which run as individual Fargate tasks, each with certain CPU and memory allocations and other celery settings, such as &lt;code class=&quot;highlighter-rouge&quot;&gt;max_concurrency&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To manage the total cost of ownership, I wanted to know how to scale Celery workers between 0 and &lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt;. A celery worker is typically an “always on” process that watches for new messages that arrive in the queue and then processes message specified (the messages delivered to the queue contain information on which function to call, and what arguments that function should be called with.&lt;/p&gt;
+
+&lt;p&gt;Let’s image that we have a celery task to process with the following properties:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;It takes a long time to process (between 15 minutes and 1 or 2 hours)&lt;/li&gt;
+  &lt;li&gt;It has lots of dependencies (such as pandas, scikit-learn, etc.)&lt;/li&gt;
+  &lt;li&gt;It requires a high amount of CPU and memory&lt;/li&gt;
+  &lt;li&gt;It cannot easily be broken down into smaller sub-tasks&lt;/li&gt;
+  &lt;li&gt;The time and frequency at which this task will be called is not predictable&lt;/li&gt;
+  &lt;li&gt;A 2 - 3 minute delay between calling the task and starting work on the task is acceptable&lt;/li&gt;
+  &lt;li&gt;This task might not be very easy to process with AWS Lambda without lots of additional logic, if not impossible.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To manage our project’s TCO, we want scale down the number of Fargate tasks that process the queue this task is sent to. If there are no messages queued for this worker and no messages currently being processed by any of the workers for the queue, the number of Fargate tasks (celery workers) should be scaled down.&lt;/p&gt;
+
+&lt;p&gt;I haven’t done much with autoscaling on AWS before, but I found that CDK provides some very nice abstractions that make scaling with Fargate task very straightforward.&lt;/p&gt;
+
+&lt;p&gt;ECS allows you to scale based on some built in metrics, such as CPU Utilization. Scaling between 0 and &lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt; workers based on CPU utilization metrics wouldn’t work because there would be no CPU utilization after the Fargate tasks are scaled to zero; messages in the queue would remain unprocessed and no new workers would be brought online.&lt;/p&gt;
+
+&lt;p&gt;Using the number of tasks in the queue would be a better option. I tried a few different options to get this to work.&lt;/p&gt;
+
+&lt;p&gt;First, I tried using one of the high-level constructs (L3 construct) from &lt;code class=&quot;highlighter-rouge&quot;&gt;ecs_patterns&lt;/code&gt; called &lt;code class=&quot;highlighter-rouge&quot;&gt;QueueProcessingFargateService&lt;/code&gt;, but this would require that I replace Redis with SQS as the broker to be used with Celery. Some people prefer to use SQS, but I like having the ability to inspect and control, which requires a broker like Redis and is not possible with SQS.&lt;/p&gt;
+
+&lt;p&gt;My current solution involves:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Creating a CloudWatch metric (the namespace is &lt;code class=&quot;highlighter-rouge&quot;&gt;FULL_APP_NAME&lt;/code&gt; and the metric name is the name of the queue, &lt;code class=&quot;highlighter-rouge&quot;&gt;default&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Calling &lt;code class=&quot;highlighter-rouge&quot;&gt;auto_scale_task_count&lt;/code&gt; on the Fargate service to create a an “autoscaling Fargate task”&lt;/li&gt;
+  &lt;li&gt;Calling &lt;code class=&quot;highlighter-rouge&quot;&gt;scale_on_metric&lt;/code&gt; on the “autoscaling Fargate task” with the CloudWatch metric created in &lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Setting up a &lt;code class=&quot;highlighter-rouge&quot;&gt;celery-metrics&lt;/code&gt; API endpoint on my Django API server that, when &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt;ed to, collects celery metrics per queue and publishes these metrics to CloudWatch.&lt;/li&gt;
+  &lt;li&gt;Scheduling a Lambda function to post to the &lt;code class=&quot;highlighter-rouge&quot;&gt;celery-metrics&lt;/code&gt; endpoint every 5 minutes.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here’s the code that takes care of steps 1, 2 and 3:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;default_celery_queue_cw_metric&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cw&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Metric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;full_app_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metric_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;default&quot;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;celery_default_queue_asg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;celery_default_worker_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;auto_scale_task_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;min_capacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_capacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;celery_default_queue_asg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scale_on_metric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;CeleryDefaultQueueAutoscaling&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;metric&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;default_celery_queue_cw_metric&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;scaling_steps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;aas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ScalingInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;change&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;aas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ScalingInterval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;change&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;adjustment_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aas&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AdjustmentType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CHANGE_IN_CAPACITY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Step 4 inspects active and reserved tasks, filters the tasks by the &lt;code class=&quot;highlighter-rouge&quot;&gt;routing_key&lt;/code&gt; (which is the same as the queue name) and the combines this with any queued tasks by calling &lt;code class=&quot;highlighter-rouge&quot;&gt;llen(queue_name)&lt;/code&gt;. Finally, the queue names and combined active, reserved and queued task totals are sent to CloudWatch via boto3. The code for this is in &lt;code class=&quot;highlighter-rouge&quot;&gt;backend/apps/core/utils/celery_utils.py&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here’s the code for the Lambda function in step 5:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;os&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;urllib.request&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;FULL_DOMAIN_NAME&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FULL_DOMAIN_NAME&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CELERY_METRICS_PATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;api/celery-metrics/&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;CELERY_METRICS_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;https://{FULL_DOMAIN_NAME}/{CELERY_METRICS_PATH}&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CELERY_METRICS_TOKEN&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;CELERY_METRICS_TOKEN&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lambda_handler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;celery_metrics_token&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CELERY_METRICS_TOKEN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dumps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;utf8&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urllib&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;CELERY_METRICS_URL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;content-type&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;application/json&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urllib&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urlopen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, here is the code for defining the lambda function and scheduled invocation of the lambda function:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CeleryAutoscalingStack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cloudformation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NestedStack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;core&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Construct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lambda_function&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;aws_lambda&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;CeleryMetricsLambdaFunction&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aws_lambda&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Code&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;awslambda&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;publish_celery_metrics.lambda_handler&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;runtime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;aws_lambda&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runtime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PYTHON_3_7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;variables&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;regular_variables&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;celery_default_cw_metric_schedule&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;events&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Rule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;CeleryDefaultCWMetricSchedule&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;schedule&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;events&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Schedule&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;core&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;minutes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)),&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;targets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;events_targets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LambdaFunction&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lambda_function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;c&quot;&gt;# TODO: refactor this to loop through CloudWatch metrics multiple celery queues&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;celery_default_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;default_celery_queue_cw_metric&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grant_put_metric_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;backend_service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;backend_task&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;task_role&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;miscellaneous-grievances&quot;&gt;Miscellaneous Grievances&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Fargate tasks cannot access Secrets that use JSON template&lt;/li&gt;
+  &lt;li&gt;You cannot select &lt;code class=&quot;highlighter-rouge&quot;&gt;FARGATE_SPOT&lt;/code&gt; on a CDK-created ECS cluster. This option seems to only be available from the ECS Wizard in the AWS Console&lt;/li&gt;
+  &lt;li&gt;It’s not super clear how to package dependencies in Lambda with CDK. Here’s an interesting approach that I would like to try: &lt;a href=&quot;https://github.com/aws-samples/aws-cdk-examples/issues/130#issuecomment-554097487&quot;&gt;https://github.com/aws-samples/aws-cdk-examples/issues/130#issuecomment-554097487&lt;/a&gt;. The Lambda functions I’m using don’t require anything outside of the standard library, but if they did it would require some additional work to make sure dependencies can be added as Lambda Layers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;todo&quot;&gt;TODO&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Create an IAM role template that can be used to create an IAM role that has access to setup infrastructure through CDK. Currently I’m using an admin account which is not a best practice.&lt;/li&gt;
+  &lt;li&gt;Move this Wiki Article to the project documentation site and main README&lt;/li&gt;
+  &lt;li&gt;Expand on each topic, replace existing documentation&lt;/li&gt;
+  &lt;li&gt;Add a summary of each &lt;code class=&quot;highlighter-rouge&quot;&gt;NestedStack&lt;/code&gt; from CDK code&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Tue, 02 Jun 2020 00:00:00 -0400</pubDate>
+        <link>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Setup, Development and Deployment of a web app using Django, VueJS, VuePress, Docker, nginx, traefik and GitLab</title>
@@ -37,36 +796,6 @@
         <pubDate>Wed, 09 Jan 2019 00:00:00 -0500</pubDate>
         <link>https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html</link>
         <guid isPermaLink="true">https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Scripting my daily development environment setup</title>
-        <description>&lt;p&gt;This article shows how I automated the setup of my daily development environment for work with a bash script. Here’s the script:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;PROJDIR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/bcaffey/git/project-directory/src
-&lt;span class=&quot;nv&quot;&gt;NOTESDIR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/home/bcaffey/Documents/notes
-
-gnome-terminal &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--tab&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--working-directory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PROJDIR&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bash -c &#39;echo -ne &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;33]0;Django - Server&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;; . ./setup-virtualenv.bash &amp;amp;&amp;amp; ./runserver&#39;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--tab&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--working-directory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PROJDIR&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bash -c &#39;echo -ne &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;33]0;Celery - Queue 1&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;; . ./setup-virtualenv.bash &amp;amp;&amp;amp; ./runcelery_1&#39;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--tab&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--working-directory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PROJDIR&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bash -c &#39;echo -ne &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;33]0;Celery - Queue 2&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;; . ./setup.-virtualenvbash &amp;amp;&amp;amp; ./runcelery_2&#39;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--tab&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--working-directory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PROJDIR&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bash -c &#39;echo -ne &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;33]0;Flower&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;; . ./setup-virtualenv.bash &amp;amp;&amp;amp; ./runflower&#39;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--tab&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--working-directory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PROJDIR&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bash -c &#39;echo -ne &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;33]0;Django - Shell&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\0&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;; . ./setup-virtualenv.bash &amp;amp;&amp;amp; ./manage shell&#39;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PROJDIR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; code &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$NOTESDIR&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; code &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-
-google-chrome http://subdomain.domain.com:8222/admin/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This script opens a &lt;code class=&quot;highlighter-rouge&quot;&gt;gnome-terminal&lt;/code&gt; window with 5 tabs, one for a Django app, another for a Django shell, 2 for celery workers and one to run flower. Additionally, we specify a name for the tabs with &lt;code class=&quot;highlighter-rouge&quot;&gt;\033]0;Django - Shell\007\&quot;&lt;/code&gt;. I then launch VS Code and open up my Django app and I’m all ready to go. This might only take minute or two to do manually each morning, but the script can be launched at startup so that my development environment is set as soon as I turn on my computer. An easy way to do this on Ubuntu is to use &lt;code class=&quot;highlighter-rouge&quot;&gt;Startup Applications&lt;/code&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 20 Aug 2018 00:00:00 -0400</pubDate>
-        <link>https://briancaffey.github.io/2018/08/20/startup-script-for-work.html</link>
-        <guid isPermaLink="true">https://briancaffey.github.io/2018/08/20/startup-script-for-work.html</guid>
         
         
       </item>
