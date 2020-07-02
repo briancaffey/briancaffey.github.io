@@ -6,6 +6,7 @@ permalink: /projects/django-postgres-vue-gitlab-ecs
 gitlab: verbose-equals-true/django-postgres-vue-gitlab-ecs
 image: /static/architecture_verbose_equals_true.png
 link: https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/
+date: 2020-06-06
 ---
 
 This project takes you through the process of setting up, developing, deploying and maintaining a modern web application built with Django and VueJS
