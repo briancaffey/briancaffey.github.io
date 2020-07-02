@@ -5,7 +5,7 @@ comments: true
 permalink: /projects/playquest
 github: briancaffey/playquest
 image: /static/playquest.png
-link: http://playquest.io
+link: https://github.com/briancaffey/playquest
 date: 2017-08-01
 ---
 

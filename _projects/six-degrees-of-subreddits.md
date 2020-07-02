@@ -5,7 +5,7 @@ comments: true
 permalink: /projects/six-degrees-of-subreddits
 github: briancaffey/briancaffey.com/tree/master/srgraph
 image: /static/subreddits.png
-link: http://briancaffey.com/six-degrees-of-subreddits
+link: https://briancaffey.github.io/2017/03/03/graph_subreddit.html
 date: 2017-03-03
 ---
 

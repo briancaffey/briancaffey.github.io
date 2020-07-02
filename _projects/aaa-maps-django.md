@@ -5,7 +5,7 @@ comments: true
 permalink: /projects/django-leaflet-demo
 github: briancaffey/django-leaflet-demo
 image: /static/map_homepage.png
-link: http://159.89.235.193/books/
+link: https://github.com/briancaffey/django-leaflet-demo
 date: 2018-02-19
 ---
 

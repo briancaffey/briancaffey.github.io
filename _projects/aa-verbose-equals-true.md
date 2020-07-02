@@ -5,7 +5,7 @@ comments: true
 permalink: /projects/verbose-equals-true
 gitlab: briancaffey/verbose-equals-true
 image: /static/technologies.png
-link: https://verbose-equals-true.tk
+link: https://gitlab.com/briancaffey/verbose-equals-true
 date: 2019-01-09
 ---
 
