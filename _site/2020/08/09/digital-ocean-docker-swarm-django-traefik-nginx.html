@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <meta property="og:image" content="https://briancaffey.github.io/static/shark.jpg" />
+  
+
+  <title>Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray</title>
+  <meta name="description" content="Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html">
+  <link rel="alternate" type="application/rss+xml" title="Brian Caffey" href="https://briancaffey.github.io/feed.xml">
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75060954-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <body>
+    <style>
+    img{
+      display:block;
+      margin:auto;
+    }
+    </style>
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Brian Caffey</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/contact">Contact</a>
+          
+        
+          
+          <a class="page-link" href="/blog">Blog</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/projects/index.html">Projects</a>
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray</h1>
+    <p class="post-meta"><time datetime="2020-08-09T00:00:00-04:00" itemprop="datePublished">Aug 9, 2020</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <h1 id="deploying-django-applications-with-docker-swarm-on-digitalocean-using-gitlab-ci-traefik-nginx-and-rex-ray">Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray</h1>
+
+<p>I recently wrote two articles about deploying Django applications to AWS serverless environments: one on <a href="https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html">AWS Fargate</a> (CloudFront, ALB and ECS Fargate containers) and one on <a href="https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway.html">AWS Lambda</a> (Lambda + API Gateway, without using Zappa or Serverless Framework). Both projects focused on automating as much of the setup and operation as possible using DevOps patterns: Infrastructure as Code, GitOps, CI/CD and docker containers. I used AWS resources exclusively (with the exception of GitLab) with the help of <a href="https://aws.amazon.com/cdk/">AWS Cloud Development Kit (CDK)</a>, an awesome tool that I have really come to like. In general I really like AWS, and the more I use it I start to think about what I would do without it. Also, a lot of the feedback I got on these projects recommended to “just use a VPS” instead of bothering with AWS because it is complicated, expensive, overkill, etc. This got me thinking about how far I could get in deploying a Django application on a server with little or no external services that AWS has spoiled me with. After a little bit of discomfort and confusion, I was able to check off most of what I was hoping to and came away with a few questions as well. If you are interested to know how I got things setup and and hear some of my thoughts on running Django applications in production, continue reading!</p>
+
+<p>In this article, I’m going to go over my approach to deploying and running Django applications using DigitalOcean Droplets (Linux-based virtual machine that runs on top of virtualized hardware) and block storage volumes (network-based block devices that provide additional data storage for Droplets).</p>
+
+<blockquote>
+  <p>I’ll also touch on trade-offs between DigitalOcean and AWS and emphasize aspects of the project that confuse/d me with these block quotes.</p>
+</blockquote>
+
+<p>Here’s a link to my project that I’ll be referencing: <a href="https://gitlab.com/briancaffey/digital-ocean-docker-swarm-django-traefik">https://gitlab.com/briancaffey/digital-ocean-docker-swarm-django-traefik</a>.</p>
+
+<p>The project setup is a combination of some of the best practices I have picked up along the way as well as some very helpful guides, repositories and blog posts that I’ll do my best to reference throughout this article.</p>
+
+<h2 id="overview">Overview</h2>
+
+<p>Here are some of the key parts of the project that I’ll go over:</p>
+
+<ul>
+  <li>DigitalOcean and GitLab setup</li>
+  <li>Creating an A Record that points to our Droplet IP</li>
+  <li>Using a prebuilt VM image that ships with docker and docker-compose</li>
+  <li>Setting up the REX-Ray storage driver to automatically provision Digital Ocean block storage volumes</li>
+  <li>Setting up a docker swarm cluster</li>
+  <li>Setting up a <code class="highlighter-rouge">.gitlab-ci.yml</code> file to build images and push them to a private GitLab CI project registry</li>
+  <li>Writing a docker-compose file to configure the services (containers) that will support the application</li>
+  <li>Deploying a stack to the docker swarm cluster on DigitalOcean from our GitLab CI environment over SSH</li>
+  <li>Django project settings and management commands for our Postgres database and static files</li>
+  <li>Monitoring, logging and debugging</li>
+  <li>Destroying the environment + cleanup</li>
+</ul>
+
+<p>Before I dig into all of this, I recommend that you check out <a href="https://mattsegal.dev/django-prod-architectures.html">this article about Django production architectures by Matt Segal</a>. This is a great primer for a lot of what I’ll be talking about and it includes some great visualizations. <a href="https://mattsegal.dev">mattsegal.dev</a> has lots of good content related to Django, I also recommend checking out <a href="https://mattsegal.dev/nginx-django-reverse-proxy-config.html">this article about how NGINX is used with Django</a>. Thanks for the great resources, Matt!</p>
+
+<h2 id="digitalocean-setup">DigitalOcean setup</h2>
+
+<ul>
+  <li>Sign up for a new DigitalOcean account if you don’t already have one</li>
+  <li>Create a DigitalOcean project <a href="https://cloud.digitalocean.com/projects/new">https://cloud.digitalocean.com/projects/new</a></li>
+  <li>Create a personal access token (we will use this to configure a docker addon that will provision block storage volumes automatically) <a href="https://cloud.digitalocean.com/account/api/tokens">https://cloud.digitalocean.com/account/api/tokens</a></li>
+  <li>Create and add an SSH key to your account. This is a pretty simple step, but DigitalOcean still has really thorough documentation on how to do this (see <a href="https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/">this article</a> for more information)</li>
+</ul>
+
+<h2 id="prebuilt-docker-vm-image">Prebuilt Docker VM image</h2>
+
+<p>From the <a href="https://cloud.digitalocean.com/droplets/new">Create Droplets</a> page, select <code class="highlighter-rouge">Marketplace</code> and search for <code class="highlighter-rouge">docker</code>. Select the <code class="highlighter-rouge">Docker 5:19.03.1~3 18.04</code> image. Note that this VM is Ubuntun 18.04 with Docker Community Edition and docker-compose pre-installed.</p>
+
+<p>Select the basic plan, and then scroll to the left to choose the $5.00/month option. Select a datacenter region. Most of these regions should be OK, but you should verify that the region you have selected supports volumes (they may all support volumes, but there are some DO features that are not supported accross all regiongs, similar to AWS). Do not select a VPC or any of the additional options.</p>
+
+<p>For Authentication, select the SSH key that you created earlier.</p>
+
+<p>Take note of the Droplet’s IP address; we will use this in the next step.</p>
+
+<h2 id="gitlab-setup">GitLab setup</h2>
+
+<p>Create a new GitLab project and clone it locally. You can also clone or fork my project and use that as a starting point. Go to <code class="highlighter-rouge">Settings &gt; CI/CD &gt; Variables</code> in your GitLab project and add the following environment variables:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">SSH_PRIVATE_KEY</code>: the value should start with <code class="highlighter-rouge">-----BEGIN RSA PRIVATE KEY-----</code> and end with <code class="highlighter-rouge">-----END RSA PRIVATE KEY-----</code></li>
+  <li><code class="highlighter-rouge">DROPLET_IP</code>: the IP address of the droplet you just created</li>
+  <li><code class="highlighter-rouge">POSTGRES_PASSWORD</code>: a secure password that we will use for our Postgres database (we will share this with our Django application later on)</li>
+  <li><code class="highlighter-rouge">SECRET_KEY</code>: a random secret key to use for our Django application.</li>
+  <li><code class="highlighter-rouge">DEBUG</code>: the number <code class="highlighter-rouge">0</code></li>
+</ul>
+
+<h2 id="a-record">A Record</h2>
+
+<p>By the end of this project you will be able to deploy your Django application to a live domain name provided that you have one. All you need to do is create an A Record that points to the Droplet IP. There are no DNS configuration changes to make inside of DigitalOcean. I’m using a domain that I purchased through Route53. You can get a free <code class="highlighter-rouge">.tk</code> domain from <a href="https://www.freenom.com/en/freeandpaiddomains.html">freenom</a>. I have used this before and it is a great option for testing things out.</p>
+
+<h2 id="ssh-into-your-digitalocean-droplet">SSH into your DigitalOcean Droplet</h2>
+
+<p>You can do this with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh -i ~/.ssh/a1_rsa root@123.45.578.91
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">a1_rsa</code> is the private key I added to GitHub. You can logout for now, but keep this command handy, because we will be coming back to our Droplet via SSH shortly.</p>
+
+<h2 id="add-the-rex-ray-docker-plugin">Add the REX-Ray docker plugin</h2>
+
+<p>This step is very simple, you can follow along with this short guide: <a href="https://www.digitalocean.com/community/questions/how-to-attach-digitalocean-block-storage-to-docker-container">https://www.digitalocean.com/community/questions/how-to-attach-digitalocean-block-storage-to-docker-container</a>.</p>
+
+<p>There is basically one command to run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker plugin install rexray/dobs DOBS_TOKEN=YOUR_DIGITALOCEAN_TOKEN DOBS_REGION=nyc1 LINUX_VOLUME_FILEMODE=0775
+</code></pre></div></div>
+
+<p>You will need to make sure that you replace <code class="highlighter-rouge">YOUR_DIGITALOCEAN_TOKEN</code> with the personal access token you added earlier. Also, <code class="highlighter-rouge">DOBS_REGION</code> should be the region you selected for your Droplet earlier.</p>
+
+<p>Check that the plugin was installed correctly with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker plugin ls
+</code></pre></div></div>
+
+<p>Here’s a quick intro to REX-Ray from <a href="https://rexray.readthedocs.io/en/stable/">rexray.readthedocs.io</a>:</p>
+
+<blockquote>
+  <p>REX-Ray is an open source, storage management solution designed to support container runtimes such as Docker and Mesos. REX-Ray enables stateful applications, such as databases, to persist and maintain its data after the life cycle of the container has ended. Built-in high availability enables orchestrators such as Docker Swarm, Kubernetes, and Mesos Frameworks like Marathon to automatically orchestrate storage tasks between hosts in a cluster.</p>
+</blockquote>
+
+<p>In the context of this project, REX-Ray will automate the creation of DigitalOcean Block Storage Volumes. We will talk about volumes and how they are used later on in this article.</p>
+
+<h2 id="gitlab-ciyml"><code class="highlighter-rouge">.gitlab-ci.yml</code></h2>
+
+<p><code class="highlighter-rouge">.gitlab-ci.yml</code> is a file that configures pipelines when code is pushed to GitLab, similar to how GitHub Actions work with GitHub. This single file is a huge topic, if you are unfamiliar with GitLab CI, you might want to have a look over <a href="https://docs.gitlab.com/ee/ci/yaml/">this page from the GitLab documentation</a> which goes over all of the configuration options with many examples. Also, <a href="https://docs.gitlab.com/ee/ci/variables/predefined_variables.html">this documentation page</a> covers the predefined environment variables that are made available to GitLab CI pipelines. I’m using these in a few different places as we will see shortly.</p>
+
+<p>CI/CD pipelines that I define with <code class="highlighter-rouge">.gitlab-ci.yml</code> typically contain three stages: <code class="highlighter-rouge">test</code>, <code class="highlighter-rouge">build</code> and <code class="highlighter-rouge">deploy</code>. We will focus on the <code class="highlighter-rouge">build</code> and <code class="highlighter-rouge">deploy</code> stages for now (reference the article on my Fargate project linked above for reference on setting up unit tests with pytest).</p>
+
+<p><code class="highlighter-rouge">build-backend</code> is the name of a GitLab CI job that builds and tags a docker image from the source code in the <code class="highlighter-rouge">backend</code> directory of this project and pushes the tagged container image to a private image registry on gitlab.com that we will use later.</p>
+
+<p>Here’s the YAML code for <code class="highlighter-rouge">build-backend</code>:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">build-backend</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">build</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">docker:19.03.1</span>
+  <span class="na">services</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">docker:19.03.5-dind</span>
+  <span class="na">before_script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="pi">|</span>
+      <span class="no">docker build \</span>
+        <span class="no">-t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA \</span>
+        <span class="no">-f backend/docker/Dockerfile.prod \</span>
+        <span class="no">./backend/</span>
+    <span class="pi">-</span> <span class="s">docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">build-nginx</code> is almost identical, but the <code class="highlighter-rouge">docker build</code> arguments are slightly different. There are three arguments for the <code class="highlighter-rouge">docker build</code> command that I’m using here:</p>
+
+<ol>
+  <li><code class="highlighter-rouge">-t</code>: the tag to tag the built image with</li>
+  <li><code class="highlighter-rouge">-f</code>: the Dockerfile to be used for building the image</li>
+  <li>the <code class="highlighter-rouge">context</code> that is sent to the docker daemon when we build the image</li>
+</ol>
+
+<p><code class="highlighter-rouge">-t</code> makes use of two predefined GitLab CI variables: <code class="highlighter-rouge">CI_REGISTRY_IMAGE</code> and <code class="highlighter-rouge">CI_COMMIT_SHORT_SHA</code>. <code class="highlighter-rouge">$CI_REGISTRY_IMAGE</code> is the URL for the private image registry on gitlab.com that we push our images to that is specific to our project: <code class="highlighter-rouge">registry.gitlab.com/&lt;gitlab_username&gt;/&lt;project_name&gt;</code>, and <code class="highlighter-rouge">CI_COMMIT_SHORT_SHA</code> is an character alphanumeric value that contains the truncated name of the commit hash, this is known as the <code class="highlighter-rouge">tag</code>, even though we pass in more than just this value. We combine these two values with <code class="highlighter-rouge">/</code> and the name of the image we are building, such as <code class="highlighter-rouge">backend</code>, so the full value being passed to <code class="highlighter-rouge">-t</code> is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>registry.gitlab.com/gitlab-username/my-project/backend:abcd1234
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">-f</code> is the path to the <code class="highlighter-rouge">Dockerfile</code> we are using relative to the directory where we are running the <code class="highlighter-rouge">docker build</code> command, which is the root directory of the project.</p>
+
+<p>The final argument defines the context that we are using to build the image, and this is an important part for understanding how Docker works. This argument defines the directory that is zipped up and sent to the docker daemon via the docker API. When we build an image with <code class="highlighter-rouge">docker build</code>, we are essentially using the docker CLI to make a POST request to our docker daemon (server) where the POST data contains all of the files that we will have access to in the steps of the Dockerfile (such as <code class="highlighter-rouge">ADD</code> and <code class="highlighter-rouge">COPY</code> – we will get to these soon). There’s a key difference between the <code class="highlighter-rouge">backend</code> and <code class="highlighter-rouge">nginx</code> <code class="highlighter-rouge">docker build</code> commands: the context for <code class="highlighter-rouge">backend</code> is <code class="highlighter-rouge">backend</code>, but the context for <code class="highlighter-rouge">nginx</code> is <code class="highlighter-rouge">.</code> (the root of the project). This is because we may want access to another top level directory in our project that contains, for example, a Vue.js or React application, that we will build into our NGINX container. In order to be able to access both files in the <code class="highlighter-rouge">nginx</code> and the folder containing our frontend app, we need to send a context that contains both of these directories. Sending too many files to to the docker daemon when you run docker build will usually cause the <code class="highlighter-rouge">docker build</code> command to hang. The first line of output from a <code class="highlighter-rouge">docker build</code> command should be something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sending build context to Docker daemon  24.58kB
+</code></pre></div></div>
+
+<p>If this number is too high, you should use a <code class="highlighter-rouge">.dockerignore</code> file that ignores any files or directories you don’t want to send to the docker daemon (similar to how <code class="highlighter-rouge">.gitignore</code> works with git).</p>
+
+<p>To be able to pull and push (read and write) images to our private project container image registry, we need login with our docker client using the <code class="highlighter-rouge">docker login</code> command in the <code class="highlighter-rouge">before_script</code> as well two other predefined GitLab CI variables: <code class="highlighter-rouge">CI_JOB_TOKEN</code> and <code class="highlighter-rouge">CI_REGISTRY</code>. This all happens using a special service called <code class="highlighter-rouge">docker-in-docker</code> which I won’t go into too much detail here, but it is a common practice when working with containers in a CI/CD environment that itself which is also based on containers, such as GitLab CI (each job runs in a container – the key <code class="highlighter-rouge">image</code> – and can define additional containers – the <code class="highlighter-rouge">services</code> key – to help with the CI job). Once the two images for <code class="highlighter-rouge">backend</code> and <code class="highlighter-rouge">nginx</code> have been built and pushed, our GitLab CI pipeline moves on to the next stage: <code class="highlighter-rouge">deploy</code>. In the <code class="highlighter-rouge">deploy</code> stage, we will start these and other containers on our DigitalOcean droplet, so we are getting close, but there is a lot more to explain. Before we deploy our containers, we need to do some one-time setup:</p>
+
+<ol>
+  <li>initialize a single-node docker swarm cluster on our Droplet and</li>
+  <li>create a docker network that our cluster’s services (containers) will use</li>
+</ol>
+
+<h2 id="setup-a-docker-swarm-cluster">Setup a docker swarm cluster</h2>
+
+<p>To setup a docker swarm cluster, SSH into the Droplet with the command we introduced above (<code class="highlighter-rouge">ssh -i ~/.ssh/a1_rsa root@123.45.578.91</code> where <code class="highlighter-rouge">a1_rsa</code> is the name of the private key file – you can ignore the <code class="highlighter-rouge">-i ~/.ssh/a1_rsa</code> part if you are using an SSH key called <code class="highlighter-rouge">id_rsa</code>), and run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker swarm init --advertise-addr DROPLET_IP
+</code></pre></div></div>
+
+<p>Replace <code class="highlighter-rouge">DROPLET_IP</code> with your Droplet’s IP address (e.g. <code class="highlighter-rouge">123.45.578.91</code>). Check out <a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-cluster-of-docker-containers-with-docker-swarm-and-digitalocean-on-ubuntu-16-04">this article</a> for some additional information about using docker swarm on GitLab. It is a little bit outdated, but the main ideas should still hold up. Docker swarm is designed to orchestrate containers running on a group (or swarm) of multiple machines. However, it is perfectly fine to run a single-node cluster as we are doing here.</p>
+
+<p>Docker swarm uses docker-compose files, but using docker swarm is very different from running <code class="highlighter-rouge">docker-compose up</code>, a command which you might see people running both locally and in production and which also uses docker-compose files. As a best practice, you should not be using <code class="highlighter-rouge">docker-compose</code> (the command) in production. Many people do this, and several official tutorials will often end with “now just run <code class="highlighter-rouge">docker-compose up</code> and you are done”. The first time I ran containers in the cloud I pulled my git repo into a VM, installed docker and docker-compose and ran <code class="highlighter-rouge">docker-compose up</code>. It is pretty easy and it works very similarly in both local and production environments, but this guide will be using <code class="highlighter-rouge">docker-compose</code> in production. There is more I could say here, but the main point is that docker swarm is a simplified version of something like Kubernetes, but it comes built-in to docker and is very simple to use.</p>
+
+<h2 id="defining-an-overlay-network">Defining an overlay network</h2>
+
+<p>SSH into your droplet and run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker network create --driver=overlay traefik-public
+</code></pre></div></div>
+
+<blockquote>
+  <p>Usually we define networks in our docker-compose file, but this network needs to be defined first and then referenced in our docker-compose file. Here’s a thread on SO that goes into a little bit more on why this is necessary, but I still don’t have a very clear idea of why this is the case. With another configuration or perhaps docker-compose version, this may not be needed. I’ll update this part of the article if I figure anything out.</p>
+</blockquote>
+
+<p>Let’s go over one more docker concept that will helpful in the next few steps. When you run <code class="highlighter-rouge">docker ps</code> on your local machine, the docker CLI first looks to see if the <code class="highlighter-rouge">DOCKER_HOST</code> environment variable is set. If it is not, then docker defaults to <code class="highlighter-rouge">unix:///var/run/docker.sock</code>, a UNIX socket. Check out <a href="https://stackoverflow.com/questions/35110146/can-anyone-explain-docker-sock">this SO post</a> titled “Can anyone explain docker.sock?”</p>
+
+<p>We change the docker host that our local docker CLI is talking to by setting this environment variable, and one nice way to set this environment variables uses an SSH connection:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DOCKER_HOST=ssh://root@$DOCKER_IP
+</code></pre></div></div>
+
+<p>See this article for a more in-depth discussion: <a href="https://www.digitalocean.com/community/tutorials/how-to-use-a-remote-docker-server-to-speed-up-your-workflow">https://www.digitalocean.com/community/tutorials/how-to-use-a-remote-docker-server-to-speed-up-your-workflow</a>.</p>
+
+<p>You can try this out locally. Run a container locally, check it with <code class="highlighter-rouge">docker ps</code>, then export the <code class="highlighter-rouge">DOCKER_HOST</code> environment variable with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export DOCKER_HOST=ssh://root@123.45.678.91
+</code></pre></div></div>
+
+<p>Replacing <code class="highlighter-rouge">123.45.678.91</code> with your Droplet IP. Run <code class="highlighter-rouge">docker ps</code> again and you should see nothing (or any other containers that you started on your Droplet). Finally, run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unset DOCKER_HOST
+</code></pre></div></div>
+
+<p>Running <code class="highlighter-rouge">docker ps</code> again you should see the containers on your machine. We will be using this idea in the next step when we look at the <code class="highlighter-rouge">docker stack deploy</code> command.</p>
+
+<h2 id="docker-stack-deploy"><code class="highlighter-rouge">docker stack deploy</code></h2>
+
+<p>Now that we have done our one-time-setup steps, let’s look at the <code class="highlighter-rouge">deploy</code> stage of <code class="highlighter-rouge">.gitlab-ci.yml</code>, the GitLab CI job that will get our containers running on our Droplet. First, let’s break down the <code class="highlighter-rouge">deploy-digital-ocean</code> command:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">deploy-digital-ocean</span><span class="pi">:</span>
+  <span class="na">stage</span><span class="pi">:</span> <span class="s">deploy</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">docker:19.03.1</span>
+  <span class="na">services</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">docker:19.03.5-dind</span>
+  <span class="na">variables</span><span class="pi">:</span>
+    <span class="na">DOCKER_HOST</span><span class="pi">:</span> <span class="s2">"</span><span class="s">ssh://root@$DROPLET_IP"</span>
+  <span class="na">before_script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">apk update &amp;&amp; apk add openssh-client bash</span>
+    <span class="pi">-</span> <span class="s">mkdir -p ~/.ssh</span>
+    <span class="pi">-</span> <span class="s">echo "$SSH_PRIVATE_KEY" &gt; ~/.ssh/id_rsa</span>
+    <span class="pi">-</span> <span class="s">chmod 600 ~/.ssh/id_rsa</span>
+    <span class="pi">-</span> <span class="s">eval "$(ssh-agent -s)"</span>
+    <span class="pi">-</span> <span class="s">ssh-add ~/.ssh/id_rsa</span>
+    <span class="pi">-</span> <span class="s">ssh-keyscan -H $DROPLET_IP &gt;&gt; ~/.ssh/known_hosts</span>
+    <span class="pi">-</span> <span class="s">docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY</span>
+  <span class="na">script</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">docker stack deploy -c stack.yml my-stack --with-registry-auth</span>
+</code></pre></div></div>
+
+<p>This job uses the same <code class="highlighter-rouge">image</code> and <code class="highlighter-rouge">services</code> that our <code class="highlighter-rouge">build</code> stage jobs used. Notice that we set <code class="highlighter-rouge">DOCKER_HOST</code> to <code class="highlighter-rouge">"ssh://root@$DROPLET_IP"</code>, this means that any docker CLI commands in this job will be communicating with the docker daemon on our Droplet. The <code class="highlighter-rouge">before_script</code> has a lot going on, but all we are doing is preparing to use the SSH private key that we previously added to our GitLab project’s CI/CD environment variables. The base image for this job, <code class="highlighter-rouge">docker:19.03.1</code> is based on Alpine Linus. This version of Linux is super light weight and doesn’t come with <code class="highlighter-rouge">openssh-client</code> or <code class="highlighter-rouge">bash</code>, so our first step is to install these with the Alpine package manager, <code class="highlighter-rouge">apk</code>:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apk update <span class="o">&amp;&amp;</span> apk add openssh-client bash
+</code></pre></div></div>
+
+<p>Next, we add the <code class="highlighter-rouge">SSH_PRIVATE_KEY</code> environment variable into the body of the <code class="highlighter-rouge">id_rsa</code> private key file, change the permission of this file and then add the key to our SSH agent. Here’s an excerpt from <code class="highlighter-rouge">man ssh-agent</code> that provides a little bit more context into why we need to run <code class="highlighter-rouge">eval "$(ssh-agent -s)"</code> and <code class="highlighter-rouge">ssh-add ~/.ssh/id_rsa</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DESCRIPTION
+     ssh-agent is a program to hold private keys used for public key authentication (RSA, DSA, ECDSA, Ed25519)ssh-agent is usually started in the beginning of an X-session or a login session, and all other windows or programs are started as clients to the ssh-agent program.  Through use of environment variables the agent can be located and automatically used for authentication when logging in to other machines using ssh(1).
+
+     The agent initially does not have any private keys.  Keys are added using ssh(1) (see AddKeysToAgent in ssh_config(5) for details) or ssh-add(1).  Multiple identities may be stored in ssh-agent concurrently and ssh(1) will automatically use them if present.  ssh-add(1) is also used to remove keys from ssh-agent and to query the keys that are held in one.
+</code></pre></div></div>
+
+<p>Next, <code class="highlighter-rouge">ssh-keyscan -H $DROPLET_IP &gt;&gt; ~/.ssh/known_hosts</code> tells our SSH agent about our Droplet so that it doesn’t prompt us with a <code class="highlighter-rouge">Do you want to add this server to known hosts? (yes/no)</code>, or whatever the equivalent of that is for the docker CLI when it attempts to connect to a remote docker daemon over SSH.</p>
+
+<p>Finally, we login to our our GitLab private registry using the same command from before when we built and pushed images to our private registry on gitlab.com:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+</code></pre></div></div>
+
+<p>This essentially gives our DigitalOcean Droplet access to the <code class="highlighter-rouge">backend</code> and <code class="highlighter-rouge">nginx</code> images in our private GitLab CI image registry, even tho we are running this command in a contain, in a container that is probably running in Kubernetes on GCP. Next, we are actually going to use these images.</p>
+
+<p>The last command in the <code class="highlighter-rouge">deploy-digital-ocean</code> job is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stack deploy -c stack.yml my-stack --with-registry-auth
+</code></pre></div></div>
+
+<p>Check out this link from the docker docs on docker stacks <a href="https://docs.docker.com/engine/swarm/stack-deploy/">https://docs.docker.com/engine/swarm/stack-deploy/</a>. <code class="highlighter-rouge">--with-registry-auth</code> is important, our command will complete if this is not included, but our application won’t start.</p>
+
+<h2 id="stackyml"><code class="highlighter-rouge">stack.yml</code></h2>
+
+<p>Now we are ready to tackle the last big file in our repo: <code class="highlighter-rouge">stack.yml</code>. This is a the docker-compose file that we use to deploy our project. The only reason we needed to run <code class="highlighter-rouge">docker login</code> above is because <code class="highlighter-rouge">stack.yml</code> references the two images we built and pushed to our GitLab private repo. There’s a lot going on in this file, let’s start with the <code class="highlighter-rouge">backend</code> service:</p>
+
+<h3 id="backend">backend</h3>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.4"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">backend</span><span class="pi">:</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s">${CI_REGISTRY_IMAGE}/backend:${CI_COMMIT_SHORT_SHA}</span>
+  <span class="na">networks</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">main</span>
+  <span class="na">environment</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">POSTGRES_PASSWORD</span>
+    <span class="pi">-</span> <span class="s">SECRET_KEY</span>
+    <span class="pi">-</span> <span class="s">DEBUG</span>
+  <span class="na">volumes</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">backendassets:/code/assets</span>
+  <span class="na">depends_on</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">postgres</span>
+    <span class="pi">-</span> <span class="s">redis</span>
+    <span class="pi">-</span> <span class="s">web</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">image</code> is essentially what we defined in <code class="highlighter-rouge">.gitlab-ci.yml</code>, but the syntax is slightly different:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>${CI_REGISTRY_IMAGE}/backend:${CI_COMMIT_SHORT_SHA}
+</code></pre></div></div>
+
+<p>We pass environment variables that we defined in GitLab CI via the <code class="highlighter-rouge">environment</code> key.</p>
+
+<p>The volume <code class="highlighter-rouge">backendassets</code> is used for storing static assets (CSS, JS, etc.) as well as media assets (images, videos, any other file type). We mount this directory at <code class="highlighter-rouge">/code/assets</code> and then define our <code class="highlighter-rouge">STATIC_ROOT</code> in Django’s <code class="highlighter-rouge">settings.py</code> to be:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"assets"</span><span class="p">,</span> <span class="s">"static"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Later, when we run <code class="highlighter-rouge">collectstatic</code>, files are copied to this location in our container, and since this is the location of the volume, the files are actually copied to the volume and will be persisted if we destroy the backend container and restart it. When the container restarts, the volume is mounted again and the static files will still be available to our application.</p>
+
+<p><code class="highlighter-rouge">network</code> and <code class="highlighter-rouge">depends_on</code> related to to the other services that this application will communicate with. <code class="highlighter-rouge">main</code> is a network defined in the <code class="highlighter-rouge">networks</code> part of <code class="highlighter-rouge">stack.yml</code>, notice that we reference the <code class="highlighter-rouge">traefik-public</code> network here that we created earlier, as well.</p>
+
+<blockquote>
+  <p>Depends on helps with service startup order, but it is a better practice to use <code class="highlighter-rouge">./wait-for-it.sh</code>. However, I have never had any issues related to startup order. I’ll try adding this later to make things more robust.</p>
+</blockquote>
+
+<p><code class="highlighter-rouge">postgres</code> and <code class="highlighter-rouge">redis</code> will start before <code class="highlighter-rouge">backend</code>. Our Django application will communicate to these services by their hostnames: <code class="highlighter-rouge">postgres</code> and <code class="highlighter-rouge">redis</code>. The fact that <code class="highlighter-rouge">backend</code>, <code class="highlighter-rouge">postgres</code> and <code class="highlighter-rouge">redis</code> are all on the same network (<code class="highlighter-rouge">main</code>) means that they can resolve each other by these names. For example, the connection string to redis will look like: <code class="highlighter-rouge">redis://redis:6379</code>. Let’s look at the <code class="highlighter-rouge">DATABASES</code> configuration in <code class="highlighter-rouge">settings.py</code> to see how we connect to Postgres:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"default"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"ENGINE"</span><span class="p">:</span> <span class="s">"django.db.backends.postgresql_psycopg2"</span><span class="p">,</span>
+        <span class="s">"NAME"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"POSTGRES_NAME"</span><span class="p">,</span> <span class="s">"postgres"</span><span class="p">),</span>
+        <span class="s">"USER"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"POSTGRES_USERNAME"</span><span class="p">,</span> <span class="s">"postgres"</span><span class="p">),</span>
+        <span class="s">"PASSWORD"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"POSTGRES_PASSWORD"</span><span class="p">,</span> <span class="s">"postgres"</span><span class="p">),</span>
+        <span class="s">"HOST"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"POSTGRES_SERVICE_HOST"</span><span class="p">,</span> <span class="s">"postgres"</span><span class="p">),</span>
+        <span class="s">"PORT"</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"POSTGRES_SERVICE_PORT"</span><span class="p">,</span> <span class="mi">5432</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I have defined the <code class="highlighter-rouge">HOST</code> to be based on the environment variable <code class="highlighter-rouge">POSTGRES_HOST</code>, but I have not defined this environment variable, so why didn’t I just say <code class="highlighter-rouge">"HOST": "postgres"</code>? I could have, but if I want to change the database in the future, the only change will be adding an environment variable; I won’t have to worry about hardcoded values.</p>
+
+<p>I’m choosing to run Postgres in a container and not use a managed database (which DigitalOcean does offer) in order to save on costs and also to get more practice managing my own database. I use RDS with AWS and it handles a lot of things that I don’t have to worry about, such as backups, and it allows me to quickly restore from a snapshot. I’m interested in learning more about how I can do these tasks with a database that I run myself.</p>
+
+<h3 id="nginx">NGINX</h3>
+
+<p>The next service we should go over is <code class="highlighter-rouge">web</code>, the service that runs the NGINX container that we pushed to our private GitLab image registry. This service has a couple of functions that I’ll walk through:</p>
+
+<ol>
+  <li>Reverse proxy</li>
+  <li>Serve static files for Django</li>
+  <li>Serve a frontend Javascript application</li>
+</ol>
+
+<p>Here’s the definition of this service in <code class="highlighter-rouge">stack.yml</code>:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">web</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">${CI_REGISTRY_IMAGE}/nginx:${CI_COMMIT_SHORT_SHA}</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">traefik-public</span>
+      <span class="pi">-</span> <span class="s">main</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">backendassets:/usr/src/app/assets</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.enable=true"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.routers.nginx-web.rule=Host(`mysite.com`)"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.routers.nginx-web.entrypoints=websecure"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver"</span>
+        <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.services.nginx-web.loadbalancer.server.port=80"</span>
+</code></pre></div></div>
+
+<p>For now, ignore the contents under the <code class="highlighter-rouge">deploy</code> key; we will cover this next when we go over the <code class="highlighter-rouge">traefik</code> service.</p>
+
+<p>NGINX acts as a reverse proxy when it sends request starting with <code class="highlighter-rouge">/api</code> or <code class="highlighter-rouge">/admin</code> to the <code class="highlighter-rouge">backend</code> container. Two blocks in <code class="highlighter-rouge">prod.conf</code> enable this behavior:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  upstream backend {
+    server backend:8000;
+  }
+</code></pre></div></div>
+
+<p>This hostname <code class="highlighter-rouge">backend</code> is defined as <code class="highlighter-rouge">backend:8000</code>. <code class="highlighter-rouge">backend:8000</code> can be resolved by the <code class="highlighter-rouge">web</code> service because it is on the same <code class="highlighter-rouge">main</code> network that <code class="highlighter-rouge">backend</code> is on. If either of the <code class="highlighter-rouge">web</code> or <code class="highlighter-rouge">backend</code> wasn’t on the <code class="highlighter-rouge">main</code> network, NGINX would not be able to make sense of <code class="highlighter-rouge">backend:8000</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    # backend urls
+    location ~ ^/(admin|api) {
+      proxy_redirect off;
+      proxy_pass http://backend;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+    }
+</code></pre></div></div>
+
+<p>This block does that actual request forwarding. <code class="highlighter-rouge">http://backend</code> references the <code class="highlighter-rouge">upstream backend {}</code> block defined above.</p>
+
+<p>The volume <code class="highlighter-rouge">backendassets</code> is referenced here and mounts to <code class="highlighter-rouge">/usr/src/app/assets</code>. This path is then referenced in <code class="highlighter-rouge">prod.conf</code>, the NGINX configuration file that is used in our custom NGINX-based image:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    # static files
+    location /static {
+      autoindex on;
+      alias /usr/src/app/assets/static;
+    }
+</code></pre></div></div>
+
+<p>In this block of <code class="highlighter-rouge">prod.conf</code>, we tell NGINX to serve files from <code class="highlighter-rouge">/usr/src/app/assets/static</code> for requests that start with <code class="highlighter-rouge">/static</code>. A request made to <code class="highlighter-rouge">https://mysite.com/static/base.css</code> would return a file located at <code class="highlighter-rouge">/usr/src/app/assets/static</code> if that file existed. Remember, when we run the <code class="highlighter-rouge">collecstatic</code> management command in our Django container, it will collect our static files to <code class="highlighter-rouge">backendassets</code>. Since <code class="highlighter-rouge">backendassets</code> is mounted to the <code class="highlighter-rouge">web</code> service at <code class="highlighter-rouge">/usr/src/app/assets</code>, NGINX will have access to these files by way of the volume mount and they will persist across restarts of the web service and its NGINX container.</p>
+
+<p>Finally, NGINX can serve a Javascript SPA or similar if we choose to use one in our project. To understand how this is done, we need to understand multistage Dockerfiles. Here’s the Dockerfile used for the <code class="highlighter-rouge">nginx</code> container:</p>
+
+<pre><code class="language-Dockerfile"># # build stage
+# FROM node:10-alpine as build-stage
+# WORKDIR /app/
+# COPY frontend/package.json /app/
+# RUN npm cache verify
+# RUN npm install
+# COPY frontend /app/
+# RUN npm run build
+
+# production stage
+# FROM nginx:1.19.1-alpine as production-stage
+FROM nginx:1.19.1-alpine
+COPY nginx/prod/prod.conf /etc/nginx/nginx.conf
+COPY nginx/prod/index.html /dist/
+# COPY --from=build-stage /app/dist /dist/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+</code></pre>
+
+<p>Currently I don’t have a SPA setup, but this is how we could setup one using Vue.js. The important part is this line:</p>
+
+<pre><code class="language-Dockerfile">COPY --from=build-stage /app/dist /dist/
+</code></pre>
+
+<p>This would copy the build files for our Javascript application into the <code class="highlighter-rouge">/dist/</code> folder of our NGINX container. Another few declarations and blocks in <code class="highlighter-rouge">prod.conf</code> allow all other requests to be served by the contents of this folder:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    root /dist/;
+    index index.html;
+</code></pre></div></div>
+
+<p>This sets the root and the index document for our NGINX webserver.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    # frontend
+    location / {
+      try_files $uri $uri/ @rewrites;
+    }
+
+    location @rewrites {
+      rewrite ^(.+)$ /index.html last;
+    }
+</code></pre></div></div>
+
+<p>These two blocks route all other requests to the frontend Javascript app’s <code class="highlighter-rouge">index.html</code> file location in <code class="highlighter-rouge">/dist/</code> (any request that doesn’t start with <code class="highlighter-rouge">/static</code>, <code class="highlighter-rouge">/api</code> or <code class="highlighter-rouge">/admin</code>). We may wish to change this behavior if you want Django to serve most of your requests and possibly serve a single page application on another path.</p>
+
+<p>Lastly, the <code class="highlighter-rouge">web</code> service’s <code class="highlighter-rouge">deployment</code> key has some <code class="highlighter-rouge">labels</code> defined for Traefik. Let’s come back to these after having a look at the <code class="highlighter-rouge">traefik</code> service.</p>
+
+<h3 id="traefik">Traefik</h3>
+
+<p><img src="https://docs.traefik.io/assets/img/traefik-architecture.png" alt="png" /></p>
+
+<blockquote>
+  <p>Traefik is an open-source Edge Router that makes publishing your services a fun and easy experience. It receives requests on behalf of your system and finds out which components are responsible for handling them. – <a href="https://docs.traefik.io/">https://docs.traefik.io/</a></p>
+</blockquote>
+
+<p>Traefik has three main functions in my application:</p>
+
+<ol>
+  <li>Request TLS certificates from Let’s Encrypt that allow us to encrypt our web traffic with HTTPS</li>
+  <li>Do TLS termination</li>
+  <li>Route all requests to NGINX</li>
+</ol>
+
+<p>The one thing that Traefik cannot do is serve static files; it is not a webserver, unlike NGINX which is a webserver. NGINX is also capable of requesting TLS certs from Let’s Encrypt, so we don’t technically need Traefik, but it is indeed “fun and easy”, especially when it comes to requesting certificates.</p>
+
+<blockquote>
+  <p>I have tried setting up Certbot with NGINX a long time ago but I never go it to work, and I didn’t like the idea about how to run a chron job to refresh old certs.</p>
+</blockquote>
+
+<p>There are two main ways to set up Traefik:</p>
+
+<ol>
+  <li>write a <code class="highlighter-rouge">traefik.toml</code> file and build this into your own custom image (similar to what we do with NGINX and <code class="highlighter-rouge">prod.conf</code>)</li>
+  <li>use a base image and specify all configure options through command line arguments.</li>
+</ol>
+
+<p>I started out with the first approach, and I did get it to work, but I have decided that the second way is better. It requires one less image to build in our deployment process and it is easy to parametrize the command line arguments in <code class="highlighter-rouge">stack.yml</code> (for now all the values I’m using in the <code class="highlighter-rouge">traefik</code> service are hard-coded, this is one more item for my ToDo list on this project).</p>
+
+<p>I had a hard time finding good examples of how to use Traefik version 2 with Docker Swarm in the Traefik docs. Their official example for using docker uses <code class="highlighter-rouge">docker-compose up</code>. There is a Swarm example, but it is for an older version of Traefik (1.7). This article titled <a href="https://blog.creekorful.com/2019/10/how-to-install-traefik-2-docker-swarm/">How to install Traefik 2.x on a Docker Swarm</a> helped me a lot in figuring out how to get everything working. Thank you for the great article, <a href="https://github.com/creekorful">Aloïs</a>!</p>
+
+<p>Here’s the code that sets up the traefik service:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">traefik</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">traefik:v2.0.2</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">80:80"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">443:443"</span>
+    <span class="na">command</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--providers.docker.endpoint=unix:///var/run/docker.sock"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--providers.docker.swarmMode=true"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--providers.docker.exposedbydefault=false"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--providers.docker.network=traefik-public"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--entrypoints.web.address=:80"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--entrypoints.websecure.address=:443"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--certificatesresolvers.letsencryptresolver.acme.email=brian@email.com"</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">letsencrypt:/letsencrypt</span>
+      <span class="pi">-</span> <span class="s">/var/run/docker.sock:/var/run/docker.sock</span>
+    <span class="na">networks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">traefik-public</span>
+    <span class="na">deploy</span><span class="pi">:</span>
+      <span class="na">placement</span><span class="pi">:</span>
+        <span class="na">constraints</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="s">node.role == manager</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>The one thing I don’t like about this setup is that it uses a 1GB volume to store one small JSON file. I think that 1GB is the smallest block storage volume I can request using REX-Ray. This only adds $0.10/month to our project costs which is not that bad.</p>
+</blockquote>
+
+<p><code class="highlighter-rouge">web</code> and <code class="highlighter-rouge">websecure</code> refer to values declared on the <code class="highlighter-rouge">web</code> service. Let’s take a look at those values:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">deploy</span><span class="pi">:</span>
+  <span class="na">labels</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.enable=true"</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.routers.nginx-web.rule=Host(`mysite.com`)"</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.routers.nginx-web.entrypoints=websecure"</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver"</span>
+    <span class="pi">-</span> <span class="s2">"</span><span class="s">traefik.http.services.nginx-web.loadbalancer.server.port=80"</span>
+</code></pre></div></div>
+
+<p>I still need to setup HTTP -&gt; HTTPS redirecting, so for now only <code class="highlighter-rouge">websecure</code> is defined, but Aloïs explains this clearly in his article.</p>
+
+<blockquote>
+  <p>For me this is the most complicated part of the setup. I’m still not familiar with exactly how Traefik and Let’s Encrypt work. Hopefully I can run through this process a few more times with some variations to better understand the rough edges. Otherwise for this simple way to get TLS certificates. AWS makes this very easy with Amazon Certificate Manager (ACM) which makes the requesting of certificates very simple, especially within CDK.</p>
+</blockquote>
+
+<p>That wraps up our overview of <code class="highlighter-rouge">stack.yml</code>, we left off with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stack deploy -c stack.yml my-stack --with-registry-auth
+</code></pre></div></div>
+
+<p>We can check out the status of our docker stack deployment by running a few different docker CLI commands. You can either SSH into your Droplet or configure the <code class="highlighter-rouge">DOCKER_HOST</code> environment variable that I showed you earlier and run these commands from your local terminal:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker stack ps my-stack --no-trunc
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">--no-trunc</code> is important because important error messages tend to be cut off. This option will show the full version of each column returned by <code class="highlighter-rouge">docker stack ps</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker service ls
+</code></pre></div></div>
+
+<p>This command shows some the active services on our Droplet.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps
+</code></pre></div></div>
+
+<p>This command is useful for shelling into a container to run commands and poke around for debugging.</p>
+
+<p>You can get the Container ID of a running container and access it with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker exec -it 0da8370ab283 bash
+</code></pre></div></div>
+
+<p>This assumes that <code class="highlighter-rouge">bash</code> is installed on the container with ID <code class="highlighter-rouge">0da8370ab283</code>.</p>
+
+<h2 id="management-commands">Management commands</h2>
+
+<p>Once the site is deployed we stil need to run a few commands to set up our Djnago application:</p>
+
+<ol>
+  <li>collectstatic</li>
+  <li>migrate</li>
+  <li>createsuperuser</li>
+</ol>
+
+<blockquote>
+  <p>One other ToDo is to figure out how to run these commands through manual GitLab CI jobs.</p>
+</blockquote>
+
+<p>That’s most of what I wanted to cover on a first pass. This should be a good starting point for working with a Django application in Docker Swarm on DigitalOcean.</p>
+
+<h2 id="next-steps">Next steps</h2>
+
+<p>Here are some ideas about the next steps I could take on this project.</p>
+
+<h3 id="local-environment">Local environment</h3>
+
+<p>I’ll probably need to create another docker-compose file to bring up everything locally. It might be a good way to experiment with different Traefik settings.</p>
+
+<h3 id="infrastructure-as-code-setup">Infrastructure as Code setup</h3>
+
+<p>There might be a good opportunity to learn more about Terreform or Ansible here. There are a number of manual, one time setup steps. Some of these can’t be automated, but some of them would probably fit very neatly into one of these tools. Pulumi would also be a good option to explore as it is more analagous to CDK.</p>
+
+<h3 id="scaling-out-docker-swarm-services-across-multiple-machines">Scaling out docker swarm services across multiple machines</h3>
+
+<p>I have only scratched the surface of what docker swarm can do. There are lots of other settings that would be helpful to setup for learning purposes, especially around resource limits for services. For simplicity I haven’t touch on any of these options yet. I’m curious to know how many containers I can fit onto one small Droplet, and if resource limits could help with compute and memory-intensive workloads.</p>
+
+<h3 id="kubernetes-on-digitalocean">Kubernetes on DigitalOcean</h3>
+
+<p>DigitalOcean now offers simplified Kubernetes solutions. It would be interesting to try this out once I get better with docker swarm. I have used Kubernetes a with minikube and to a limited extent with GCP.</p>
+
+<h3 id="deploying-locally-without-using-gitlab-ci">Deploying locally, without using GitLab CI</h3>
+
+<p>CDK makes deploying locally very easy, especially with the Lambda project I put together. This project as it stands might be a little bit more difficult to deploy locally. It assumes that the images we want to deploy are private. It might be possible, but for now I am fine with deploying through GitLab CI since the pipeline only takes a few minutes to complete for the build and deploy stages.</p>
+
+  </div>
+
+<!-- Add Disqus comments. -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'briancaffey'; // required: replace example with your forum shortname
+  var disqus_identifier = "/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html";
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Brian Caffey</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Brian Caffey</li>
+          <li><a href="mailto:briancaffey2010@gmail.com">briancaffey2010@gmail.com</a></li>
+          <li><a href="https://briancaffey.github.io">briancaffey.github.io</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/briancaffey">
+    <span class="purple-icon icon--github">
+        <svg viewBox="0 0 16 16">
+    <path fill="#6e5494" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://gitlab.com/briancaffey">
+    <span class="gitlab-fox">
+        
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="210px" height="194px" viewBox="0 0 210 194" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Fill-1-+-Group-24" sketch:type="MSLayerGroup">
+            <g id="Group-24" sketch:type="MSShapeGroup">
+                <g id="Group">
+                    <path d="M105.0614,193.655 L105.0614,193.655 L143.7014,74.734 L66.4214,74.734 L105.0614,193.655 L105.0614,193.655 Z" id="Fill-4" fill="#E24329"></path>
+                    <path id="Fill-6" fill="#FC6D26"></path>
+                    <path d="M105.0614,193.6548 L66.4214,74.7338 L12.2684,74.7338 L105.0614,193.6548 Z" id="Fill-8" fill="#FC6D26"></path>
+                    <path id="Fill-10" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7341 L12.2685,74.7341 L0.5265,110.8731 C-0.5445,114.1691 0.6285,117.7801 3.4325,119.8171 L105.0615,193.6551 L12.2685,74.7341 Z" id="Fill-12" fill="#FCA326"></path>
+                    <path id="Fill-14" fill="#FC6D26"></path>
+                    <path d="M12.2685,74.7342 L66.4215,74.7342 L43.1485,3.1092 C41.9515,-0.5768 36.7375,-0.5758 35.5405,3.1092 L12.2685,74.7342 Z" id="Fill-16" fill="#E24329"></path>
+                    <path d="M105.0614,193.6548 L143.7014,74.7338 L197.8544,74.7338 L105.0614,193.6548 Z" id="Fill-18" fill="#FC6D26"></path>
+                    <path d="M197.8544,74.7341 L197.8544,74.7341 L209.5964,110.8731 C210.6674,114.1691 209.4944,117.7801 206.6904,119.8171 L105.0614,193.6551 L197.8544,74.7341 Z" id="Fill-20" fill="#FCA326"></path>
+                    <path d="M197.8544,74.7342 L143.7014,74.7342 L166.9744,3.1092 C168.1714,-0.5768 173.3854,-0.5758 174.5824,3.1092 L197.8544,74.7342 Z" id="Fill-22" fill="#E24329"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+          
+          <li>
+            <a href="https://twitter.com/briancaffey"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#00aced" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">briancaffey</span></a>
+
+          </li>
+          
+          
+          <li>
+                <a href="https://www.linkedin.com/in/brian-caffey-06b22a18">
+      <span class="icon  icon--linkedin">
+        <svg viewBox="0 50 512 512" >
+          <path fill="#828282" d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683
+          C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z
+          M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615
+          c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915
+          s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z"/>
+        </svg>
+      </span>
+  
+      <span class="username">Brian Caffey</span>
+    </a>
+          </li>
+          
+          
+          <li>
+            <a href="https://stackoverflow.com/users/6084948/briancaffey">
+    <span class="so-icon icon--github">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 120 120" style="enable-background:new 0 0 120 120;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#BCBBBB;}
+	.st1{fill:#F48023;}
+</style>
+<polygon class="st0" points="84.4,93.8 84.4,70.6 92.1,70.6 92.1,101.5 22.6,101.5 22.6,70.6 30.3,70.6 30.3,93.8 "/>
+<path class="st1" d="M38.8,68.4l37.8,7.9l1.6-7.6l-37.8-7.9L38.8,68.4z M43.8,50.4l35,16.3l3.2-7l-35-16.4L43.8,50.4z M53.5,33.2
+	l29.7,24.7l4.9-5.9L58.4,27.3L53.5,33.2z M72.7,14.9l-6.2,4.6l23,31l6.2-4.6L72.7,14.9z M38,86h38.6v-7.7H38V86z"/>
+</svg>
+
+    </span>
+    <span class="username">
+        briancaffey
+    </span>
+</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

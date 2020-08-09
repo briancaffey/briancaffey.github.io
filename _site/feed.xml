@@ -5,9 +5,596 @@
     <description></description>
     <link>https://briancaffey.github.io/</link>
     <atom:link href="https://briancaffey.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 01 Aug 2020 11:19:02 -0400</pubDate>
-    <lastBuildDate>Sat, 01 Aug 2020 11:19:02 -0400</lastBuildDate>
+    <pubDate>Sun, 09 Aug 2020 16:01:02 -0400</pubDate>
+    <lastBuildDate>Sun, 09 Aug 2020 16:01:02 -0400</lastBuildDate>
     <generator>Jekyll v3.1.6</generator>
+    
+      <item>
+        <title>Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray</title>
+        <description>&lt;h1 id=&quot;deploying-django-applications-with-docker-swarm-on-digitalocean-using-gitlab-ci-traefik-nginx-and-rex-ray&quot;&gt;Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray&lt;/h1&gt;
+
+&lt;p&gt;I recently wrote two articles about deploying Django applications to AWS serverless environments: one on &lt;a href=&quot;https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html&quot;&gt;AWS Fargate&lt;/a&gt; (CloudFront, ALB and ECS Fargate containers) and one on &lt;a href=&quot;https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway.html&quot;&gt;AWS Lambda&lt;/a&gt; (Lambda + API Gateway, without using Zappa or Serverless Framework). Both projects focused on automating as much of the setup and operation as possible using DevOps patterns: Infrastructure as Code, GitOps, CI/CD and docker containers. I used AWS resources exclusively (with the exception of GitLab) with the help of &lt;a href=&quot;https://aws.amazon.com/cdk/&quot;&gt;AWS Cloud Development Kit (CDK)&lt;/a&gt;, an awesome tool that I have really come to like. In general I really like AWS, and the more I use it I start to think about what I would do without it. Also, a lot of the feedback I got on these projects recommended to “just use a VPS” instead of bothering with AWS because it is complicated, expensive, overkill, etc. This got me thinking about how far I could get in deploying a Django application on a server with little or no external services that AWS has spoiled me with. After a little bit of discomfort and confusion, I was able to check off most of what I was hoping to and came away with a few questions as well. If you are interested to know how I got things setup and and hear some of my thoughts on running Django applications in production, continue reading!&lt;/p&gt;
+
+&lt;p&gt;In this article, I’m going to go over my approach to deploying and running Django applications using DigitalOcean Droplets (Linux-based virtual machine that runs on top of virtualized hardware) and block storage volumes (network-based block devices that provide additional data storage for Droplets).&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;I’ll also touch on trade-offs between DigitalOcean and AWS and emphasize aspects of the project that confuse/d me with these block quotes.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Here’s a link to my project that I’ll be referencing: &lt;a href=&quot;https://gitlab.com/briancaffey/digital-ocean-docker-swarm-django-traefik&quot;&gt;https://gitlab.com/briancaffey/digital-ocean-docker-swarm-django-traefik&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The project setup is a combination of some of the best practices I have picked up along the way as well as some very helpful guides, repositories and blog posts that I’ll do my best to reference throughout this article.&lt;/p&gt;
+
+&lt;h2 id=&quot;overview&quot;&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;Here are some of the key parts of the project that I’ll go over:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;DigitalOcean and GitLab setup&lt;/li&gt;
+  &lt;li&gt;Creating an A Record that points to our Droplet IP&lt;/li&gt;
+  &lt;li&gt;Using a prebuilt VM image that ships with docker and docker-compose&lt;/li&gt;
+  &lt;li&gt;Setting up the REX-Ray storage driver to automatically provision Digital Ocean block storage volumes&lt;/li&gt;
+  &lt;li&gt;Setting up a docker swarm cluster&lt;/li&gt;
+  &lt;li&gt;Setting up a &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitlab-ci.yml&lt;/code&gt; file to build images and push them to a private GitLab CI project registry&lt;/li&gt;
+  &lt;li&gt;Writing a docker-compose file to configure the services (containers) that will support the application&lt;/li&gt;
+  &lt;li&gt;Deploying a stack to the docker swarm cluster on DigitalOcean from our GitLab CI environment over SSH&lt;/li&gt;
+  &lt;li&gt;Django project settings and management commands for our Postgres database and static files&lt;/li&gt;
+  &lt;li&gt;Monitoring, logging and debugging&lt;/li&gt;
+  &lt;li&gt;Destroying the environment + cleanup&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Before I dig into all of this, I recommend that you check out &lt;a href=&quot;https://mattsegal.dev/django-prod-architectures.html&quot;&gt;this article about Django production architectures by Matt Segal&lt;/a&gt;. This is a great primer for a lot of what I’ll be talking about and it includes some great visualizations. &lt;a href=&quot;https://mattsegal.dev&quot;&gt;mattsegal.dev&lt;/a&gt; has lots of good content related to Django, I also recommend checking out &lt;a href=&quot;https://mattsegal.dev/nginx-django-reverse-proxy-config.html&quot;&gt;this article about how NGINX is used with Django&lt;/a&gt;. Thanks for the great resources, Matt!&lt;/p&gt;
+
+&lt;h2 id=&quot;digitalocean-setup&quot;&gt;DigitalOcean setup&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Sign up for a new DigitalOcean account if you don’t already have one&lt;/li&gt;
+  &lt;li&gt;Create a DigitalOcean project &lt;a href=&quot;https://cloud.digitalocean.com/projects/new&quot;&gt;https://cloud.digitalocean.com/projects/new&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Create a personal access token (we will use this to configure a docker addon that will provision block storage volumes automatically) &lt;a href=&quot;https://cloud.digitalocean.com/account/api/tokens&quot;&gt;https://cloud.digitalocean.com/account/api/tokens&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Create and add an SSH key to your account. This is a pretty simple step, but DigitalOcean still has really thorough documentation on how to do this (see &lt;a href=&quot;https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/&quot;&gt;this article&lt;/a&gt; for more information)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;prebuilt-docker-vm-image&quot;&gt;Prebuilt Docker VM image&lt;/h2&gt;
+
+&lt;p&gt;From the &lt;a href=&quot;https://cloud.digitalocean.com/droplets/new&quot;&gt;Create Droplets&lt;/a&gt; page, select &lt;code class=&quot;highlighter-rouge&quot;&gt;Marketplace&lt;/code&gt; and search for &lt;code class=&quot;highlighter-rouge&quot;&gt;docker&lt;/code&gt;. Select the &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker 5:19.03.1~3 18.04&lt;/code&gt; image. Note that this VM is Ubuntun 18.04 with Docker Community Edition and docker-compose pre-installed.&lt;/p&gt;
+
+&lt;p&gt;Select the basic plan, and then scroll to the left to choose the $5.00/month option. Select a datacenter region. Most of these regions should be OK, but you should verify that the region you have selected supports volumes (they may all support volumes, but there are some DO features that are not supported accross all regiongs, similar to AWS). Do not select a VPC or any of the additional options.&lt;/p&gt;
+
+&lt;p&gt;For Authentication, select the SSH key that you created earlier.&lt;/p&gt;
+
+&lt;p&gt;Take note of the Droplet’s IP address; we will use this in the next step.&lt;/p&gt;
+
+&lt;h2 id=&quot;gitlab-setup&quot;&gt;GitLab setup&lt;/h2&gt;
+
+&lt;p&gt;Create a new GitLab project and clone it locally. You can also clone or fork my project and use that as a starting point. Go to &lt;code class=&quot;highlighter-rouge&quot;&gt;Settings &amp;gt; CI/CD &amp;gt; Variables&lt;/code&gt; in your GitLab project and add the following environment variables:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SSH_PRIVATE_KEY&lt;/code&gt;: the value should start with &lt;code class=&quot;highlighter-rouge&quot;&gt;-----BEGIN RSA PRIVATE KEY-----&lt;/code&gt; and end with &lt;code class=&quot;highlighter-rouge&quot;&gt;-----END RSA PRIVATE KEY-----&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;DROPLET_IP&lt;/code&gt;: the IP address of the droplet you just created&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;POSTGRES_PASSWORD&lt;/code&gt;: a secure password that we will use for our Postgres database (we will share this with our Django application later on)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SECRET_KEY&lt;/code&gt;: a random secret key to use for our Django application.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;DEBUG&lt;/code&gt;: the number &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;a-record&quot;&gt;A Record&lt;/h2&gt;
+
+&lt;p&gt;By the end of this project you will be able to deploy your Django application to a live domain name provided that you have one. All you need to do is create an A Record that points to the Droplet IP. There are no DNS configuration changes to make inside of DigitalOcean. I’m using a domain that I purchased through Route53. You can get a free &lt;code class=&quot;highlighter-rouge&quot;&gt;.tk&lt;/code&gt; domain from &lt;a href=&quot;https://www.freenom.com/en/freeandpaiddomains.html&quot;&gt;freenom&lt;/a&gt;. I have used this before and it is a great option for testing things out.&lt;/p&gt;
+
+&lt;h2 id=&quot;ssh-into-your-digitalocean-droplet&quot;&gt;SSH into your DigitalOcean Droplet&lt;/h2&gt;
+
+&lt;p&gt;You can do this with the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh -i ~/.ssh/a1_rsa root@123.45.578.91
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;a1_rsa&lt;/code&gt; is the private key I added to GitHub. You can logout for now, but keep this command handy, because we will be coming back to our Droplet via SSH shortly.&lt;/p&gt;
+
+&lt;h2 id=&quot;add-the-rex-ray-docker-plugin&quot;&gt;Add the REX-Ray docker plugin&lt;/h2&gt;
+
+&lt;p&gt;This step is very simple, you can follow along with this short guide: &lt;a href=&quot;https://www.digitalocean.com/community/questions/how-to-attach-digitalocean-block-storage-to-docker-container&quot;&gt;https://www.digitalocean.com/community/questions/how-to-attach-digitalocean-block-storage-to-docker-container&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There is basically one command to run:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker plugin install rexray/dobs DOBS_TOKEN=YOUR_DIGITALOCEAN_TOKEN DOBS_REGION=nyc1 LINUX_VOLUME_FILEMODE=0775
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You will need to make sure that you replace &lt;code class=&quot;highlighter-rouge&quot;&gt;YOUR_DIGITALOCEAN_TOKEN&lt;/code&gt; with the personal access token you added earlier. Also, &lt;code class=&quot;highlighter-rouge&quot;&gt;DOBS_REGION&lt;/code&gt; should be the region you selected for your Droplet earlier.&lt;/p&gt;
+
+&lt;p&gt;Check that the plugin was installed correctly with:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker plugin ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here’s a quick intro to REX-Ray from &lt;a href=&quot;https://rexray.readthedocs.io/en/stable/&quot;&gt;rexray.readthedocs.io&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;REX-Ray is an open source, storage management solution designed to support container runtimes such as Docker and Mesos. REX-Ray enables stateful applications, such as databases, to persist and maintain its data after the life cycle of the container has ended. Built-in high availability enables orchestrators such as Docker Swarm, Kubernetes, and Mesos Frameworks like Marathon to automatically orchestrate storage tasks between hosts in a cluster.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In the context of this project, REX-Ray will automate the creation of DigitalOcean Block Storage Volumes. We will talk about volumes and how they are used later on in this article.&lt;/p&gt;
+
+&lt;h2 id=&quot;gitlab-ciyml&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.gitlab-ci.yml&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.gitlab-ci.yml&lt;/code&gt; is a file that configures pipelines when code is pushed to GitLab, similar to how GitHub Actions work with GitHub. This single file is a huge topic, if you are unfamiliar with GitLab CI, you might want to have a look over &lt;a href=&quot;https://docs.gitlab.com/ee/ci/yaml/&quot;&gt;this page from the GitLab documentation&lt;/a&gt; which goes over all of the configuration options with many examples. Also, &lt;a href=&quot;https://docs.gitlab.com/ee/ci/variables/predefined_variables.html&quot;&gt;this documentation page&lt;/a&gt; covers the predefined environment variables that are made available to GitLab CI pipelines. I’m using these in a few different places as we will see shortly.&lt;/p&gt;
+
+&lt;p&gt;CI/CD pipelines that I define with &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitlab-ci.yml&lt;/code&gt; typically contain three stages: &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy&lt;/code&gt;. We will focus on the &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy&lt;/code&gt; stages for now (reference the article on my Fargate project linked above for reference on setting up unit tests with pytest).&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;build-backend&lt;/code&gt; is the name of a GitLab CI job that builds and tags a docker image from the source code in the &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; directory of this project and pushes the tagged container image to a private image registry on gitlab.com that we will use later.&lt;/p&gt;
+
+&lt;p&gt;Here’s the YAML code for &lt;code class=&quot;highlighter-rouge&quot;&gt;build-backend&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;build-backend&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;build&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker:19.03.1&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker:19.03.5-dind&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;before_script&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;|&lt;/span&gt;
+      &lt;span class=&quot;no&quot;&gt;docker build \&lt;/span&gt;
+        &lt;span class=&quot;no&quot;&gt;-t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA \&lt;/span&gt;
+        &lt;span class=&quot;no&quot;&gt;-f backend/docker/Dockerfile.prod \&lt;/span&gt;
+        &lt;span class=&quot;no&quot;&gt;./backend/&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;build-nginx&lt;/code&gt; is almost identical, but the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt; arguments are slightly different. There are three arguments for the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command that I’m using here:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-t&lt;/code&gt;: the tag to tag the built image with&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-f&lt;/code&gt;: the Dockerfile to be used for building the image&lt;/li&gt;
+  &lt;li&gt;the &lt;code class=&quot;highlighter-rouge&quot;&gt;context&lt;/code&gt; that is sent to the docker daemon when we build the image&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-t&lt;/code&gt; makes use of two predefined GitLab CI variables: &lt;code class=&quot;highlighter-rouge&quot;&gt;CI_REGISTRY_IMAGE&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;CI_COMMIT_SHORT_SHA&lt;/code&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;$CI_REGISTRY_IMAGE&lt;/code&gt; is the URL for the private image registry on gitlab.com that we push our images to that is specific to our project: &lt;code class=&quot;highlighter-rouge&quot;&gt;registry.gitlab.com/&amp;lt;gitlab_username&amp;gt;/&amp;lt;project_name&amp;gt;&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;CI_COMMIT_SHORT_SHA&lt;/code&gt; is an character alphanumeric value that contains the truncated name of the commit hash, this is known as the &lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;, even though we pass in more than just this value. We combine these two values with &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt; and the name of the image we are building, such as &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt;, so the full value being passed to &lt;code class=&quot;highlighter-rouge&quot;&gt;-t&lt;/code&gt; is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;registry.gitlab.com/gitlab-username/my-project/backend:abcd1234
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-f&lt;/code&gt; is the path to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; we are using relative to the directory where we are running the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command, which is the root directory of the project.&lt;/p&gt;
+
+&lt;p&gt;The final argument defines the context that we are using to build the image, and this is an important part for understanding how Docker works. This argument defines the directory that is zipped up and sent to the docker daemon via the docker API. When we build an image with &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt;, we are essentially using the docker CLI to make a POST request to our docker daemon (server) where the POST data contains all of the files that we will have access to in the steps of the Dockerfile (such as &lt;code class=&quot;highlighter-rouge&quot;&gt;ADD&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;COPY&lt;/code&gt; – we will get to these soon). There’s a key difference between the &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt; commands: the context for &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt;, but the context for &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; (the root of the project). This is because we may want access to another top level directory in our project that contains, for example, a Vue.js or React application, that we will build into our NGINX container. In order to be able to access both files in the &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt; and the folder containing our frontend app, we need to send a context that contains both of these directories. Sending too many files to to the docker daemon when you run docker build will usually cause the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command to hang. The first line of output from a &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt; command should be something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Sending build context to Docker daemon  24.58kB
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If this number is too high, you should use a &lt;code class=&quot;highlighter-rouge&quot;&gt;.dockerignore&lt;/code&gt; file that ignores any files or directories you don’t want to send to the docker daemon (similar to how &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; works with git).&lt;/p&gt;
+
+&lt;p&gt;To be able to pull and push (read and write) images to our private project container image registry, we need login with our docker client using the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker login&lt;/code&gt; command in the &lt;code class=&quot;highlighter-rouge&quot;&gt;before_script&lt;/code&gt; as well two other predefined GitLab CI variables: &lt;code class=&quot;highlighter-rouge&quot;&gt;CI_JOB_TOKEN&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;CI_REGISTRY&lt;/code&gt;. This all happens using a special service called &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-in-docker&lt;/code&gt; which I won’t go into too much detail here, but it is a common practice when working with containers in a CI/CD environment that itself which is also based on containers, such as GitLab CI (each job runs in a container – the key &lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt; – and can define additional containers – the &lt;code class=&quot;highlighter-rouge&quot;&gt;services&lt;/code&gt; key – to help with the CI job). Once the two images for &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt; have been built and pushed, our GitLab CI pipeline moves on to the next stage: &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy&lt;/code&gt;. In the &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy&lt;/code&gt; stage, we will start these and other containers on our DigitalOcean droplet, so we are getting close, but there is a lot more to explain. Before we deploy our containers, we need to do some one-time setup:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;initialize a single-node docker swarm cluster on our Droplet and&lt;/li&gt;
+  &lt;li&gt;create a docker network that our cluster’s services (containers) will use&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;setup-a-docker-swarm-cluster&quot;&gt;Setup a docker swarm cluster&lt;/h2&gt;
+
+&lt;p&gt;To setup a docker swarm cluster, SSH into the Droplet with the command we introduced above (&lt;code class=&quot;highlighter-rouge&quot;&gt;ssh -i ~/.ssh/a1_rsa root@123.45.578.91&lt;/code&gt; where &lt;code class=&quot;highlighter-rouge&quot;&gt;a1_rsa&lt;/code&gt; is the name of the private key file – you can ignore the &lt;code class=&quot;highlighter-rouge&quot;&gt;-i ~/.ssh/a1_rsa&lt;/code&gt; part if you are using an SSH key called &lt;code class=&quot;highlighter-rouge&quot;&gt;id_rsa&lt;/code&gt;), and run the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker swarm init --advertise-addr DROPLET_IP
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Replace &lt;code class=&quot;highlighter-rouge&quot;&gt;DROPLET_IP&lt;/code&gt; with your Droplet’s IP address (e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;123.45.578.91&lt;/code&gt;). Check out &lt;a href=&quot;https://www.digitalocean.com/community/tutorials/how-to-create-a-cluster-of-docker-containers-with-docker-swarm-and-digitalocean-on-ubuntu-16-04&quot;&gt;this article&lt;/a&gt; for some additional information about using docker swarm on GitLab. It is a little bit outdated, but the main ideas should still hold up. Docker swarm is designed to orchestrate containers running on a group (or swarm) of multiple machines. However, it is perfectly fine to run a single-node cluster as we are doing here.&lt;/p&gt;
+
+&lt;p&gt;Docker swarm uses docker-compose files, but using docker swarm is very different from running &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt;, a command which you might see people running both locally and in production and which also uses docker-compose files. As a best practice, you should not be using &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; (the command) in production. Many people do this, and several official tutorials will often end with “now just run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt; and you are done”. The first time I ran containers in the cloud I pulled my git repo into a VM, installed docker and docker-compose and ran &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt;. It is pretty easy and it works very similarly in both local and production environments, but this guide will be using &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose&lt;/code&gt; in production. There is more I could say here, but the main point is that docker swarm is a simplified version of something like Kubernetes, but it comes built-in to docker and is very simple to use.&lt;/p&gt;
+
+&lt;h2 id=&quot;defining-an-overlay-network&quot;&gt;Defining an overlay network&lt;/h2&gt;
+
+&lt;p&gt;SSH into your droplet and run the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker network create --driver=overlay traefik-public
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Usually we define networks in our docker-compose file, but this network needs to be defined first and then referenced in our docker-compose file. Here’s a thread on SO that goes into a little bit more on why this is necessary, but I still don’t have a very clear idea of why this is the case. With another configuration or perhaps docker-compose version, this may not be needed. I’ll update this part of the article if I figure anything out.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Let’s go over one more docker concept that will helpful in the next few steps. When you run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps&lt;/code&gt; on your local machine, the docker CLI first looks to see if the &lt;code class=&quot;highlighter-rouge&quot;&gt;DOCKER_HOST&lt;/code&gt; environment variable is set. If it is not, then docker defaults to &lt;code class=&quot;highlighter-rouge&quot;&gt;unix:///var/run/docker.sock&lt;/code&gt;, a UNIX socket. Check out &lt;a href=&quot;https://stackoverflow.com/questions/35110146/can-anyone-explain-docker-sock&quot;&gt;this SO post&lt;/a&gt; titled “Can anyone explain docker.sock?”&lt;/p&gt;
+
+&lt;p&gt;We change the docker host that our local docker CLI is talking to by setting this environment variable, and one nice way to set this environment variables uses an SSH connection:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DOCKER_HOST=ssh://root@$DOCKER_IP
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;See this article for a more in-depth discussion: &lt;a href=&quot;https://www.digitalocean.com/community/tutorials/how-to-use-a-remote-docker-server-to-speed-up-your-workflow&quot;&gt;https://www.digitalocean.com/community/tutorials/how-to-use-a-remote-docker-server-to-speed-up-your-workflow&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can try this out locally. Run a container locally, check it with &lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps&lt;/code&gt;, then export the &lt;code class=&quot;highlighter-rouge&quot;&gt;DOCKER_HOST&lt;/code&gt; environment variable with the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export DOCKER_HOST=ssh://root@123.45.678.91
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Replacing &lt;code class=&quot;highlighter-rouge&quot;&gt;123.45.678.91&lt;/code&gt; with your Droplet IP. Run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps&lt;/code&gt; again and you should see nothing (or any other containers that you started on your Droplet). Finally, run:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;unset DOCKER_HOST
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Running &lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps&lt;/code&gt; again you should see the containers on your machine. We will be using this idea in the next step when we look at the &lt;code class=&quot;highlighter-rouge&quot;&gt;docker stack deploy&lt;/code&gt; command.&lt;/p&gt;
+
+&lt;h2 id=&quot;docker-stack-deploy&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker stack deploy&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;Now that we have done our one-time-setup steps, let’s look at the &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy&lt;/code&gt; stage of &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitlab-ci.yml&lt;/code&gt;, the GitLab CI job that will get our containers running on our Droplet. First, let’s break down the &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy-digital-ocean&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;deploy-digital-ocean&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;stage&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;deploy&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker:19.03.1&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker:19.03.5-dind&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;variables&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;DOCKER_HOST&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;ssh://root@$DROPLET_IP&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;before_script&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;apk update &amp;amp;&amp;amp; apk add openssh-client bash&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mkdir -p ~/.ssh&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;echo &quot;$SSH_PRIVATE_KEY&quot; &amp;gt; ~/.ssh/id_rsa&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;chmod 600 ~/.ssh/id_rsa&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;eval &quot;$(ssh-agent -s)&quot;&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssh-add ~/.ssh/id_rsa&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssh-keyscan -H $DROPLET_IP &amp;gt;&amp;gt; ~/.ssh/known_hosts&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;docker stack deploy -c stack.yml my-stack --with-registry-auth&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This job uses the same &lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;services&lt;/code&gt; that our &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt; stage jobs used. Notice that we set &lt;code class=&quot;highlighter-rouge&quot;&gt;DOCKER_HOST&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;ssh://root@$DROPLET_IP&quot;&lt;/code&gt;, this means that any docker CLI commands in this job will be communicating with the docker daemon on our Droplet. The &lt;code class=&quot;highlighter-rouge&quot;&gt;before_script&lt;/code&gt; has a lot going on, but all we are doing is preparing to use the SSH private key that we previously added to our GitLab project’s CI/CD environment variables. The base image for this job, &lt;code class=&quot;highlighter-rouge&quot;&gt;docker:19.03.1&lt;/code&gt; is based on Alpine Linus. This version of Linux is super light weight and doesn’t come with &lt;code class=&quot;highlighter-rouge&quot;&gt;openssh-client&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;bash&lt;/code&gt;, so our first step is to install these with the Alpine package manager, &lt;code class=&quot;highlighter-rouge&quot;&gt;apk&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apk update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apk add openssh-client bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, we add the &lt;code class=&quot;highlighter-rouge&quot;&gt;SSH_PRIVATE_KEY&lt;/code&gt; environment variable into the body of the &lt;code class=&quot;highlighter-rouge&quot;&gt;id_rsa&lt;/code&gt; private key file, change the permission of this file and then add the key to our SSH agent. Here’s an excerpt from &lt;code class=&quot;highlighter-rouge&quot;&gt;man ssh-agent&lt;/code&gt; that provides a little bit more context into why we need to run &lt;code class=&quot;highlighter-rouge&quot;&gt;eval &quot;$(ssh-agent -s)&quot;&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ssh-add ~/.ssh/id_rsa&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;DESCRIPTION
+     ssh-agent is a program to hold private keys used for public key authentication (RSA, DSA, ECDSA, Ed25519)ssh-agent is usually started in the beginning of an X-session or a login session, and all other windows or programs are started as clients to the ssh-agent program.  Through use of environment variables the agent can be located and automatically used for authentication when logging in to other machines using ssh(1).
+
+     The agent initially does not have any private keys.  Keys are added using ssh(1) (see AddKeysToAgent in ssh_config(5) for details) or ssh-add(1).  Multiple identities may be stored in ssh-agent concurrently and ssh(1) will automatically use them if present.  ssh-add(1) is also used to remove keys from ssh-agent and to query the keys that are held in one.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, &lt;code class=&quot;highlighter-rouge&quot;&gt;ssh-keyscan -H $DROPLET_IP &amp;gt;&amp;gt; ~/.ssh/known_hosts&lt;/code&gt; tells our SSH agent about our Droplet so that it doesn’t prompt us with a &lt;code class=&quot;highlighter-rouge&quot;&gt;Do you want to add this server to known hosts? (yes/no)&lt;/code&gt;, or whatever the equivalent of that is for the docker CLI when it attempts to connect to a remote docker daemon over SSH.&lt;/p&gt;
+
+&lt;p&gt;Finally, we login to our our GitLab private registry using the same command from before when we built and pushed images to our private registry on gitlab.com:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This essentially gives our DigitalOcean Droplet access to the &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt; images in our private GitLab CI image registry, even tho we are running this command in a contain, in a container that is probably running in Kubernetes on GCP. Next, we are actually going to use these images.&lt;/p&gt;
+
+&lt;p&gt;The last command in the &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy-digital-ocean&lt;/code&gt; job is:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker stack deploy -c stack.yml my-stack --with-registry-auth
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Check out this link from the docker docs on docker stacks &lt;a href=&quot;https://docs.docker.com/engine/swarm/stack-deploy/&quot;&gt;https://docs.docker.com/engine/swarm/stack-deploy/&lt;/a&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;--with-registry-auth&lt;/code&gt; is important, our command will complete if this is not included, but our application won’t start.&lt;/p&gt;
+
+&lt;h2 id=&quot;stackyml&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;Now we are ready to tackle the last big file in our repo: &lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt;. This is a the docker-compose file that we use to deploy our project. The only reason we needed to run &lt;code class=&quot;highlighter-rouge&quot;&gt;docker login&lt;/code&gt; above is because &lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt; references the two images we built and pushed to our GitLab private repo. There’s a lot going on in this file, let’s start with the &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; service:&lt;/p&gt;
+
+&lt;h3 id=&quot;backend&quot;&gt;backend&lt;/h3&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.4&quot;&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;backend&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${CI_REGISTRY_IMAGE}/backend:${CI_COMMIT_SHORT_SHA}&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;main&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;POSTGRES_PASSWORD&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;SECRET_KEY&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;DEBUG&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;backendassets:/code/assets&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;depends_on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;postgres&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;redis&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;web&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt; is essentially what we defined in &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitlab-ci.yml&lt;/code&gt;, but the syntax is slightly different:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;${CI_REGISTRY_IMAGE}/backend:${CI_COMMIT_SHORT_SHA}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We pass environment variables that we defined in GitLab CI via the &lt;code class=&quot;highlighter-rouge&quot;&gt;environment&lt;/code&gt; key.&lt;/p&gt;
+
+&lt;p&gt;The volume &lt;code class=&quot;highlighter-rouge&quot;&gt;backendassets&lt;/code&gt; is used for storing static assets (CSS, JS, etc.) as well as media assets (images, videos, any other file type). We mount this directory at &lt;code class=&quot;highlighter-rouge&quot;&gt;/code/assets&lt;/code&gt; and then define our &lt;code class=&quot;highlighter-rouge&quot;&gt;STATIC_ROOT&lt;/code&gt; in Django’s &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; to be:&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BASE_DIR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;assets&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;static&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Later, when we run &lt;code class=&quot;highlighter-rouge&quot;&gt;collectstatic&lt;/code&gt;, files are copied to this location in our container, and since this is the location of the volume, the files are actually copied to the volume and will be persisted if we destroy the backend container and restart it. When the container restarts, the volume is mounted again and the static files will still be available to our application.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;network&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;depends_on&lt;/code&gt; related to to the other services that this application will communicate with. &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; is a network defined in the &lt;code class=&quot;highlighter-rouge&quot;&gt;networks&lt;/code&gt; part of &lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt;, notice that we reference the &lt;code class=&quot;highlighter-rouge&quot;&gt;traefik-public&lt;/code&gt; network here that we created earlier, as well.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Depends on helps with service startup order, but it is a better practice to use &lt;code class=&quot;highlighter-rouge&quot;&gt;./wait-for-it.sh&lt;/code&gt;. However, I have never had any issues related to startup order. I’ll try adding this later to make things more robust.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;postgres&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;redis&lt;/code&gt; will start before &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt;. Our Django application will communicate to these services by their hostnames: &lt;code class=&quot;highlighter-rouge&quot;&gt;postgres&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;redis&lt;/code&gt;. The fact that &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;postgres&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;redis&lt;/code&gt; are all on the same network (&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;) means that they can resolve each other by these names. For example, the connection string to redis will look like: &lt;code class=&quot;highlighter-rouge&quot;&gt;redis://redis:6379&lt;/code&gt;. Let’s look at the &lt;code class=&quot;highlighter-rouge&quot;&gt;DATABASES&lt;/code&gt; configuration in &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; to see how we connect to Postgres:&lt;/p&gt;
+
+&lt;div class=&quot;language-py highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;default&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;ENGINE&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;django.db.backends.postgresql_psycopg2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;NAME&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POSTGRES_NAME&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;postgres&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;USER&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POSTGRES_USERNAME&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;postgres&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;PASSWORD&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POSTGRES_PASSWORD&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;postgres&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;HOST&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POSTGRES_SERVICE_HOST&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;postgres&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;PORT&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environ&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POSTGRES_SERVICE_PORT&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5432&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I have defined the &lt;code class=&quot;highlighter-rouge&quot;&gt;HOST&lt;/code&gt; to be based on the environment variable &lt;code class=&quot;highlighter-rouge&quot;&gt;POSTGRES_HOST&lt;/code&gt;, but I have not defined this environment variable, so why didn’t I just say &lt;code class=&quot;highlighter-rouge&quot;&gt;&quot;HOST&quot;: &quot;postgres&quot;&lt;/code&gt;? I could have, but if I want to change the database in the future, the only change will be adding an environment variable; I won’t have to worry about hardcoded values.&lt;/p&gt;
+
+&lt;p&gt;I’m choosing to run Postgres in a container and not use a managed database (which DigitalOcean does offer) in order to save on costs and also to get more practice managing my own database. I use RDS with AWS and it handles a lot of things that I don’t have to worry about, such as backups, and it allows me to quickly restore from a snapshot. I’m interested in learning more about how I can do these tasks with a database that I run myself.&lt;/p&gt;
+
+&lt;h3 id=&quot;nginx&quot;&gt;NGINX&lt;/h3&gt;
+
+&lt;p&gt;The next service we should go over is &lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt;, the service that runs the NGINX container that we pushed to our private GitLab image registry. This service has a couple of functions that I’ll walk through:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Reverse proxy&lt;/li&gt;
+  &lt;li&gt;Serve static files for Django&lt;/li&gt;
+  &lt;li&gt;Serve a frontend Javascript application&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Here’s the definition of this service in &lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;web&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;${CI_REGISTRY_IMAGE}/nginx:${CI_COMMIT_SHORT_SHA}&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;traefik-public&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;main&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;backendassets:/usr/src/app/assets&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.enable=true&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.routers.nginx-web.rule=Host(`mysite.com`)&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.routers.nginx-web.entrypoints=websecure&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.services.nginx-web.loadbalancer.server.port=80&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For now, ignore the contents under the &lt;code class=&quot;highlighter-rouge&quot;&gt;deploy&lt;/code&gt; key; we will cover this next when we go over the &lt;code class=&quot;highlighter-rouge&quot;&gt;traefik&lt;/code&gt; service.&lt;/p&gt;
+
+&lt;p&gt;NGINX acts as a reverse proxy when it sends request starting with &lt;code class=&quot;highlighter-rouge&quot;&gt;/api&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;/admin&lt;/code&gt; to the &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; container. Two blocks in &lt;code class=&quot;highlighter-rouge&quot;&gt;prod.conf&lt;/code&gt; enable this behavior:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  upstream backend {
+    server backend:8000;
+  }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This hostname &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; is defined as &lt;code class=&quot;highlighter-rouge&quot;&gt;backend:8000&lt;/code&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;backend:8000&lt;/code&gt; can be resolved by the &lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt; service because it is on the same &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; network that &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; is on. If either of the &lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;backend&lt;/code&gt; wasn’t on the &lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; network, NGINX would not be able to make sense of &lt;code class=&quot;highlighter-rouge&quot;&gt;backend:8000&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    # backend urls
+    location ~ ^/(admin|api) {
+      proxy_redirect off;
+      proxy_pass http://backend;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This block does that actual request forwarding. &lt;code class=&quot;highlighter-rouge&quot;&gt;http://backend&lt;/code&gt; references the &lt;code class=&quot;highlighter-rouge&quot;&gt;upstream backend {}&lt;/code&gt; block defined above.&lt;/p&gt;
+
+&lt;p&gt;The volume &lt;code class=&quot;highlighter-rouge&quot;&gt;backendassets&lt;/code&gt; is referenced here and mounts to &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/src/app/assets&lt;/code&gt;. This path is then referenced in &lt;code class=&quot;highlighter-rouge&quot;&gt;prod.conf&lt;/code&gt;, the NGINX configuration file that is used in our custom NGINX-based image:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    # static files
+    location /static {
+      autoindex on;
+      alias /usr/src/app/assets/static;
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In this block of &lt;code class=&quot;highlighter-rouge&quot;&gt;prod.conf&lt;/code&gt;, we tell NGINX to serve files from &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/src/app/assets/static&lt;/code&gt; for requests that start with &lt;code class=&quot;highlighter-rouge&quot;&gt;/static&lt;/code&gt;. A request made to &lt;code class=&quot;highlighter-rouge&quot;&gt;https://mysite.com/static/base.css&lt;/code&gt; would return a file located at &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/src/app/assets/static&lt;/code&gt; if that file existed. Remember, when we run the &lt;code class=&quot;highlighter-rouge&quot;&gt;collecstatic&lt;/code&gt; management command in our Django container, it will collect our static files to &lt;code class=&quot;highlighter-rouge&quot;&gt;backendassets&lt;/code&gt;. Since &lt;code class=&quot;highlighter-rouge&quot;&gt;backendassets&lt;/code&gt; is mounted to the &lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt; service at &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/src/app/assets&lt;/code&gt;, NGINX will have access to these files by way of the volume mount and they will persist across restarts of the web service and its NGINX container.&lt;/p&gt;
+
+&lt;p&gt;Finally, NGINX can serve a Javascript SPA or similar if we choose to use one in our project. To understand how this is done, we need to understand multistage Dockerfiles. Here’s the Dockerfile used for the &lt;code class=&quot;highlighter-rouge&quot;&gt;nginx&lt;/code&gt; container:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;# # build stage
+# FROM node:10-alpine as build-stage
+# WORKDIR /app/
+# COPY frontend/package.json /app/
+# RUN npm cache verify
+# RUN npm install
+# COPY frontend /app/
+# RUN npm run build
+
+# production stage
+# FROM nginx:1.19.1-alpine as production-stage
+FROM nginx:1.19.1-alpine
+COPY nginx/prod/prod.conf /etc/nginx/nginx.conf
+COPY nginx/prod/index.html /dist/
+# COPY --from=build-stage /app/dist /dist/
+EXPOSE 80
+CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Currently I don’t have a SPA setup, but this is how we could setup one using Vue.js. The important part is this line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Dockerfile&quot;&gt;COPY --from=build-stage /app/dist /dist/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This would copy the build files for our Javascript application into the &lt;code class=&quot;highlighter-rouge&quot;&gt;/dist/&lt;/code&gt; folder of our NGINX container. Another few declarations and blocks in &lt;code class=&quot;highlighter-rouge&quot;&gt;prod.conf&lt;/code&gt; allow all other requests to be served by the contents of this folder:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    root /dist/;
+    index index.html;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This sets the root and the index document for our NGINX webserver.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    # frontend
+    location / {
+      try_files $uri $uri/ @rewrites;
+    }
+
+    location @rewrites {
+      rewrite ^(.+)$ /index.html last;
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;These two blocks route all other requests to the frontend Javascript app’s &lt;code class=&quot;highlighter-rouge&quot;&gt;index.html&lt;/code&gt; file location in &lt;code class=&quot;highlighter-rouge&quot;&gt;/dist/&lt;/code&gt; (any request that doesn’t start with &lt;code class=&quot;highlighter-rouge&quot;&gt;/static&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;/api&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;/admin&lt;/code&gt;). We may wish to change this behavior if you want Django to serve most of your requests and possibly serve a single page application on another path.&lt;/p&gt;
+
+&lt;p&gt;Lastly, the &lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt; service’s &lt;code class=&quot;highlighter-rouge&quot;&gt;deployment&lt;/code&gt; key has some &lt;code class=&quot;highlighter-rouge&quot;&gt;labels&lt;/code&gt; defined for Traefik. Let’s come back to these after having a look at the &lt;code class=&quot;highlighter-rouge&quot;&gt;traefik&lt;/code&gt; service.&lt;/p&gt;
+
+&lt;h3 id=&quot;traefik&quot;&gt;Traefik&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://docs.traefik.io/assets/img/traefik-architecture.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Traefik is an open-source Edge Router that makes publishing your services a fun and easy experience. It receives requests on behalf of your system and finds out which components are responsible for handling them. – &lt;a href=&quot;https://docs.traefik.io/&quot;&gt;https://docs.traefik.io/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Traefik has three main functions in my application:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Request TLS certificates from Let’s Encrypt that allow us to encrypt our web traffic with HTTPS&lt;/li&gt;
+  &lt;li&gt;Do TLS termination&lt;/li&gt;
+  &lt;li&gt;Route all requests to NGINX&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The one thing that Traefik cannot do is serve static files; it is not a webserver, unlike NGINX which is a webserver. NGINX is also capable of requesting TLS certs from Let’s Encrypt, so we don’t technically need Traefik, but it is indeed “fun and easy”, especially when it comes to requesting certificates.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;I have tried setting up Certbot with NGINX a long time ago but I never go it to work, and I didn’t like the idea about how to run a chron job to refresh old certs.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;There are two main ways to set up Traefik:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;write a &lt;code class=&quot;highlighter-rouge&quot;&gt;traefik.toml&lt;/code&gt; file and build this into your own custom image (similar to what we do with NGINX and &lt;code class=&quot;highlighter-rouge&quot;&gt;prod.conf&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;use a base image and specify all configure options through command line arguments.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I started out with the first approach, and I did get it to work, but I have decided that the second way is better. It requires one less image to build in our deployment process and it is easy to parametrize the command line arguments in &lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt; (for now all the values I’m using in the &lt;code class=&quot;highlighter-rouge&quot;&gt;traefik&lt;/code&gt; service are hard-coded, this is one more item for my ToDo list on this project).&lt;/p&gt;
+
+&lt;p&gt;I had a hard time finding good examples of how to use Traefik version 2 with Docker Swarm in the Traefik docs. Their official example for using docker uses &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt;. There is a Swarm example, but it is for an older version of Traefik (1.7). This article titled &lt;a href=&quot;https://blog.creekorful.com/2019/10/how-to-install-traefik-2-docker-swarm/&quot;&gt;How to install Traefik 2.x on a Docker Swarm&lt;/a&gt; helped me a lot in figuring out how to get everything working. Thank you for the great article, &lt;a href=&quot;https://github.com/creekorful&quot;&gt;Aloïs&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;Here’s the code that sets up the traefik service:&lt;/p&gt;
+
+&lt;div class=&quot;language-yml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;traefik&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;traefik:v2.0.2&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;80:80&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;443:443&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--providers.docker.endpoint=unix:///var/run/docker.sock&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--providers.docker.swarmMode=true&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--providers.docker.exposedbydefault=false&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--providers.docker.network=traefik-public&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--entrypoints.web.address=:80&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--entrypoints.websecure.address=:443&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--certificatesresolvers.letsencryptresolver.acme.email=brian@email.com&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;letsencrypt:/letsencrypt&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/run/docker.sock:/var/run/docker.sock&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;traefik-public&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;placement&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;constraints&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;node.role == manager&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The one thing I don’t like about this setup is that it uses a 1GB volume to store one small JSON file. I think that 1GB is the smallest block storage volume I can request using REX-Ray. This only adds $0.10/month to our project costs which is not that bad.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;websecure&lt;/code&gt; refer to values declared on the &lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt; service. Let’s take a look at those values:&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;deploy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.enable=true&quot;&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.routers.nginx-web.rule=Host(`mysite.com`)&quot;&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.routers.nginx-web.entrypoints=websecure&quot;&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver&quot;&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;traefik.http.services.nginx-web.loadbalancer.server.port=80&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I still need to setup HTTP -&amp;gt; HTTPS redirecting, so for now only &lt;code class=&quot;highlighter-rouge&quot;&gt;websecure&lt;/code&gt; is defined, but Aloïs explains this clearly in his article.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;For me this is the most complicated part of the setup. I’m still not familiar with exactly how Traefik and Let’s Encrypt work. Hopefully I can run through this process a few more times with some variations to better understand the rough edges. Otherwise for this simple way to get TLS certificates. AWS makes this very easy with Amazon Certificate Manager (ACM) which makes the requesting of certificates very simple, especially within CDK.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;That wraps up our overview of &lt;code class=&quot;highlighter-rouge&quot;&gt;stack.yml&lt;/code&gt;, we left off with the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker stack deploy -c stack.yml my-stack --with-registry-auth
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can check out the status of our docker stack deployment by running a few different docker CLI commands. You can either SSH into your Droplet or configure the &lt;code class=&quot;highlighter-rouge&quot;&gt;DOCKER_HOST&lt;/code&gt; environment variable that I showed you earlier and run these commands from your local terminal:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker stack ps my-stack --no-trunc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--no-trunc&lt;/code&gt; is important because important error messages tend to be cut off. This option will show the full version of each column returned by &lt;code class=&quot;highlighter-rouge&quot;&gt;docker stack ps&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker service ls
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This command shows some the active services on our Droplet.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker ps
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This command is useful for shelling into a container to run commands and poke around for debugging.&lt;/p&gt;
+
+&lt;p&gt;You can get the Container ID of a running container and access it with the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker exec -it 0da8370ab283 bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This assumes that &lt;code class=&quot;highlighter-rouge&quot;&gt;bash&lt;/code&gt; is installed on the container with ID &lt;code class=&quot;highlighter-rouge&quot;&gt;0da8370ab283&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;management-commands&quot;&gt;Management commands&lt;/h2&gt;
+
+&lt;p&gt;Once the site is deployed we stil need to run a few commands to set up our Djnago application:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;collectstatic&lt;/li&gt;
+  &lt;li&gt;migrate&lt;/li&gt;
+  &lt;li&gt;createsuperuser&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;One other ToDo is to figure out how to run these commands through manual GitLab CI jobs.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;That’s most of what I wanted to cover on a first pass. This should be a good starting point for working with a Django application in Docker Swarm on DigitalOcean.&lt;/p&gt;
+
+&lt;h2 id=&quot;next-steps&quot;&gt;Next steps&lt;/h2&gt;
+
+&lt;p&gt;Here are some ideas about the next steps I could take on this project.&lt;/p&gt;
+
+&lt;h3 id=&quot;local-environment&quot;&gt;Local environment&lt;/h3&gt;
+
+&lt;p&gt;I’ll probably need to create another docker-compose file to bring up everything locally. It might be a good way to experiment with different Traefik settings.&lt;/p&gt;
+
+&lt;h3 id=&quot;infrastructure-as-code-setup&quot;&gt;Infrastructure as Code setup&lt;/h3&gt;
+
+&lt;p&gt;There might be a good opportunity to learn more about Terreform or Ansible here. There are a number of manual, one time setup steps. Some of these can’t be automated, but some of them would probably fit very neatly into one of these tools. Pulumi would also be a good option to explore as it is more analagous to CDK.&lt;/p&gt;
+
+&lt;h3 id=&quot;scaling-out-docker-swarm-services-across-multiple-machines&quot;&gt;Scaling out docker swarm services across multiple machines&lt;/h3&gt;
+
+&lt;p&gt;I have only scratched the surface of what docker swarm can do. There are lots of other settings that would be helpful to setup for learning purposes, especially around resource limits for services. For simplicity I haven’t touch on any of these options yet. I’m curious to know how many containers I can fit onto one small Droplet, and if resource limits could help with compute and memory-intensive workloads.&lt;/p&gt;
+
+&lt;h3 id=&quot;kubernetes-on-digitalocean&quot;&gt;Kubernetes on DigitalOcean&lt;/h3&gt;
+
+&lt;p&gt;DigitalOcean now offers simplified Kubernetes solutions. It would be interesting to try this out once I get better with docker swarm. I have used Kubernetes a with minikube and to a limited extent with GCP.&lt;/p&gt;
+
+&lt;h3 id=&quot;deploying-locally-without-using-gitlab-ci&quot;&gt;Deploying locally, without using GitLab CI&lt;/h3&gt;
+
+&lt;p&gt;CDK makes deploying locally very easy, especially with the Lambda project I put together. This project as it stands might be a little bit more difficult to deploy locally. It assumes that the images we want to deploy are private. It might be possible, but for now I am fine with deploying through GitLab CI since the pipeline only takes a few minutes to complete for the build and deploy stages.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 09 Aug 2020 00:00:00 -0400</pubDate>
+        <link>https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html</link>
+        <guid isPermaLink="true">https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html</guid>
+        
+        
+      </item>
     
       <item>
         <title>Deploying serverless Django applications to AWS with CDK on a tiny budget using Lambda, API Gateway, awsgi and the Lambda proxy pattern</title>
@@ -3586,292 +4173,6 @@ MariaDB [sample_db]&amp;gt;
         <pubDate>Sun, 28 Jan 2018 00:00:00 -0500</pubDate>
         <link>https://briancaffey.github.io/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0</link>
         <guid isPermaLink="true">https://briancaffey.github.io/2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0</guid>
-        
-        
-      </item>
-    
-      <item>
-        <title>Finding the best poker hand in five-card draw with python</title>
-        <description>&lt;p&gt;&lt;img src=&quot;/static/poker.jpg&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;I recently took a Hackerrank challenge for a job application that involved poker. I’m not a poker player, so I had a brief moment of panic as I read over the problem the description. In this article I want to do some reflection on how I approached the problem.&lt;/p&gt;
-
-&lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;/h1&gt;
-
-&lt;p&gt;The hackerrank question asked me to write a program that would determine the best poker hand possible in &lt;a href=&quot;https://en.wikipedia.org/wiki/Five-card_draw&quot;&gt;five-card draw&lt;/a&gt; poker. We are given 10 cards, the first 5 are the current hand, and the second 5 are the next five cards in the deck. We assume that we can see the next five cards (they are not hidden). We want to exchange any &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; number of cards (where &lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;lt;= 5&lt;/code&gt;) in our hand for the next &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; cards in the deck. For example, we can take out any combination of 2 cards from the hand we are given, but we must replace these two cards with the next two cards from the deck (we can’t pick any two cards from the deck).&lt;/p&gt;
-
-&lt;h1 id=&quot;evaluating-hands&quot;&gt;Evaluating hands&lt;/h1&gt;
-
-&lt;p&gt;Suit and value make up the value of playing cards. For example, you can have a 3 of clubs. 3 is the value, clubs is the suit. We can represent this as &lt;code class=&quot;highlighter-rouge&quot;&gt;3C&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Suits&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Clubs C
-Spades S
-Heart H
-Diamonds D&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Value (Rank)&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;values = {&quot;2&quot;:2, &quot;3&quot;:3, &quot;4&quot;:4, &quot;5&quot;:5, &quot;6&quot;:6, &quot;7&quot;:7, &quot;8&quot;:8, &quot;9&quot;:9, &quot;10&quot;:10, &quot;J&quot;:11, &quot;Q&quot;:12, &quot;K&quot;:13, &quot;A&quot;:14}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;hands&quot;&gt;Hands&lt;/h2&gt;
-
-&lt;p&gt;Here are the hands of poker&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Royal flush (the problem didn’t ask me to consider Royal Flush)
-    &lt;blockquote&gt;
-      &lt;p&gt;A, K, Q, J, 10, all the same suit.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Straight flush
-    &lt;blockquote&gt;
-      &lt;p&gt;Five cards in a sequence, all in the same suit. &lt;strong&gt;Ace can either come before 2 or come after King.&lt;/strong&gt;&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Four of a kind
-    &lt;blockquote&gt;
-      &lt;p&gt;All four cards of the same rank.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Full house
-    &lt;blockquote&gt;
-      &lt;p&gt;Three of a kind with a pair.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Flush
-    &lt;blockquote&gt;
-      &lt;p&gt;Any five cards of the same suit, but not in a sequence.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Straight
-    &lt;blockquote&gt;
-      &lt;p&gt;Five cards in a sequence, but not of the same suit.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Three of a kind
-    &lt;blockquote&gt;
-      &lt;p&gt;Three cards of the same rank.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Two pair
-    &lt;blockquote&gt;
-      &lt;p&gt;Two different pairs.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Pair
-    &lt;blockquote&gt;
-      &lt;p&gt;Two cards of the same rank.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-  &lt;li&gt;High Card
-    &lt;blockquote&gt;
-      &lt;p&gt;When you haven’t made any of the hands above, the highest card plays.
-In the example below, the jack plays as the highest card.&lt;/p&gt;
-    &lt;/blockquote&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;evaluating-a-hand-of-cards&quot;&gt;Evaluating a hand of cards&lt;/h2&gt;
-
-&lt;p&gt;A hand is five cards. The first thing I did was write out functions to evaluate if a group of 5 cards satisfies the conditions of one of the ten hands.&lt;/p&gt;
-
-&lt;p&gt;Here’s a sample hand:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;3S&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;JC&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;QD&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;5D&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;AH&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;To write functions, I reached for using 2 important python features: &lt;code class=&quot;highlighter-rouge&quot;&gt;set&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here’s an example of a simple function to detect a flush, a hand with cards of all the same suit:&lt;/p&gt;
-
-&lt;h2 id=&quot;checking-a-flush&quot;&gt;Checking a flush&lt;/h2&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;suits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;suits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This function creates a list of the suits in our hand, and then counts the unique elements in that list by making it a set. If the length of the set is 1, then all the cards in the hand must be of the same suit.&lt;/p&gt;
-
-&lt;p&gt;But wait, what if we have a straight flush? Also, a hand that satisfies a flush could also be described as a two pair hand. The problem asked me to find the highest possible hand for a given set of cards, so I tried to keep things simple by writing a &lt;code class=&quot;highlighter-rouge&quot;&gt;check_hand()&lt;/code&gt; function that checks each hand starting from straight flush down to high card. As soon as a condition for a hand was satisfied, I returned a number that corresponded to the strength of the hand (1 for high card up to 10 for straight flush). The problem didn’t include Royal flush, so I will not include that here.&lt;/p&gt;
-
-&lt;p&gt;Here’s the &lt;code class=&quot;highlighter-rouge&quot;&gt;check_hand&lt;/code&gt; function:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_straight_flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_four_of_a_kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;
-
-    &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_two_pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_pair&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This function starts checking the most valuable hands. After it checks the second to lowest hand (pair), it returns a value of 1. This value of 1 corresponds to the “highest card” hand. Since I’m not comparing the relative value of hands, it doesn’t matter what the highest card is, so the number just represents the &lt;em&gt;type&lt;/em&gt; of hand that is the strongest.&lt;/p&gt;
-
-&lt;h2 id=&quot;other-hands&quot;&gt;Other hands&lt;/h2&gt;
-
-&lt;p&gt;Here are the all of the functions I used to detect hands:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;card_order_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;4&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;6&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;7&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;8&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;9&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;T&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;J&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Q&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;K&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;A&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_straight_flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_straight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_four_of_a_kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
-        &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_full_house&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
-        &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_flush&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;suits&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;suits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_straight&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;rank_values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;card_order_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value_range&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank_values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rank_values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value_range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
-        &lt;span class=&quot;c&quot;&gt;#check straight with low Ace&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;A&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;3&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;4&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_three_of_a_kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_two_pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;check_one_pairs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultdict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value_counts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;defaultdict&lt;/code&gt; is a great built-in that is good to use when you don’t know what elements will be in your dictionary, but you know what the initial values of any key that could be added should be. We don’t need it here, but the alternative would be to write a very long dictionary where keys are the possible card values and the values of each key is 0.&lt;/p&gt;
-
-&lt;h1 id=&quot;finding-the-best-hand&quot;&gt;Finding the best hand&lt;/h1&gt;
-
-&lt;p&gt;It would certainly be cleaner and more efficient to write out the above functions into one large function, but I wanted to keep things simple as I was under time constraints.&lt;/p&gt;
-
-&lt;p&gt;The next step in the problem is to determine the best possible hand we can get given the hand we are dealt and the 5 cards on top of the deck. I decided to first solve this problem with brute force. Here was my logic for this part: use &lt;code class=&quot;highlighter-rouge&quot;&gt;itertools&lt;/code&gt; to get all combinations of groups of 0, 1, 2, 3, 4 and 5 cards from my hand and add the first &lt;code class=&quot;highlighter-rouge&quot;&gt;5 - n&lt;/code&gt; cards from the deck so we get a five card deck. For each combination of cards we can run &lt;code class=&quot;highlighter-rouge&quot;&gt;check_hand()&lt;/code&gt; and keep track of the highest rank hand, and then return that hand as the best hand. Here’s the code I wrote for this part of the problem:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;itertools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combinations&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;hand_dict&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;straight-flush&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;four-of-a-kind&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;full-house&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;flush&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;straight&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;three-of-a-kind&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;two-pairs&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;one-pair&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;highest-card&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;#exhaustive search using itertools.combinations&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;play&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cards&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cards&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;deck&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cards&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;best_hand&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;possible_combos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;combinations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;possible_combos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; 
-            &lt;span class=&quot;n&quot;&gt;current_hand&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;hand_value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check_hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand_value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;best_hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;best_hand&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand_value&lt;/span&gt;
-                
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hand_dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;best_hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;checking-test-cases&quot;&gt;Checking test cases&lt;/h1&gt;
-
-&lt;p&gt;Lastly, I need to check each hand and print out the best hand possible. Here’s the loop I wrote to do this:&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stdin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;readlines&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;cards&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cards&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;deck&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cards&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:]&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hand:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Deck:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;deck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Best hand:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;play&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cards&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This will accept one round of cards per line:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2C 3D 4S 5D 7H KD QH 6C JH 2D
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;and it will output the following:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Hand: 2C 3D 4S 5D 7H Deck: KD QH 6C JH 2D Best hand: straight
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;optimization&quot;&gt;Optimization&lt;/h1&gt;
-
-&lt;p&gt;This was an interesting problem to deal with as the solution contained several parts that worked together. While solving the problem I aimed worked through to the end leaving some parts to come back to that I felt confident in solving. Instead of writing each function to check differnt hands at the beginning, I filled most of these functions with &lt;code class=&quot;highlighter-rouge&quot;&gt;pass&lt;/code&gt; and moved on to write the next part that involves checking each different combination of cards. Recently having worked through python’s &lt;code class=&quot;highlighter-rouge&quot;&gt;itertools&lt;/code&gt; exercises on Hackerrank, the &lt;code class=&quot;highlighter-rouge&quot;&gt;combinations&lt;/code&gt; functions was fresh in my mind.&lt;/p&gt;
-
-&lt;p&gt;While I was able to arrive at a solution that satisfied the test cases, I did not have time to think about the efficiency or Big O analysis of the problem.&lt;/p&gt;
-
-&lt;p&gt;There is obviously some refactoring that I could do to make things cleaner. With more time I would take an object oriented approach by making classes for cards and hands, and adding class methods to evaluate the hands.&lt;/p&gt;
-
-&lt;p&gt;For each round, we have to run &lt;code class=&quot;highlighter-rouge&quot;&gt;check_hand()&lt;/code&gt; on each hand combination. Let’s think about how many hands we have to evaluate:&lt;/p&gt;
-
-&lt;p&gt;We have to consider combinations of cards formed by taking out groups of 0, 1, 2, 3, 4 and 5 cards and adding the next number of cards in the deck that bring the total card count to 5, which means we have to do 5C0 + 5C1 + 5C2 + 5C3 + 5C4 + 5C5 calls to &lt;code class=&quot;highlighter-rouge&quot;&gt;check_hand()&lt;/code&gt;. So the sum of total calls is 1 + 5 + 10 + 10 + 5 + 1 = &lt;strong&gt;32&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;For each of these 32 calls that happen when we run &lt;code class=&quot;highlighter-rouge&quot;&gt;play()&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;check_hands()&lt;/code&gt; runs through each of the &lt;code class=&quot;highlighter-rouge&quot;&gt;check_&lt;/code&gt; functions starting with the highest value hand. As soon as it finds a “match”, &lt;code class=&quot;highlighter-rouge&quot;&gt;check_hands()&lt;/code&gt; returns a number value (&lt;code class=&quot;highlighter-rouge&quot;&gt;hand_value&lt;/code&gt;) corresponding to straight flush, four of a kind, etc. This value is then compared with the highest value that has been previously found (&lt;code class=&quot;highlighter-rouge&quot;&gt;best_hand&lt;/code&gt;) and replaces that value if the current hand’s hand rank has a higher value.&lt;/p&gt;
-
-&lt;p&gt;I’m not sure if there is faster way to find the best hand than the brute force method I implemented.&lt;/p&gt;
-</description>
-        <pubDate>Tue, 02 Jan 2018 00:00:00 -0500</pubDate>
-        <link>https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python.html</link>
-        <guid isPermaLink="true">https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python.html</guid>
         
         
       </item>
