@@ -1,0 +1,204 @@
+:root {
+  --color: #243746;
+  --color-primary: #158876;
+  --color-secondary: #0e2233;
+  --bg: #f3f5f4;
+  --bg-secondary: #fff;
+  --bg-code: #ddd;
+  --border-color: #ddd;
+}
+
+.dark-mode {
+  --color: #ebf4f1;
+  --color-primary: #41b38a;
+  --color-secondary: #fdf9f3;
+  --bg: #091a28;
+  --bg-secondary: #071521;
+  --bg-code: #ddd;
+  --border-color: #0d2538;
+}
+
+.sepia-mode {
+  --color: #433422;
+  --color-primary: #504231;
+  --color-secondary: #504231;
+  --bg: #f1e7d0;
+  --bg-code: #ddd;
+  --bg-secondary: #eae0c9;
+  --border-color: #ded0bf;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg);
+  color: var(--color);
+  transition: background-color 0.3s;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+/* Additional vertical padding used by kbd tag. */
+.py-05 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.markdown {
+  @apply text-gray-900 leading-normal break-words;
+  color: var(--color-secondary);
+}
+
+.markdown .token.operator {
+  background: none;
+}
+
+.markdown > * + * {
+  @apply mt-0 mb-4;
+}
+
+.markdown li + li {
+  @apply mt-1;
+}
+
+.markdown li > p + p {
+  @apply mt-6;
+  color: var(--color-primary);
+}
+
+.markdown img {
+  margin: auto;
+}
+
+.markdown strong {
+  @apply font-semibold;
+}
+
+.markdown a {
+  @apply font-semibold;
+}
+
+.markdown strong a {
+  @apply font-bold;
+}
+
+.markdown h1 {
+  border-color: var(--color-primary);
+  @apply leading-tight border-b text-4xl font-semibold mb-4 mt-6 pb-2;
+}
+
+.markdown h2 {
+  border-color: var(--color-primary);
+  @apply leading-tight border-b text-2xl font-semibold mb-4 mt-6 pb-2;
+}
+
+.markdown h3 {
+  border-color: var(--color-primary);
+  @apply leading-snug text-lg font-semibold mb-4 mt-6;
+}
+
+.markdown h4 {
+  border-color: var(--color-primary);
+  @apply leading-none text-base font-semibold mb-4 mt-6;
+}
+
+.markdown h5 {
+  border-color: var(--color-primary);
+  @apply leading-tight text-sm font-semibold mb-4 mt-6;
+}
+
+.markdown h6 {
+  @apply leading-tight text-sm font-semibold text-gray-600 mb-4 mt-6;
+}
+
+.markdown blockquote {
+  @apply text-base border-l-4 border-gray-300 pl-4 pr-4 text-gray-600;
+  border-color: var(--color-primary);
+}
+
+.markdown code {
+  @apply font-mono text-sm inline bg-gray-200 rounded px-1 py-05;
+  background-color: var(--bg-code);
+  color: black;
+}
+
+.markdown pre {
+  @apply bg-gray-100 rounded p-4;
+  /* background-color: blue; */
+  /* color: red; */
+}
+
+.markdown pre code {
+  @apply block bg-transparent p-0 overflow-visible rounded-none;
+  /* background-color: var(--bg-code); */
+  color: black;
+}
+
+code[class*='language-'],
+pre[class*='language-'] {
+  background: var(--bg-code) !important;
+  text-shadow: none !important;
+}
+
+/*
+.markdown> line-numbers {
+  background-color: yellow;
+} */
+
+.markdown ul {
+  @apply text-base pl-8 list-disc;
+}
+
+.markdown ol {
+  @apply text-base pl-8 list-decimal;
+}
+
+.markdown kbd {
+  @apply text-xs inline-block rounded border px-1 py-05 align-middle font-normal font-mono shadow;
+}
+
+.markdown table,
+th,
+td {
+  @apply text-base;
+  border: 1px solid black;
+  border-color: var(--color);
+}
+
+.markdown table {
+  overflow-x: scroll;
+}
+
+.markdown th {
+  @apply border py-1 px-3;
+}
+
+.markdown td {
+  @apply border py-1 px-3;
+}
+
+/* Override pygments style background color. */
+.markdown .highlight pre {
+  @apply bg-gray-100 !important;
+}
+
+.article-card {
+  box-shadow: 0 5px 10px 1px var(--color-secondary);
+}
+
+.article-card:hover {
+  box-shadow: 0 5px 15px 5px var(--color-primary);
+}
+
+hr {
+  background-color: var(--color);
+  border: none;
+  height: 1px;
+}
+
+.menu-icon {
+  color: var(--color);
+  background-color: var(--border-color);
+}
