@@ -11,6 +11,8 @@
         Last updated: {{ formatDate(article.date) }}
       </p>
       <nuxt-content class="markdown" :document="article" />
+      {{ article }}
+      <Narration :utterance="article" />
       <disqus
         v-if="article.comments === true"
         shortname="briancaffey"

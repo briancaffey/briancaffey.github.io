@@ -1,10 +1,5 @@
 export default {
   /*
-   ** Nuxt rendering mode
-   ** See https://nuxtjs.org/api/configuration-mode
-   */
-  mode: 'universal',
-  /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
    */
@@ -81,6 +76,12 @@ export default {
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
+  'content:file:beforeInsert': (document) => {
+    if (document.extension === '.md') {
+      const raw = document.text
+      Object.assign(document, raw)
+    }
+  },
   build: {},
 
   sitemap: {
@@ -88,7 +89,7 @@ export default {
     routes: async () => {
       const { $content } = require('@nuxt/content')
 
-      const posts = await $content('articles').only(['path']).fetch()
+      const posts = await $content('blog').only(['path']).fetch()
       const projects = await $content('projects').only(['path']).fetch()
 
       return []

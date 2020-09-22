@@ -4,7 +4,6 @@
     @click="$emit('toggle')"
   >
     <nav>
-      <Navigation />
       <ul class="text-center">
         <li>
           <nuxt-link to="/">Home</nuxt-link>

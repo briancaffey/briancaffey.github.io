@@ -1,6 +1,6 @@
 ---
 layout: project
-title: "bucksamonth.com"
+title: 'bucksamonth.com'
 comments: true
 permalink: /projects/bucksamonth
 github: briancaffey/bucksamonth
