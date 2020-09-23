@@ -1,30 +1,28 @@
 <template>
   <div>
-    <h1 class="text-center text-xl py-8">Projects ({{ projects.length }})</h1>
-    <div class="lg:px-32 px-4">
+    <h1 class="text-center text-xl py-4">Projects ({{ projects.length }})</h1>
+    <div class="lg:px-32 px-2 sm:px-4">
       <ul class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
-        <li
+        <nuxt-link
           v-for="project of projects"
           :key="project.slug"
-          class="rounded article-card"
+          :to="{ name: 'projects-slug', params: { slug: project.slug } }"
         >
-          <nuxt-link
-            :to="{ name: 'projects-slug', params: { slug: project.slug } }"
-          >
+          <li class="rounded article-card">
             <img
               v-if="project.image"
               :src="project.image"
               class="h-32 w-full object-cover rounded-t"
             />
-            <div class="p-8">
-              <h2 class="text-2xl">{{ project.title }}</h2>
+            <div class="py-8 px-4 sm:px-4">
+              <h2 class="text-2xl leading-8">{{ project.title }}</h2>
               <p>{{ project.description }}</p>
-              <p class="text-gray-500 mb-4">
+              <p class="text-gray-600 mb-4">
                 Last updated: {{ formatDate(project.date) }}
               </p>
             </div>
-          </nuxt-link>
-        </li>
+          </li>
+        </nuxt-link>
       </ul>
     </div>
   </div>
@@ -60,8 +58,10 @@ export default {
   },
   head() {
     return {
-      title: 'Projects',
+      title: "Brian Caffey's Projects",
     }
   },
 }
 </script>
+
+<style></style>

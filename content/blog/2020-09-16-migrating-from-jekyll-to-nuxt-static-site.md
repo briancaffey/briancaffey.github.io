@@ -6,15 +6,19 @@ comments: true
 image: /static/nuxt-app.png
 ---
 
-Jekyll has served me well for a long time, but I'm going to be moving it Nuxt. This article will hopefully be the first new article in my Nuxt blog, but I'm going to try to bring over most of the old content from my other blog.
+Jekyll has served me well for a long time, but I've decided to switch the static site generator I use for my personal blog from Jekyll to Nuxt. This article will hopefully be the first new article in my Nuxt blog.
 
-I'm going to start off with a `feature-nuxt` feature branch. In the root of my current Jekyll project I'll make a new Nuxt project with the following options:
+Here are some goals for what I want to do with this new site:
+
+- Learn more about Nuxt and Nuxt Content, JAM Stack and static site generation
+- Master TailwindCSS for building responsive layouts
+- Better understand and measure SEO for my site and the content I publish on it
 
 ## Creating a nuxt project
 
-Since I can't create the nuxt project in a non-empty directory, I'll create it in a folder called `nuxt`:
+I'm going to start off with a `feature-nuxt` feature branch. Since I can't create the nuxt project in a non-empty directory, I'll create a new nuxt project in a folder called `nuxt`:
 
-```
+```txt
 brian@x1:~/github/briancaffey.github.io/nuxt$ npx create-nuxt-app .
 
 create-nuxt-app v3.2.0
@@ -53,7 +57,7 @@ yarn generate
 yarn start
 ```
 
-I see the following:
+Starts my project on `localhost:3000`:
 
 ![Nuxt app](/static/nuxt-app.png)
 
@@ -61,20 +65,26 @@ I see the following:
 
 Here are some of the parts of migrating that I need to think about:
 
-- Disqus comments
-- Google analytics
-- Converting layouts/includes to Vue components
-- Mapping random projects to Nuxt (such as n x n tic-tac-toe in React)
-- Static assets
-- Safely moving/removing files from the Jekyll site
+- **Disqus comments**: I previously based the `disqus_identifier` used to link Disqus threads to specific pages on Jekyll's page URLs (of the form `/YYYY/MM/DD/name-of-article.html`). I could transform the slug value with a hook in `nuxt.config.js`, or manually add a `disqus_identifier` value to the frontmatter of markdown files.
+- **Static Content**: In Jekyll I had static content in a few different places. With Nuxt, all static content will live under the top level folder `/static` that is mapped to the root URL where my site is hosted. Since I had lots of content under `/static` in my Jekyll site, such as `/static/my-image.png`, I ended up putting conent in `/static/static`, hopefully this won't be too confusing.
+
+## Nuxt Community
+
+There are a lot of great packages from the [`nuxt-community`](https://github.com/nuxt-community) GitHub organization that are widely used in many Nuxt projects. Here are a few of the Nuxt community plugins and other Nuxt extensions that I have used so far:
+
+- [nuxt/content](https://content.nuxtjs.org/): an official Nuxt project that provides a Git-based Headless CMS
+- `@nuxtjs/tailwindcss`
+- `@nuxtjs/color-mode`
+- `@nuxtjs/google-analytics`
+- `@nuxtjs/sitemap`
+- `@nuxtjs/feed`
 
 ## Issues
 
 - Tailwind removes markdown styles in blog articles from nuxt/content (solved by adding some extra css with [this](https://github.com/iandinwoodie/github-markdown-tailwindcss/blob/master/markdown.css))
-
 - No support for automatically adding markdown anchors (GitHub Flavored Markdown supports this)
+- Not able to do true server-side redirects, but you can do something like this: [https://github.com/nuxt-community/redirect-module/issues/1#issuecomment-615070920](https://github.com/nuxt-community/redirect-module/issues/1#issuecomment-615070920)
 
-## Things to Add
+## TODO
 
-- Sitemap
-- Redirects from old blog for content carried over
+- Add tags, categories, search to blog

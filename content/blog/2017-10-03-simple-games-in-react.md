@@ -1,21 +1,18 @@
 ---
-
 layout: post
 title: Simple Board Games in ReactJS
 date: 2017-10-03
 comments: true
 image: /img/wuziqi.png
-
 ---
 
 To ease into learning ReactJS, I took a shot at implementing a simple tic-tac-toe game with React. This is covered in the official [Facebook React tutorial](https://reactjs.org/tutorial/tutorial.html), but I haven't actually looked at how they did this yet. Instead, I wanted to see how far I could get on my own, and then fallback to the tutorial if I needed help. I heard that there are many different ways that React components can be organized and structured in a React project, so I wanted to see how my results compared to what the official tutorial recommends.
 
-
 Here's the final result:
 
-[![png](/img/download.png)](/react/tic-tac-react/tic-tac-react.html)
+![png](/img/download.png)
 
-You can play this game [here](/react/tic-tac-react/tic-tac-react.html)
+You can play this game <a href="/react/tic-tac-react/tic-tac-react.html" target="_blank">here</a>
 
 I wanted to give the game some additional features, so I let the player set the dimensions of the board to be any integer greater than 1. Here's a look at the main component called "Board" which contains most of the business logic:
 
@@ -159,9 +156,9 @@ I had so much fun putting together this tic-tac-toe app that I decided to write 
 
 Here's a look at the result of my Gomoku game:
 
-[![png](/img/wuziqi.png)](/react/wuziqi/wuziqi.html)
+![png](/img/wuziqi.png)
 
-You can play this game [here](/react/wuziqi/wuziqi.html).
+You can play this game <a href="/react/wuziqi/wuziqi.html" target="_blank">here</a>
 
 Here's the main component for this game with heavy commenting:
 

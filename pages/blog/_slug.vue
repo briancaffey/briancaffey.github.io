@@ -1,23 +1,24 @@
 <template>
   <article>
-    <div class="px-4 sm:px-4 md:px-4 lg:px-16 xl:pb-16 mt-2 lg:pl-64">
-      <img
-        v-if="article.image"
-        :src="article.image"
-        class="h-64 w-full object-cover rounded"
-      />
-      <h1 class="prose text-3xl">{{ article.title }}</h1>
+    <img
+      v-if="article.image"
+      :src="article.image"
+      class="h-64 w-full object-cover"
+    />
+    <div class="px-2 sm:px-4 md:px-4 lg:px-16 xl:pb-16 mt-2 lg:pl-64">
+      <h1 class="prose text-3xl leading-9">{{ article.title }}</h1>
       <p class="text-gray-500 mb-4">
         Last updated: {{ formatDate(article.date) }}
       </p>
       <nuxt-content class="markdown" :document="article" />
-      {{ article }}
-      <Narration :utterance="article" />
+
+      <Narration :utterance="article.raw" />
       <disqus
         v-if="article.comments === true"
         shortname="briancaffey"
-        identifier="article.slug"
+        :identifier="article.disqus_id || article.slug"
       ></disqus>
+      <h1></h1>
     </div>
   </article>
 </template>
@@ -25,8 +26,7 @@
 <script>
 export default {
   async asyncData({ $content, params }) {
-    const article = await $content('articles', params.slug).fetch()
-
+    const article = await $content('blog', params.slug).fetch()
     return { article }
   },
   methods: {
@@ -38,6 +38,20 @@ export default {
   head() {
     return {
       title: this.article.title,
+      meta: [
+        {
+          property: 'og:title',
+          content: this.article.title,
+        },
+        {
+          property: 'og:description',
+          content: this.article.description,
+        },
+        {
+          property: 'og:image',
+          content: process.env.baseUrl + this.article.image,
+        },
+      ],
     }
   },
 }

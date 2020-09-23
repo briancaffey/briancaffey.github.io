@@ -1,8 +1,12 @@
 <template>
-  <div class="grid grid-cols-3 py-2 px-4 items-center">
+  <div class="grid grid-cols-3 py-2 px-2 sm:px-4 items-center">
     <div class="justify-left">
-      <nuxt-link to="/" class="text-xl font-bold"
-        ><span class="hidden sm:inline">Brian </span>Caffey</nuxt-link
+      <nuxt-link
+        to="/"
+        class="text-xl"
+        :class="$route.path === '/' ? 'font-bold' : ''"
+        ><span class="hidden sm:inline">Brian Caffey</span
+        ><span class="inline sm:hidden">JBC</span></nuxt-link
       >
     </div>
     <div class="justify-center">

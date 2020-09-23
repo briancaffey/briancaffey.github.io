@@ -55,15 +55,15 @@ a {
   background: none;
 }
 
-.markdown > * + * {
+.markdown>*+* {
   @apply mt-0 mb-4;
 }
 
-.markdown li + li {
+.markdown li+li {
   @apply mt-1;
 }
 
-.markdown li > p + p {
+.markdown li>p+p {
   @apply mt-6;
   color: var(--color-primary);
 }
@@ -186,6 +186,7 @@ td {
 
 .article-card {
   box-shadow: 0 5px 10px 1px var(--color-secondary);
+  height: 100%;
 }
 
 .article-card:hover {
@@ -201,4 +202,9 @@ hr {
 .menu-icon {
   color: var(--color);
   background-color: var(--border-color);
+}
+
+.mobile-menu {
+  background-color: var(--bg-secondary);
+  color: var(--color);
 }

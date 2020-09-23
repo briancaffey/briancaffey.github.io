@@ -1,4 +1,7 @@
 export default {
+  env: {
+    baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io',
+  },
   /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
@@ -61,6 +64,7 @@ export default {
     '@nuxt/content',
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     '@nuxtjs/sitemap',
+    '@nuxtjs/feed',
   ],
   /*
    ** Axios module configuration
@@ -76,11 +80,14 @@ export default {
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
-  'content:file:beforeInsert': (document) => {
-    if (document.extension === '.md') {
-      const raw = document.text
-      Object.assign(document, raw)
-    }
+
+  hooks: {
+    'content:file:beforeInsert': (document) => {
+      if (document.extension === '.md') {
+        const raw = document.text
+        document.raw = raw
+      }
+    },
   },
   build: {},
 
@@ -97,6 +104,45 @@ export default {
         .concat(...projects.map((p) => p.path))
     },
   },
+
+  feed: [
+    // A default feed configuration object
+    {
+      path: '/feed.xml', // The route to your feed.
+      async create(feed) {
+        feed.options = {
+          title: 'briancaffey.github.io',
+          link: 'https://briancaffey.github.io/feed.xml',
+          description: 'RSS feed for briancaffey.github.io',
+        }
+        const { $content } = require('@nuxt/content')
+        const articles = await $content('blog', { deep: true, text: true })
+          .only(['title', 'body', 'date', 'slug', 'description'])
+          .sortBy('date', 'desc')
+          .fetch()
+        articles.forEach((article) => {
+          feed.addItem({
+            title: article.title,
+            id: article.url,
+            link: `https://briancaffey.github.io/blog/${article.slug}`,
+            description: article.description,
+            // content: article.text,
+          })
+        })
+
+        feed.addCategory('Nuxt.js')
+
+        feed.addContributor({
+          name: 'Brian Caffey',
+          email: 'briancaffey2010@gmail.com',
+          link: 'https://briancaffey.github.io',
+        })
+      }, // The create function (see below)
+      cacheTime: 1000 * 60 * 15, // How long should the feed be cached
+      type: 'rss2', // Can be: rss2, atom1, json1
+      data: [''], // Will be passed as 2nd argument to `create` function
+    },
+  ],
 
   server: {
     port: 3000,

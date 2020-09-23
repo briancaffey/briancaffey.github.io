@@ -1,14 +1,10 @@
 ---
-
 layout: post
 title: Setup, Development and Deployment of a web app using Django, VueJS, VuePress, Docker, nginx, traefik and GitLab
 date: 2019-01-09
 comments: true
 image: /static/technologies.png
-
 ---
-
-![png](/static/technologies.png)
 
 This project is currently deployed on [https://verbose-equals-true.tk](https://verbose-equals-true.tk). The source code is available at [https://gitlab.com/briancaffey/verbose-equals-true](https://gitlab.com/briancaffey/verbose-equals-true).
 

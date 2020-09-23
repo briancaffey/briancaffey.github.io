@@ -2,20 +2,31 @@
   <nav class="">
     <ul class="items-right justify-end hidden md:flex">
       <li class="px-4">
-        <nuxt-link to="/blog">Blog</nuxt-link>
+        <nuxt-link
+          to="/blog"
+          :class="$route.path.startsWith('/blog') ? 'font-bold' : ''"
+          >Blog</nuxt-link
+        >
       </li>
       <li class="px-4">
-        <nuxt-link to="/projects">Projects</nuxt-link>
+        <nuxt-link
+          to="/projects"
+          :class="$route.path.startsWith('/projects') ? 'font-bold' : ''"
+          >Projects</nuxt-link
+        >
       </li>
       <li class="px-4">
-        <nuxt-link to="/contact">Contact</nuxt-link>
+        <nuxt-link
+          to="/contact"
+          :class="$route.path.startsWith('/contact') ? 'font-bold' : ''"
+          >Contact</nuxt-link
+        >
       </li>
     </ul>
     <div class="flex justify-end md:hidden z-1000" @click="show = !show">
       <button class="flex items-center px-3 py-2 border rounded menu-icon">
         <svg
           class="fill-current h-3 w-3"
-          :class="$route.path === '/' ? 'text-white' : 'text-co-blue'"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
         >

@@ -32,7 +32,7 @@
 export default {
   head() {
     return {
-      title: 'Contact',
+      title: 'Contact Brian Caffey',
     }
   },
 }
