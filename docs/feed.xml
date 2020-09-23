@@ -4,7 +4,7 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Wed, 23 Sep 2020 04:20:19 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 23 Sep 2020 04:41:16 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
@@ -99,14 +99,14 @@
             <guid>https://briancaffey.github.io/blog/2017-11-28-remove-root-partition-bloat-from-docker</guid>
         </item>
         <item>
-            <title><![CDATA[How to enable color emoji on Arch Linux with Emoji One Font]]></title>
-            <link>https://briancaffey.github.io/blog/2017-11-24-how-to-get-color-emoji-in-arch-linux</link>
-            <guid>https://briancaffey.github.io/blog/2017-11-24-how-to-get-color-emoji-in-arch-linux</guid>
-        </item>
-        <item>
             <title><![CDATA[Using Tensorflow and Tensorboard with Docker]]></title>
             <link>https://briancaffey.github.io/blog/2017-11-20-using-tensorflow-and-tensor-board-with-docker</link>
             <guid>https://briancaffey.github.io/blog/2017-11-20-using-tensorflow-and-tensor-board-with-docker</guid>
+        </item>
+        <item>
+            <title><![CDATA[How to enable color emoji on Arch Linux with Emoji One Font]]></title>
+            <link>https://briancaffey.github.io/blog/2017-11-24-how-to-get-color-emoji-in-arch-linux</link>
+            <guid>https://briancaffey.github.io/blog/2017-11-24-how-to-get-color-emoji-in-arch-linux</guid>
         </item>
         <item>
             <title><![CDATA[Installing the GPU version of Tensorflow with Docker on Arch Linux]]></title>
