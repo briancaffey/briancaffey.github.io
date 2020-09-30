@@ -1,3 +1,5 @@
+import { doc } from 'prettier'
+
 export default {
   env: {
     baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io',
@@ -83,6 +85,14 @@ export default {
 
   hooks: {
     'content:file:beforeInsert': (document) => {
+      if (document.path.startsWith('/blog/')) {
+        let date = document.slug.substring(0, 10)
+        date = date.replace(/-/g, '/')
+        const url = date + '/' + document.slug.substring(11) + '.html'
+        document.url = url
+        document.slug = document.slug + '.html'
+        document.path = document.path + '.html'
+      }
       if (document.extension === '.md') {
         const raw = document.text
         document.raw = raw
@@ -151,5 +161,13 @@ export default {
 
   generate: {
     dir: 'docs',
+  },
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push({
+        path: '/:year/:month/:day/:slug',
+        component: resolve(__dirname, 'pages/blog/_slug.vue'),
+      })
+    },
   },
 }
