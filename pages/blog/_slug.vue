@@ -26,8 +26,8 @@
 <script>
 export default {
   async asyncData({ $content, params }) {
-    const file = `${params.year}-${params.month}-${params.day}-${params.slug}`
-    const article = await $content('blog', file).fetch()
+    const file = `${params.year}/${params.month}/${params.day}/${params.slug}`
+    const article = await $content(file).fetch()
     return { article }
   },
   methods: {

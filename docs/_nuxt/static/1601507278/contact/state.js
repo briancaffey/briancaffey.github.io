@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1601507278",layout:"default",error:null,serverRendered:a,routePath:"\u002Fcontact",config:{content:{dbHash:"d2a3cec7"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));

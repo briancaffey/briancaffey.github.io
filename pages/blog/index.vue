@@ -6,7 +6,7 @@
         <nuxt-link
           v-for="article of articles"
           :key="article.slug"
-          :to="article.url"
+          :to="article.path"
         >
           <li class="rounded article-card">
             <img
@@ -31,11 +31,12 @@
 <script>
 export default {
   async asyncData({ $content, params }) {
-    const articles = await $content('blog', params.slug)
-      .only(['title', 'description', 'image', 'slug', 'author', 'date', 'url'])
+    let articles = await $content({ deep: true })
+      .only(['title', 'description', 'image', 'slug', 'author', 'date'])
       .sortBy('date', 'desc')
       .fetch()
 
+    articles = articles.filter((x) => !x.path.startsWith('/projects/'))
     return {
       articles,
     }

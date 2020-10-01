@@ -136,6 +136,10 @@ a {
   color: black;
 }
 
+.markdown p {
+  margin-bottom: 10px;
+}
+
 code[class*='language-'],
 pre[class*='language-'] {
   background: var(--bg-code) !important;
