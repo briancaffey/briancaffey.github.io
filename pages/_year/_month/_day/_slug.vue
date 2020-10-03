@@ -26,8 +26,6 @@
 <script>
 export default {
   async asyncData({ $content, params }) {
-    console.log(params)
-    console.log('hmm')
     const file = `${params.year}/${params.month}/${params.day}/${params.slug}`
     const article = await $content(file).fetch()
     return { article }

@@ -1,6 +1,10 @@
 import { doc } from 'prettier'
 
 export default {
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
   env: {
     baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io',
   },
@@ -169,7 +173,6 @@ export default {
       const { $content } = require('@nuxt/content')
 
       const posts = await $content({ deep: true }).only(['path']).fetch()
-      // console.log(posts)
       return posts.map((x) => x.path)
     },
   },
