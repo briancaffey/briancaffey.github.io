@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1601692046",layout:"default",error:null,serverRendered:a,routePath:"\u002F2016\u002F03\u002F11\u002Fmigrating-from-jekyll-to-nuxt-static-site.html",config:{content:{dbHash:"bb915ab6"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));

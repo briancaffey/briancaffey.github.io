@@ -131,14 +131,14 @@ export default {
         }
         const { $content } = require('@nuxt/content')
         const articles = await $content({ deep: true, text: true })
-          .only(['title', 'body', 'date', 'slug', 'description'])
+          .only(['title', 'body', 'date', 'slug', 'description', 'path'])
           .sortBy('date', 'desc')
           .fetch()
         articles.forEach((article) => {
           feed.addItem({
             title: article.title,
             id: article.url,
-            link: `https://briancaffey.github.io/${article.path}`,
+            link: `https://briancaffey.github.io${article.path}`,
             description: article.description,
             // content: article.text,
           })
