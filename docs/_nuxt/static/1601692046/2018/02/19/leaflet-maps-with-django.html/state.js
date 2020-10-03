@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1601692046",layout:"default",error:null,serverRendered:a,routePath:"\u002F2018\u002F02\u002F19\u002Fleaflet-maps-with-django.html",config:{content:{dbHash:"bb915ab6"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));

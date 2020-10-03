@@ -1,0 +1,425 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="Brian Caffey's personal website"><meta data-n-head="ssr" property="og:title" content="Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray"><meta data-n-head="ssr" property="og:description" content="undefined"><meta data-n-head="ssr" property="og:image" content="https://briancaffey.github.io/static/shark.jpg"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/484df72.js" as="script"><link rel="preload" href="/_nuxt/cff3b0e.js" as="script"><link rel="preload" href="/_nuxt/30623f9.js" as="script"><link rel="preload" href="/_nuxt/b4629f2.js" as="script"><link rel="preload" href="/_nuxt/0595448.js" as="script"><style data-vue-ssr-id="38dfa7e4:0 f52d43e0:0 517a8dd7:0 fa7ff0ca:0 56b15182:0 25f7f390:0">/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}[hidden],template{display:none}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}button{background-color:transparent;background-image:none}button:focus{outline:1px dotted;outline:5px auto -webkit-focus-ring-color}fieldset,ol,ul{margin:0;padding:0}ol,ul{list-style:none}html{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}hr{border-top-width:1px}img{border-style:solid}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{color:#a0aec0}input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#a0aec0}input::placeholder,textarea::placeholder{color:#a0aec0}[role=button],button{cursor:pointer}table{border-collapse:collapse}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}button,input,optgroup,select,textarea{padding:0;line-height:inherit;color:inherit}code,kbd,pre,samp{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-t{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.border{border-width:1px}.cursor-pointer{cursor:pointer}.block{display:block}.inline{display:inline}.flex{display:flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.font-bold{font-weight:700}.h-2{height:.5rem}.h-3{height:.75rem}.h-12{height:3rem}.h-32{height:8rem}.h-64{height:16rem}.text-xl{font-size:1.25rem}.text-2xl{font-size:1.5rem}.text-3xl{font-size:1.875rem}.leading-8{line-height:2rem}.leading-9{line-height:2.25rem}.m-2{margin:.5rem}.m-4{margin:1rem}.mx-auto{margin-left:auto;margin-right:auto}.mt-2{margin-top:.5rem}.mt-4{margin-top:1rem}.mb-4{margin-bottom:1rem}.object-cover{-o-object-fit:cover;object-fit:cover}.p-4{padding:1rem}.px-1{padding-left:.25rem;padding-right:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-32{padding-top:8rem;padding-bottom:8rem}.pb-4{padding-bottom:1rem}.pt-8{padding-top:2rem}.pb-8{padding-bottom:2rem}.pt-16{padding-top:4rem}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.right-0{right:0}.bottom-0{bottom:0}.resize{resize:both}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.fill-current{fill:currentColor}.text-center{text-align:center}.text-right{text-align:right}.text-black{--text-opacity:1;color:#000;color:rgba(0,0,0,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-red-400{--text-opacity:1;color:#fc8181;color:rgba(252,129,129,var(--text-opacity))}.visible{visibility:visible}.w-2{width:.5rem}.w-3{width:.75rem}.w-12{width:3rem}.w-full{width:100%}.z-10{z-index:10}.gap-4{grid-gap:1rem;gap:1rem}.gap-6{grid-gap:1.5rem;gap:1.5rem}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.transform{--transform-translate-x:0;--transform-translate-y:0;--transform-rotate:0;--transform-skew-x:0;--transform-skew-y:0;--transform-scale-x:1;--transform-scale-y:1;transform:translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y))}.transition-all{transition-property:all}.transition{transition-property:background-color,border-color,color,fill,stroke,opacity,box-shadow,transform}.duration-150{transition-duration:.15s}.delay-150{transition-delay:.15s}@-webkit-keyframes spin{to{transform:rotate(1turn)}}@keyframes spin{to{transform:rotate(1turn)}}@-webkit-keyframes ping{75%,to{transform:scale(2);opacity:0}}@keyframes ping{75%,to{transform:scale(2);opacity:0}}@-webkit-keyframes pulse{50%{opacity:.5}}@keyframes pulse{50%{opacity:.5}}@-webkit-keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:none;-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:none;-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@media (min-width:640px){.sm\:container{width:100%}}@media (min-width:640px) and (min-width:640px){.sm\:container{max-width:640px}}@media (min-width:640px) and (min-width:768px){.sm\:container{max-width:768px}}@media (min-width:640px) and (min-width:1024px){.sm\:container{max-width:1024px}}@media (min-width:640px) and (min-width:1280px){.sm\:container{max-width:1280px}}@media (min-width:640px){.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:px-4{padding-left:1rem;padding-right:1rem}}@media (min-width:768px){.md\:container{width:100%}}@media (min-width:768px) and (min-width:640px){.md\:container{max-width:640px}}@media (min-width:768px) and (min-width:768px){.md\:container{max-width:768px}}@media (min-width:768px) and (min-width:1024px){.md\:container{max-width:1024px}}@media (min-width:768px) and (min-width:1280px){.md\:container{max-width:1280px}}@media (min-width:768px){.md\:flex{display:flex}.md\:hidden{display:none}.md\:px-4{padding-left:1rem;padding-right:1rem}}@media (min-width:1024px){.lg\:container{width:100%}}@media (min-width:1024px) and (min-width:640px){.lg\:container{max-width:640px}}@media (min-width:1024px) and (min-width:768px){.lg\:container{max-width:768px}}@media (min-width:1024px) and (min-width:1024px){.lg\:container{max-width:1024px}}@media (min-width:1024px) and (min-width:1280px){.lg\:container{max-width:1280px}}@media (min-width:1024px){.lg\:px-16{padding-left:4rem;padding-right:4rem}.lg\:px-32{padding-left:8rem;padding-right:8rem}.lg\:pl-64{padding-left:16rem}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1280px){.xl\:container{width:100%}}@media (min-width:1280px) and (min-width:640px){.xl\:container{max-width:640px}}@media (min-width:1280px) and (min-width:768px){.xl\:container{max-width:768px}}@media (min-width:1280px) and (min-width:1024px){.xl\:container{max-width:1024px}}@media (min-width:1280px) and (min-width:1280px){.xl\:container{max-width:1280px}}@media (min-width:1280px){.xl\:pb-16{padding-bottom:4rem}}:root{--color:#243746;--color-primary:#158876;--color-secondary:#0e2233;--bg:#f3f5f4;--bg-secondary:#fff;--bg-code:#ddd;--border-color:#ddd}.dark-mode{--color:#ebf4f1;--color-primary:#41b38a;--color-secondary:#fdf9f3;--bg:#091a28;--bg-secondary:#071521;--bg-code:#ddd;--border-color:#0d2538}.sepia-mode{--color:#433422;--color-primary:#504231;--color-secondary:#504231;--bg:#f1e7d0;--bg-code:#ddd;--bg-secondary:#eae0c9;--border-color:#ded0bf}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;background-color:#f3f5f4;background-color:var(--bg);color:#243746;color:var(--color);transition:background-color .3s}a{color:#158876;color:var(--color-primary)}.py-05{padding-top:.125rem;padding-bottom:.125rem}.markdown{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity));line-height:1.5;word-wrap:break-word;color:#0e2233;color:var(--color-secondary)}.markdown .token.operator{background:0 0}.markdown>*+*{margin-top:0;margin-bottom:1rem}.markdown li+li{margin-top:.25rem}.markdown li>p+p{margin-top:1.5rem;color:#158876;color:var(--color-primary)}.markdown img{margin:auto}.markdown a,.markdown strong{font-weight:600}.markdown strong a{font-weight:700}.markdown h1{font-size:2.25rem}.markdown h1,.markdown h2{border-color:#158876;border-color:var(--color-primary);line-height:1.25;border-bottom-width:1px;font-weight:600;margin-bottom:1rem;margin-top:1.5rem;padding-bottom:.5rem}.markdown h2{font-size:1.5rem}.markdown h3{line-height:1.375;font-size:1.125rem}.markdown h3,.markdown h4{border-color:#158876;border-color:var(--color-primary);font-weight:600;margin-bottom:1rem;margin-top:1.5rem}.markdown h4{line-height:1;font-size:1rem}.markdown h5{border-color:#158876;border-color:var(--color-primary)}.markdown h5,.markdown h6{line-height:1.25;font-size:.875rem;font-weight:600;margin-bottom:1rem;margin-top:1.5rem}.markdown blockquote,.markdown h6{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.markdown blockquote{font-size:1rem;border-left-width:4px;--border-opacity:1;border-color:#e2e8f0;border-color:rgba(226,232,240,var(--border-opacity));padding-left:1rem;padding-right:1rem;border-color:#158876;border-color:var(--color-primary)}.markdown code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:.875rem;display:inline;background-color:#edf2f7;background-color:rgba(237,242,247,var(--bg-opacity));padding:.125rem .25rem;background-color:#ddd;background-color:var(--bg-code);color:#000}.markdown code,.markdown pre{--bg-opacity:1;border-radius:.25rem}.markdown pre{background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity));padding:1rem}.markdown pre code{display:block;background-color:transparent;padding:0;overflow:visible;border-radius:0;color:#000}.markdown p{margin-bottom:10px}code[class*=language-],pre[class*=language-]{background:#ddd!important;background:var(--bg-code)!important;text-shadow:none!important}.markdown ul{list-style-type:disc}.markdown ol,.markdown ul{font-size:1rem;padding-left:2rem}.markdown ol{list-style-type:decimal}.markdown kbd{font-size:.75rem;display:inline-block;border-radius:.25rem;border-width:1px;padding:.125rem .25rem;vertical-align:middle;font-weight:400;font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.markdown table,td,th{font-size:1rem;border:1px solid #243746;border-color:var(--color)}.markdown table{overflow-x:scroll}.markdown td,.markdown th{border-width:1px;padding:.25rem .75rem}.markdown .highlight pre{--bg-opacity:1!important;background-color:#f7fafc!important;background-color:rgba(247,250,252,var(--bg-opacity))!important}.article-card{box-shadow:0 5px 10px 1px #0e2233;box-shadow:0 5px 10px 1px var(--color-secondary);height:100%}.article-card:hover{box-shadow:0 5px 15px 5px #158876;box-shadow:0 5px 15px 5px var(--color-primary)}hr{background-color:#243746;background-color:var(--color);border:none;height:1px}.menu-icon{background-color:#ddd;background-color:var(--border-color)}.menu-icon,.mobile-menu{color:#243746;color:var(--color)}.mobile-menu{background-color:#fff;background-color:var(--bg-secondary)}code[class*=language-],pre[class*=language-]{color:#000;background:0 0;text-shadow:0 1px #fff;font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-] ::-moz-selection,code[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection{text-shadow:none;background:#b3d4fc}code[class*=language-] ::selection,code[class*=language-]::selection,pre[class*=language-] ::selection,pre[class*=language-]::selection{text-shadow:none;background:#b3d4fc}@media print{code[class*=language-],pre[class*=language-]{text-shadow:none}}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#f5f2f0}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.token.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#9a6e3a;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.class-name,.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}span[data-v-51e3ff6a]{position:absolute;left:50%;transform:translateX(-50%);text-align:center;top:2px}</style><link rel="preload" href="/_nuxt/static/1601692046/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html/state.js" as="script"><link rel="preload" href="/_nuxt/static/1601692046/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html/payload.js" as="script">
+  </head>
+  <body>
+    <script data-n-head="ssr" data-hid="nuxt-color-mode-script" data-pbody="true">!function (){"use strict";var e=window,s=document,t=s.documentElement,n=["dark","light"],o=function(e){for(var t=e+"=",n=s.cookie.split(";"),o=0;o<n.length;o++){for(var a=n[o];" "===a.charAt(0);)a=a.substring(1,a.length);if(0===a.indexOf(t))return a.substring(t.length,a.length)}return null}("nuxt-color-mode")||"system",a="system"===o?c():o;function i(e){var s=""+e+"-mode";t.classList?t.classList.add(s):t.className+=" "+s}function r(s){return e.matchMedia("(prefers-color-scheme"+s+")")}function c(){if(e.matchMedia&&"not all"!==r("").media)for(var s of n)if(r(":"+s).matches)return s;return"light"}i(a),e["__NUXT_COLOR_MODE__"]={preference:o,value:a,getColorScheme:c,addClass:i,removeClass:function(e){var s=""+e+"-mode";t.classList?t.classList.remove(s):t.className=t.className.replace(new RegExp(s,"g"),"")}}}();
+</script><div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div class="grid grid-cols-3 py-2 px-2 sm:px-4 items-center" data-v-58308eeb><div class="justify-left" data-v-58308eeb><a href="/" class="text-xl nuxt-link-active" data-v-58308eeb><span class="hidden sm:inline" data-v-58308eeb>Brian Caffey</span><span class="inline sm:hidden" data-v-58308eeb>JBC</span></a></div> <div class="justify-center" data-v-58308eeb><div class="grid items-center justify-center" data-v-58308eeb><ul class="flex px-4"><li class="md:px-4 px-1 cursor-pointer">
+      🖥️
+    </li><li class="md:px-4 px-1 cursor-pointer">
+      🌞
+    </li><li class="md:px-4 px-1 cursor-pointer">
+      🌚
+    </li><li class="md:px-4 px-1 cursor-pointer">
+      ☕
+    </li></ul></div></div> <div class="flex justify-end" data-v-58308eeb><nav data-v-cd9cc810 data-v-58308eeb><ul class="items-right justify-end hidden md:flex" data-v-cd9cc810><li class="px-4" data-v-cd9cc810><a href="/blog" data-v-cd9cc810>Blog</a></li> <li class="px-4" data-v-cd9cc810><a href="/projects" data-v-cd9cc810>Projects</a></li> <li class="px-4" data-v-cd9cc810><a href="/contact" data-v-cd9cc810>Contact</a></li></ul> <div class="flex justify-end md:hidden z-1000" data-v-cd9cc810><button class="flex items-center px-3 py-2 border rounded menu-icon" data-v-cd9cc810><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="fill-current h-3 w-3" data-v-cd9cc810><title data-v-cd9cc810>Menu</title> <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" data-v-cd9cc810></path></svg></button></div> <!----></nav></div></div> <article><img src="/static/shark.jpg" class="h-64 w-full object-cover"> <div class="px-2 sm:px-4 md:px-4 lg:px-16 xl:pb-16 mt-2 lg:pl-64"><h1 class="prose text-3xl leading-9">Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray</h1> <p class="text-gray-500 mb-4">
+      Last updated: August 8, 2020
+    </p> <div class="markdown nuxt-content"><p>I recently wrote two articles about deploying Django applications to AWS serverless environments: one on <a href="https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html" rel="nofollow noopener noreferrer" target="_blank">AWS Fargate</a> (CloudFront, ALB and ECS Fargate containers) and one on <a href="https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway.html" rel="nofollow noopener noreferrer" target="_blank">AWS Lambda</a> (Lambda + API Gateway, without using Zappa or Serverless Framework). Both projects focused on automating as much of the setup and operation as possible using DevOps patterns: Infrastructure as Code, GitOps, CI/CD and docker containers. I used AWS resources exclusively (with the exception of GitLab) with the help of <a href="https://aws.amazon.com/cdk/" rel="nofollow noopener noreferrer" target="_blank">AWS Cloud Development Kit (CDK)</a>, an awesome tool that I have really come to like. In general I really like AWS, and the more I use it I start to think about what I would do without it. Also, a lot of the feedback I got on these projects recommended to "just use a VPS" instead of bothering with AWS because it is complicated, expensive, overkill, etc. This got me thinking about how far I could get in deploying a Django application on a server with little or no external services that AWS has spoiled me with. After a little bit of discomfort and confusion, I was able to check off most of what I was hoping to and came away with a few questions as well. If you are interested to know how I got things setup and and hear some of my thoughts on running Django applications in production, continue reading!</p>
+<p>In this article, I'm going to go over my approach to deploying and running Django applications using DigitalOcean Droplets (Linux-based virtual machine that runs on top of virtualized hardware) and block storage volumes (network-based block devices that provide additional data storage for Droplets).</p>
+<blockquote>
+<p>I'll also touch on trade-offs between DigitalOcean and AWS and emphasize aspects of the project that confuse/d me with these block quotes.</p>
+</blockquote>
+<p>Here's a link to my project that I'll be referencing: <a href="https://gitlab.com/briancaffey/digital-ocean-docker-swarm-django-traefik" rel="nofollow noopener noreferrer" target="_blank">https://gitlab.com/briancaffey/digital-ocean-docker-swarm-django-traefik</a>.</p>
+<p>The project setup is a combination of some of the best practices I have picked up along the way as well as some very helpful guides, repositories and blog posts that I'll do my best to reference throughout this article.</p>
+<h2 id="overview"><a href="#overview" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Overview</h2>
+<p>Here are some of the key parts of the project that I'll go over:</p>
+<ul>
+<li>DigitalOcean and GitLab setup</li>
+<li>Creating an A Record that points to our Droplet IP</li>
+<li>Using a prebuilt VM image that ships with docker and docker-compose</li>
+<li>Setting up the REX-Ray storage driver to automatically provision Digital Ocean block storage volumes</li>
+<li>Setting up a docker swarm cluster</li>
+<li>Setting up a <code>.gitlab-ci.yml</code> file to build images and push them to a private GitLab CI project registry</li>
+<li>Writing a docker-compose file to configure the services (containers) that will support the application</li>
+<li>Deploying a stack to the docker swarm cluster on DigitalOcean from our GitLab CI environment over SSH</li>
+<li>Django project settings and management commands for our Postgres database and static files</li>
+<li>Monitoring, logging and debugging</li>
+<li>Destroying the environment + cleanup</li>
+</ul>
+<p>Before I dig into all of this, I recommend that you check out <a href="https://mattsegal.dev/django-prod-architectures.html" rel="nofollow noopener noreferrer" target="_blank">this article about Django production architectures by Matt Segal</a>. This is a great primer for a lot of what I'll be talking about and it includes some great visualizations. <a href="https://mattsegal.dev" rel="nofollow noopener noreferrer" target="_blank">mattsegal.dev</a> has lots of good content related to Django, I also recommend checking out <a href="https://mattsegal.dev/nginx-django-reverse-proxy-config.html" rel="nofollow noopener noreferrer" target="_blank">this article about how NGINX is used with Django</a>. Thanks for the great resources, Matt!</p>
+<h2 id="digitalocean-setup"><a href="#digitalocean-setup" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>DigitalOcean setup</h2>
+<ul>
+<li>Sign up for a new DigitalOcean account if you don't already have one</li>
+<li>Create a DigitalOcean project <a href="https://cloud.digitalocean.com/projects/new" rel="nofollow noopener noreferrer" target="_blank">https://cloud.digitalocean.com/projects/new</a></li>
+<li>Create a personal access token (we will use this to configure a docker addon that will provision block storage volumes automatically) <a href="https://cloud.digitalocean.com/account/api/tokens" rel="nofollow noopener noreferrer" target="_blank">https://cloud.digitalocean.com/account/api/tokens</a></li>
+<li>Create and add an SSH key to your account. This is a pretty simple step, but DigitalOcean still has really thorough documentation on how to do this (see <a href="https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/" rel="nofollow noopener noreferrer" target="_blank">this article</a> for more information)</li>
+</ul>
+<h2 id="prebuilt-docker-vm-image"><a href="#prebuilt-docker-vm-image" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Prebuilt Docker VM image</h2>
+<p>From the <a href="https://cloud.digitalocean.com/droplets/new" rel="nofollow noopener noreferrer" target="_blank">Create Droplets</a> page, select <code>Marketplace</code> and search for <code>docker</code>. Select the <code>Docker 5:19.03.1~3 18.04</code> image. Note that this VM is Ubuntun 18.04 with Docker Community Edition and docker-compose pre-installed.</p>
+<p>Select the basic plan, and then scroll to the left to choose the \$5.00/month option. Select a datacenter region. Most of these regions should be OK, but you should verify that the region you have selected supports volumes (they may all support volumes, but there are some DO features that are not supported accross all regiongs, similar to AWS). Do not select a VPC or any of the additional options.</p>
+<p>For Authentication, select the SSH key that you created earlier.</p>
+<p>Take note of the Droplet's IP address; we will use this in the next step.</p>
+<h2 id="gitlab-setup"><a href="#gitlab-setup" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>GitLab setup</h2>
+<p>Create a new GitLab project and clone it locally. You can also clone or fork my project and use that as a starting point. Go to <code>Settings > CI/CD > Variables</code> in your GitLab project and add the following environment variables:</p>
+<ul>
+<li><code>SSH_PRIVATE_KEY</code>: the value should start with <code>-----BEGIN RSA PRIVATE KEY-----</code> and end with <code>-----END RSA PRIVATE KEY-----</code></li>
+<li><code>DROPLET_IP</code>: the IP address of the droplet you just created</li>
+<li><code>POSTGRES_PASSWORD</code>: a secure password that we will use for our Postgres database (we will share this with our Django application later on)</li>
+<li><code>SECRET_KEY</code>: a random secret key to use for our Django application.</li>
+<li><code>DEBUG</code>: the number <code>0</code></li>
+</ul>
+<h2 id="a-record"><a href="#a-record" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>A Record</h2>
+<p>By the end of this project you will be able to deploy your Django application to a live domain name provided that you have one. All you need to do is create an A Record that points to the Droplet IP. There are no DNS configuration changes to make inside of DigitalOcean. I'm using a domain that I purchased through Route53. You can get a free <code>.tk</code> domain from <a href="https://www.freenom.com/en/freeandpaiddomains.html" rel="nofollow noopener noreferrer" target="_blank">freenom</a>. I have used this before and it is a great option for testing things out.</p>
+<h2 id="ssh-into-your-digitalocean-droplet"><a href="#ssh-into-your-digitalocean-droplet" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>SSH into your DigitalOcean Droplet</h2>
+<p>You can do this with the following command:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>ssh -i ~/.ssh/a1_rsa root@123.45.578.91
+</code></pre></div>
+<p><code>a1_rsa</code> is the private key I added to GitHub. You can logout for now, but keep this command handy, because we will be coming back to our Droplet via SSH shortly.</p>
+<h2 id="add-the-rex-ray-docker-plugin"><a href="#add-the-rex-ray-docker-plugin" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Add the REX-Ray docker plugin</h2>
+<p>This step is very simple, you can follow along with this short guide: <a href="https://www.digitalocean.com/community/questions/how-to-attach-digitalocean-block-storage-to-docker-container" rel="nofollow noopener noreferrer" target="_blank">https://www.digitalocean.com/community/questions/how-to-attach-digitalocean-block-storage-to-docker-container</a>.</p>
+<p>There is basically one command to run:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker plugin install rexray/dobs DOBS_TOKEN=YOUR_DIGITALOCEAN_TOKEN DOBS_REGION=nyc1 LINUX_VOLUME_FILEMODE=0775
+</code></pre></div>
+<p>You will need to make sure that you replace <code>YOUR_DIGITALOCEAN_TOKEN</code> with the personal access token you added earlier. Also, <code>DOBS_REGION</code> should be the region you selected for your Droplet earlier.</p>
+<p>Check that the plugin was installed correctly with:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker plugin ls
+</code></pre></div>
+<p>Here's a quick intro to REX-Ray from <a href="https://rexray.readthedocs.io/en/stable/" rel="nofollow noopener noreferrer" target="_blank">rexray.readthedocs.io</a>:</p>
+<blockquote>
+<p>REX-Ray is an open source, storage management solution designed to support container runtimes such as Docker and Mesos. REX-Ray enables stateful applications, such as databases, to persist and maintain its data after the life cycle of the container has ended. Built-in high availability enables orchestrators such as Docker Swarm, Kubernetes, and Mesos Frameworks like Marathon to automatically orchestrate storage tasks between hosts in a cluster.</p>
+</blockquote>
+<p>In the context of this project, REX-Ray will automate the creation of DigitalOcean Block Storage Volumes. We will talk about volumes and how they are used later on in this article.</p>
+<h2 id="gitlab-ciyml"><a href="#gitlab-ciyml" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a><code>.gitlab-ci.yml</code></h2>
+<p><code>.gitlab-ci.yml</code> is a file that configures pipelines when code is pushed to GitLab, similar to how GitHub Actions work with GitHub. This single file is a huge topic, if you are unfamiliar with GitLab CI, you might want to have a look over <a href="https://docs.gitlab.com/ee/ci/yaml/" rel="nofollow noopener noreferrer" target="_blank">this page from the GitLab documentation</a> which goes over all of the configuration options with many examples. Also, <a href="https://docs.gitlab.com/ee/ci/variables/predefined_variables.html" rel="nofollow noopener noreferrer" target="_blank">this documentation page</a> covers the predefined environment variables that are made available to GitLab CI pipelines. I'm using these in a few different places as we will see shortly.</p>
+<p>CI/CD pipelines that I define with <code>.gitlab-ci.yml</code> typically contain three stages: <code>test</code>, <code>build</code> and <code>deploy</code>. We will focus on the <code>build</code> and <code>deploy</code> stages for now (reference the article on my Fargate project linked above for reference on setting up unit tests with pytest).</p>
+<p><code>build-backend</code> is the name of a GitLab CI job that builds and tags a docker image from the source code in the <code>backend</code> directory of this project and pushes the tagged container image to a private image registry on gitlab.com that we will use later.</p>
+<p>Here's the YAML code for <code>build-backend</code>:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-yml"><code><span class="token key atrule">build-backend</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> build
+  <span class="token key atrule">image</span><span class="token punctuation">:</span> docker<span class="token punctuation">:</span>19.03.1
+  <span class="token key atrule">services</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> docker<span class="token punctuation">:</span>19.03.5<span class="token punctuation">-</span>dind
+  <span class="token key atrule">before_script</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> docker login <span class="token punctuation">-</span>u gitlab<span class="token punctuation">-</span>ci<span class="token punctuation">-</span>token <span class="token punctuation">-</span>p $CI_JOB_TOKEN $CI_REGISTRY
+  <span class="token key atrule">script</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token punctuation">|</span><span class="token scalar string">
+      docker build \
+        -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA \
+        -f backend/docker/Dockerfile.prod \
+        ./backend/</span>
+    <span class="token punctuation">-</span> docker push $CI_REGISTRY_IMAGE/backend<span class="token punctuation">:</span>$CI_COMMIT_SHORT_SHA
+</code></pre></div>
+<p><code>build-nginx</code> is almost identical, but the <code>docker build</code> arguments are slightly different. There are three arguments for the <code>docker build</code> command that I'm using here:</p>
+<ol>
+<li><code>-t</code>: the tag to tag the built image with</li>
+<li><code>-f</code>: the Dockerfile to be used for building the image</li>
+<li>the <code>context</code> that is sent to the docker daemon when we build the image</li>
+</ol>
+<p><code>-t</code> makes use of two predefined GitLab CI variables: <code>CI_REGISTRY_IMAGE</code> and <code>CI_COMMIT_SHORT_SHA</code>. <code>$CI_REGISTRY_IMAGE</code> is the URL for the private image registry on gitlab.com that we push our images to that is specific to our project: <code>registry.gitlab.com/&lt;gitlab_username>/&lt;project_name></code>, and <code>CI_COMMIT_SHORT_SHA</code> is an character alphanumeric value that contains the truncated name of the commit hash, this is known as the <code>tag</code>, even though we pass in more than just this value. We combine these two values with <code>/</code> and the name of the image we are building, such as <code>backend</code>, so the full value being passed to <code>-t</code> is:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>registry.gitlab.com/gitlab-username/my-project/backend:abcd1234
+</code></pre></div>
+<p><code>-f</code> is the path to the <code>Dockerfile</code> we are using relative to the directory where we are running the <code>docker build</code> command, which is the root directory of the project.</p>
+<p>The final argument defines the context that we are using to build the image, and this is an important part for understanding how Docker works. This argument defines the directory that is zipped up and sent to the docker daemon via the docker API. When we build an image with <code>docker build</code>, we are essentially using the docker CLI to make a POST request to our docker daemon (server) where the POST data contains all of the files that we will have access to in the steps of the Dockerfile (such as <code>ADD</code> and <code>COPY</code> -- we will get to these soon). There's a key difference between the <code>backend</code> and <code>nginx</code> <code>docker build</code> commands: the context for <code>backend</code> is <code>backend</code>, but the context for <code>nginx</code> is <code>.</code> (the root of the project). This is because we may want access to another top level directory in our project that contains, for example, a Vue.js or React application, that we will build into our NGINX container. In order to be able to access both files in the <code>nginx</code> and the folder containing our frontend app, we need to send a context that contains both of these directories. Sending too many files to to the docker daemon when you run docker build will usually cause the <code>docker build</code> command to hang. The first line of output from a <code>docker build</code> command should be something like this:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>Sending build context to Docker daemon  24.58kB
+</code></pre></div>
+<p>If this number is too high, you should use a <code>.dockerignore</code> file that ignores any files or directories you don't want to send to the docker daemon (similar to how <code>.gitignore</code> works with git).</p>
+<p>To be able to pull and push (read and write) images to our private project container image registry, we need login with our docker client using the <code>docker login</code> command in the <code>before_script</code> as well two other predefined GitLab CI variables: <code>CI_JOB_TOKEN</code> and <code>CI_REGISTRY</code>. This all happens using a special service called <code>docker-in-docker</code> which I won't go into too much detail here, but it is a common practice when working with containers in a CI/CD environment that itself which is also based on containers, such as GitLab CI (each job runs in a container -- the key <code>image</code> -- and can define additional containers -- the <code>services</code> key -- to help with the CI job). Once the two images for <code>backend</code> and <code>nginx</code> have been built and pushed, our GitLab CI pipeline moves on to the next stage: <code>deploy</code>. In the <code>deploy</code> stage, we will start these and other containers on our DigitalOcean droplet, so we are getting close, but there is a lot more to explain. Before we deploy our containers, we need to do some one-time setup:</p>
+<ol>
+<li>initialize a single-node docker swarm cluster on our Droplet and</li>
+<li>create a docker network that our cluster's services (containers) will use</li>
+</ol>
+<h2 id="setup-a-docker-swarm-cluster"><a href="#setup-a-docker-swarm-cluster" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Setup a docker swarm cluster</h2>
+<p>To setup a docker swarm cluster, SSH into the Droplet with the command we introduced above (<code>ssh -i ~/.ssh/a1_rsa root@123.45.578.91</code> where <code>a1_rsa</code> is the name of the private key file -- you can ignore the <code>-i ~/.ssh/a1_rsa</code> part if you are using an SSH key called <code>id_rsa</code>), and run the following command:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker swarm init --advertise-addr DROPLET_IP
+</code></pre></div>
+<p>Replace <code>DROPLET_IP</code> with your Droplet's IP address (e.g. <code>123.45.578.91</code>). Check out <a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-cluster-of-docker-containers-with-docker-swarm-and-digitalocean-on-ubuntu-16-04" rel="nofollow noopener noreferrer" target="_blank">this article</a> for some additional information about using docker swarm on GitLab. It is a little bit outdated, but the main ideas should still hold up. Docker swarm is designed to orchestrate containers running on a group (or swarm) of multiple machines. However, it is perfectly fine to run a single-node cluster as we are doing here.</p>
+<p>Docker swarm uses docker-compose files, but using docker swarm is very different from running <code>docker-compose up</code>, a command which you might see people running both locally and in production and which also uses docker-compose files. As a best practice, you should not be using <code>docker-compose</code> (the command) in production. Many people do this, and several official tutorials will often end with "now just run <code>docker-compose up</code> and you are done". The first time I ran containers in the cloud I pulled my git repo into a VM, installed docker and docker-compose and ran <code>docker-compose up</code>. It is pretty easy and it works very similarly in both local and production environments, but this guide will be using <code>docker-compose</code> in production. There is more I could say here, but the main point is that docker swarm is a simplified version of something like Kubernetes, but it comes built-in to docker and is very simple to use.</p>
+<h2 id="defining-an-overlay-network"><a href="#defining-an-overlay-network" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Defining an overlay network</h2>
+<p>SSH into your droplet and run the following command:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker network create --driver=overlay traefik-public
+</code></pre></div>
+<blockquote>
+<p>Usually we define networks in our docker-compose file, but this network needs to be defined first and then referenced in our docker-compose file. Here's a thread on SO that goes into a little bit more on why this is necessary, but I still don't have a very clear idea of why this is the case. With another configuration or perhaps docker-compose version, this may not be needed. I'll update this part of the article if I figure anything out.</p>
+</blockquote>
+<p>Let's go over one more docker concept that will helpful in the next few steps. When you run <code>docker ps</code> on your local machine, the docker CLI first looks to see if the <code>DOCKER_HOST</code> environment variable is set. If it is not, then docker defaults to <code>unix:///var/run/docker.sock</code>, a UNIX socket. Check out <a href="https://stackoverflow.com/questions/35110146/can-anyone-explain-docker-sock" rel="nofollow noopener noreferrer" target="_blank">this SO post</a> titled "Can anyone explain docker.sock?"</p>
+<p>We change the docker host that our local docker CLI is talking to by setting this environment variable, and one nice way to set this environment variables uses an SSH connection:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>DOCKER_HOST=ssh://root@$DOCKER_IP
+</code></pre></div>
+<p>See this article for a more in-depth discussion: <a href="https://www.digitalocean.com/community/tutorials/how-to-use-a-remote-docker-server-to-speed-up-your-workflow" rel="nofollow noopener noreferrer" target="_blank">https://www.digitalocean.com/community/tutorials/how-to-use-a-remote-docker-server-to-speed-up-your-workflow</a>.</p>
+<p>You can try this out locally. Run a container locally, check it with <code>docker ps</code>, then export the <code>DOCKER_HOST</code> environment variable with the following command:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>export DOCKER_HOST=ssh://root@123.45.678.91
+</code></pre></div>
+<p>Replacing <code>123.45.678.91</code> with your Droplet IP. Run <code>docker ps</code> again and you should see nothing (or any other containers that you started on your Droplet). Finally, run:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>unset DOCKER_HOST
+</code></pre></div>
+<p>Running <code>docker ps</code> again you should see the containers on your machine. We will be using this idea in the next step when we look at the <code>docker stack deploy</code> command.</p>
+<h2 id="docker-stack-deploy"><a href="#docker-stack-deploy" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a><code>docker stack deploy</code></h2>
+<p>Now that we have done our one-time-setup steps, let's look at the <code>deploy</code> stage of <code>.gitlab-ci.yml</code>, the GitLab CI job that will get our containers running on our Droplet. First, let's break down the <code>deploy-digital-ocean</code> command:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-yml"><code><span class="token key atrule">deploy-digital-ocean</span><span class="token punctuation">:</span>
+  <span class="token key atrule">stage</span><span class="token punctuation">:</span> deploy
+  <span class="token key atrule">image</span><span class="token punctuation">:</span> docker<span class="token punctuation">:</span>19.03.1
+  <span class="token key atrule">services</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> docker<span class="token punctuation">:</span>19.03.5<span class="token punctuation">-</span>dind
+  <span class="token key atrule">variables</span><span class="token punctuation">:</span>
+    <span class="token key atrule">DOCKER_HOST</span><span class="token punctuation">:</span> <span class="token string">"ssh://root@$DROPLET_IP"</span>
+  <span class="token key atrule">before_script</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> apk update <span class="token important">&&</span> apk add openssh<span class="token punctuation">-</span>client bash
+    <span class="token punctuation">-</span> mkdir <span class="token punctuation">-</span>p ~/.ssh
+    <span class="token punctuation">-</span> echo "$SSH_PRIVATE_KEY" <span class="token punctuation">></span> ~/.ssh/id_rsa
+    <span class="token punctuation">-</span> chmod 600 ~/.ssh/id_rsa
+    <span class="token punctuation">-</span> eval "$(ssh<span class="token punctuation">-</span>agent <span class="token punctuation">-</span>s)"
+    <span class="token punctuation">-</span> ssh<span class="token punctuation">-</span>add ~/.ssh/id_rsa
+    <span class="token punctuation">-</span> ssh<span class="token punctuation">-</span>keyscan <span class="token punctuation">-</span>H $DROPLET_IP <span class="token punctuation">></span><span class="token punctuation">></span> ~/.ssh/known_hosts
+    <span class="token punctuation">-</span> docker login <span class="token punctuation">-</span>u gitlab<span class="token punctuation">-</span>ci<span class="token punctuation">-</span>token <span class="token punctuation">-</span>p $CI_JOB_TOKEN $CI_REGISTRY
+  <span class="token key atrule">script</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> docker stack deploy <span class="token punctuation">-</span>c stack.yml my<span class="token punctuation">-</span>stack <span class="token punctuation">-</span><span class="token punctuation">-</span>with<span class="token punctuation">-</span>registry<span class="token punctuation">-</span>auth
+</code></pre></div>
+<p>This job uses the same <code>image</code> and <code>services</code> that our <code>build</code> stage jobs used. Notice that we set <code>DOCKER_HOST</code> to <code>"ssh://root@$DROPLET_IP"</code>, this means that any docker CLI commands in this job will be communicating with the docker daemon on our Droplet. The <code>before_script</code> has a lot going on, but all we are doing is preparing to use the SSH private key that we previously added to our GitLab project's CI/CD environment variables. The base image for this job, <code>docker:19.03.1</code> is based on Alpine Linus. This version of Linux is super light weight and doesn't come with <code>openssh-client</code> or <code>bash</code>, so our first step is to install these with the Alpine package manager, <code>apk</code>:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>apk update && apk add openssh-client bash
+</code></pre></div>
+<p>Next, we add the <code>SSH_PRIVATE_KEY</code> environment variable into the body of the <code>id_rsa</code> private key file, change the permission of this file and then add the key to our SSH agent. Here's an excerpt from <code>man ssh-agent</code> that provides a little bit more context into why we need to run <code>eval "$(ssh-agent -s)"</code> and <code>ssh-add ~/.ssh/id_rsa</code>:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>DESCRIPTION
+     ssh-agent is a program to hold private keys used for public key authentication (RSA, DSA, ECDSA, Ed25519)ssh-agent is usually started in the beginning of an X-session or a login session, and all other windows or programs are started as clients to the ssh-agent program.  Through use of environment variables the agent can be located and automatically used for authentication when logging in to other machines using ssh(1).
+
+     The agent initially does not have any private keys.  Keys are added using ssh(1) (see AddKeysToAgent in ssh_config(5) for details) or ssh-add(1).  Multiple identities may be stored in ssh-agent concurrently and ssh(1) will automatically use them if present.  ssh-add(1) is also used to remove keys from ssh-agent and to query the keys that are held in one.
+</code></pre></div>
+<p>Next, <code>ssh-keyscan -H $DROPLET_IP >> ~/.ssh/known_hosts</code> tells our SSH agent about our Droplet so that it doesn't prompt us with a <code>Do you want to add this server to known hosts? (yes/no)</code>, or whatever the equivalent of that is for the docker CLI when it attempts to connect to a remote docker daemon over SSH.</p>
+<p>Finally, we login to our our GitLab private registry using the same command from before when we built and pushed images to our private registry on gitlab.com:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+</code></pre></div>
+<p>This essentially gives our DigitalOcean Droplet access to the <code>backend</code> and <code>nginx</code> images in our private GitLab CI image registry, even tho we are running this command in a contain, in a container that is probably running in Kubernetes on GCP. Next, we are actually going to use these images.</p>
+<p>The last command in the <code>deploy-digital-ocean</code> job is:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker stack deploy -c stack.yml my-stack --with-registry-auth
+</code></pre></div>
+<p>Check out this link from the docker docs on docker stacks <a href="https://docs.docker.com/engine/swarm/stack-deploy/" rel="nofollow noopener noreferrer" target="_blank">https://docs.docker.com/engine/swarm/stack-deploy/</a>. <code>--with-registry-auth</code> is important, our command will complete if this is not included, but our application won't start.</p>
+<h2 id="stackyml"><a href="#stackyml" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a><code>stack.yml</code></h2>
+<p>Now we are ready to tackle the last big file in our repo: <code>stack.yml</code>. This is a the docker-compose file that we use to deploy our project. The only reason we needed to run <code>docker login</code> above is because <code>stack.yml</code> references the two images we built and pushed to our GitLab private repo. There's a lot going on in this file, let's start with the <code>backend</code> service:</p>
+<h3 id="backend"><a href="#backend" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>backend</h3>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-yml"><code><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.4"</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">backend</span><span class="token punctuation">:</span>
+  <span class="token key atrule">image</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span>CI_REGISTRY_IMAGE<span class="token punctuation">}</span>/backend<span class="token punctuation">:</span>$<span class="token punctuation">{</span>CI_COMMIT_SHORT_SHA<span class="token punctuation">}</span>
+  <span class="token key atrule">networks</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> main
+  <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> POSTGRES_PASSWORD
+    <span class="token punctuation">-</span> SECRET_KEY
+    <span class="token punctuation">-</span> DEBUG
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> backendassets<span class="token punctuation">:</span>/code/assets
+  <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> postgres
+    <span class="token punctuation">-</span> redis
+    <span class="token punctuation">-</span> web
+</code></pre></div>
+<p>The <code>image</code> is essentially what we defined in <code>.gitlab-ci.yml</code>, but the syntax is slightly different:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>${CI_REGISTRY_IMAGE}/backend:${CI_COMMIT_SHORT_SHA}
+</code></pre></div>
+<p>We pass environment variables that we defined in GitLab CI via the <code>environment</code> key.</p>
+<p>The volume <code>backendassets</code> is used for storing static assets (CSS, JS, etc.) as well as media assets (images, videos, any other file type). We mount this directory at <code>/code/assets</code> and then define our <code>STATIC_ROOT</code> in Django's <code>settings.py</code> to be:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-py"><code>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>BASE_DIR<span class="token punctuation">,</span> <span class="token string">"assets"</span><span class="token punctuation">,</span> <span class="token string">"static"</span><span class="token punctuation">)</span>
+</code></pre></div>
+<p>Later, when we run <code>collectstatic</code>, files are copied to this location in our container, and since this is the location of the volume, the files are actually copied to the volume and will be persisted if we destroy the backend container and restart it. When the container restarts, the volume is mounted again and the static files will still be available to our application.</p>
+<p><code>network</code> and <code>depends_on</code> related to to the other services that this application will communicate with. <code>main</code> is a network defined in the <code>networks</code> part of <code>stack.yml</code>, notice that we reference the <code>traefik-public</code> network here that we created earlier, as well.</p>
+<blockquote>
+<p>Depends on helps with service startup order, but it is a better practice to use <code>./wait-for-it.sh</code>. However, I have never had any issues related to startup order. I'll try adding this later to make things more robust.</p>
+</blockquote>
+<p><code>postgres</code> and <code>redis</code> will start before <code>backend</code>. Our Django application will communicate to these services by their hostnames: <code>postgres</code> and <code>redis</code>. The fact that <code>backend</code>, <code>postgres</code> and <code>redis</code> are all on the same network (<code>main</code>) means that they can resolve each other by these names. For example, the connection string to redis will look like: <code>redis://redis:6379</code>. Let's look at the <code>DATABASES</code> configuration in <code>settings.py</code> to see how we connect to Postgres:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-py"><code>DATABASES <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">"default"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"ENGINE"</span><span class="token punctuation">:</span> <span class="token string">"django.db.backends.postgresql_psycopg2"</span><span class="token punctuation">,</span>
+        <span class="token string">"NAME"</span><span class="token punctuation">:</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"POSTGRES_NAME"</span><span class="token punctuation">,</span> <span class="token string">"postgres"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"USER"</span><span class="token punctuation">:</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"POSTGRES_USERNAME"</span><span class="token punctuation">,</span> <span class="token string">"postgres"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"PASSWORD"</span><span class="token punctuation">:</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"POSTGRES_PASSWORD"</span><span class="token punctuation">,</span> <span class="token string">"postgres"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"HOST"</span><span class="token punctuation">:</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"POSTGRES_SERVICE_HOST"</span><span class="token punctuation">,</span> <span class="token string">"postgres"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token string">"PORT"</span><span class="token punctuation">:</span> os<span class="token punctuation">.</span>environ<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"POSTGRES_SERVICE_PORT"</span><span class="token punctuation">,</span> <span class="token number">5432</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div>
+<p>I have defined the <code>HOST</code> to be based on the environment variable <code>POSTGRES_HOST</code>, but I have not defined this environment variable, so why didn't I just say <code>"HOST": "postgres"</code>? I could have, but if I want to change the database in the future, the only change will be adding an environment variable; I won't have to worry about hardcoded values.</p>
+<p>I'm choosing to run Postgres in a container and not use a managed database (which DigitalOcean does offer) in order to save on costs and also to get more practice managing my own database. I use RDS with AWS and it handles a lot of things that I don't have to worry about, such as backups, and it allows me to quickly restore from a snapshot. I'm interested in learning more about how I can do these tasks with a database that I run myself.</p>
+<h3 id="nginx"><a href="#nginx" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>NGINX</h3>
+<p>The next service we should go over is <code>web</code>, the service that runs the NGINX container that we pushed to our private GitLab image registry. This service has a couple of functions that I'll walk through:</p>
+<ol>
+<li>Reverse proxy</li>
+<li>Serve static files for Django</li>
+<li>Serve a frontend Javascript application</li>
+</ol>
+<p>Here's the definition of this service in <code>stack.yml</code>:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-yml"><code><span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">web</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> $<span class="token punctuation">{</span>CI_REGISTRY_IMAGE<span class="token punctuation">}</span>/nginx<span class="token punctuation">:</span>$<span class="token punctuation">{</span>CI_COMMIT_SHORT_SHA<span class="token punctuation">}</span>
+    <span class="token key atrule">networks</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> traefik<span class="token punctuation">-</span>public
+      <span class="token punctuation">-</span> main
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> backendassets<span class="token punctuation">:</span>/usr/src/app/assets
+    <span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token string">"traefik.enable=true"</span>
+        <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.nginx-web.rule=Host(`mysite.com`)"</span>
+        <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.nginx-web.entrypoints=websecure"</span>
+        <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver"</span>
+        <span class="token punctuation">-</span> <span class="token string">"traefik.http.services.nginx-web.loadbalancer.server.port=80"</span>
+</code></pre></div>
+<p>For now, ignore the contents under the <code>deploy</code> key; we will cover this next when we go over the <code>traefik</code> service.</p>
+<p>NGINX acts as a reverse proxy when it sends request starting with <code>/api</code> or <code>/admin</code> to the <code>backend</code> container. Two blocks in <code>prod.conf</code> enable this behavior:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>  upstream backend {
+    server backend:8000;
+  }
+</code></pre></div>
+<p>This hostname <code>backend</code> is defined as <code>backend:8000</code>. <code>backend:8000</code> can be resolved by the <code>web</code> service because it is on the same <code>main</code> network that <code>backend</code> is on. If either of the <code>web</code> or <code>backend</code> wasn't on the <code>main</code> network, NGINX would not be able to make sense of <code>backend:8000</code>.</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>    # backend urls
+    location ~ ^/(admin|api) {
+      proxy_redirect off;
+      proxy_pass http://backend;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+    }
+</code></pre></div>
+<p>This block does that actual request forwarding. <code>http://backend</code> references the <code>upstream backend {}</code> block defined above.</p>
+<p>The volume <code>backendassets</code> is referenced here and mounts to <code>/usr/src/app/assets</code>. This path is then referenced in <code>prod.conf</code>, the NGINX configuration file that is used in our custom NGINX-based image:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>    # static files
+    location /static {
+      autoindex on;
+      alias /usr/src/app/assets/static;
+    }
+</code></pre></div>
+<p>In this block of <code>prod.conf</code>, we tell NGINX to serve files from <code>/usr/src/app/assets/static</code> for requests that start with <code>/static</code>. A request made to <code>https://mysite.com/static/base.css</code> would return a file located at <code>/usr/src/app/assets/static</code> if that file existed. Remember, when we run the <code>collecstatic</code> management command in our Django container, it will collect our static files to <code>backendassets</code>. Since <code>backendassets</code> is mounted to the <code>web</code> service at <code>/usr/src/app/assets</code>, NGINX will have access to these files by way of the volume mount and they will persist across restarts of the web service and its NGINX container.</p>
+<p>Finally, NGINX can serve a Javascript SPA or similar if we choose to use one in our project. To understand how this is done, we need to understand multistage Dockerfiles. Here's the Dockerfile used for the <code>nginx</code> container:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code># # build stage
+# FROM node:10-alpine as build-stage
+# WORKDIR /app/
+# COPY frontend/package.json /app/
+# RUN npm cache verify
+# RUN npm install
+# COPY frontend /app/
+# RUN npm run build
+
+# production stage
+# FROM nginx:1.19.1-alpine as production-stage
+FROM nginx:1.19.1-alpine
+COPY nginx/prod/prod.conf /etc/nginx/nginx.conf
+COPY nginx/prod/index.html /dist/
+# COPY --from=build-stage /app/dist /dist/
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+</code></pre></div>
+<p>Currently I don't have a SPA setup, but this is how we could setup one using Vue.js. The important part is this line:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>COPY --from=build-stage /app/dist /dist/
+</code></pre></div>
+<p>This would copy the build files for our Javascript application into the <code>/dist/</code> folder of our NGINX container. Another few declarations and blocks in <code>prod.conf</code> allow all other requests to be served by the contents of this folder:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>    root /dist/;
+    index index.html;
+</code></pre></div>
+<p>This sets the root and the index document for our NGINX webserver.</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>    # frontend
+    location / {
+      try_files $uri $uri/ @rewrites;
+    }
+
+    location @rewrites {
+      rewrite ^(.+)$ /index.html last;
+    }
+</code></pre></div>
+<p>These two blocks route all other requests to the frontend Javascript app's <code>index.html</code> file location in <code>/dist/</code> (any request that doesn't start with <code>/static</code>, <code>/api</code> or <code>/admin</code>). We may wish to change this behavior if you want Django to serve most of your requests and possibly serve a single page application on another path.</p>
+<p>Lastly, the <code>web</code> service's <code>deployment</code> key has some <code>labels</code> defined for Traefik. Let's come back to these after having a look at the <code>traefik</code> service.</p>
+<h3 id="traefik"><a href="#traefik" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Traefik</h3>
+<p><img alt="png" src="https://docs.traefik.io/assets/img/traefik-architecture.png"></p>
+<blockquote>
+<p>Traefik is an open-source Edge Router that makes publishing your services a fun and easy experience. It receives requests on behalf of your system and finds out which components are responsible for handling them. -- <a href="https://docs.traefik.io/" rel="nofollow noopener noreferrer" target="_blank">https://docs.traefik.io/</a></p>
+</blockquote>
+<p>Traefik has three main functions in my application:</p>
+<ol>
+<li>Request TLS certificates from Let's Encrypt that allow us to encrypt our web traffic with HTTPS</li>
+<li>Do TLS termination</li>
+<li>Route all requests to NGINX</li>
+</ol>
+<p>The one thing that Traefik cannot do is serve static files; it is not a webserver, unlike NGINX which is a webserver. NGINX is also capable of requesting TLS certs from Let's Encrypt, so we don't technically need Traefik, but it is indeed "fun and easy", especially when it comes to requesting certificates.</p>
+<blockquote>
+<p>I have tried setting up Certbot with NGINX a long time ago but I never go it to work, and I didn't like the idea about how to run a chron job to refresh old certs.</p>
+</blockquote>
+<p>There are two main ways to set up Traefik:</p>
+<ol>
+<li>write a <code>traefik.toml</code> file and build this into your own custom image (similar to what we do with NGINX and <code>prod.conf</code>)</li>
+<li>use a base image and specify all configure options through command line arguments.</li>
+</ol>
+<p>I started out with the first approach, and I did get it to work, but I have decided that the second way is better. It requires one less image to build in our deployment process and it is easy to parametrize the command line arguments in <code>stack.yml</code> (for now all the values I'm using in the <code>traefik</code> service are hard-coded, this is one more item for my ToDo list on this project).</p>
+<p>I had a hard time finding good examples of how to use Traefik version 2 with Docker Swarm in the Traefik docs. Their official example for using docker uses <code>docker-compose up</code>. There is a Swarm example, but it is for an older version of Traefik (1.7). This article titled <a href="https://blog.creekorful.com/2019/10/how-to-install-traefik-2-docker-swarm/" rel="nofollow noopener noreferrer" target="_blank">How to install Traefik 2.x on a Docker Swarm</a> helped me a lot in figuring out how to get everything working. Thank you for the great article, <a href="https://github.com/creekorful" rel="nofollow noopener noreferrer" target="_blank">Aloïs</a>!</p>
+<p>Here's the code that sets up the traefik service:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-yml"><code><span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">traefik</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> traefik<span class="token punctuation">:</span>v2.0.2
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"80:80"</span>
+      <span class="token punctuation">-</span> <span class="token string">"443:443"</span>
+    <span class="token key atrule">command</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"--providers.docker.endpoint=unix:///var/run/docker.sock"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--providers.docker.swarmMode=true"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--providers.docker.exposedbydefault=false"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--providers.docker.network=traefik-public"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--entrypoints.web.address=:80"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--entrypoints.websecure.address=:443"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--certificatesresolvers.letsencryptresolver.acme.email=brian@email.com"</span>
+      <span class="token punctuation">-</span> <span class="token string">"--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> letsencrypt<span class="token punctuation">:</span>/letsencrypt
+      <span class="token punctuation">-</span> /var/run/docker.sock<span class="token punctuation">:</span>/var/run/docker.sock
+    <span class="token key atrule">networks</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> traefik<span class="token punctuation">-</span>public
+    <span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+      <span class="token key atrule">placement</span><span class="token punctuation">:</span>
+        <span class="token key atrule">constraints</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> node.role == manager
+</code></pre></div>
+<blockquote>
+<p>The one thing I don't like about this setup is that it uses a 1GB volume to store one small JSON file. I think that 1GB is the smallest block storage volume I can request using REX-Ray. This only adds \$0.10/month to our project costs which is not that bad.</p>
+</blockquote>
+<p><code>web</code> and <code>websecure</code> refer to values declared on the <code>web</code> service. Let's take a look at those values:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-yaml"><code><span class="token key atrule">deploy</span><span class="token punctuation">:</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token string">"traefik.enable=true"</span>
+    <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.nginx-web.rule=Host(`mysite.com`)"</span>
+    <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.nginx-web.entrypoints=websecure"</span>
+    <span class="token punctuation">-</span> <span class="token string">"traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver"</span>
+    <span class="token punctuation">-</span> <span class="token string">"traefik.http.services.nginx-web.loadbalancer.server.port=80"</span>
+</code></pre></div>
+<p>I still need to setup HTTP -> HTTPS redirecting, so for now only <code>websecure</code> is defined, but Aloïs explains this clearly in his article.</p>
+<blockquote>
+<p>For me this is the most complicated part of the setup. I'm still not familiar with exactly how Traefik and Let's Encrypt work. Hopefully I can run through this process a few more times with some variations to better understand the rough edges. Otherwise for this simple way to get TLS certificates. AWS makes this very easy with Amazon Certificate Manager (ACM) which makes the requesting of certificates very simple, especially within CDK.</p>
+</blockquote>
+<p>That wraps up our overview of <code>stack.yml</code>, we left off with the following command:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker stack deploy -c stack.yml my-stack --with-registry-auth
+</code></pre></div>
+<p>We can check out the status of our docker stack deployment by running a few different docker CLI commands. You can either SSH into your Droplet or configure the <code>DOCKER_HOST</code> environment variable that I showed you earlier and run these commands from your local terminal:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker stack ps my-stack --no-trunc
+</code></pre></div>
+<p><code>--no-trunc</code> is important because important error messages tend to be cut off. This option will show the full version of each column returned by <code>docker stack ps</code>.</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker service ls
+</code></pre></div>
+<p>This command shows some the active services on our Droplet.</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker ps
+</code></pre></div>
+<p>This command is useful for shelling into a container to run commands and poke around for debugging.</p>
+<p>You can get the Container ID of a running container and access it with the following command:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>docker exec -it 0da8370ab283 bash
+</code></pre></div>
+<p>This assumes that <code>bash</code> is installed on the container with ID <code>0da8370ab283</code>.</p>
+<h2 id="management-commands"><a href="#management-commands" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Management commands</h2>
+<p>Once the site is deployed we stil need to run a few commands to set up our Djnago application:</p>
+<ol>
+<li>collectstatic</li>
+<li>migrate</li>
+<li>createsuperuser</li>
+</ol>
+<blockquote>
+<p>One other ToDo is to figure out how to run these commands through manual GitLab CI jobs.</p>
+</blockquote>
+<p>That's most of what I wanted to cover on a first pass. This should be a good starting point for working with a Django application in Docker Swarm on DigitalOcean.</p>
+<h2 id="next-steps"><a href="#next-steps" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Next steps</h2>
+<p>Here are some ideas about the next steps I could take on this project.</p>
+<h3 id="local-environment"><a href="#local-environment" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Local environment</h3>
+<p>I'll probably need to create another docker-compose file to bring up everything locally. It might be a good way to experiment with different Traefik settings.</p>
+<h3 id="infrastructure-as-code-setup"><a href="#infrastructure-as-code-setup" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Infrastructure as Code setup</h3>
+<p>There might be a good opportunity to learn more about Terreform or Ansible here. There are a number of manual, one time setup steps. Some of these can't be automated, but some of them would probably fit very neatly into one of these tools. Pulumi would also be a good option to explore as it is more analagous to CDK.</p>
+<h3 id="scaling-out-docker-swarm-services-across-multiple-machines"><a href="#scaling-out-docker-swarm-services-across-multiple-machines" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Scaling out docker swarm services across multiple machines</h3>
+<p>I have only scratched the surface of what docker swarm can do. There are lots of other settings that would be helpful to setup for learning purposes, especially around resource limits for services. For simplicity I haven't touch on any of these options yet. I'm curious to know how many containers I can fit onto one small Droplet, and if resource limits could help with compute and memory-intensive workloads.</p>
+<h3 id="kubernetes-on-digitalocean"><a href="#kubernetes-on-digitalocean" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Kubernetes on DigitalOcean</h3>
+<p>DigitalOcean now offers simplified Kubernetes solutions. It would be interesting to try this out once I get better with docker swarm. I have used Kubernetes a with minikube and to a limited extent with GCP.</p>
+<h3 id="deploying-locally-without-using-gitlab-ci"><a href="#deploying-locally-without-using-gitlab-ci" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Deploying locally, without using GitLab CI</h3>
+<p>CDK makes deploying locally very easy, especially with the Lambda project I put together. This project as it stands might be a little bit more difficult to deploy locally. It assumes that the images we want to deploy are private. It might be possible, but for now I am fine with deploying through GitLab CI since the pipeline only takes a few minutes to complete for the build and deploy stages.</p></div> <div class="fixed bg-white shadow right-0 bottom-0 rounded-full p-4 m-4 cursor-pointer h-2 w-2" data-v-51e3ff6a><span class="text-black" data-v-51e3ff6a> 🗣 </span></div> <div id="disqus_thread" identifier="digital-ocean-docker-swarm-django-traefik-nginx.html" style="min-height:200px"></div> <h1></h1></div></article> <div class="p-4 lg:px-16 text-center" data-v-45f22fd0><hr data-v-45f22fd0> <div class="py-4" data-v-45f22fd0>Thanks for checking out my site!</div> <div class="pb-4" data-v-45f22fd0>© 2020 Brian Caffey</div></div></div></div></div><script defer src="/_nuxt/static/1601692046/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html/state.js"></script><script src="/_nuxt/484df72.js" defer></script><script src="/_nuxt/0595448.js" defer></script><script src="/_nuxt/cff3b0e.js" defer></script><script src="/_nuxt/30623f9.js" defer></script><script src="/_nuxt/b4629f2.js" defer></script>
+  </body>
+</html>

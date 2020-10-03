@@ -1,0 +1,331 @@
+<!doctype html>
+<html data-n-head-ssr>
+  <head>
+    <title>Generating MIDI files from guitar tablatures with Python and regular expressions</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="Brian Caffey's personal website"><meta data-n-head="ssr" property="og:title" content="Generating MIDI files from guitar tablatures with Python and regular expressions"><meta data-n-head="ssr" property="og:description" content="undefined"><meta data-n-head="ssr" property="og:image" content="https://briancaffey.github.io/static/guitar.jpg"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/_nuxt/484df72.js" as="script"><link rel="preload" href="/_nuxt/cff3b0e.js" as="script"><link rel="preload" href="/_nuxt/30623f9.js" as="script"><link rel="preload" href="/_nuxt/b4629f2.js" as="script"><link rel="preload" href="/_nuxt/0595448.js" as="script"><style data-vue-ssr-id="38dfa7e4:0 f52d43e0:0 517a8dd7:0 fa7ff0ca:0 56b15182:0 25f7f390:0">/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}[hidden],template{display:none}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}button{background-color:transparent;background-image:none}button:focus{outline:1px dotted;outline:5px auto -webkit-focus-ring-color}fieldset,ol,ul{margin:0;padding:0}ol,ul{list-style:none}html{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}hr{border-top-width:1px}img{border-style:solid}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{color:#a0aec0}input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#a0aec0}input::placeholder,textarea::placeholder{color:#a0aec0}[role=button],button{cursor:pointer}table{border-collapse:collapse}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}button,input,optgroup,select,textarea{padding:0;line-height:inherit;color:inherit}code,kbd,pre,samp{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-t{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.border{border-width:1px}.cursor-pointer{cursor:pointer}.block{display:block}.inline{display:inline}.flex{display:flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.font-bold{font-weight:700}.h-2{height:.5rem}.h-3{height:.75rem}.h-12{height:3rem}.h-32{height:8rem}.h-64{height:16rem}.text-xl{font-size:1.25rem}.text-2xl{font-size:1.5rem}.text-3xl{font-size:1.875rem}.leading-8{line-height:2rem}.leading-9{line-height:2.25rem}.m-2{margin:.5rem}.m-4{margin:1rem}.mx-auto{margin-left:auto;margin-right:auto}.mt-2{margin-top:.5rem}.mt-4{margin-top:1rem}.mb-4{margin-bottom:1rem}.object-cover{-o-object-fit:cover;object-fit:cover}.p-4{padding:1rem}.px-1{padding-left:.25rem;padding-right:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-32{padding-top:8rem;padding-bottom:8rem}.pb-4{padding-bottom:1rem}.pt-8{padding-top:2rem}.pb-8{padding-bottom:2rem}.pt-16{padding-top:4rem}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.right-0{right:0}.bottom-0{bottom:0}.resize{resize:both}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.fill-current{fill:currentColor}.text-center{text-align:center}.text-right{text-align:right}.text-black{--text-opacity:1;color:#000;color:rgba(0,0,0,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-red-400{--text-opacity:1;color:#fc8181;color:rgba(252,129,129,var(--text-opacity))}.visible{visibility:visible}.w-2{width:.5rem}.w-3{width:.75rem}.w-12{width:3rem}.w-full{width:100%}.z-10{z-index:10}.gap-4{grid-gap:1rem;gap:1rem}.gap-6{grid-gap:1.5rem;gap:1.5rem}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.transform{--transform-translate-x:0;--transform-translate-y:0;--transform-rotate:0;--transform-skew-x:0;--transform-skew-y:0;--transform-scale-x:1;--transform-scale-y:1;transform:translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y))}.transition-all{transition-property:all}.transition{transition-property:background-color,border-color,color,fill,stroke,opacity,box-shadow,transform}.duration-150{transition-duration:.15s}.delay-150{transition-delay:.15s}@-webkit-keyframes spin{to{transform:rotate(1turn)}}@keyframes spin{to{transform:rotate(1turn)}}@-webkit-keyframes ping{75%,to{transform:scale(2);opacity:0}}@keyframes ping{75%,to{transform:scale(2);opacity:0}}@-webkit-keyframes pulse{50%{opacity:.5}}@keyframes pulse{50%{opacity:.5}}@-webkit-keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:none;-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:none;-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@media (min-width:640px){.sm\:container{width:100%}}@media (min-width:640px) and (min-width:640px){.sm\:container{max-width:640px}}@media (min-width:640px) and (min-width:768px){.sm\:container{max-width:768px}}@media (min-width:640px) and (min-width:1024px){.sm\:container{max-width:1024px}}@media (min-width:640px) and (min-width:1280px){.sm\:container{max-width:1280px}}@media (min-width:640px){.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:px-4{padding-left:1rem;padding-right:1rem}}@media (min-width:768px){.md\:container{width:100%}}@media (min-width:768px) and (min-width:640px){.md\:container{max-width:640px}}@media (min-width:768px) and (min-width:768px){.md\:container{max-width:768px}}@media (min-width:768px) and (min-width:1024px){.md\:container{max-width:1024px}}@media (min-width:768px) and (min-width:1280px){.md\:container{max-width:1280px}}@media (min-width:768px){.md\:flex{display:flex}.md\:hidden{display:none}.md\:px-4{padding-left:1rem;padding-right:1rem}}@media (min-width:1024px){.lg\:container{width:100%}}@media (min-width:1024px) and (min-width:640px){.lg\:container{max-width:640px}}@media (min-width:1024px) and (min-width:768px){.lg\:container{max-width:768px}}@media (min-width:1024px) and (min-width:1024px){.lg\:container{max-width:1024px}}@media (min-width:1024px) and (min-width:1280px){.lg\:container{max-width:1280px}}@media (min-width:1024px){.lg\:px-16{padding-left:4rem;padding-right:4rem}.lg\:px-32{padding-left:8rem;padding-right:8rem}.lg\:pl-64{padding-left:16rem}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1280px){.xl\:container{width:100%}}@media (min-width:1280px) and (min-width:640px){.xl\:container{max-width:640px}}@media (min-width:1280px) and (min-width:768px){.xl\:container{max-width:768px}}@media (min-width:1280px) and (min-width:1024px){.xl\:container{max-width:1024px}}@media (min-width:1280px) and (min-width:1280px){.xl\:container{max-width:1280px}}@media (min-width:1280px){.xl\:pb-16{padding-bottom:4rem}}:root{--color:#243746;--color-primary:#158876;--color-secondary:#0e2233;--bg:#f3f5f4;--bg-secondary:#fff;--bg-code:#ddd;--border-color:#ddd}.dark-mode{--color:#ebf4f1;--color-primary:#41b38a;--color-secondary:#fdf9f3;--bg:#091a28;--bg-secondary:#071521;--bg-code:#ddd;--border-color:#0d2538}.sepia-mode{--color:#433422;--color-primary:#504231;--color-secondary:#504231;--bg:#f1e7d0;--bg-code:#ddd;--bg-secondary:#eae0c9;--border-color:#ded0bf}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;background-color:#f3f5f4;background-color:var(--bg);color:#243746;color:var(--color);transition:background-color .3s}a{color:#158876;color:var(--color-primary)}.py-05{padding-top:.125rem;padding-bottom:.125rem}.markdown{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity));line-height:1.5;word-wrap:break-word;color:#0e2233;color:var(--color-secondary)}.markdown .token.operator{background:0 0}.markdown>*+*{margin-top:0;margin-bottom:1rem}.markdown li+li{margin-top:.25rem}.markdown li>p+p{margin-top:1.5rem;color:#158876;color:var(--color-primary)}.markdown img{margin:auto}.markdown a,.markdown strong{font-weight:600}.markdown strong a{font-weight:700}.markdown h1{font-size:2.25rem}.markdown h1,.markdown h2{border-color:#158876;border-color:var(--color-primary);line-height:1.25;border-bottom-width:1px;font-weight:600;margin-bottom:1rem;margin-top:1.5rem;padding-bottom:.5rem}.markdown h2{font-size:1.5rem}.markdown h3{line-height:1.375;font-size:1.125rem}.markdown h3,.markdown h4{border-color:#158876;border-color:var(--color-primary);font-weight:600;margin-bottom:1rem;margin-top:1.5rem}.markdown h4{line-height:1;font-size:1rem}.markdown h5{border-color:#158876;border-color:var(--color-primary)}.markdown h5,.markdown h6{line-height:1.25;font-size:.875rem;font-weight:600;margin-bottom:1rem;margin-top:1.5rem}.markdown blockquote,.markdown h6{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.markdown blockquote{font-size:1rem;border-left-width:4px;--border-opacity:1;border-color:#e2e8f0;border-color:rgba(226,232,240,var(--border-opacity));padding-left:1rem;padding-right:1rem;border-color:#158876;border-color:var(--color-primary)}.markdown code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:.875rem;display:inline;background-color:#edf2f7;background-color:rgba(237,242,247,var(--bg-opacity));padding:.125rem .25rem;background-color:#ddd;background-color:var(--bg-code);color:#000}.markdown code,.markdown pre{--bg-opacity:1;border-radius:.25rem}.markdown pre{background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity));padding:1rem}.markdown pre code{display:block;background-color:transparent;padding:0;overflow:visible;border-radius:0;color:#000}.markdown p{margin-bottom:10px}code[class*=language-],pre[class*=language-]{background:#ddd!important;background:var(--bg-code)!important;text-shadow:none!important}.markdown ul{list-style-type:disc}.markdown ol,.markdown ul{font-size:1rem;padding-left:2rem}.markdown ol{list-style-type:decimal}.markdown kbd{font-size:.75rem;display:inline-block;border-radius:.25rem;border-width:1px;padding:.125rem .25rem;vertical-align:middle;font-weight:400;font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.markdown table,td,th{font-size:1rem;border:1px solid #243746;border-color:var(--color)}.markdown table{overflow-x:scroll}.markdown td,.markdown th{border-width:1px;padding:.25rem .75rem}.markdown .highlight pre{--bg-opacity:1!important;background-color:#f7fafc!important;background-color:rgba(247,250,252,var(--bg-opacity))!important}.article-card{box-shadow:0 5px 10px 1px #0e2233;box-shadow:0 5px 10px 1px var(--color-secondary);height:100%}.article-card:hover{box-shadow:0 5px 15px 5px #158876;box-shadow:0 5px 15px 5px var(--color-primary)}hr{background-color:#243746;background-color:var(--color);border:none;height:1px}.menu-icon{background-color:#ddd;background-color:var(--border-color)}.menu-icon,.mobile-menu{color:#243746;color:var(--color)}.mobile-menu{background-color:#fff;background-color:var(--bg-secondary)}code[class*=language-],pre[class*=language-]{color:#000;background:0 0;text-shadow:0 1px #fff;font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-] ::-moz-selection,code[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection{text-shadow:none;background:#b3d4fc}code[class*=language-] ::selection,code[class*=language-]::selection,pre[class*=language-] ::selection,pre[class*=language-]::selection{text-shadow:none;background:#b3d4fc}@media print{code[class*=language-],pre[class*=language-]{text-shadow:none}}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#f5f2f0}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.token.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#9a6e3a;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.class-name,.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}span[data-v-51e3ff6a]{position:absolute;left:50%;transform:translateX(-50%);text-align:center;top:2px}</style><link rel="preload" href="/_nuxt/static/1601692046/2018/04/26/generating-music-from-guitar-tabs-with-python.html/state.js" as="script"><link rel="preload" href="/_nuxt/static/1601692046/2018/04/26/generating-music-from-guitar-tabs-with-python.html/payload.js" as="script">
+  </head>
+  <body>
+    <script data-n-head="ssr" data-hid="nuxt-color-mode-script" data-pbody="true">!function (){"use strict";var e=window,s=document,t=s.documentElement,n=["dark","light"],o=function(e){for(var t=e+"=",n=s.cookie.split(";"),o=0;o<n.length;o++){for(var a=n[o];" "===a.charAt(0);)a=a.substring(1,a.length);if(0===a.indexOf(t))return a.substring(t.length,a.length)}return null}("nuxt-color-mode")||"system",a="system"===o?c():o;function i(e){var s=""+e+"-mode";t.classList?t.classList.add(s):t.className+=" "+s}function r(s){return e.matchMedia("(prefers-color-scheme"+s+")")}function c(){if(e.matchMedia&&"not all"!==r("").media)for(var s of n)if(r(":"+s).matches)return s;return"light"}i(a),e["__NUXT_COLOR_MODE__"]={preference:o,value:a,getColorScheme:c,addClass:i,removeClass:function(e){var s=""+e+"-mode";t.classList?t.classList.remove(s):t.className=t.className.replace(new RegExp(s,"g"),"")}}}();
+</script><div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div class="grid grid-cols-3 py-2 px-2 sm:px-4 items-center" data-v-58308eeb><div class="justify-left" data-v-58308eeb><a href="/" class="text-xl nuxt-link-active" data-v-58308eeb><span class="hidden sm:inline" data-v-58308eeb>Brian Caffey</span><span class="inline sm:hidden" data-v-58308eeb>JBC</span></a></div> <div class="justify-center" data-v-58308eeb><div class="grid items-center justify-center" data-v-58308eeb><ul class="flex px-4"><li class="md:px-4 px-1 cursor-pointer">
+      🖥️
+    </li><li class="md:px-4 px-1 cursor-pointer">
+      🌞
+    </li><li class="md:px-4 px-1 cursor-pointer">
+      🌚
+    </li><li class="md:px-4 px-1 cursor-pointer">
+      ☕
+    </li></ul></div></div> <div class="flex justify-end" data-v-58308eeb><nav data-v-cd9cc810 data-v-58308eeb><ul class="items-right justify-end hidden md:flex" data-v-cd9cc810><li class="px-4" data-v-cd9cc810><a href="/blog" data-v-cd9cc810>Blog</a></li> <li class="px-4" data-v-cd9cc810><a href="/projects" data-v-cd9cc810>Projects</a></li> <li class="px-4" data-v-cd9cc810><a href="/contact" data-v-cd9cc810>Contact</a></li></ul> <div class="flex justify-end md:hidden z-1000" data-v-cd9cc810><button class="flex items-center px-3 py-2 border rounded menu-icon" data-v-cd9cc810><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="fill-current h-3 w-3" data-v-cd9cc810><title data-v-cd9cc810>Menu</title> <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" data-v-cd9cc810></path></svg></button></div> <!----></nav></div></div> <article><img src="/static/guitar.jpg" class="h-64 w-full object-cover"> <div class="px-2 sm:px-4 md:px-4 lg:px-16 xl:pb-16 mt-2 lg:pl-64"><h1 class="prose text-3xl leading-9">Generating MIDI files from guitar tablatures with Python and regular expressions</h1> <p class="text-gray-500 mb-4">
+      Last updated: April 25, 2018
+    </p> <div class="markdown nuxt-content"><p>Recently I have been playing lots of classical guitar. I use <a href="classtab.org">classtab.org</a>, a website with hundreds of classical guitar pieces in tab form. Here's an example of a guitar tab:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>|---------------0---|---3-2-3-----------|-----0-------------|
+|-------0-3-1-1---3-|-3-------3-0-----0-|-1-3---3-1-0---0---|
+|---0-2-0-----------|-------------0-2---|-------------2---0-|
+|-------------2-----|-------2-----------|-------------------|
+|-------------------|-2-----------------|-0-----2-----3-----|
+|-3-----------------|-------------0-----|-------------------|
+</code></pre></div>
+<p>It is a representation of where and when strings are played. The six lines here represent the six strings of the guitar e, A, D, G, B and E and the numbers indicate where on the fretboard to press for each note. The vertical bars represent one bar of music.</p>
+<p>My goal is to write an application that can read in guitar tabs and then produce a corresponding MIDI file for the song.</p>
+<p>To start, I will use regular expressions to parse the bars of music in a guitar tab text file.</p>
+<p>Next, I will use a Python package called MIDIUtil to generate <code>.mid</code> files from the guitar tabs.</p>
+<p>Finally, I'll put this into a simple web app that lets users copy paste guitar tab text or enter a URL from a site like classtab.org that will similarly generate a MIDI file.</p>
+<h2 id="regex"><a href="#regex" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Regex</h2>
+<p>First, let's look at a few different examples of guitar tabs to get a better sense of what our goal should be in using regular expressions to parse notes.</p>
+<h3 id="tab-examples"><a href="#tab-examples" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Tab examples</h3>
+<p><a href="http://www.classtab.org/barrios_la_catedral_3_allegro.txt" rel="nofollow noopener noreferrer" target="_blank">http://www.classtab.org/barrios_la_catedral_3_allegro.txt</a></p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>La Catedral
+Author: Agustin Barrios
+Tablature by: Gianpiero Ciammaricone
+              giancian@yahoo.com
+              http://www.geocities.com/vienna/6619
+
+Tablature Explanation at the end.
+
+[key corrected from "D Major" Jan 99]
+
+This is Revision 3 (5/2/98), I have added a modification made by
+Barrios in line 5 of the TAB, both ways of playing it are included,
+so you can choose the best one for you.
+Revision 2: Made a few corrections.
+Revision 1: The first release of the tab.
+
+3rd Movement (Allegro):
+Key: B Minor
+Time signature: 6/8
+
+E-|-------------------------|-----------------------------|
+B-|-----------------3-------|-----------------3-----------|
+G-|---------0---4-------4---|---------0---4-------4-------|
+D-|---4-3h4---4---4---4---4-|---4-3h4---4---4---4---4-----|
+A-|-2-----------------------|-2---------------------------|
+E-|-------------------------|-----------------------------|
+    p m i   m i m i a i m i
+
+E-|-------------------------|-----------------------------|
+B-|-----------------3-------|-----------------3-----------|
+G-|---------2---4-------4---|---------2---4-------4-------|
+D-|---5-4h5---5---5---5---5-|---5-4h5---5---5---5---5-----|
+A-|-2-----------------------|-2---------------------------|
+E-|-------------------------|-----------------------------|
+    p m i   m i m i a i m i
+
+E-|-------------------------|-----------------------------|
+B-|-----------------5-------|-----------------5-----------|
+G-|---------4---6-------6---|---------4---6-------6-------|
+D-|---7-6h7---7---7---7---7-|---7-6h7---7---7---7---7-----|
+A-|-4-----------------------|-4---------------------------|
+E-|-------------------------|-----------------------------|
+    p m i   m i m i a i m i
+</code></pre></div>
+<p><a href="http://www.classtab.org/moreno_torroba_siete_piezas_de_album_6_chisperada.txt" rel="nofollow noopener noreferrer" target="_blank">http://www.classtab.org/moreno_torroba_siete_piezas_de_album_6_chisperada.txt</a></p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>SIETE PIEZAS DE ALBUM: VI. CHISPERADA
+As recorded by Federico Moreno Torroba
+
+Music by Federico Moreno Torroba
+
+|-----0-----0-|-----------0-|-----0-----0-|
+|---1-----0---|-----3-----0-|---1-----0---|
+|---2-----0---|---2-------1-|---2-----0---|
+|---2---------|---3---------|---2---------|
+|-0-----------|---------2---|-0-----------|
+|-------3-----|-1-----0-----|-------3-----|
+
+|-----------0-|-----0-----0-|-----------0-|-----------0--|
+|-----3-----0-|---1-----0---|-----3-----0-|-----3-----0--|
+|---2-------1-|---2-----0---|---2-------1-|---2-------1--|
+|---3---------|---2---------|---3---------|---3----------|
+|---------2---|-0-----------|-0-------2---|-0-------2----|
+|-1-----0-----|-------3-----|-------0-----|-------0------|
+
+|---------------0--|-0-----0-----|-1-----1-3p1-0---|
+|---1-0---------0--|-1-----------|---------------3-|
+|-2-----2-0-----1--|-2-----1-----|-2-----2---------|
+|-----------3------|-------------|-------0---------|
+|-3----------------|---0-0---2-2-|---3-3-----------|
+|-------------0----|-------------|-----------------|
+</code></pre></div>
+<p><a href="http://www.classtab.org/moreno_torroba_sonatina_in_a_2_andante.txt" rel="nofollow noopener noreferrer" target="_blank">http://www.classtab.org/moreno_torroba_sonatina_in_a_2_andante.txt</a></p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>Sonatina in A - II - Andante
+
+F. Moreno Torroba (1891-1982)
+
+tuning DADGBE
+
+E|-----2--3---5----------10--8--7-------|-----8----7^8^7-----------------------|
+B|-----3--5---7----------7--------------|-----8-----------10---------8---------|
+G|-----2---------------------9--7-------|-----9--------------------------11----|
+D|-----0--------------4-----------------|--------------------------10----------|
+A|-----0----------0---------------------|----------------------7---------------|
+D|-----0--------------------------------|-----0--------------------------------|
+
+E|--------------------------------------|--------------------------------------|
+B|------------------7--8^10-8---7^5-----|---5---------7-8-7-5-----5------------|
+G|--9^11^9----7--9------------------7---|---6-----------------7---6------------|
+D|-------8------------------------------|---5---------------------5--7----19°--|
+A|-------10-----------------------------|------0--12°--------------------------|
+D|-------0------------------------------|---0---------------------0------------|
+</code></pre></div>
+<p>Here are a few things that we need to consider:</p>
+<ul>
+<li>
+<p>The start of each line sometimes starts with a the note of the string (<code>E</code> or <code>e</code>, <code>A</code>, <code>D</code>, etc.) followed by <code>|</code> or just simply start with <code>|</code>. Some lines may start with <code>E-|</code>.</p>
+</li>
+<li>
+<p>There is generally a <code>-</code> character between each note. When this is not the case, we may have a <code>p</code>, <code>h</code> or <code>^</code> which indicates "pull off" or "hammer on". This means that you are playing the string with the hand on the fretboard, not the hand over the sound hole. We should replace these with <code>-</code>.</p>
+</li>
+<li>
+<p>A tab may have an inconsistant number of characters in each bar. I'm not too concerned about this. I'm not going for perfection just yet, but it could make this task very difficult if you want to get the timing of your sounds just right.</p>
+</li>
+<li>
+<p>Notes played on the 10th fret and higher must be read together. For example, <code>---12---</code> should be played on the 12 fret; it does not mean play <code>1</code> and then play <code>2</code>.</p>
+</li>
+<li>
+<p>There are some other special characters such as <code>°</code> or <code>&lt;</code>/<code>></code>. I think these both denote harmonics. This is when you place your finger on the string at a position along the fretboard, but do not press down. We probably want to replace these characters with <code>-</code> as well.</p>
+</li>
+</ul>
+<h3 id="tab-text-file-processing"><a href="#tab-text-file-processing" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>Tab text file processing</h3>
+<p>Here are some things that may be helpful to do as soon as we read a text file:</p>
+<ul>
+<li>
+<p>convert everything to upper or lower case</p>
+</li>
+<li>
+<p>replace non-numeric characters with <code>-</code></p>
+</li>
+</ul>
+<p>When I work with regex, I usually go straight to <a href="regex101.com">regex101.com</a>.</p>
+<h2 id="midiutil"><a href="#midiutil" aria-hidden="true" tabindex="-1"><span class="icon icon-link"></span></a>MIDIUtil</h2>
+<p>At this point, I think it will be helpful to examine MIDIUtil and create and play a basic MIDI file.</p>
+<p>Before you do that, you might want to read over the <a href="https://wiki.archlinux.org/index.php/MIDI" rel="nofollow noopener noreferrer" target="_blank">MIDI Arch Wiki article</a>.</p>
+<blockquote>
+<p>MIDIUtil is a pure Python library that allows one to write multi-track Musical Instrument Digital Interface (MIDI) files from within Python programs (both format 1 and format 2 files are now supported). It is object-oriented and allows one to create and write these files with a minimum of fuss.</p>
+</blockquote>
+<p>Here's a basic example of MIDIUtil. This script generates a MIDI file that contains a major scale.</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-python"><code><span class="token comment">#!/usr/bin/env python</span>
+
+<span class="token keyword">from</span> midiutil <span class="token keyword">import</span> MIDIFile
+
+degrees  <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">60</span><span class="token punctuation">,</span> <span class="token number">62</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">65</span><span class="token punctuation">,</span> <span class="token number">67</span><span class="token punctuation">,</span> <span class="token number">69</span><span class="token punctuation">,</span> <span class="token number">71</span><span class="token punctuation">,</span> <span class="token number">72</span><span class="token punctuation">]</span>  <span class="token comment"># MIDI note number</span>
+track    <span class="token operator">=</span> <span class="token number">0</span>
+channel  <span class="token operator">=</span> <span class="token number">0</span>
+time     <span class="token operator">=</span> <span class="token number">0</span>    <span class="token comment"># In beats</span>
+duration <span class="token operator">=</span> <span class="token number">1</span>    <span class="token comment"># In beats</span>
+tempo    <span class="token operator">=</span> <span class="token number">60</span>   <span class="token comment"># In BPM</span>
+volume   <span class="token operator">=</span> <span class="token number">100</span>  <span class="token comment"># 0-127, as per the MIDI standard</span>
+
+MyMIDI <span class="token operator">=</span> MIDIFile<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># One track, defaults to format 1 (tempo track is created</span>
+                      <span class="token comment"># automatically)</span>
+MyMIDI<span class="token punctuation">.</span>addTempo<span class="token punctuation">(</span>track<span class="token punctuation">,</span> time<span class="token punctuation">,</span> tempo<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i<span class="token punctuation">,</span> pitch <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>degrees<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    MyMIDI<span class="token punctuation">.</span>addNote<span class="token punctuation">(</span>track<span class="token punctuation">,</span> channel<span class="token punctuation">,</span> pitch<span class="token punctuation">,</span> time <span class="token operator">+</span> i<span class="token punctuation">,</span> duration<span class="token punctuation">,</span> volume<span class="token punctuation">)</span>
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"major-scale.mid"</span><span class="token punctuation">,</span> <span class="token string">"wb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> output_file<span class="token punctuation">:</span>
+    MyMIDI<span class="token punctuation">.</span>writeFile<span class="token punctuation">(</span>output_file<span class="token punctuation">)</span>
+</code></pre></div>
+<p>Now let's try to play this file. Well, if you read the MIDI article, you would know that this isn't really what we are doing. We want to see what our major scale sounds like. In order to do that, we need to install and configure both a MIDI synthesizer as well as a soundfont.</p>
+<p>We can use timidity++ for our MIDI synth. There are very simple instructions on how to do this <a href="https://wiki.archlinux.org/index.php/timidity" rel="nofollow noopener noreferrer" target="_blank">here</a>.</p>
+<p>Here are the steps I followed:</p>
+<p>From the AUR, install <code>timidity++</code> and <code>timidity-freepats</code>.</p>
+<p>Add yourself to the audio group:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code># gpasswd -a brian audio
+</code></pre></div>
+<p>Add the following line to <code>/etc/timidity++/timidity.cfg</code>:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>soundfont /usr/share/soundfonts/timidity-freepats.sf2
+</code></pre></div>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>sudo systemctl start timidity.service
+sudo systemctl enable timidity.service
+</code></pre></div>
+<p>Run <code>aplaymidi -l</code>:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code> $ aplaymidi -l
+ Port    Client name                      Port name
+ 14:0    Midi Through                     Midi Through Port-0
+130:0    TiMidity                         TiMidity port 0
+130:1    TiMidity                         TiMidity port 1
+130:2    TiMidity                         TiMidity port 2
+130:3    TiMidity                         TiMidity port 3
+</code></pre></div>
+<p>Finally, we can play our MIDI file that we generated by running the python script above:</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code> $ aplaymidi major-scale.mid --port 130:0
+&lt;music plays...>
+</code></pre></div>
+<p>For this project, playing files using a synthesizer is useful to verify that the MIDI was successfully created. If/when we get to the point of making a web app to convert midi files to music files, we will generate the midifile in-memory, convert it to a WAV file and then return that to the user.</p>
+<p>Let's try to process a very simple tab file with just one string and a few notes, and then generate a simple MIDI file based on the tab.</p>
+<p>Our sample tab can be:</p>
+<p><em>simple-tab.txt</em></p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code>--0--2--4--
+</code></pre></div>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-python"><code><span class="token comment">#!/usr/bin/env python</span>
+
+<span class="token keyword">from</span> midiutil <span class="token keyword">import</span> MIDIFile
+
+degrees  <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">60</span><span class="token punctuation">,</span> <span class="token number">62</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">65</span><span class="token punctuation">,</span> <span class="token number">67</span><span class="token punctuation">,</span> <span class="token number">69</span><span class="token punctuation">,</span> <span class="token number">71</span><span class="token punctuation">,</span> <span class="token number">72</span><span class="token punctuation">]</span>  <span class="token comment"># MIDI note number</span>
+track    <span class="token operator">=</span> <span class="token number">0</span>
+channel  <span class="token operator">=</span> <span class="token number">0</span>
+time     <span class="token operator">=</span> <span class="token number">0</span>    <span class="token comment"># In beats</span>
+duration <span class="token operator">=</span> <span class="token number">1</span>    <span class="token comment"># In beats</span>
+tempo    <span class="token operator">=</span> <span class="token number">60</span>   <span class="token comment"># In BPM</span>
+volume   <span class="token operator">=</span> <span class="token number">100</span>  <span class="token comment"># 0-127, as per the MIDI standard</span>
+
+MyMIDI <span class="token operator">=</span> MIDIFile<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># One track, defaults to format 1 (tempo track is created</span>
+                      <span class="token comment"># automatically)</span>
+MyMIDI<span class="token punctuation">.</span>addTempo<span class="token punctuation">(</span>track<span class="token punctuation">,</span> time<span class="token punctuation">,</span> tempo<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i<span class="token punctuation">,</span> pitch <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>degrees<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    MyMIDI<span class="token punctuation">.</span>addNote<span class="token punctuation">(</span>track<span class="token punctuation">,</span> channel<span class="token punctuation">,</span> pitch<span class="token punctuation">,</span> time <span class="token operator">+</span> i<span class="token punctuation">,</span> duration<span class="token punctuation">,</span> volume<span class="token punctuation">)</span>
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"major-scale.mid"</span><span class="token punctuation">,</span> <span class="token string">"wb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> output_file<span class="token punctuation">:</span>
+    MyMIDI<span class="token punctuation">.</span>writeFile<span class="token punctuation">(</span>output_file<span class="token punctuation">)</span>
+</code></pre></div>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-text"><code> $ echo "--0--2--4--" > simple-tab.txt
+</code></pre></div>
+<p>Here's the script I used to generate some fairly accurate MIDI files. There are still some bugs in the script that generates the MIDI file, but this meets the goal I had last weekend of writing a simple script to generate music from guitar tabs.</p>
+<div class="nuxt-content-highlight"><pre class="line-numbers language-python"><code><span class="token comment">#!/usr/bin/env python</span>
+
+<span class="token keyword">from</span> midiutil <span class="token keyword">import</span> MIDIFile
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> re
+
+string_notes <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"high_e"</span><span class="token punctuation">,</span> <span class="token string">"B"</span><span class="token punctuation">,</span> <span class="token string">"G"</span><span class="token punctuation">,</span> <span class="token string">"D"</span><span class="token punctuation">,</span> <span class="token string">"A"</span><span class="token punctuation">,</span> <span class="token string">"E"</span><span class="token punctuation">]</span>
+
+guitar_strings <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'E'</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">'note_val'</span><span class="token punctuation">:</span><span class="token number">52</span><span class="token punctuation">,</span> <span class="token string">'track_num'</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">'A'</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">'note_val'</span><span class="token punctuation">:</span><span class="token number">57</span><span class="token punctuation">,</span> <span class="token string">'track_num'</span><span class="token punctuation">:</span><span class="token number">1</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">'D'</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">'note_val'</span><span class="token punctuation">:</span><span class="token number">62</span><span class="token punctuation">,</span> <span class="token string">'track_num'</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">'G'</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">'note_val'</span><span class="token punctuation">:</span><span class="token number">67</span><span class="token punctuation">,</span> <span class="token string">'track_num'</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">'B'</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">'note_val'</span><span class="token punctuation">:</span><span class="token number">71</span><span class="token punctuation">,</span> <span class="token string">'track_num'</span><span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">'high_e'</span><span class="token punctuation">:</span><span class="token punctuation">{</span><span class="token string">'note_val'</span><span class="token punctuation">:</span><span class="token number">76</span><span class="token punctuation">,</span> <span class="token string">'track_num'</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># read the tab file</span>
+file_name <span class="token operator">=</span> sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+<span class="token keyword">if</span> file_name<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">"."</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token string">'txt'</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Please select a text file"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>file_name<span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+    contents <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+contents <span class="token operator">=</span> contents<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"h"</span><span class="token punctuation">,</span> <span class="token string">"-"</span><span class="token punctuation">)</span>
+contents <span class="token operator">=</span> contents<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"p"</span><span class="token punctuation">,</span> <span class="token string">"-"</span><span class="token punctuation">)</span>
+contents <span class="token operator">=</span> contents<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> <span class="token string">"-"</span><span class="token punctuation">)</span>
+contents <span class="token operator">=</span> contents<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">,</span> <span class="token string">"-"</span><span class="token punctuation">)</span>
+contents <span class="token operator">=</span> contents<span class="token punctuation">.</span>upper<span class="token punctuation">(</span><span class="token punctuation">)</span>
+bar_group <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">r"(?:[E,B,G,D,A,-]+\|[0-9-h|]+\n){6}"</span><span class="token punctuation">,</span>contents<span class="token punctuation">)</span>
+
+<span class="token comment">#bar_group = re.findall(r"(?:\|[0-9-\*h\|]+\n){6}",contents)</span>
+
+
+track    <span class="token operator">=</span> <span class="token number">0</span>
+channel  <span class="token operator">=</span> <span class="token number">0</span>
+time     <span class="token operator">=</span> <span class="token number">0</span>    <span class="token comment"># In beats</span>
+duration <span class="token operator">=</span> <span class="token number">1</span>    <span class="token comment"># In beats</span>
+tempo    <span class="token operator">=</span> <span class="token number">1000</span>   <span class="token comment"># In BPM</span>
+volume   <span class="token operator">=</span> <span class="token number">100</span>  <span class="token comment"># 0-127, as per the MIDI standard</span>
+
+MyMIDI <span class="token operator">=</span> MIDIFile<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span>  <span class="token comment"># One track, defaults to format 1 (tempo track is created</span>
+                      <span class="token comment"># automatically)</span>
+MyMIDI<span class="token punctuation">.</span>addTempo<span class="token punctuation">(</span>track<span class="token punctuation">,</span> time<span class="token punctuation">,</span> tempo<span class="token punctuation">)</span>
+
+interval <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>bar_group<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span>
+
+<span class="token keyword">for</span> b <span class="token keyword">in</span> bar_group<span class="token punctuation">:</span>
+
+    strings <span class="token operator">=</span> b<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span>
+    strings <span class="token operator">=</span> <span class="token punctuation">[</span>x <span class="token keyword">for</span> x <span class="token keyword">in</span> strings <span class="token keyword">if</span> x <span class="token operator">!=</span> <span class="token string">''</span><span class="token punctuation">]</span>
+    e_count <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span>s <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>strings<span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+        current_string <span class="token operator">=</span> strings<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        <span class="token keyword">if</span> current_string <span class="token keyword">not</span> <span class="token keyword">in</span> guitar_strings<span class="token punctuation">.</span>keys<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            current_string <span class="token operator">=</span> string_notes<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+        <span class="token keyword">if</span> current_string <span class="token operator">==</span> <span class="token string">"E"</span><span class="token punctuation">:</span>
+            e_count <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token keyword">if</span> e_count <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">:</span>
+            current_string <span class="token operator">==</span> <span class="token string">"high_e"</span>
+
+        track <span class="token operator">=</span> guitar_strings<span class="token punctuation">[</span>current_string<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'track_num'</span><span class="token punctuation">]</span>
+
+        s <span class="token operator">=</span> s<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+        s <span class="token operator">=</span> s<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'|'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>
+        s <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+
+        <span class="token keyword">for</span> i<span class="token punctuation">,</span> pitch <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            volume <span class="token operator">=</span> <span class="token number">100</span>
+
+            <span class="token keyword">if</span> pitch <span class="token operator">==</span> <span class="token string">"\n"</span><span class="token punctuation">:</span>
+                <span class="token keyword">break</span>
+            <span class="token keyword">if</span> pitch <span class="token operator">==</span> <span class="token string">"-"</span><span class="token punctuation">:</span>
+                volume <span class="token operator">=</span> <span class="token number">0</span>
+                pitch <span class="token operator">=</span> <span class="token number">50</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"adding note"</span><span class="token punctuation">)</span>
+            pitch <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>pitch<span class="token punctuation">)</span> <span class="token operator">+</span> guitar_strings<span class="token punctuation">[</span>current_string<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'note_val'</span><span class="token punctuation">]</span>
+            MyMIDI<span class="token punctuation">.</span>addNote<span class="token punctuation">(</span>track<span class="token punctuation">,</span> channel<span class="token punctuation">,</span> pitch<span class="token punctuation">,</span> time <span class="token operator">+</span> i<span class="token punctuation">,</span> duration<span class="token punctuation">,</span> volume<span class="token punctuation">)</span>
+
+    time <span class="token operator">+=</span> interval<span class="token operator">*</span><span class="token number">8</span>
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"major-scale.mid"</span><span class="token punctuation">,</span> <span class="token string">"wb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> output_file<span class="token punctuation">:</span>
+    MyMIDI<span class="token punctuation">.</span>writeFile<span class="token punctuation">(</span>output_file<span class="token punctuation">)</span>
+</code></pre></div>
+<p>Here's me playing one of my favorite songs, you might recognize it!</p>
+<blockquote class="instagram-media" data-instgrm-captioned="" data-instgrm-permalink="https://www.instagram.com/p/rg2gmyyFdC/" data-instgrm-version="8" style="background:#fff;border:0;border-radius:3px;box-shadow:0 0 1px 0 rgba(0,0,0,.5),0 1px 10px 0 rgba(0,0,0,.15);margin:1px;max-width:658px;padding:0;width:calc(100% - 2px)"><div style="padding:8px"> <div style="background:#f8f8f8;line-height:0;margin-top:40px;padding:50% 0;text-align:center;width:100%"> <div style="background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC);display:block;height:44px;margin:0 auto -44px;position:relative;top:-22px;width:44px"></div></div> <p style="margin:8px 0 0 0;padding:0 4px"> <a href="https://www.instagram.com/p/rg2gmyyFdC/" target="_blank" style="color:#000;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:400;line-height:17px;text-decoration:none;word-wrap:break-word">Written in 1902, this catchy tune from Fransico Tárrega's 'Gran Vals' is now heard by an estimated 22,000 per second worldwide.. it is also a registered sound trademark of a billion dollar Finnish company 🎵 #franciscotárrega #tarrega #tárrega #classicalguitar #spanishguitarist #spain #instamusic #granvals #grandevalse #grandwaltz #crownmolding</a></p> <p style="color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;text-overflow:ellipsis;white-space:nowrap">A post shared by <a href="https://www.instagram.com/briancaffey/" target="_blank" style="color:#c9c8cd;font-family:Arial,sans-serif;font-size:14px;font-style:normal;font-weight:400;line-height:17px"> Brian</a> (@briancaffey) on <time datetime="2014-08-10T09:48:59+00:00" style="font-family:Arial,sans-serif;font-size:14px;line-height:17px">Aug 10, 2014 at 2:48am PDT</time></p></div></blockquote> <script async defer src="//www.instagram.com/embed.js"></script></div> <div class="fixed bg-white shadow right-0 bottom-0 rounded-full p-4 m-4 cursor-pointer h-2 w-2" data-v-51e3ff6a><span class="text-black" data-v-51e3ff6a> 🗣 </span></div> <div id="disqus_thread" identifier="generating-music-from-guitar-tabs-with-python.html" style="min-height:200px"></div> <h1></h1></div></article> <div class="p-4 lg:px-16 text-center" data-v-45f22fd0><hr data-v-45f22fd0> <div class="py-4" data-v-45f22fd0>Thanks for checking out my site!</div> <div class="pb-4" data-v-45f22fd0>© 2020 Brian Caffey</div></div></div></div></div><script defer src="/_nuxt/static/1601692046/2018/04/26/generating-music-from-guitar-tabs-with-python.html/state.js"></script><script src="/_nuxt/484df72.js" defer></script><script src="/_nuxt/0595448.js" defer></script><script src="/_nuxt/cff3b0e.js" defer></script><script src="/_nuxt/30623f9.js" defer></script><script src="/_nuxt/b4629f2.js" defer></script>
+  </body>
+</html>

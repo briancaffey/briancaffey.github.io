@@ -85,14 +85,14 @@ export default {
 
   hooks: {
     'content:file:beforeInsert': (document) => {
-      if (document.path.startsWith('/blog/')) {
-        let date = document.slug.substring(0, 10)
-        date = date.replace(/-/g, '/')
-        const url = date + '/' + document.slug.substring(11) + '.html'
-        document.url = url
-        document.slug = document.slug + '.html'
-        document.path = document.path + '.html'
-      }
+      // if (document.path.startsWith('/blog/')) {
+      //   let date = document.slug.substring(0, 10)
+      //   date = date.replace(/-/g, '/')
+      //   const url = date + '/' + document.slug.substring(11) + '.html'
+      //   document.url = url
+      //   document.slug = document.slug + '.html'
+      //   document.path = document.path + '.html'
+      // }
       if (document.extension === '.md') {
         const raw = document.text
         document.raw = raw
@@ -106,11 +106,15 @@ export default {
     routes: async () => {
       const { $content } = require('@nuxt/content')
 
-      const posts = await $content('blog').only(['path']).fetch()
+      const posts = await $content({ deep: true }).only(['path']).fetch()
       const projects = await $content('projects').only(['path']).fetch()
 
       return []
-        .concat(...posts.map((w) => w.path))
+        .concat(
+          ...posts
+            .filter((x) => !x.path.startsWith('/projects/'))
+            .map((w) => w.path)
+        )
         .concat(...projects.map((p) => p.path))
     },
   },
@@ -126,7 +130,7 @@ export default {
           description: 'RSS feed for briancaffey.github.io',
         }
         const { $content } = require('@nuxt/content')
-        const articles = await $content('blog', { deep: true, text: true })
+        const articles = await $content({ deep: true, text: true })
           .only(['title', 'body', 'date', 'slug', 'description'])
           .sortBy('date', 'desc')
           .fetch()
@@ -134,7 +138,7 @@ export default {
           feed.addItem({
             title: article.title,
             id: article.url,
-            link: `https://briancaffey.github.io/blog/${article.slug}`,
+            link: `https://briancaffey.github.io/${article.path}`,
             description: article.description,
             // content: article.text,
           })
@@ -161,12 +165,19 @@ export default {
 
   generate: {
     dir: 'docs',
+    async routes() {
+      const { $content } = require('@nuxt/content')
+
+      const posts = await $content({ deep: true }).only(['path']).fetch()
+      // console.log(posts)
+      return posts.map((x) => x.path)
+    },
   },
   router: {
     extendRoutes(routes, resolve) {
       routes.push({
         path: '/:year/:month/:day/:slug',
-        component: resolve(__dirname, 'pages/blog/_slug.vue'),
+        component: resolve(__dirname, 'pages/_year/_month/_day/_slug.vue'),
       })
     },
   },

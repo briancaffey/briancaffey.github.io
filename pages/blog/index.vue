@@ -32,7 +32,7 @@
 export default {
   async asyncData({ $content, params }) {
     let articles = await $content({ deep: true })
-      .only(['title', 'description', 'image', 'slug', 'author', 'date'])
+      .only(['title', 'description', 'image', 'slug', 'author', 'date', 'path'])
       .sortBy('date', 'desc')
       .fetch()
 

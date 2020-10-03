@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>briancaffey.github.io</title>
+        <link>https://briancaffey.github.io/feed.xml</link>
+        <description>RSS feed for briancaffey.github.io</description>
+        <lastBuildDate>Sat, 03 Oct 2020 02:27:33 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/nuxt-community/feed-module</generator>
+        <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Migrating my personal GitHub pages blog from Jekyll to Nuxt]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Some of the tools and workflows I use for local Django application development]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Deploying serverless Django applications to AWS with CDK on a tiny budget using Lambda, API Gateway, awsgi and the Lambda proxy pattern]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Using AWS CDK, GitLab, Fargate and CloudFront for Django + Vue.js applications]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Setup, Development and Deployment of a web app using Django, VueJS, VuePress, Docker, nginx, traefik and GitLab]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis-CI]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Up and running with Jekyll + GitHub Pages]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Django + Vue.js web application template with AWS Cloud Development Kit (CDK), AWS Fargate and GitLab CI]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Full Stack web appliction with Django, VueJS, Docker, and other containerized services]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Generating MIDI files from guitar tablatures with Python and regular expressions]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Ubuntu 16.04.4 Installation and Setup Notes]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Using Leaflet to display geographical data in a Django app with Mapbox, DataTables, Bootstrap 4 and Travis CI]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Detailed setup of a mini Django News App project with Bootstrap, AJAX, Celery and RabbitMQ]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Reading 13F SEC filings with python]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[How to do simple SQL tasks with MariaDB]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Finding the best poker hand in five-card draw with python]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Getting started with Python's Twisted Framework]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Setting up a Flask project with Flask CLI and Docker]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Reflecting on my web-app development process after reading The Twelve-Factor App]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Analysis of AUR and Official Arch Repository data]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[AUR and Official Arch Linux Repository Data Analysis]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Removing root partition bloat caused by docker]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[How to enable color emoji on Arch Linux with Emoji One Font]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Using Tensorflow and Tensorboard with Docker]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Installing the GPU version of Tensorflow with Docker on Arch Linux]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Automating Django deployment with a Deploy-to-Heroku button]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[A binary clock written in bash]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[How to connect to Google Starbucks wifi using i3 and Arch Linux]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Reading RSS with Python]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Moving from Gnome Desktop to i3 window manager on Arch Linux]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Simple Board Games in ReactJS]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Arch Linux Installation Guide]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[playquest.io]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Comparing different ways to build friend objects in Django]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[bucksamonth.com]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Rendering SketchUp models with Kerkythea]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Building a 3D model from 60 photographs with VisualSFM and Meshlab]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Python script for generating 2D n-state Langton's Ant animations]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Setting up a Django app on Heroku]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Related subreddit graph exploration with NetworkX]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[six degrees of subreddits]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[PCPartPicker data]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[PC PartPicker data analysis]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+        <item>
+            <title><![CDATA[Home media center meta-tutorial with miniDLNA, Raspberry Pi, Deluge and Apple TV]]></title>
+            <link>https://briancaffey.github.io/undefined</link>
+            <guid>https://briancaffey.github.io/undefined</guid>
+        </item>
+    </channel>
+</rss>
