@@ -212,3 +212,18 @@ hr {
   background-color: var(--bg-secondary);
   color: var(--color);
 }
+
+.btn {
+  border-radius: 1;
+  border-color: var(--color-primary);
+  /* background-color: var(--color-secondary); */
+}
+
+.btn:hover {
+  background-color: var(--bg-secondary);
+
+}
+
+.hero {
+  border-color: var(--color-primary)
+}
