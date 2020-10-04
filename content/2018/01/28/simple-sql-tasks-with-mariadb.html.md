@@ -5,6 +5,10 @@ date: 2018-01-28
 comments: true
 image: /static/mariadb.png
 permalink: /2018/01/28/how-to-do-simple-sql-tasks-with-mariadb-0
+tags:
+  - maria-db
+  - sql
+  - databases
 ---
 
 In this article I'll look at another interview takehome assignment. This assignment included SQL, python and some logic puzzles. If you read to the end I'll share a fun "trick question" that was also included.

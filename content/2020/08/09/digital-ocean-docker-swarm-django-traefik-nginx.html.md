@@ -4,6 +4,16 @@ title: Deploying Django applications with docker swarm on DigitalOcean using Git
 date: 2020-08-09
 comments: true
 image: /static/shark.jpg
+tags:
+  - django
+  - docker
+  - digital-ocean
+  - vue
+  - gitlab
+  - rex-ray
+  - traefik
+  - nginx
+  - swarm
 ---
 
 I recently wrote two articles about deploying Django applications to AWS serverless environments: one on [AWS Fargate](https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html) (CloudFront, ALB and ECS Fargate containers) and one on [AWS Lambda](https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway.html) (Lambda + API Gateway, without using Zappa or Serverless Framework). Both projects focused on automating as much of the setup and operation as possible using DevOps patterns: Infrastructure as Code, GitOps, CI/CD and docker containers. I used AWS resources exclusively (with the exception of GitLab) with the help of [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/), an awesome tool that I have really come to like. In general I really like AWS, and the more I use it I start to think about what I would do without it. Also, a lot of the feedback I got on these projects recommended to "just use a VPS" instead of bothering with AWS because it is complicated, expensive, overkill, etc. This got me thinking about how far I could get in deploying a Django application on a server with little or no external services that AWS has spoiled me with. After a little bit of discomfort and confusion, I was able to check off most of what I was hoping to and came away with a few questions as well. If you are interested to know how I got things setup and and hear some of my thoughts on running Django applications in production, continue reading!
@@ -210,7 +220,7 @@ deploy-digital-ocean:
   services:
     - docker:19.03.5-dind
   variables:
-    DOCKER_HOST: "ssh://root@$DROPLET_IP"
+    DOCKER_HOST: 'ssh://root@$DROPLET_IP'
   before_script:
     - apk update && apk add openssh-client bash
     - mkdir -p ~/.ssh
@@ -264,7 +274,7 @@ Now we are ready to tackle the last big file in our repo: `stack.yml`. This is a
 ### backend
 
 ```yml
-version: "3.4"
+version: '3.4'
 services:
   backend:
   image: ${CI_REGISTRY_IMAGE}/backend:${CI_COMMIT_SHORT_SHA}
@@ -342,11 +352,11 @@ services:
       - backendassets:/usr/src/app/assets
     deploy:
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.nginx-web.rule=Host(`mysite.com`)"
-        - "traefik.http.routers.nginx-web.entrypoints=websecure"
-        - "traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver"
-        - "traefik.http.services.nginx-web.loadbalancer.server.port=80"
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.nginx-web.rule=Host(`mysite.com`)'
+        - 'traefik.http.routers.nginx-web.entrypoints=websecure'
+        - 'traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver'
+        - 'traefik.http.services.nginx-web.loadbalancer.server.port=80'
 ```
 
 For now, ignore the contents under the `deploy` key; we will cover this next when we go over the `traefik` service.
@@ -469,19 +479,19 @@ services:
   traefik:
     image: traefik:v2.0.2
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     command:
-      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
-      - "--providers.docker.swarmMode=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=traefik-public"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsencryptresolver.acme.email=brian@email.com"
-      - "--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"
+      - '--providers.docker.endpoint=unix:///var/run/docker.sock'
+      - '--providers.docker.swarmMode=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--providers.docker.network=traefik-public'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true'
+      - '--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web'
+      - '--certificatesresolvers.letsencryptresolver.acme.email=brian@email.com'
+      - '--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json'
     volumes:
       - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
@@ -500,11 +510,11 @@ services:
 ```yaml
 deploy:
   labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.nginx-web.rule=Host(`mysite.com`)"
-    - "traefik.http.routers.nginx-web.entrypoints=websecure"
-    - "traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver"
-    - "traefik.http.services.nginx-web.loadbalancer.server.port=80"
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.nginx-web.rule=Host(`mysite.com`)'
+    - 'traefik.http.routers.nginx-web.entrypoints=websecure'
+    - 'traefik.http.routers.nginx-web.tls.certresolver=letsencryptresolver'
+    - 'traefik.http.services.nginx-web.loadbalancer.server.port=80'
 ```
 
 I still need to setup HTTP -> HTTPS redirecting, so for now only `websecure` is defined, but Aloïs explains this clearly in his article.

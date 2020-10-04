@@ -5,6 +5,13 @@ date: 2018-02-19
 comments: true
 image: /static/map_homepage.png
 disqus_id: /2018/02/19/leaflet-maps-with-django.html
+tags:
+  - leaflet
+  - django
+  - mapbox
+  - data-tables
+  - bootstrap
+  - travis-ci
 ---
 
 ![png](/static/map_entire.png)

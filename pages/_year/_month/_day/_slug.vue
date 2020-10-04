@@ -7,6 +7,7 @@
     />
     <div class="px-2 sm:px-4 md:px-4 lg:px-16 xl:pb-16 mt-2 lg:pl-64">
       <h1 class="prose text-3xl leading-9">{{ article.title }}</h1>
+      <tags v-if="article.tags" :tags="article.tags" />
       <p class="text-gray-500 mb-4">
         Last updated: {{ formatDate(article.date) }}
       </p>

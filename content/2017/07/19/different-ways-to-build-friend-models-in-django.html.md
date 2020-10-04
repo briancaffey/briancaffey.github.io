@@ -1,10 +1,10 @@
 ---
-
 layout: post
 title: Comparing different ways to build friend objects in Django
 date: 2017-07-19
 comments: true
-
+tags:
+  - django
 ---
 
 This post will briefly explore two different methods of creating models in Django for friends, relationships, followers or connections on a social network. The first method is one I learned from [this youtube tutorial series](https://www.youtube.com/watch?v=IXJ46DitsIg&index=55&list=PLw02n0FEB3E3VSHjyYMcFadtQORvl1Ssj) by [Max Goodridge](https://github.com/maxg203) when I first started learning Django.
@@ -78,7 +78,7 @@ This approach is helpful when you want to track the users someone is following a
 
 ```html
 {% for friend in request.user.userprofile.followers.all %}
-    <p>{{ friend }}</p>
+<p>{{ friend }}</p>
 {% endfor %}
 ```
 
@@ -117,7 +117,7 @@ class UserProfile(models.Model):
     def get_connections(self):
   		connections = Connection.objects.filter(creator=self.user)
   		return connections
-          
+
     def get_followers(self):
         followers = Connection.objects.filter(following=self.user)
         return followers
@@ -129,12 +129,11 @@ In a recent project I have been looking for a way to display all users in a netw
 
 Here's a quick description of `SerializerMethodField` from the [Django REST Framework documentation](http://www.django-rest-framework.org/api-guide/fields/#serializermethodfield):
 
->This is a read-only field. It gets its value by **calling a method on the serializer class it is attached to**. It can be used to add any sort of data to the serialized representation of your object.
+> This is a read-only field. It gets its value by **calling a method on the serializer class it is attached to**. It can be used to add any sort of data to the serialized representation of your object.
 
 Here's a view and serializer that I use to show all users in a social network, along with Boolean Fields that indicate if each user is following or followed by the logged-in user making the request.
 
-
-*api/views.py*
+_api/views.py_
 
 ```python
 class UserListAPIView(ListAPIView):
@@ -142,7 +141,7 @@ class UserListAPIView(ListAPIView):
     serializer_class = UserListSerializer
 ```
 
-*api/serializers.py*
+_api/serializers.py_
 
 ```python
 from ..models import UserProfile, Connection
@@ -179,7 +178,7 @@ class UserListSerializer(ModelSerializer):
 
 Finally, here's look into the `index.js` file that includes the React component which consumes this API data:
 
-*assets/js/index.js*
+_assets/js/index.js_
 
 ```js
 ...

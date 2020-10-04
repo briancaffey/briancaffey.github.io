@@ -1,29 +1,29 @@
 ---
-
 layout: post
 title: Python script for generating 2D n-state Langton's Ant animations
 date: 2017-04-02
 comments: true
 image: /static/ant.png
-
+tags:
+  - python
+  - cellular-automata
 ---
 
 ![png](/static/LLRRRLRRRRR.png)
 
-This is an old project that I would like to refactor. I'm copying the contents of [this Jupyter notebook](https://github.com/briancaffey/cellular-automata/blob/master/ants.ipynb) into this article with the `jupyter nbconvert ants.ipynb --to markdown`. 
+This is an old project that I would like to refactor. I'm copying the contents of [this Jupyter notebook](https://github.com/briancaffey/cellular-automata/blob/master/ants.ipynb) into this article with the `jupyter nbconvert ants.ipynb --to markdown`.
 
 This notebook explores a type of Turing Machine known as [termites](https://en.wikipedia.org/wiki/Turmite). The first part is a script I wrote a few years ago when I was first learning Python. If you are new to learning Python, I suggest you give it a try before reading the script; there's a lot you will learn about flow control and data structures. My script is far from perfect and every time I come back to it there is an idiom I can add and areas that can be refactored and cleaned up. It generates images of 2-dimensional n-state termites on an $a$ x $b$ rectangular grid, or it can generate multiple images (frames) of a single termite as it grows to make a video. Here's an example of a termite animatino that I made using the script below:
 
 <iframe width="100%" height="400" src="https://www.youtube-nocookie.com/embed/Du2DorTLAo4?rel=0" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
 
-The type of termite explored here is a modified version of a type of cellular automata known as [Langton's Ant](https://en.wikipedia.org/wiki/Langton%27s_ant). Langton's Ant has a simple ruleset: an ant is placed on a 2-dimensional grid of 2-state cells (black or white) with a directional orientation. If the ant is on a black cell at $t=n$, the ant enters the cell on the immediate left at $t=n+1$ and the state of the cell it exits changes to white. If the state of the cell that the ant enters is white, the ant enters the cell immediately to the right and the cell it exits turns black. Around 11,000 steps, the ant enters a 'highway' which results in a repeated motion that moves the ant continually in one direction. 
+The type of termite explored here is a modified version of a type of cellular automata known as [Langton's Ant](https://en.wikipedia.org/wiki/Langton%27s_ant). Langton's Ant has a simple ruleset: an ant is placed on a 2-dimensional grid of 2-state cells (black or white) with a directional orientation. If the ant is on a black cell at $t=n$, the ant enters the cell on the immediate left at $t=n+1$ and the state of the cell it exits changes to white. If the state of the cell that the ant enters is white, the ant enters the cell immediately to the right and the cell it exits turns black. Around 11,000 steps, the ant enters a 'highway' which results in a repeated motion that moves the ant continually in one direction.
 
-Instead of black and white cells, we can define $n$ number of states (colors) and assign any combination of $n$ instructions (eg. LRLLLRLLLRL). The script below generates generates an arbitrary number of `ants`. Each number in `range(ants)` is converted to binary and then 1s and 0s of the corresponding binary number represent the left and right turns for each individual ant. For example: `bin(23)` corresponds to a 5-state ant with the following rules: RLRRR. This method avoids generating isotropes (RLRRR is the same ant as LRLLL). 
+Instead of black and white cells, we can define $n$ number of states (colors) and assign any combination of $n$ instructions (eg. LRLLLRLLLRL). The script below generates generates an arbitrary number of `ants`. Each number in `range(ants)` is converted to binary and then 1s and 0s of the corresponding binary number represent the left and right turns for each individual ant. For example: `bin(23)` corresponds to a 5-state ant with the following rules: RLRRR. This method avoids generating isotropes (RLRRR is the same ant as LRLLL).
 
-If `record` is set to `True`, one frame will be captured every `frame_interval` number of steps. These images can be converted into video easily with open-source programs like [Blender](https://www.blender.org/). 
+If `record` is set to `True`, one frame will be captured every `frame_interval` number of steps. These images can be converted into video easily with open-source programs like [Blender](https://www.blender.org/).
 
-The last part of the notebook attempts to use new methods from the latest version of scikit-learn ([0.18.1](http://scikit-learn.org/stable/whats_new.html)) to cluster ants by their behavior: k-means (for clustering) and Isolation Forests (for detecting outliers). 
-
+The last part of the notebook attempts to use new methods from the latest version of scikit-learn ([0.18.1](http://scikit-learn.org/stable/whats_new.html)) to cluster ants by their behavior: k-means (for clustering) and Isolation Forests (for detecting outliers).
 
 ```python
 import PIL
@@ -41,9 +41,8 @@ import seaborn as sns
 %matplotlib inline
 ```
 
-
 ```python
-#this script generates an image (or a series of images) for n-state 2D Langton's Ant cellular automaton. 
+#this script generates an image (or a series of images) for n-state 2D Langton's Ant cellular automaton.
 
 #SETTINGS
 
@@ -66,7 +65,7 @@ length = int(200)
 
 #initialize ant in the center of the grid
 #grid contains length_width**2 cells
-ant_pos = int((length*width)/2) + int(width/2) 
+ant_pos = int((length*width)/2) + int(width/2)
 
 #boolean to check if the ant touches the border (out of bounds)
 oob = False
@@ -104,7 +103,7 @@ magenta = (216,0,115,255)
 
 color_choices = [red, orange, yellow, light_blue, yellow_green, blue, purple, black, grey, green, teal, light_blue, other, brown, pink, mauve, magenta]
 
-#convert an integer to binary and then convert 
+#convert an integer to binary and then convert
 def num_to_string(num):
     binary = bin(num)
     moves = ""
@@ -116,7 +115,7 @@ def num_to_string(num):
     return moves
 
 #moves list includes all 16 length moves
-#moves_list = [num_to_string(ant) for ant in range(32768,65536)] 
+#moves_list = [num_to_string(ant) for ant in range(32768,65536)]
 
 #defines the list of strings that is used for the main loop bellow
 moves_list = [num_to_string(ant) for ant in range(ants)]
@@ -154,7 +153,7 @@ def move(color,d):
     while True:
         #this part is a little confusing and may need to be rewritten
         #it uses the current direction of the ant to determine the appropriate direction for the next turn
-        #breaks are used 
+        #breaks are used
         if pix_list[ant_pos][2] == color and direction == width*d:
             #set the color to the next color in the list, or loop back to the beginning of the list if the end has been reached
             pix_list[ant_pos][2] = (color + 1) % len(pixel_colors)
@@ -162,7 +161,7 @@ def move(color,d):
             init = ant_pos
             #move the ant
             move_right()
-            #save the updated position of the ant 
+            #save the updated position of the ant
             end = ant_pos
             #calculate the new direction of the ant by taking the difference between end and init
             direction = end - init
@@ -215,7 +214,7 @@ def run():
         if ant_pos < width or ant_pos % width == 0:
             oob = step
             return
-        #loop through the moves 
+        #loop through the moves
         for index, direction in enumerate(moves1):
             try:
                 #remember the ant position
@@ -235,7 +234,7 @@ def run():
                     break
                 else:
                     continue
-            except: 
+            except:
                 #print("Out of bounds at step number " + str(step))
                 oob = step
                 return
@@ -247,8 +246,8 @@ def save_image(i):
     im1.putdata(pix_series)
     #to rescale the image, set the scale variable in settings and call resize on im1
     im1.resize((scale*im1.size[0],scale*im1.size[1])).save('%s.png' % (moves))
-    
-#builds a dictionary to count pixels by color 
+
+#builds a dictionary to count pixels by color
 def build_df_row():
     colors_dict = {str(val): 0 for val, color in enumerate(pixel_colors)}
     moves_dict = {'moves':moves}
@@ -266,7 +265,7 @@ def build_df_row():
 for _, moves in enumerate(moves_list):
     oob = 0
     dir_path = str(_)
-    
+
     #make a new directory for each new ant walk in walks based on the the walk number and navigate to that directory
     if record == True:
         #make a new directory to record frames for a give ant if record is set to true and that directory does not yet exist
@@ -275,13 +274,13 @@ for _, moves in enumerate(moves_list):
         #otherwise just change into the directory
         else:
             os.chdir(dir_path)
-    
+
     #set ant at middle of grid
-    ant_pos = int((length*width)/2) + int(width/2) 
-    
+    ant_pos = int((length*width)/2) + int(width/2)
+
     #moves = len(moves)
     pixel_colors = color_choices[:(len(moves))]
-    
+
     #defines an empty list of elements [x,y,0] where x amd y are the position 0 is the 0ht color in the color list (the base canvas color)
     pix_list = []
     for x in range(length):
@@ -294,40 +293,39 @@ for _, moves in enumerate(moves_list):
 
     #counter keeps track of the frame number (if recording a series of images)
     counter = 0
-    
+
     #run the ant
-    run() 
-    
+    run()
+
     #capture the final state of the grid with get_pix_series
     get_pix_series()
-    
+
     #uncomment below to preview images for testing
     #im1.putdata(pix_series)
     #im1.resize((scale*im1.size[0],scale*im1.size[1])).show()
-    
+
     #build a dictionary with pixel counts
     colors_dict = build_df_row()
     row_df = pd.DataFrame(colors_dict, index=[0])
     df = df.append(row_df, ignore_index=True)
-    
+
     if record_final_image == True:
         os.chdir(os.path.expanduser('~/Documents/CA_1/imgs/'))
         save_image(_)
         os.chdir('../')
-    
+
     #summary
     print(str(_), end=' ')
-    
+
 os.chdir(os.path.expanduser('~/Documents/CA_1/'))
 df.to_csv('ants_hist_.csv', index=False)
 ```
 
 # Clustering
 
-We now have a csv file where each row is a 16-state termite and the columns labeled 0 through 15 count the sum of pixels in each state (the different colors). With `last_step` we also track the last step reached in the event that the ant runs into the edge of the grid. This will be helpful in clustering ants that form highways in different groups from those that complete 100000 steps inside the 200 x 200 grid. 
+We now have a csv file where each row is a 16-state termite and the columns labeled 0 through 15 count the sum of pixels in each state (the different colors). With `last_step` we also track the last step reached in the event that the ant runs into the edge of the grid. This will be helpful in clustering ants that form highways in different groups from those that complete 100000 steps inside the 200 x 200 grid.
 
-First let's read the csv into a pandas DataFrame and look at some of the data. 
-
+First let's read the csv into a pandas DataFrame and look at some of the data.
 
 ```python
 import PIL
@@ -345,31 +343,20 @@ import seaborn as sns
 %matplotlib inline
 ```
 
-
 ```python
 os.chdir(os.path.expanduser('~/Documents/CA_1/'))
 df1 = pd.read_csv('ants_hist_.csv')
 ```
 
-
 ```python
 df1.shape
 ```
 
-
-
-
     (32768, 18)
-
-
-
 
 ```python
 df1.sample(3)
 ```
-
-
-
 
 <div>
 <table border="1" class="dataframe">
@@ -464,39 +451,27 @@ df1.sample(3)
 </table>
 </div>
 
-
-
-There are 32768 unique instructions for 16-state termites `(2^16)/2 = 32768`. Let's check to see how many of these are duplicates. We want to select only the state-counts and then call `.drop_duplicates` on that DataFrame. 
-
+There are 32768 unique instructions for 16-state termites `(2^16)/2 = 32768`. Let's check to see how many of these are duplicates. We want to select only the state-counts and then call `.drop_duplicates` on that DataFrame.
 
 ```python
 df2 = df1.iloc[:,0:16]
 ```
 
-
 ```python
 df2.shape[0] - df2.drop_duplicates().shape[0]
 ```
 
-
-
-
     1566
 
-
-
-1566 of the 16-state termites. It might be helpful to remove these termites from the DataFrame before we cluster them. 
-
+1566 of the 16-state termites. It might be helpful to remove these termites from the DataFrame before we cluster them.
 
 ```python
 unique_termites_index = df2.drop_duplicates().index
 ```
 
-
 ```python
 df = df1.loc[unique_termites_index,:]
 ```
-
 
 ```python
 df['steps_taken'] = [100000 if x==0 else x for x in df.last_step]
@@ -504,13 +479,9 @@ df['file_names'] = [x+'.png' for x in df.moves]
 df['move_len'] = [len(x) for x in df.moves]
 ```
 
-
 ```python
 df.head()
 ```
-
-
-
 
 <div>
 <table border="1" class="dataframe">
@@ -666,15 +637,11 @@ df.head()
 <p>5 rows × 21 columns</p>
 </div>
 
-
-
-
 ```python
 df.index = df.file_names
 ```
 
-Here's a quick look at the distribution of the base canvas color (red in the images below) over all of the unique termites. 
-
+Here's a quick look at the distribution of the base canvas color (red in the images below) over all of the unique termites.
 
 ```python
 x = '0'
@@ -686,66 +653,39 @@ plt.ylabel('Count')
 plt.title('Histogram Showing Termite Count by number of cells in state 0')
 ```
 
-
-
-
     <matplotlib.text.Text at 0x116dee10>
 
-
-
-
 ![png](/static/ants_files/ants_20_1.png)
-
-
 
 ```python
 df.shape
 ```
 
-
-
-
     (31202, 21)
 
-
-
 Now we can prepare a DataFrame that we will feed in to the clustering model. We will take only the pixel counts and the total number of steps taken.
-
 
 ```python
 X = df[df.move_len==16].iloc[:,[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,18]]
 ```
 
-
 ```python
 X.columns
 ```
-
-
-
 
     Index([u'0', u'1', u'10', u'11', u'12', u'13', u'14', u'15', u'2', u'3', u'4',
            u'5', u'6', u'7', u'8', u'9', u'steps_taken'],
           dtype='object')
 
-
-
-Most of the termites completed all 100000 steps within the grid boundries. 
-
+Most of the termites completed all 100000 steps within the grid boundries.
 
 ```python
 X[X.steps_taken==100000].steps_taken.count()
 ```
 
-
-
-
     29955
 
-
-
 Here'a a histogram of the steps taken by ants that took less than 100000 steps.
-
 
 ```python
 X[X.steps_taken<100000].steps_taken.hist()
@@ -754,19 +694,11 @@ plt.xlabel('steps_taken')
 plt.ylabel('Count')
 ```
 
-
-
-
     <matplotlib.text.Text at 0x18aa3a58>
-
-
-
 
 ![png](/static/ants_files/ants_28_1.png)
 
-
 Here's another look at the distribution of cells in state 3 over all termites:
-
 
 ```python
 x = '3' #other intereting states: 1, 7, 11, 15
@@ -778,61 +710,39 @@ plt.ylabel('Count (termites)')
 plt.title('Histogram Showing Termite Count by number of cells in state 3')
 ```
 
-
-
-
     <matplotlib.text.Text at 0x15ba6630>
 
-
-
-
 ![png](/static/ants_files/ants_30_1.png)
-
-
 
 ```python
 X.shape
 ```
 
-
-
-
     (31202, 17)
 
+To cluster the different termites, we can use an unsupervised learning method called clustering. It is "unsupervised" because I don't explicitly tell the model what types termites should be grouped together. Instead, we will tell the model _how many different clusters there are._ Of course, I really don't know how many clusters there should be. I do know from looking at the results that there seem to be many different types of behavior, patterns, sizes and other characteristics. We significantly reduce the complexity of clustering task by training the model on the count of pixels by what state the are in. I'm sure that the model won't be able to pick up on all of the nuances that humans can detect by looking at the images, but I have a feeling that it should be able to do a fairly good job. After we take a look at the individual clusters, we can try to find an optimal number of clusters by minimizing the total number of outliers of all the clusters. Here's [an interesting paper](http://papers.nips.cc/paper/5306-on-integrated-clustering-and-outlier-detection.pdf) on integrated clustering and outlier detection.
 
-
-To cluster the different termites, we can use an unsupervised learning method called clustering. It is "unsupervised" because I don't explicitly tell the model what types termites should be grouped together. Instead, we will tell the model *how many different clusters there are.* Of course, I really don't know how many clusters there should be. I do know from looking at the results that there seem to be many different types of behavior, patterns, sizes and other characteristics. We significantly reduce the complexity of clustering task by training the model on the count of pixels by what state the are in. I'm sure that the model won't be able to pick up on all of the nuances that humans can detect by looking at the images, but I have a feeling that it should be able to do a fairly good job. After we take a look at the individual clusters, we can try to find an optimal number of clusters by minimizing the total number of outliers of all the clusters. Here's [an interesting paper](http://papers.nips.cc/paper/5306-on-integrated-clustering-and-outlier-detection.pdf) on integrated clustering and outlier detection. 
-
-Here's how we set up the clustering model. For the numebr of clusters, let's start with 75. 
-
+Here's how we set up the clustering model. For the numebr of clusters, let's start with 75.
 
 ```python
 k_means = cluster.KMeans(n_clusters=75, random_state=1)
 ```
 
-
 ```python
 k_means.fit(X, y=None)
 ```
-
-
-
 
     KMeans(algorithm='auto', copy_x=True, init='k-means++', max_iter=300,
         n_clusters=75, n_init=10, n_jobs=1, precompute_distances='auto',
         random_state=1, tol=0.0001, verbose=0)
 
-
-
 Then we add the cluster number to each termite:
-
 
 ```python
 X['clusters'] = k_means.labels_
 ```
 
 Here's the breakdown of clusters by number of termites in each cluster:
-
 
 ```python
 plt.figure(figsize=(12,4))
@@ -842,33 +752,23 @@ plt.ylabel('Count')
 plt.title('Termite count by cluster')
 ```
 
-
-
-
     <matplotlib.text.Text at 0x15c4c358>
-
-
-
 
 ![png](/static/ants_files/ants_38_1.png)
 
-
 And here is a list of the data shown above:
-
 
 ```python
 for x, y in zip(X.clusters.value_counts().index, X.clusters.value_counts()): print(' || cluster_num: ' + str(x) , 'count: ' + str(y), end='  ')
 ```
 
-     || cluster_num: 16 count: 3293   || cluster_num: 71 count: 3036   || cluster_num: 46 count: 2993   || cluster_num: 0 count: 2752   || cluster_num: 23 count: 2667   || cluster_num: 52 count: 2540   || cluster_num: 50 count: 2185   || cluster_num: 5 count: 1412   || cluster_num: 19 count: 987   || cluster_num: 45 count: 816   || cluster_num: 44 count: 791   || cluster_num: 54 count: 686   || cluster_num: 42 count: 625   || cluster_num: 64 count: 603   || cluster_num: 21 count: 534   || cluster_num: 37 count: 518   || cluster_num: 38 count: 345   || cluster_num: 73 count: 315   || cluster_num: 57 count: 314   || cluster_num: 4 count: 302   || cluster_num: 22 count: 291   || cluster_num: 70 count: 285   || cluster_num: 8 count: 225   || cluster_num: 2 count: 224   || cluster_num: 9 count: 218   || cluster_num: 26 count: 182   || cluster_num: 49 count: 178   || cluster_num: 65 count: 138   || cluster_num: 29 count: 137   || cluster_num: 63 count: 123   || cluster_num: 25 count: 122   || cluster_num: 33 count: 105   || cluster_num: 1 count: 74   || cluster_num: 66 count: 71   || cluster_num: 27 count: 70   || cluster_num: 62 count: 66   || cluster_num: 69 count: 58   || cluster_num: 35 count: 56   || cluster_num: 11 count: 55   || cluster_num: 68 count: 54   || cluster_num: 14 count: 51   || cluster_num: 32 count: 49   || cluster_num: 30 count: 45   || cluster_num: 55 count: 38   || cluster_num: 6 count: 35   || cluster_num: 13 count: 34   || cluster_num: 43 count: 30   || cluster_num: 60 count: 30   || cluster_num: 58 count: 30   || cluster_num: 24 count: 29   || cluster_num: 39 count: 26   || cluster_num: 51 count: 25   || cluster_num: 3 count: 24   || cluster_num: 28 count: 24   || cluster_num: 15 count: 23   || cluster_num: 72 count: 23   || cluster_num: 17 count: 22   || cluster_num: 10 count: 22   || cluster_num: 34 count: 21   || cluster_num: 74 count: 20   || cluster_num: 36 count: 20   || cluster_num: 61 count: 19   || cluster_num: 31 count: 17   || cluster_num: 20 count: 13   || cluster_num: 18 count: 12   || cluster_num: 67 count: 12   || cluster_num: 12 count: 11   || cluster_num: 47 count: 11   || cluster_num: 59 count: 10   || cluster_num: 53 count: 8   || cluster_num: 7 count: 6   || cluster_num: 41 count: 6   || cluster_num: 40 count: 6   || cluster_num: 48 count: 3   || cluster_num: 56 count: 1  
-
+     || cluster_num: 16 count: 3293   || cluster_num: 71 count: 3036   || cluster_num: 46 count: 2993   || cluster_num: 0 count: 2752   || cluster_num: 23 count: 2667   || cluster_num: 52 count: 2540   || cluster_num: 50 count: 2185   || cluster_num: 5 count: 1412   || cluster_num: 19 count: 987   || cluster_num: 45 count: 816   || cluster_num: 44 count: 791   || cluster_num: 54 count: 686   || cluster_num: 42 count: 625   || cluster_num: 64 count: 603   || cluster_num: 21 count: 534   || cluster_num: 37 count: 518   || cluster_num: 38 count: 345   || cluster_num: 73 count: 315   || cluster_num: 57 count: 314   || cluster_num: 4 count: 302   || cluster_num: 22 count: 291   || cluster_num: 70 count: 285   || cluster_num: 8 count: 225   || cluster_num: 2 count: 224   || cluster_num: 9 count: 218   || cluster_num: 26 count: 182   || cluster_num: 49 count: 178   || cluster_num: 65 count: 138   || cluster_num: 29 count: 137   || cluster_num: 63 count: 123   || cluster_num: 25 count: 122   || cluster_num: 33 count: 105   || cluster_num: 1 count: 74   || cluster_num: 66 count: 71   || cluster_num: 27 count: 70   || cluster_num: 62 count: 66   || cluster_num: 69 count: 58   || cluster_num: 35 count: 56   || cluster_num: 11 count: 55   || cluster_num: 68 count: 54   || cluster_num: 14 count: 51   || cluster_num: 32 count: 49   || cluster_num: 30 count: 45   || cluster_num: 55 count: 38   || cluster_num: 6 count: 35   || cluster_num: 13 count: 34   || cluster_num: 43 count: 30   || cluster_num: 60 count: 30   || cluster_num: 58 count: 30   || cluster_num: 24 count: 29   || cluster_num: 39 count: 26   || cluster_num: 51 count: 25   || cluster_num: 3 count: 24   || cluster_num: 28 count: 24   || cluster_num: 15 count: 23   || cluster_num: 72 count: 23   || cluster_num: 17 count: 22   || cluster_num: 10 count: 22   || cluster_num: 34 count: 21   || cluster_num: 74 count: 20   || cluster_num: 36 count: 20   || cluster_num: 61 count: 19   || cluster_num: 31 count: 17   || cluster_num: 20 count: 13   || cluster_num: 18 count: 12   || cluster_num: 67 count: 12   || cluster_num: 12 count: 11   || cluster_num: 47 count: 11   || cluster_num: 59 count: 10   || cluster_num: 53 count: 8   || cluster_num: 7 count: 6   || cluster_num: 41 count: 6   || cluster_num: 40 count: 6   || cluster_num: 48 count: 3   || cluster_num: 56 count: 1
 
 ```python
 cluster_dict = {x: y for x, y in zip(X.clusters.value_counts().index, X.clusters.value_counts())}
 ```
 
 Now let's have a look at some of the termite clusters. We can use matplotlib and PIL to display multiple images using subplots.
-
 
 ```python
 #variables to manage the arrangement and spacing of cluster images
@@ -895,7 +795,7 @@ def show_images(cluster_num, samples = 0,  files_bool=False, files=None):
         files1 = np.random.choice(files.index, min(files.shape[0], samples), replace=False)
     if (samples == 0) & (files_bool==False):
         files1 = X[X.clusters==cluster_num].index
-    if (samples > 0) & (files_bool==False): 
+    if (samples > 0) & (files_bool==False):
         files1 = np.random.choice(X[X.clusters==cluster_num].index, min(cluster_dict[cluster_num],samples), replace=False)
     set_spacing(files1)
     plt.figure(figsize = (14,im_length))
@@ -909,18 +809,13 @@ def show_images(cluster_num, samples = 0,  files_bool=False, files=None):
     print('Cluster #' + str(X.ix[x].clusters) + ' -- Cluster Total: ' + str(cluster_dict[X.ix[x].clusters]))
 ```
 
-
 ```python
 show_images(16, samples=12)
 ```
 
     Cluster #16 -- Cluster Total: 3293
 
-
-
 ![png](/static/ants_files/ants_44_1.png)
-
-
 
 ```python
 show_images(46, samples=12)
@@ -928,11 +823,7 @@ show_images(46, samples=12)
 
     Cluster #46 -- Cluster Total: 2993
 
-
-
 ![png](/static/ants_files/ants_45_1.png)
-
-
 
 ```python
 show_images(51, samples=12)
@@ -940,11 +831,7 @@ show_images(51, samples=12)
 
     Cluster #51 -- Cluster Total: 25
 
-
-
 ![png](/static/ants_files/ants_46_1.png)
-
-
 
 ```python
 show_images(18, samples=12)
@@ -952,11 +839,7 @@ show_images(18, samples=12)
 
     Cluster #18 -- Cluster Total: 12
 
-
-
 ![png](/static/ants_files/ants_47_1.png)
-
-
 
 ```python
 show_images(4, samples=12)
@@ -964,11 +847,7 @@ show_images(4, samples=12)
 
     Cluster #4 -- Cluster Total: 302
 
-
-
 ![png](/static/ants_files/ants_48_1.png)
-
-
 
 ```python
 show_images(5, samples=12)
@@ -976,11 +855,7 @@ show_images(5, samples=12)
 
     Cluster #5 -- Cluster Total: 1412
 
-
-
 ![png](/static/ants_files/ants_49_1.png)
-
-
 
 ```python
 show_images(6, samples=12)
@@ -988,11 +863,7 @@ show_images(6, samples=12)
 
     Cluster #6 -- Cluster Total: 35
 
-
-
 ![png](/static/ants_files/ants_50_1.png)
-
-
 
 ```python
 show_images(9, samples=12)
@@ -1000,11 +871,7 @@ show_images(9, samples=12)
 
     Cluster #9 -- Cluster Total: 218
 
-
-
 ![png](/static/ants_files/ants_51_1.png)
-
-
 
 ```python
 show_images(12, samples=12)
@@ -1012,37 +879,25 @@ show_images(12, samples=12)
 
     Cluster #12 -- Cluster Total: 11
 
-
-
 ![png](/static/ants_files/ants_52_1.png)
-
 
 The next four cluster samples are the largest clusters:
 
-
 ```python
 show_images(30, samples=12)
 ```
 
     Cluster #30 -- Cluster Total: 45
-
-
 
 ![png](/static/ants_files/ants_54_1.png)
 
-
-
 ```python
 show_images(30, samples=12)
 ```
 
     Cluster #30 -- Cluster Total: 45
 
-
-
 ![png](/static/ants_files/ants_55_1.png)
-
-
 
 ```python
 show_images(0, samples=12)
@@ -1050,11 +905,7 @@ show_images(0, samples=12)
 
     Cluster #0 -- Cluster Total: 2752
 
-
-
 ![png](/static/ants_files/ants_56_1.png)
-
-
 
 ```python
 show_images(30, samples=15)
@@ -1062,11 +913,7 @@ show_images(30, samples=15)
 
     Cluster #30 -- Cluster Total: 45
 
-
-
 ![png](/static/ants_files/ants_57_1.png)
-
-
 
 ```python
 show_images(63, samples=12)
@@ -1074,11 +921,7 @@ show_images(63, samples=12)
 
     Cluster #63 -- Cluster Total: 123
 
-
-
 ![png](/static/ants_files/ants_58_1.png)
-
-
 
 ```python
 show_images(60, samples=12)
@@ -1086,11 +929,7 @@ show_images(60, samples=12)
 
     Cluster #60 -- Cluster Total: 30
 
-
-
 ![png](/static/ants_files/ants_59_1.png)
-
-
 
 ```python
 show_images(59, samples=12)
@@ -1098,11 +937,7 @@ show_images(59, samples=12)
 
     Cluster #59 -- Cluster Total: 10
 
-
-
 ![png](/static/ants_files/ants_60_1.png)
-
-
 
 ```python
 show_images(57, samples=12)
@@ -1110,11 +945,7 @@ show_images(57, samples=12)
 
     Cluster #57 -- Cluster Total: 314
 
-
-
 ![png](/static/ants_files/ants_61_1.png)
-
-
 
 ```python
 show_images(56, samples=12)
@@ -1122,11 +953,7 @@ show_images(56, samples=12)
 
     Cluster #56 -- Cluster Total: 1
 
-
-
 ![png](/static/ants_files/ants_62_1.png)
-
-
 
 ```python
 show_images(55, samples=12)
@@ -1134,11 +961,7 @@ show_images(55, samples=12)
 
     Cluster #55 -- Cluster Total: 38
 
-
-
 ![png](/static/ants_files/ants_63_1.png)
-
-
 
 ```python
 show_images(54, samples=12)
@@ -1146,11 +969,7 @@ show_images(54, samples=12)
 
     Cluster #54 -- Cluster Total: 686
 
-
-
 ![png](/static/ants_files/ants_64_1.png)
-
-
 
 ```python
 show_images(53, samples=12)
@@ -1158,11 +977,7 @@ show_images(53, samples=12)
 
     Cluster #53 -- Cluster Total: 8
 
-
-
 ![png](/static/ants_files/ants_65_1.png)
-
-
 
 ```python
 show_images(52, samples=12)
@@ -1170,11 +985,7 @@ show_images(52, samples=12)
 
     Cluster #52 -- Cluster Total: 2540
 
-
-
 ![png](/static/ants_files/ants_66_1.png)
-
-
 
 ```python
 show_images(51, samples=12)
@@ -1182,11 +993,7 @@ show_images(51, samples=12)
 
     Cluster #51 -- Cluster Total: 25
 
-
-
 ![png](/static/ants_files/ants_67_1.png)
-
-
 
 ```python
 show_images(50, samples=12)
@@ -1194,11 +1001,7 @@ show_images(50, samples=12)
 
     Cluster #50 -- Cluster Total: 2185
 
-
-
 ![png](/static/ants_files/ants_68_1.png)
-
-
 
 ```python
 show_images(49, samples=12)
@@ -1206,11 +1009,7 @@ show_images(49, samples=12)
 
     Cluster #49 -- Cluster Total: 178
 
-
-
 ![png](/static/ants_files/ants_69_1.png)
-
-
 
 ```python
 show_images(48, samples=12)
@@ -1218,11 +1017,7 @@ show_images(48, samples=12)
 
     Cluster #48 -- Cluster Total: 3
 
-
-
 ![png](/static/ants_files/ants_70_1.png)
-
-
 
 ```python
 show_images(47, samples=12)
@@ -1230,11 +1025,7 @@ show_images(47, samples=12)
 
     Cluster #47 -- Cluster Total: 11
 
-
-
 ![png](/static/ants_files/ants_71_1.png)
-
-
 
 ```python
 show_images(46, samples=12)
@@ -1242,11 +1033,7 @@ show_images(46, samples=12)
 
     Cluster #46 -- Cluster Total: 2993
 
-
-
 ![png](/static/ants_files/ants_72_1.png)
-
-
 
 ```python
 show_images(45, samples=12)
@@ -1254,11 +1041,7 @@ show_images(45, samples=12)
 
     Cluster #45 -- Cluster Total: 816
 
-
-
 ![png](/static/ants_files/ants_73_1.png)
-
-
 
 ```python
 show_images(44, samples=12)
@@ -1266,11 +1049,7 @@ show_images(44, samples=12)
 
     Cluster #44 -- Cluster Total: 791
 
-
-
 ![png](/static/ants_files/ants_74_1.png)
-
-
 
 ```python
 show_images(43, samples=12)
@@ -1278,11 +1057,7 @@ show_images(43, samples=12)
 
     Cluster #43 -- Cluster Total: 30
 
-
-
 ![png](/static/ants_files/ants_75_1.png)
-
-
 
 ```python
 show_images(42, samples=12)
@@ -1290,11 +1065,7 @@ show_images(42, samples=12)
 
     Cluster #42 -- Cluster Total: 625
 
-
-
 ![png](/static/ants_files/ants_76_1.png)
-
-
 
 ```python
 show_images(41, samples=12)
@@ -1302,11 +1073,7 @@ show_images(41, samples=12)
 
     Cluster #41 -- Cluster Total: 6
 
-
-
 ![png](/static/ants_files/ants_77_1.png)
-
-
 
 ```python
 show_images(40, samples=12)
@@ -1314,11 +1081,7 @@ show_images(40, samples=12)
 
     Cluster #40 -- Cluster Total: 6
 
-
-
 ![png](/static/ants_files/ants_78_1.png)
-
-
 
 ```python
 show_images(39, samples=12)
@@ -1326,11 +1089,7 @@ show_images(39, samples=12)
 
     Cluster #39 -- Cluster Total: 26
 
-
-
 ![png](/static/ants_files/ants_79_1.png)
-
-
 
 ```python
 show_images(38, samples=12)
@@ -1338,11 +1097,7 @@ show_images(38, samples=12)
 
     Cluster #38 -- Cluster Total: 345
 
-
-
 ![png](/static/ants_files/ants_80_1.png)
-
-
 
 ```python
 show_images(37, samples=12)
@@ -1350,32 +1105,25 @@ show_images(37, samples=12)
 
     Cluster #37 -- Cluster Total: 518
 
-
-
 ![png](/static/ants_files/ants_81_1.png)
 
-
-The vast majority of termites seem to form nondescript blobs after 100000 steps. There are perhaps many thousands of termites that didn't yet reach a . Setting the clusters parameter to 75 is probably too high. Many of the groups have similar behaviour. There were several cluster groups that formed 'highways'. It may make more sense to filter out these termites and cluster termites that didn't form highways. 
+The vast majority of termites seem to form nondescript blobs after 100000 steps. There are perhaps many thousands of termites that didn't yet reach a . Setting the clusters parameter to 75 is probably too high. Many of the groups have similar behaviour. There were several cluster groups that formed 'highways'. It may make more sense to filter out these termites and cluster termites that didn't form highways.
 
 # Outlier Detection
 
-It could also be interesting to see how many outliers are present in each cluster for various values of k in the k-means algorithm. This may help us choose a more fitting number of clusters by which the termites can be grouped. here's how we could do that: 
-
+It could also be interesting to see how many outliers are present in each cluster for various values of k in the k-means algorithm. This may help us choose a more fitting number of clusters by which the termites can be grouped. here's how we could do that:
 
 ```python
 from sklearn.ensemble import IsolationForest
 ```
 
-
 ```python
 X_ = X.loc[X.clusters==37, :] #16
 ```
 
-
 ```python
 X_ = X.loc[X.clusters==37, :]
 ```
-
 
 ```python
 clf = IsolationForest(max_samples=100, random_state=rng)
@@ -1385,41 +1133,27 @@ y_pred_train = clf.predict(X_)
 
 ```
 
-
 ```python
 y_pred_train.mean()
 ```
 
-
-
-
     0.79922779922779918
 
-
-
-The following values gives us the average of the predicted values (1 for inlier, -1 for outlier), so this value doesn't correspond to a percentage accuracy. The accuracy is about 89% (the model determined that 89% of termites in cluster 37 are inliers and the remaining 11% are outliers. 
-
+The following values gives us the average of the predicted values (1 for inlier, -1 for outlier), so this value doesn't correspond to a percentage accuracy. The accuracy is about 89% (the model determined that 89% of termites in cluster 37 are inliers and the remaining 11% are outliers.
 
 ```python
 X_['anom'] = y_pred_train
 ```
 
-
 ```python
 X_.anom.value_counts()
 ```
-
-
-
 
      1    466
     -1     52
     Name: anom, dtype: int64
 
-
-
-Let's compare some of the inliers with the outliers: 
-
+Let's compare some of the inliers with the outliers:
 
 ```python
 files_normal = X_[X_.anom==(1)]
@@ -1428,11 +1162,7 @@ show_images(0, samples = 24, files_bool=True, files=files_normal)
 
     Cluster #37 -- Cluster Total: 518
 
-
-
 ![png](/static/ants_files/ants_92_1.png)
-
-
 
 ```python
 files_abnormal = X_[X_.anom==(-1)]
@@ -1441,12 +1171,9 @@ show_images(0, samples = 24, files_bool=True, files=files_abnormal)
 
     Cluster #37 -- Cluster Total: 518
 
-
-
 ![png](/static/ants_files/ants_93_1.png)
 
-
-This sample of outliers seems to have slightly different characteristics compared with the inlier sample. This can be seen in the patches of solid colors (pink, purple, teal, grey). 
+This sample of outliers seems to have slightly different characteristics compared with the inlier sample. This can be seen in the patches of solid colors (pink, purple, teal, grey).
 
 # Conclusion
 

@@ -1,43 +1,46 @@
 ---
-
 layout: post
 title: PCPartPicker data
 date: 2017-01-01
 comments: true
 image: /img/builds/hist.png
-
+tags:
+  - python
+  - scraping
+  - machine-learning
+  - data
 ---
 
 In the summer of 2016 I built two high-end computers, something I haven't done since 2011. I used [PCPartPicker](pcpartpicker.com) to research the components and read about PC builds similar to the ones I had in mind. It's a relatively new site that has a strong community of builders, helpful tools to help with part compatibility as well as extensive user reviews on PC components.
 
-Pouring over pages and pages of computer builds, CPUs, video cards and motherboards got me very interested in visualizing the data on both individual components and builds, and the relationship between component specifications and prices. This post will detail the process by which I collected, cleaned, visualized and analyzed all of the data on [PCPartPicker.com](pcpartpicker.com). I've also done some work with natural language process (NLP) to do sentiment analysis on the collection of written user reviews for individual PC parts. If you read to the end you will get to see the two computers I built last summer: [*Ascension I*](#) (my personal machine) and [*Beast Mode II* (BM2)](#) (for my cousin).
+Pouring over pages and pages of computer builds, CPUs, video cards and motherboards got me very interested in visualizing the data on both individual components and builds, and the relationship between component specifications and prices. This post will detail the process by which I collected, cleaned, visualized and analyzed all of the data on [PCPartPicker.com](pcpartpicker.com). I've also done some work with natural language process (NLP) to do sentiment analysis on the collection of written user reviews for individual PC parts. If you read to the end you will get to see the two computers I built last summer: [_Ascension I_](#) (my personal machine) and [_Beast Mode II_ (BM2)](#) (for my cousin).
 
-Data Collection & Cleaning
----
+## Data Collection & Cleaning
 
 For the most part, the data I wanted to collect was well organized and conveniently structured. Since the content on almost all of the pages on PCPartPicker is loaded dynamically, I decided to use a JavaScript engine called PhantomJS to retrieve the HTML after the page loaded. Scraping data would otherwise return only a skeleton of the DOM with no data. Here is the JavaScript file that I used with PhantomJS to scrape data:
 
 ```javascript
-"use strict";
-var system = require('system');
-var args = system.args;
-var page = require('webpage').create();
+'use strict'
+var system = require('system')
+var args = system.args
+var page = require('webpage').create()
 
-page.onConsoleMessage = function(msg) {
-    console.log(msg);
-};
-var url = args[1];
-page.open(url, function(status) {
-    if (status === "success") {
-            page.evaluate(function() {
-                console.log(document.body.innerHTML);    
-        });
-    } else {
-      console.log("not success");  
-    }
-phantom.exit(1);
-});
-```  
+page.onConsoleMessage = function (msg) {
+  console.log(msg)
+}
+var url = args[1]
+page.open(url, function (status) {
+  if (status === 'success') {
+    page.evaluate(function () {
+      console.log(document.body.innerHTML)
+    })
+  } else {
+    console.log('not success')
+  }
+  phantom.exit(1)
+})
+```
+
 PhantomJS was pretty painful to use, and I've heard of better options for web browser automation and web scrapping like [Selenium](http://www.seleniumhq.org/), so I would probably use that for future projects. PhantomJS works fairly well, and this script, combined with the bash scripts below should be able to serve as a decent template for any similar type of web scraping project.
 
 The first step is to loop through pages containing links of pages for both completed computer builds and computer parts using bash. Here's the bash script I used to scrape links to computer builds:
@@ -120,7 +123,7 @@ import os
 import pandas as pd
 from bs4 import BeautifulSoup
 
-os.chdir('builds/builds_html')    
+os.chdir('builds/builds_html')
 build_dict_list = []
 
 files = os.listdir(os.getcwd())
@@ -173,7 +176,7 @@ for i in files:
         description_clean = ''
         for paragraph in description_paragraphs:
             add = paragraph.text
-            description_clean += add + ' '  
+            description_clean += add + ' '
         description_dict = {'Description':description_clean}
 
         #Builder
@@ -221,60 +224,57 @@ df.total[(df.total>0)&(df.total<7000)].hist(bins=100, figsize=(20,10))
 
 ![png](/img/builds/hist.png)
 
-The mean PC price is **$1,292**. However, the price of PCs is not reflected accurately in `df.total`. I noticed that some builds include multiple monitors while others don't include any and some builders don't include prices for components from their previous PC builds.
+The mean PC price is **\$1,292**. However, the price of PCs is not reflected accurately in `df.total`. I noticed that some builds include multiple monitors while others don't include any and some builders don't include prices for components from their previous PC builds.
 
 The data frame contains 141 columns for parts. Here they are:
 
-
->All-In-One Monitor/Chassis_1 CPU Cooler_1 CPU Cooler_2 CPU Cooler_3 CPU_1 CPU_2 Case Accessory_1 Case Accessory_2 Case Fan_1 Case Fan_10 Case Fan_11 Case Fan_12 Case Fan_13 Case Fan_14 Case Fan_15 Case Fan_16 Case Fan_17 Case Fan_18 Case Fan_19 Case Fan_2 Case Fan_20 Case Fan_21 Case Fan_22 Case Fan_23 Case Fan_24 Case Fan_25 Case Fan_26 Case Fan_27 Case Fan_28 Case Fan_29 Case Fan_3 Case Fan_30 Case Fan_31 Case Fan_32 Case Fan_4 Case Fan_5 Case Fan_6 Case Fan_7 Case Fan_8 Case Fan_9 Case_1 Coolant_1 External Storage_1 External Storage_2 External Storage_3 External Storage_4 Fan Controller_1 Fan Controller_2 Food_1 Food_2 Food_3 Headphones_1 Headphones_2 Headphones_3 Headphones_4 Keyboard_1 Keyboard_2 Keyboard_3 Keyboard_4 Keyboard_5 Keyboard_6 Keyboard_7 Laptop_1 Memory_1 Memory_2 Memory_3 Memory_4 Memory_5 Memory_6 Memory_7 Memory_8 Monitor_1 Monitor_2 Monitor_3 Monitor_4 Monitor_5 Monitor_6 Motherboard_1 Mouse_1 Mouse_2 Mouse_3 Mouse_4 Mouse_5 Operating System_1 Optical Drive_1 Optical Drive_2 Optical Drive_3 Optical Drive_4 Power Supply_1 Radiator_1 Reservoir_1 Software_1 Software_2 Software_3 Software_4 Software_5 Software_6 Sound Card_1 Sound Card_2 Speakers_1 Speakers_2 Storage_1 Storage_10 Storage_11 Storage_12 Storage_13 Storage_14 Storage_15 Storage_16 Storage_17 Storage_18 Storage_19 Storage_2 Storage_20 Storage_21 Storage_22 Storage_23 Storage_24 Storage_25 Storage_3 Storage_4 Storage_5 Storage_6 Storage_7 Storage_8 Storage_9 Thermal Compound_1 Thermal Compound_2 Thermal Compound_3 Thermal Compound_4 UPS_1 Video Card Cooler_1 Video Card Cooler_2 Video Card_1 Video Card_2 Video Card_3 Video Card_4 Wired Network Adapter_1 Wired Network Adapter_2 Wireless Network Adapter_1 Wireless Network Adapter_2
+> All-In-One Monitor/Chassis_1 CPU Cooler_1 CPU Cooler_2 CPU Cooler_3 CPU_1 CPU_2 Case Accessory_1 Case Accessory_2 Case Fan_1 Case Fan_10 Case Fan_11 Case Fan_12 Case Fan_13 Case Fan_14 Case Fan_15 Case Fan_16 Case Fan_17 Case Fan_18 Case Fan_19 Case Fan_2 Case Fan_20 Case Fan_21 Case Fan_22 Case Fan_23 Case Fan_24 Case Fan_25 Case Fan_26 Case Fan_27 Case Fan_28 Case Fan_29 Case Fan_3 Case Fan_30 Case Fan_31 Case Fan_32 Case Fan_4 Case Fan_5 Case Fan_6 Case Fan_7 Case Fan_8 Case Fan_9 Case_1 Coolant_1 External Storage_1 External Storage_2 External Storage_3 External Storage_4 Fan Controller_1 Fan Controller_2 Food_1 Food_2 Food_3 Headphones_1 Headphones_2 Headphones_3 Headphones_4 Keyboard_1 Keyboard_2 Keyboard_3 Keyboard_4 Keyboard_5 Keyboard_6 Keyboard_7 Laptop_1 Memory_1 Memory_2 Memory_3 Memory_4 Memory_5 Memory_6 Memory_7 Memory_8 Monitor_1 Monitor_2 Monitor_3 Monitor_4 Monitor_5 Monitor_6 Motherboard_1 Mouse_1 Mouse_2 Mouse_3 Mouse_4 Mouse_5 Operating System_1 Optical Drive_1 Optical Drive_2 Optical Drive_3 Optical Drive_4 Power Supply_1 Radiator_1 Reservoir_1 Software_1 Software_2 Software_3 Software_4 Software_5 Software_6 Sound Card_1 Sound Card_2 Speakers_1 Speakers_2 Storage_1 Storage_10 Storage_11 Storage_12 Storage_13 Storage_14 Storage_15 Storage_16 Storage_17 Storage_18 Storage_19 Storage_2 Storage_20 Storage_21 Storage_22 Storage_23 Storage_24 Storage_25 Storage_3 Storage_4 Storage_5 Storage_6 Storage_7 Storage_8 Storage_9 Thermal Compound_1 Thermal Compound_2 Thermal Compound_3 Thermal Compound_4 UPS_1 Video Card Cooler_1 Video Card Cooler_2 Video Card_1 Video Card_2 Video Card_3 Video Card_4 Wired Network Adapter_1 Wired Network Adapter_2 Wireless Network Adapter_1 Wireless Network Adapter_2
 
 That's right, somebody included mulitple food items in their PC build! One build listed 29 hard drive disks and another listed 32 case fans. So, it will make more sense to look at individual PC builds by their core components:
 
-* case
-* CPU
-* GPU (multiple)
-* motherboard
-* memory (multiple)
-* storage (multiple)
-* CPU cooler
-* PSU (power supply unit)
+- case
+- CPU
+- GPU (multiple)
+- motherboard
+- memory (multiple)
+- storage (multiple)
+- CPU cooler
+- PSU (power supply unit)
 
 Most of the PC builds have at least one of these core components.
 
-Part Data
----
+## Part Data
 
 Collecting data for individual parts followed the same process as collecting data for completed builds. Here are the counts of parts I collected by type:
 
-|Case|-|CPU|-|CPU Coooler|-|Case Fan|-|GPU |-|Hard Drive|-|Memory|-|Monitor|-|Motherboard|-|PSU |-|UPS|
-|:----:|---|:---:|---|:-----------:|---|:--------:|---|:----:|---|:----------:|---|:------:|---|:-------:|---|:-----------:|---|:----:|---|:---:|
-|2774| |886| |        730| |    1192| |2996| |      1736| |  1700| |    600| |       2400| |1434| |300|
-
+| Case | -   | CPU | -   | CPU Coooler | -   | Case Fan | -   | GPU  | -   | Hard Drive | -   | Memory | -   | Monitor | -   | Motherboard | -   | PSU  | -   | UPS |
+| :--: | --- | :-: | --- | :---------: | --- | :------: | --- | :--: | --- | :--------: | --- | :----: | --- | :-----: | --- | :---------: | --- | :--: | --- | :-: |
+| 2774 |     | 886 |     |     730     |     |   1192   |     | 2996 |     |    1736    |     |  1700  |     |   600   |     |    2400     |     | 1434 |     | 300 |
 
 Here's a quick look at the features I am interested in for each part:
 
-* Case
-  * Color, Manufacturer, Name, Dimensions, Volume, Average Price, Type
-* CPU
-  * Name, Manufacturer, Lithography, TDP, Operating Frequency, Boost Frequency, Core Count, Hyperthreading, Maximum Supported Memory, Average Price
-* CPU Cooler
-  * Manufacturer, Maximum Noise Level, Maximum RPM, Liquid Cooled, Radiator Size, Bearing Type, Height
-* Case Fan
-  * RPM
-* GPU
-  * Memory (GB), NVIDIA/AMD, Clock Speed (MHz), Boost Clock Speed (MHz), Chipset, Manufacturer, TDP, Model
-* Hard Drive
-  * Storage (GB), RPM, SSD/Spinning, Price/GB, Form Factor, Manufacturer
-* Memory
-  * Manufacturer', CAS, Price/GB, DDR3/DDR4, Speed, DIMM, Size (GB), Module Count, Module Size, Voltage
-* Monitor
-  * Refresh rate, Response Time (ms), Screen Size, Viewing Angle, Aspect Ratio, Brightness, Display Colors, Manufacturer, LED, Recommended Resolution, Wide Screen, Curved Screen
-* Motherboard
-  * Socket, Maximum Supported Memory, Memory Slots, Chipset
-* Power Supply Unit (PSU)
-  * Modular, Power, Price/Watt, Manufacturer, Efficiency Certification
-* UPS
-  * Charge time
+- Case
+  - Color, Manufacturer, Name, Dimensions, Volume, Average Price, Type
+- CPU
+  - Name, Manufacturer, Lithography, TDP, Operating Frequency, Boost Frequency, Core Count, Hyperthreading, Maximum Supported Memory, Average Price
+- CPU Cooler
+  - Manufacturer, Maximum Noise Level, Maximum RPM, Liquid Cooled, Radiator Size, Bearing Type, Height
+- Case Fan
+  - RPM
+- GPU
+  - Memory (GB), NVIDIA/AMD, Clock Speed (MHz), Boost Clock Speed (MHz), Chipset, Manufacturer, TDP, Model
+- Hard Drive
+  - Storage (GB), RPM, SSD/Spinning, Price/GB, Form Factor, Manufacturer
+- Memory
+  - Manufacturer', CAS, Price/GB, DDR3/DDR4, Speed, DIMM, Size (GB), Module Count, Module Size, Voltage
+- Monitor
+  - Refresh rate, Response Time (ms), Screen Size, Viewing Angle, Aspect Ratio, Brightness, Display Colors, Manufacturer, LED, Recommended Resolution, Wide Screen, Curved Screen
+- Motherboard
+  - Socket, Maximum Supported Memory, Memory Slots, Chipset
+- Power Supply Unit (PSU)
+  - Modular, Power, Price/Watt, Manufacturer, Efficiency Certification
+- UPS
+  - Charge time
 
 There's a lot of data for each part, some parts are missing a lot of price data. Each part has a list of vendors with prices that are in the same neighborhood. To impute missing prices on the `builds` DataFrame, I will be imputing the average price. For parts missing pricing data, where it makes sense, I'll be using a few different methods to predict the average price (linear regression, decision tree, random forest) and then use those predicted values to fill missing on the `builds` DataFrame.
 
@@ -377,7 +377,6 @@ df['eff_rank'] = df['Efficiency Certification'].map(eff_rank_mapping)
 
 Let's take a look at some of the data we have so far:
 
-
 ```python
 plt.figure(figsize=(12,8))
 plt.axis([0,1800,0,500])
@@ -405,6 +404,7 @@ plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/psu/watts_vs_price.png'))
 ```
+
 ![png](/img/psu/watts_vs_price.png)
 
 The data points along the x-axis are PSUs with no price data. There's a pretty nice correlation between watts and price, and Efficiency Rating should help make price predictions even more accurate than using wattage alone. A quick and easy way to determine how influential each feature of our data is on the target variable (price) is to train the data on machine learning algorithm called a random forest.
@@ -420,6 +420,7 @@ feature_cols = [u'power', u'eff_rank', u'Manufacturer', u'Modular', u'Type']
 X = df[cols].dropna()[feature_cols]
 y = df[cols].dropna().avg
 ```
+
 Running `print X.shape, y.shape` returns `((1100, 5), (1100,))`, so we have 1100 observations of PSUs with complete data. We started with 1434 observations of PSUs, so my goal is to make predictions on PSU prices for the values with missing price data. (There may not be good enough feature data to make these predictions, but we won't worry about that for now). The next step is to map categorical variable values from strings to integers:
 
 ```python
@@ -444,16 +445,15 @@ rfreg.fit(X, y)
 feature_importance = pd.DataFrame({'feature':feature_cols, 'importance':rfreg.feature_importances_}).sort_values(by='importance', ascending=False)
 ```
 
-The `feature_importance` dataframe assigns a percentage representing how important each feature is in predicting the target variable, price.  
+The `feature_importance` dataframe assigns a percentage representing how important each feature is in predicting the target variable, price.
 
-|feature|importance|
-|----|----|
-|power|0.674090|
-|eff_rank|0.170238|
-|Manufacturer|0.101809|
-|Modular|0.033512|
-|Type|0.020352|  
-
+| feature      | importance |
+| ------------ | ---------- |
+| power        | 0.674090   |
+| eff_rank     | 0.170238   |
+| Manufacturer | 0.101809   |
+| Modular      | 0.033512   |
+| Type         | 0.020352   |
 
 Looking at feature importance is a quick way evaluate the relative strength of each feature in a model. The results here aren't surprising: `power` is by far the most important feature, but `eff_rank` also has significant pull on the target variable (PSU price). The manufacturer, whether or not the PSU is modular and the type (form factor) are less important and could be ignored altogether in the next model.
 
@@ -489,6 +489,7 @@ To find the optimal value of `n_estimators` we search for the value with the low
 ```python
 sorted(zip(RMSE_scores, estimator_range))[0]
 ```
+
 `(28.100834969072217, 160)`
 
 So, we get a slightly lower root mean squared error of 28.1 when we choose an `n_estimators` value of 160 (we started with `n_estimators` equal to 150).
@@ -501,6 +502,7 @@ Notice that there is a red point on the x-axis just beyond 1200 Watts. Let's pre
 #filter the dataframe by 80+ Titanium rated PSUs that have a price of 0 and power over 1200 W
 X_ = np.array(df[(df['Efficiency Certification']=='80+ Titanium')&(df.power>1200)&(df.avg==0)][feature_cols])
 ```
+
 Let's get the index for this PSU:
 
 ```python
@@ -515,7 +517,7 @@ Now we can make a prediction for price of this PSU:
 rfreg.predict(df.ix[1260][feature_cols])
 ```
 
-And the prediction we get for this model is $278.09. This product is listed [on Amazon](https://www.amazon.com/Thermaltake-ToughPower-TITANIUM-256-colors-Management/dp/B019JKM20W) and [NewEgg](https://www.newegg.com/Product/Product.aspx?Item=N82E16817153270) for $349.99, which means that our prediction fell short of the actual price by quite a bit (by $71.90).
+And the prediction we get for this model is $278.09. This product is listed [on Amazon](https://www.amazon.com/Thermaltake-ToughPower-TITANIUM-256-colors-Management/dp/B019JKM20W) and [NewEgg](https://www.newegg.com/Product/Product.aspx?Item=N82E16817153270) for $349.99, which means that our prediction fell short of the actual price by quite a bit (by \$71.90).
 
 A more practical approach for modeling PSU prices might be to simply make individual linear regressions for each Efficiency Certification. Here's a prediction for the same PSU using a linear regression of only a handful of 80+ Titanium rated PSUs:
 
@@ -529,6 +531,7 @@ reg = LinearRegression()
 reg.fit(X,y)
 print reg.predict([1250])
 ```
+
 `[[ 332.5585859]]`
 
 This prediction is much more accurate, and it falls right in line with a line-of-best-fit for the red points on the scatter plot above.
@@ -580,7 +583,7 @@ plt.figure()
 
 ![png](/img/motherboard/features_vs_price.png)
 
-Of the 2400 motherboards in the dataset, there is price information for only 618 motherboards. The average motherboard price is $157.50. Here's a visualizations of motherboard prices:
+Of the 2400 motherboards in the dataset, there is price information for only 618 motherboards. The average motherboard price is \$157.50. Here's a visualizations of motherboard prices:
 
 ```python
 plt.figure(figsize=(12,8))
@@ -700,15 +703,15 @@ feature_importance = pd.DataFrame({'feature':feature_cols, 'importance':rfreg.fe
 print feature_importance
 ```
 
-|feature|importance|
-|----|----|
-|Memory_Slots_int|0.352454|
-|SLI_Support_int|0.155018|
-|Memory_Type_int|0.127274|
-|Form_Factor_int|0.113944|
-|Chipset_int|0.088664|
-|max_mem|0.085077|
-|socket_int|0.077571|
+| feature          | importance |
+| ---------------- | ---------- |
+| Memory_Slots_int | 0.352454   |
+| SLI_Support_int  | 0.155018   |
+| Memory_Type_int  | 0.127274   |
+| Form_Factor_int  | 0.113944   |
+| Chipset_int      | 0.088664   |
+| max_mem          | 0.085077   |
+| socket_int       | 0.077571   |
 
 And finally we can test the accuracy of the model by searching for an optimal `n_estimators` number of decision trees with 5-fold cross validation:
 
@@ -737,6 +740,7 @@ plt.xticks(fontsize=13)
 plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/motherboard/n_est_vs_rmse.png'))
 ```
+
 ![png](/img/motherboard/n_est_vs_rmse.png)
 
 The predictive accuracy is not great. Let's look at a few random motherboards with no pricing data and compare the model's prediction to prices on Amazon.
@@ -745,7 +749,7 @@ The predictive accuracy is not great. Let's look at a few random motherboards wi
 df[df.avg==0].sample(1)['Part #']
 ```
 
-```1710    GA-Z97X-SOC FORCE```
+`1710 GA-Z97X-SOC FORCE`
 
 This is a random sample with no pricing data, and its index value is 1710.
 
@@ -757,7 +761,7 @@ rfreg.predict(np.array(df.ix[1710][feature_cols]))
 
 `array([ 203.90425])`
 
-[This product](https://www.amazon.com/gp/offer-listing/B00JKCHEPS/ref=dp_olp_used_mbc?ie=UTF8&condition=used) is available used on Amazon for $249.00, so we have fairly significant error in this one prediction.
+[This product](https://www.amazon.com/gp/offer-listing/B00JKCHEPS/ref=dp_olp_used_mbc?ie=UTF8&condition=used) is available used on Amazon for \$249.00, so we have fairly significant error in this one prediction.
 
 Here's one more example that I will cherry-pick:
 
@@ -765,7 +769,7 @@ Here's one more example that I will cherry-pick:
 df[df.avg==0].sample(1)['Part #']
 ```
 
-`234    A76ML-K 3.0`
+`234 A76ML-K 3.0`
 
 ```python
 rfreg.predict(np.array(df.ix[234][feature_cols]))
@@ -781,9 +785,9 @@ Most of the motherboards with no pricing data in the dataset are out of stock on
 
 CPU price and performance are determined by several features, so I'll go through them one by one and show interesting relationships among different features and between features and price.
 
-# Lithography  
+# Lithography
 
-One interesting feature of CPUs that distinguishes Intel and AMD (the two CPU manufacturers) is *lithography*. Lithography can be described as the average space between a processor's transistors, and it is an important factor that determines clock speed and power consumption. This graph shows lithography vs. CPU price for CPUs priced under $750:
+One interesting feature of CPUs that distinguishes Intel and AMD (the two CPU manufacturers) is _lithography_. Lithography can be described as the average space between a processor's transistors, and it is an important factor that determines clock speed and power consumption. This graph shows lithography vs. CPU price for CPUs priced under \$750:
 
 ```python
 plt.figure(figsize=(12,4))
@@ -853,7 +857,6 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu
 
 ![png](/img/cpu/tdp_by_cores.png)
 
-
 # Thermal Design Power (TDP)
 
 Here is a desrciption of TDP from the [Wikipedia article on Thermal Design Power](https://en.wikipedia.org/wiki/Thermal_design_power):
@@ -894,7 +897,6 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu
 ![png](/img/cpu/freq_v_cores.png)
 
 The CPUs shown in the graph above are all Intel CPUs that utilize a proprietary technology called hyper-threading. Hyper-threading is a new feature on CPUs that allows them to better schedule the tasks that they do so that they can minimize the time the need to wait for information to process. Another good analogy I have heard to explain hyper-threading is eating M&Ms as fast as possible with one hand vs. two hands. Hyper-threading is like using two hands to eat M&Ms, while you are eating an M&M with your left hand, your right hand is retrieving the next M&M from the bowl. Here is the same data with price on the y-axis and core count by color:
-
 
 ```python
 plt.figure(figsize=(12,8))
@@ -1097,6 +1099,7 @@ It's a misconception that faster memory has higher latency, because CAS is not a
 ```text
 true latency (nanoseconds) = clock cycle time (nanoseconds) x CAS (clock cycles)
 ```
+
 So here's how we can calculate true latency using the data in the dataset:
 
 ```text
@@ -1107,7 +1110,7 @@ df_lat['true_latency'] = [((x/2.)/1000.)*y for x, y in zip(df_lat.ddr_speed, df_
 
 Let's calculate the true latency of two different memory modules: DDR4-2666/CAS18 and DDR3-1333/CAS9.
 
-The 'DDR' in DDR memory stands for *double data rate*, which means that information is transfared twice per clock cycle. Because of this, we must first take the MT/s rate and divide by 2 to calculate the clock speed. Next we need to find how long each clock cycle takes. To find this amount of time we can divide 1 by the frequency. Finally we multiply the time of one clock cycle by the CAS (the latency in number cycles) to get the latency in seconds (nanoseconds):
+The 'DDR' in DDR memory stands for _double data rate_, which means that information is transfared twice per clock cycle. Because of this, we must first take the MT/s rate and divide by 2 to calculate the clock speed. Next we need to find how long each clock cycle takes. To find this amount of time we can divide 1 by the frequency. Finally we multiply the time of one clock cycle by the CAS (the latency in number cycles) to get the latency in seconds (nanoseconds):
 
 ```text
 DDR4-2666
@@ -1226,7 +1229,6 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/mem
 
 ![png](/img/memory/voltage.png)
 
-
 # Video Card / Graphics Card / GPU
 
 Video cards are often the single biggest expense for high-end PCs. They deliver parallel computing performance that is necessary for modern applications like 4K gaming, virtual reality and deep learning. Like the CPU market, the GPU market is dominated by two major players: NVIDIA and AMD. These companies produce graphical processing units, but there are a number of vendors who sell graphics cards using the core chipsets provided by NVIDIA and AMD (and these two companies also sell their own consumer products).
@@ -1281,7 +1283,7 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu
 
 ![png](/img/gpu/length_vs_price.png)
 
-And here is another look at the same data, filtered for graphics cards under $1,100:
+And here is another look at the same data, filtered for graphics cards under \$1,100:
 
 ```python
 plt.figure(figsize=(12,8))
@@ -1405,6 +1407,7 @@ plt.show()
 
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/six_NVIDIA.png'))
 ```
+
 ![png](/img/gpu/six_NVIDIA.png)
 
 It's also helpful to compare the most recent two series of NVIDIA GPUs by chipset families:
@@ -1553,7 +1556,6 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/sto
 
 For HDDs, the color of each point represent the speed in rotations per minute of the spinning disk:
 
-
 ```python
 plt.figure(figsize=(12,7))
 plt.axis([0,11000,0,650])
@@ -1640,6 +1642,7 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/fan
 
 print lreg.score(X, y, sample_weight=None)
 ```
+
 `0.0345903950712`
 
 ![png](/img/fan/air_flow_v_static_pressure.png)
@@ -1672,6 +1675,7 @@ plt.plot(size ,pred, color='red')
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/fan/rpm_max_vs_static_pressure.png'))
 print lreg.score(X,y,sample_weight=None)
 ```
+
 `0.711316685518`
 
 ![png](/img/fan/rpm_max_vs_static_pressure.png)
@@ -1699,7 +1703,7 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/mon
 
 ![png](/img/monitor/screen_size.png)
 
-Monitors are measured not only in size, but in a number of different measures related to *time*. Framerate refers to how many frames per second are rendered in programs, typically games. A display monitor can show as many frames per second as its *refresh rate* allows. Most modern games and monitors use a technology called V-Sync (vertical-sync), which limits the *frame rate* to the maximum *refresh rate* that the monitor can handle.
+Monitors are measured not only in size, but in a number of different measures related to _time_. Framerate refers to how many frames per second are rendered in programs, typically games. A display monitor can show as many frames per second as its _refresh rate_ allows. Most modern games and monitors use a technology called V-Sync (vertical-sync), which limits the _frame rate_ to the maximum _refresh rate_ that the monitor can handle.
 
 Input lag and response time are two other important monitor metrics, particullarly for competitive gamers. Input lag refers to the amount of time it takes for user input from peripherals, such as mouse and keyboard, to be reflected on the screen. Input lag typically ranges from (range), and can make all of the difference in FPS games (first-person shooters). Here's an explination of response time from an enthusiast monitor site, [www.144hzmonitors.com](http://www.144hzmonitors.com/knowledge-base/what-does-response-time/):
 
@@ -1709,8 +1713,7 @@ Response time is an important metric for playing fast-paced games and watching a
 
 There are lots of features for monitors that would seem to be good predictors of price, but there is too much missing data to draw meaningful conclusions. Instead, we can look at another dimension of the pricing that we still haven't explored.
 
-Vendor Data
----
+## Vendor Data
 
 In the graphs and models used above for exploring various types of PC components, the price associated with an individual part is the average of prices offered by any number of vendors. For example, one CPU may be sold by Amazon for $150.00, NewEgg for $145.00 and NCIX US for $170.00. This CPU would be priced at $155 in the dataset.
 
@@ -1755,6 +1758,7 @@ plt.xticks(fontsize=13)
 plt.yticks(fontsize=13)
 plt.legend(['Average Z-score'], loc='upper left', fontsize=14)
 ```
+
 ![png](/img/monitor/average_z_score_by_vendor.png)
 
 One problem with this method of scoring is that there is a very small number of price observations for each part, and the price observations generally are not normally distributed. Also, some vendors offer significantly more products than others. However, it does support my guess that Amazon has the most competitive product offerings overall.
@@ -1776,10 +1780,10 @@ plt.xticks(fontsize=13)
 plt.yticks(fontsize=13)
 plt.legend(['Count'], fontsize=14, loc='upper left')
 ```
+
 ![png](/img/monitor/monitors_by_vendor.png)
 
-User Reviews
----
+## User Reviews
 
 One other interesting dimension of the PC part data is user reviews. Users are able to leave reviews for parts they included in their PCs. Reviews include a short text description with a star-rating (between 1 and 5 stars). Here's a short sample of some of this data:
 
@@ -1798,18 +1802,23 @@ plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu
 Here's one text rating from each of the 5 categories:
 
 ### 5 Star Rating
+
 > Amazing GPU; 4 GB VRAM, and it processes data faster than I thought it would. Not a fancy 900-series one but still very powerful.
 
 ### 4 Star Rating
+
 > Runs cool, aesthetically pleasing. -1 star for the VRAM fiasco with Nvidia.
 
 ### 3 Star Rating
+
 > I like the aesthetics of this card, but I don’t like that I couldn’t get a 960 like I hoped. I for sure will let people not to go to the store to get a GPU, as they are overpriced at both Best Buy and Micro Center. Also, if you are planning to use this with an analog monitor, be sure that the monitor has a DisplayPort/HDMI/DVI input (and you have a cable of one of those types), as this card DOES NOT in ANY WAY accept analog signals.
 
 ### 2 Star Rating
+
 > It's a potato. You cannot play any game at any decent framerates even with a FX-8320.
 
 ### 1 Star Rating
+
 > CRAP
 
 With this labeled text data we can use natural language processing (NLP) techniques to predict the sentiment (the star rating in this case) for a new text review. At a very basic level, this works by assigning a probabilities to each word in a review and then generating a binary prediction based on a statistical model.
@@ -1836,6 +1845,7 @@ df['five'] = ['five' if x == 5 else 'not' for x in df.Stars]
 df['label'] = df.five.map({'not':0, 'five':1})
 print df.label.value_counts()
 ```
+
 ```text
 1    1197
 0     769
@@ -1918,8 +1928,7 @@ There is a lot of exciting work being done in the area of sentiment analysis. Go
 
 We will do more text analysis with the user descriptions of PC builds. Instead of classifying builds, we will attempt to cluster them into distinct categories based on the language used in their descriptions.
 
-PC Builds
----
+## PC Builds
 
 We can now revisit data from the collection of PC builds. Each row in the builds DataFrame contains several links to the parts that are included in the. To do this, we will be merging the part data frames with the PC builds data frame. Here's a bried description of database-style DataFrame joining/merging from the [pandas documentation](http://pandas.pydata.org/pandas-docs/stable/merging.html):
 
@@ -1959,8 +1968,7 @@ The arguments of `pd.merge()` define how we merge the information from `psu_df` 
 
 In the next post I will merge all of the individual PC part data frames with the PC builds data frame so we can have a more granular look at the collection of computers and their parts.
 
-My Recent PC Builds
----
+## My Recent PC Builds
 
 As promised, here are the two builds that I put together last summer:
 
@@ -1968,48 +1976,46 @@ As promised, here are the two builds that I put together last summer:
 
 [PCPartPicker part list](https://pcpartpicker.com/list/fRx8d6) / [Price breakdown by merchant](https://pcpartpicker.com/list/fRx8d6/by_merchant/)
 
-Type|Item|Price
-:----|:----|:----
-**CPU** | [Intel Core i7-6700K 4.0GHz Quad-Core Processor](https://pcpartpicker.com/product/tdmxFT/intel-cpu-bx80662i76700k) | $329.25 @ OutletPC
-**CPU Cooler** | [Corsair H100i v2 70.7 CFM Liquid CPU Cooler](https://pcpartpicker.com/product/CrDzK8/corsair-cpu-cooler-cw9060025ww) | $99.99 @ B&H
-**Motherboard** | [Asus MAXIMUS VIII HERO ATX LGA1151 Motherboard](https://pcpartpicker.com/product/tBZ2FT/asus-motherboard-maximusviiihero) | $209.99 @ B&H
-**Memory** | [Crucial Ballistix Sport 16GB (2 x 8GB) DDR4-2400 Memory](https://pcpartpicker.com/product/dNLypg/crucial-memory-bls2k8g4d240fsa) | $109.64 @ B&H
-**Storage** | [Samsung 850 EVO-Series 250GB 2.5" Solid State Drive](https://pcpartpicker.com/product/3kL7YJ/samsung-internal-hard-drive-mz75e250bam) | $97.88 @ OutletPC
-**Storage** | [Samsung 850 EVO-Series 250GB 2.5" Solid State Drive](https://pcpartpicker.com/product/3kL7YJ/samsung-internal-hard-drive-mz75e250bam) | $97.88 @ OutletPC
-**Storage** | [Western Digital BLACK SERIES 1TB 3.5" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/Fz2kcf/western-digital-internal-hard-drive-wd1003fzex) | $69.00 @ B&H
-**Video Card** | [MSI GeForce GTX 1080 8GB Founders Edition Video Card](https://pcpartpicker.com/product/gRvZxr/msi-video-card-geforcegtx1080foundersedition) | $660.31 @ Amazon
-**Case** | [Corsair 450D ATX Mid Tower Case](https://pcpartpicker.com/product/9JvRsY/corsair-case-cc9011049ww) | $109.99 @ Newegg
-**Power Supply** | [Corsair 850W 80+ Gold Certified Semi-Modular ATX Power Supply](https://pcpartpicker.com/product/DmPzK8/corsair-power-supply-cp9020086) | $120.98 @ Newegg
-**Operating System** | [Microsoft Windows 10 Pro OEM 64-bit](https://pcpartpicker.com/product/MfH48d/microsoft-os-fqc08930) | $94.00 @ Amazon
-**Software** | [ESET Smart Security 2016 (1 Year Subscription) Software](https://pcpartpicker.com/product/XwzZxr/eset-software-esshn111rbx2016) | $62.98 @ Newegg
- | *Prices include shipping, taxes, rebates, and discounts* |
- | **Total** | **$2061.89**
- | Generated by [PCPartPicker](http://pcpartpicker.com) 2017-02-11 21:29 EST-0500 |
-
-
+| Type                                                                           | Item                                                                                                                                                        | Price               |
+| :----------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
+| **CPU**                                                                        | [Intel Core i7-6700K 4.0GHz Quad-Core Processor](https://pcpartpicker.com/product/tdmxFT/intel-cpu-bx80662i76700k)                                          | \$329.25 @ OutletPC |
+| **CPU Cooler**                                                                 | [Corsair H100i v2 70.7 CFM Liquid CPU Cooler](https://pcpartpicker.com/product/CrDzK8/corsair-cpu-cooler-cw9060025ww)                                       | \$99.99 @ B&H       |
+| **Motherboard**                                                                | [Asus MAXIMUS VIII HERO ATX LGA1151 Motherboard](https://pcpartpicker.com/product/tBZ2FT/asus-motherboard-maximusviiihero)                                  | \$209.99 @ B&H      |
+| **Memory**                                                                     | [Crucial Ballistix Sport 16GB (2 x 8GB) DDR4-2400 Memory](https://pcpartpicker.com/product/dNLypg/crucial-memory-bls2k8g4d240fsa)                           | \$109.64 @ B&H      |
+| **Storage**                                                                    | [Samsung 850 EVO-Series 250GB 2.5" Solid State Drive](https://pcpartpicker.com/product/3kL7YJ/samsung-internal-hard-drive-mz75e250bam)                      | \$97.88 @ OutletPC  |
+| **Storage**                                                                    | [Samsung 850 EVO-Series 250GB 2.5" Solid State Drive](https://pcpartpicker.com/product/3kL7YJ/samsung-internal-hard-drive-mz75e250bam)                      | \$97.88 @ OutletPC  |
+| **Storage**                                                                    | [Western Digital BLACK SERIES 1TB 3.5" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/Fz2kcf/western-digital-internal-hard-drive-wd1003fzex) | \$69.00 @ B&H       |
+| **Video Card**                                                                 | [MSI GeForce GTX 1080 8GB Founders Edition Video Card](https://pcpartpicker.com/product/gRvZxr/msi-video-card-geforcegtx1080foundersedition)                | \$660.31 @ Amazon   |
+| **Case**                                                                       | [Corsair 450D ATX Mid Tower Case](https://pcpartpicker.com/product/9JvRsY/corsair-case-cc9011049ww)                                                         | \$109.99 @ Newegg   |
+| **Power Supply**                                                               | [Corsair 850W 80+ Gold Certified Semi-Modular ATX Power Supply](https://pcpartpicker.com/product/DmPzK8/corsair-power-supply-cp9020086)                     | \$120.98 @ Newegg   |
+| **Operating System**                                                           | [Microsoft Windows 10 Pro OEM 64-bit](https://pcpartpicker.com/product/MfH48d/microsoft-os-fqc08930)                                                        | \$94.00 @ Amazon    |
+| **Software**                                                                   | [ESET Smart Security 2016 (1 Year Subscription) Software](https://pcpartpicker.com/product/XwzZxr/eset-software-esshn111rbx2016)                            | \$62.98 @ Newegg    |
+| _Prices include shipping, taxes, rebates, and discounts_                       |
+| **Total**                                                                      | **\$2061.89**                                                                                                                                               |
+| Generated by [PCPartPicker](http://pcpartpicker.com) 2017-02-11 21:29 EST-0500 |
 
 # Beastmode II (BM2)
 
 [PCPartPicker part list](https://pcpartpicker.com/list/D83rWX) / [Price breakdown by merchant](https://pcpartpicker.com/list/D83rWX/by_merchant/)
 
-Type|Item|Price
-:----|:----|:----
-**CPU** | [Intel Core i7-6800K 3.4GHz 6-Core Processor](https://pcpartpicker.com/product/Td98TW/intel-cpu-bx80671i76800k) | $408.58 @ OutletPC
-**CPU Cooler** | [Corsair H100i v2 70.7 CFM Liquid CPU Cooler](https://pcpartpicker.com/product/CrDzK8/corsair-cpu-cooler-cw9060025ww) | $99.99 @ B&H
-**Motherboard** | [Gigabyte GA-X99-Designare EX ATX LGA2011-3 Motherboard](https://pcpartpicker.com/product/wtnG3C/gigabyte-ga-x99-designare-ex-atx-lga2011-3-motherboard-ga-x99-designare-ex) | $418.95 @ B&H
-**Memory** | [Corsair Vengeance LPX 16GB (2 x 8GB) DDR4-3000 Memory](https://pcpartpicker.com/product/MYH48d/corsair-memory-cmk16gx4m2b3000c15) | $124.99 @ Newegg
-**Memory** | [Corsair Vengeance LPX 16GB (2 x 8GB) DDR4-3000 Memory](https://pcpartpicker.com/product/MYH48d/corsair-memory-cmk16gx4m2b3000c15) | $124.99 @ Newegg
-**Storage** | [Samsung 850 EVO-Series 250GB 2.5" Solid State Drive](https://pcpartpicker.com/product/3kL7YJ/samsung-internal-hard-drive-mz75e250bam) | $97.88 @ OutletPC
-**Storage** | [Western Digital BLACK SERIES 2TB 3.5" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/XtjG3C/western-digital-internal-hard-drive-wd2003fzex) | $117.99 @ SuperBiiz
-**Storage** | [Western Digital BLACK SERIES 2TB 3.5" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/XtjG3C/western-digital-internal-hard-drive-wd2003fzex) | $117.99 @ SuperBiiz
-**Video Card** | [MSI GeForce GTX 1080 8GB Video Card](https://pcpartpicker.com/product/FwcMnQ/msi-video-card-geforcegtx1080armor8goc) (2-Way SLI) | $598.45 @ Amazon
-**Video Card** | [MSI GeForce GTX 1080 8GB Video Card](https://pcpartpicker.com/product/FwcMnQ/msi-video-card-geforcegtx1080armor8goc) (2-Way SLI) | $598.45 @ Amazon
-**Case** | [Corsair 760T Black ATX Full Tower Case](https://pcpartpicker.com/product/yLvRsY/corsair-case-760tblack) | $176.33 @ Amazon
-**Power Supply** | [EVGA SuperNOVA 1000 P2 1000W 80+ Platinum Certified Fully-Modular ATX Power Supply](https://pcpartpicker.com/product/dJ6BD3/evga-power-supply-220p21000xr) | $183.80 @ OutletPC
-**Operating System** | [Microsoft Windows 10 Pro OEM 64-bit](https://pcpartpicker.com/product/MfH48d/microsoft-os-fqc08930) | $94.00 @ Amazon
-**Software** | [ESET NOD32 Antivirus 2016 (1 Year Subscription) Software](https://pcpartpicker.com/product/HmkwrH/eset-software-eavhn111rbx2016) | $44.99 @ Adorama
- | *Prices include shipping, taxes, rebates, and discounts* |
- | Total (before mail-in rebates) | $3227.38
- | Mail-in rebates | -$20.00
- | **Total** | **$3207.38**
- | Generated by [PCPartPicker](http://pcpartpicker.com) 2017-02-11 21:46 EST-0500 |
+| Type                                                                           | Item                                                                                                                                                                         | Price                |
+| :----------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------- |
+| **CPU**                                                                        | [Intel Core i7-6800K 3.4GHz 6-Core Processor](https://pcpartpicker.com/product/Td98TW/intel-cpu-bx80671i76800k)                                                              | \$408.58 @ OutletPC  |
+| **CPU Cooler**                                                                 | [Corsair H100i v2 70.7 CFM Liquid CPU Cooler](https://pcpartpicker.com/product/CrDzK8/corsair-cpu-cooler-cw9060025ww)                                                        | \$99.99 @ B&H        |
+| **Motherboard**                                                                | [Gigabyte GA-X99-Designare EX ATX LGA2011-3 Motherboard](https://pcpartpicker.com/product/wtnG3C/gigabyte-ga-x99-designare-ex-atx-lga2011-3-motherboard-ga-x99-designare-ex) | \$418.95 @ B&H       |
+| **Memory**                                                                     | [Corsair Vengeance LPX 16GB (2 x 8GB) DDR4-3000 Memory](https://pcpartpicker.com/product/MYH48d/corsair-memory-cmk16gx4m2b3000c15)                                           | \$124.99 @ Newegg    |
+| **Memory**                                                                     | [Corsair Vengeance LPX 16GB (2 x 8GB) DDR4-3000 Memory](https://pcpartpicker.com/product/MYH48d/corsair-memory-cmk16gx4m2b3000c15)                                           | \$124.99 @ Newegg    |
+| **Storage**                                                                    | [Samsung 850 EVO-Series 250GB 2.5" Solid State Drive](https://pcpartpicker.com/product/3kL7YJ/samsung-internal-hard-drive-mz75e250bam)                                       | \$97.88 @ OutletPC   |
+| **Storage**                                                                    | [Western Digital BLACK SERIES 2TB 3.5" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/XtjG3C/western-digital-internal-hard-drive-wd2003fzex)                  | \$117.99 @ SuperBiiz |
+| **Storage**                                                                    | [Western Digital BLACK SERIES 2TB 3.5" 7200RPM Internal Hard Drive](https://pcpartpicker.com/product/XtjG3C/western-digital-internal-hard-drive-wd2003fzex)                  | \$117.99 @ SuperBiiz |
+| **Video Card**                                                                 | [MSI GeForce GTX 1080 8GB Video Card](https://pcpartpicker.com/product/FwcMnQ/msi-video-card-geforcegtx1080armor8goc) (2-Way SLI)                                            | \$598.45 @ Amazon    |
+| **Video Card**                                                                 | [MSI GeForce GTX 1080 8GB Video Card](https://pcpartpicker.com/product/FwcMnQ/msi-video-card-geforcegtx1080armor8goc) (2-Way SLI)                                            | \$598.45 @ Amazon    |
+| **Case**                                                                       | [Corsair 760T Black ATX Full Tower Case](https://pcpartpicker.com/product/yLvRsY/corsair-case-760tblack)                                                                     | \$176.33 @ Amazon    |
+| **Power Supply**                                                               | [EVGA SuperNOVA 1000 P2 1000W 80+ Platinum Certified Fully-Modular ATX Power Supply](https://pcpartpicker.com/product/dJ6BD3/evga-power-supply-220p21000xr)                  | \$183.80 @ OutletPC  |
+| **Operating System**                                                           | [Microsoft Windows 10 Pro OEM 64-bit](https://pcpartpicker.com/product/MfH48d/microsoft-os-fqc08930)                                                                         | \$94.00 @ Amazon     |
+| **Software**                                                                   | [ESET NOD32 Antivirus 2016 (1 Year Subscription) Software](https://pcpartpicker.com/product/HmkwrH/eset-software-eavhn111rbx2016)                                            | \$44.99 @ Adorama    |
+| _Prices include shipping, taxes, rebates, and discounts_                       |
+| Total (before mail-in rebates)                                                 | \$3227.38                                                                                                                                                                    |
+| Mail-in rebates                                                                | -\$20.00                                                                                                                                                                     |
+| **Total**                                                                      | **\$3207.38**                                                                                                                                                                |
+| Generated by [PCPartPicker](http://pcpartpicker.com) 2017-02-11 21:46 EST-0500 |

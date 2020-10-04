@@ -4,6 +4,12 @@ title: Migrating my personal GitHub pages blog from Jekyll to Nuxt
 date: 2020-09-17
 comments: true
 image: /static/nuxt-app.png
+tags:
+  - nuxt
+  - vue
+  - content
+  - static-site
+  - web
 ---
 
 Jekyll has served me well for a long time, but I've decided to switch the static site generator I use for my personal blog from Jekyll to Nuxt. This article will hopefully be the first new article in my Nuxt blog.

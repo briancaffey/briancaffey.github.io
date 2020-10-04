@@ -4,6 +4,12 @@ title: Generating MIDI files from guitar tablatures with Python and regular expr
 date: 2018-04-26
 comments: true
 image: /static/guitar.jpg
+tags:
+  - midi
+  - python
+  - regex
+  - guitar
+  - music
 ---
 
 Recently I have been playing lots of classical guitar. I use [classtab.org](classtab.org), a website with hundreds of classical guitar pieces in tab form. Here's an example of a guitar tab:

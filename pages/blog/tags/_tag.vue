@@ -1,6 +1,13 @@
 <template>
   <div>
-    <h1 class="text-center text-xl py-4">Blog Posts ({{ articles.length }})</h1>
+    <div class="text-xl text-center py-4">
+      Blog posts tagged with
+      <nuxt-link :to="`/blog/tags/${$route.params.tag}/`">
+        <span class="bg-white rounded-lg text-small px-2 py-1 uppercase shadow">
+          {{ $route.params.tag }} 🏷️
+        </span>
+      </nuxt-link>
+    </div>
     <blog-list :articles="articles" />
   </div>
 </template>
@@ -19,6 +26,7 @@ export default {
         'path',
         'tags',
       ])
+      .where({ tags: { $containsAny: [params.tag] } })
       .sortBy('date', 'desc')
       .fetch()
 
@@ -27,12 +35,7 @@ export default {
       articles,
     }
   },
-  head() {
-    return {
-      title: "Brian Caffey's Blog",
-    }
-  },
 }
 </script>
 
-<style></style>
+<style scoped></style>

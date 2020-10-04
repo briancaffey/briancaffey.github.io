@@ -1,11 +1,12 @@
 ---
-
 layout: post
 title: Setting up a Django app on Heroku
 date: 2017-03-04
 comments: true
 image: /static/django-heroku.png
-
+tags:
+  - django
+  - heroku
 ---
 
 This is a simple guide to setting up a Django project on Heroku.
@@ -28,7 +29,6 @@ myproj        manage.py
 
 This sets up a virtual environment and creates an empty Django project. The next step is to create a settings module.
 
-
 ```terminal
 (proj) $ cd myproj
 (proj) $ mkdir settings && cd settings
@@ -36,7 +36,7 @@ This sets up a virtual environment and creates an empty Django project. The next
 
 Next we want to add `__init__.py` to settings to make it a python module.
 
-*src/myproj/settings/__init__.py*
+_src/myproj/settings/**init**.py_
 
 ```python
 from .base import *
@@ -51,7 +51,7 @@ except:
 
 Next we want to change the `BASE_DIR` (base directory) in `settings.py`:
 
-*settings.py*
+_settings.py_
 
 ```python
 [...]
@@ -95,6 +95,7 @@ psycopg2==2.7.1
 pyparsing==2.2.0
 six==1.10.0
 ```
+
 And then we can add these to a file in our base directory called `requirements.txt`:
 
 ```terminal
@@ -131,7 +132,7 @@ Next we can make our first commit:
 
 The next step involves setting up Heroku. First we need to create a `Procfile` in our base directory:
 
-*Procfile*
+_Procfile_
 
 ```text
 web: gunicorn myproj.wsgi --log-file -
@@ -175,7 +176,7 @@ Now we can finally push the git repository to Heroku:
 Now if we go to our site on heroku we should see:
 
 ```
-Not Found  
+Not Found
 
 The requested URL / was not found on this server.
 ```
@@ -185,7 +186,7 @@ There is a helpful guide on deploying Python and Django apps on Heroku's website
 Here's an important excerpt regarding databases:
 
 > For Django applications, a Heroku Postgres hobby-dev database is automatically provisioned. This populates the DATABASE_URL environment variable.
-No add-ons are automatically provisioned if a pure Python application is detected. If you need a SQL database for your app, add one explicitly:
+> No add-ons are automatically provisioned if a pure Python application is detected. If you need a SQL database for your app, add one explicitly:
 
 ```terminal
 $ heroku addons:create heroku-postgresql:hobby-dev
@@ -198,7 +199,6 @@ So we need to run this command:
 (proj) $ heroku addons:create heroku-postgresql:hobby-dev
 
 ```
-
 
 Next we need to access the terminal on our Heroku server:
 
@@ -261,7 +261,7 @@ MIDDLEWARE = [
 
 Next we have a few more items to add to our settings files:
 
-*production.py*
+_production.py_
 
 ```python
 
@@ -351,6 +351,7 @@ Next we can commit these changes and push to Heroku, and check to see if the sta
 (proj) $ git push heroku master
 (proj) $ heroku config:set DISABLE_COLLECTSTATIC=0
 ```
+
 Now we should be able to see the admin panel with working CSS on both the live and local heroku sites.
 
 # Adding an app and configuring Bootstrap
@@ -391,6 +392,7 @@ urlpatterns = [
 ]
 
 ```
+
 Next we have to add `pages` to `INSTALLED_APPS` in both `production.py` and `local.py`.
 
 Next we need to make some folders within our new `pages` app:
@@ -404,11 +406,7 @@ Next we need to make some folders within our new `pages` app:
 Then we need to add the following to `home.html`:
 
 ```html
-{% extends "base.html" %}
-
-{% block content %}
-
-{% endblock content%}
+{% extends "base.html" %} {% block content %} {% endblock content%}
 ```
 
 Next we need to update `DIR` in `TEMPLATES` in `base.py`, `local.py` and `production.py`:
@@ -418,6 +416,7 @@ Next we need to update `DIR` in `TEMPLATES` in `base.py`, `local.py` and `produc
 'DIRS': [os.path.join(BASE_DIR, 'templates')],
 [...]
 ```
+
 Next we need to add a `templates` folder to the root of our project:
 
 ```terminal
@@ -431,18 +430,27 @@ Next we can add a basic Bootstrap template to `base.html`:
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Bootstrap 101 Template</title>
 
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
 
-		<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+    <!-- Optional theme -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+      crossorigin="anonymous"
+    />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -458,7 +466,11 @@ Next we can add a basic Bootstrap template to `base.html`:
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
 ```

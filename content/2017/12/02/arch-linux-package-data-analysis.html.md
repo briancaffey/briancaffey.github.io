@@ -4,6 +4,10 @@ title: Analysis of AUR and Official Arch Repository data
 date: 2017-12-02
 comments: true
 image: /static/official_repos.png
+tags:
+  - arch-linux
+  - data
+  - python
 ---
 
 Arch Linux provides packages through the official Arch Linux repositories and the Arch User Repository (AUR). I recently gathered data on ~50,000 packages from these repositories on [archlinux.org](archlinux.org) to better understand the makeup of the packages. In this article I will share some visualizations I made as well as some key takeaways about the data set I gathered.

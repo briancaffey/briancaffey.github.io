@@ -4,6 +4,12 @@ title: Deploying serverless Django applications to AWS with CDK on a tiny budget
 date: 2020-08-01
 comments: true
 image: /static/djambda.png
+tags:
+  - serverless
+  - django
+  - aws
+  - lambda
+  - cdk
 ---
 
 ## tl;dr

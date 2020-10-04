@@ -4,6 +4,8 @@ title: Simple Board Games in ReactJS
 date: 2017-10-03
 comments: true
 image: /img/wuziqi.png
+tags:
+  - react
 ---
 
 To ease into learning ReactJS, I took a shot at implementing a simple tic-tac-toe game with React. This is covered in the official [Facebook React tutorial](https://reactjs.org/tutorial/tutorial.html), but I haven't actually looked at how they did this yet. Instead, I wanted to see how far I could get on my own, and then fallback to the tutorial if I needed help. I heard that there are many different ways that React components can be organized and structured in a React project, so I wanted to see how my results compared to what the official tutorial recommends.

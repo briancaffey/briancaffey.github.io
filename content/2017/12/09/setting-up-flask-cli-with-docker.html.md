@@ -1,21 +1,23 @@
 ---
-
 layout: post
 title: Setting up a Flask project with Flask CLI and Docker
 date: 2017-12-09
 comments: true
 image: /static/flask-docker.png
+tags:
+  - flask
+  - docker
 ---
 
 ![png](/static/flask-docker.png)
 
 ⚠️ This article is under contruction ⚠️
 
-I've recently been working on an awesome tutorial from [testdriven.io](https://testdriven.io) that covers flask, react and docker. The beginning of the project covers how to setup a basic flask app using `flask-scripts`. `flask-scripts` is a deprecated tool and the tutorial recommends using `Flask CLI`. I have fumbled with this the first time I tried to set it up and while I was able to get it working, I couldn't get it working inside of docker. In this article I'll detail the setup of my flask project with `Flask CLI`. 
+I've recently been working on an awesome tutorial from [testdriven.io](https://testdriven.io) that covers flask, react and docker. The beginning of the project covers how to setup a basic flask app using `flask-scripts`. `flask-scripts` is a deprecated tool and the tutorial recommends using `Flask CLI`. I have fumbled with this the first time I tried to set it up and while I was able to get it working, I couldn't get it working inside of docker. In this article I'll detail the setup of my flask project with `Flask CLI`.
 
 > One of the nice new features in Flask 0.11 is the built-in integration of the click command line interface. This enables a wide range of new features for the Flask ecosystem and your own applications.
 
-OK. Let's set up a basic flask app: 
+OK. Let's set up a basic flask app:
 
 ### Directories
 
@@ -27,6 +29,7 @@ OK. Let's set up a basic flask app:
 ```
 
 ### Virtual Environment
+
 ```
  $ virtualenv -p python3 env
 Running virtualenv with interpreter /home/brian/anaconda3/bin/python3
@@ -64,15 +67,15 @@ Successfully installed Jinja2-2.10 MarkupSafe-1.0 Werkzeug-0.13 click-6.7 flask-
 (env) $
 ```
 
-At this point we are ready to create our flask app. 
+At this point we are ready to create our flask app.
 
-Here's a note about the CLI: 
+Here's a note about the CLI:
 
 > For the **flask** script to work, an application needs to be discovered. This is achieved by exporting the `FLASK_APP` environment variable. It can be either set to an import path or to a filename of a Python module that contains a Flask application.
 
-Let's add an `app.py` file inside the `project` folder: 
+Let's add an `app.py` file inside the `project` folder:
 
-*app.py*
+_app.py_
 
 ```python
 from flask import Flask, jsonify
@@ -82,18 +85,18 @@ app = Flask(__name__)
 @app.route('/users/ping', methods=['GET'])
 def ping_pong():
     return jsonify({
-        'message':'pong!', 
+        'message':'pong!',
         'status':'success'
         })
 ```
 
-And now let's add an environment variable to tell the Flask CLI where our app is located: 
+And now let's add an environment variable to tell the Flask CLI where our app is located:
 
 ```terminal
- $ export FLASK_APP=/home/brian/Documents/flask/test-flask/users-service/project/app.py 
+ $ export FLASK_APP=/home/brian/Documents/flask/test-flask/users-service/project/app.py
 ```
 
-OK, now let's try to run `flask run` and navigate to `/users/ping` and see what happens: 
+OK, now let's try to run `flask run` and navigate to `/users/ping` and see what happens:
 
 ```terminal
  $ flask run
@@ -102,9 +105,9 @@ OK, now let's try to run `flask run` and navigate to `/users/ping` and see what 
 127.0.0.1 - - [09/Dec/2017 19:20:14] "GET /users/ping HTTP/1.1" 200 -
 ```
 
-Great! We see our `pong!` message returned in the browser. Next, let's configure our settings: 
+Great! We see our `pong!` message returned in the browser. Next, let's configure our settings:
 
-*project/config.py*
+_project/config.py_
 
 ```python
 class BaseConfig:
@@ -129,7 +132,7 @@ And now we can add the following line right below where we define `app = Flask(_
 app.config.from_object('project.config.DevelopmentConfig')
 ```
 
-When we run `flask run`, we get a long error message including: 
+When we run `flask run`, we get a long error message including:
 
 ```terminal
 Debugged import:
@@ -148,7 +151,7 @@ ImportStringError: import_string() failed for 'project.config'. Possible reasons
 
 Let's try to add `__init__.py` to our `project` folder.
 
-Once we do this, we are able to run the app successfully, but we don't see any special message about Debug mode being on: 
+Once we do this, we are able to run the app successfully, but we don't see any special message about Debug mode being on:
 
 ```terminal
  $ flask run
@@ -156,25 +159,25 @@ Once we do this, we are able to run the app successfully, but we don't see any s
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
 
-The documentation mentions that we can turn on Debug mode with: 
+The documentation mentions that we can turn on Debug mode with:
 
 ```terminal
 export FLASK_DEBUG=1
 ```
 
-We can check the debug mode by printing `app.config` in the `ping_pong()` function that is returned when we hit `/users/ping`: 
+We can check the debug mode by printing `app.config` in the `ping_pong()` function that is returned when we hit `/users/ping`:
 
 ```python
 @app.route('/users/ping', methods=['GET'])
 def ping_pong():
     print(app.config)
     return jsonify({
-        'message':'pong!', 
+        'message':'pong!',
         'status':'success'
         })
 ```
 
-Here's what we see in the terminal: 
+Here's what we see in the terminal:
 
 ```terminal
 <Config {'DEBUG': True, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}>
@@ -188,15 +191,15 @@ Just to be sure this is working correctly, let's try another config setting, `Pr
 127.0.0.1 - - [09/Dec/2017 19:45:29] "GET /users/ping HTTP/1.1" 200 -
 ```
 
-OK, so far so good! I think that `FLASK_DEBUG` may give us some additional information in the terminal. 
+OK, so far so good! I think that `FLASK_DEBUG` may give us some additional information in the terminal.
 
-Let's run: 
+Let's run:
 
 ```terminal
 export FLASK_DEBUG=1
 ```
 
-and run our app in `ProductionConfig` mode: 
+and run our app in `ProductionConfig` mode:
 
 ```terminal
  $ flask run
@@ -208,16 +211,16 @@ and run our app in `ProductionConfig` mode:
  * Debugger PIN: 775-946-486
 ```
 
-and when we hit `/users/ping` we get: 
+and when we hit `/users/ping` we get:
 
 ```terminal
 <Config {'DEBUG': True, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'PRESERVE_CONTEXT_ON_EXCEPTION': None, 'SECRET_KEY': None, 'PERMANENT_SESSION_LIFETIME': datetime.timedelta(31), 'USE_X_SENDFILE': False, 'LOGGER_NAME': 'project.app', 'LOGGER_HANDLER_POLICY': 'always', 'SERVER_NAME': None, 'APPLICATION_ROOT': None, 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'SEND_FILE_MAX_AGE_DEFAULT': datetime.timedelta(0, 43200), 'TRAP_BAD_REQUEST_ERRORS': False, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'JSON_AS_ASCII': True, 'JSON_SORT_KEYS': True, 'JSONIFY_PRETTYPRINT_REGULAR': True, 'JSONIFY_MIMETYPE': 'application/json', 'TEMPLATES_AUTO_RELOAD': None}>
 127.0.0.1 - - [09/Dec/2017 19:51:17] "GET /users/ping HTTP/1.1" 200 -
 ```
 
-Here we can see that `DEBUG` is `True`, which was forced when we set `FLASK_DEBUG=1`. 
+Here we can see that `DEBUG` is `True`, which was forced when we set `FLASK_DEBUG=1`.
 
-For clarity, let's review the directory structure of our project: 
+For clarity, let's review the directory structure of our project:
 
 ```terminal
  $ tree project/
@@ -227,21 +230,21 @@ project/
 └── __init__.py
 ```
 
-`__init__.py` is just an empty file at this point, but in the testdriven.io tutorial it is the file that contains our app. 
+`__init__.py` is just an empty file at this point, but in the testdriven.io tutorial it is the file that contains our app.
 
 OK, we have a very simple flask app that we can control with the flask cli. Let's get ready to dockerize this simple project.
 
-We need a `requirements.txt` file. So far we just have flask. We want to place this file on the same level as our `project` folder: 
+We need a `requirements.txt` file. So far we just have flask. We want to place this file on the same level as our `project` folder:
 
-*requirements.txt*
+_requirements.txt_
 
 ```
 Flask==0.12.1
 ```
 
-And we can add a `.gitignore` file as well at the same level: 
+And we can add a `.gitignore` file as well at the same level:
 
-*.gitignore*
+_.gitignore_
 
 ```
 __pycache__
@@ -250,7 +253,7 @@ env
 
 ## Docker
 
-Here are the versions of docker applications I have installed: 
+Here are the versions of docker applications I have installed:
 
 ```terminal
  $ docker -v && docker-compose -v && docker-machine -v
@@ -259,7 +262,7 @@ docker-compose version 1.17.1, build unknown
 docker-machine version 0.13.0, build HEAD
 ```
 
-Currently I don't have any docker machines, images or containers. Here is the status of the docker service: 
+Currently I don't have any docker machines, images or containers. Here is the status of the docker service:
 
 ```terminal
  $ systemctl status docker
@@ -285,7 +288,7 @@ Dec 08 19:13:09 archthinkpad dockerd[5486]: time="2017-12-08T19:13:09.082056339-
 Dec 08 19:13:09 archthinkpad systemd[1]: Started Docker Application Container Engine.
 ```
 
-OK, docker seems to be working fine. Now we need to create a Docker host and point the docker client at it. What does this mean? From what I understand, we will be running docker containers not on our local machine but in an instance of `virtualbox` on our local machine. To do this, we will use the `docker-machine` command: 
+OK, docker seems to be working fine. Now we need to create a Docker host and point the docker client at it. What does this mean? From what I understand, we will be running docker containers not on our local machine but in an instance of `virtualbox` on our local machine. To do this, we will use the `docker-machine` command:
 
 ```terminal
  $ docker-machine create -d virtualbox testdriven-dev
@@ -320,15 +323,15 @@ Docker is up and running!
 To see how to connect your Docker Client to the Docker Engine running on this virtual machine, run: docker-machine env testdriven-dev
 ```
 
-We see that `Docker is up and running!`, but notice this line: 
+We see that `Docker is up and running!`, but notice this line:
 
 ```
 This machine has been allocated an IP address, but Docker Machine could not reach it successfully.
 ```
 
-This might be a problem. I think that the `docker-machine env <machine-name>` command fixes this: 
+This might be a problem. I think that the `docker-machine env <machine-name>` command fixes this:
 
-When you run this command you get the following: 
+When you run this command you get the following:
 
 ```terminal
  $ docker-machine env testdriven-dev
@@ -336,11 +339,11 @@ export DOCKER_TLS_VERIFY="1"
 export DOCKER_HOST="tcp://192.168.99.100:2376"
 export DOCKER_CERT_PATH="/home/brian/.docker/machine/machines/testdriven-dev"
 export DOCKER_MACHINE_NAME="testdriven-dev"
-# Run this command to configure your shell: 
+# Run this command to configure your shell:
 # eval $(docker-machine env testdriven-dev)
 ```
 
-The result of this command tells us to run `eval $(docker-machine env testdriven-dev):
+The result of this command tells us to run `eval \$(docker-machine env testdriven-dev):
 
 ```terminal
 eval "$(docker-machine env testdriven-dev)"
@@ -356,7 +359,7 @@ DOCKER_TLS_VERIFY=1
 DOCKER_HOST=tcp://192.168.99.100:2376
 ```
 
-Next we need to add a Dockerfile. We will call it `Dockerfile-dev`. Let's look at `Dockerfile-dev` from the tutorial and see how we may need to modify it for the way we set up our project: 
+Next we need to add a Dockerfile. We will call it `Dockerfile-dev`. Let's look at `Dockerfile-dev` from the tutorial and see how we may need to modify it for the way we set up our project:
 
 ```
 FROM python:3.6.3
@@ -378,9 +381,9 @@ ADD . /usr/src/app
 CMD python manage.py runserver -h 0.0.0.0
 ```
 
-We start by defining a base image with the `FROM` line which will give us the correct version of python. We then set folders and the current working directory in docker. Next we install flask add the `requirements.txt` file and install flask with the `RUN` line. We then add the directory (on our local machine) with `ADD . /usr/src/app`. 
+We start by defining a base image with the `FROM` line which will give us the correct version of python. We then set folders and the current working directory in docker. Next we install flask add the `requirements.txt` file and install flask with the `RUN` line. We then add the directory (on our local machine) with `ADD . /usr/src/app`.
 
-This should all be fine up until the last line where we see a `manage.py` file. We never created this file since we wish to use the Flask CLI. We could try replicating the process did locally inside our Dockerfile. We need to add the the `FLASK_APP` environment variable, and its value should be the script that has just been added to the docker image. Let's try: 
+This should all be fine up until the last line where we see a `manage.py` file. We never created this file since we wish to use the Flask CLI. We could try replicating the process did locally inside our Dockerfile. We need to add the the `FLASK_APP` environment variable, and its value should be the script that has just been added to the docker image. Let's try:
 
 ```
 [...]
@@ -390,9 +393,9 @@ ENV FLASK_APP /usr/src/app/project/app.py
 CMD flask run
 ```
 
-Next we need a script for `docker-compose`. `docker-compose` is a tool for defining and running multi-container Docker applications. Again, let's look at what was included in the tutorial and then see if we need to make any adjustments: 
+Next we need a script for `docker-compose`. `docker-compose` is a tool for defining and running multi-container Docker applications. Again, let's look at what was included in the tutorial and then see if we need to make any adjustments:
 
-*docker-compose-dev.yml* (this file goes in the root directory, one level up from where `Dockerfile-dev`)
+_docker-compose-dev.yml_ (this file goes in the root directory, one level up from where `Dockerfile-dev`)
 
 ```
 version: '3.3'
@@ -410,7 +413,7 @@ services:
         - 5001:5000
 ```
 
-OK, this looks good! Let's give it a try. We can run the following command: 
+OK, this looks good! Let's give it a try. We can run the following command:
 
 ```terminal
  $ docker-compose -f docker-compose-dev.yml build
@@ -482,15 +485,15 @@ That seemed to work. Next the tutorial says to run `docker-compose -f docker-com
 ```terminal
  $ docker-compose -f docker-compose-dev.yml up
 Creating network "testflask_default" with the default driver
-Creating users-service ... 
+Creating users-service ...
 Creating users-service ... done
 Attaching to users-service
 users-service    | Usage: flask run [OPTIONS]
-users-service    | 
+users-service    |
 users-service    | Error: The file/path provided (/usr/src/app/project/app.py) does not appear to exist.  Please verify the path is correct.  If app is not on PYTHONPATH, ensure the extension is .py
 users-service exited with code 2
 ```
 
-OK, we have an error that seems to have come from our `flask run` command. 
+OK, we have an error that seems to have come from our `flask run` command.
 
 To bo continued...

@@ -1,33 +1,37 @@
 ---
-
 layout: post
 title: Reading 13F SEC filings with python
 date: 2018-01-30
 comments: true
 image: /static/sec.jpg
-
+tags:
+  - sec
+  - python
+  - data
+  - scraping
 ---
 
 ![jpg](/static/sec.jpg)
 
-> The SEC Form 13F is a filing with the Securities and Exchange Commission (SEC) also known as the Information Required of Institutional Investment Managers Form. It is a quarterly filing required of institutional investment managers with over $100 million in qualifying assets. -[Investopedia](https://www.investopedia.com/terms/f/form-13f.asp)
+> The SEC Form 13F is a filing with the Securities and Exchange Commission (SEC) also known as the Information Required of Institutional Investment Managers Form. It is a quarterly filing required of institutional investment managers with over \$100 million in qualifying assets. -[Investopedia](https://www.investopedia.com/terms/f/form-13f.asp)
 
-In this article I will show how to collect and parse 13F filing data from the SEC. 
+In this article I will show how to collect and parse 13F filing data from the SEC.
 
-First, use [EDGAR](https://www.sec.gov/edgar/searchedgar/companysearch.html) to search the company of interest. 
+First, use [EDGAR](https://www.sec.gov/edgar/searchedgar/companysearch.html) to search the company of interest.
 
 > EDGAR, the Electronic Data Gathering, Analysis, and Retrieval system, performs automated collection, validation, indexing, acceptance, and forwarding of submissions by companies and others who are required by law to file forms with the U.S. Securities and Exchange Commission (the "SEC"). -[Wikipedia](https://en.wikipedia.org/wiki/EDGAR)
 
-Click on the Central Index Key (CIK) of the company you are search for, and then click on `Documents`. 
+Click on the Central Index Key (CIK) of the company you are search for, and then click on `Documents`.
 
-You'll want to grab the HTML version of the `Information Table`. I have saved them in a folder with their file names cooresponding to their dates (`YYYY-MM-DD` format). 
+You'll want to grab the HTML version of the `Information Table`. I have saved them in a folder with their file names cooresponding to their dates (`YYYY-MM-DD` format).
 
-For this example, I have manually collected the files for a few years of data filed by a hedge fund. Here are the files I'll be working with: 
+For this example, I have manually collected the files for a few years of data filed by a hedge fund. Here are the files I'll be working with:
 
 ```python
 files = os.listdir("13f/")
 print(*sorted(files), sep="\n")
 ```
+
 ```
 2014-02-14.html
 2014-05-15.html
@@ -47,7 +51,7 @@ print(*sorted(files), sep="\n")
 2017-10-30.html
 ```
 
-Here's a quick script we can use to parse information from each filing document: 
+Here's a quick script we can use to parse information from each filing document:
 
 ```python
 def scrape_13f(file):
@@ -66,12 +70,12 @@ def scrape_13f(file):
         dic["SHARES"] = int(position[4].text.replace(',', ''))
         dic["DATE"] = date.strip(".html")
         positions.append(dic)
-        
+
     df = pd.DataFrame(positions)
     return df
 ```
 
-Using this function we can get a quick snapshot of this hedge fund by filing total over the last 4 years: 
+Using this function we can get a quick snapshot of this hedge fund by filing total over the last 4 years:
 
 ```python
 fund_growth = [sum(scrape_13f(file).VALUE) for file in sorted(files)]
@@ -89,7 +93,7 @@ plt.xticks(rotation='vertical')
 
 ## Fund Positions with Bubble Chart
 
-Next, it would be great to get a snapshot of the stocks owned by this fund in a given year. Let's use a D3 bubble chart. The names for each stock are quite long, so first let's convert them to stock ticker values. Here's a quick script I hacked together using a Fidelity lookup service: 
+Next, it would be great to get a snapshot of the stocks owned by this fund in a given year. Let's use a D3 bubble chart. The names for each stock are quite long, so first let's convert them to stock ticker values. Here's a quick script I hacked together using a Fidelity lookup service:
 
 ```python
 cusip_nums = set()
@@ -108,11 +112,11 @@ for c in list(ticker_dic.keys()):
         ticker_dic[c] = ticker
     except:
         pass
-    
+
     time.sleep(1)
 ```
 
-I couldn't get all the CUSIP numbers, but I was able to get most of them. Some of the CUSIP numbers have changed for certain stocks and couldn't be looked up with this service. For now I won't fill these in. With the `ticker_dic` dictionary, we can make a quick edit to our `scrape_13f` function to populate ticker data for each holding: 
+I couldn't get all the CUSIP numbers, but I was able to get most of them. Some of the CUSIP numbers have changed for certain stocks and couldn't be looked up with this service. For now I won't fill these in. With the `ticker_dic` dictionary, we can make a quick edit to our `scrape_13f` function to populate ticker data for each holding:
 
 ```python
 ticker_dict = {'00206R102': 'T', '00507V109': 'ATVI', '00724F101': 'ADBE', ... }
@@ -134,12 +138,12 @@ def scrape_13f(file):
         dic["DATE"] = date.strip(".html")
         dic["TICKER"] = ticker_dict[position[2].text]
         positions.append(dic)
-        
+
     df = pd.DataFrame(positions)
     return df
 ```
 
-Let's check this: 
+Let's check this:
 
 ```
 df = scrape_13f(files[2])
@@ -155,7 +159,7 @@ print(df[["CUSIP", "NAME_OF_ISSUER", "TICKER"]].head())
 4  035710409    ANNALY CAP MGMT INC    NLY
 ```
 
-Let's take a look at the last filing, Q4 2017. 
+Let's take a look at the last filing, Q4 2017.
 
 ```python
 q4_2017 = sorted(files)[-1]
@@ -178,4 +182,3 @@ plt.show()
 ```
 
 ![png](/static/2017_filing.png)
-

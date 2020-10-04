@@ -1,24 +1,25 @@
 ---
-
 layout: post
 title: Getting started with Python's Twisted Framework
 date: 2017-12-22
 comments: true
 image: /static/twisted-snakes.png
-
+tags:
+  - python
+  - twisted
 ---
 
 ![png](/static/twisted-snakes.png)
 
-In this article I'm going to be exploring python's twisted framework. I'm working through the *Twisted Network Programming Essentials* book from O'Reilly. 
+In this article I'm going to be exploring python's twisted framework. I'm working through the _Twisted Network Programming Essentials_ book from O'Reilly.
 
 ## Installation
 
 ```terminal
  $ pip install twisted
- ```
+```
 
-The main idea behind Twisted is that it gives us the parallelism of multithreading programming with the ease of reasoning of single threaded programming. 
+The main idea behind Twisted is that it gives us the parallelism of multithreading programming with the ease of reasoning of single threaded programming.
 
 ![png](/static/event-driven.jpg)
 
@@ -37,7 +38,8 @@ while True:
 
 Here's a simple echo server/client example that illustrates how the reactor works. It is composed of `echoclient.py` and `echoserver.py`:
 
-*echoclient.py*
+_echoclient.py_
+
 ```python
 from twisted.internet import reactor, protocol
 
@@ -65,7 +67,7 @@ reactor.connectTCP("localhost", 8000, EchoFactory())
 reactor.run()
 ```
 
-*echoserver.py*
+_echoserver.py_
 
 ```python
 from twisted.internet import protocol, reactor

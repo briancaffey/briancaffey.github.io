@@ -4,6 +4,8 @@ title: How to connect to Google Starbucks wifi using i3 and Arch Linux
 date: 2017-10-20
 comments: true
 image: /static/i3wifi.png
+tags:
+  - arch-linux
 ---
 
 ![png](/static/i3wifi.png)

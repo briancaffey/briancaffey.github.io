@@ -1,16 +1,17 @@
 ---
-
 layout: post
 title: Using Tensorflow and Tensorboard with Docker
 date: 2017-11-20
 comments: true
 image: /static/tf.png
-
+tags:
+  - tensorflow
+  - docker
 ---
 
-In my last article we set up Tensorflow with Docker. Next I want to try to get Tensorboard running. 
+In my last article we set up Tensorflow with Docker. Next I want to try to get Tensorboard running.
 
-When we opened the Jupyter notebook, our command included port mapping. Here is that command: 
+When we opened the Jupyter notebook, our command included port mapping. Here is that command:
 
 ```terminal
 $ sudo nvidia-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
@@ -18,14 +19,13 @@ $ sudo nvidia-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
 
 Tensorboard will be served in our browser on port `6006`, so we will want to do that port mapping in our `nvidia-docker` command:
 
-
 ```terminal
 sudo nvidia-docker run -p 0.0.0.0:6006:6006 -it tensorflow/tensorflow:latest-gpu bash
 ```
 
-I want to run [this script](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py) from the Tensorflow github repo. It is an example of MNIST with summaries. Summaries are logs that are captured from script and they provide the data that runs Tensorboard. In this case they are recorded in `/tmp/tensorflow/mnist/logs/`. 
+I want to run [this script](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py) from the Tensorflow github repo. It is an example of MNIST with summaries. Summaries are logs that are captured from script and they provide the data that runs Tensorboard. In this case they are recorded in `/tmp/tensorflow/mnist/logs/`.
 
-To start with this script let's just copy and paste it into a file. We will need to add vim to our docker container for that: 
+To start with this script let's just copy and paste it into a file. We will need to add vim to our docker container for that:
 
 ```terminal
 # apt-get update
@@ -35,7 +35,7 @@ To start with this script let's just copy and paste it into a file. We will need
 Now we can copy and paste the script and run it:
 
 ```python
-root@eb9e069064d7:~# python tb.py 
+root@eb9e069064d7:~# python tb.py
 Successfully downloaded train-images-idx3-ubyte.gz 9912422 bytes.
 Extracting /tmp/tensorflow/mnist/input_data/train-images-idx3-ubyte.gz
 Successfully downloaded train-labels-idx1-ubyte.gz 28881 bytes.
@@ -46,7 +46,7 @@ Successfully downloaded t10k-labels-idx1-ubyte.gz 4542 bytes.
 Extracting /tmp/tensorflow/mnist/input_data/t10k-labels-idx1-ubyte.gz
 2017-11-20 03:52:53.792141: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
 2017-11-20 03:52:53.878640: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:892] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2017-11-20 03:52:53.878892: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties: 
+2017-11-20 03:52:53.878892: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1030] Found device 0 with properties:
 name: GeForce GTX 1080 major: 6 minor: 1 memoryClockRate(GHz): 1.7335
 pciBusID: 0000:01:00.0
 totalMemory: 7.92GiB freeMemory: 7.43GiB
@@ -171,9 +171,8 @@ root@eb9e069064d7:~# tensorboard --logdir=/tmp/tensorflow/mnist/logs/
 TensorBoard 0.4.0rc2 at http://eb9e069064d7:6006 (Press CTRL+C to quit)
 ```
 
-Now we can simply navigate to `localhost:6006` in our browser to start using Tensorboard. Here's a screenshot of Tensorboard showing accuracy: 
-
+Now we can simply navigate to `localhost:6006` in our browser to start using Tensorboard. Here's a screenshot of Tensorboard showing accuracy:
 
 ![png](/static/tf.png)
 
-This wasn't too bad. The MNIST example included a very nice script with everything set up properly. My next big challenge is to implement some type of learning model with a data set of my own and visualize it with TensorBoard, but I'll have to go through several examples before then. 
+This wasn't too bad. The MNIST example included a very nice script with everything set up properly. My next big challenge is to implement some type of learning model with a data set of my own and visualize it with TensorBoard, but I'll have to go through several examples before then.

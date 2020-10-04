@@ -4,6 +4,8 @@ title: Arch Linux Installation Guide
 date: 2017-08-03
 comments: true
 image: /static/arch.png
+tags:
+  - arch-linux
 ---
 
 This post will be a comprehensive guide to installing Arch Linux. I will be installing Arch Linux on a refurbished [ThinkPad T430 Laptop](http://www3.lenovo.com/us/en/laptops/thinkpad/t-series/t430/), first as a guest OS on a Windows 10 Pro host, and then on a secondary SSD that will replace the optical drive. I will try to cover absolutely everything you need from creating a bootable USB drive to customizing the desktop interface and installing development environments and tools.

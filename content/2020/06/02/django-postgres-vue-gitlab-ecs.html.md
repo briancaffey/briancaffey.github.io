@@ -4,6 +4,12 @@ title: Using AWS CDK, GitLab, Fargate and CloudFront for Django + Vue.js applica
 date: 2020-06-02
 comments: true
 image: /static/architecture_verbose_equals_true.png
+tags:
+  - fargate
+  - django
+  - gitlab
+  - vue
+  - cdk
 ---
 
 > This article was originally posted on [https://dev.to/briancaffey/building-a-django-vue-js-application-with-aws-cdk-and-gitlab-ci-also-how-to-scale-celery-workers-to-zero-1o6i](https://dev.to/briancaffey/building-a-django-vue-js-application-with-aws-cdk-and-gitlab-ci-also-how-to-scale-celery-workers-to-zero-1o6i). It is also available on the documentation site for the project: [https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/start/overview/](https://verbose-equals-true.gitlab.io/django-postgres-vue-gitlab-ecs/start/overview/)
@@ -349,7 +355,7 @@ cdk deploy:
     - master
   variables:
     ENVIRONMENT: dev
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_TLS_CERTDIR: ''
   before_script:
     - apk add nodejs-current npm
     - npm i -g aws-cdk
