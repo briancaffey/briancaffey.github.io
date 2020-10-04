@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1601771584",layout:"default",error:null,serverRendered:a,routePath:"\u002F2018\u002F02\u002F09\u002Fa-sample-django-news-app.html",config:{content:{dbHash:"40c0868a"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));

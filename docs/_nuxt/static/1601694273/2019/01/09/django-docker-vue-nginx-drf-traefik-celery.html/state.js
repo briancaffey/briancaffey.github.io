@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1601694273",layout:"default",error:null,serverRendered:a,routePath:"\u002F2019\u002F01\u002F09\u002Fdjango-docker-vue-nginx-drf-traefik-celery.html",config:{content:{dbHash:"372b968f"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));

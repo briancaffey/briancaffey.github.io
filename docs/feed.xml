@@ -4,7 +4,7 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Sat, 03 Oct 2020 03:04:38 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 04 Oct 2020 00:33:10 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
@@ -29,19 +29,14 @@
             <guid>https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway.html</guid>
         </item>
         <item>
-            <title><![CDATA[Using AWS CDK, GitLab, Fargate and CloudFront for Django + Vue.js applications]]></title>
-            <link>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html</link>
-            <guid>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html</guid>
-        </item>
-        <item>
-            <title><![CDATA[Up and running with Jekyll + GitHub Pages]]></title>
-            <link>https://briancaffey.github.io/2016/03/11/migrating-from-jekyll-to-nuxt-static-site.html</link>
-            <guid>https://briancaffey.github.io/2016/03/11/migrating-from-jekyll-to-nuxt-static-site.html</guid>
-        </item>
-        <item>
             <title><![CDATA[Django + Vue.js web application template with AWS Cloud Development Kit (CDK), AWS Fargate and GitLab CI]]></title>
             <link>https://briancaffey.github.io/projects/django-postgres-vue-gitlab-ecs</link>
             <guid>https://briancaffey.github.io/projects/django-postgres-vue-gitlab-ecs</guid>
+        </item>
+        <item>
+            <title><![CDATA[Using AWS CDK, GitLab, Fargate and CloudFront for Django + Vue.js applications]]></title>
+            <link>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html</link>
+            <guid>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html</guid>
         </item>
         <item>
             <title><![CDATA[Setup, Development and Deployment of a web app using Django, VueJS, VuePress, Docker, nginx, traefik and GitLab]]></title>
@@ -124,14 +119,14 @@
             <guid>https://briancaffey.github.io/2017/11/28/remove-root-partition-bloat-from-docker.html</guid>
         </item>
         <item>
-            <title><![CDATA[Using Tensorflow and Tensorboard with Docker]]></title>
-            <link>https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker.html</link>
-            <guid>https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker.html</guid>
-        </item>
-        <item>
             <title><![CDATA[How to enable color emoji on Arch Linux with Emoji One Font]]></title>
             <link>https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux.html</link>
             <guid>https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux.html</guid>
+        </item>
+        <item>
+            <title><![CDATA[Using Tensorflow and Tensorboard with Docker]]></title>
+            <link>https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker.html</link>
+            <guid>https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker.html</guid>
         </item>
         <item>
             <title><![CDATA[Installing the GPU version of Tensorflow with Docker on Arch Linux]]></title>
