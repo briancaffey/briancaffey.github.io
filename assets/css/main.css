@@ -227,3 +227,55 @@ hr {
 .hero {
   border-color: var(--color-primary)
 }
+
+
+
+
+.markdown {
+  @apply break-words;
+
+  & h2,
+  & h3 {
+
+    /* Fix anchor scrollTo */
+    &::before {
+      display: block;
+      content: " ";
+      margin-top: -85px;
+      height: 85px;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Style anchor links on headings added by @nuxt/content */
+    &>a {
+      @apply ml-5;
+
+      &::before {
+        content: "#";
+        @apply font-normal text-xl leading-8 -ml-5 pr-2 absolute opacity-100;
+      }
+
+      @screen lg {
+        @apply ml-0;
+
+        &::before {
+          @apply opacity-0;
+        }
+      }
+    }
+
+    &:hover {
+      &>a::before {
+        @apply opacity-100;
+      }
+    }
+  }
+
+}
+
+/* Force style on pre elements */
+& pre[class*="language-"] {
+  /* Make pre static so the relative goes to the parent (.nuxt-content-highlight) */
+  @apply bg-gray-800 static;
+}

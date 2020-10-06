@@ -18,6 +18,9 @@ export default {
    ** See https://nuxtjs.org/api/configuration-head
    */
   head: {
+    htmlAttrs: {
+      lang: 'en',
+    },
     title: 'Brian Caffey',
     meta: [
       { charset: 'utf-8' },
