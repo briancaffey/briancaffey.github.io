@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1601789838",layout:"default",error:null,serverRendered:a,routePath:"\u002F2018\u002F01\u002F02\u002Fchecking-poker-hands-with-python.html",config:{content:{dbHash:"c00b6c4e"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));

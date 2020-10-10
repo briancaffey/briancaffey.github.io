@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1602291974",layout:"default",error:null,serverRendered:a,routePath:"\u002Fblog\u002Ftags\u002Freact",config:{content:{dbHash:"b55ee43e"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
