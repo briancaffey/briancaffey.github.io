@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap">
     <tag
-      v-for="tag in tagCounts()"
+      v-for="tag in tagCounts().slice(0, limit)"
       :key="tag[0]"
       :tag="tag[0]"
       :count="tag[1]"
@@ -15,6 +15,10 @@ export default {
     articles: {
       type: Array,
       default: () => [],
+    },
+    limit: {
+      type: Number,
+      default: Infinity,
     },
   },
   methods: {

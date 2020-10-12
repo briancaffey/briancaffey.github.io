@@ -21,8 +21,13 @@
           </div>
         </div>
         <div>
-          <h2 class="text-2xl pb-4 text-center">Browse blog posts by tag</h2>
-          <tag-cloud :articles="articles" />
+          <h2 class="text-2xl pb-4 text-center">Popular tags</h2>
+          <tag-cloud :articles="articles" :limit="40" />
+          <div class="pt-8 text-center">
+            <nuxt-link to="/blog/tags/" class="p-4 m-4 rounded border btn"
+              >All tags</nuxt-link
+            >
+          </div>
         </div>
       </div>
     </div>

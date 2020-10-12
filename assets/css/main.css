@@ -279,3 +279,23 @@ hr {
   /* Make pre static so the relative goes to the parent (.nuxt-content-highlight) */
   @apply bg-gray-800 static;
 }
+
+
+.mc {
+  background-color: var(--bg);
+  border-color: var(--color-primary);
+  border-width: 1px;
+  color: var(--color-primary);
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.mc-btn {
+  color: var(--bg-secondary);
+  background-color: var(--color-secondary);
+  cursor: pointer;
+}
