@@ -4,10 +4,15 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Sat, 10 Oct 2020 01:06:20 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 12 Oct 2020 02:30:52 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[How to add an email signup form to a Nuxt site with MailChimp]]></title>
+            <link>https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp.html</link>
+            <guid>https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp.html</guid>
+        </item>
         <item>
             <title><![CDATA[Migrating my personal GitHub pages blog from Jekyll to Nuxt]]></title>
             <link>https://briancaffey.github.io/2020/09/17/migrating-from-jekyll-to-nuxt-static-site.html</link>
