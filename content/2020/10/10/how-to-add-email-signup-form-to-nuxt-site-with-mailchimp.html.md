@@ -137,7 +137,10 @@ Next, let's configure the redirect to a custom "Thank you for subscribing page" 
 
 `Audience > Signup forms > Signup forms` and select `Form builder`
 
-On the `Form Builder` menu, select **Confirmation thank you page** from the dropdown menu and enter the URL of the page that you want to redirect to after a user subscribes where it says: `Instead of showing this thank you page, send subscribers to another URL`
+Select **Signup thank you page** from the dropdown menu and add a custom URL that you will show users when they first submit their email to the form.
+
+Next, also on the `Form Builder` menu, select **Confirmation thank you page** from the dropdown menu and enter the URL of the page that you want to redirect to after a user confirms their subscription where it says: `Instead of showing this thank you page, send subscribers to another URL`
+
 
 ## Next Steps
 
