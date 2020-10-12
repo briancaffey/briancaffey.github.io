@@ -18,6 +18,7 @@
         v-if="article.comments === true"
         shortname="briancaffey"
         :identifier="article.disqus_id || article.slug"
+        :key="$colorMode.preference"
       ></disqus>
       <h1></h1>
     </div>
