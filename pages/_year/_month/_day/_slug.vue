@@ -16,9 +16,9 @@
       <Narration :utterance="article.raw" />
       <disqus
         v-if="article.comments === true"
+        :key="$colorMode.preference"
         shortname="briancaffey"
         :identifier="article.disqus_id || article.slug"
-        :key="$colorMode.preference"
       ></disqus>
       <h1></h1>
     </div>
