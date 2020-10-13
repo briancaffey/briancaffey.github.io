@@ -24,7 +24,7 @@
         </a>
       </div>
     </div>
-    <div></div>
+    <div><contact-form /></div>
   </div>
 </template>
 

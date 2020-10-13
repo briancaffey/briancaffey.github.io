@@ -3,9 +3,9 @@
     <!-- Begin Mailchimp Signup Form -->
     <div id="mc_embed_signup" class="mx-auto w-full md:w-1/2">
       <form
+        id="mc-embedded-subscribe-form"
         action="https://github.us2.list-manage.com/subscribe/post?u=43a795784ca963e25903a0da6&amp;id=9937fe4fc5"
         method="post"
-        id="mc-embedded-subscribe-form"
         name="mc-embedded-subscribe-form"
         class="validate"
         target="_blank"
@@ -16,12 +16,12 @@
           class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center"
         >
           <input
+            id="mce-EMAIL"
             type="email"
             value=""
             name="EMAIL"
-            id="mce-EMAIL"
             placeholder="Enter your email address"
-            class="rounded mc"
+            class="rounded mc text-center"
           />
           <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
           <div style="position: absolute; left: -5000px" aria-hidden="true">
@@ -34,10 +34,10 @@
           </div>
           <div class="">
             <input
+              id="mc-embedded-subscribe"
               type="submit"
               value="Subscribe"
               name="subscribe"
-              id="mc-embedded-subscribe"
               class="mc-btn rounded px-2 py-1 w-full"
             />
           </div>
