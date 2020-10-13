@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1602561010",layout:"default",error:null,serverRendered:a,routePath:"\u002F2017\u002F07\u002F19\u002Fdifferent-ways-to-build-friend-models-in-django.html",config:{content:{dbHash:"1f06e358"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
