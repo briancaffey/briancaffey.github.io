@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1602644973",layout:"default",error:null,serverRendered:a,routePath:"\u002F2018\u002F02\u002F21\u002Fubuntu-installation-and-setup-notes.html",config:{content:{dbHash:"a51f50c1"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));

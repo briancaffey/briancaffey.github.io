@@ -1,0 +1,1 @@
+window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1602644973",layout:"default",error:null,serverRendered:a,routePath:"\u002F2017\u002F11\u002F11\u002Fcreating-a-heroku-deploy-button-for-django-template-project.html",config:{content:{dbHash:"a51f50c1"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
