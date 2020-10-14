@@ -292,6 +292,7 @@ hr {
   padding-top: 5px;
   padding-bottom: 5px;
   border-radius: 5px;
+  width: 100%;
 }
 
 .mc-btn {

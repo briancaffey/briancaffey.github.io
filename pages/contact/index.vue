@@ -24,7 +24,10 @@
         </a>
       </div>
     </div>
-    <div><contact-form /></div>
+    <div>
+      <div class="text-2xl font-bold text-center py-4">Contact me</div>
+      <contact-form />
+    </div>
   </div>
 </template>
 
