@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-auto max-w-6xl">
     <h1 class="text-center text-xl py-4">Projects ({{ projects.length }})</h1>
     <div class="lg:px-32 px-2 sm:px-4">
       <ul class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">

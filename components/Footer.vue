@@ -1,7 +1,7 @@
 <template>
-  <div class="p-4 lg:px-16 text-center">
+  <div class="mx-auto max-w-6xl p-4 lg:px-16 text-center">
     <hr class="mt-4" />
-    <div class="mx-auto p-4">
+    <div class="mx-auto py-4">
       <div class="pb-4">
         Join my mailing list to get updated whenever I publish a new article.
       </div>

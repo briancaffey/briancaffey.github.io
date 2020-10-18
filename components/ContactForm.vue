@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto px-4 w-full sm:w-2/3">
+  <div class="mx-auto max-w-6xl px-4 w-full sm:w-2/3 lg:px-16">
     <form
       action="https://formsubmit.co/briancaffey2010@gmail.com"
       method="POST"

@@ -1,5 +1,7 @@
 <template>
-  <div class="grid grid-cols-3 py-2 px-2 sm:px-4 items-center">
+  <div
+    class="mx-auto grid grid-cols-3 py-2 px-2 sm:px-4 items-center max-w-6xl"
+  >
     <div class="justify-left">
       <nuxt-link
         to="/"

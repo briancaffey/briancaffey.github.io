@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-auto max-w-6xl">
     <h1 class="text-center text-xl py-4">Blog Posts ({{ articles.length }})</h1>
     <blog-list :articles="articles" />
   </div>

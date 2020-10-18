@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-auto max-w-6xl">
     <div class="px-4 lg:px-32">
       <div class="sm:p-16 text-center py-4">
         <div class="p-3 rounded border border-white hero">

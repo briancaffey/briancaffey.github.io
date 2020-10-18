@@ -3,6 +3,9 @@ layout: post
 title: Some of the tools and workflows I use for local Django application development
 date: 2020-09-16
 comments: true
+tags:
+  - django
+  - development
 ---
 
 This article will be an overview of some of the tools and workflows I use when developing Django applications locally on my computer.
