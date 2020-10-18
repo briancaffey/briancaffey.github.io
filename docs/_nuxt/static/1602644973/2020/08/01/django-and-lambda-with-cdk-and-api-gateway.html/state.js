@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1602644973",layout:"default",error:null,serverRendered:a,routePath:"\u002F2020\u002F08\u002F01\u002Fdjango-and-lambda-with-cdk-and-api-gateway.html",config:{content:{dbHash:"a51f50c1"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
