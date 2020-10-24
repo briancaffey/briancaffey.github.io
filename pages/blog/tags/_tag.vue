@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mx-auto max-w-6xl">
     <div class="text-xl text-center py-4">
       Blog posts tagged with
       <nuxt-link :to="`/blog/tags/${$route.params.tag}/`">

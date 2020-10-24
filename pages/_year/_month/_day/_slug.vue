@@ -20,7 +20,7 @@
           class="mc-btn rounded py-1 px-2"
           @click="showComments = true"
         >
-          Show Disqus Comments
+          Show Disqus Comments 💬
         </button>
         <button
           v-else
