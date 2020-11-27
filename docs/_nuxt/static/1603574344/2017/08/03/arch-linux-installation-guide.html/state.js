@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1603574344",layout:"default",error:null,serverRendered:a,routePath:"\u002F2017\u002F08\u002F03\u002Farch-linux-installation-guide.html",config:{content:{dbHash:"e52fc9b7"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
