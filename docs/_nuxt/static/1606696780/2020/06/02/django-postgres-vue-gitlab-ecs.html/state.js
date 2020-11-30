@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1606696780",layout:"default",error:null,serverRendered:a,routePath:"\u002F2020\u002F06\u002F02\u002Fdjango-postgres-vue-gitlab-ecs.html",config:{content:{dbHash:"98328db7"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
