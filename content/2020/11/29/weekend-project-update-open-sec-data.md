@@ -1,6 +1,6 @@
 ---
 title: 'Weekend project update: Open SEC Data'
-published: true
+date: 2020-11-29
 description: This project uses Django, DRF and Celery to read public SEC filings from sec.gov, build it into an API which is consumed through a Vue.js application.
 image: /static/sec-update.jpg
 tags:
