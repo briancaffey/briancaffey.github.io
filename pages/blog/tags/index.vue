@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="mx-auto max-w-6xl">
     <div class="text-xl text-center py-4">
       All tags
-      <div class="mx-auto w-full md:w-1/2 mt-4 p-4">
+      <div class="mt-4 p-4">
         <tag-cloud :articles="articles" />
       </div>
     </div>
