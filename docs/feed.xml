@@ -4,10 +4,21 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Fri, 27 Nov 2020 07:28:23 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 30 Nov 2020 00:36:23 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Weekend project update: Open SEC Data]]></title>
+            <link>https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data</link>
+            <guid>https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data</guid>
+            <description><![CDATA[This project uses Django, DRF and Celery to read public SEC filings from sec.gov, build it into an API which is consumed through a Vue.js application.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Open SEC Data: A web app and API for processing 13F Filing data from SEC.gov]]></title>
+            <link>https://briancaffey.github.io/projects/sec-filing-data-project</link>
+            <guid>https://briancaffey.github.io/projects/sec-filing-data-project</guid>
+        </item>
         <item>
             <title><![CDATA[How to authenticate Django REST Framework API calls from a (Vue) JS client using Session Authentication and HttpOnly cookies]]></title>
             <link>https://briancaffey.github.io/2020/11/27/how-to-authenticate-django-rest-framework-from-vue-app-with-session-authentication-httponly-cookies</link>
