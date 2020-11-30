@@ -1,12 +1,12 @@
 ---
 layout: project
-title: "Open SEC Data"
+title: "Open SEC Data: A web app and API for processing 13F Filing data from SEC.gov"
 comments: true
 permalink: /projects/six-degrees-of-subreddits
 github: briancaffey/sec-filings-app
 image: /static/sec.jpg
 link: /2020/11/29/weekend-project-update-open-sec-data
-date: 2017-03-03
+date: 2020-11-29
 ---
 
 
