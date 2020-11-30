@@ -11,7 +11,7 @@ tags:
   - scraping
 ---
 
-**Update**: This project has been updated, please see [this article](2020/11/29/weekend-project-update-open-sec-data) to read about the most recent updates.
+**Update**: This project has been updated, please see [this article](/2020/11/29/weekend-project-update-open-sec-data) to read about the most recent updates.
 
 - [https://opensecdata.ga](https://opensecdata.ga) (project staging website, deployed to docker swarm cluster running on DigitalOcean)
 - [https://gitlab.com/briancaffey/sec-filings-app](https://gitlab.com/briancaffey/sec-filings-app) (main repository, requires GitLab account)
