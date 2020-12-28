@@ -13,7 +13,7 @@ tags:
 
 Over the holidays between lots of big meals and many naps, I tried to tackle one more goal of mine before this year come to an end: building an application with Django and Nuxt.js.
 
-This year I rebuilt my personal blog ([briancaffey.github.io](https://briancaffey.github.io/)) with Nuxt.js, the `@nuxt/content` headless git-based CMS and TailwindCSS. It is statically generated with Nuxt's full-static mode and has been really enjoyable to work with. I have also learned a lot more about SEO and how Nuxt helps improve Vue applications' SEO. I have also been working a lot with Django and Vue.js applications where Django serves as an API to a Vue.js SPA. This combinatoin of technologies works well for a lot of use cases, but it falls short in SEO. Nuxt also provides a great way to organize large Vue.js projects which I have been finding very helpful. For these reasons, combining Django and Nuxt has been something that I have wanted to try for a while, so this article will share some of my experiences in recent efforts to build with these two frameworks. I took [detailed notes of each step of the project setup](https://gitlab.com/briancaffey/django-nuxt-starter/-/blob/develop/STEP_BY_STEP.md) starting from an empty repository, and I put together a diagram of my understanding of how data flows in the application.
+This year I rebuilt my personal blog ([briancaffey.github.io](https://briancaffey.github.io/)) with Nuxt.js, the `@nuxt/content` headless git-based CMS and TailwindCSS. It is statically generated with Nuxt's full-static mode and has been really enjoyable to work with. I have also learned a lot more about SEO and how Nuxt helps improve Vue applications' SEO. I have also been working a lot with Django and Vue.js applications where Django serves as an API to a Vue.js SPA. This combination of technologies works well for a lot of use cases, but it falls short in SEO. Nuxt also provides a great way to organize large Vue.js projects which I have been finding very helpful. For these reasons, combining Django and Nuxt has been something that I have wanted to try for a while, so this article will share some of my experiences in recent efforts to build with these two frameworks. I took [detailed notes of each step of the project setup](https://gitlab.com/briancaffey/django-nuxt-starter/-/blob/develop/STEP_BY_STEP.md) starting from an empty repository, and I put together a diagram of my understanding of how data flows in the application.
 
 Here's the link to the project repository that I'll be referencing: [https://gitlab.com/briancaffey/django-nuxt-starter](https://gitlab.com/briancaffey/django-nuxt-starter)
 
@@ -23,9 +23,9 @@ This article will focus on explaining the project through the diagram shown belo
 
 ## Diagram components
 
-A. Your computer - Possibly also your development machine which is runnig the application in docker containers with docker-compose.
+A. Your computer - Possibly also your development machine which is running the application in docker containers with docker-compose.
 
-B. NGINX - This is the "front desk" of the application that does a few different things. It is the first component that web requests come to. It serves as a reverse proxy which does path-based routing. It looks at the URL request and determins where to send it. For example: `/api/posts/1`, `/dashboard/`, `/admin/` could all be routed differently depending on the NGINX configuration file. We will look at this again in the next section. This  component, like most of the other things in the diagram, runs in a container. NGINX can also serve static files for our Django app and do TLS termination to make our application available over a secure HTTPS connection.
+B. NGINX - This is the "front desk" of the application that does a few different things. It is the first component that web requests come to. It serves as a reverse proxy which does path-based routing. It looks at the URL request and determines where to send it. For example: `/api/posts/1`, `/dashboard/`, `/admin/` could all be routed differently depending on the NGINX configuration file. We will look at this again in the next section. This  component, like most of the other things in the diagram, runs in a container. NGINX can also serve static files for our Django app and do TLS termination to make our application available over a secure HTTPS connection.
 
 C. Nuxt.JS server - The first "S" in SSR (server side rendering). It is a Node.js process that renders HTML from Vue components that we define in our Nuxt app, as well as data fetched from other servers/APIs before returning HTML back to the client.
 
@@ -35,7 +35,7 @@ E. Django REST Framework is a Django package the facilitates the creation of RES
 
 F. This is the Postgres database, also a containerized service. It is on the same docker network as the Django/gunicorn application, so the Django application can connect to the Postgres database using the hostname `postgres`.
 
-G. docker-compose is used to orchesrate the docker network, containers and volumes that make up the application.
+G. docker-compose is used to orchestrate the docker network, containers and volumes that make up the application.
 
 H. This box represents the docker network that allows for easy networking between services. We will come back to this the significance of this in the next section.
 
@@ -52,7 +52,7 @@ The data flow shown here will walk through what happens when a user visits `http
 
 2. As we mentioned earlier, NGINX's path-based routing sends all requests that do not start with `/api/*` or `/admin/*` to the Nuxt.js server.
 
-3. When the request gets to the Nuxt server, the Nuxt lifecycle methods start. The important one that I'm using so far is `asyncData`. This property is used to request data that will be used in the rendering of our HTML respnse.
+3. When the request gets to the Nuxt server, the Nuxt lifecycle methods start. The important one that I'm using so far is `asyncData`. This property is used to request data that will be used in the rendering of our HTML response.
 
 4. Inside of `asyncData`, the application uses axios to make a request to `/api/posts/` (for example). In `nuxt.config.js`, the `privateRuntimeConfig` sets a baseUrl value for axios to `http://backend:8000`. Since the Nuxt server is on the same docker network as the backend Django/gunicorn server, the Nuxt server is able to resolve `http://backend` to the address of the backend server.
 
@@ -86,6 +86,6 @@ Their entire product is open source and I have been very impressed with what I h
 
 There is a still a lot I have to learn about Nuxt. I'm still very new to the Framework and this is my first time using Nuxt's SSR mode. Nuxt seems to have its own way of doing lots of things that I'm used to doing in Vue. There is a very supportive community and well-maintained official packages to help with lots of things, like the `@nuxt/axios` package that I'm using.
 
-My next step is to keep expanding my blog application. One thing I didn't mention is authentication. I plan on using Django session authentication for authenticating request to Django. It seems that it already works correctly in my application (logging in through Django admin and then navigating to Nuxt routes that make Django requests are working only when I'm logged in.) I think I have an idea about how Vuex, authentication and route guards will work together, but I haven't gottent then yet. If anyone has some good reference projects or recommendations on how to expand on what I already have, please let me know!
+My next step is to keep expanding my blog application. One thing I didn't mention is authentication. I plan on using Django session authentication for authenticating request to Django. It seems that it already works correctly in my application (logging in through Django admin and then navigating to Nuxt routes that make Django requests are working only when I'm logged in.) I think I have an idea about how Vuex, authentication and route guards will work together, but I haven't gotten there yet. If anyone has some good reference projects or recommendations on how to expand on what I already have, please let me know!
 
-I know that Nuxt has an auth module, so I need to see if that is relevant for what I want need in my application. I also need to contuniue reading the Nuxt documentation. I still don't know what I don't know about Nuxt and the plugins and modules that it makes available. I also noticed that Nuxt has it's own version of the Vue 3 Composition API, something I am just now starting to learn more about, so that it another area I'll need to dig into eventually.
+I know that Nuxt has an auth module, so I need to see if that is relevant for what I want need in my application. I also need to continue reading the Nuxt documentation. I still don't know what I don't know about Nuxt and the plugins and modules that it makes available. I also noticed that Nuxt has it's own version of the Vue 3 Composition API, something I am just now starting to learn more about, so that it another area I'll need to dig into eventually.
