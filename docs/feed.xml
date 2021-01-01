@@ -4,10 +4,16 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Mon, 28 Dec 2020 04:16:56 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 01 Jan 2021 19:42:10 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Session Authentication with Django, Django REST Framework and Nuxt]]></title>
+            <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
+            <guid>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
+            <description><![CDATA[This article shows how to use session authentication with Django + Nuxt.js applications]]></description>
+        </item>
         <item>
             <title><![CDATA[Building web applications with Django, Django REST Framework, Nuxt.js and docker]]></title>
             <link>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</link>

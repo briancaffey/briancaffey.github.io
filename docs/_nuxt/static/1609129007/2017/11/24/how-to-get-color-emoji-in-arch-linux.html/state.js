@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1609129007",layout:"default",error:null,serverRendered:a,routePath:"\u002F2017\u002F11\u002F24\u002Fhow-to-get-color-emoji-in-arch-linux.html",config:{content:{dbHash:"429fadf8"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
