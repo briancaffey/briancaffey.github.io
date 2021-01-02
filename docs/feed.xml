@@ -4,7 +4,7 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Fri, 01 Jan 2021 23:59:41 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 02 Jan 2021 14:23:48 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
@@ -25,12 +25,6 @@
             <link>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</link>
             <guid>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</guid>
             <description><![CDATA[This article documents my progress combining the Django web framework with Nuxt JS to build applications that have both great SEO and a smooth SPA user experience.]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Using the Stripe API for monthly SaaS subscriptions in applications built with Django and Vue.js]]></title>
-            <link>https://briancaffey.github.io/2020/12/23/using-stripe-for-monthly-saas-subscription-in-django-vue-app</link>
-            <guid>https://briancaffey.github.io/2020/12/23/using-stripe-for-monthly-saas-subscription-in-django-vue-app</guid>
-            <description><![CDATA[This article shows how to use the Stripe API for enabling a monthly subscription service in applications built with Django and Vue.js]]></description>
         </item>
         <item>
             <title><![CDATA[Weekend project update: Open SEC Data]]></title>

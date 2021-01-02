@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a,b){return {staticAssetsBase:"\u002F_nuxt\u002Fstatic\u002F1609545573",layout:"default",error:null,serverRendered:a,routePath:"\u002F2018\u002F01\u002F30\u002Freading-13f-sec-filings-with-python.html",config:{content:{dbHash:"3757cb7a"}},colorMode:{preference:b,value:b,unknown:a}}}(true,"system"));
