@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/blog/tags/development", {data:[{articles:[{title:"Some of the tools and workflows I use for local Django application development",date:"2020-09-16T00:00:00.000Z",tags:["django","development"],path:"\u002F2020\u002F09\u002F16\u002Ftools-for-developing-django-apps-locally.html",slug:"tools-for-developing-django-apps-locally.html"}]}],fetch:[],mutations:void 0});

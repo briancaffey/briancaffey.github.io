@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/jp/blog/tags/sec", {data:[{articles:[{title:"Reading 13F SEC filings with python",date:"2018-01-30T00:00:00.000Z",image:"\u002Fstatic\u002Fsec.jpg",tags:["sec","python","data","scraping"],path:"\u002F2018\u002F01\u002F30\u002Freading-13f-sec-filings-with-python.html",slug:"reading-13f-sec-filings-with-python.html"}]}],fetch:[],mutations:void 0});

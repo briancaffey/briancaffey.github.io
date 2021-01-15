@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/jp/blog/tags/react", {data:[{articles:[{title:"Simple Board Games in ReactJS",date:"2017-10-03T00:00:00.000Z",image:"\u002Fimg\u002Fwuziqi.png",tags:["react"],path:"\u002F2017\u002F10\u002F03\u002Fsimple-games-in-react.html",slug:"simple-games-in-react.html"}]}],fetch:[],mutations:void 0});

@@ -4,10 +4,16 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Sat, 09 Jan 2021 14:44:40 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 15 Jan 2021 05:58:31 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Adding internationalization to a statically generated Nuxt site]]></title>
+            <link>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</link>
+            <guid>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</guid>
+            <description><![CDATA[This article will summarize my experience implementing internationalization (i18n) for a statically-generated Nuxt.js site]]></description>
+        </item>
         <item>
             <title><![CDATA[Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application]]></title>
             <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
