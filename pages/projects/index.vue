@@ -1,6 +1,8 @@
 <template>
   <div class="mx-auto max-w-6xl">
-    <h1 class="text-center text-xl py-4">Projects ({{ projects.length }})</h1>
+    <h1 class="text-center text-xl py-4">
+      {{ $t('projects.projects') }} ({{ projects.length }})
+    </h1>
     <div class="lg:px-32 px-2 sm:px-4">
       <ul class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
         <nuxt-link
@@ -23,7 +25,8 @@
               <h2 class="text-2xl leading-8">{{ project.title }}</h2>
               <p>{{ project.description }}</p>
               <p class="text-gray-600 mb-4">
-                Last updated: {{ formatDate(project.date) }}
+                {{ $t('common.lastUpdated') }}
+                {{ project.date | formatDate($i18n.locale) }}
               </p>
             </div>
           </li>

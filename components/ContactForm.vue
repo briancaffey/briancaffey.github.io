@@ -11,7 +11,7 @@
             <span class="text-red-600">*</span></label
           >
           <input
-            placeholder="J. Appleseed"
+            :placeholder="$t('contactForm.sampleName')"
             type="text"
             name="name"
             required
@@ -21,7 +21,7 @@
         <div>
           <label for="name">{{ $t('contactForm.yourEmail') }}</label>
           <input
-            placeholder="j.appleseed@email.com"
+            :placeholder="$t('contactForm.sampleEmail')"
             type="email"
             name="email"
             required
@@ -31,7 +31,7 @@
         <div>
           <label for="website">{{ $t('contactForm.yourWebsite') }}</label>
           <input
-            placeholder="https://appleseed.co"
+            :placeholder="$t('contactForm.sampleWebsite')"
             type="url"
             name="website"
             class="mc"

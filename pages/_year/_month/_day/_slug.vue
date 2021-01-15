@@ -9,7 +9,8 @@
       <h1 class="prose text-3xl leading-9">{{ article.title }}</h1>
       <tags v-if="article.tags" :tags="article.tags" />
       <p class="text-gray-500 mb-4">
-        Last updated: {{ formatDate(article.date) }}
+        {{ $t('common.lastUpdated') }}
+        {{ article.date | formatDate($i18n.locale) }}
       </p>
       <nuxt-content class="markdown" :document="article" />
 

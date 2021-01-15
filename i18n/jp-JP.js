@@ -34,5 +34,15 @@ module.exports = {
       'メーリングリストに参加して、新しい記事を公開するたびに更新してください。',
     enterEmail: 'Eメール',
     subscribe: '申し込む',
+    thankYou: '登録ありがとうございます！',
+  },
+  projects: {
+    projects: 'プロジェクト',
+  },
+  blog: {
+    blogPosts: 'ブログ投稿',
+  },
+  tags: {
+    allTags: 'すべてのタグ',
   },
 }

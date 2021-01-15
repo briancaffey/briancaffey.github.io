@@ -6,7 +6,8 @@
       <img :src="project.image" class="h-64 w-full object-cover rounded" />
       <h1 class="prose text-3xl">{{ project.title }}</h1>
       <p class="text-gray-500 mb-4">
-        Last updated: {{ formatDate(project.date) }}
+        {{ $t('common.lastUpdated') }}
+        {{ project.date | formatDate($i18n.locale) }}
       </p>
       <h1 class="text-xl">
         <a v-if="project.link" :href="project.link">GitHub Link 🔗</a>

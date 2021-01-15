@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed bg-white shadow left-0 bottom-0 rounded-full p-4 m-4 cursor-pointer h-2 w-2"
+    class="fixed bg-white shadow left-0 bottom-0 rounded-full p-4 m-4 cursor-pointer h-4 w-4"
     @click="speak"
   >
     <span class="text-black"> 🗣 </span>

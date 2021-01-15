@@ -4,10 +4,12 @@ layout: post
 title: Detailed setup of a mini Django News App project with Bootstrap, AJAX, Celery and RabbitMQ
 date: 2018-02-09
 comments: true
+tags:
+  - django
 
 ---
 
-The Django project started in the news room. This article will offer detailed documentation of the setup process for a simple news application. This project was given as a takehome assignment for another Django position I am interview for. I won't focus on any production considerations as this is only a demo project that is supposed to work locally. 
+The Django project started in the news room. This article will offer detailed documentation of the setup process for a simple news application. This project was given as a takehome assignment for another Django position I am interview for. I won't focus on any production considerations as this is only a demo project that is supposed to work locally.
 
 For reference, the code is on [this Github repository](https://github.com/briancaffey/django-news-app).
 
@@ -19,28 +21,28 @@ This project included some interesting requirements that were outside of the sco
 - Display published posts on a page styled with Bootstrap
 - Implement and admin page that allows staff to create and publish posts
 - Cache the public facing home page
-- On the home page use jQuery to poll a URL for updates, and refresh the page if an update is found. 
+- On the home page use jQuery to poll a URL for updates, and refresh the page if an update is found.
 - Add a button on the public facing page that when pressed launches a celery task that send an email to the site admin.
 
 ## Release Notes and code snippets
 
-Here's a quick description of the design decisions I made for the various specifications with code snippets: 
+Here's a quick description of the design decisions I made for the various specifications with code snippets:
 
 #### Post Model
 
-For the Post model I decided to use two DateTimeFields: `updated` and `timestamp`. `timestamp` is the public-facing time that shows on each article. `updated` is changed when a publish or unpublish action is taken on a Post. 
+For the Post model I decided to use two DateTimeFields: `updated` and `timestamp`. `timestamp` is the public-facing time that shows on each article. `updated` is changed when a publish or unpublish action is taken on a Post.
 
 When a `POST` request is made to the `toggle_publish` view, three things happen:
 
-- The Post's `published` field is toggled and the Post's `updated` field is set to the current time. 
+- The Post's `published` field is toggled and the Post's `updated` field is set to the current time.
 
-- The only record in `LastUpdate` is updated. This model only contains a `DateTimeField` also called `updated`. 
+- The only record in `LastUpdate` is updated. This model only contains a `DateTimeField` also called `updated`.
 
-- The cache is cleared, clearing any pages cached from the `home` view. 
+- The cache is cleared, clearing any pages cached from the `home` view.
 
 #### Home Page
 
-For the public facing home page, I return a list of Posts where `published` is set to `True` and also return a UNIX time epoch of the Post with the most recent `updated` field. 
+For the public facing home page, I return a list of Posts where `published` is set to `True` and also return a UNIX time epoch of the Post with the most recent `updated` field.
 
 *views.py*
 
@@ -48,10 +50,10 @@ For the public facing home page, I return a list of Posts where `published` is s
 @cache_page(None)
 def home(request):
     """
-    This is the public view that displays only published posts. 
+    This is the public view that displays only published posts.
     The view also returns a UNIX timestamp of the most recently updated post.
     This timestamp is compared with the `LastUpdate` value to determine when the page should be refreshed.
-    Every 5 seconds, the `latest` timestamp is compared with the `LastUpdate` timestamp. 
+    Every 5 seconds, the `latest` timestamp is compared with the `LastUpdate` timestamp.
     If `LastUpdate` is greater that `latest`, this implies that a Post has either been published or unpublished.
     """
 
@@ -65,7 +67,7 @@ def home(request):
 
 #### AJAX poll on home page
 
-I use an AJAX poll that returns a JSON response containing the `updated` field of `LastUpdate` as a UNIX time epoch called `latest`. I compare this UNIX time epoch with the the UNIX time epoch returned with context data in `home`. If the `latest` value is greater than the the UNIX time stamp of the most recently updated article, then the page is reloaded. At this point, the cache will have been cleared by `toggle_publish`, and the new Posts are displayed. 
+I use an AJAX poll that returns a JSON response containing the `updated` field of `LastUpdate` as a UNIX time epoch called `latest`. I compare this UNIX time epoch with the the UNIX time epoch returned with context data in `home`. If the `latest` value is greater than the the UNIX time stamp of the most recently updated article, then the page is reloaded. At this point, the cache will have been cleared by `toggle_publish`, and the new Posts are displayed.
 
 *home.html* (AJAX poll)
 
@@ -101,13 +103,13 @@ I use an AJAX poll that returns a JSON response containing the `updated` field o
 def refresh(request):
     """
     This is the URL that is polled by the public-facing page.
-    It returns a UNIX timestamp of the last time an article was published or unpublished. 
+    It returns a UNIX timestamp of the last time an article was published or unpublished.
     This timestamp comes from the `LastUpdated`, a table that stores and updates only one row with one datetime column.
-    Publishing and unpublishing are the only two actions that clear the cached homepage. 
+    Publishing and unpublishing are the only two actions that clear the cached homepage.
     When the returned UNIX timestamp is greater than the UNIX timestamp of the most recently updated article,
     The page is refreshed with `location.reload()`.
     """
-    
+
     t, created = LastUpdate.objects.get_or_create(id=1)
     if created:
         t.save()
@@ -120,17 +122,17 @@ def refresh(request):
 
 #### Email admin through a celery task
 
-The email feature is functional, but the button returns a JSON response that says "successful" if the message was sent to celery. My plan was to make another AJAX call and then updated the `Email Admin` link to say `Your email was sent.` if it the task was sent the messaging service. 
+The email feature is functional, but the button returns a JSON response that says "successful" if the message was sent to celery. My plan was to make another AJAX call and then updated the `Email Admin` link to say `Your email was sent.` if it the task was sent the messaging service.
 
 For details on how celery can be set up with a Django project, I reference on of my favorite Django blogs, [simpleisbetterthancomplex.com](https://simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html). This article shows how to set up celery in a Django project and my set up almost exactly mirrors this setup, but my celery task simply sends an email.
 
 #### Admin Page
 
-The admin page contains a list of all articles. Each article contains a link to manage publish settings. This calls the `toggle_publish` page that displays the selected article and contains a button that says `Publish` or `Unpublish` depending on the value of the Post's `published` value. 
+The admin page contains a list of all articles. Each article contains a link to manage publish settings. This calls the `toggle_publish` page that displays the selected article and contains a button that says `Publish` or `Unpublish` depending on the value of the Post's `published` value.
 
 #### Cache
 
-For caching I chose the memcached backend. Other options included using file caching and database caching, but this seemed to be the simplest approach. I used a decorator function to cache the results of the `home` view. 
+For caching I chose the memcached backend. Other options included using file caching and database caching, but this seemed to be the simplest approach. I used a decorator function to cache the results of the `home` view.
 
 Here are some additional notes on how I used caching in this project:
 
@@ -142,9 +144,9 @@ def home(request):
     [...]
 ```
 
-- We pass the argument of `None` so that the page cache does not expire; we will manually clear the cache when a staff member publishes an article. 
+- We pass the argument of `None` so that the page cache does not expire; we will manually clear the cache when a staff member publishes an article.
 
-- The first time we access the `home` view, we will see our print statement, in subsequent requests, the cached page will be used and we will not see the print statement. 
+- The first time we access the `home` view, we will see our print statement, in subsequent requests, the cached page will be used and we will not see the print statement.
 
 In order for caching to work we need to add the following to `settings.py`:
 
@@ -160,7 +162,7 @@ CACHES = {
 Next, we need to install the following packages:
 
 ```
-(virtualenv) $ pip install memcache 
+(virtualenv) $ pip install memcache
 # pacman -S memcached
 # systemctl start memcached
 # systemctl enable memcached
@@ -168,7 +170,7 @@ Next, we need to install the following packages:
 
 ##### Clearing the cache
 
-To clear the cache, we can simply do the following in a view: 
+To clear the cache, we can simply do the following in a view:
 
 ```python
 from django.core.cache import cache
@@ -193,25 +195,25 @@ def toggle_publish(request,id):
     return render(request, 'posts/publish.html', context)
 ```
 
-`cache.clear()` clears the cache, and the `home` view is regenerated from the Queryset and template rather the being served directly from the cache. This newly generated page is then saved to the cache and used on subsequent calls to `home` until the cache is cleared again. 
+`cache.clear()` clears the cache, and the `home` view is regenerated from the Queryset and template rather the being served directly from the cache. This newly generated page is then saved to the cache and used on subsequent calls to `home` until the cache is cleared again.
 
 ## Basic setup
 
 Here are the first steps need to set up the project correctly:
 
-First, let's start with creating a virtual environment: 
+First, let's start with creating a virtual environment:
 
 ```
 $ virtualenv -p python3 virtualenv
 ```
 
-Next, let's activate the virtual environment with: 
+Next, let's activate the virtual environment with:
 
 ```
 $ source virtualenv/bin/activate
 ```
 
-Next, let's install `django` and `selenium`: 
+Next, let's install `django` and `selenium`:
 
 ```
 (virtualenv) $ pip install django selenium
@@ -223,7 +225,7 @@ Next, let's start our app:
 (virtualenv) $ django-admin.py startproject news .
 ```
 
-The `.` will start the project in the current environment. Let's take a look at the directory structure: 
+The `.` will start the project in the current environment. Let's take a look at the directory structure:
 
 ```
 (virtualenv) $ tree -L 2
@@ -243,7 +245,7 @@ The `.` will start the project in the current environment. Let's take a look at 
     └── selenium
 ```
 
-At this point, we can start the local server: 
+At this point, we can start the local server:
 
 ```
 (virtualenv) $ python manage.py runserver
@@ -369,6 +371,6 @@ if __name__ == "__main__":
     unittest.main(warnings="ignore")
 ```
 
-I used the package called `factory_boy` to setup create a user that I could use in my test. This project didn't include a staff registration page, so to test regular staff functionality I used `factory` to create a dummy user that can login and perform tasks. 
+I used the package called `factory_boy` to setup create a user that I could use in my test. This project didn't include a staff registration page, so to test regular staff functionality I used `factory` to create a dummy user that can login and perform tasks.
 
 For the full repo, please find it on my github account: [https://github.com/briancaffey/django-news-app](https://github.com/briancaffey/django-news-app).

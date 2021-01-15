@@ -5,6 +5,8 @@ module.exports = {
     contact: 'Contact',
   },
   home: {
+    allTags: 'Tous les tags',
+    allArticles: 'Tous les articles du blog',
     tags: 'Tags populaires',
     blogPost: 'Mon dernier article de blog',
     welcome:
@@ -14,7 +16,7 @@ module.exports = {
     name: 'Brian Caffey',
   },
   footer: {
-    thanks: 'Thanks for checking out my site!',
+    thanks: "Merci d'avoir visiter mon site !",
   },
   contactForm: {
     contactMe: 'Contact',
@@ -22,15 +24,25 @@ module.exports = {
     sampleName: 'J. Appleseed',
     yourEmail: 'Courriel',
     sampleEmail: 'jappleseed@appleseed.co',
-    yourWebsite: 'Your Website',
+    yourWebsite: 'Votre site web',
     sampleWebsite: 'https://appleseed.co',
     message: 'Message',
-    sampleMessage: 'Type your message here',
+    sampleMessage: 'Ecrivez votre message ici',
     send: 'Envoyer',
   },
   newsletter: {
     joinNewsletter: 'Abonnez-vous à mon newsletter',
     enterEmail: 'Adresse e-mail',
     subscribe: "S'inscrire",
+    thankYou: 'Merci de vous être abonné !',
+  },
+  projects: {
+    projects: 'Projets',
+  },
+  blog: {
+    blogPosts: 'Articles du blog',
+  },
+  tags: {
+    allTags: 'Tous les tags',
   },
 }

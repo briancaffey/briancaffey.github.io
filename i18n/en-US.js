@@ -15,6 +15,7 @@ module.exports = {
   },
   common: {
     name: 'Brian Caffey',
+    lastUpdated: 'Last Updated on',
   },
   footer: {
     thanks: 'Thanks for checking out my site!',
@@ -36,5 +37,15 @@ module.exports = {
       'Join my mailing list to get updated whenever I publish a new article.',
     enterEmail: 'Enter your email address',
     subscribe: 'Subscribe',
+    thankYou: 'Thank you for subscribing!',
+  },
+  projects: {
+    projects: 'Projects',
+  },
+  blog: {
+    blogPosts: 'Blog Posts',
+  },
+  tags: {
+    allTags: 'All tags',
   },
 }
