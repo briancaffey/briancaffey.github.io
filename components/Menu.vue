@@ -3,23 +3,23 @@
     <ul class="items-right justify-end hidden md:flex">
       <li class="px-4">
         <nuxt-link
-          to="/blog"
-          :class="$route.path.startsWith('/blog') ? 'font-bold' : ''"
-          >Blog</nuxt-link
+          :to="localePath('blog')"
+          :class="$route.name.startsWith('blog') ? 'font-bold' : ''"
+          >{{ $t('nav.blog') }}</nuxt-link
         >
       </li>
       <li class="px-4">
         <nuxt-link
-          to="/projects"
-          :class="$route.path.startsWith('/projects') ? 'font-bold' : ''"
-          >Projects</nuxt-link
+          :to="localePath('projects')"
+          :class="$route.name.startsWith('projects') ? 'font-bold' : ''"
+          >{{ $t('nav.projects') }}</nuxt-link
         >
       </li>
       <li class="px-4">
         <nuxt-link
-          to="/contact"
-          :class="$route.path.startsWith('/contact') ? 'font-bold' : ''"
-          >Contact</nuxt-link
+          :to="localePath('contact')"
+          :class="$route.name.startsWith('contact') ? 'font-bold' : ''"
+          >{{ $t('nav.contact') }}</nuxt-link
         >
       </li>
     </ul>

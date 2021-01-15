@@ -6,7 +6,12 @@
         <nuxt-link
           v-for="project of projects"
           :key="project.slug"
-          :to="{ name: 'projects-slug', params: { slug: project.slug } }"
+          :to="
+            localePath({
+              name: 'projects-slug',
+              params: { slug: project.slug },
+            })
+          "
         >
           <li class="rounded article-card">
             <img

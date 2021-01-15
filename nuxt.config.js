@@ -74,6 +74,7 @@ export default {
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     '@nuxtjs/sitemap',
     '@nuxtjs/feed',
+    'nuxt-i18n',
   ],
   /*
    ** Axios module configuration
@@ -186,5 +187,59 @@ export default {
         component: resolve(__dirname, 'pages/_year/_month/_day/_slug.vue'),
       })
     },
+  },
+  i18n: {
+    vueI18n: {
+      fallbackLocale: 'en',
+    },
+    defaultLocale: 'en',
+    parsePages: false,
+    detectBrowserLanguage: false,
+    seo: false,
+    lazy: true,
+    vuex: {
+      moduleName: 'i18n',
+      syncLocale: false,
+      syncMessages: false,
+      syncRouteParams: true,
+    },
+    langDir: 'i18n/',
+    locales: [
+      {
+        code: 'en',
+        iso: 'en-US',
+        file: 'en-US.js',
+        name: 'English',
+        flag: '🇺🇸',
+      },
+      {
+        code: 'fr',
+        iso: 'fr-FR',
+        file: 'fr-FR.js',
+        name: 'Français',
+        flag: '🇫🇷',
+      },
+      {
+        code: 'zh',
+        iso: 'zh-ZH',
+        file: 'zh-ZH.js',
+        name: '简体中文',
+        flag: '🇨🇳',
+      },
+      {
+        code: 'ru',
+        iso: 'ru-RU',
+        file: 'ru-RU.js',
+        name: 'Русский',
+        flag: '🇷🇺',
+      },
+      {
+        code: 'jp',
+        iso: 'jp-JP',
+        file: 'jp-JP.js',
+        name: '日本語',
+        flag: '🇯🇵',
+      },
+    ],
   },
 }

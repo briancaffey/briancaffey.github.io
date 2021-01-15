@@ -25,7 +25,9 @@
       </div>
     </div>
     <div>
-      <div class="text-2xl font-bold text-center py-4">Contact me</div>
+      <div class="text-2xl font-bold text-center py-4">
+        {{ $t('contactForm.contactMe') }}
+      </div>
       <contact-form />
     </div>
   </div>

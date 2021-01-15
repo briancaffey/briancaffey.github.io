@@ -4,17 +4,18 @@
   >
     <div class="justify-left">
       <nuxt-link
-        to="/"
+        :to="localePath('/')"
         class="text-xl"
-        :class="$route.path === '/' ? 'font-bold' : ''"
-        ><span class="hidden sm:inline">Brian Caffey</span
+        :class="$route.name.startsWith('index') ? 'font-bold' : ''"
+        ><span class="hidden sm:inline">{{ $t('common.name') }}</span
         ><span class="inline sm:hidden">JBC</span></nuxt-link
       >
     </div>
-    <div class="justify-center">
+    <div class="justify-center flex">
       <ColorModePicker />
     </div>
-    <div class="flex justify-end">
+    <div class="flex justify-end relative">
+      <locale-picker /> &nbsp;
       <Menu />
     </div>
   </div>

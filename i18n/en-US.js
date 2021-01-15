@@ -1,0 +1,40 @@
+module.exports = {
+  nav: {
+    home: 'Home',
+    blog: 'Blog',
+    projects: 'Projects',
+    contact: 'Contact',
+  },
+  home: {
+    allTags: 'All Tags',
+    allArticles: 'All Posts',
+    tags: 'Popular tags',
+    blogPost: 'My latest blog post',
+    welcome:
+      "Welcome to Brian Caffey's personal website. This site is mostly a blog about software engineering as well as some of my other hobbies and interests.",
+  },
+  common: {
+    name: 'Brian Caffey',
+  },
+  footer: {
+    thanks: 'Thanks for checking out my site!',
+  },
+  contactForm: {
+    contactMe: 'Contact Me',
+    yourName: 'Your Name',
+    sampleName: 'J. Appleseed',
+    yourEmail: 'Your Email',
+    sampleEmail: 'jappleseed@appleseed.co',
+    yourWebsite: 'Your Website',
+    sampleWebsite: 'https://appleseed.co',
+    message: 'Message',
+    sampleMessage: 'Type your message here',
+    send: 'Send',
+  },
+  newsletter: {
+    joinNewsletter:
+      'Join my mailing list to get updated whenever I publish a new article.',
+    enterEmail: 'Enter your email address',
+    subscribe: 'Subscribe',
+  },
+}

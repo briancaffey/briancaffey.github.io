@@ -3,19 +3,32 @@
     class="fixed inset-0 z-10 opacity-30 justify-center mobile-menu items-center pt-16 transition-all duration-150 delay-150"
   >
     <nav>
-      <ul class="text-center flex-wrap" @click="$emit('toggle')">
+      <ul class="text-center flex-wrap">
         <li>
-          <nuxt-link to="/">Home</nuxt-link>
+          <nuxt-link :to="localePath('index')" @click.native="$emit('toggle')"
+            >Home</nuxt-link
+          >
         </li>
         <li>
-          <nuxt-link to="/blog">Blog</nuxt-link>
+          <nuxt-link :to="localePath('blog')" @click.native="$emit('toggle')">{{
+            $t('nav.blog')
+          }}</nuxt-link>
         </li>
         <li>
-          <nuxt-link to="/projects">Projects</nuxt-link>
+          <nuxt-link
+            :to="localePath('projects')"
+            @click.native="$emit('toggle')"
+            >{{ $t('nav.projects') }}</nuxt-link
+          >
         </li>
         <li>
-          <nuxt-link to="/contact">Contact</nuxt-link>
+          <nuxt-link
+            :to="localePath('contact')"
+            @click.native="$emit('toggle')"
+            >{{ $t('nav.contact') }}</nuxt-link
+          >
         </li>
+        <locale-picker />
       </ul>
     </nav>
     <button

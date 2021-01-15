@@ -3,12 +3,12 @@
     <hr class="mt-4" />
     <div class="mx-auto py-4">
       <div class="pb-4">
-        Join my mailing list to get updated whenever I publish a new article.
+        {{ $t('newsletter.joinNewsletter') }}
       </div>
       <subscribe />
     </div>
     <hr />
-    <div class="py-4">Thanks for checking out my site!</div>
+    <div class="py-4">{{ $t('footer.thanks') }}</div>
     <div class="pb-4">© 2020 Brian Caffey</div>
   </div>
 </template>

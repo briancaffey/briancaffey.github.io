@@ -7,7 +7,8 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
         <div>
           <label for="name"
-            >Your Name <span class="text-red-600">*</span></label
+            >{{ $t('contactForm.yourName') }}
+            <span class="text-red-600">*</span></label
           >
           <input
             placeholder="J. Appleseed"
@@ -18,7 +19,7 @@
           />
         </div>
         <div>
-          <label for="name">Your Email</label>
+          <label for="name">{{ $t('contactForm.yourEmail') }}</label>
           <input
             placeholder="j.appleseed@email.com"
             type="email"
@@ -28,7 +29,7 @@
           />
         </div>
         <div>
-          <label for="website">Your Website</label>
+          <label for="website">{{ $t('contactForm.yourWebsite') }}</label>
           <input
             placeholder="https://appleseed.co"
             type="url"
@@ -39,9 +40,12 @@
         </div>
       </div>
       <div class="text-left mt-4">
-        <label for="message">Message <span class="text-red-600">*</span></label>
+        <label for="message"
+          >{{ $t('contactForm.message') }}
+          <span class="text-red-600">*</span></label
+        >
         <textarea
-          placeholder="Type your message here"
+          :placeholder="$t('contactForm.sampleMessage')"
           type="text"
           name="message"
           required
@@ -49,7 +53,7 @@
         />
       </div>
       <button type="submit" class="mc-btn rounded px-2 py-1 w-full mt-2">
-        Send
+        {{ $t('contactForm.send') }}
       </button>
     </form>
   </div>
