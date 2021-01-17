@@ -121,6 +121,11 @@ top_skills = Counter(skills).most_common()
 print(top_skills)
 ```
 
+<client-only>
+<skill-count />
+</client-only>
+
+
 I'll try to briefly describe what I know about each of these if I know what it means (without Googling!):
 
 ```py
@@ -463,7 +468,8 @@ sorted(race_and_gender_count.items(), key=lambda x: x[1], reverse=True)
 
 ### Founder background wordcloud
 
-Here's another wordcloud showing founder background, education and experience.
+Here are two wordclouds showing founder background, education and experience for men and women founders.
 
+![png](/static/founders_wc.png)
 
 ###
