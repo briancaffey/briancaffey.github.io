@@ -40,6 +40,7 @@ export default {
   plugins: [
     '~/plugins/disqus',
     '~/plugins/filters',
+    { src: '~/plugins/apexcharts', mode: 'client' },
     { src: '~plugins/drift.js', mode: 'client' },
   ],
   /*
