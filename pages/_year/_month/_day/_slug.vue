@@ -8,7 +8,8 @@
     <div class="mx-auto max-w-5xl px-2 sm:px-4 md:px-4 lg:px-16 mt-2">
       <h1 class="prose text-3xl leading-9">{{ article.title }}</h1>
       <tags v-if="article.tags" :tags="article.tags" />
-      <p class="text-gray-500 mb-4">
+      <external v-if="article.external" :external="article.external" />
+      <p class="blog-date text-gray-500 mb-4">
         {{ $t('common.lastUpdated') }}
         {{ article.date | formatDate($i18n.locale) }}
       </p>

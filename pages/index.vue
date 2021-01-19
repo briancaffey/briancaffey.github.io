@@ -49,6 +49,7 @@ export default {
         'date',
         'path',
         'tags',
+        'external',
       ])
       .sortBy('date', 'desc')
       .fetch()

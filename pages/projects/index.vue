@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-6xl">
-    <h1 class="text-center text-xl py-4">
+    <h1 class="text-center text-3xl py-8">
       {{ $t('projects.projects') }} ({{ projects.length }})
     </h1>
     <div class="lg:px-32 px-2 sm:px-4">

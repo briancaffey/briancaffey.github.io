@@ -3,10 +3,12 @@
     class="fixed inset-0 z-10 opacity-30 justify-center mobile-menu items-center pt-16 transition-all duration-150 delay-150"
   >
     <nav>
-      <ul class="text-center flex-wrap">
+      <ul class="text-center flex-wrap text-3xl">
         <li>
-          <nuxt-link :to="localePath('index')" @click.native="$emit('toggle')"
-            >Home</nuxt-link
+          <nuxt-link
+            :to="localePath('index')"
+            @click.native="$emit('toggle')"
+            >{{ $t('nav.home') }}</nuxt-link
           >
         </li>
         <li>
@@ -28,7 +30,6 @@
             >{{ $t('nav.contact') }}</nuxt-link
           >
         </li>
-        <locale-picker />
       </ul>
     </nav>
     <button

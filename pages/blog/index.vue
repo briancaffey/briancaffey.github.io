@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto max-w-6xl">
-    <h1 class="text-center text-xl py-4">
+    <h1 class="text-center text-3xl py-8">
       {{ $t('blog.blogPosts') }} ({{ articles.length }})
     </h1>
     <blog-list :articles="articles" />
@@ -20,6 +20,7 @@ export default {
         'date',
         'path',
         'tags',
+        'external',
       ])
       .sortBy('date', 'desc')
       .fetch()

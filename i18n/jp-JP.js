@@ -1,5 +1,6 @@
 module.exports = {
   nav: {
+    home: 'ホームページ',
     blog: 'ブログ',
     projects: 'プロジェクト',
     contact: '連絡先',
@@ -14,6 +15,7 @@ module.exports = {
   },
   common: {
     name: 'ブライアン・カフェイ',
+    lastUpdated: '最終更新日：',
   },
   footer: {
     thanks: '私のサイトをチェックしてくれてありがとう！',

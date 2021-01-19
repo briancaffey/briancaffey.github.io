@@ -1,5 +1,6 @@
 module.exports = {
   nav: {
+    home: "Page d'accueil",
     blog: 'Blog',
     projects: 'Projets',
     contact: 'Contact',
@@ -14,6 +15,7 @@ module.exports = {
   },
   common: {
     name: 'Brian Caffey',
+    lastUpdated: 'dernière mise à jour le',
   },
   footer: {
     thanks: "Merci d'avoir visiter mon site !",

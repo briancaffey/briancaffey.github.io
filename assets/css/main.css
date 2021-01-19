@@ -194,7 +194,16 @@ td {
 }
 
 .article-card:hover {
-  box-shadow: 0 5px 15px 5px var(--color-primary);
+  box-shadow: 0 5px 15px 5px var(--color-secondary);
+}
+
+.blog-card-description {
+  color: var(--color-secondary)
+}
+
+.blog-date {
+  color: var(--color-secondary);
+  font-style: italic
 }
 
 hr {
