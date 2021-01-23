@@ -27,6 +27,9 @@ export default {
               : 'dark',
         },
         plotOptions: {},
+        title: {
+          text: "Count of skills listed in job postings",
+        },
         chart: {
           animations: {
             enabled: false,
@@ -39,6 +42,9 @@ export default {
           },
         },
         xaxis: {
+        title: {
+          text: "Skill",
+        },
           categories: this.$store.getters['waas/getTopSkills'],
           tickAmount: 10,
           labels: {
@@ -52,10 +58,11 @@ export default {
           enabled: false,
         },
 
-        // yaxis: {
-        //   decimalsInFloat: 3,
-        //   tickAmount: 7,
-        // },
+        yaxis: {
+          title: {
+            text: "Count",
+          },
+        },
       },
     }
   },

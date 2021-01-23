@@ -6,7 +6,6 @@
       :options="chartOptions"
       :series="$store.getters['waas/getSalaryEquitySeries']"
     ></apexchart>
-    {{ $colorMode.preference }}
   </div>
 </template>
 
@@ -26,6 +25,9 @@ export default {
               ? 'light'
               : 'dark',
         },
+        title: {
+          text: "Average Salary, Equity and Years of Experience",
+        },
         chart: {
           animations: {
             enabled: false,
@@ -38,6 +40,9 @@ export default {
           },
         },
         xaxis: {
+          title: {
+            text: "Average Salary",
+          },
           tickAmount: 10,
           labels: {
             formatter: function (val) {
@@ -45,8 +50,40 @@ export default {
             },
           },
         },
+        tooltip: {
+          x: {
+            show: true,
+            formatter: function(value, opts) {
+              return (
+                opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]
+                  .jobTitle + 
+                " | " + 
+                opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]
+                  .companyName
+
+              );
+            }
+          },
+          y: {
+            show: false,
+            formatter: function(value, opts) {
+              return (
+                "$" +
+                opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]
+                  .x + 
+                " | " +
+                (opts.series[opts.seriesIndex][opts.dataPointIndex] * 100).toFixed(3) +
+                "%"
+
+              );
+            }
+          }
+        },
 
         yaxis: {
+          title: {
+            text: "Average Equity",
+          },
           decimalsInFloat: 3,
           tickAmount: 7,
         },

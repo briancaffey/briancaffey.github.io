@@ -154,10 +154,12 @@ export const getters = {
       // eslint-disable-next-line prefer-const
       for (let job of company.jobs) {
         // eslint-disable-next-line prefer-const
+        const companyName = company.company_name
         const avgSalary = job.details.salary ? job.details.salary.avg : 0
         const avgEquity = job.details.equity ? job.details.equity.avg : 0
         const experience = job.details.min_years_experience
-        const dataRow = [avgSalary, avgEquity]
+        const jobTitle = job.job_title
+        const dataRow = { x: avgSalary, y: avgEquity, jobTitle, companyName }
 
         // add the experience to a series in `data`
         if (
@@ -181,7 +183,8 @@ export const getters = {
     }
     return jobData.map((x) => {
       // eslint-disable-next-line dot-notation
-      return { ...x, name: `${x['name']}+ Years` }
+      const name = Number.isInteger(x['name']) ? `${x['name']}+ Years` : `Any`
+      return { ...x, name }
     })
   },
 }

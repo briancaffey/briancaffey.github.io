@@ -322,7 +322,6 @@ default_colors = wc.to_array()
 plt.figure(figsize=(40, 40))
 plt.imshow(wc, interpolation="bilinear")
 
-wc.to_file("company_desc_wc.png")
 plt.axis("off")
 plt.savefig('company_description_wc.png')
 plt.show()
@@ -330,7 +329,7 @@ plt.show()
 
 ### Salary, Equity and Years of Experience
 
-Here's a scatterplot chart showing salary, equity and years of experience. Each data point links to a job posting on workforastartup.com.
+Here's a scatterplot showing salary, equity and years of experience. Each data point links to a job posting on [workatastartup.com](https://workatastartup.com).
 
 
 <client-only>
@@ -396,7 +395,7 @@ There are a lot of logos that have a similar design to Stripe's logo. Rose/peach
 
 ### Founders
 
-Let's take a look at the founders. I came across the deepface PyPI project an was impressed at how accurately it can classify face data.
+Let's take a look at the founders. I came across the [deepface](https://pypi.org/project/deepface/) PyPI project an was impressed at how accurately it can classify face data.
 
 Here's a sample of YC Founder headshots:
 
