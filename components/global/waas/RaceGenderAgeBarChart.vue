@@ -628,7 +628,11 @@ export default {
               ? 'light'
               : 'dark',
         },
+        title: {
+          text: "Age, Race and Gender",
+        },
         chart: {
+
           animations: {
             enabled: false,
           },
@@ -641,6 +645,10 @@ export default {
           },
         },
         xaxis: {
+          decimalsInFloat: 0,
+          title: {
+            text: "Age",
+          },
           categories: [
             0,
             1,
@@ -704,6 +712,9 @@ export default {
         yaxis: {
           // decimalsInFloat: 3,
           tickAmount: 7,
+          title: {
+            text: "Count",
+          },
         },
       },
     }
