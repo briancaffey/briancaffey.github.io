@@ -1,13 +1,24 @@
 <template>
   <div class="mx-auto max-w-6xl">
     <div class="text-xl text-center py-4">
-      <nuxt-link :to="localePath(`/blog/tags/${$route.params.tag}/`)">
-        <span
-          class="inline-block bg-white rounded-lg text-small px-2 py-1 uppercase shadow"
-        >
-          {{ $route.params.tag }} 🏷️
-        </span>
-      </nuxt-link>
+      <div class="mb-4">
+        <nuxt-link :to="localePath(`/blog/tags/`)">
+          <span
+            class="inline-block bg-white rounded-lg text-small px-2 py-1 shadow"
+          >
+            🏷️ {{ $t('home.allTags') }} 🏷️
+          </span>
+        </nuxt-link>
+      </div>
+      <div class="mb-4">
+        <nuxt-link :to="localePath(`/blog/tags/${$route.params.tag}/`)">
+          <span
+            class="inline-block bg-white rounded-lg text-small px-2 py-1 uppercase shadow"
+          >
+            {{ $route.params.tag }} 🏷️
+          </span>
+        </nuxt-link>
+      </div>
     </div>
     <blog-list :articles="articles" />
   </div>

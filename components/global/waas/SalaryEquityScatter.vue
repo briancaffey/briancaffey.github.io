@@ -1,10 +1,13 @@
 <template>
-  <apexchart
-    type="scatter"
-    height="350"
-    :options="chartOptions"
-    :series="$store.getters['waas/getSalaryEquitySeries']"
-  ></apexchart>
+  <div>
+    <apexchart
+      type="scatter"
+      height="350"
+      :options="chartOptions"
+      :series="$store.getters['waas/getSalaryEquitySeries']"
+    ></apexchart>
+    {{ $colorMode.preference }}
+  </div>
 </template>
 
 <script>
@@ -16,6 +19,13 @@ export default {
   data() {
     return {
       chartOptions: {
+        theme: {
+          mode:
+            this.$colorMode.preference === 'light' ||
+            this.$colorMode.preference === 'system'
+              ? 'light'
+              : 'dark',
+        },
         chart: {
           animations: {
             enabled: false,

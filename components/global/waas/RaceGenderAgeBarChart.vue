@@ -618,6 +618,16 @@ export default {
         },
       ],
       chartOptions: {
+        dataLabels: {
+          enabled: false,
+        },
+        theme: {
+          mode:
+            this.$colorMode.preference === 'light' ||
+            this.$colorMode.preference === 'system'
+              ? 'light'
+              : 'dark',
+        },
         chart: {
           animations: {
             enabled: false,

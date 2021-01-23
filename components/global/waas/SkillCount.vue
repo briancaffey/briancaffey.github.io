@@ -19,6 +19,13 @@ export default {
   data() {
     return {
       chartOptions: {
+        theme: {
+          mode:
+            this.$colorMode.preference === 'light' ||
+            this.$colorMode.preference === 'system'
+              ? 'light'
+              : 'dark',
+        },
         plotOptions: {},
         chart: {
           animations: {

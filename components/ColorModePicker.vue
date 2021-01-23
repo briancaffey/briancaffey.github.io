@@ -9,7 +9,6 @@
       >
         {{ color[1] }}
       </li>
-      <!-- <nuxt-link v-for="(l, i) in $config" :to="switchLocalePath('en')">English</nuxt-link> -->
     </ul>
   </div>
 </template>
