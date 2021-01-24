@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/zh/blog/tags/machine-learning", {data:[{articles:[{title:"PCPartPicker data",date:"2017-01-01T00:00:00.000Z",image:"\u002Fimg\u002Fbuilds\u002Fhist.png",tags:["python","scraping","machine-learning","data"],path:"\u002F2017\u002F01\u002F01\u002Fpc-data.html",slug:"pc-data.html"}]}],fetch:[],mutations:void 0});

@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/blog/tags/rss", {data:[{articles:[{title:"Reading RSS with Python",date:"2017-10-17T00:00:00.000Z",image:"\u002Fstatic\u002Fpython_rss.png",tags:["python","rss"],path:"\u002F2017\u002F10\u002F17\u002Freading-rss-with-python.html",slug:"reading-rss-with-python.html"}]}],fetch:[],mutations:void 0});
