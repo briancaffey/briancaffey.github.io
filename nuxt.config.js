@@ -81,7 +81,9 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: process.env.NODE_ENV === 'production' ? 'https://briancaffey.github.io' : 'http://localhost:3000'
+  },
   /*
    ** Content module configuration
    ** See https://content.nuxtjs.org/configuration
