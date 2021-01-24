@@ -141,6 +141,7 @@ export default {
         const { $content } = require('@nuxt/content')
         const articles = await $content({ deep: true, text: true })
           .only(['title', 'body', 'date', 'slug', 'description', 'path'])
+          .where({ draft: { $ne: true}})
           .sortBy('date', 'desc')
           .fetch()
         articles.forEach((article) => {

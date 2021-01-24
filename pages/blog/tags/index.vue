@@ -23,6 +23,7 @@ export default {
         'path',
         'tags',
       ])
+      .where({ draft: { $ne: true } })
       .sortBy('date', 'desc')
       .fetch()
 
