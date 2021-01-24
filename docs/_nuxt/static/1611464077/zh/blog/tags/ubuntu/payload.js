@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/zh/blog/tags/ubuntu", {data:[{articles:[{slug:"ubuntu-installation-and-setup-notes.html",title:"Ubuntu 16.04.4 Installation and Setup Notes",date:"2018-03-01T00:00:00.000Z",image:"\u002Fstatic\u002Fubuntu_installation.png",tags:["ubuntu","linux"],path:"\u002F2018\u002F02\u002F21\u002Fubuntu-installation-and-setup-notes.html"}]}],fetch:[],mutations:[]});

@@ -1,8 +1,14 @@
 /*!
-  * vue-router v3.4.3
+  * vue-router v3.4.9
   * (c) 2020 Evan You
   * @license MIT
   */
+
+/*!
+ * ApexCharts v3.23.1
+ * (c) 2018-2020 Juned Chhipa
+ * Released under the MIT License.
+ */
 
 /*!
  * JavaScript Cookie v2.2.1
@@ -36,3 +42,17 @@
  * (c) 2018-present egoist <0x142857@gmail.com>
  * Released under the MIT License.
  */
+
+/*!
+ * vuex v3.6.0
+ * (c) 2020 Evan You
+ * @license MIT
+ */
+
+/*! svg.draggable.js - v2.2.2 - 2019-01-08
+  * https://github.com/svgdotjs/svg.draggable.js
+  * Copyright (c) 2019 Wout Fierens; Licensed MIT */
+
+/*! svg.filter.js - v2.0.2 - 2016-02-24
+  * https://github.com/wout/svg.filter.js
+  * Copyright (c) 2016 Wout Fierens; Licensed MIT */
