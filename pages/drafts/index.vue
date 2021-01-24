@@ -1,11 +1,9 @@
 <template>
   <div class="mx-auto max-w-6xl">
-    <div class="text-3xl text-center py-8">
-      🏷️ {{ $t('tags.allTags') }} 🏷️
-      <div class="mt-4 p-4">
-        <tag-cloud :articles="articles" />
-      </div>
-    </div>
+    <h1 class="text-center text-3xl py-8">
+      {{ $t('blog.drafts') }} ({{ articles.length }})
+    </h1>
+    <blog-list :articles="articles" />
   </div>
 </template>
 
@@ -22,8 +20,9 @@ export default {
         'date',
         'path',
         'tags',
+        'external',
       ])
-      .where({ draft: { $ne: true } })
+      .where({ draft: { $eq: true } })
       .sortBy('date', 'desc')
       .fetch()
 
@@ -32,7 +31,18 @@ export default {
       articles,
     }
   },
+  head() {
+    return {
+      title: "Brian Caffey's Blog",
+      meta: [
+        {
+          name: 'robots',
+          content: 'noindex',
+        },
+      ],
+    }
+  },
 }
 </script>
 
-<style scoped></style>
+<style></style>

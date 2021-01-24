@@ -38,6 +38,7 @@ export default {
         'path',
         'tags',
       ])
+      .where({ draft: { $ne: true } })
       .where({ tags: { $containsAny: [params.tag] } })
       .sortBy('date', 'desc')
       .fetch()

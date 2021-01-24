@@ -13,9 +13,16 @@
         {{ $t('common.lastUpdated') }}
         {{ article.date | formatDate($i18n.locale) }}
       </p>
+      <div v-if="article.draft" class="p-4 my-4 bg-red-300 rounded">
+        <p>
+          <strong>
+            ⚠️ This article is a draft and is not yet complete. ⚠️
+          </strong>
+        </p>
+      </div>
       <nuxt-content class="markdown" :document="article" />
 
-      <Narration :utterance="article.raw" />
+      <!-- <Narration :utterance="article.raw" /> -->
       <div class="text-center pb-4 pt-8">
         <button
           v-if="!showComments"
@@ -65,6 +72,10 @@ export default {
     return {
       title: this.article.title,
       meta: [
+        {
+          name: 'robots',
+          content: this.article.draft ? 'noindex' : 'all',
+        },
         {
           property: 'og:title',
           content: this.article.title,
