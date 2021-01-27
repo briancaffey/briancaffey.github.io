@@ -328,6 +328,12 @@ plt.savefig('company_description_wc.png')
 plt.show()
 ```
 
+Here's a breakdown of YC companies by category and sub category:
+
+<client-only>
+<category-breakdown-chart />
+</client-only>
+
 ### Salary, Equity and Years of Experience
 
 Here's a scatterplot showing salary, equity and years of experience. Each data point links to a job posting on [workatastartup.com](https://workatastartup.com).
