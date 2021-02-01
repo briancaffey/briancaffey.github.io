@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/zh/drafts", {data:[{articles:[]}],fetch:[],mutations:[]});

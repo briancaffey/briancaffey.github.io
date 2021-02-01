@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/jp/blog/tags/startups", {data:[{articles:[]}],fetch:[],mutations:[]});

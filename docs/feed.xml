@@ -4,10 +4,16 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Mon, 01 Feb 2021 03:28:32 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 01 Feb 2021 03:30:39 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup]]></title>
+            <link>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</link>
+            <guid>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</guid>
+            <description><![CDATA[Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup]]></description>
+        </item>
         <item>
             <title><![CDATA[Adding internationalization to a statically generated Nuxt site]]></title>
             <link>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</link>
