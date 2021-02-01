@@ -9,21 +9,21 @@ tags:
   - scraping
   - startups
   - yc
-external:
-  - link: https://news.ycombinator.com/
-    site: hn
-  - link: https://reddit.com
-    site: reddit
-  - link: https://dev.to
-    site: dev
-  - link: https://medium.com
-    site: medium
-  - link: https://briancaffey.hashnode.com
-    site: hashnode
-  - link: https://briancaffey.substack.com
-    site: substack
-  - link: https://hackernoon.com/
-    site: hackernoon
+# external:
+#   - link: https://news.ycombinator.com/
+#     site: hn
+#   - link: https://reddit.com
+#     site: reddit
+#   - link: https://dev.to
+#     site: dev
+#   - link: https://medium.com
+#     site: medium
+#   - link: https://briancaffey.hashnode.com
+#     site: hashnode
+#   - link: https://briancaffey.substack.com
+#     site: substack
+#   - link: https://hackernoon.com/
+#     site: hackernoon
 draft: true
 ---
 
@@ -152,7 +152,7 @@ I'll try to briefly describe what I know about each of these if I know what it m
  ('PYTHON', 312), # I'm a big Python fan, it was the first language I touched, happy to see it near the top!
  ('AMAZON WEB SERVICES (AWS)', 200), # I like AWS a lot. I have really been enjoying using CDK to build infrastructure
  ('NODE.JS', 195), # I would to do more with node this year. I generally use Python for web apps
- ('POSTGRESQL', 132), # <3 postgres!
+ ('POSTGRESQL', 132), # I have used Postgres ever since I started using Django and like it a lot
  ('TYPESCRIPT', 114), # this is another goal of mine for 2021, it seems like an inevitability
  ('JAVA', 79), # I have never used Java
  ('SQL', 74), # I usually don't write my own SQL queries; I view SQL through the lense of an ORM
@@ -194,15 +194,15 @@ I'll try to briefly describe what I know about each of these if I know what it m
  ('COMPUTER VISION', 17), # I once used OpenCV on my Raspberry Pi
  ('EXPRESS', 15), # I'd like to learn how to use this in 2021
  ('BASH/SHELL', 13), # I'm not very fluent in bash but
- ('OBJECTIVE-C', 13),
- ('FIREBASE', 12),
- ('SCALA', 11),
+ ('OBJECTIVE-C', 13), # I haven't used this but I know it is popular for iOS development
+ ('FIREBASE', 12), # I have played around with Firebase, but I haven't built anything with it
+ ('SCALA', 11), # Functional programming language for JVM, I haven't used it
  ('SOFTWARE SECURITY', 11),
- ('UNITY', 11),
- ('R', 11),
- ('KAFKA', 10),
- ('SPARK', 10),
- ('ELASTICSEARCH', 10), #
+ ('UNITY', 11), # I used this once before to play around with VR development for HTC Vive
+ ('R', 11), # I haven't used R before, and I would probably reach for a Python library for doing statistics or ML-related things
+ ('KAFKA', 10), # I haven't used it but I'm familiar with the ideas behind Kafka.
+ ('SPARK', 10), # I haven't used it and I'm not really sure what it is
+ ('ELASTICSEARCH', 10), # I haven't used it before
  ('ETL', 10), # Extract, Transform and Load
  ('NATURAL LANGUAGE PROCESSING', 10),
  ('HEROKU', 10), # I used this when first learning about Django, haven't used it in a while
@@ -210,23 +210,23 @@ I'll try to briefly describe what I know about each of these if I know what it m
  ('JENKINS', 9), # I haven't used it, I am a big GitLab fan and will use that whenever possible
  ('RUST', 9), # I have read the Rust book and have played around with WASM
  ('IMAGE PROCESSING', 8),
- ('SERVERLESS', 8),
+ ('SERVERLESS', 8), # I currenty use Fargate and have also used Lambda and SQS and some other serverless AWS tools
  ('BLOCKCHAIN', 8),
  ('OPENCV', 8),
- ('CAD DESIGN', 7),
- ('JQUERY', 7),
- ('HADOOP', 6),
- ('.NET CORE', 6),
- ('TCP/IP', 6),
- ('ELIXIR', 6),
+ ('CAD DESIGN', 7), # I am a big fan of SketchUp and I'm familiar with Blender as well, but I'm not sure if these qualify as CAD design
+ ('JQUERY', 7), # It was the first library I worked with when I started learning javascript
+ ('HADOOP', 6), # It is related to map-reduce, I haven't used it before and I don't really know what it is. I know it is related to HDFS
+ ('.NET CORE', 6), # I haven't used it
+ ('TCP/IP', 6), # I'm familiary with the basics
+ ('ELIXIR', 6), # I don't know, I think it is a framework for Erlang
  ('INTERNET OF THINGS (IOT)', 5),
- ('SASS', 5),
+ ('SASS', 5), # I think it is a framework for CSS. I frequently see node-sass errors from npm
  ('OPENGL', 5),
- ('DYNAMODB', 5),
- ('GOOGLE APP ENGINE', 5),
- ('UNIX', 4), # GNU is Not Unix!
+ ('DYNAMODB', 5), # I am familiar with it but haven't used it
+ ('GOOGLE APP ENGINE', 5), # I haven't used it before
+ ('UNIX', 4),
  ('SPRING FRAMEWORK', 4), # A Java web framework that I haven't used
- ('CUDA', 4), #
+ ('CUDA', 4), # I have used it indirectly when I used nvidia-docker to used Tensorflow
  ('DART', 4), # I don't know what this is
  ('ERLANG', 4), # A language that handles concurrency very well
  ('RABBITMQ', 4), # Message queue, I have used it before but tend to use Redis as a message broker
@@ -287,6 +287,39 @@ I'll try to briefly describe what I know about each of these if I know what it m
 ]
 ```
 
+The list above gives a count of the different skills in all job postings sorted by the most common skills. But what about the most common skills listed together with any given skill? This would allow us to answer questions like "what skills appear most frequently along with JavaScript?"
+
+We can find this with by doing:
+
+```py
+skills_frequency = defaultdict(lambda: defaultdict(lambda: 0))
+
+for company in company_list:
+    if company["jobs"] is not None:
+        for job in company["jobs"]:
+            if job["job_skills"] is not None:
+                job_skills = job["job_skills"]
+
+                skill_tuples = itertools.permutations(job_skills, 2)
+
+                for skill_tuple in skill_tuples:
+                    first = skill_tuple[0]
+                    second = skill_tuple[1]
+
+                    skills_frequency[first][second] += 1
+
+pprint.pprint(
+    {
+        key: sorted(value.items(), key=lambda kv: -kv[1])
+        for key, value in skills_frequency.items()
+    }
+)
+```
+
+<client-only>
+<skill-frequencies>
+</client-only>
+
 ### What are these companies working on?
 
 Here's a wordcloud made from the short company descriptions:
@@ -336,7 +369,7 @@ Here's a breakdown of YC companies by category and sub category:
 
 ### Salary, Equity and Years of Experience
 
-Here's a scatterplot showing salary, equity and years of experience. Each data point links to a job posting on [workatastartup.com](https://workatastartup.com).
+Here's a scatterplot showing average salary and average equity for positions categorized by years of experience required.
 
 
 <client-only>
@@ -408,6 +441,38 @@ Here's a sample of YC Founder headshots:
 
 ![png](/static/yc_founders_sample.png)
 
+Here's how I used the deepface library to add race, gender and age data for each of the headshot images:
+
+```py
+IMG_DIR = 'data/waas_full_details_dump_files/'
+# headshots are all .jpg files, so we can get all headshots like this:
+founder_headshots = [x for x in os.listdir(IMG_DIR) if x.endswith('.jpg')]
+founder_count = len(founder_headshots)
+
+img_paths = [IMG_DIR + x for x in founder_headshots]
+results = {}
+
+for idx, img in enumerate(img_paths):
+    print(f"analyzing {idx}/{founder_count}")
+    try:
+        img_key = img.split("/")[-1]
+        obj = DeepFace.analyze(
+            img_path=img,
+            actions=['age', 'gender', 'race', 'emotion'],
+            enforce_detection=False
+        )
+        obj.update({"img": img_key})
+        results[img_key] = obj
+
+    except ValueError as e:
+        print(e)
+
+with open("founder_images.json", "w+") as f:
+    f.write(json.dumps(results))
+```
+
+There are more steps needed to transform this data to make it compatible for use with a histogram showing age, race and gender. Check out the Jupyter notebook linked at the end of this article to see the code used to make this data transformation. Here's a simple way to count founders grouped by race and gender:
+
 ```
 race_and_gender_count = defaultdict(lambda: 0)
 for result in list(results):
@@ -441,23 +506,121 @@ sorted(race_and_gender_count.items(), key=lambda x: x[1], reverse=True)
 
 ### Founder background wordcloud
 
-Here are two wordclouds showing founder background, education and experience for men and women founders.
+Here's a wordcloudsshowing founder background, education and experience. The code for this is similar to the wordcloud shown previously for company descriptions.
 
 ![png](/static/founders_wc.png)
 
-###
-
 ## Generating YC Startup Companies
 
-Finally, I'll try to generate some plausible descriptions of YC companies based on the descriptions of companies scraped from WaaS. I've never done anything like this so I wasn't sure what to expect. I have read about big advancements made in text generation with GPT-3, but other than that I have no idea about where to begin.. LSTM? GAN? RL? DL?
+Finally, I'll try to generate some plausible descriptions of YC companies based on the descriptions of companies scraped from WaaS. I have read about big advancements made in text generation with GPT-3, but otherwise I'm not familiar with text-generation or any other generative models.
 
-My initial goal was to do this using a simple example that I could repeat locally using Tensorflow. Googling for `text generation with python tensorflow` led me to this tutorial: [https://www.thepythoncode.com/article/text-generation-keras-python](https://www.thepythoncode.com/article/text-generation-keras-python). I was able to run the example, but the results were not very good, at least not as good as the results used in the example of generating text from a model trained on the text of "Alice in Wonderland". This is probably because I ran 10 epochs instead of 30, but I didn't want to wait hours before getting results for each iteration.
+My initial goal was to do this using a simple example that I could replicate locally using Tensorflow. Googling for `text generation with python tensorflow` led me to this tutorial: [https://www.thepythoncode.com/article/text-generation-keras-python](https://www.thepythoncode.com/article/text-generation-keras-python). I was able to run the example, but the results were not very good, at least not as good as the results used in the example of generating text from a model trained on the text of "Alice in Wonderland". This is probably because I ran 10 epochs instead of 30, but I didn't want to wait hours before getting results for each iteration.
 
 Another Google search led me to [this article on Max Woolf's Blog](https://minimaxir.com/2019/09/howto-gpt2/) which I was able to get started with in just a few minutes. I combined the text from the 2 sections of the longer company descriptions: `description` and `technology`.
 
-Here's my first attempt at using Google Colab. Here's the link to the Google Colab (anyone can view and comment):
+Here's the link to the Google Colab (anyone can view and comment):
 
 [https://colab.research.google.com/drive/1u9b-FVGgUGcfifLy7bUXgoPe-pZ81rm3?usp=sharing](https://colab.research.google.com/drive/1u9b-FVGgUGcfifLy7bUXgoPe-pZ81rm3?usp=sharing)
+
+Google Colab gives you access to an environment with a GPU suitable for working with GPT2. Here's an overview of the code used to train GPT2 on the company descriptions:
+
+```py
+%tensorflow_version 1.x
+!pip install -q gpt-2-simple
+import gpt_2_simple as gpt2
+from datetime import datetime
+from google.colab import files
+```
+
+This installs [`gpt-2-simple`](https://github.com/minimaxir/gpt-2-simple) and gives us access to the Google Drive connected to the Google account used to sign in to Google Colab.
+
+
+The GPU can be inspected with:
+
+```
+!nvidia-smi
+````
+
+```
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 460.32.03    Driver Version: 418.67       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            Off  | 00000000:00:04.0 Off |                    0 |
+| N/A   51C    P8    10W /  70W |      0MiB / 15079MiB |      0%      Default |
+|                               |                      |                 ERR! |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 460.32.03    Driver Version: 418.67       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            Off  | 00000000:00:04.0 Off |                    0 |
+| N/A   51C    P8    10W /  70W |      0MiB / 15079MiB |      0%      Default |
+|                               |                      |                 ERR! |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+```
+
+Next we download the GPT-2 model:
+
+```py
+gpt2.download_gpt2(model_name="124M")
+```
+
+Then we mount Google Drive with the following command:
+
+```py
+gpt2.mount_gdrive()
+```
+
+With our file (`waas.txt`) uploaded to Google Drive, the following
+
+```py
+file_name = "waas.txt"
+gpt2.copy_file_from_gdrive(file_name)
+```
+
+Now the model needs to be fine-tuned:
+
+```py
+sess = gpt2.start_tf_sess()
+
+gpt2.finetune(
+    sess,
+    dataset=file_name,
+    model_name='124M',
+    steps=1000,
+    restore_from='fresh',
+    run_name='run1',
+    print_every=10,
+    sample_every=200,
+    save_every=500
+)
+```
+
+Here are some results from my first attempt at using Google Colab. Training the model will output a sample after every 200 steps. I have included only the first sample from the training, but you can see the output from each step in the Colab notebook.
 
 ```
 WARNING:tensorflow:From /usr/local/lib/python3.6/dist-packages/gpt_2_simple/src/sample.py:17: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
@@ -576,341 +739,9 @@ Training...
  energy sector and be
 
 [210 | 517.61] loss=1.62 avg=2.40
-[220 | 541.69] loss=1.45 avg=2.35
-[230 | 565.82] loss=1.02 avg=2.29
-[240 | 590.00] loss=1.03 avg=2.23
-[250 | 614.18] loss=0.79 avg=2.16
-[260 | 638.45] loss=0.93 avg=2.11
-[270 | 662.46] loss=0.68 avg=2.05
-[280 | 686.40] loss=0.84 avg=2.00
-[290 | 710.45] loss=0.58 avg=1.94
-[300 | 734.54] loss=0.25 avg=1.88
-[310 | 758.60] loss=0.55 avg=1.83
-[320 | 782.69] loss=0.40 avg=1.78
-[330 | 806.83] loss=0.44 avg=1.73
-[340 | 830.88] loss=0.20 avg=1.68
-[350 | 854.86] loss=0.36 avg=1.63
-[360 | 878.88] loss=0.43 avg=1.59
-[370 | 902.89] loss=0.23 avg=1.55
-[380 | 926.90] loss=0.21 avg=1.51
-[390 | 950.92] loss=0.18 avg=1.47
-[400 | 974.97] loss=0.13 avg=1.43
-======== SAMPLE 1 ========
 
-ongoing an industry-leading machine learning platform with
-software, we deliver predictions over a 3D map of the scene to
-predict where parts of a city will be most efficiently in the
-future, that is, when driving is frictionless. Our platform
-predicts where the most assets and materials will be most
-needlessly stored, such as buildings, factories, cities, and
-remote forested regions of space. Our prediction engines then
-perform these predictions with our customers' predictions on top
-of the data we collect from our customers and layer it back on
-top of predicting what they actually see and do in real time on
-their device(s). For example, if our predictions on where to
-shop would lead to the opening of a shop within a city in both
-ComfortSuite and ComfortFitSuites, and where shoppers should be
-looking (i.e. Comfort, Lean, Safer, Grab) while wearing both
-flip-flops on our phones. We are currently hiring bright,
-self-driven professionals who are passionate about building
-products that make people smile, live, and work in innovative
-ways for the next 5 years. Tech Stack: Java - React - PostgreSQL
-- AWSKeysize secures transactions in thousands of transactions
-per day. It\'s a great tool for people who want to anonymize
-their transactions and control how they spend their money.
-Compared to other financial services, it\'s not. It\'s not.
-It\'s not.There\'s a reason that 10% of all bank transactions
-are Robin Hood-like - we know this because we've seen it called
-the Santarcha error. Every time a transaction is added to a
-banking transaction book, it adds a 9x shift to the book. And if
-the above information is not protected by strong encryption, it
-has the following consequences:- Receipts will be compromised-
-Records from fraudulent activities will be compromised- Emails
-from fraudulent contacts will be compromisedWe haven\'t yet been
-able to get a developer to contribute their private code to our
-platform, but they seem to be the most active and trusted
-individuals in the world. We are actively seeking to build out a
-stronger NFC-powered banking transaction experience.NFC Quest is
-a payment app for next-day delivery that allows your order to be
-delivered to anywhere in the world within 3 days of your
-estimated time of delivery. Personalize it with your address,
-phone number, cryptocurrency (e.g. Bitcoin, Ethereum, or
-Canadian Gold). It can also be used for international payments,
-so you get paid pretty quick if you show up late. It\'s set up
-with an App (Google Drive, Outlook, Google Wallet), an iOS
-wallet, and a QR code reader. Our current payment product
-devices include a barcode reader that does the hard work of
-retooling the data contained within, so that the physical
-product is un-cracked and free of counterfeits. Furthermore, our
-barcode readers can be firmly in place without breaking the
-bank. We use machine learning to predict the shape and sizes of
-items, and generate custom software libraries to run around the
-world on the item without breaking the bank. The power of our
-technology lies not in the technology itself, but in the way in
-which the physical products are designed and sold. We are
-currently one of the largest technology companies in the world,
-with projects in France, Italy, Austria, Korea, and Switzerland.
-Niantic is an American e-commerce, logistics and hospitality
-company. Our mission is to democratize retailing and make it
-easier to get what you need in a fast, convenient way. We make
-furniture, appliances, components, and more, and are the fastest
-growing U.S. company with almost no technology stack. Stable is
-simplifying outdated and convoluted regulatory frameworks with
-software. We solve forefficiencies by allowing retailers to
-confidently answer any question they may have when shopping for
-furniture, appliances, parts, and parts\'s. We do this by
-leveraging software, digitizing paperwork to ensure they\'re
-truly unique.The easiest way to become the actual one to whom
-you\'ll give credit for products and brands you use. - Stable
-founders, 4+ years experience solving for problems in different
-IT verticals.Started by a simple betas of 3 college kids, we’ve
-grown to own product, culture, and methodology. We believe in
-the power of ideas to bring about change, and in using our
-platform to empower stakeholders to be what they are rather than
-who they seem. We use OCR technology to create a 3D
-representation of a product or service. This allows us to
-compare and significantly improve the accuracy of customer
-surveys, comparing and then comparing various data sources, we
-doing extensive micro-scaling of the systems we are building
-against dozens of other companies out there. Currently we run
-our founding team on AWS and our VCs along the way as well as
-supporting Engineering, Finance, and Product lead. Funders is
-built on the principles that diversity, inclusivity, economic
-mobility, and non-discrimination should be built a united and
-prosperous country. We
+[...]
 
-[410 | 1009.42] loss=0.15 avg=1.39
-[420 | 1033.35] loss=0.19 avg=1.35
-[430 | 1057.28] loss=0.10 avg=1.32
-[440 | 1081.20] loss=0.10 avg=1.28
-[450 | 1105.15] loss=0.12 avg=1.25
-[460 | 1129.18] loss=0.11 avg=1.22
-[470 | 1153.22] loss=0.13 avg=1.19
-[480 | 1177.29] loss=0.10 avg=1.16
-[490 | 1201.41] loss=0.11 avg=1.14
-[500 | 1225.56] loss=0.13 avg=1.11
-Saving checkpoint/run1/model-500
-[510 | 1252.07] loss=0.10 avg=1.09
-[520 | 1276.01] loss=0.11 avg=1.06
-[530 | 1300.07] loss=0.10 avg=1.04
-[540 | 1324.17] loss=0.10 avg=1.02
-[550 | 1348.21] loss=0.08 avg=0.99
-[560 | 1372.20] loss=0.12 avg=0.97
-[570 | 1396.19] loss=0.13 avg=0.95
-[580 | 1420.17] loss=0.07 avg=0.93
-[590 | 1444.13] loss=0.07 avg=0.91
-[600 | 1468.10] loss=0.12 avg=0.90
-======== SAMPLE 1 ========
-
- and all other companies on the world stage. We\'ll continually
- improve our customer experience with new technologies and
- better understand the functions of existing ones. Magic is a
- data-driven financial services industry analytics company that
- doesn\'t discriminate, and isn\'t run by a top-down algorithm.
- We use heavy Ruby on Rails/React/React Native server-side
- programming and integrate with a robust sales team (sold-alone
- team). We are a happy, fun, fast-growing business with members
- who love fun and teamwork, and, generally, we are. Ruby on
- Rails is a modern, shared toolkit for building and selling
- teams. It spans all platforms and is covered by tools like
- Salesforce, Salesmen and Stripe. Companies like Slack,
- Slackbot, and Slackweb use Ruby on Rails every day.We believe
- that the right framework combines features many other
- frameworks have to offer. Primarily built in Rails, we also use
- React, GraphQL, PostgreSQL, and Node.js. Equipment we use●
- Workflow automation● High-performance programming● Data
- integration● Maintenance workflow● Delivery plan automation●
- Logical analysis automation● On-boarding automation● Scrum CI
- We\'re growing fast and are backed by some pretty legendary
- investors like YC, the Summit Technology leader and a veteran
- of multiple exits, including being Y Comissioned after the S19
- tech cycle (S19 batch) and having our first profitable
- full-year year out in 2020 (S20 batch).We\'re a team of driven
- people who love solving problems and building products for
- everyone. We care about great product and great culture and are
- looking for great talent in the right places at the right time.
- We\'re looking for people who love learning and using new
- technologies, pushing new paradigms and applying existing
- knowledge. BrightFuture is an early stage startup focused on
- unique technology (science, balloons, etc.) to bring a future
- where drones and other aerial vehicles no longer pose a threat
- to human life and are being replaced by low-tech flying robots
- that can see, hear, sense, and walk. We are developing a
- low-cost balloons-able airborne vehicle that can be operated
- autonomously on a portable rooftop ESC. We are taking the next
- steps in developing and testing low-cost, autonomous aerial
- vehicles for people and transportation. You will be a key part
- of this development effort. BlaBla is a blockchain powered
- travel reporting startup. BlaBla is the travel reporting
- platform that people, companies, and business applications need
- to deal with the ever-expanding collection of photos, travel
- preferences, and more. With BlaBla, more people can be
- connected and communicated with more money, and the world is
- less dependent on big business and more able to take their
- trips on demand. We are already a household name in the travel
- industry with over 12 million users and we are backed by great
- investors like Y Combinator, Dashboard Ventures, JLL and
- Headset Ventures. We just closed our Series A round and are now
- investing in the development of iOS, Android, and iOS apps.
- FounderWer is an engineer by trade and has previously built
- intelligent travel products for Nike, TripAdvisor, Virgin
- America, and many more of the largest travel agencies. Notably,
- he\'s the only engineer in the history of mankind to have built
- a highly accurate radar for an opponent such as a football
- leader. Speedrunner at heart, Wojciechiu builds innovative
- products that help athletes and teams win like no other. What
- does this actually mean? Simply put, he’s not tech savvy but
- rather, it\'s "just another term for flying a lot of fast cars
- slow". Think of this as Concorde without the bells and
- whistles. Our platform currently has three products that
- capture the interest of both the public and the companies. When
- users search for a product by using mobile devices, Wojciechiu
- takes all the options out of the equation. If this sounds like
- a lot of work to you, check out our Technical Stack, Designers
- & Pros (written in Spanish), we can help. OnePlus is a
- general-purpose chat assistant for texting and messaging. Built
- to last. Worthy of its authoring and research basis.
- LanguageExtensible is a collaborative platform for enterprise
- communication. We believe that the development of new and
- enhanced communication tools increases the productivity of
- teams, increases empathy, and increases economic efficiency.
- With one single software, we are creating the standard
- communication tool for the entire enterprise. Every
- communication tool has its place. But one of the most important
- communication tools is still incredibly rudimentary today.
- Worthy of its authoring and research basis, one of the world’s
- most innovative communication tools has been founded by PhDs
- from the University of Barcelona and Stanford. Built with
- Product experts in mind, one of the fastest-growing and diverse
- tech companies in the world, OnePlus is poised to expand its
- product line with conversational and phone tools.
- OTCErrorReporting() - Overwriting code with Redux Oomongo
-
-[610 | 1502.22] loss=0.09 avg=0.88
-[620 | 1526.13] loss=0.08 avg=0.86
-[630 | 1550.07] loss=0.08 avg=0.85
-[640 | 1574.05] loss=0.07 avg=0.83
-[650 | 1598.05] loss=0.07 avg=0.81
-[660 | 1622.05] loss=0.08 avg=0.80
-[670 | 1646.08] loss=0.09 avg=0.78
-[680 | 1670.10] loss=0.08 avg=0.77
-[690 | 1694.11] loss=0.09 avg=0.76
-[700 | 1718.11] loss=0.07 avg=0.74
-[710 | 1742.12] loss=0.08 avg=0.73
-[720 | 1766.13] loss=0.06 avg=0.72
-[730 | 1790.16] loss=0.08 avg=0.70
-[740 | 1814.24] loss=0.07 avg=0.69
-[750 | 1838.31] loss=0.07 avg=0.68
-[760 | 1862.39] loss=0.08 avg=0.67
-[770 | 1886.42] loss=0.07 avg=0.66
-[780 | 1910.44] loss=0.06 avg=0.65
-[790 | 1934.46] loss=0.07 avg=0.64
-[800 | 1958.46] loss=0.08 avg=0.63
-======== SAMPLE 1 ========
-
-. It is not uncommon for salespeople in large companies to be
-asked to use the phone at all times to process payroll.
-Salespeople spend 15-20% of their time using their cell phone to
-communicate with their sales team. By using this space, they can
-shed tenuous ties to their sales team and build closer personal
-and professional ties that allow them to take ownership of their
-own work, achieve better lengths of work, and achieve more
-happiness.Salespeople spend most of their time designing,
-building, and operating products for the sales channel. These
-spaces create an environment where people can feel most
-important what worked and what didn\'t work, and where they can
-confidently and methodically move at a high velocity.The best
-entrepreneurs focus on building products and processes that will
-help them in their sales career, and the space for passionate
-developers grows each day. The more code, the more effective the
-product journey. - EricViviu aka Initialized by Docker - R&D the
-future of continuous integration - R&D the future of continuous
-integrationContinuous integration is more team fun! We\'re
-building tools to automate work teams of all sizes and levels,
-to help them land meaningful leads, and to accelerate the
-journey back to profitability. We\'re focused on automating work
-teams of all sizes and amounts, to help them land meaningful
-leads, and to accelerate the journey back to profitability.
-Tenderdome is a fast-growing startup changing the face of
-hospitality. We are a team of passionate engineers and
-entrepreneurs looking to grow and evolve as a business. We\'re
-building Tenderdome into a great place to work. Come join us.
-Rails / React / Typescript / Golang / Postgresql\nPostgres is a
-fast-growing startup. We\'re having problems scaling -- we do --
-and making good progress on everything.We\'re a fast-growing
-company - we write software that gets adopted by the next
-billion-user user world. And PagerDish is a team of engineers
-and product engineers working on a different story. They share
-ideas, experiments and info together. Pairfold means connecting
-billions of users with every aspect of its e-commerce strategy.
-The company is working on integrations with police departments
-across the country and is working on tools to make buying a lot
-of easier.This is a unique opportunity to join an early-stage
-startup with significant space and opportunity. We are bringing
-technology to the massive consumer electronics market. Twisted
-Software is a fast-growing Y Combinator–backed startup that
-helps companies such as Walmart, Carrier, Tesla, Moda, Sendman,
-Bank of America, West Coast Fed, 4BI, and Carrier. We enable
-sellers and bidders to prosper. We sell weed. We make weed
-sense. We work with high-growth teams. We build products that
-have been through the wringer multiple times before. Together,
-we can usher in the entirely new use cases of cannabis we are
-about to create.TWE is currently building a systems &
-infrastructure that underpins our entire cannabis enterprise.
-This includes a premier platform for ingesting and managing
-high-traffic cannabis, a premier platform for ingesting and
-managing cannabis-laced beverages, and a premier platform for
-ingesting and managing cannabis-focused video. We\'re currently
-building a systems & infrastructure that underpins our entire
-cannabis enterprise. This includes a premier platform for
-ingesting and managing cannabis, a premier platform for
-ingesting and managing cannabis-laced content, a premier
-platform for ingesting and managing cannabis-focused content and
-a premier platform for ingesting and managing cannabis-fuelled
-media content. We\'re currently building a solid relationships
-with media partners which to include in our cannabis portfolio.
-TOC is a great place to start if you love helping people build
-their own cannabis products, and want to build a portfolio of
-tools and services you can use to help other cannabis consumers
-grow their own. Our mission is to help cannabis consumers from
-driving millions of dollars in revenue to getting their next
-product on the market. We push the boundaries of what is
-possible for alcohol and tobacco companies, are not immune to
-technological advances, and are constantly figuring out the best
-ways to use our knowledge of their users and creations to best
-benefit our burgeoning business. TOC is a great place to start
-if you love helping people build their own cannabis products,
-and want to build a portfolio of tools and services you can use
-to help people grow their own. We’re a small team that’s looking
-for like-minded individuals to join us on the mission to drive
-the singular goal of cannabis prohibition to the forefront of
-popular culture and commerce. Our founders are former executives
-at viral video companies (and today’s most famous brands), and
-they’re building a viral product that’s sure to get a lot of
-fanfare. Our founders are technologists and engineers who spent
-years building and developing complex computer vision algorithms
-at the highest levels. Our product is a series of virtual masks
-that are paired with a hairbrush to give
-
-[810 | 1992.49] loss=0.06 avg=0.62
-[820 | 2016.42] loss=0.07 avg=0.61
-[830 | 2040.33] loss=0.06 avg=0.60
-[840 | 2064.23] loss=0.08 avg=0.59
-[850 | 2088.14] loss=0.08 avg=0.58
-[860 | 2112.11] loss=0.07 avg=0.57
-[870 | 2136.10] loss=0.08 avg=0.56
-[880 | 2160.09] loss=0.07 avg=0.55
-[890 | 2184.11] loss=0.06 avg=0.55
-[900 | 2208.20] loss=0.07 avg=0.54
-[910 | 2232.22] loss=0.07 avg=0.53
-[920 | 2256.32] loss=0.07 avg=0.52
-[930 | 2280.45] loss=0.06 avg=0.51
-[940 | 2304.54] loss=0.06 avg=0.51
-[950 | 2328.55] loss=0.05 avg=0.50
-[960 | 2352.51] loss=0.06 avg=0.49
-[970 | 2376.45] loss=0.07 avg=0.49
-[980 | 2400.37] loss=0.06 avg=0.48
-[990 | 2424.23] loss=0.07 avg=0.47
 [1000 | 2448.17] loss=0.07 avg=0.47
 Saving checkpoint/run1/model-1000
 WARNING:tensorflow:From /tensorflow-1.15.2/python3.6/tensorflow_core/python/training/saver.py:963: remove_checkpoint (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
@@ -922,8 +753,39 @@ Here's a sample generated using the trained model:
 
 > We are a small team of MIT-trained researchers and entrepreneurs based in Palo Alto, California. We're creating a new form of transportation for people and gear. Based in the heart of downtown LA, our downtown L.A. location will be the last remaining obstacle preventing people from making, selling, and visiting the Smithsonian. We\'re building a disruptive technology that impacts the way people interact in the world in a positive way. Token Transit is digitizing much of the way we travel for real. We are building it to work for everyone, digitizing billions of things we buy and sell every day. Our platform connects real users and non-users in a global network. Our first product, UNITY, made it from scratch and is in mixed state. We are helping to develop the first truly international distributed logistics network powered by an AI and a IoT. Our mission is to revolutionize how companies move containers, trucks, and other loads across borders. Our technology is being architected and being implemented by experts across the globe. Our annual revenue:$150M/year. How we work We are a small, fast growing company with a core team based in San Francisco, CA.  Our software is being used by thousands of customers worldwide. We are building our technology platform in two key areas: (1) automated supply chain forecasting for companies and (2) internal analysis of company data to help leaders analyze and improve production. Our YearEnd blog is currently looking for Senior Electricians & Candidates. If you\'re excited about this exciting challenge, please apply. Burrow is a daily driver app for mobile that works on any device. With Burrow, your driver is on your phone to show your friends where you are going, which destinations you are on, and more. You can also add your phone to a list and get in-depth insights into the driving itself. We love to tie in-stream data, visualised by React Native, to the driving experience. We also take a data-driven approach to managing our customer list, managing our teams and our operations framework. Our API serves a large amount of native API functions, and using Cockroach to access these functions through microservices allowed us to interface with the relevant services (e.g. DynamoDB, Picnic and our own API). We also inserted a lot of debugging and monitoring functionality into the ecosystem. Our API serves a large amount of data - including relational and non-relational data - about where you are and what you\'ve wanted to do the longest, what you\'ve got, and where you are now. We also manage a lot of the operations of the platform and provide some of the data integrations with your existing relational and non-relational data. Technologies we use NodeJS, React, Apollo, Postgres, Heroku, Docker, and Tensorflow: Fluttertable, Datapoint, Pandas, Keras, Numpy, Scipy, Scikit, SciPy, scikit-learn AI-ron at MERN Automation is a Google-backed NARability company that is committed to being the leading platform for accurately measuring and diagnosing agricultural production. We have built proprietary software and software automation systems to make it easy for any government to track agricultural production and prices. Our primary technologies today are:Tables, Entry Points into Global Food Production, Pipeline and Grain Market, and GenomicData.utility.Upstream is revolutionizing how U.S. agriculture is produced and sold. We are serving the agronomists, farmers, market researchers, and data scientists in the USA. WWrendy is on a mission to enable breakthrough scientific research in agricultural technology. We are growing cassava in our bioreactors, improving crop health and producing more durables than we need to feed ourselves. We use machine learning to identify cancer-causing microbes in seeds and in consumer durables to make food more accessible and more sustainable. We are building an entirely new technical infrastructure for agricultural diagnostics: tractors, biores, and tractors-all with a singular goal of improving yields and feed the world. We have humble beginnings as a grocery delivery service and have since grown to serve millions of people every year. We are a tight-knit team of MIT-trained researchers, technologists, and businesspeople, who have built an industry-leading technology platform that uses sensors and software to analyze crop production data to create intelligent and efficient food products. Our mission is to help all farmers have a more sustainable crop, by using microbial discoveries to improve the health and prosperity of their communities. We're a well-funded, well-funded, yuletide startup. We're looking to grow and affordably upgrade our tech stack every year. We use less expensive tools and techniques to analyze and build comprehensive datasets on crop production and food safety to help farmers grow more food and avoid over-production. Rails / React / AWS We build, manage, and cybersecurity insurance through an on-premise platform. We
 
+From this first attempt there are already a few ideas for YC startups:
 
-### Learning Resources
+> We are helping to develop the first truly international distributed logistics network powered by an AI and a IoT. Our mission is to revolutionize how companies move containers, trucks, and other loads across borders. Our technology is being architected and being implemented by experts across the globe.
+
+> We have built proprietary software and software automation systems to make it easy for any government to track agricultural production and prices.
+
+Next we can try improving the output by using some additional features of `gpt-2-simple`. One important setting is the size of the model. There are three released sizes of GPT-2:
+
+ * `124M` (default): the "small" model, 500MB on disk. This is the one used on my first try
+ * `355M`: the "medium" model, 1.5GB on disk.
+ * `774M`: the "large" model, cannot currently be finetuned with Colaboratory but can be used to generate text from the pretrained model (see later in Notebook)
+ * `1558M`: the "extra large", true model. Will not work if a K80 GPU is attached to the notebook. (like `774M`, it cannot be finetuned).
+
+We can try again using the 355M model. The `large` and `extra large` models won't work for our use case of finetuning the model on our sample text.
+
+This would be a great time to plug my startup, but I don't have one. Instead, here are 10,000 startup ideas I generated with GPT-2 trained on the 335M model using the YC company descriptions for finetuning:
+
+```py
+gpt2.generate_to_file(sess,
+                      destination_path=gen_file,
+                      length=150,
+                      prefix="we are building the world's first",
+                      temperature=0.7,
+                      nsamples=10000,
+                      batch_size=20,
+                      )
+```
+
+<client-only>
+<generated-ideas />
+</client-only>
+
+### Credits, Links and Learning Resources
 
 Here's a link to Max Woolf's blog which has a lot of helpful resources on using GPT-2. Max is the author of `gpt-2-simple` which is the Python package used in the Google Colab (Max is the author of that Google Colab as well):
 
@@ -936,3 +798,11 @@ Here are some resources for learning more about text generation. I came across J
 Jay also has a great YouTube channel:
 
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/MQnJZuBGmSQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Here's the link to the source markdown file for this article: [https://github.com/briancaffey/briancaffey.github.io/tree/master/content/2021/01/16](https://github.com/briancaffey/briancaffey.github.io/tree/master/content/2021/01/16)
+
+Here's a link to the repo containing all of the scraped data and Jupyter notebooks used for exploring the data: [https://gitlab.com/briancaffey/yc-waas-data](https://gitlab.com/briancaffey/yc-waas-data)
+
+Here's the link to the Google Colab used for generating company descriptions with GPT-2 and gpt-2-simple: [https://colab.research.google.com/drive/1u9b-FVGgUGcfifLy7bUXgoPe-pZ81rm3?usp=sharing#scrollTo=8DKMc0fiej4N](https://colab.research.google.com/drive/1u9b-FVGgUGcfifLy7bUXgoPe-pZ81rm3?usp=sharing#scrollTo=8DKMc0fiej4N)
+
+Thank you for reading!

@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 export const state = () => ({
   companies: [],
+  ideaIndex: 0,
+  generatedIdeas: ['loading gpt-2 generated ideas...'],
+  skillFrequencies: [],
   topSkills: [
     ['JAVASCRIPT', 330],
     ['REACT', 323],
@@ -143,8 +146,16 @@ export const state = () => ({
 })
 
 export const getters = {
+  getIdeaIndex: (s) => {
+    return s.ideaIndex % 10000
+  },
   getTopSkills: (s) => s.topSkills.map((x) => x[0]),
   getTopSkillCounts: (s) => s.topSkills.map((x) => x[1]),
+  getSkillFrequencies: (s) => s.skillFrequencies,
+  getGeneratedIdeas: (s) => (idx) => s.generatedIdeas[idx],
+  getRelatedSkillsForSkill: (s) => (selectedSkill) => {
+    return s.skillFrequencies[selectedSkill]
+  },
   getCompanies: (s) => s.companies,
   getSalaryEquitySeries: (s) => {
     // eslint-disable-next-line prefer-const
@@ -194,10 +205,30 @@ export const actions = {
     const response = await this.$axios.$get('static/waas_10.json')
     commit('SET_COMPANIES', response)
   },
+  async fetchSkillFrequencyData({ commit }) {
+    const response = await this.$axios.$get('static/waas/skill_pairs.json')
+    commit('SET_SKILL_FREQUENCIES', response)
+  },
+  async fetchGeneratedIdeas({ commit }) {
+    const response = await this.$axios.$get('static/waas/generated_ideas.json')
+    commit('SET_GENERATED_IDEAS', response)
+  },
+  changeIdeasIndex({ commit }, payload) {
+    commit('SET_IDEAS_INDEX', payload)
+  },
 }
 
 export const mutations = {
+  SET_IDEAS_INDEX: (state, payload) => {
+    state.ideaIndex = state.ideaIndex + payload
+  },
+  SET_GENERATED_IDEAS: (state, payload) => {
+    state.generatedIdeas = payload
+  },
   SET_COMPANIES: (state, payload) => {
     state.companies = payload
+  },
+  SET_SKILL_FREQUENCIES: (state, payload) => {
+    state.skillFrequencies = payload
   },
 }
