@@ -24,7 +24,6 @@ tags:
 #     site: substack
 #   - link: https://hackernoon.com/
 #     site: hackernoon
-draft: true
 ---
 
 I always enjoy reading about new batches of YC companies. I came across YC's [Work at a Startup](https://www.workatastartup.com/) (WaaS) recently while browsing HN and got pretty curious about all of the available data points on companies, jobs and founders.
