@@ -82,7 +82,10 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: process.env.NODE_ENV === 'production' ? 'https://briancaffey.github.io' : 'http://localhost:3000'
+    baseURL:
+      process.env.NODE_ENV === 'production'
+        ? 'https://briancaffey.github.io'
+        : 'http://localhost:3000',
   },
   /*
    ** Content module configuration
@@ -117,7 +120,10 @@ export default {
     routes: async () => {
       const { $content } = require('@nuxt/content')
 
-      const posts = await $content({ deep: true }).only(['path']).fetch()
+      const posts = await $content({ deep: true })
+        .only(['path', 'draft'])
+        .where({ draft: { $ne: true } })
+        .fetch()
       const projects = await $content('projects').only(['path']).fetch()
 
       return []
@@ -143,7 +149,7 @@ export default {
         const { $content } = require('@nuxt/content')
         const articles = await $content({ deep: true, text: true })
           .only(['title', 'body', 'date', 'slug', 'description', 'path'])
-          .where({ draft: { $ne: true}})
+          .where({ draft: { $ne: true } })
           .sortBy('date', 'desc')
           .fetch()
         articles.forEach((article) => {
