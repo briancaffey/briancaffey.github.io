@@ -65,6 +65,7 @@ export default {
       title: 'Brian Caffey',
     }
   },
+  transition: 'page',
 }
 </script>
 

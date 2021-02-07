@@ -33,7 +33,7 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: var(--bg);
   color: var(--color);
-  transition: background-color 0.3s;
+  transition: background-color 0.7s;
 }
 
 a {

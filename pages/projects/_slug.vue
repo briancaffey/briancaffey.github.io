@@ -35,5 +35,6 @@ export default {
       title: this.project.title,
     }
   },
+  transition: 'page',
 }
 </script>
