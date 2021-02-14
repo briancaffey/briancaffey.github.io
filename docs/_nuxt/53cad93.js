@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[23],{291:function(t,e,n){"use strict";n.r(e);var c={},l=n(7),component=Object(l.a)(c,(function(){var t=this.$createElement,e=this._self._c||t;return e("div",[e("h2",{staticClass:"text-center text-2xl py-32"},[this._v(this._s(this.$t("newsletter.thankYou")))])])}),[],!1,null,"7ef7c48b",null);e.default=component.exports}}]);
