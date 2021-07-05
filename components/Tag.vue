@@ -1,7 +1,17 @@
 <template>
   <nuxt-link :key="tag" :to="localePath(`/blog/tags/${tag}/`)">
     <div
-      class="px-2 text-sm shadow rounded-lg bg-white mx-1 mt-1 uppercase cursor-pointer"
+      class="
+        px-2
+        text-sm
+        shadow
+        rounded-lg
+        bg-white
+        mx-1
+        mt-1
+        uppercase
+        cursor-pointer
+      "
     >
       {{ tag }} 🏷️
       <span v-if="count"

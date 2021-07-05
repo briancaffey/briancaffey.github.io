@@ -13,7 +13,16 @@
       <div class="mb-4">
         <nuxt-link :to="localePath(`/blog/tags/${$route.params.tag}/`)">
           <span
-            class="inline-block bg-white rounded-lg text-small px-2 py-1 uppercase shadow"
+            class="
+              inline-block
+              bg-white
+              rounded-lg
+              text-small
+              px-2
+              py-1
+              uppercase
+              shadow
+            "
           >
             {{ $route.params.tag }} 🏷️
           </span>
