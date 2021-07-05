@@ -1,7 +1,17 @@
 <template>
   <article>
     <div
-      class="mx-auto max-w-6xl px-4 sm:px-4 md:px-4 lg:px-16 xl:pb-16 mt-4 lg:pl-64"
+      class="
+        mx-auto
+        max-w-6xl
+        px-4
+        sm:px-4
+        md:px-4
+        lg:px-16
+        xl:pb-16
+        mt-4
+        lg:pl-64
+      "
     >
       <img :src="project.image" class="h-64 w-full object-cover rounded" />
       <h1 class="prose text-3xl">{{ project.title }}</h1>

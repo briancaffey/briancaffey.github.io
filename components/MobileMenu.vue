@@ -1,6 +1,18 @@
 <template>
   <div
-    class="fixed inset-0 z-10 opacity-30 justify-center mobile-menu items-center pt-16 transition-all duration-150 delay-150"
+    class="
+      fixed
+      inset-0
+      z-10
+      opacity-30
+      justify-center
+      mobile-menu
+      items-center
+      pt-16
+      transition-all
+      duration-150
+      delay-150
+    "
   >
     <nav>
       <ul class="text-center flex-wrap text-3xl">
@@ -33,7 +45,18 @@
       </ul>
     </nav>
     <button
-      class="fixed top-0 right-0 items-center m-2 px-3 py-2 border rounded menu-icon"
+      class="
+        fixed
+        top-0
+        right-0
+        items-center
+        m-2
+        px-3
+        py-2
+        border
+        rounded
+        menu-icon
+      "
       @click="$emit('toggle')"
     >
       <svg
