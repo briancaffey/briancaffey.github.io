@@ -36,4 +36,4 @@ https://github.com/jazzband/djangorestframework-simplejwt/issues/71
 
 This diagram shows how authentication data moves between the Django backend and the Vue.js frontend running in the browser.
 
-*This article is not yet complete*
+*This article should now be complete complete*
