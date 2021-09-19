@@ -27,7 +27,7 @@ jobs:
 
       # - run: npm ci
       # - run: npm test
-      - run: npm i && npm run generate
+      - run: yarn && yarn generate generate
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
