@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/ru/blog/tags/poker", {data:[{articles:[{slug:"checking-poker-hands-with-python.html",title:"Finding the best poker hand in five-card draw with python",date:"2018-01-02T00:00:00.000Z",image:"\u002Fstatic\u002Fpoker.jpg",tags:["python","poker"],path:"\u002F2018\u002F01\u002F02\u002Fchecking-poker-hands-with-python.html"}]}],fetch:[],mutations:[]});
