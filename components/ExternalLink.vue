@@ -6,7 +6,7 @@
         :alt="data.link"
         class="rounded"
         width="25"
-      />
+      >
     </a>
   </div>
 </template>
@@ -16,9 +16,9 @@ export default {
   props: {
     data: {
       type: Object,
-      default: () => [],
-    },
-  },
+      default: () => []
+    }
+  }
 }
 </script>
 

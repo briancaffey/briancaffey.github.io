@@ -5,7 +5,7 @@
       height="350"
       :options="chartOptions"
       :series="$store.getters['waas/getSalaryEquitySeries']"
-    ></apexchart>
+    />
   </div>
 </template>
 
@@ -56,8 +56,8 @@ export default {
             formatter: function(value, opts) {
               return (
                 opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]
-                  .jobTitle + 
-                " | " + 
+                  .jobTitle +
+                " | " +
                 opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]
                   .companyName
 
@@ -70,7 +70,7 @@ export default {
               return (
                 "$" +
                 opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex]
-                  .x + 
+                  .x +
                 " | " +
                 (opts.series[opts.seriesIndex][opts.dataPointIndex] * 100).toFixed(3) +
                 "%"

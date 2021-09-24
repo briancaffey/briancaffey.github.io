@@ -31,10 +31,7 @@
     "@nuxtjs/tailwindcss": "^2.1.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.5.0",
-    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-nuxt": "^1.0.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.0.5",
     "push-dir": "^0.4.1"
   }
 }

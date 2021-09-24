@@ -9,9 +9,12 @@
         Previous Idea
       </button>
       <div>Idea #{{ this.$store.getters['waas/getIdeaIndex'] + 1 }}</div>
-      <button class="" @click="incrementIdeasIndex">Next Idea</button>
+      <button class="" @click="incrementIdeasIndex">
+        Next Idea
+      </button>
     </div>
-    <br />
+
+    <br>
     <div class="text-center">
       <div class="p-3 rounded border border-white hero">
         {{
@@ -26,17 +29,17 @@
 
 <script>
 export default {
-  created() {
+  created () {
     this.$store.dispatch('waas/fetchGeneratedIdeas')
   },
   methods: {
-    incrementIdeasIndex() {
+    incrementIdeasIndex () {
       this.$store.dispatch('waas/changeIdeasIndex', 1)
     },
-    decrementIdeasIndex() {
+    decrementIdeasIndex () {
       this.$store.dispatch('waas/changeIdeasIndex', -1)
-    },
-  },
+    }
+  }
 }
 </script>
 

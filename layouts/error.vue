@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  layout({ redirect, route }) {
-    if (route.path === '/abc') redirect(301, '/contact')
+  layout ({ redirect, route }) {
+    if (route.path === '/abc') { redirect(301, '/contact') }
     return 'default'
-  },
+  }
 }
 </script>
 

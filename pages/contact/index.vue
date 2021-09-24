@@ -4,7 +4,7 @@
       class="h-64 object-cover mx-auto rounded"
       src="/static/JBC_PA.jpg"
       alt="Brian Caffey at the Libery Bell in Philadelphia"
-    />
+    >
     <div class="flex mx-auto justify-center py-4">
       <div class="grid grid-cols-5 items-center gap-4 px-4">
         <a href="https://github.com/briancaffey">
@@ -35,11 +35,11 @@
 
 <script>
 export default {
-  head() {
+  head () {
     return {
-      title: 'Contact Brian Caffey',
+      title: 'Contact Brian Caffey'
     }
-  },
+  }
 }
 </script>
 

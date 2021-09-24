@@ -1,3 +1,4 @@
+
 <template>
   <div class="grid items-center justify-center">
     <ul class="flex px-4">
@@ -15,15 +16,15 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       colors: [
         ['system', '🖥️'],
         ['light', '🌞'],
         ['dark', '🌚'],
-        ['sepia', '☕'],
-      ],
+        ['sepia', '☕']
+      ]
     }
-  },
+  }
 }
 </script>

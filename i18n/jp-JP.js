@@ -3,7 +3,7 @@ module.exports = {
     home: 'ホームページ',
     blog: 'ブログ',
     projects: 'プロジェクト',
-    contact: '連絡先',
+    contact: '連絡先'
   },
   home: {
     allTags: 'すべてのタグ',
@@ -11,14 +11,14 @@ module.exports = {
     tags: '人気のタグ',
     blogPost: '私の最新のブログ投稿',
     welcome:
-      'ブライアン・カフェイの個人ウェブサイトへようこそ。このサイトは主に、ソフトウェアエンジニアリングだけでなく、他の趣味や興味についてのブログです。',
+      'ブライアン・カフェイの個人ウェブサイトへようこそ。このサイトは主に、ソフトウェアエンジニアリングだけでなく、他の趣味や興味についてのブログです。'
   },
   common: {
     name: 'ブライアン・カフェイ',
-    lastUpdated: '最終更新日：',
+    lastUpdated: '最終更新日：'
   },
   footer: {
-    thanks: '私のサイトをチェックしてくれてありがとう！',
+    thanks: '私のサイトをチェックしてくれてありがとう！'
   },
   contactForm: {
     contactMe: '私に連絡して',
@@ -29,22 +29,22 @@ module.exports = {
     yourWebsite: 'あなたのウェブサイト',
     sampleWebsite: 'https://appleseed.co',
     message: 'メッセージ',
-    sampleMessage: 'ここにメッセージを入力してください',
+    sampleMessage: 'ここにメッセージを入力してください'
   },
   newsletter: {
     joinNewsletter:
       'メーリングリストに参加して、新しい記事を公開するたびに更新してください。',
     enterEmail: 'Eメール',
     subscribe: '申し込む',
-    thankYou: '登録ありがとうございます！',
+    thankYou: '登録ありがとうございます！'
   },
   projects: {
-    projects: 'プロジェクト',
+    projects: 'プロジェクト'
   },
   blog: {
-    blogPosts: 'ブログ投稿',
+    blogPosts: 'ブログ投稿'
   },
   tags: {
-    allTags: 'すべてのタグ',
-  },
+    allTags: 'すべてのタグ'
+  }
 }

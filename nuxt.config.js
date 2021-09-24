@@ -1,8 +1,6 @@
-import { doc } from 'prettier'
-
 export default {
   env: {
-    baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io',
+    baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io'
   },
   /*
    ** Nuxt target
@@ -15,7 +13,7 @@ export default {
    */
   head: {
     htmlAttrs: {
-      lang: 'en',
+      lang: 'en'
     },
     title: 'Brian Caffey',
     meta: [
@@ -24,10 +22,10 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: "Brian Caffey's personal website",
-      },
+        content: "Brian Caffey's personal website"
+      }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   /*
    ** Global CSS
@@ -41,7 +39,7 @@ export default {
     '~/plugins/disqus',
     '~/plugins/filters',
     { src: '~/plugins/apexcharts', mode: 'client' },
-    { src: '~plugins/drift.js', mode: 'client' },
+    { src: '~plugins/drift.js', mode: 'client' }
   ],
   /*
    ** Auto import components
@@ -60,9 +58,9 @@ export default {
     [
       '@nuxtjs/google-analytics',
       {
-        id: 'UA-75060954-1',
-      },
-    ],
+        id: 'UA-75060954-1'
+      }
+    ]
   ],
   /*
    ** Nuxt.js modules
@@ -75,7 +73,7 @@ export default {
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     '@nuxtjs/sitemap',
     '@nuxtjs/feed',
-    'nuxt-i18n',
+    'nuxt-i18n'
   ],
   /*
    ** Axios module configuration
@@ -85,7 +83,7 @@ export default {
     baseURL:
       process.env.NODE_ENV === 'production'
         ? 'https://briancaffey.github.io'
-        : 'http://localhost:3000',
+        : 'http://localhost:3000'
   },
   /*
    ** Content module configuration
@@ -111,7 +109,7 @@ export default {
         const raw = document.text
         document.raw = raw
       }
-    },
+    }
   },
   build: {},
 
@@ -129,22 +127,22 @@ export default {
       return []
         .concat(
           ...posts
-            .filter((x) => !x.path.startsWith('/projects/'))
-            .map((w) => w.path)
+            .filter(x => !x.path.startsWith('/projects/'))
+            .map(w => w.path)
         )
-        .concat(...projects.map((p) => p.path))
-    },
+        .concat(...projects.map(p => p.path))
+    }
   },
 
   feed: [
     // A default feed configuration object
     {
       path: '/feed.xml', // The route to your feed.
-      async create(feed) {
+      async create (feed) {
         feed.options = {
           title: 'briancaffey.github.io',
           link: 'https://briancaffey.github.io/feed.xml',
-          description: 'RSS feed for briancaffey.github.io',
+          description: 'RSS feed for briancaffey.github.io'
         }
         const { $content } = require('@nuxt/content')
         const articles = await $content({ deep: true, text: true })
@@ -157,7 +155,7 @@ export default {
             title: article.title,
             id: article.url,
             link: `https://briancaffey.github.io${article.path}`,
-            description: article.description,
+            description: article.description
             // content: article.text,
           })
         })
@@ -167,40 +165,40 @@ export default {
         feed.addContributor({
           name: 'Brian Caffey',
           email: 'briancaffey2010@gmail.com',
-          link: 'https://briancaffey.github.io',
+          link: 'https://briancaffey.github.io'
         })
       }, // The create function (see below)
       cacheTime: 1000 * 60 * 15, // How long should the feed be cached
       type: 'rss2', // Can be: rss2, atom1, json1
-      data: [''], // Will be passed as 2nd argument to `create` function
-    },
+      data: [''] // Will be passed as 2nd argument to `create` function
+    }
   ],
 
   server: {
     port: 3000,
-    host: '0.0.0.0',
+    host: '0.0.0.0'
   },
 
   generate: {
     dir: 'docs',
-    async routes() {
+    async routes () {
       const { $content } = require('@nuxt/content')
 
       const posts = await $content({ deep: true }).only(['path']).fetch()
-      return posts.map((x) => x.path)
-    },
+      return posts.map(x => x.path)
+    }
   },
   router: {
-    extendRoutes(routes, resolve) {
+    extendRoutes (routes, resolve) {
       routes.push({
         path: '/:year/:month/:day/:slug',
-        component: resolve(__dirname, 'pages/_year/_month/_day/_slug.vue'),
+        component: resolve(__dirname, 'pages/_year/_month/_day/_slug.vue')
       })
-    },
+    }
   },
   i18n: {
     vueI18n: {
-      fallbackLocale: 'en',
+      fallbackLocale: 'en'
     },
     defaultLocale: 'en',
     parsePages: false,
@@ -211,7 +209,7 @@ export default {
       moduleName: 'i18n',
       syncLocale: false,
       syncMessages: false,
-      syncRouteParams: true,
+      syncRouteParams: true
     },
     langDir: 'i18n/',
     locales: [
@@ -220,36 +218,36 @@ export default {
         iso: 'en-US',
         file: 'en-US.js',
         name: 'English',
-        flag: '🇺🇸',
+        flag: '🇺🇸'
       },
       {
         code: 'fr',
         iso: 'fr-FR',
         file: 'fr-FR.js',
         name: 'Français',
-        flag: '🇫🇷',
+        flag: '🇫🇷'
       },
       {
         code: 'zh',
         iso: 'zh-ZH',
         file: 'zh-ZH.js',
         name: '简体中文',
-        flag: '🇨🇳',
+        flag: '🇨🇳'
       },
       {
         code: 'ru',
         iso: 'ru-RU',
         file: 'ru-RU.js',
         name: 'Русский',
-        flag: '🇷🇺',
+        flag: '🇷🇺'
       },
       {
         code: 'jp',
         iso: 'jp-JP',
         file: 'jp-JP.js',
         name: '日本語',
-        flag: '🇯🇵',
-      },
-    ],
-  },
+        flag: '🇯🇵'
+      }
+    ]
+  }
 }

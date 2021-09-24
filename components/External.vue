@@ -1,8 +1,8 @@
 <template>
   <div class="flex py-2">
-    <external-link v-for="(l, i) in external" :key="i" :data="l">{{
-      l
-    }}</external-link>
+    <external-link v-for="(l, i) in external" :key="i" :data="l">
+      {{ l }}
+    </external-link>
   </div>
 </template>
 
@@ -11,9 +11,9 @@ export default {
   props: {
     external: {
       type: Array,
-      default: () => [],
-    },
-  },
+      default: () => []
+    }
+  }
 }
 </script>
 

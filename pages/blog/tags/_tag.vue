@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  async asyncData({ $content, params }) {
+  async asyncData ({ $content, params }) {
     let articles = await $content({ deep: true })
       .only([
         'title',
@@ -45,18 +45,18 @@ export default {
         'author',
         'date',
         'path',
-        'tags',
+        'tags'
       ])
       .where({ draft: { $ne: true } })
       .where({ tags: { $containsAny: [params.tag] } })
       .sortBy('date', 'desc')
       .fetch()
 
-    articles = articles.filter((x) => !x.path.startsWith('/projects/'))
+    articles = articles.filter(x => !x.path.startsWith('/projects/'))
     return {
-      articles,
+      articles
     }
-  },
+  }
 }
 </script>
 

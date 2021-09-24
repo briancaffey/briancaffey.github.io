@@ -20,9 +20,11 @@
               v-if="project.image"
               :src="project.image"
               class="h-32 w-full object-cover rounded-t"
-            />
+            >
             <div class="py-8 px-4 sm:px-4">
-              <h2 class="text-2xl leading-8">{{ project.title }}</h2>
+              <h2 class="text-2xl leading-8">
+                {{ project.title }}
+              </h2>
               <p>{{ project.description }}</p>
               <p class="text-gray-600 mb-4">
                 {{ $t('common.lastUpdated') }}
@@ -38,7 +40,7 @@
 
 <script>
 export default {
-  async asyncData({ $content, params }) {
+  async asyncData ({ $content, params }) {
     const projects = await $content('projects', params.slug)
       .only([
         'layout',
@@ -49,26 +51,26 @@ export default {
         'image',
         'link',
         'date',
-        'slug',
+        'slug'
       ])
       .sortBy('date', 'desc')
       .fetch()
 
     return {
-      projects,
+      projects
     }
   },
   methods: {
-    formatDate(date) {
+    formatDate (date) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' }
       return new Date(date).toLocaleDateString('en', options)
-    },
-  },
-  head() {
-    return {
-      title: "Brian Caffey's Projects",
     }
   },
+  head () {
+    return {
+      title: "Brian Caffey's Projects"
+    }
+  }
 }
 </script>
 

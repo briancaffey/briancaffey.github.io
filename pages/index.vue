@@ -8,7 +8,9 @@
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <h2 class="text-2xl pb-4 text-center">{{ $t('home.blogPost') }}</h2>
+          <h2 class="text-2xl pb-4 text-center">
+            {{ $t('home.blogPost') }}
+          </h2>
           <ul>
             <blog-card :article="articles[0]" />
           </ul>
@@ -16,19 +18,23 @@
             <nuxt-link
               :to="localePath('blog')"
               class="p-4 m-4 rounded border btn"
-              >{{ $t('home.allArticles') }}</nuxt-link
             >
+              {{ $t('home.allArticles') }}
+            </nuxt-link>
           </div>
         </div>
         <div>
-          <h2 class="text-2xl pb-4 text-center">{{ $t('home.tags') }}</h2>
+          <h2 class="text-2xl pb-4 text-center">
+            {{ $t('home.tags') }}
+          </h2>
           <tag-cloud :articles="articles" :limit="40" />
           <div class="pt-8 text-center">
             <nuxt-link
               :to="localePath('/blog/tags/')"
               class="p-4 m-4 rounded border btn"
-              >{{ $t('home.allTags') }}</nuxt-link
             >
+              {{ $t('home.allTags') }}
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -38,7 +44,7 @@
 
 <script>
 export default {
-  async asyncData({ $content, params }) {
+  async asyncData ({ $content, params }) {
     let articles = await $content({ deep: true })
       .only([
         'title',
@@ -49,23 +55,23 @@ export default {
         'date',
         'path',
         'tags',
-        'external',
+        'external'
       ])
       .where({ draft: { $ne: true } })
       .sortBy('date', 'desc')
       .fetch()
 
-    articles = articles.filter((x) => !x.path.startsWith('/projects/'))
+    articles = articles.filter(x => !x.path.startsWith('/projects/'))
     return {
-      articles,
+      articles
     }
   },
-  head() {
+  head () {
     return {
-      title: 'Brian Caffey',
+      title: 'Brian Caffey'
     }
   },
-  transition: 'page',
+  transition: 'page'
 }
 </script>
 

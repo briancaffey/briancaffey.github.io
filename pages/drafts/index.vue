@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  async asyncData({ $content, params }) {
+  async asyncData ({ $content, params }) {
     let articles = await $content({ deep: true })
       .only([
         'title',
@@ -20,28 +20,28 @@ export default {
         'date',
         'path',
         'tags',
-        'external',
+        'external'
       ])
       .where({ draft: { $eq: true } })
       .sortBy('date', 'desc')
       .fetch()
 
-    articles = articles.filter((x) => !x.path.startsWith('/projects/'))
+    articles = articles.filter(x => !x.path.startsWith('/projects/'))
     return {
-      articles,
+      articles
     }
   },
-  head() {
+  head () {
     return {
       title: "Brian Caffey's Blog",
       meta: [
         {
           name: 'robots',
-          content: 'noindex',
-        },
-      ],
+          content: 'noindex'
+        }
+      ]
     }
-  },
+  }
 }
 </script>
 

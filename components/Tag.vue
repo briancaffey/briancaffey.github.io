@@ -14,10 +14,9 @@
       "
     >
       {{ tag }} 🏷️
-      <span v-if="count"
-        >(<span class="font-bold">{{ count }}</span
-        >)</span
-      >
+      <span
+        v-if="count"
+      >(<span class="font-bold">{{ count }}</span>)</span>
     </div>
   </nuxt-link>
 </template>
@@ -27,13 +26,13 @@ export default {
   props: {
     tag: {
       type: String,
-      default: '',
+      default: ''
     },
     count: {
       type: Number,
-      default: null,
-    },
-  },
+      default: null
+    }
+  }
 }
 </script>
 

@@ -7,7 +7,7 @@
 module.exports = {
   future: {
     removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
+    purgeLayersByDefault: true
   },
   theme: {},
   variants: {},
@@ -21,7 +21,7 @@ module.exports = {
       'pages/**/*.vue',
       'content/**/*.md',
       'plugins/**/*.js',
-      'nuxt.config.js',
-    ],
-  },
+      'nuxt.config.js'
+    ]
+  }
 }
