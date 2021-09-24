@@ -25,6 +25,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - run: yarn add -g eslint
       - run: yarn lint
       - run: yarn && yarn generate
 
