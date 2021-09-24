@@ -6,11 +6,15 @@
           v-if="article.image"
           :src="article.image"
           class="h-32 w-full object-cover rounded-t"
-        />
+        >
       </div>
       <div class="pt-4 px-4 sm:px-4">
-        <p class="text-2xl leading-8">{{ article.title }}</p>
-        <p class="blog-card-description">{{ article.description }}</p>
+        <p class="text-2xl leading-8">
+          {{ article.title }}
+        </p>
+        <p class="blog-card-description">
+          {{ article.description }}
+        </p>
       </div>
     </nuxt-link>
     <div class="px-4">
@@ -33,9 +37,9 @@ export default {
   props: {
     article: {
       type: Object,
-      default: () => {},
-    },
-  },
+      default: () => {}
+    }
+  }
 }
 </script>
 

@@ -141,22 +141,22 @@ export const state = () => ({
     ['XML', 1],
     ['MEMCACHED', 1],
     ['LESS', 1],
-    ['AMAZON ECHO', 1],
-  ],
+    ['AMAZON ECHO', 1]
+  ]
 })
 
 export const getters = {
   getIdeaIndex: (s) => {
     return s.ideaIndex % 10000
   },
-  getTopSkills: (s) => s.topSkills.map((x) => x[0]),
-  getTopSkillCounts: (s) => s.topSkills.map((x) => x[1]),
-  getSkillFrequencies: (s) => s.skillFrequencies,
-  getGeneratedIdeas: (s) => (idx) => s.generatedIdeas[idx],
-  getRelatedSkillsForSkill: (s) => (selectedSkill) => {
+  getTopSkills: s => s.topSkills.map(x => x[0]),
+  getTopSkillCounts: s => s.topSkills.map(x => x[1]),
+  getSkillFrequencies: s => s.skillFrequencies,
+  getGeneratedIdeas: s => idx => s.generatedIdeas[idx],
+  getRelatedSkillsForSkill: s => (selectedSkill) => {
     return s.skillFrequencies[selectedSkill]
   },
-  getCompanies: (s) => s.companies,
+  getCompanies: s => s.companies,
   getSalaryEquitySeries: (s) => {
     // eslint-disable-next-line prefer-const
     let jobData = []
@@ -187,35 +187,35 @@ export const getters = {
         } else {
           jobData.push({
             name: experience,
-            data: [dataRow],
+            data: [dataRow]
           })
         }
       }
     }
     return jobData.map((x) => {
       // eslint-disable-next-line dot-notation
-      const name = Number.isInteger(x['name']) ? `${x['name']}+ Years` : `Any`
+      const name = Number.isInteger(x['name']) ? `${x['name']}+ Years` : 'Any'
       return { ...x, name }
     })
-  },
+  }
 }
 
 export const actions = {
-  async fetchData({ commit }) {
+  async fetchData ({ commit }) {
     const response = await this.$axios.$get('static/waas_10.json')
     commit('SET_COMPANIES', response)
   },
-  async fetchSkillFrequencyData({ commit }) {
+  async fetchSkillFrequencyData ({ commit }) {
     const response = await this.$axios.$get('static/waas/skill_pairs.json')
     commit('SET_SKILL_FREQUENCIES', response)
   },
-  async fetchGeneratedIdeas({ commit }) {
+  async fetchGeneratedIdeas ({ commit }) {
     const response = await this.$axios.$get('static/waas/generated_ideas.json')
     commit('SET_GENERATED_IDEAS', response)
   },
-  changeIdeasIndex({ commit }, payload) {
+  changeIdeasIndex ({ commit }, payload) {
     commit('SET_IDEAS_INDEX', payload)
-  },
+  }
 }
 
 export const mutations = {
@@ -230,5 +230,5 @@ export const mutations = {
   },
   SET_SKILL_FREQUENCIES: (state, payload) => {
     state.skillFrequencies = payload
-  },
+  }
 }

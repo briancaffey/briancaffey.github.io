@@ -24,11 +24,11 @@ export default {
   props: {
     utterance: {
       type: String,
-      default: 'hello',
-    },
+      default: 'hello'
+    }
   },
   methods: {
-    speak() {
+    speak () {
       const synth = window.speechSynthesis
       const voices = synth.getVoices()
       const speaking = synth.speaking
@@ -39,8 +39,8 @@ export default {
       const utterance = new SpeechSynthesisUtterance(this.utterance)
       utterance.voice = voices[8]
       speechSynthesis.speak(utterance)
-    },
-  },
+    }
+  }
 }
 </script>
 

@@ -22,7 +22,7 @@
             name="EMAIL"
             :placeholder="$t('newsletter.enterEmail')"
             class="rounded mc text-center"
-          />
+          >
           <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
           <div style="position: absolute; left: -5000px" aria-hidden="true">
             <input
@@ -30,7 +30,7 @@
               name="b_43a795784ca963e25903a0da6_9937fe4fc5"
               tabindex="-1"
               value=""
-            />
+            >
           </div>
           <div class="">
             <input
@@ -39,7 +39,7 @@
               :value="$t('newsletter.subscribe')"
               name="subscribe"
               class="mc-btn rounded px-2 py-1 w-full"
-            />
+            >
           </div>
         </div>
       </form>

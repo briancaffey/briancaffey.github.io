@@ -6,17 +6,17 @@
     >
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
         <div>
-          <label for="name"
-            >{{ $t('contactForm.yourName') }}
-            <span class="text-red-600">*</span></label
-          >
+          <label
+            for="name"
+          >{{ $t('contactForm.yourName') }}
+            <span class="text-red-600">*</span></label>
           <input
             :placeholder="$t('contactForm.sampleName')"
             type="text"
             name="name"
             required
             class="mc"
-          />
+          >
         </div>
         <div>
           <label for="name">{{ $t('contactForm.yourEmail') }}</label>
@@ -26,7 +26,7 @@
             name="email"
             required
             class="mc"
-          />
+          >
         </div>
         <div>
           <label for="website">{{ $t('contactForm.yourWebsite') }}</label>
@@ -36,14 +36,14 @@
             name="website"
             class="mc"
             required="false"
-          />
+          >
         </div>
       </div>
       <div class="text-left mt-4">
-        <label for="message"
-          >{{ $t('contactForm.message') }}
-          <span class="text-red-600">*</span></label
-        >
+        <label
+          for="message"
+        >{{ $t('contactForm.message') }}
+          <span class="text-red-600">*</span></label>
         <textarea
           :placeholder="$t('contactForm.sampleMessage')"
           type="text"

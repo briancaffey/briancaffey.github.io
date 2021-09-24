@@ -9,9 +9,9 @@ export default {
   props: {
     tags: {
       type: Array,
-      default: () => [],
-    },
-  },
+      default: () => []
+    }
+  }
 }
 </script>
 

@@ -3,7 +3,7 @@ module.exports = {
     home: "Page d'accueil",
     blog: 'Blog',
     projects: 'Projets',
-    contact: 'Contact',
+    contact: 'Contact'
   },
   home: {
     allTags: 'Tous les tags',
@@ -11,14 +11,14 @@ module.exports = {
     tags: 'Tags populaires',
     blogPost: 'Mon dernier article de blog',
     welcome:
-      "Bienvenue sur le site Web personnel de Brian Caffey. Ce site est principalement un blog sur l'ingénierie logicielle ainsi que sur certains de mes autres passe-temps et intérêts.",
+      "Bienvenue sur le site Web personnel de Brian Caffey. Ce site est principalement un blog sur l'ingénierie logicielle ainsi que sur certains de mes autres passe-temps et intérêts."
   },
   common: {
     name: 'Brian Caffey',
-    lastUpdated: 'dernière mise à jour le',
+    lastUpdated: 'dernière mise à jour le'
   },
   footer: {
-    thanks: "Merci d'avoir visiter mon site !",
+    thanks: "Merci d'avoir visiter mon site !"
   },
   contactForm: {
     contactMe: 'Contact',
@@ -30,21 +30,21 @@ module.exports = {
     sampleWebsite: 'https://appleseed.co',
     message: 'Message',
     sampleMessage: 'Ecrivez votre message ici',
-    send: 'Envoyer',
+    send: 'Envoyer'
   },
   newsletter: {
     joinNewsletter: 'Abonnez-vous à mon newsletter',
     enterEmail: 'Adresse e-mail',
     subscribe: "S'inscrire",
-    thankYou: 'Merci de vous être abonné !',
+    thankYou: 'Merci de vous être abonné !'
   },
   projects: {
-    projects: 'Projets',
+    projects: 'Projets'
   },
   blog: {
-    blogPosts: 'Articles du blog',
+    blogPosts: 'Articles du blog'
   },
   tags: {
-    allTags: 'Tous les tags',
-  },
+    allTags: 'Tous les tags'
+  }
 }

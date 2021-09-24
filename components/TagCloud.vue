@@ -14,32 +14,32 @@ export default {
   props: {
     articles: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     limit: {
       type: Number,
-      default: Infinity,
-    },
+      default: Infinity
+    }
   },
   methods: {
-    mergeArrays(arr) {
+    mergeArrays (arr) {
       return [].concat.apply([], arr)
     },
-    counter(list) {
+    counter (list) {
       return list.reduce(
         (prev, curr) => ({
           ...prev,
-          [curr]: 1 + (prev[curr] || 0),
+          [curr]: 1 + (prev[curr] || 0)
         }),
         {}
       )
     },
-    tagCounts() {
+    tagCounts () {
       return Object.entries(
-        this.counter(this.mergeArrays(this.articles.map((x) => x.tags)))
+        this.counter(this.mergeArrays(this.articles.map(x => x.tags)))
       ).sort((a, b) => b[1] - a[1])
-    },
-  },
+    }
+  }
 }
 </script>
 

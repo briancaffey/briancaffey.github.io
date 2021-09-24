@@ -7,9 +7,9 @@
         :to="localePath('/')"
         class="text-xl"
         :class="$route.name.startsWith('index') ? 'font-bold' : ''"
-        ><span class="hidden sm:inline">{{ $t('common.name') }}</span
-        ><span class="inline sm:hidden">JBC</span></nuxt-link
       >
+        <span class="hidden sm:inline">{{ $t('common.name') }}</span><span class="inline sm:hidden">JBC</span>
+      </nuxt-link>
     </div>
     <div class="justify-center flex">
       <ColorModePicker />
@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'Navigation',
+  name: 'Navigation'
 }
 </script>
 

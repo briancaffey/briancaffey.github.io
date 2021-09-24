@@ -5,22 +5,25 @@
         <nuxt-link
           :to="localePath('blog')"
           :class="$route.name.startsWith('blog') ? 'font-bold' : ''"
-          >{{ $t('nav.blog') }}</nuxt-link
         >
+          {{ $t('nav.blog') }}
+        </nuxt-link>
       </li>
       <li class="px-4">
         <nuxt-link
           :to="localePath('projects')"
           :class="$route.name.startsWith('projects') ? 'font-bold' : ''"
-          >{{ $t('nav.projects') }}</nuxt-link
         >
+          {{ $t('nav.projects') }}
+        </nuxt-link>
       </li>
       <li class="px-4">
         <nuxt-link
           :to="localePath('contact')"
           :class="$route.name.startsWith('contact') ? 'font-bold' : ''"
-          >{{ $t('nav.contact') }}</nuxt-link
         >
+          {{ $t('nav.contact') }}
+        </nuxt-link>
       </li>
     </ul>
     <div class="flex justify-end md:hidden z-1000" @click="show = !show">
@@ -42,11 +45,11 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      show: false,
+      show: false
     }
-  },
+  }
 }
 </script>
 

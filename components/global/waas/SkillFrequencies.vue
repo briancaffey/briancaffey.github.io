@@ -22,19 +22,19 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      selectedSkill: null,
+      selectedSkill: null
     }
   },
   computed: {
-    skillFrequencies() {
+    skillFrequencies () {
       return Object.keys(this.$store.getters['waas/getSkillFrequencies'])
-    },
+    }
   },
-  created() {
+  created () {
     this.$store.dispatch('waas/fetchSkillFrequencyData')
-  },
+  }
 }
 </script>
 

@@ -5,7 +5,7 @@
         v-for="article of articles"
         :key="article.slug"
         :article="article"
-      ></blog-card>
+      />
     </ul>
   </div>
 </template>
@@ -15,9 +15,9 @@ export default {
   props: {
     articles: {
       type: Array,
-      default: () => [],
-    },
-  },
+      default: () => []
+    }
+  }
 }
 </script>
 

@@ -31,8 +31,9 @@
           :key="`${locale.code}-option`"
           :to="switchLocalePath(locale.code)"
           @click.native="toggleShowOptions"
-          >{{ locale.flag }} {{ locale.name }}</nuxt-link
         >
+          {{ locale.flag }} {{ locale.name }}
+        </nuxt-link>
       </div>
     </div>
   </div>
@@ -40,31 +41,31 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      showOptions: false,
+      showOptions: false
     }
   },
   computed: {
-    currentLocaleObject() {
+    currentLocaleObject () {
       const currentLocale = this.$i18n.locale
 
       return this.$i18n.locales.find((obj) => {
         return (obj.code = currentLocale)
       })
     },
-    availableLocales() {
+    availableLocales () {
       return this.$i18n.locales
     },
-    getShowOptions() {
+    getShowOptions () {
       return this.showOptions
-    },
+    }
   },
   methods: {
-    toggleShowOptions() {
+    toggleShowOptions () {
       // alert(this.$i18n.locale)
       this.showOptions = !this.showOptions
-    },
-  },
+    }
+  }
 }
 </script>
