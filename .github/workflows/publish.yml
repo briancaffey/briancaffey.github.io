@@ -25,9 +25,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - run: yarn global add eslint
+      - run: yarn
       - run: yarn lint
-      - run: yarn && yarn generate
+      - run: yarn generate
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
