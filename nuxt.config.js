@@ -215,6 +215,7 @@ export default {
     locales: [
       {
         code: 'en',
+        emoji: 'flag-us',
         iso: 'en-US',
         file: 'en-US.js',
         name: 'English',
@@ -222,6 +223,7 @@ export default {
       },
       {
         code: 'fr',
+        emoji: 'flag-fr',
         iso: 'fr-FR',
         file: 'fr-FR.js',
         name: 'Français',
@@ -229,6 +231,7 @@ export default {
       },
       {
         code: 'zh',
+        emoji: 'flag-cn',
         iso: 'zh-ZH',
         file: 'zh-ZH.js',
         name: '简体中文',
@@ -236,6 +239,7 @@ export default {
       },
       {
         code: 'ru',
+        emoji: 'flag-ru',
         iso: 'ru-RU',
         file: 'ru-RU.js',
         name: 'Русский',
@@ -243,6 +247,7 @@ export default {
       },
       {
         code: 'jp',
+        emoji: 'flag-jp',
         iso: 'jp-JP',
         file: 'jp-JP.js',
         name: '日本語',
