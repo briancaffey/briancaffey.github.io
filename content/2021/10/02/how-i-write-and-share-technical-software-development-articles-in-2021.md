@@ -10,7 +10,7 @@ tags:
   - writing
   - blogging
 external:
-  - link: https://news.ycombinator.com/
+  - link: https://news.ycombinator.com/item?id=28740415
     site: hn
   - link: https://www.reddit.com/r/webdev/comments/q0qc3l/how_i_write_and_share_technical_software/
     site: reddit
