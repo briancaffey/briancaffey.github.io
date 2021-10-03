@@ -89,6 +89,10 @@ export default {
         {
           property: 'og:image',
           content: process.env.baseUrl + this.article.image
+        },
+        {
+          property: 'summary_large_image',
+          content: process.env.baseUrl + this.article.image
         }
       ]
     }
