@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/ru/blog/tags/writing", {data:[{articles:[]}],fetch:{},mutations:[]});

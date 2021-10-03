@@ -4,10 +4,16 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Sun, 03 Oct 2021 17:14:33 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 03 Oct 2021 18:01:44 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[How I write and share technical software development articles in 2021]]></title>
+            <link>https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021</link>
+            <guid>https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021</guid>
+            <description><![CDATA[This article describes how to write and share technical articles in 2021]]></description>
+        </item>
         <item>
             <title><![CDATA[Authenticating requests with JWT tokens stored in HTTPOnly cookies in Django]]></title>
             <link>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</link>
