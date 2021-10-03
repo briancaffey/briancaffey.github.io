@@ -91,7 +91,7 @@ export default {
           content: process.env.baseUrl + this.article.image
         },
         {
-          property: 'summary_large_image',
+          property: 'twitter:card',
           content: process.env.baseUrl + this.article.image
         }
       ]
