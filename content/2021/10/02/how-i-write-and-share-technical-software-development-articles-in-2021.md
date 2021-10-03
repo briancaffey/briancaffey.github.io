@@ -283,9 +283,28 @@ height: 100%;
 
 I use MailChimp to build a newsletter audience. I'll be sending out a newsletter to my current audience with an update about this article. I wrote an article about how to set up MailChimp on Nuxt. I wrote an article on my blog about how I set up a form for guests to sign up for a newsletter using a MailChimp form: [https://briancaffey.github.io/zh/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp.html](https://briancaffey.github.io/zh/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp.html).
 
+Here's what the form looks like:
+
+
+<br />
+
+<client-only />
+  <newsletter />
+</client-only>
+
 ### formsubmit.co
 
 Site visitors can send me messages through an online form called [formsubmit.co](https://formsubmit.co). I include this form on my site's [Contact](https://briancaffey.github.io/contact) page.
+
+<br />
+
+<client-only />
+  <contact-form />
+</client-only>
+
+<br /><br />
+
+This two forms are examples of using Vue components in Markdown files that I mentioned earlier. Both the `Nesletter` and `ContactForm` components must be in the `components/global` directory.
 
 ### Drift
 
