@@ -2,6 +2,7 @@
 title: How I write and share technical software development articles in 2021
 date: '2021-10-02'
 description: This article describes how to write and share technical articles in 2021
+image: /static/dev-sites.png
 tags:
   - nuxt
   - vue
@@ -22,6 +23,8 @@ external:
     site: substack
   - link: https://hackernoon.com/
     site: hackernoon
+  - link: https://egghead.io/
+    site: egghead
 draft: true
 ---
 
