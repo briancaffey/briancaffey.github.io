@@ -39,13 +39,13 @@ I first started writing my personal website on GitHub pages using a static websi
 
 ### GitHub Pages
 
-I host my website on GitHub pages at the following domain: [briancaffey.github.io](https://briancaffey.github.io). GitHub pages is a great way to host a public site. The subdomain, `briancaffey` in my case, is your GitHub username. GitHub pages will serve content from a specified branch and nested folder. My website use the branch `gh-pages` and the root folder `/`.
+I host my website on GitHub pages at the following domain: [briancaffey.github.io](https://briancaffey.github.io). GitHub pages is a great way to host a public site. The subdomain, `briancaffey` in my case, is your GitHub username. GitHub pages will serve content from a specified branch and nested folder. My website uses the branch `gh-pages` and the root folder `/`.
 
 ### GitHub Actions
 
 I use GitHub actions to deploy my website to GitHub pages. Here's the file that sets up the GitHub action that builds and deploys my site:
 
-```
+```yml
 name: github pages
 
 on:
@@ -84,7 +84,7 @@ jobs:
           publish_dir: ./docs
 ```
 
-When changes are pushed to the `master` branch, this script runs. It builds the site with `yarn generate` and then the `peaceiris/actions-gh-pages@v3` commits only the build artifacts to the `gh-pages` branch where the content is served on `briancaffey.github.io`.
+When changes are pushed to the `master` branch, this script runs. It builds the site with `yarn generate` and then the `peaceiris/actions-gh-pages@v3` GitHub Action commits only the build artifacts to the `gh-pages` branch where the content is served on `briancaffey.github.io`.
 
 ### Nuxt.js Framework
 
@@ -134,8 +134,8 @@ content/
 │       └── 07
 │           └── my-article.md
 ├── 2017
-│   ├── 01
-│   │   └── 01
+│   └── 01
+│      └── 01
 │           └── my-other-article.md
 ...
 └── projects
@@ -175,7 +175,7 @@ pages
 └── thank-you.vue
 ```
 
-Directories in side of the `pages` directory starting with an underscore (like `_year`) can be used as URL parameters.
+Directories in the `pages` directory starting with an underscore (like `_year`) can be used as URL parameters.
 
 ### Markdown and Vue Components
 
@@ -191,7 +191,7 @@ This is some content
 This is more content.
 ```
 
-Vue components used in Markdown files must be included in the `components/global` directory.
+Vue components used in Markdown files must be included in the `components/global` directory. Here's an article on my blog where I used Vue components to show interactive graphs: [https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings](https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings)
 
 ### Images
 
