@@ -12,20 +12,20 @@ tags:
 external:
   - link: https://news.ycombinator.com/
     site: hn
-  - link: https://reddit.com
+  - link: https://www.reddit.com/r/webdev/comments/q0qc3l/how_i_write_and_share_technical_software/
     site: reddit
-  - link: https://dev.to
+  - link: https://dev.to/briancaffey/how-i-write-and-share-technical-software-development-articles-in-2021-27n2
     site: dev
-  - link: https://medium.com
+  - link: https://medium.com/@briancaffey/how-i-write-and-share-technical-software-development-articles-in-2021-8168d3871bf9
     site: medium
-  - link: https://briancaffey.hashnode.com
+  - link: https://briancaffey.hashnode.dev/how-i-write-and-share-technical-software-development-articles-in-2021
     site: hashnode
-  - link: https://briancaffey.substack.com
-    site: substack
-  - link: https://hackernoon.com/
-    site: hackernoon
-  - link: https://egghead.io/
-    site: egghead
+  # - link: https://briancaffey.substack.com
+  #   site: substack
+  # - link: https://hackernoon.com/
+  #   site: hackernoon
+  # - link: https://egghead.io/
+  #   site: egghead
 ---
 
 This article describes how I write and share technical articles on my personal website and other developer websites and technical article aggregation sites.
@@ -310,8 +310,17 @@ For this article, I have mostly tried to keep the custom content to a minimum so
 DEV.to articles support their own custom front-matter properties. Here's what the front-matter for the DEV.to article looks like:
 
 ```
-<add DEV.to article front-matter>
+---
+title: How I write and share technical software development articles in 2021
+published: false
+date: '2021-10-02'
+tags:  nuxt, vue, publishing, blogging
+image: 'https://briancaffey.github.io/static/dev-sites.png'
+canonical_url: https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021
+---
 ```
+
+If you don't see your article in your list of article drafts on your DEV.to dashboard, you can go into `Settings > Extensions > Publishing to DEV Community from RSS` and click on `Save Feed Settings`. I think this refreshes your RSS feed in your dashboard.
 
 ### Medium
 
@@ -360,8 +369,3 @@ You may want to split a large project's documentation site into its own site, ra
 As I'm writing this article, Nuxt 3 is almost one week away from a public beta. I'm excited to try upgrading this site to Nuxt 3 and trying out some of the new features that it includes.
 
 Thanks for reading this article, wherever you may have found it on the internet!
-
-## TODO
-
-- [ ] Add DEV.to front-matter
-- [ ] Publish on DEV.to
