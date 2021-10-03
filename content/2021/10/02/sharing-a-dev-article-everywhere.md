@@ -306,17 +306,25 @@ DEV.to articles support their own custom frontmatter properties. Here's what the
 
 I haven't published anything on Medium, so one of my goals for this article is to cross publish it on Medium in my first article on that platform.
 
+[https://medium.com/new-story](https://medium.com/new-story)
+
 ### Hashnode
 
 Hashnode seems like a newer version of DEV.to.
+
+[https://hashnode.com/create/story](https://hashnode.com/create/story)
 
 ### Hacker Noon
 
 Hacker Noon is another plaform that I haven't used before as a writer, but one that I'm aiming to publish on with this article!
 
+[https://app.hackernoon.com/new](https://app.hackernoon.com/new)
+
 ### Reddit
 
 I have shared a lot of content on different programming subreddits specific to some of the tools and frameworks I use, such as `r/aws` and `r/django`. When sharing on reddit, I like to share links to my personal website with at least on comment that provides a detailed summary of the article. When sharing on
+
+[https://www.reddit.com/r/Nuxt/](https://www.reddit.com/r/Nuxt/)
 
 ### Facebook
 
@@ -333,5 +341,7 @@ One more great thing about GitHub pages is that you can publish a site on any of
 I have been working updating and rewriting my Django + Vue.js + AWS reference project. It contains a documentation site that I am making with VuePress. The repo for this project is here: [github.com/briancaffey/django-step-by-step](https://github.com/briancaffey/django-step-by-step). This repository has it's own GitHub Pages configuration, as well as a GitHub Action to help automate the deployment of this project documentation site to GitHub Pages. The project site is currently hosted on [briancaffey.github.io/django-step-by-step/](https://briancaffey.github.io/django-step-by-step/).
 
 You may want to split a large project's documentation site into its own site, rather than having it live on the nested path of a personal blog. Following this pattern, your GitHub pages blog can become a site that is much larger than one single Nuxt statis site. `briancaffey.github.io` is now a hybrid Nuxt.js and VuePress site, with a subset of routes (starting with /django-step-by-step/) being served by VuePress.
+
+As I'm writing this article, Nuxt 3 is almost one week away from a public beta. I'm excited to try upgrading this site to Nuxt 3 and trying out some of the new features that it includes.
 
 Thanks for reading this article, wherever you may have found it on the internet!
