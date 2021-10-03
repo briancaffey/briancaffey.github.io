@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/zh/blog/tags/publishing", {data:[{articles:[]}],fetch:{},mutations:[]});
