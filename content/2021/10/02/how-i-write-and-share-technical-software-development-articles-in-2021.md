@@ -324,6 +324,8 @@ For this article, I have mostly tried to keep the custom content to a minimum so
 
 ### DEV.to
 
+[https://dev.to/briancaffey/how-i-write-and-share-technical-software-development-articles-in-2021-27n2](https://dev.to/briancaffey/how-i-write-and-share-technical-software-development-articles-in-2021-27n2)
+
 [DEV.to](https://dev.to) is a popular site for sharing technical articles. They allow you to automatically draft articles to publish on their site by adding your site's RSS feed. This article will be published on DEV.to through the RSS feed connection that my account has with DEV.to.
 
 DEV.to articles support their own custom front-matter properties. Here's what the front-matter for the DEV.to article looks like:
@@ -343,11 +345,15 @@ If you don't see your article in your list of article drafts on your DEV.to dash
 
 ### Medium
 
+[https://medium.com/@briancaffey/how-i-write-and-share-technical-software-development-articles-in-2021-8168d3871bf9](https://medium.com/@briancaffey/how-i-write-and-share-technical-software-development-articles-in-2021-8168d3871bf9)
+
 I haven't published anything on Medium, so one of my goals for this article is to cross publish it on Medium in my first article on that platform.
 
 [https://medium.com/new-story](https://medium.com/new-story)
 
 ### Hashnode
+
+[https://briancaffey.hashnode.dev/how-i-write-and-share-technical-software-development-articles-in-2021](https://briancaffey.hashnode.dev/how-i-write-and-share-technical-software-development-articles-in-2021)
 
 Hashnode seems very similar to DEV.to. Here's a comparison that shows some of the advantages of using Hashnode as a blogging platform over DEV.to: [https://hashnode.com/vs/devto](https://hashnode.com/vs/devto).
 
@@ -363,11 +369,15 @@ Hacker Noon is another platform that I haven't used before as a writer, but one 
 
 [https://app.hackernoon.com/new](https://app.hackernoon.com/new)
 
+### Hacker News
+
+[https://news.ycombinator.com/item?id=28740415](https://news.ycombinator.com/item?id=28740415)
+
 ### Reddit
 
 I have shared a lot of content on different programming subreddits specific to some of the tools and frameworks I use, such as `r/aws` and `r/django`. When sharing on reddit, I like to share links to my personal website with at least on comment that provides a detailed summary of the article. When sharing on
 
-[https://www.reddit.com/r/Nuxt/](https://www.reddit.com/r/Nuxt/)
+[https://www.reddit.com/r/webdev/comments/q0qc3l/how_i_write_and_share_technical_software/](https://www.reddit.com/r/webdev/comments/q0qc3l/how_i_write_and_share_technical_software/)
 
 ### Facebook
 
@@ -382,6 +392,19 @@ Discord also has some dedicated servers for software frameworks, such as Nuxt.js
 One more great thing about GitHub pages is that you can publish a site on any of your GitHub repositories that will be hosted on a subpath of your GitHub pages blog.
 
 I have been working updating and rewriting my Django + Vue.js + AWS reference project. It contains a documentation site that I am making with VuePress. The repo for this project is here: [github.com/briancaffey/django-step-by-step](https://github.com/briancaffey/django-step-by-step). This repository has it's own GitHub Pages configuration, as well as a GitHub Action to help automate the deployment of this project documentation site to GitHub Pages. The project site is currently hosted on [briancaffey.github.io/django-step-by-step/](https://briancaffey.github.io/django-step-by-step/).
+
+The project uses a CDK construct library that I have been developing alongside of this reference project called [`django-cdk`](https://github.com/briancaffey/django-cdk). It provides high-level constructs that allow you to deploy a complete stack of resources on AWS that will support your Django + Vue.js application including:
+
+- VPC networking
+- CloudFront & S3 for Frontend
+- RDS & Elasticache
+- ECS & EKS options
+- Application Load Balancer
+- Automatic migrations
+- Asset and Media file storage with S3
+- Shell access (for debugging)
+
+The documentation for `django-cdk` can be found here: [https://briancaffey.github.io/django-step-by-step/deploy/aws/#about-django-cdk](https://briancaffey.github.io/django-step-by-step/deploy/aws/#about-django-cdk)
 
 You may want to split a large project's documentation site into its own site, rather than having it live on the nested path of a personal blog. Following this pattern, your GitHub pages blog can become a site that is much larger than one single Nuxt static site. `briancaffey.github.io` is now a hybrid Nuxt.js and VuePress site, with a subset of routes (starting with /django-step-by-step/) being served by VuePress.
 
