@@ -20,8 +20,8 @@ external:
     site: medium
   - link: https://briancaffey.hashnode.dev/how-i-write-and-share-technical-software-development-articles-in-2021
     site: hashnode
-  # - link: https://briancaffey.substack.com
-  #   site: substack
+  - link: https://briancaffey.substack.com/p/how-i-write-and-share-technical-software
+    site: substack
   # - link: https://hackernoon.com/
   #   site: hackernoon
   # - link: https://egghead.io/
@@ -372,6 +372,10 @@ Hacker Noon is another platform that I haven't used before as a writer, but one 
 ### Hacker News
 
 [https://news.ycombinator.com/item?id=28740415](https://news.ycombinator.com/item?id=28740415)
+
+### Substack
+
+[https://briancaffey.substack.com/p/how-i-write-and-share-technical-software](https://briancaffey.substack.com/p/how-i-write-and-share-technical-software)
 
 ### Reddit
 
