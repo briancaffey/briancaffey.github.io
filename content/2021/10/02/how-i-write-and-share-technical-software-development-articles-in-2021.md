@@ -22,8 +22,8 @@ external:
     site: hashnode
   - link: https://briancaffey.substack.com/p/how-i-write-and-share-technical-software
     site: substack
-  # - link: https://hackernoon.com/
-  #   site: hackernoon
+  - link: https://hackernoon.com/how-to-get-your-dev-blog-noticed-in-2021
+    site: hackernoon
   # - link: https://egghead.io/
   #   site: egghead
 ---
@@ -365,9 +365,9 @@ Egghead is another blogging platform that allows you to helps you `Own Your Onli
 
 ### Hacker Noon
 
-Hacker Noon is another platform that I haven't used before as a writer, but one that I'm aiming to publish on with this article!
+[https://hackernoon.com/how-to-get-your-dev-blog-noticed-in-2021](https://hackernoon.com/how-to-get-your-dev-blog-noticed-in-2021)
 
-[https://app.hackernoon.com/new](https://app.hackernoon.com/new)
+Hacker Noon is another platform that I haven't used before as a writer. In order to publish an article on Hacker Noon, the article must go through an editing process. The Hacker Noon editors change the title and cover image of my article, and also added some minor editor notes.
 
 ### Hacker News
 
