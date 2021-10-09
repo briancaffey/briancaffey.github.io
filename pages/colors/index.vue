@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto max-w-6xl grid-cols-3">
+  <div class="mx-auto max-w-6xl flex">
     <div class="palette box-color" /> color
     <div class="palette box-color-primary" /> color-primary
     <div class="palette box-color-secondary" /> color-secondary
