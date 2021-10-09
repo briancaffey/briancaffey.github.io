@@ -27,7 +27,7 @@
           <h2 class="text-2xl pb-4 text-center">
             {{ $t('home.tags') }}
           </h2>
-          <tag-cloud :articles="articles" :limit="40" />
+          <tag-cloud :articles="articles" :limit="30" />
           <div class="pt-8 text-center">
             <nuxt-link
               :to="localePath('/blog/tags/')"

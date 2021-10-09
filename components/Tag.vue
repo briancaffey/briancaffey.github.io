@@ -3,14 +3,16 @@
     <div
       class="
         px-2
-        text-sm
+        text-lg
+        text-white
         shadow
         rounded-lg
-        bg-white
+        bg-black
         mx-1
         mt-1
         uppercase
         cursor-pointer
+        tag
       "
     >
       {{ tag }} 🏷️
@@ -36,4 +38,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.tag {
+  background-color: var(--color-primary);
+  transition: transform .2s;
+}
+.tag:hover {
+  transform: scale(1.05);
+}
+</style>
