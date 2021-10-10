@@ -10,6 +10,12 @@
 <script>
 export default {
   async asyncData ({ $content, params }) {
+    const allArticles = await $content({ deep: true })
+      .only(['title'])
+      .where({ draft: { $ne: true }, layout: { $eq: 'post' } })
+      .sortBy('date', 'desc')
+      .fetch()
+
     let articles = await $content({ deep: true })
       .only([
         'title',
@@ -28,7 +34,7 @@ export default {
 
     articles = articles.filter(x => !x.path.startsWith('/projects/'))
     return {
-      articles
+      articles, allArticles
     }
   },
   head () {

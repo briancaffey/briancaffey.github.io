@@ -16,7 +16,7 @@
           </ul>
           <div class="pt-8 text-center">
             <nuxt-link
-              :to="localePath('blog')"
+              :to="localePath('/blog/1')"
               class="p-4 m-4 rounded border btn"
             >
               {{ $t('home.allArticles') }}

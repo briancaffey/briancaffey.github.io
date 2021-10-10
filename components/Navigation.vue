@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    <div class="top" />
     <div
       class="mx-auto flex py-2 px-2 sm:px-4 items-center max-w-6xl justify-center"
     >
@@ -44,5 +45,11 @@ span.emoji-mart-emoji {
   margin-left: auto;
   margin-right: auto;
   transform: translate(50%, 50%);
+}
+
+.top {
+  width: 100%;
+  background-color: var(--color-primary);
+  height: 3px;
 }
 </style>
