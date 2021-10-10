@@ -1,5 +1,5 @@
 <template>
-  <li class="rounded article-card card">
+  <li class="rounded article-card">
     <nuxt-link :to="localePath(article.path)">
       <div>
         <img
@@ -44,11 +44,4 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  transition: transform .2s;
-}
-
-.card:hover {
-  transform: scale(1.025);
-}
 </style>
