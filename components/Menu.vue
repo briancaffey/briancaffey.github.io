@@ -4,7 +4,7 @@
       <ul class="items-right float-right hidden md:flex">
         <li class="px-4 text-lg">
           <nuxt-link
-            :to="localePath('blog')"
+            :to="localePath('/blog/1')"
             :class="$route.name.startsWith('blog') ? 'selected' : ''"
           >
             {{ $t('nav.blog') }}
