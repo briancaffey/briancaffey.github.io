@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/in/blog/tags/cellular-automata", {data:[{articles:[{slug:"langton-ant-notebook.html",title:"Python script for generating 2D n-state Langton's Ant animations",date:"2017-04-02T00:00:00.000Z",image:"\u002Fstatic\u002Fant.png",tags:["python","cellular-automata"],path:"\u002F2017\u002F04\u002F02\u002Flangton-ant-notebook.html"}]}],fetch:{},mutations:[]});
