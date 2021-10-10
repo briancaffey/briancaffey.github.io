@@ -3,7 +3,7 @@ layout: post
 title: PCPartPicker data
 date: 2017-01-01
 comments: true
-image: /img/builds/hist.png
+image: /img/pcpp/hist.png
 tags:
   - python
   - scraping
@@ -222,7 +222,7 @@ At this point we can do a quick visualization of the distribution of PC prices:
 df.total[(df.total>0)&(df.total<7000)].hist(bins=100, figsize=(20,10))
 ```
 
-![png](/img/builds/hist.png)
+![png](/img/pcpp/hist.png)
 
 The mean PC price is **\$1,292**. However, the price of PCs is not reflected accurately in `df.total`. I noticed that some builds include multiple monitors while others don't include any and some builders don't include prices for components from their previous PC builds.
 
