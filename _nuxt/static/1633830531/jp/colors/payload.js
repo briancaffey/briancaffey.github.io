@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/jp/colors", {data:[{}],fetch:{},mutations:[]});
