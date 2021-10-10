@@ -36,7 +36,6 @@ span.emoji-mart-emoji {
   padding-right: 0px;
 }
 .selected {
-  text-decoration: underline;
   text-shadow: .25px 0 0  #000;
 }
 .picker {
