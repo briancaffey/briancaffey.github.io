@@ -189,13 +189,17 @@ td {
 }
 
 .article-card {
-  box-shadow: 0 5px 10px 1px var(--color-secondary);
+  box-shadow: 0 5px 10px 0 var(--color-secondary);
+  /* transition:  */
+  transition: box-shadow .2s, transform .2s;
   height: 100%;
 }
 
 .article-card:hover {
-  box-shadow: 0 5px 15px 5px var(--color-secondary);
+  box-shadow: 0 10px 40px 0 var(--color-secondary);
+  transform: scale(1.025);
 }
+
 
 .blog-card-description {
   color: var(--color-secondary)

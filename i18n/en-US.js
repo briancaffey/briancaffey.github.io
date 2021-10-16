@@ -21,6 +21,7 @@ module.exports = {
     thanks: 'Thanks for checking out my site!'
   },
   contactForm: {
+    followMe: 'Follow Me',
     contactMe: 'Contact Me',
     yourName: 'Your Name',
     sampleName: 'J. Appleseed',
