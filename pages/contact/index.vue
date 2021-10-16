@@ -26,6 +26,30 @@
     </div>
     <div>
       <div class="text-2xl font-bold text-center py-4">
+        {{ $t('contactForm.followMe') }}
+      </div>
+      <div class="flex mx-auto justify-center py-4">
+        <div class="grid grid-cols-5 items-center gap-4 px-4">
+          <a href="https://dev.to/briancaffey">
+            <img class="follow" src="/icons/dev.png">
+          </a>
+          <a href="https://briancaffey.substack.com">
+            <img class="follow" src="/icons/substack.png">
+          </a>
+          <a href="https://briancaffey.hashnode.dev/">
+            <img class="follow" src="/icons/hashnode.png">
+          </a>
+          <a href="https://medium.com/@briancaffey">
+            <img class="follow" src="/icons/medium.png">
+          </a>
+          <a href="https://hackernoon.com/u/briancaffey">
+            <img class="follow" src="/icons/hackernoon.png">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="text-2xl font-bold text-center py-4">
         {{ $t('contactForm.contactMe') }}
       </div>
       <contact-form />
@@ -43,4 +67,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.follow {
+  max-height: 50px;
+  border-radius: 10px;
+}
+</style>

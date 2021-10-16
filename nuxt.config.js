@@ -255,6 +255,14 @@ export default {
         file: 'jp-JP.js',
         name: '日本語',
         flag: '🇯🇵'
+      },
+      {
+        code: 'in',
+        emoji: 'flag-in',
+        iso: 'hi-IN',
+        file: 'hi-IN.js',
+        name: 'हिंदी',
+        flag: '🇮🇳'
       }
     ]
   }

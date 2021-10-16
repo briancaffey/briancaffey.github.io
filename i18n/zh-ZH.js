@@ -7,12 +7,12 @@ module.exports = {
   },
   home: {
     allTags: '所有标签',
-    allArticles: '所有博客文章',
-    joinNewsletter: '加入我的时事通讯',
+    allArticles: '所有文章',
+    joinNewsletter: '加入我的通讯名单',
     tags: '热门标签',
-    blogPost: '我最新的博客文章',
+    blogPost: '最新的博客文章',
     welcome:
-      '欢迎使用Brian Caffey的个人网站。这个站点主要是关于软件工程的博客，以及我的其他爱好和兴趣。'
+      '欢迎访问Brian Caffey的个人网站。本网站主要发表我对关于软件工程的拙见，以及分享我的兴趣爱好。'
   },
   common: {
     lastUpdated: '更新日期',
@@ -22,20 +22,21 @@ module.exports = {
     thanks: '感谢您访问我的网站！'
   },
   contactForm: {
+    followMe: '请关注我在其他网站的账号，上面也有我发表的文章',
     contactMe: '联络我',
     yourName: '名字',
-    sampleName: '张三',
-    yourEmail: '你的邮件',
-    sampleEmail: 'zhangsan@163.com',
-    yourWebsite: '你的网页',
-    sampleWebsite: 'https://zhangsan.cn',
+    sampleName: '陈某某',
+    yourEmail: '您的邮箱',
+    sampleEmail: 'chenmoumou@qq.com',
+    yourWebsite: '您的网页',
+    sampleWebsite: 'https://chenmoumou.cn',
     message: '信息',
-    sampleMessage: '在这里输入你的消息',
+    sampleMessage: '输入消息',
     send: '发送'
   },
   newsletter: {
-    joinNewsletter: '加入我的新闻通讯',
-    enterEmail: '输入你的电子邮箱地址',
+    joinNewsletter: '加入我的通讯名单',
+    enterEmail: '输入您的电子邮箱',
     subscribe: '订阅',
     thankYou: '感谢您的订阅！'
   },
@@ -43,7 +44,7 @@ module.exports = {
     projects: '项目'
   },
   blog: {
-    blogPosts: '博客文章'
+    blogPosts: '文章'
   },
   tags: {
     allTags: '所有标签'

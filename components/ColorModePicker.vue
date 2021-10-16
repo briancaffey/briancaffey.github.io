@@ -46,6 +46,11 @@ span.emoji-mart-emoji {
   padding: 0px;
   padding-left: 0px;
   padding-right: 0px;
+  transition: transform .2s;
+}
+
+span.emoji-mart-emoji:hover {
+  transform: scale(1.3);
 }
 
 .centered {
