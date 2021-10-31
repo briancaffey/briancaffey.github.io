@@ -1,0 +1,221 @@
+---
+title: How and why I added AdSense and an AdBlock blocker to my personal blog
+date: '2021-10-31'
+description: This article describes how I added AdSense and how I request that site visitors not use AdBlock
+image: /static/dev-sites.png
+tags:
+  - nuxt
+  - ads
+  - adsense
+showOnAdblock: true
+
+external:
+  - link: https://news.ycombinator.com
+    site: hn
+  - link: https://www.reddit.com
+    site: reddit
+  - link: https://dev.to/briancaffey
+    site: dev
+  - link: https://medium.com/@briancaffey
+    site: medium
+  - link: https://briancaffey.hashnode.dev
+    site: hashnode
+  - link: https://briancaffey.substack.com
+    site: substack
+  - link: https://hackernoon.com/
+    site: hackernoon
+
+comments: true
+---
+
+If you are readying this article on [briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-blocker-to-my-website](https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-blocker-to-my-website), then you will be prompted to turn off your ad blocker if you are using one.
+
+This article will provide an overview and deep dive on how I went about adding ads to my site with AdSense, and how I request that site visitors not use AdBlock so that I can make more money from ads on my site.
+
+## How I added AdSense to my site
+
+I have been enjoying using my GitHub Pages website to learn more about static sites, JAMStack and Nuxt.js, the awesome Vue.js Framework that I use to build my personal blog. I have been able to learn and implement a lot of different components and features, and I have tried to write about them in my blog. Some examples include:
+
+- Adding a Drift chat window so users can message me directly
+- Implementing a Contact form with formsubmit.io
+- Using Vue.js components in Markdown files to add interactive elements to my articles (such as graphs)
+- Adding a custom MailChimp newsletter sign-up form that is included in the footer of each page of my blog
+
+I have also been learning the suite of Google tools for monitoring and measuring traffic to my site, including Google Analytics and Google Search Console. Google Search Console is helpful for understanding the search terms that people are using when searching Google that result in organic traffic to my site.
+
+At one point I found out that another website was using the same Google Tracking code that I had previously hard-coded into an old version of my website, and my Google Analytics started measuring traffic to URLs that I didn't recognize as belonging to my site. I was able to fix this by adding a Hostname filter rule in Google Analytics.
+
+One area that I have not had any experience with until recently is Google AdSense. Google AdSense is an easy way to get started with selling ads on your website. Here's an overview of what I did to get started:
+
+- Add a site in Google Analytics
+- Submit my site for approval
+- Install and configure the Google AdSense plugin for NuxtJS
+- Add the `ads.txt` file from Google Analytics to my site
+- Confirm my address by entering a code that was mailed to me
+
+Here's the config code for AdSense from `nuxt.config.js`:
+
+```js
+  /*
+   ** Nuxt.js modules
+   */
+  modules: [
+    // Doc: https://axios.nuxtjs.org/usage
+    '@nuxtjs/axios',
+    // Doc: https://github.com/nuxt/content
+    '@nuxt/content',
+    // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
+    '@nuxtjs/sitemap',
+    '@nuxtjs/feed',
+    'nuxt-i18n',
+    ['@nuxtjs/google-adsense', {     <-- AdSense config
+      id: 'ca-pub-4924597640144289'
+    }]
+  ],
+```
+
+The process was pretty simple. Google now automatically places ads on my site in a few different formats:
+
+- ads displayed on the top and bottom of the page
+- popup ads displayed between route navigation
+- ads automatically inserted into the body of the page between paragraphs in my articles
+- ads that I place on articles explicitly using the `<adsbygoogle />` Vue component
+
+When everything was set up properly I started seeing ads on my site, and the estimated earnings started showing up. Google has a payment threshold of $100, so I need make this amount before I can start receiving money from Google.
+
+My estimated earning report shows that I make between $0 and $4.32 in ad sales per day. I'm interested to see how much I can make with an article that I post across the many different channels that I can publish to. I explored this in a previous article, but the main channels I can use for sharing content are:
+
+- DEV.to
+- Facebook
+- Hashnode
+- Medium
+- Reddit
+- Discord
+- Hacker Noon
+- Twitter
+- My MailChimp mailing list
+- Substack
+- Hacker News
+
+This article be a good place to start exploring how effective the different channels are in driving content to my site, and I'll update this article later with more details and numbers from my AdSense reports.
+
+## How I built an AdBlock detector for my site
+
+I assume that most of the people who are reading my content are like me and have an AdBlock extension installed in their browser, such as AdBlock. This got me thinking about how I could implement a simple AdBlock detector for my site that would hide the contents of the page if AdBlock is enabled.
+
+### How do you check to see if AdBlock is enabled?
+
+To check to see if AdBlock is enabled, I came across [this StackOverflow question](https://stackoverflow.com/questions/4869154/how-to-detect-adblock-on-my-website) which inspired the code that I am now using on this site to detect AdBlock. There are a few different parts of my Nuxt Application that work together to detect if AdBlock is active and request that the user pause AdBlock for the site. The main components are:
+
+- A component called `AdBlockBlocker`
+- Vuex store (used to store a boolean value that indicates if AdBlock is enabled)
+- Some logic in the `default.vue` layout that is used for almost all of the pages on my site
+- A component/page to display when AdBlock is enabled
+
+Here's an overview of each part:
+
+**AdBlockBlocker.vue**
+
+This is the key part of how the AdBlock detection works. If the client is unable to download the `adsbygoogle.js` file, then that indicates that the user is using AdBlock.
+
+```js
+<template>
+  <div />
+</template>
+
+<script>
+export default {
+  mounted () {
+    const vm = this
+    setInterval(() => {
+      vm.detectAdBlock()
+    }, 5000)
+  },
+  methods: {
+    async  detectAdBlock () {
+      const googleAdUrl = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+      await fetch(new Request(googleAdUrl)).then((_) => {
+        this.$store.commit('adblock/setAdblockEnabled', false)
+      }).catch((_) => {
+        this.$store.commit('adblock/setAdblockEnabled', true)
+      })
+    }
+  }
+}
+</script>
+```
+
+One other important point about this component is that it runs AdBlock detection using `setInterval`, meaning that it will check if AdBlock is enabled every few seconds while a user is on my site.
+
+- If AdBlock is enabled, the request will fail and the Vuex store value will be updated, which will cause the site to display the `PleaseDisableAdlock.vue` component.
+
+- Id AdBlock is not enabled, then the file will be read from disk cache and the Vuex store value will remain `false`.
+
+**Vuex Store**
+
+This is a very simple Vuex store module. The `isAdblockEnabled` getter will be used in the `default.vue` layout to component.
+
+```js
+/* eslint-disable no-console */
+export const state = () => ({
+  adblockEnabled: false
+})
+
+export const getters = {
+  isAdblockEnabled: state => state.adblockEnabled
+}
+
+export const mutations = {
+  setAdblockEnabled (state, payload) {
+    state.adblockEnabled = payload
+  }
+}
+```
+
+**default.vue layout logic**
+
+```vue
+<template>
+  <div>
+    <Navigation />
+    <PleaseDisableAdblock v-if="$store.getters['adblock/isAdblockEnabled']" />
+    <Nuxt v-else />
+    <AdBlockerBlocker />
+
+    <Footer />
+  </div>
+</template>
+```
+
+**Content to show to request that a user pauses AdBlock**
+
+I'm planning on using a simple message and also displaying some blog posts (including this one) about how I used AdSense and how I detect the use of AdBlock on my site. I also want to invite people who do not wish to disabled AdBlock to read my blog directly on GitHub, or to read it without ads by cloning or forking my repo locally and running it in development mode with `yarn dev`.
+
+## Why am I adding ads and an AdBlock detector to my site?
+
+Being asked to disabled AdBlock is increasingly common, but it seems that sites all do it differently, and the quality of the experience varies widely. Here's how I want to the experience on my site to work:
+
+1. A user visits my site with AdBlock enabled
+1. For a few seconds, the user can start reading the content of the article
+1. The page content is replaced with a message that says "Please disable AdBlock" and some other links that people may find interesting or helpful.
+1. The user goes into the AdBlock extension and pauses AdBlock on my site
+1. The original page content is then displayed with ads
+
+I don't want to ask the user to press a button or make the user think that they need to refresh the page. This is why using `setInterval` is helpful, I continuously make requests to the Google Ads JavaScript file that will be used to detect AdBlock.
+
+I'm happy to pause my AdBlock for smaller sites that ask me to, or for newspaper sites that are supported by advertising, and I'm assuming that people visiting my site will also be OK with pausing AdBlock as a way of thanking me for the work that goes into what I share on my blog.
+
+I'm mostly curious to see what happens to my site's traffic, and to see what impact it could have on the earnings I make from AdSense.
+
+Some of my questions are:
+
+- What will happen to the bounce rate if I request that AdBlock users pause AdBlock for my site?
+- What is the most effective amount of time to wait before requesting that a new user pause AdBlock for my site
+- What else can I include on my "Please Disable AdBlock" page to encourage new users to pause AdBlock on my site?
+
+I'll have a good follow-up article to share with numbers from my AdSense and Google analytics.
+
+I also found that there were not a lot of great results for the search terms I was using to find articles about how to create an AdBlock blocker. I used some terms like:
+
+- how to detect adblock on my vue / nuxt site
+- how to see if a site user has adblock enabled
