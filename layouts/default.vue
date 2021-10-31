@@ -1,8 +1,9 @@
 <template>
   <div>
     <Navigation />
-
-    <Nuxt />
+    <PleaseDisableAdblock v-if="$store.getters['adblock/isAdblockEnabled']" />
+    <Nuxt v-else />
+    <AdBlockerBlocker />
 
     <Footer />
   </div>

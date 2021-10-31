@@ -48,5 +48,6 @@ module.exports = {
   },
   tags: {
     allTags: 'All tags'
-  }
+  },
+  pleaseDisableAdblock: 'Please disable AdBlock to view this page. Once AdBlock is disabled, this page will be automatically refreshed. Thank you!'
 }
