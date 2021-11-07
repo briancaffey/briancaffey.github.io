@@ -2,26 +2,26 @@
 title: How and why I added AdSense and an AdBlock detector to my personal website
 date: '2021-10-31'
 description: This article describes how I added AdSense to my personal website and how I request that site visitors pause AdBlock while reading my blog
-image: /static/ab_cover.png
+image: https://briancaffey.github.io/static/ab_cover.png
 tags:
   - nuxt
   - ads
   - adsense
   - adblock
 
-# external:
-#   - link: https://news.ycombinator.com
-#     site: hn
-#   - link: https://www.reddit.com
-#     site: reddit
-#   - link: https://dev.to/briancaffey
-#     site: dev
-#   - link: https://medium.com/@briancaffey
-#     site: medium
-#   - link: https://briancaffey.hashnode.dev
-#     site: hashnode
-#   - link: https://briancaffey.substack.com
-#     site: substack
+external:
+  - link: https://news.ycombinator.com/item?id=29143003
+    site: hn
+  - link: https://www.reddit.com/r/Nuxt/comments/qowjbu/how_and_why_i_added_adsense_and_a_custom_adblock/
+    site: reddit
+  - link: https://dev.to/briancaffey/how-and-why-i-added-adsense-and-an-adblock-detector-to-my-personal-website-5ag3
+    site: dev
+  - link: https://medium.com/@briancaffey/how-and-why-i-added-adsense-and-an-adblock-detector-to-my-personal-website-b210d7f45e22
+    site: medium
+  - link: https://briancaffey.hashnode.dev/how-and-why-i-added-adsense-and-an-adblock-detector-to-my-personal-website
+    site: hashnode
+  - link: https://briancaffey.substack.com/p/how-and-why-i-added-adsense-and-an
+    site: substack
 #   - link: https://hackernoon.com/
 #     site: hackernoon
 
