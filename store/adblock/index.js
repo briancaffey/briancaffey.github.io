@@ -1,6 +1,10 @@
-/* eslint-disable no-console */
+let initialValue = false
+
+if (process.window) {
+  initialValue = JSON.parse(window.localStorage.getItem('adblockEnabled')) || false
+}
 export const state = () => ({
-  adblockEnabled: false
+  adblockEnabled: initialValue
 })
 
 export const getters = {
