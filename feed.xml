@@ -4,14 +4,14 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Mon, 01 Nov 2021 02:52:32 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 07 Nov 2021 19:29:24 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
         <item>
             <title><![CDATA[How and why I added AdSense and an AdBlock detector to my personal website]]></title>
-            <link>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-blocker-to-my-website</link>
-            <guid>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-blocker-to-my-website</guid>
+            <link>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website</link>
+            <guid>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website</guid>
             <description><![CDATA[This article describes how I added AdSense to my personal website and how I request that site visitors pause AdBlock while reading my blog]]></description>
         </item>
         <item>
