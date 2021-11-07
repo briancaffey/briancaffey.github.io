@@ -45,7 +45,7 @@ $ yarn generate
           </div>
 
           <div>
-            If you are curious about how I built this AdBlock detection feature on my website, I wrote an in-depth article about it which can be read once you disable AdBlock. Alternatively, you can read the raw Markdown file for my AdSense / AdBlock article on GitHub <a target="_blank" style="text-decoration: underline; cursor: pointer;" href="https://github.com/briancaffey/briancaffey.github.io/blob/master/content/2021/10/31/how-and-why-i-added-adsense-and-adblock-blocker-to-my-website.md">here</a>.
+            If you are curious about how I built this AdBlock detection feature on my website, I wrote an in-depth article about it which can be read once you disable AdBlock. Alternatively, you can read the raw Markdown file for my AdSense / AdBlock article on GitHub <a target="_blank" style="text-decoration: underline; cursor: pointer;" href="https://github.com/briancaffey/briancaffey.github.io/blob/master/content/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website.md">here</a>.
           </div>
           <div class="pt-4">
             Finally, if you are curious about how much I am making with Google AdSense on my blog and want to keep up with my projects and experiments, please join my MailChimp newsletter for monthly updates and new articles.
