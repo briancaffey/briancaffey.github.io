@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/blog/tags/dns", {data:[{articles:[]}],fetch:{},mutations:[]});
