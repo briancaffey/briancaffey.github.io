@@ -3,7 +3,7 @@
     <Navigation />
     <PleaseDisableAdblock v-if="$store.getters['adblock/isAdblockEnabled']" />
     <Nuxt v-else />
-    <AdBlockerBlocker />
+    <!-- <AdBlockerBlocker /> -->
 
     <Footer />
   </div>
