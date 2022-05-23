@@ -28,6 +28,8 @@ external:
 comments: true
 ---
 
+Update: I disabled the ad block blocker on my personal website. It was an interesting experiment and I learned that ad block detection is a game of cat and mouse. It did not work with uBlock Origin, but it did work with AdBlock. I probably won't be revisiting this topic.
+
 If you are reading this article on [briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website](https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website), then you will be prompted to pause your ad blocker if you are using one. If you are *not* using an ad blocker, I recommend that you consider installing one. Reading this article on a browser with AdBlock enabled will allow you to see how I detect AdBlock and ask people to pause it when they are on my site.
 
 This article is a deep dive on how I added ads to my site with Google AdSense and how I request that visitors to my site pause AdBlock so that I can make more money from Google AdSense.
