@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/in/blog/tags/crypto", {data:[{articles:[]}],fetch:{},mutations:[]});
