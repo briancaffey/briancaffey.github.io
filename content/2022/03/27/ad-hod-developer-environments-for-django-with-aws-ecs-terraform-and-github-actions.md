@@ -35,29 +35,30 @@ comments: true
 
 ## tl;dr
 
-This article shows how software development teams can spin up ad hoc environments for testing and demoing purposes.
+This article will show how software development teams can build on-demand environments for dog-food testing, quality review, internal and external demos and other use cases that require short-lived but feature-complete instances of a web application. The focus will be on the technical implementation of building ad hoc environments using specific set of tools (including AWS ECS, Terraform and GitHub Actions). I will also be giving context on the high-level implementation decisions based on what I think are best practices guided by the [12-Factor Application methodology](https://12factor.net/). If any of this interests you, please have a read and let me know what you think in the comments on the outlets where I'll be sharing this article (links at the end).
 
 ## GitHub Links
 
-This article has three corresponding code repositories on GitHub that will be referenced in this article:
+This article references three open-source code repositories on GitHub:
 
 - [django-step-by-step](https://github.com/briancaffey/django-step-by-step)
   - this repo contains an example microblogging application called μblog
-  - includes complete GitHub Action examples for automating creation, updating and removal of ad hoc environments
+  - includes complete GitHub Action examples for automating creation, updating and destruction of ad hoc environments
 
 - [terraform-aws-django](https://github.com/briancaffey/terraform-aws-django)
-  - a Terraform module that has been published to Terraform Registry
-  - includes examples of how to use the module
+  - a collection of modules for running Django applications on AWS using Terraform, including ad hoc environments
+  - this module has been published to Terraform Registry
 
 - [terraform-aws-ad-hoc-environments](https://github.com/briancaffey/terraform-aws-ad-hoc-environments)
-  - this repo is also published to Terraform Registry
-  - it provides the shared infrastructure for setting up our ad hoc environments
+  - a Terraform module that provides shared infrastructure used by ad hoc environments (VPC, RDS instance, bastion host, etc.)
+  - this module has also been published to Terraform Registry
+  - this module is designed to be used with the `terraform-aws-django` module
 
 ## Assumptions
 
-There are all sorts of applications, and all sort of engineering teams. For some context of what I'm describing in this article, here are some basic assumptions that I'm making about a fictional application and developed by a fictional engineering team:
+There are all sorts of applications, and all sort of engineering teams. For some context on what I'm describing in this article, here are some basic assumptions that I'm making about a fictional application and developed by a fictional engineering team:
 
-- engineering department has a backend team, a frontend team, a devops team and works closely with a product team
+- engineering team is composed of a backend team, a frontend team, a devops team and works closely with a product team
 - backend team primarily develops an API
 - frontend team develops an JavaScript SPA (frontend website)
 - SPA consumes backend API
@@ -72,8 +73,8 @@ Here are assumptions about specific tools and technologies used at the company:
 - frontend is also packaged into a docker container using multi-stage builds and NGINX
 - frontend does not require any build-time configuration (all configuration needed by frontend is fetched from backend)
 - backend application's configuration is driven by plain-text environment variables at run-time
-- automation pipeline exists for building, tagging and pushing backend and frontend containers to an ECR repository
 - engineering team uses AWS
+- automation pipeline exists for building, tagging and pushing backend and frontend containers to an ECR repository
 - devops team uses AWS ECS for running containerized workloads
 - devops team uses Terraform for provisioning infrastructure
 - devops team uses GitHub Actions for building automation pipelines
@@ -81,54 +82,107 @@ Here are assumptions about specific tools and technologies used at the company:
 
 ## What are ad hoc environments?
 
-Ad hoc environments are short-lived environments that are designed to be used for testing a specific set of features or for demoing a specific application configuration in an isolated environment.
-
-## eli5
-
-A developer named Brian says: I want to run version 1.2.3 of the backend application and version 4.5.6 of the frontend application. That developer selects these two version values as inputs in a GitHub Action or  Jenkins pipeline or Slack chatbot and then a few moments later gets a message saying:
-
-    Hey Brian, your environment is ready!
-
-    visit: https://brian.dev.company.com to access the environment
-
-    this environment will self-destruct in 1 day!
-
-    thank you!
+Ad hoc environments are short-lived environments that are designed to be used for testing a specific set of features or for demoing a specific application configuration in an isolated environment. It is intended to be a functional duplicate of the main production environment. An ad hoc environment is the first cloud environment that the application code will be deployed to after a developer has been working on it in a local development environment.
 
 ## Trade-offs to make when designing ad hoc environment infrastructure and automation
 
-When building infrastructure for ad hoc environments, there are a few things to solve for:
+When building infrastructure and workflows for ad hoc environments, there are a few things to solve for:
 
 - startup speed
 - shared vs isolated resources
-- costs
+- total cost of ownership
 - automation complexity
 - degree of similarity to production environments
 
+Let's look at these items by considering how we can set up the main infrastructure components that will be used to run our ad hoc application environments.
+
+### Relational Databases
+
 Startup speed can be measured by the time between when an environment is requested and when that environment can be used. In this period of time, an automation pipeline may do the following:
 
-- run `terraform init`, `terraform plan` and `terraform apply`
+- run `terraform init`, `terraform plan` and `terraform apply` to build infrastructure
 - run scripts to prepare the application such as database migrations
 - seeding initial sample data with a script or database dump
-- message the user with information about the environment (URLs, commands for accessing a bastion host or interactive shell, etc.)
+- message the user with information about the environment (URLs, commands for accessing an interactive shell, etc.)
 
-Some things in AWS take more time to provision than others. RDS and ElastiCache instances can take a long time to create relative to S3 buckets or IAM roles. RDS and ElastiCache instances are also more costly than other resources. We could use a single, shared RDS instance placed in a private subnet of a shared VPC. Each ad hoc environment could use a different named database in the RDS instance in the form `{ad-hoc-env-name}-db`. We can do port forwarding from the GitHub Action script as described [here](https://itnext.io/secure-access-to-a-private-network-from-github-actions-47dab60cf37d):
+RDS instances can take a long time to create relative to other AWS resources such as S3 buckets and IAM roles. RDS and ElastiCache instances are also more costly than other resources. We could use a single, shared RDS instance placed in a private subnet of a shared VPC. Each ad hoc environment could use a different named database in the RDS instance in the form `{ad-hoc-env-name}-db`. Using one RDS instance per ad hoc environment would be slow to startup and tear down and also costly if there are many developers using ad hoc environments simultaneously.
 
-    ssh -o StrictHostKeyChecking=no -t -t  \
-      -i ./github_id_rsa "${SHH_USER}@${BASTION_IP}" \
-      -L "3306:${MYSQL_IP}:3306" &
+If we choose to isolate the application's relational database at the databases level (and not the RDS instance level), then we will need our automation workflow to create a database per ad hoc environment.
 
-This would require that we have a bastion in order to access RDS in a private database. Now our setup is more complex, but the complexity is justified since we now:
+Let's spin up a simple example to illustrate how this would would work.
 
-- won't incur the costs of lots of RDS instances
-- will start up faster because it doesn't need to create an RDS per environment
-- have slightly less resource isolation (but this is an acceptable trade-off)
+- A developer is working on `feature-abc` that involves a significant refactor of the data model.
+- The developer decides to spin up an ad hoc environment called `feature-abc`.
+- Our automation will need to create a database in the RDS instance called `feature-abc`.
+- We can configure a bastion host with `psql` installed that has network and security group access to our RDS instance, and we can give our GitHub Actions an SSH key that can be used to run `createdb` over SSH.
+- The automation also runs database migrations once the application has started, and we can view the logs of the database migration to check for any irregularities or other issues.
+- This will give the developer and the rest of team confidence that the promoting `feature-abc` to the next pre-production environments will not have any errors.
+- The developer may even choose to load a SQL dump of the next pre-production environment into their `feature-abc` database get even more confidence that there will be no data integrity errors.
+- When the developer's PR is merged and approved, the ad hoc environment `feature-abc` can be destroyed, including the `feature-abc` database in the shared RDS instance.
 
-The postgres database is just one part of our application, and already there a few decisions that we have to make when it comes to some of the trade-offs mentioned above.
+With this approach we won't incur the costs of multiple RDS instances. Ad hoc environments will start up faster because an RDS instance per environment is not required. We do have slightly less resource isolation, and we need to introduce a bastion host, but I consider this an acceptable trade-off.
+
+### Redis (key-value database)
+
+Redis is used in the application and it plays a few different roles:
+
+- primarily, it is a caching layer that can cache request responses to reduce load on the database and speed up our application
+- it is a message broker for our async task workers (celery)
+- if web sockets are used (I don't use them in the sample application), redis can be used as the backend that coordinates socket messages
+- it can be used as a backend for other pluggable Django apps that our main application may need to use (such as django-constance, for example)
+
+AWS offers a managed Redis service called ElastiCache. An ElastiCache instance can do database isolation similar to how RDS can can database isolation as we discussed previously, but there are some key differences:
+
+- redis databases are numbered, not named
+- the backend application uses isolated numbered databases for the different redis use cases that I just mentioned (for example: celery uses database `0`, our API caching layer uses database `1`, etc.)
+
+This makes it difficult to use a single ElastiCache instance for our ad hoc environments since we would need to figure out which numbered database to assign to a specific role for each ad hoc environment (e.g. how do we know which numbered database to use for the API caching for the `feature-abc` ad hoc environment). [Is this correct? I couldn't find any other way to use namespaces or isolation in redis.]
+
+So how can we approach providing isolated redis instances for multiple ad hoc environments? My solution is to run our own redis as a stateful service in ECS. Before we dig into how to do this, we need to talk about another important part of our application: compute.
+
+### Compute
+
+Our backend application is composed of a few different services that all share the same code base. In other words, our backend's services uses the same docker image but run different processes for each component: gunicorn for the core API, celery for the task workers and celerybeat for task scheduling. If our application used websockets, we could have another service that runs an asgi server process (like daphne or uvicorn).
+
+Since our backend application is packaged into a container and we are using AWS as our cloud provider, ECS is a great choice for running our backend services. ECS is a container orchestration tool that I usually describe as a nice middle ground between docker swarm and Kubernetes. Simply put, it is a flexible option for running our containerized services that make up our backend application.
+
+Using ECS you can choose to run containers on EC2 instances that you can manage, or you can run containers using Fargate. Fargate is a serverless compute option that takes care of managing the underlying "computer" that our containers run on. All of our backend dependencies are defined in our Dockerfile, so there is nothing else we need to worry about installing or managing on the underlying operating system that runs our containers -- AWS handles all of this for us. To use Fargate, we simply tell AWS which containers to run and how much CPU and memory to use in the ECS Task that runs the containers. To scale our app horizontally, the the ECS service that managed ECS tasks simply increases the number of tasks that run. Since we are going to use the Fargate launch type for our ECS Tasks, let's talk about the ergonomics of these serverless compute instances compared to running gunicorn directly on an EC2 instances.
+
+- We can't SSH into the Fargate instance. We can instead use AWS Systems Manager and EcsExec to open an interactive shell in a running backend container. This can be useful for developers who might need to run a management command or access an interactive Django shell to verify behavior in their ad hoc environment.
+
+- We can't simply change code on the server and restart services. This can sometimes be a useful pattern for debugging something that can only be tested on a cloud environment (e.g. something that can't easily be reproduced on your local machine), so this requires that developers push new images to their backend services for every change they want to see reflected on their ad hoc environment. Later on I'll discuss how we can provide tooling for developers to quickly update the image used in their backend services.
+
+With AWS Fargate, you will pay more than you would for a comparable amount of CPU and memory on EC2. Similar to EC2 spot instances, Fargate offers interruptable instances called Fargate Spot which costs significantly less than regular Fargate instances. Fargate spot is appropriate for our ad hoc environments since ad hoc environments are non-critical workloads. In the event that a Fargate spot instance is interrupted, the ECS service will automatically launch another Fargate task to replace the task that was stopped.
+
+ECS with Fargate is ideal for running the stateless services that make up our backend application. Each ad hoc environment will include an ECS cluster that groups ECS services together.
+
+### Redis, revisited
+
+We can run redis as an ECS service instead of using ElastiCache. In order to do this, we will need our backend services (gunicorn, celery and celerybeat) to be able to communicate with a fourth ECS service that will run be running redis (using an official redis image from Docker Hub, or a redis image that we define in ECR).
+
+By default, there is no way for our backend services to know how to communicate with another service in our ECS cluster. If you have used docker-compose, you may know that you can use the service name `redis` as the hostname so that a backend service can communicate with redis. To achieve this in AWS, we need some way to manage a DNS record that points to the private IP of the Fargate task that is running redis in our ECS cluster. Such a service exists in AWS and it is called Cloud Map. Cloud Map offers service discovery so that our backend services can make network calls to a static DNS address that will reliably point to the correct private IP.
+
+We can define a service discovery namespace (which will essentially be a top level domain, or TLD) that all of our ad hoc environments can share. Let's assume this namespace is called `ad-hoc`. Each ad hoc environment can then define a service discovery service in the shared namespace for redis that is called `{ad-hoc-env-name}-redis`. This way, we can have a reliable address that we can use for our backend configuration (environment variables) that will look like this: `redis://{ad-hoc-env-name}-redis.ad-hoc:6379/0`. `{ad-hoc-env-name-redis}.ad-hoc` will be the hostname of the redis service, and Route 53 will create records that point `{ad-hoc-env-name}-redis.ad-hoc` to the private IP of the redis Fargate task for each ad hoc environment.
+
+### Load Balancing
+
+We now have our backend services running on Fargate spot instances, and they can communicate with the redis service in our ECS cluster using service discovery that we configured with Cloud Map. We still need to think about a few things:
+
+- how will we expose our API service to the public (or private) internet
+- how will we expose our frontend application to the public (or private) internet
+- how will we make sure that requests go the correct ECS services
+
+Application load balancers (ALBs) are a great way to expose web app traffic to the internet. We could either have one application load balancer per ad hoc environment, or one application load balancer shared between all ad hoc environments. ALBs are somewhat slow to create and they also incur a significant monthly cost, so using a shared ALB for all ad hoc environments would be preferable.
+
+Individual ad hoc environments can then create target groups and listener rules for a shared ALB for each service that needs to serve requests from the internet. In our case this is the backend API server and the frontend server that serves our static frontend site using NGINX.
+
+ECS services that need to be exposed to the internet can specify the target group, port and container to use for load balancing. A target group is created that defines the health check and other settings, and a load balancer listener rule is created on the shared load balancer that will forward traffic matching certain conditions to the target group for our service.
+
+For a given ad hoc environment, we need to specify that only traffic with certain paths should be sent to the backend service, and all other traffic should be sent to the frontend service. For example, we may only want to send traffic that start with the path `/api` or `/admin` to the backend target group.
 
 ## More on shared resources vs per-environment resources
 
-Here's a detailed overview of the resources that are shared and the resources that are specific to each ad hoc environment.
+Up until now we have discussed infrastructure design decisions at a high level, but we have not yet talked about how to organize our infrastructure as code. At a basic level, components of our ad hoc environment either fall into shared infrastructure or infrastructure that is specific to an individual ad hoc environment. Here's a list of the resources that are shared and the resources that are specific to each ad hoc environment.
 
 Shared resources include:
 
@@ -144,12 +198,13 @@ Ad hoc environment resources include:
 
 - ECS Cluster
 - ECS Tasks and Services (for backend and frontend applications)
-- CloudWatch logging groups
+- ECS Tasks for running management commands (such as migrate)
+- CloudWatch logging groups for containers defined in ECS Tasks
 - ALB Target groups
 - ALB listener rules
-- Route53 record that point to the load balancer
-- S3 bucket
-- Service Discovery Service
+- Route 53 record that points to the load balancer (e.g. `ad-hoc-env-name.example.com`)
+- S3 bucket for static and media assets
+- Service Discovery Service for redis service in ECS cluster
 
 Shared resources can be defined in one terraform configuration and deployed once. These resources will be long-lived as long as the application is under active development and the team requires on-demand provisioning of ad hoc environments.
 
@@ -303,63 +358,6 @@ We will create one database in our RDS instance per ad hoc environment for data 
 Our terraform configuration for ad hoc environments will define variables that will be provided by `terraform_remote_state` that will reference values from our shared resource terraform configuration. This is what that looks like in Terraform code:
 
 ```hcl
-# terraform_remote_state
-
-terraform {
-  required_version = ">=1.1.7"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "4.4.0"
-    }
-  }
-
-  backend "s3" {}
-}
-
-provider "aws" {
-  region = var.region
-}
-
-# shared resources
-# see https://github.com/briancaffey/terraform-aws-ad-hoc-environments
-
-data "terraform_remote_state" "shared" {
-  backend = "s3"
-  config = {
-    bucket = var.s3_bucket
-    key    = var.key
-    region = var.region
-  }
-}
-
-# main
-
-module "main" {
-  source = "../../modules/ad-hoc"
-
-  # shared resources -- taken from terraform_remote_state data source above
-  vpc_id                         = data.terraform_remote_state.shared.outputs.vpc_id
-  private_subnets                = data.terraform_remote_state.shared.outputs.private_subnets
-  public_subnets                 = data.terraform_remote_state.shared.outputs.public_subnets
-  listener_arn                   = data.terraform_remote_state.shared.outputs.listener_arn
-  alb_dns_name                   = data.terraform_remote_state.shared.outputs.alb_dns_name
-  service_discovery_namespace_id = data.terraform_remote_state.shared.outputs.service_discovery_namespace_id
-  task_role_arn                  = data.terraform_remote_state.shared.outputs.task_role_arn
-  execution_role_arn             = data.terraform_remote_state.shared.outputs.execution_role_arn
-  rds_address                    = data.terraform_remote_state.shared.outputs.rds_address
-  alb_default_tg_arn             = data.terraform_remote_state.shared.outputs.alb_default_tg_arn
-  ecs_sg_id                      = data.terraform_remote_state.shared.outputs.ecs_sg_id
-
-  # per environment settings -- taken from .tfvars files
-  ecr_be_repo_url = var.ecr_be_repo_url
-  ecr_fe_repo_url = var.ecr_fe_repo_url
-  region          = var.region
-  frontend_url    = var.frontend_url
-  zone_name       = var.zone_name
-  record_name     = var.record_name
-}
 ```
 
 ## How to setup an ad hoc environment
@@ -423,7 +421,7 @@ If we first run database migrations **and then** update application code (ECS se
 
 We need a GitHub Action that can do the following:
 
-- fetch the container definitions JSON for the backend tasks (`aws ecs describe-task-definition`)
+- fetch the current container definition JSON files for each backend tasks (`aws ecs describe-task-definition`)
 - write new container definitions JSON with the new backend image tag
 - register new task definitions with the new container definition JSON files for each task (`aws ecs register-task-definition`)
 - call run-task with the newly updated migration ECS task (`aws ecs run-task`)
@@ -431,7 +429,18 @@ We need a GitHub Action that can do the following:
 - update the backend services (gunicorn, celery, celery beat) (`aws ecs update-service`)
 - wait for the new backend services to be stable (`aws ecs wait services-stable`)
 
-In order have the correct arguments for all of the AWS CLI calls used in the above workflow, we can fetch values from `terraform output` and save values into environment variables, and then use these value in a later stage of our GitHub Actions workflow.
+Here's a visual representation of the backend update process:
+
+![png](/static/adhoc/ad_hoc.backend_update.drawio.png)
+
+In order have the correct arguments for all of the AWS CLI calls used in the above workflow, we can fetch values from `terraform output` and save values into environment variables, and then use these value in a later stage of our GitHub Actions workflow. Alternatively, we can use the AWS CLI to fetch resource names by tag.
+
+We should also consider the following:
+
+- the GitHub Action should call a script that runs the steps described above instead of writing the script directly in the GitHub Action itself. This will make debugging easier and will also make it easier to setup automation pipelines using a tool other than GitHub Actions if we choose to do so later
+- how do we structure this script? should it be one big script, or can we break out each step into small scripts? we should try to use KISS and DRY principles
+
+### Frontend updates
 
 The process described above is needed for updating the backend application. Updating the frontend application involves a similar process to the backend update:
 
@@ -453,7 +462,7 @@ No data from the ad hoc environment will be deleted. The S3 bucket objects will 
 
 We need to think about how we can keep track of our active ad hoc environments. Active environments will incur additional AWS costs, and we do not want developers or the product team to create lots of environments and then leave them running without actively using them.
 
-We may decide to have some long-lived ad hoc environments, but those would be managed primarily by the DevOps team.
+We may decide to have some long-lived ad hoc environments, but those would be managed primarily by the DevOps team and respective owners (e.g. QA, product team, etc.).
 
 One way to check the active ad hoc environments would be to use the AWS CLI. We could list the ECS clusters in our development account, and this would show the number of ad hoc environments running. We could go farther and list the ad hoc environments by when they were last updated. We could then request developers or team members to remove ad hoc environments that are not in use.
 
@@ -475,11 +484,7 @@ At the very minimum, our ad hoc environments need to know what versions of the f
 
 - [ ] Public or private - do you want anyone on the internet to be able to access your ad hoc environment, or should the environment only be accessible over a private VPN connection. A `public` boolean could default to `false`, and you could have the environment only available
 
-- [ ] Custom AWS tags
-
 - [ ] Custom environment variables
-
-## AWS Tagging
 
 ## Deploying the application from your local machine
 
@@ -632,7 +637,7 @@ The `terraform-aws-ad-hoc-environments` module has been published to the Terrafo
 
 ### `1`: VPC module
 
-### `1`: AWS CloudMap
+### `1`: AWS Cloud Map
 
 ### `1`: EC2 instance (bastion host)
 
@@ -710,13 +715,36 @@ In order for our backend application containers to communicate with the Redis EC
 
 [Google Drive link to this diagram](https://drive.google.com/file/d/1Te427LEPSlGinEfncH39gArHxwB1cMp0/view?usp=sharing). It is view-only, but you can duplicate it and edit the copy.
 
+## Next steps
+
+- Terragrunt
+- Terraform Cloud
+
 ## TODOs
 
 A list of things that need to be fixed or added to this article
 
-- [x] rename GitHub Action to `create_update_ad_hoc_env`
-- [x] rename GitHub Action to `destroy_ad_hoc_env`
-- [ ] Build Route 53 resources based on ad hoc environment name (e.g. `my-env.dev.example.com`)
 - [ ] Mention CloudFormation template as an option for managing S3 backend resources [link](https://www.bti360.com/mng-terraform-state-cloudformation/)
-- [ ] Use Fargate Spot launch type instead of regular Fargate in order to lower costs for ad hoc environments
-- [ ] Add a dedicated directory for storing `tfvars` files
+- [ ] [https://discuss.hashicorp.com/t/setup-terraform-github-action-fails-during-init-before-while-managing-workspaces-in-terraform-cloud/29659/2](https://discuss.hashicorp.com/t/setup-terraform-github-action-fails-during-init-before-while-managing-workspaces-in-terraform-cloud/29659/2)
+
+
+### Important TODOs
+
+- [x] Add collectstatic and migrate commands to GitHub Actions workflow via run-task command (with logs)
+- [ ] Create a combined Django management command that can be used for database mgirations and collectstatic commands
+
+### Backend Service update process
+
+- [ ] Build and push whenever a tag is pushed?
+
+### Implement Frontend Service Update
+
+- [ ] Add GitHub Actions workflow
+- [ ] Update Existing Build and Push frontend workflow to use git tag
+- [ ] Build client version into client and display it on UI
+
+## Meta
+
+- [ ] Look into using bastion host for EcsExec commands instead of running EcsExec from local machine
+- [x] Remove as many env vars as possible (ECR repo names - use AWS account number and interpolate)
+- [ ] Least privilege for AWS credentials used in automation and those used by developers. Give roles only the permissions to do what they need to do any nothing more.
