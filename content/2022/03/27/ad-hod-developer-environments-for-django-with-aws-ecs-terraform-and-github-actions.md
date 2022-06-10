@@ -111,7 +111,7 @@ Startup speed can be measured by the time between when an environment is request
 
 RDS instances can take a long time to create relative to other AWS resources such as S3 buckets and IAM roles. RDS instances are also more costly than other resources. We could use a single, shared RDS instance placed in a private subnet of a shared VPC. Each ad hoc environment could use a different named database in the RDS instance in the form `{ad-hoc-env-name}-db`. Using one RDS instance per ad hoc environment would be slow to startup and tear down and also costly if there are many developers using ad hoc environments simultaneously.
 
-If we choose to isolate the application's relational database at the databases level (and not the RDS instance level), then we will need our automation workflow to create a database per ad hoc environment.
+If we choose to isolate the application's relational database at the database level (and not the RDS instance level), then we will need our automation workflow to create a database per ad hoc environment.
 
 Let's spin up a simple example to illustrate how this would would work.
 
@@ -169,7 +169,7 @@ In my opinion, ECS with Fargate is ideal for running the stateless services that
 
 ### Redis, revisited
 
-We can run redis as an ECS service instead of using ElastiCache. In order to do this, we will need our backend services (gunicorn, celery and celerybeat) to be able to communicate with a fourth ECS service that will run be running redis (using an official redis image from Docker Hub, or a redis image that we define in ECR).
+We can run redis as an ECS service instead of using ElastiCache. In order to do this, we will need our backend services (gunicorn, celery and celerybeat) to be able to communicate with a fourth ECS service that will be running redis (using an official redis image from Docker Hub, or a redis image that we define in ECR).
 
 By default, **there is no way for our backend services to know how to communicate with any other service in our ECS cluster**. If you have used docker-compose, you may know that you can use the service name `redis` in a backend service to easily communicate with a redis service called `redis`. This networking convenience is not available to use out of the box with ECS. To achieve this in AWS, we need some way to manage a unique ad hoc environment-specific Route 53 DNS record that points to the private IP of the Fargate task that is running redis in an ECS cluster for a given ad hoc environment. Such a service exists in AWS and it is called Cloud Map. Cloud Map offers service discovery so that our backend services can make network calls to a static DNS address that will reliably point to the correct private IP of the ECS task running the redis container.
 
@@ -229,7 +229,7 @@ Ad hoc environment `<name>.tfvars` files are stored in a directory of a special 
 
 Now let's look at the two terraform configurations used for defining shared resources and ad hoc environment resources.
 
-## Diagram
+## Ad Hoc Environment Diagram
 
 Here's an overview of the resources used for the ad hoc environments. The **letters represent shared resources** and the **numbers represent per-environment resources**.
 
@@ -420,7 +420,7 @@ The simplest approach to updating the application would be edit the `brian.tfvar
 
 If we run the same pipeline that we initially used to deploy ad hoc environment (with `terraform init`, `terraform plan` and `terraform apply`) against the updated `brian.tfvars` file, this will result in a rolling update of the frontend and backend services ([more on rolling updates here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-ecs.html)).
 
-If there are database migrations included in the new version of the code that is going out, we will need to run the database migrations after the `terraform apply` completes. One of the top level outputs of our ad hov environment terraform configuration includes a complete `run-task` command that will run our database migrations when called from GitHub Actions (or our local machine).
+If there are database migrations included in the new version of the code that is going out, we need to run database migrations after the `terraform apply` completes. We use a top level output from the ad hov environment terraform configuration that is a `run-task` command with all appropriate arguments that will run database migrations when called from GitHub Actions.
 
 ### Order of Operations
 
@@ -452,6 +452,20 @@ We should also consider the following:
 
 - the GitHub Action should call a script that runs the steps described above instead of writing the script directly in the GitHub Action itself. This will make debugging easier and will also make it easier to setup automation pipelines using a tool other than GitHub Actions if we choose to do so later
 - how do we structure this script? should it be one big script, or can we break out each step into small scripts? we should try to use KISS and DRY principles
+
+Here is what I'm using for the script. There lots of comments, so please refer to those comments for an explanation of what the script is doing.
+
+```bash
+# TODO: copy script code from django-step-by-step
+```
+
+With this GitHub Actions workflow, a developer can now easily change the version of backend code that is running in their ad hoc environments without needing to involve Terraform. Additionally, this process will be similar to what is done for normal production code updates.
+
+### Using `ignore_changes` in the definitions
+
+There is one more important point to make about Terraform before we conclude this discussion on updating backend code for existing ad hoc environments. Consider the scenario where a developer has launched an ad hoc environment with backend version `v1.0.0`. They make a small change to the backend code and push version `v1.0.1`. Next, the developer remember that a backend environment variable needs to be changed. This can be done by updating their `*.tfvars` file. If they now re-run the ad hoc environment update pipeline **without also updating the backend version in their `*.tfvars` file**, then their code will be reverted from `v1.0.1` to `v1.0.0`. We would need to coordinate version changes between updating the backend with the pipelines that use Terraform commands and the pipelines that use the AWS CLI commands.
+
+There is a setting on the `aws_ecs_service` resource in Terraform we can can use to prevent this from happening. This setting is called [`ignore_changes`](#TODO-add-link-to-ignore-changes-documentation) and is defined under the resource's `lifecycle` configuration block. With this setting, when we update the `*.tfvars` file with our new environment variable value, we will create another recent task definition with the same `v1.0.0` image, but the ECS service will not update in response to this change (that's what the `ignore_changes` is for). Once we make the `*.tfvars` file update and redeploy using the Terraform pipeline, nothing on our ad hoc changes, but we did get a new task definitions defined in our AWS account for each backend service. When we go to make the backend update with the pipeline that uses AWS CLI commands, the most recent task revision is used to create the new task definition, so it will include the environment variable change that we added earlier.
 
 ### Frontend updates
 
@@ -747,9 +761,21 @@ One minor improvement would be to move the `terraform` directory out of the `dja
 
 Everything shown here uses a single AWS account for everything: ECR images, Terraform remote state storage, all shared resource environments and all ad hoc environments. For a demonstration of this workflow one account keeps things simple, but in practice it would be beneficial to use multiple AWS accounts for different purposes. This would also involve more carefully planned IAM roles for cross-account resource access.
 
+### Modules for stable environments to be used for long-lived pre-production and production environments
+
+This article looked at how to make tradeoffs between costs, speed of deployment and production parity in ad hoc environments. I'm interested in building a new set of modules that can be used to set up environments that:
+
+- are more stable and more long-lived
+- have less resource sharing (dedicated RDS and ElastiCache resources)
+- implement autoscaling for load-testing (or maybe implement autoscaling for ad hoc environments)
+- can be used to perform load testing
+- have enhanced observability tooling
+
+These environments might be used as part of a QA process that does a final sign-off on a new set of features scheduled for deployment to production environments, for example.
+
 ## Conclusion
 
-That wraps up the tour of my ad hoc environment infrastructure automation process.
+This wraps up the tour of my ad hoc environment infrastructure automation.
 
 ## TODOs
 
@@ -766,6 +792,7 @@ A list of things that need to be fixed or added to this article
   - [ ] AWS Region
   - [ ] S3 Backend bucket name
   - [ ] Other environment variables that will be available for all GitHub Action jobs
+  - [ ] AWS Credentials
 
 - [ ] Fix Workspace issues once and for all
   - [ ] Delete all ad hoc environments and all shared resources environments
