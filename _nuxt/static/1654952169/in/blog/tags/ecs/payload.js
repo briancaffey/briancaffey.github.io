@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/in/blog/tags/ecs", {data:[{articles:[]}],fetch:{},mutations:[]});
