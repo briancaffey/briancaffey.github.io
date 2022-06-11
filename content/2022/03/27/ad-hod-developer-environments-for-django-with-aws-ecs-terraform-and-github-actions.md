@@ -159,7 +159,7 @@ With ECS you can choose to run containers directly on EC2 instances that you man
 
 Since we are going to use the Fargate launch type for our ECS Tasks, let's talk about the ergonomics of these serverless compute instances compared to running our services directly on an EC2 instances.
 
-- We can't SSH into Fargate compute instance. We can instead use AWS Systems Manager and EcsExec to open an interactive shell in a running backend container. This can be useful for developers who might need to run a management command or access an interactive Django shell to verify behavior in their ad hoc environment.
+- We can't SSH into Fargate compute instances. We can instead use AWS Systems Manager and EcsExec to open an interactive shell in a running backend container. This can be useful for developers who might need to run a management command or access an interactive Django shell to verify behavior in their ad hoc environment.
 
 - We can't simply change code on the server and restart services. This can sometimes be a useful pattern for debugging something that can only be tested on a cloud environment (e.g. something that can't easily be reproduced on your local machine), so this requires that developers push new images to their backend services for every change they want to see reflected on their ad hoc environment. Later on I'll discuss how we can provide tooling for developers to quickly update the image used in their backend services.
 
@@ -173,7 +173,7 @@ We can run redis as an ECS service instead of using ElastiCache. In order to do 
 
 By default, **there is no way for our backend services to know how to communicate with any other service in our ECS cluster**. If you have used docker-compose, you may know that you can use the service name `redis` in a backend service to easily communicate with a redis service called `redis`. This networking convenience is not available to use out of the box with ECS. To achieve this in AWS, we need some way to manage a unique ad hoc environment-specific Route 53 DNS record that points to the private IP of the Fargate task that is running redis in an ECS cluster for a given ad hoc environment. Such a service exists in AWS and it is called Cloud Map. Cloud Map offers service discovery so that our backend services can make network calls to a static DNS address that will reliably point to the correct private IP of the ECS task running the redis container.
 
-We can define a service discovery namespace (which will essentially be a top level domain, or TLD) that all of our ad hoc environments can share. Let's assume this namespace is called `ad-hoc`. Each ad hoc environment can then define a service discovery service in the shared namespace for redis that is called `{ad-hoc-env-name}-redis`. This way, we can have a reliable address that we can configure as an environment for our backend that will look like this: `redis://{ad-hoc-env-name}-redis.ad-hoc:6379/0`. `{ad-hoc-env-name-redis}.ad-hoc` will be the hostname of the redis service, and Route 53 will create records that point `{ad-hoc-env-name}-redis.ad-hoc` to the private IP of the redis Fargate task for each ad hoc environment.
+We can define a service discovery namespace (which will essentially be a top level domain, or TLD) that all of our ad hoc environments can share. Let's assume this namespace is called `ad-hoc`. Each ad hoc environment can then define a service discovery service in the shared namespace for redis that is called `{ad-hoc-env-name}-redis`. This way, we can have a reliable address that we can configure as an environment for our backend that will look like this: `redis://{ad-hoc-env-name}-redis.ad-hoc:6379/0`. `{ad-hoc-env-name-redis}.ad-hoc` will be the hostname of the redis service, and Route 53 will create records that point to `{ad-hoc-env-name}-redis.ad-hoc` to the private IP of the redis Fargate task for each ad hoc environment.
 
 ### Load Balancing
 
@@ -191,7 +191,7 @@ ECS services that need to be exposed to the internet can specify the target grou
 
 For a given ad hoc environment, we need to specify that only traffic with certain paths should be sent to the backend service, and all other traffic should be sent to the frontend service. For example, we may only want to send traffic that starts with the path `/api` or `/admin` to the backend target group, and all other traffic should be sent to the frontend target group. We can do this by setting conditions on the listener rules that forward traffic do the frontend and backend target groups based on the hostname and path.
 
-We want our listener rule logic to forward `/api`, `/admin` and any other backend traffic to the backend target group, and forward all other traffic (`/*`) to the frontend target group. In order to do this, we need the backend listener rule to have a higher priority than the frontend listener rule for each ad hoc environment. Since we are using the same load balancer for all ad hoc environments, the priority values for each listener rule need to be unique. If we don't set the priority explicitly, then the priority will be set automatically to the next available value in ascending order. In order to make sure that the backend listener rule has a higher priority than the frontend listener rule, we need to tell Terraform that the frontend module `depends_on` the backend module. This way that backend listener rule will have a higher priority (e.g. priority of 1) because it will be created first, and the frontend listener rule will have a lower priority (e.g. priority of 2).
+We want our listener rule logic to forward `/api`, `/admin` and any other backend traffic to the backend target group, and forward all other traffic (`/*`) to the frontend target group. In order to do this, we need the backend listener rule to have a higher priority than the frontend listener rule for each ad hoc environment. Since we are using the same load balancer for all ad hoc environments, the priority values for each listener rule need to be unique. If we don't set the priority explicitly, then the priority will be set automatically to the next available value in ascending order. In order to make sure that the backend listener rule has a higher priority than the frontend listener rule for each ad hoc environment, we need to tell Terraform that the frontend module `depends_on` the backend module. This way the backend listener rule will have a higher priority (e.g. priority of 1) because it will be created first, and the frontend listener rule will have a lower priority (e.g. priority of 2).
 
 ## More on shared resources vs per-environment resources
 
@@ -225,9 +225,9 @@ Ad hoc environment resources can be defined in another terraform configuration t
 
 The `<name>.tfvars` file will allow developers to use a simple, standard file interface for defining application specific values, such as the version of the backend and frontend. This brings developers into the concepts and practices of "infrastructure as code" and "configuration as code" and also helps the entire team keep track of how different environments are configured.
 
-Ad hoc environment `<name>.tfvars` files are stored in a directory of a special git repository that also defines the ad hoc environment terraform configuration. Currently, the `tfvars` files are stored [here](https://github.com/briancaffey/django-step-by-step/tree/main/terraform/live/dev).
+Ad hoc environment `<name>.tfvars` files are stored in a directory of a special git repository that also defines the ad hoc environment terraform configuration. Currently, the `tfvars` files are stored [here](https://github.com/briancaffey/django-step-by-step/tree/main/terraform/live/ad-hoc/envs).
 
-Now let's look at the two terraform configurations used for defining shared resources and ad hoc environment resources.
+Now let's look at the two terraform configurations used for defining **shared resources** and **ad hoc environment resources**.
 
 ## Ad Hoc Environment Diagram
 
@@ -298,7 +298,7 @@ In order for service discovery to work in the VPC that we created, we need to ad
 
 There are two important security groups that we will set up as part of the shared infrastructure layer to be used by each ad hoc environment: one security group for the load balancer, and one security group where all of our ECS services will run.
 
-The load balancer security group will allow all traffic on port `80` and `443` for `HTTP` and `HTTPS` traffic. The ECS security group will only allow inbound traffic from the application load balancer security group.
+The load balancer security group will allow all traffic on port `80` and `443` for `HTTP` and `HTTPS` traffic. The ECS security group will only allow inbound traffic from the application load balancer security group. It will also allow for traffic from port 6379 for redis traffic.
 
 ### IAM Roles
 
@@ -310,7 +310,7 @@ We will create one RDS instance in one of the private subnets in our VPC. This R
 
 ### Load Balancer
 
-We will use one load balancer for all ad hoc environments. This load balancer will have a wildcard ACM certificate attached to it (`*.dev.example.com`, for example). Each ad hoc environment will create a Route 53 record that will point to this load balancer's public DNS name. For example, `brian.dev.example.com` will be the address of my ad hoc environment. Requests to this address will then be routed to either the frontend ECS service or the backend ECS service depending on request header values that will be set on the listener rules.
+We will use one load balancer for all ad hoc environments. This load balancer will have a wildcard ACM certificate attached to it (`*.dev.example.com`, for example). Each ad hoc environment will create a Route 53 record that will point to this load balancer's public DNS name. For example, `brian.dev.example.com` will be the address of my ad hoc environment. Requests to this address will then be routed to either the frontend ECS service or the backend ECS service depending on request header values and request path values that will be set on the listener rules.
 
 By default, a load balancer supports up to 50 listener rules, so we can create plenty of ad hoc environments before we need to increase the default quota. There will be a discussion at the end of this article about AWS service quotas.
 
@@ -318,7 +318,7 @@ By default, a load balancer supports up to 50 listener rules, so we can create p
 
 The bastion host will be created in one of the VPC's public subnets. This will primarily be used for connecting to RDS to create new databases for new ad hoc environments, or for manually manipulating data in an ad hoc environment for debugging.
 
-## Environment-specific resources
+## Ad hoc environment resources
 
 Now that we have defined a shared set of infrastructure that our ad hoc environments will use, let's have a look at the resources that will be specific to ad hoc environments that will be added on top of the shared resources.
 
@@ -328,50 +328,21 @@ The ECS Cluster is a simple grouping of ECS tasks and services.
 
 ### ECS Tasks and Services
 
-Each environment will have a unique collection of ECS tasks and services that will be used to run the application.
+Each environment will have a set of ECS tasks and services that will be used to run the application.
 
 There are four important ECS services in our application that are used to run "long-running" ECS tasks. Long-running tasks are tasks that start processes that run indefinitely, rather than running until completion. The long-running tasks in our application include:
 
 - backend web application (gunciron web server)
 - backend celery worker
 - backend celery beat
-- frontend web site
+- frontend web site (nginx web server)
 - redis
 
-The infrastructure code also defines some tasks that are not long-running but rather short lived tasks that run until completion and do not start again. These services include:
+The infrastructure code also defines some tasks that are not long-running but rather short lived tasks that run until completion and do not start again. These tasks include:
 
 - collectstatic
 - database migrations
 - any other ad-hoc task that we want to run, usually wrapped in a Django management command
-
-### ALB Listener Rules and Target Groups
-
-These two resources work together to expose certain ECS tasks to the internet. The pattern used to do this involves:
-
-- creating an `aws_lb_target_group` that define a `health_check`, references a VPC and a port
-- defining a `load_balancer` block on an `aws_ecs_service` resource that references the `aws_lb_target_group`
-- an `aws_lb_listener_rule` rule is defined to forward traffic matching certain hostname, path or header values that we define to the `aws_lb_target_group`
-
-### Route 53 record
-
-The Route 53 resource we create for ad hoc environment will define a subdomain that will use for the ad hoc environment, such as `brian.example.dev` (where `example.dev` is a domain name used internally by the DevOps team). The load balancer created as part of the shared resources will have a wildcard certificate that will give us secure connections for URLs following the pattern `*.example.dev`.
-
-### S3 bucket
-
-An S3 bucket will be provisioned per ad hoc environment. This S3 bucket will store both static files as well as media uploads (images).
-
-### Database within RDS instance
-
-We will create one database in our RDS instance per ad hoc environment for data isolation.
-
-### terraform_remote_state
-
-[`terraform_remote_state`](https://www.terraform.io/language/state/remote-state-data) is a feature of terraform that will allow us to separate the shared infrastructure terraform configuration ([link]()) from the ad hoc environment terraform infrastructure ([link]()).
-
-Our terraform configuration for ad hoc environments will define variables that will be provided by `terraform_remote_state` that will reference values from our shared resource terraform configuration. This is what that looks like in Terraform code:
-
-```hcl
-```
 
 ## How to setup an ad hoc environment
 
@@ -389,7 +360,7 @@ The downsides of this approach are:
 - creating ad hoc environments requires knowledge of git, so non-technical product team members might need help from the engineering team when setting up an ad hoc environment
 - there is an additional "manual" step of creating a `<name>.tfvars` file that must be done before running a pipeline to create an ad hoc environment
 
-Provided that a `<name>.tfvars` file has been created and pushed to the correct branch (`main`, for example) of our "live" Terraform repo, creating or updating an ad hoc environment will be as simple as running a pipeline in GitHub Actions that specifies the `<name>` of our ad hoc environment. If no such `<name>.tfvars` file exists, our pipeline will fail.
+Provided that a `<name>.tfvars` file has been created and pushed to the repo, creating or updating an ad hoc environment will be as simple as running a pipeline in GitHub Actions that specifies the `<name>` of our ad hoc environment. If no such `<name>.tfvars` file exists, our pipeline will fail.
 
 ### GitHub Action
 
@@ -406,7 +377,7 @@ Creating ad hoc environments will involve manually triggering a GitHub Action th
 
 We only have to enter the name of the ad hoc environment we want to create or update. The ad hoc environment name is used as the Terraform workspace name. This name is also the name of the `<name>.tfvars` file that must be created per environment.
 
-This workflow will do `terraform init`, `terraform plan` and `terraform apply` using the `<name>.tfvars` file. When everything has been created, we will use the AWS CLI to prepare the environment so that it can be used. We will use the `aws ecs run-task` command to run database migrations needed so that the application code can interact with the database.
+This workflow will do `terraform init`, `terraform plan` and `terraform apply` using the `<name>.tfvars` file. When everything has been created, we will use the AWS CLI to prepare the environment so that it can be used. We will use the `aws ecs run-task` command to run database migrations needed so that the application code can make database queries.
 
 ## How to update code in an existing ad hoc environment
 
@@ -438,7 +409,7 @@ We need a GitHub Action that can do the following:
 - write new container definitions JSON with the new backend image tag
 - register new task definitions with the new container definition JSON files for each task (`aws ecs register-task-definition`)
 - call run-task with the newly updated migration ECS task (`aws ecs run-task`)
-- wait for the task to exit and display the logs
+- wait for the task to exit and display the logs (`aws ecs wait tasks-stopped`)
 - update the backend services (gunicorn, celery, celery beat) (`aws ecs update-service`)
 - wait for the new backend services to be stable (`aws ecs wait services-stable`)
 
@@ -447,11 +418,6 @@ Here's a visual representation of the backend update process:
 ![png](/static/adhoc/ad_hoc.backend_update.drawio.png)
 
 In order have the correct arguments for all of the AWS CLI calls used in the above workflow, we can use the AWS CLI to fetch resource names by tag.
-
-We should also consider the following:
-
-- the GitHub Action should call a script that runs the steps described above instead of writing the script directly in the GitHub Action itself. This will make debugging easier and will also make it easier to setup automation pipelines using a tool other than GitHub Actions if we choose to do so later
-- how do we structure this script? should it be one big script, or can we break out each step into small scripts? we should try to use KISS and DRY principles
 
 Here is what I'm using for the script. There lots of comments, so please refer to those comments for an explanation of what the script is doing.
 
@@ -651,7 +617,7 @@ echo "Services are now stable. Backend services are now up to date with $BACKEND
 echo "Backend update is now complete!"
 ```
 
-With this GitHub Actions workflow, a developer can now easily change the version of backend code that is running in their ad hoc environments without needing to involve Terraform.
+With this GitHub Actions workflow, a developer can now easily change the version of backend code that is running in their ad hoc environments without needing to involve Terraform. Using the `ad_hoc_backend_update.yml` GitHub Actions workflow, a developer only needs to enter the name of the workspace and the version of the backend code they want to use. The workflow will then run the `migrate` task and update the backend services.
 
 ### Using `ignore_changes` in the definitions
 
@@ -661,7 +627,7 @@ There is a setting on the `aws_ecs_service` resource in Terraform we can can use
 
 ### Frontend updates
 
-The process described above is needed for updating the backend application. Updating the frontend application involves a similar process to the backend update:
+The process described above is needed for updating the backend application. Updating the frontend application involves a similar process to the backend update. The main difference is that no task (such as the `migrate` command on the backend) needs to run before the service is updated. Here's an overview of the frontend update process:
 
 - fetch the container definition JSON for the frontend tasks (`aws ecs describe-task-definition`)
 - write new container definition JSON with the new frontend image tag
@@ -669,224 +635,116 @@ The process described above is needed for updating the backend application. Upda
 - update the frontend service (`aws ecs update-service`)
 - wait for the new backend services to be stable (`aws ecs wait services-stable`)
 
-## Options for ad hoc environment settings
+## Setting up everything from a new AWS account and GitHub Actions
 
-At the very minimum, our ad hoc environments need to know what versions of the frontend and backend application to use (the image tag for the frontend and backend images that have been pushed to ECR).
+Here's a quick overview of initial setup steps that are needed in order to use the automation defined in the GitHub Actions for ad hoc environments.
 
-- [ ] Public or private - do you want anyone on the internet to be able to access your ad hoc environment, or should the environment only be accessible over a private VPN connection. A `public` boolean could default to `false`, and you could have the environment only available
+### Configure AWS credentials locally
 
-- [ ] Custom environment variables
+There is one Terraform command that we will run on our local machine to setup a remote backend for storing our Terraform state. In order to run this, we need to configure AWS credentials locally.
 
-### S3 backend resources and ECR repositories
+### Run the `make tf-bootstrap` command
 
-We first want to set up an S3 backend that we can use for storing our Terraform state files as well as ECR repositories for storing the images used for the frontend and backend components of our application. There are a few ways to do this:
+This command will setup an S3 bucket and DynamoDB table for storing Terraform state. Running this command will also require that a `bootstrap.tfvars` file has been created from the template. This will define the AWS region and name to be used for creating resources.
 
-1. Set things up manually (not recommended)
-2. Set things up using Terraform (this is what I'm doing currently)
-3. Set things up using a CloudFormation template
-4. Use Terraform Cloud
+### Build and push a backend and frontend image
 
-I'll be using option 2. This is sometimes referred to as "bootstrapping". When using CDK for IaC, you will do something similar that sets up S3 buckets and ECR repositories used to manage the assets used for application deployment.
+The `tf-bootstrap` command also creates ECR repositories for the backend and frontend images. We can use the `ecr_backend.yml` and `ecr_frontend.yml` GitHub Actions workflows to build and push the backend and frontend images to the ECR repositories. These pipelines accept a single parameter which is a git tag that must exist in the repo. This git tag will then be used as the image tag for the backend and frontend images.
 
-Have a look at [this README.md file](https://github.com/briancaffey/django-step-by-step/blob/main/terraform/bootstrap/README.md) for more information about bootstrapping a Terraform S3 backend.
+### Purchase a domain name in Route 53
 
-We can use the `make tf-bootstrap` command from the `django-step-by-step` GitHub repo to do this. Before running `make tf-bootstrap`, we need to copy the `bootstrap.tfvars.template` file to `bootstrap.tfvars` and add values for `region` and `backend_name`. Setting up these resources takes just a few seconds.
+I use Route 53 to manage DNS records, and have purchased a domain name that I use for testing and debugging in this and other projects.
 
-### Set up shared infrastructure
+### Create a wildcard ACM certificate
 
-The next step is to setup shared infrastructure components that our ad hoc environments will use. We will use the S3 backend that was setup in the previous step to store the Terraform state for our shared resources. The shared resources is configured with a dedicated Terraform module that I have published to the Terraform Registry ([link](https://registry.terraform.io/modules/briancaffey/ad-hoc-environments/aws/latest)). The git repo for this Terraform module contains a simple example (located in [`examples/simple`](https://github.com/briancaffey/terraform-aws-ad-hoc-environments/tree/main/examples/simple)) that I use to set up the shared resources.
+I chose to create this certificate outside of Terraform and import it via ARN. We need a wildcard certificate so that multiple ad hoc environments can be hosted on subdomains of the same domain.
 
-We will need to provide a `backend.config` file that will be used to configure the S3 backend where we will store the terraform state for the shared resources.
+### Create a new EC2 key pair
 
-This terraform configuration will not be updated frequently, so there is no GitHub Actions pipeline that will be used for updating and deploying the shared resources. For larger infrastructure teams, it might make sense to build a GitHub Actions pipeline for introducing changes to the shared resources rather than deploying from a local machine.
+The key pair should be created manually and it needs to be added to GitHub repository secrets so that it can be used in the ad hoc environment pipelines.
 
-The shared resources terraform configuration requires two inputs:
+### Add secrets to GitHub
 
-- `certificate_arn`: the ARN of a pre-provisioned wildcard ACM certificate that will be used to provide secure connections to the shared load balancer over the public internet. (My approach to ad hoc environments assumes that the environments can be accessed over the public internet without a VPN connection, but your requirements may be different)
-- `key_name`: the name of a pre-existing EC2 key pair name that will be used to access the bastion host from GitHub Actions. We need this in order to create databases in our RDS instance per ad hoc environment
+The follow secrets are needed for GitHub Actions to run. Add these as repository secrets:
 
-### Setting up an ad hoc environment
+- `ACM_CERTIFICATE_ARN` - ARN of the wildcard ACM certificate
+- `AWS_ACCESS_KEY_ID` - AWS access key ID
+- `AWS_ACCOUNT_ID` - AWS account ID
+- `AWS_DEFAULT_REGION` - AWS default region (I use `us-east-1`)
+- `AWS_SECRET_ACCESS_KEY` - AWS secret access key
+- `DOMAIN_NAME` - domain name for the ad hoc environment (e.g. example.com)
+- `KEY_NAME` - name of the EC2 key pair
+- `SSH_PRIVATE_KEY` - private key for the EC2 key pair
+- `TF_BACKEND_BUCKET` - name of the S3 bucket used for storing Terraform state
+- `TF_BACKEND_DYNAMODB_TABLE` - name of the DynamoDB table used for storing Terraform state
+- `TF_BACKEND_REGION` - AWS region for the S3 bucket and DynamoDB table
 
-Now that we have set up shared resources, we can start
+These secrets are referenced in the GitHub Actions workflows.
 
-## Spin everything down
+### Create shared resources
 
-To get rid of all of the AWS resources used to support ad hoc environments, we need to delete the following:
+Now that we have GitHub secrets configured, we can run the `shared_resources_create_update.yml` GitHub Actions workflow. This will create  shared resources environment in which we can build our ad hoc environments. This workflow requires a name (e.g. `dev`). This require that we create a `dev.tfvars` file in `terraform/live/shared-resources` directory.
 
-- all ad hoc environments
-- shared resources
-- S3 bucket and dynamodb table that were used to store terraform state
+### Create an ad hoc environment
 
-### Delete ad hoc environment
+We can now create an ad hoc environment. This requires the name of the shared resources environment (e.g. `dev`) and the name of the ad hoc environment (e.g. `brian-test`). The only thing we need to do before creating the `brian-test` ad hoc environment is to create the `brian-test.tfvars` file in the `terraform/live/ad-hoc/envs` directory. This will define the versions of the application and any other environment configuration that is needed.
 
-This can be done by running the `terraform destroy` GitHub Actions job with the name of the ad hoc environment to be destroyed.
+### Update the backend version in an ad hoc environment
 
-### Delete shared resources
+Now that the backend is up and running and usable, we can update the backend version used in our ad hoc environment. This can be done by running the `ad_hoc_backend_update.yml` GitHub Actions workflow. To run this workflow you must specify:
 
-Currently this can be done from the command line using the `make examples-simple-destroy` Makefile command in the `terraform-aws-ad-hoc-environments` repo.
+- the shared resource workspace (e.g. `dev`)
+- the ad hoc environment name (e.g. `brian-test`)
+- the new version of the backend to be used (e.g. `v1.0.0`)
 
-### Delete the S3 bucket and DynamoDB table that are used to store and lock state files
+The backend version should already have been built and pushed to the ECR repository using the `ecr_backend.yml` GitHub Actions workflow.
 
-This can be done from the `django-step-by-step` repo using the `make tf-bootstrap-destroy` command.
+### Use ECS Exec to access a Django shell in a running container
 
+Instead of SSHing into the container, we can use the `ecs-exec` command to access a shell in the container. This is useful for debugging and testing. One of the outputs of the ad hoc environment terraform configuration contains the script needed to run the `ecs-exec` command:
 
-## State management & resource lifecycle
+```bash
+TASK_ARN=$(aws ecs list-tasks \
+  --cluster alpha-cluster \
+  --service-name  alpha-gunicorn | jq -r '.taskArns | .[0]' \
+)
+aws ecs execute-command --cluster alpha-cluster \
+    --task $TASK_ARN \
+    --container gunicorn \
+    --interactive \
+    --command "/bin/bash"
+```
 
-Let's take a look at the way that state is stored and shared between different components of our ad hoc environment setup.
+You will then have a shell in the container:
 
-## Diagram
+```
+The Session Manager plugin was installed successfully. Use the AWS CLI to start a session.
 
-Here's a diagram that shows both where state is stored as well as the lifecycle of resources used in ad hoc environments.
 
-![png](/static/adhoc/lifecycle.drawio.png)
+Starting session with SessionId: ecs-execute-command-073d1947fa71c058c
+root@ip-10-0-2-167:/code# python manage.py shell
+Python 3.9.9 (main, Dec 21 2021, 10:03:34)
+[GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>>
+```
 
-## High level overview of lifecycle (A - F)
+### Destroy an ad hoc environment
 
-### `A`: bootstrapped S3 backend for terraform state
+Use the `ad_hoc_env_destroy.yml` GitHub Actions workflow to destroy an ad hoc environment. To run this workflow you need to specify the shared resource workspace (e.g. `dev`) and the ad hoc environment name (e.g. `brian-test`).
 
-These resource are long lived and they provide the ability to store Terraform state (a JSON object that described what is deployed to our AWS account) as well as Elastic Container Registry repos that store builds of our frontend and backend application.
+### Destroy the shared resources environment
 
-### `B`: deploy shared resources for ad hoc environments
+Use the `shared_resources_destroy.yml` GitHub Actions workflow to destroy the shared resources environment. To run this workflow you need to specify the shared resource workspace (e.g. `dev`).
 
-Ad hoc environments share resources. This helps keeps startup speeds low and also helps to keep costs down.
-
-### `C`: launch (or update) ad hoc environments
-
-Ad hoc environments can be launched by developers for testing a feature, or setting up an environment for a product demo. The same process used for launching a new environment can be used for updating an existing environment. Application versions can be updated through updating Terraform, or through a GitHub Action that makes a series of AWS CLI calls to make rolling updates to ECS services. This is triggered by a manual GitHub Action.
-
-### `D`: destroy an ad hoc environment
-
-Once an ad hoc environment is no longer needed, it can be destroyed by running another GitHub Action with the name of the ad hoc environment to destroy as the only input.
-
-### `E`: destroy shared resources
-
-If ad hoc environments are no longer needed altogether, then the shared resources can be deleted as they incur costs.
-
-### `F`: destroy bootstrap resources
-
-Once all ad hoc environments and shared resources are removed, the S3 backend resource can also be removed.
-
-## Ad hoc infrastructure component and process details (1 - 25)
-
-### `1`: `make tf-bootstrap`
-
-This command does a `terraform init / plan / apply` to create the S3 backend resources needed for storing state files for both shared infrastructure and per-environment resources (using Terraform workspaces).
-
-### `1`: S3 backend Terraform configuration
-
-[Link](https://github.com/briancaffey/django-step-by-step/tree/main/terraform/bootstrap) to this Terraform configuration.
-
-### `1`: S3 bucket for S3 backend
-
-The S3 bucket that is used to store Terraform state files. The bucket name is provided in `bootstrap.tfvars`.
-
-### `1`: DynamoDB lock table
-
-More information about state locking can be found [here](https://www.terraform.io/language/settings/backends/s3#dynamodb-table-permissions).
-
-### `1`: ECR resources
-
-The bootstrap terraform configuration includes Elastic Container Registry repos used for storing frontend and backend application container images that will be used in the ECS clusters for each ad hoc environment.
-
-### `1`: S3 backend outputs
-
-The S3 backend Terraform configuration has Terraform outputs that can be used
-
-### `1`: Terraform state file for S3 backend
-
-The state file that stores the state for our AWS resources that store state for our ad hoc environments is stored on my local machine. This is not ideal, but the S3 backend resource are fairly simple and will not be changed as we use and develop our ad hoc environment infrastructure setup. Also, these resources can easily be delete manually from the AWS console.
-
-### `1`: `make examples-simple` for setting up shared resources
-
-`make examples-simple` is a Makefile command from the `briancaffey/terraform-aws-ad-hoc-environments` repo. Like `tf-bootstrap`, it also wraps `terraform init / plan / apply` commands, but for another Terraform configuration.
-
-### `1`: `terraform-aws-ad-hoc-environments` Terraform module on Terraform Registry
-
-The `terraform-aws-ad-hoc-environments` module has been published to the Terraform Registry and can be viewed [here](https://registry.terraform.io/modules/briancaffey/ad-hoc-environments/aws/latest).
-
-### `1`: VPC module
-
-### `1`: AWS Cloud Map
-
-### `1`: EC2 instance (bastion host)
-
-### `1`: RDS instance
-
-### `1`: Application Load Balancer
-
-### `1`: IAM resources
-
-### `1`: ECS roles
-
-### `1`: Shared resources state file
-
-### `1`: `workflow_dispatch`
-
-### `1`: `create_update_ad_hoc_env` GitHub Action
-
-### `1`: Ad hoc environment name
-
-### `1`: `terraform-aws-django` Terraform module
-
-[Link](https://registry.terraform.io/modules/briancaffey/django/aws/latest) to the `terraform-aws-django` module on the Terraform Registry.
-
-### `1`: ECS cluster
-
-One ECS cluster is created for each ad hoc environment. The ECS cluster resources is is a grouping of ECS services and tasks.
-
-### `1`: ECS services
-
-The application uses the following ECS services for ad hoc environments:
-
-- `gunicorn` - web server process for the API
-- `celery` - web worker that processes tasks
-- `celery beat` - job scheduler that creates tasks for celery workers to process
-- `nginx` - for serving the frontend application
-- `redis` - a stateful service that is used for application data caching and brokering tasks
-
-### `1`: S3 bucket for ad hoc environment
-
-Each ad hoc environment will have a dedicated S3 bucket for storing static and media files. In the context of the example application we are running, these files are all image files
-
-### `1`: ALB Listener Rules
-
-There is a single load balancer shared across all ad hoc environments. Each ad hoc environments has associated listener rules that route requests based on the path to the correct application
-
-### `1`: Postgres database in RDS instance
-
-Each ad hoc environment uses a dedicated postgres database that lives in an RDS instance that is shared by all ad hoc environments.
-
-### `1`: Redis
-
-Redis is a key-value database that is used for application data caching and brokering tasks. Running redis as an ECS service is an alternative to using a managed ElastiCache instance per ad hoc environment.
-
-### `1`: Service Discovery Service (CloudMap)
-
-In order for our backend application containers to communicate with the Redis ECS service, we need to set up a Service Discovery service for Redis. This will maintain an internal Route 53 record that points to the private IP of the Fargate Task that runs the redis container.
-
-### `1`: `terraform-remote-state`
-
-[`terraform-remote-state`](https://www.terraform.io/language/state/remote-state-data) is used to share state between two Terraform configurations. For example, the endpoint of the RDS instance needs to shared from the shared resources Terraform Configuration to the ad hoc environment configuration.
-
-### `1`: `destroy_ad_hoc_env`
-
-### `1`: `make examples-simple-destroy`
-
-### `1`: `make tf-bootstrap-destroy`
-
-### `1`: `briancaffey/django-step-by-step` GitHub repo
-
-### `1`: `briancaffey/terraform-aws-django` GitHub repo
-
-### `1`: `briancaffey/terraform-aws-ad-hoc-environments` GitHub repo
-
-### Google Drive link to this draw.io diagram
-
-[Google Drive link to this diagram](https://drive.google.com/file/d/1Te427LEPSlGinEfncH39gArHxwB1cMp0/view?usp=sharing). It is view-only, but you can duplicate it and edit the copy.
+This defines the full lifecycle of creating and destroying ad hoc environments.
 
 ## Future improvements, open questions and next steps
 
-- Least privilege (for roles used in automation)
+### Enhanced Security
+
+The low hanging fruit here is to use least privilege (for roles used in automation) and to define these roles with IaC. Currently I am using Admin roles for the credentials I store in GitHub which is a shortcut to using IaC and is not a best practice.
 
 ### Keeping track of ad hoc environments
 
@@ -898,10 +756,12 @@ One way to check the active ad hoc environments would be to use the AWS CLI. We 
 
 Or we could have a policy that all ad-hoc environments are deleted automatically at the end of each week.
 
-### Terraform Tooling: Terragrunt and Terraform Cloud
+### Terraform Tooling
 
 - Testing Terraform Code
 - Testing GitHub Actions
+- Using advanced Terraform frameworks like Terragrunt
+- Using Terraform Cloud for more advanced Terraform features
 
 ### More secure way of defining RDS username and password
 
@@ -911,7 +771,15 @@ Currently the postgres database does not have a secure password. It is both hard
 
 The script used for updating the backend application could be improved or broken up into multiple scripts to better handle errors and failures that happen during the pipeline. The script runs several different commands and could potentially fail at any step, so it would be nice to improve the error messages so that both developers and DevOps teams can more quickly diagnose pipeline failures.
 
-### Repository Organization
+### Limiting traffic to ad hoc environments to a VPN
+
+Another good next step would be to show how we can limit traffic to ad hoc environments to a VPN.
+
+### Figure out how many ad hoc environments we can create with the default quotas
+
+AWS accounts limit the number of resources you can create, but for most of this quota limits you can request an increase per account. I need to figure out how many ad hoc environments I can create with the default quotas.
+
+### Code Repo Organization
 
 One minor improvement would be to move the `terraform` directory out of the `django-step-by-step` monorepo into a dedicated repo. We may also want to move GitHub Actions for creating, updating and destroying environments to this new repo. For early stage development, using a single repository that stores both application code and Terraform configuration works, but it would be better keep these separate at the repository level as the project grows. One reason for this is that we don't want lots of small commits to `*.tfvars` files to pollute the commit history of our main Django application.
 
@@ -933,54 +801,4 @@ These environments might be used as part of a QA process that does a final sign-
 
 ## Conclusion
 
-This wraps up the tour of my ad hoc environment infrastructure automation.
-
-## TODOs
-
-A list of things that need to be fixed or added to this article
-
-- [ ] Mention CloudFormation template as an option for managing S3 backend resources [link](https://www.bti360.com/mng-terraform-state-cloudformation/)
-- [ ] [https://discuss.hashicorp.com/t/setup-terraform-github-action-fails-during-init-before-while-managing-workspaces-in-terraform-cloud/29659/2](https://discuss.hashicorp.com/t/setup-terraform-github-action-fails-during-init-before-while-managing-workspaces-in-terraform-cloud/29659/2)
-
-### Important TODOs
-
-- [ ] Detail the repository secrets that must be added to GitHub in order for GitHub Actions to work for shared resources environments and ad hoc environments
-  - [ ] AWS Key Pair to be used on bastion host
-  - [ ] ACM certificate
-  - [ ] AWS Region
-  - [ ] S3 Backend bucket name
-  - [ ] Other environment variables that will be available for all GitHub Action jobs
-  - [ ] AWS Credentials
-
-- [ ] Fix Workspace issues once and for all
-  - [ ] Delete all ad hoc environments and all shared resources environments
-  - [ ] Delete all state from the S3 bucket in order to start from scratch
-  - [ ] Create two files for shared resources environments and make sure they can both be created
-  - [ ] Draft a post on the forum about the workspace configuration issues I'm having in order to make sure that I have tried everything
-  - [ ] The shared resources and ad hoc environments should be able to be created without errors about workspace configuration
-
-### Notes about TF_WORKSPACE
-
-- It can override selections made using the `terraform workspace` commands
-- If you set the TF_WORKSPACE environment variable to an empty or new configuration, then there will be issues
-
-- [ ] Add parameters to names of GitHub Actions runs (version numbers, env names for shared resources, ad hoc environment names)
-
-- [x] Add collectstatic and migrate commands to GitHub Actions workflow via run-task command (with logs)
-- [ ] Create a combined Django management command that can be used for database mgirations and collectstatic commands
-
-### Backend Service update process
-
-- [ ] Build and push whenever a tag is pushed?
-
-### Implement Frontend Service Update
-
-- [ ] Add GitHub Actions workflow
-- [ ] Update Existing Build and Push frontend workflow to use git tag
-- [ ] Build client version into client and display it on UI
-
-## Meta
-
-- [ ] Look into using bastion host for EcsExec commands instead of running EcsExec from local machine
-- [x] Remove as many env vars as possible (ECR repo names - use AWS account number and interpolate)
-- [ ] Least privilege for AWS credentials used in automation and those used by developers. Give roles only the permissions to do what they need to do any nothing more.
+This wraps up the tour of my ad hoc environment infrastructure automation. Thank you for having a read through my article. If you have a similar (or different) approach to building ad hoc environments, I would love to hear about it.
