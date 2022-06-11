@@ -1,6 +1,6 @@
 ---
 title: Setting up ad hoc development environments for Django applications with AWS ECS, Terraform and GitHub Actions
-date: '2022-05-27'
+date: '2022-06-11'
 description: This article will show how software development teams can build on-demand environments for dog-food testing, quality review, internal and external demos and other use cases that require short-lived but feature-complete instances of a web application.
 image: /static/adhoc.png
 tags:
@@ -11,8 +11,6 @@ tags:
   - ecs
   - containers
   - docker
-
-draft: true
 
 external:
 #   - link: https://news.ycombinator.com
