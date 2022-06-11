@@ -4,10 +4,16 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Sat, 11 Jun 2022 12:57:00 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 11 Jun 2022 13:17:47 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Setting up ad hoc development environments for Django applications with AWS ECS, Terraform and GitHub Actions]]></title>
+            <link>https://briancaffey.github.io/2022/03/27/ad-hod-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</link>
+            <guid>https://briancaffey.github.io/2022/03/27/ad-hod-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</guid>
+            <description><![CDATA[This article will show how software development teams can build on-demand environments for dog-food testing, quality review, internal and external demos and other use cases that require short-lived but feature-complete instances of a web application.]]></description>
+        </item>
         <item>
             <title><![CDATA[How and why I added AdSense and an AdBlock detector to my personal website]]></title>
             <link>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website</link>

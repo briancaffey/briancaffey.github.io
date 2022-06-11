@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/in/blog/tags/containers", {data:[{articles:[]}],fetch:{},mutations:[]});
