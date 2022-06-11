@@ -404,7 +404,7 @@ If we first run database migrations **and then** update application code (ECS se
 We need a GitHub Action that can do the following:
 
 - fetch the current container definition JSON files for each backend tasks (`aws ecs describe-task-definition`)
-- write new container definitions JSON with the new backend image tag
+- write new container definitions JSON with the new backend image tag (using `jq`)
 - register new task definitions with the new container definition JSON files for each task (`aws ecs register-task-definition`)
 - call run-task with the newly updated migration ECS task (`aws ecs run-task`)
 - wait for the task to exit and display the logs (`aws ecs wait tasks-stopped`)
@@ -619,16 +619,16 @@ With this GitHub Actions workflow, a developer can now easily change the version
 
 ### Using `ignore_changes` in the definitions
 
-There is one more important point to make about Terraform before we conclude this discussion on updating backend code for existing ad hoc environments. Consider the scenario where a developer has launched an ad hoc environment with backend version `v1.0.0`. They make a small change to the backend code and push version `v1.0.1`. Next, the developer remember that a backend environment variable needs to be changed. This can be done by updating their `*.tfvars` file. If they now re-run the ad hoc environment update pipeline **without also updating the backend version in their `*.tfvars` file**, then their code will be reverted from `v1.0.1` to `v1.0.0`. We would need to coordinate version changes between updating the backend with the pipelines that use Terraform commands and the pipelines that use the AWS CLI commands.
+There is one more important point to make about Terraform before we conclude this discussion on updating backend code for existing ad hoc environments. Consider the scenario where a developer has launched an ad hoc environment with backend version `v1.0.0`. They make a small change to the backend code and push version `v1.0.1`. Next, the developer remembers that a backend environment variable needs to be changed. This can be done by updating their `*.tfvars` file. If they now re-run the ad hoc environment update pipeline **without also updating the backend version in their `*.tfvars` file**, then their code will be reverted from `v1.0.1` to `v1.0.0`. We would need to coordinate version changes between updating the backend with the pipelines that use Terraform commands and the pipelines that use the AWS CLI commands.
 
-There is a setting on the `aws_ecs_service` resource in Terraform we can can use to prevent this from happening. This setting is called [`ignore_changes`](#TODO-add-link-to-ignore-changes-documentation) and is defined under the resource's `lifecycle` configuration block. With this setting, when we update the `*.tfvars` file with our new environment variable value, we will create another recent task definition with the same `v1.0.0` image, but the ECS service will not update in response to this change (that's what the `ignore_changes` is for). Once we make the `*.tfvars` file update and redeploy using the Terraform pipeline, nothing on our ad hoc changes, but we did get a new task definitions defined in our AWS account for each backend service. When we go to make the backend update with the pipeline that uses AWS CLI commands, the most recent task revision is used to create the new task definition, so it will include the environment variable change that we added earlier.
+There is a setting on the `aws_ecs_service` resource in Terraform we can can use to prevent this from happening. This setting is called [`ignore_changes`](https://www.terraform.io/language/meta-arguments/lifecycle) and is defined under the resource's `lifecycle` configuration block. With this setting, when we update the `*.tfvars` file with our new environment variable value, we will create another recent task definition with the same `v1.0.0` image, but the ECS service will not update in response to this change (that's what the `ignore_changes` is for). Once we make the `*.tfvars` file update and redeploy using the Terraform pipeline, nothing on our ad hoc changes, but we did get a new task definitions defined in our AWS account for each backend service. When we go to make the backend update with the pipeline that uses AWS CLI commands, the most recent task revision is used to create the new task definition, so it will include the environment variable change that we added earlier.
 
 ### Frontend updates
 
 The process described above is needed for updating the backend application. Updating the frontend application involves a similar process to the backend update. The main difference is that no task (such as the `migrate` command on the backend) needs to run before the service is updated. Here's an overview of the frontend update process:
 
 - fetch the container definition JSON for the frontend tasks (`aws ecs describe-task-definition`)
-- write new container definition JSON with the new frontend image tag
+- write new container definition JSON with the new frontend image tag (using `jq`)
 - register new task definitions with the new container definition JSON file for the frontend task (`aws ecs register-task-definition`)
 - update the frontend service (`aws ecs update-service`)
 - wait for the new backend services to be stable (`aws ecs wait services-stable`)
@@ -663,7 +663,7 @@ The key pair should be created manually and it needs to be added to GitHub repos
 
 ### Add secrets to GitHub
 
-The follow secrets are needed for GitHub Actions to run. Add these as repository secrets:
+The following secrets are needed for GitHub Actions to run. Add these as repository secrets:
 
 - `ACM_CERTIFICATE_ARN` - ARN of the wildcard ACM certificate
 - `AWS_ACCESS_KEY_ID` - AWS access key ID
@@ -674,18 +674,18 @@ The follow secrets are needed for GitHub Actions to run. Add these as repository
 - `KEY_NAME` - name of the EC2 key pair
 - `SSH_PRIVATE_KEY` - private key for the EC2 key pair
 - `TF_BACKEND_BUCKET` - name of the S3 bucket used for storing Terraform state
-- `TF_BACKEND_DYNAMODB_TABLE` - name of the DynamoDB table used for storing Terraform state
+- `TF_BACKEND_DYNAMODB_TABLE` - name of the DynamoDB table used for locking the Terraform state file
 - `TF_BACKEND_REGION` - AWS region for the S3 bucket and DynamoDB table
 
 These secrets are referenced in the GitHub Actions workflows.
 
 ### Create shared resources
 
-Now that we have GitHub secrets configured, we can run the `shared_resources_create_update.yml` GitHub Actions workflow. This will create  shared resources environment in which we can build our ad hoc environments. This workflow requires a name (e.g. `dev`). This require that we create a `dev.tfvars` file in `terraform/live/shared-resources` directory.
+Now that we have GitHub secrets configured, we can run the `shared_resources_create_update.yml` GitHub Actions workflow. This will create  shared resources environment in which we can build our ad hoc environments. This workflow requires a name (e.g. `dev`). This require that we create a `dev.tfvars` file in `terraform/live/shared-resources` directory. This usually takes between 5 and 7 minutes to complete since it needs to create an RDS instance which takes a few minutes to provision.
 
 ### Create an ad hoc environment
 
-We can now create an ad hoc environment. This requires the name of the shared resources environment (e.g. `dev`) and the name of the ad hoc environment (e.g. `brian-test`). The only thing we need to do before creating the `brian-test` ad hoc environment is to create the `brian-test.tfvars` file in the `terraform/live/ad-hoc/envs` directory. This will define the versions of the application and any other environment configuration that is needed.
+We can now create an ad hoc environment. This requires the name of the shared resources environment (e.g. `dev`) and the name of the ad hoc environment (e.g. `brian-test`). The only thing we need to do before creating the `brian-test` ad hoc environment is to create the `brian-test.tfvars` file in the `terraform/live/ad-hoc/envs` directory. This will define the versions of the application and any other environment configuration that is needed. This pipeline usually takes about 3 minutes to finish.
 
 ### Update the backend version in an ad hoc environment
 
@@ -693,7 +693,7 @@ Now that the backend is up and running and usable, we can update the backend ver
 
 - the shared resource workspace (e.g. `dev`)
 - the ad hoc environment name (e.g. `brian-test`)
-- the new version of the backend to be used (e.g. `v1.0.0`)
+- the new version of the backend to be used (e.g. `v1.0.2`)
 
 The backend version should already have been built and pushed to the ECR repository using the `ecr_backend.yml` GitHub Actions workflow.
 
@@ -742,7 +742,7 @@ This defines the full lifecycle of creating and destroying ad hoc environments.
 
 ### Enhanced Security
 
-The low hanging fruit here is to use least privilege (for roles used in automation) and to define these roles with IaC. Currently I am using Admin roles for the credentials I store in GitHub which is a shortcut to using IaC and is not a best practice.
+The low hanging fruit here is to use least privilege (for roles used in automation) and to define all roles with IaC. Currently I am using Admin roles for the credentials I store in GitHub which is a shortcut to using IaC and is not a best practice.
 
 ### Keeping track of ad hoc environments
 
@@ -779,11 +779,11 @@ AWS accounts limit the number of resources you can create, but for most of this 
 
 ### Code Repo Organization
 
-One minor improvement would be to move the `terraform` directory out of the `django-step-by-step` monorepo into a dedicated repo. We may also want to move GitHub Actions for creating, updating and destroying environments to this new repo. For early stage development, using a single repository that stores both application code and Terraform configuration works, but it would be better keep these separate at the repository level as the project grows. One reason for this is that we don't want lots of small commits to `*.tfvars` files to pollute the commit history of our main Django application.
+One minor improvement would be to move the `terraform` directory out of the `django-step-by-step` monorepo into a dedicated repo. We may also want to move GitHub Actions for creating, updating and destroying environments to this new repo. For early stage development, using a single repository that stores both application code and Terraform configuration works, but it would be better to keep these separate at the repository level as the project grows.
 
 ### Multiple AWS Accounts
 
-Everything shown here uses a single AWS account for everything: ECR images, Terraform remote state storage, all shared resource environments and all ad hoc environments. For a demonstration of this workflow one account keeps things simple, but in practice it would be beneficial to use multiple AWS accounts for different purposes. This would also involve more carefully planned IAM roles for cross-account resource access.
+Everything shown here uses a single AWS account: ECR images, Terraform remote state storage, all shared resource environments and all ad hoc environments. Using one account keeps things simple for a demonstration of this workflow, but in practice it would be beneficial to use multiple AWS accounts for different purposes. This would also involve more carefully planned IAM roles for cross-account resource access.
 
 ### Modules for stable environments to be used for long-lived pre-production and production environments
 
