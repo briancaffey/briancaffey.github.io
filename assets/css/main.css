@@ -252,11 +252,11 @@ hr {
 
     /* Fix anchor scrollTo */
     &::before {
-      display: block;
+      /* display: block; */
       content: " ";
       margin-top: -85px;
-      height: 85px;
-      visibility: hidden;
+      /* height: 85px; */
+      /* visibility: hidden; */
       pointer-events: none;
     }
 

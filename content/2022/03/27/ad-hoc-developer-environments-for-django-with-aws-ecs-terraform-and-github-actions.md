@@ -13,16 +13,18 @@ tags:
   - docker
 
 external:
-#   - link: https://news.ycombinator.com
-#     site: hn
-#   - link: https://www.reddit.com
-#     site: reddit
-#   - link: https://dev.to
-#     site: dev
-#   - link: https://medium.com
-#     site: medium
-#   - link: https://briancaffey.hashnode.dev
-#     site: hashnode
+  - link: https://news.ycombinator.com/item?id=31704417
+    site: hn
+  - link: https://www.reddit.com/r/aws/comments/v9ycwh/my_approach_to_building_ad_hoc_developer/
+    site: reddit
+  - link: https://dev.to/briancaffey/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions-4abh
+    site: dev
+  - link: https://medium.com/@briancaffey/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-84d26e710539
+    site: medium
+  - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
+    site: hashnode
+  - link: https://twitter.com/briancaffey/status/1535683865330831360
+    site: twitter
 #   - link: https://briancaffey.substack.com
 #     site: substack
 #   - link: https://hackernoon.com/
