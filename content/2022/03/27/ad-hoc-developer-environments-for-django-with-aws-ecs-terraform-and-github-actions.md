@@ -25,8 +25,8 @@ external:
     site: hashnode
   - link: https://twitter.com/briancaffey/status/1535683865330831360
     site: twitter
-#   - link: https://briancaffey.substack.com
-#     site: substack
+  - link: https://briancaffey.substack.com/p/setting-up-ad-hoc-development-environments
+    site: substack
 #   - link: https://hackernoon.com/
 #     site: hackernoon
 
