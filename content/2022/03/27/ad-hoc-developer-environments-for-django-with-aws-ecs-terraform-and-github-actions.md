@@ -27,8 +27,8 @@ external:
     site: twitter
   - link: https://briancaffey.substack.com/p/setting-up-ad-hoc-development-environments
     site: substack
-#   - link: https://hackernoon.com/
-#     site: hackernoon
+  - link: https://hackernoon.com/ad-hoc-environments-for-django-applications-with-ecs-terraform-and-github-actions
+    site: hackernoon
 
 comments: true
 ---
