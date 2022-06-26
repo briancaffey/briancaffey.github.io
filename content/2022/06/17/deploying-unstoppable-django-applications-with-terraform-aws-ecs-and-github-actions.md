@@ -35,7 +35,13 @@ draft: true
 comments: true
 ---
 
+## tl;dr
+
+Following up on my last article about building ad hoc environments for testing, QA and demos, this article will focus on how to make Django application "unstoppable" with respect to production environment operations: horizontal scaling in response to traffic changes, zero-downtime application deployments, zero-downtime infrastructure updates, catching code and configuration bugs in pre-production environments, and edge cases. Similar to my last article, this will be a technical deep dive on my implementation of a sample application using Terraform, AWS ECS and GitHub Actions. I will use the 12Factor App methodology to guide the design of the application architecture. If any of this interests you, please have a read and let me know what you think.
+
 # Topics to cover
+
+
 
 ## Terraform
 
@@ -63,18 +69,22 @@ comments: true
 - [ ] Autoscaling policies
 - [ ] alarms for triggering autoscaling policies
 - [ ] Fargate capacity provider
-- [ ]
 
 ## TODO
 
 - [ ] figure out what to clean up in `django-step-by-step`
-  - [x] Use multi stage Dockerfile and remove Dockerfile.dev
-  - [x] Add `migrate` service with `restart: "on-failure"`
-  - [x] remove `--platform` from Dockerfile `FROM`
-  - [x] Dockerfile.dev -> Dockerfile
-  - [ ]
+  - [x] Remove k8s directory
+  - [ ] Add Readmes to directories
+  - [ ] Clean up main readme
 - [ ] Checklist of things to do in local development environment
-  - [ ] Enable virtualization in Docker desktop
+  - [x] Enable virtualization in Docker desktop
+  - [x] remove `--platform` from Dockerfile `FROM`
+  - [x] Add `migrate` service with `restart: "on-failure"`
+  - [x] Use multi stage Dockerfile and remove Dockerfile.dev
+  - [x] Dockerfile.dev -> Dockerfile
+  - [x] Run tests
+  - [ ] Lint code
+  - [x] View coverage report (`make htmlcov`)
 - [x] Reset all tags on ECR
   - [x] Update job to build ECR on tags
   - [ ] Figure out how to setup pipeline for FE ECR image build + push
@@ -82,12 +92,13 @@ comments: true
 - [ ] create new scripts for backend update
 - [ ] create Terraform CI/CD pipelines in GitHub Actions
 - [ ] Check to see if S3 permissions are still causing issues for file uploads
-- [ ]
-
+- [ ] Refactor backend ad hoc update command to use multiple steps in GitHub Actions (break up script to different sections)
+- [ ] Create management commands for backend update (pre_update, post_update)
+- [ ] Create middleware for putting Django application into maintenance mode
 
 ## Introduction
 
-What is an unstoppable Django application?
+What is an "unstoppable" Django application?
 
 ### Horizontal Scaling
 
@@ -124,6 +135,10 @@ Another important consideration to make for our unstoppable Django application i
 - [ ] Allowing developers to test the application in an isolated environment that resembles the production environment (mention ad hoc environments)
 - [ ] Automated load testing to make sure that code changes are not introducing inefficient database queries
 
+### Getting permission to do deployments
+
+- [ ] Show how to do deployments with GitHub Actions that require permissions to push changes to production environments (or stage environments) with GitHub environments
+
 ### Auditing and Security
 
 - [ ] Disaster recovery
@@ -134,4 +149,22 @@ Another important consideration to make for our unstoppable Django application i
 
 - [ ]
 
-###
+### Stopping your unstoppable Django application
+
+- [ ] Explain why you would need to do this
+- [ ] How to stop your unstoppable Django application
+- [ ] Restarting you unstoppable Django application
+
+### Shutting down your unstoppable Django application
+
+If for whatever reason your application needs to be shut down, how do you do that?
+
+
+## Other ideas
+
+### The base layer module can be split up further
+
+- This project uses only two modules: one for the base layer architecture and one for the application layer.
+- The base layer module could be split up into distinct modules that are referenced individually by `terraform_remote_state`
+- There are other prebuilt official modules that can be used in the base layer module (such as the `rds` module: https://registry.terraform.io/modules/terraform-aws-modules/rds/aws/latest)
+-
