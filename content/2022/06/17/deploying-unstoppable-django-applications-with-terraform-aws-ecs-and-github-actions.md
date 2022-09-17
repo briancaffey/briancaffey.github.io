@@ -1,7 +1,7 @@
 ---
 title: Building and deploying unstoppable Django applications with Terraform, AWS ECS and GitHub Actions
 date: '2022-06-17'
-description: This article is a deep dive into how to do fast, zero-downtime deployments for highly scalable and cost-effective serverless Django applications using Terraform, ECS Fargate and GitHub Actions
+description: This article is a deep dive into how to do fast, zero-downtime deployments for highly-scalable and cost-effective serverless Django applications using Terraform, ECS Fargate and GitHub Actions
 # image: /static/adhoc.png
 tags:
   - django
@@ -37,32 +37,48 @@ comments: true
 
 ## tl;dr
 
-Following up on my last article about building ad hoc environments for testing, QA and demos, this article will focus on how to make Django application "unstoppable" with respect to production environment operations: horizontal scaling in response to traffic changes, zero-downtime application deployments, zero-downtime infrastructure updates, catching code and configuration bugs in pre-production environments, and edge cases. Similar to my last article, this will be a technical deep dive on my implementation of a sample application using Terraform, AWS ECS and GitHub Actions. I will use the 12Factor App methodology to guide the design of the application architecture. If any of this interests you, please have a read and let me know what you think.
+Following up on my last article about building ad hoc, or "on-demand" environments for testing, QA and demos, this article will focus on how to make Django application "unstoppable" with respect to production environment operations: horizontal scaling in response to traffic changes, zero-downtime application deployments, zero-downtime infrastructure updates, catching code and configuration bugs in pre-production environments, and edge cases. Similar to my last article, this will be a technical deep dive on my implementation of a sample application using Terraform, AWS ECS and GitHub Actions. I will use the 12Factor App methodology to guide the design of the application architecture. If any of this interests you, please have a read and let me know what you think.
 
 # Topics to cover
 
+This article will cover production and pre-production environments. As we will see, production and pre-production environments will be absolutely identical in terms of infrastructure, but there will be some differences in configuration (mostly environment variables). I'll cover the following topics:
 
+- Application code
+- Infrastructure code
+- CI/CD pipelines
+- Access patterns (application and database)
 
-## Terraform
+## Infrastructure code (Terraform)
 
 - Discuss Ad Hoc environment work in my last article
 - How I build and version Terraform modules
 - `release-please` for generating `CHANGELOG.md` files and using conventional commits
+- Terraform monorepo for managing modules for multiple environments
 - Publishing modules to Terraform Registry
 - Creating modules for live infrastructure that consumes a reusable module and re-exposing Terraform variables + tfvars
 - GitHub Actions for Terraform modules
 
 ## Repos
 
-- `django-step-by-step` - sample application that we will deploying (MTV + DRF + GraphQL + Vue App)
-- `terraform-aws-django` / `production-django-app` (or create a new repo?) - (application components - ECS services)
-- `terraform-aws-django-app-base` (base layer of infrastructure and backing services used for environment isolation)
+- `django-step-by-step`
+  - Django application (Django Templates, DRF and GraphQL implementations of the same application)
+  - Vue.js frontend
+  - GitHub Actions for deploying to AWS
+  - Consumes Terraform modules
+  - Project documentation with VuePress
+
+- `terraform-aws-django`
+  - Terraform monorepo for ad hoc and production environments
+  - versioned with `release-please`
+  - published to Terraform Registry
 
 ## GitHub Actions
 
 - [ ] Terraform environment deployment
 - [ ] break backend update script into sections with `needs`
 - [ ] Slack messages for deployment status
+
+
 
 ## AWS ECS
 
@@ -73,7 +89,6 @@ Following up on my last article about building ad hoc environments for testing, 
 ## TODO
 
 - [ ] figure out what to clean up in `django-step-by-step`
-  - [x] Remove k8s directory
   - [ ] Add Readmes to directories
   - [ ] Clean up main readme
 - [ ] Checklist of things to do in local development environment
@@ -88,7 +103,6 @@ Following up on my last article about building ad hoc environments for testing, 
 - [x] Reset all tags on ECR
   - [x] Update job to build ECR on tags
   - [ ] Figure out how to setup pipeline for FE ECR image build + push
-- [ ] create new repos
 - [ ] create new scripts for backend update
 - [ ] create Terraform CI/CD pipelines in GitHub Actions
 - [ ] Check to see if S3 permissions are still causing issues for file uploads
@@ -112,6 +126,7 @@ What is an "unstoppable" Django application?
 - Backward-compatible database migrations
 - Running migrations on a separate Fargate instance (not in the same container that runs the application)
 - AWS CLI commands for doing rolling updates to ECS services
+- Why we want to do rolling updates and not blue-green updates
 
 ### Infrastructure updates with Terraform
 
@@ -122,7 +137,6 @@ What is an "unstoppable" Django application?
 
 If you are working on a Django application yourself, you might have a way to rapidly build and push out changes to your application in a safe way. Would this work safely with a large number of developers?
 
-- [ ]
 - Variation in developer environments (M1, Intel Mac, Windows, WSL, Linux, docker vs virtualenv)
 -
 
