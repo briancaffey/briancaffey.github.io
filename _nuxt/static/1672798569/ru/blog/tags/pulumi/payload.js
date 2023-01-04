@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/ru/blog/tags/pulumi", {data:[{articles:[]}],fetch:{},mutations:[]});
