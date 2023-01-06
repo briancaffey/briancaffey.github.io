@@ -3,10 +3,11 @@
     <img
       v-if="article.image"
       :src="article.image"
-      class="pt-2 h-64 w-full object-cover cover-image"
+      class="pt-2 w-full object-cover cover-image"
+      style="height: 24rem;"
     >
     <div class="mx-auto max-w-5xl px-2 sm:px-4 md:px-4 lg:px-16 mt-2">
-      <h1 class="prose text-3xl leading-9">
+      <h1 class="prose text-4xl leading-9 py-4 font-bold">
         {{ article.title }}
       </h1>
       <tags v-if="article.tags" :tags="article.tags" />
@@ -101,11 +102,11 @@ export default {
 </script>
 
 <style scoped>
-.cover-image {
+/* .cover-image {
   transition: transform .2s;
 }
 
 .cover-image:hover {
   transform: scale(1.025);
-}
+} */
 </style>

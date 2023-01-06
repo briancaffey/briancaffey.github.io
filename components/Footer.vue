@@ -12,13 +12,19 @@
       {{ $t('footer.thanks') }}
     </div>
     <div class="pb-4">
-      © 2021 Brian Caffey
+      © {{ year }} Brian Caffey
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      year: new Date().getFullYear()
+    }
+  }
+}
 </script>
 
 <style scoped></style>
