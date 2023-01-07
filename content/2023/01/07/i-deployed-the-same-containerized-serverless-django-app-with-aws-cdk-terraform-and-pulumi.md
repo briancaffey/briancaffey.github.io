@@ -51,18 +51,18 @@ I wrote three infrastructure as code libraries for deploying containerized 3-tie
 
 ## eli5
 
-Pretend we are at the beach building sandcastles. We can build sandcastles using our hands, but this takes a lot of time, and we might accidentally knock over part of our sandcastle or bump into each other, so I made some really cool tools for building sandcastles. We have one tool for building a sand castle base that includes the wall around the outside, the moat, the door and different sections inside the walls. We have another tool for deploying smaller sand castle houses. We fill the tool with sand and water and then turn it over inside of our base and we can build an entire city of sandcastles. Also, the tool lets us carefully remove parts of our sandcastle without knocking over any of the other parts. Also we can share the tool with all of our friends and they can make cool sandcastles too, and the tool is free for them to use.
+Pretend we are at the beach building sandcastles. We can build sandcastles using our hands, but this takes a lot of time, and we might bump into each other and accidentally knock over part of our sandcastle. I made some tools for building sandcastles. We have one tool for building a sand castle base that includes the wall around the outside, the moat, the door and different sections inside the walls. And I made another tool for deploying smaller sand castle houses inside the walls of the sandcastle base. We fill the tool with sand and water and then turn it over inside of our base and we can build an entire city of sandcastles. Also, the tool lets us carefully remove parts of our sandcastle without knocking over any of the other parts. We can share the tool with all of our friends and they can make cool sandcastles too, and the tool is free for them to use.
 
-Instead of sandcastles, I'm working with computer systems that can power internet applications, like YouTube. I'm building tools that can allow me or anyone to build really awesome applications using computers.
+Instead of sandcastles, I'm working with computer systems that can power internet applications, like YouTube for example. I'm building tools that can allow me or anyone else to build really awesome internet applications using computers.
 
-The tools are not physical tools like our tools for building sandcastles, but instead these tools are made with code. The code for websites like YouTube allow you upload videos *to YouTube*, but the code I'm writing allows you to upload any type of website (even on like YouTube) *to the internet*. When we run this code, it creates applications on the internet. Also, sand is very expensive and Jeff Bezos owns the beach.
+The tools are not physical tools like the ones for building sandcastles, but instead these tools are made with code. The code for websites like YouTube allow you upload videos *to YouTube*, but the code I'm writing allows you to upload any type of website (even on like YouTube) *to the internet*. When we run this code, it creates applications on the internet. Also, sand is very expensive and Jeff Bezos owns the beach.
 
 ## Why I made an Infrastructure as Code Rosetta Stone with CDK, Terraform and Pulumi
 
 **To push myself to learn more about AWS, IaC, CI/CD, automation and Platform Engineering**
 
-- learn differences between major IaC tools and how to use them to do exactly the same thing (build a web app) on the same Cloud (AWS) in the same way (serverless container technology: ECS Fargate).
-- get more experience publishing software packages (npm) and finding the right level of abstraction
+- Learn differences between major IaC tools and how to use them to do exactly the same thing (build a web app) on the same Cloud (AWS) in the same way (serverless container technology using ECS Fargate).
+- Get more experience publishing software packages (npm) and finding the right level of abstraction for IaC libraries that is both dynamic and straightforward
 
 **To fail as many times as possible**
 
@@ -72,15 +72,15 @@ The tools are not physical tools like our tools for building sandcastles, but in
 
 **To take an application-first approach to DevOps**
 
-- While learning about IaC, I had a hard time finding in-depth materials covering application development, CI/CD pipelines and automation and Infrastructure as Code and how these three knowledge domains work together
-- You could probably use another framework with these IaC libraries like Flask or Rails, but for now I'm building these projects with Django first in mind
-- Application developers who are increasingly being tasked to do operations
+- Application developers who are increasingly being tasked with operational duties
+- While learning about IaC, I had a hard time finding in-depth materials covering application development, CI/CD pipelines and automation and Infrastructure as Code and how these three knowledge domains work together. There are important considerations to make when  between a Hello World docker image
+- You could probably use another framework with these IaC libraries like Flask or Rails, but for now I'm building these projects with Django first-in-mind
 
 **To develop a project I can reference when helping myself and others**
 
-- companies and projects that do IaC and CI/CD for the most part have things in private repos for obvious reasons, there isn't much incentive to share this type of code
-- Hopefully the application, IaC and CI/CD pipelines *aren't overly complex*. There are more complex examples of open source companies out there, but their repos have steep learning curves and a lot going on
-- for example: people often ask about how to split up IaC deployments and application deployments. I want to be able to use this project to **show** people how it can be done
+- companies and projects that do IaC and CI/CD for the most part have things in private repos for obvious reasons, there isn't any good reason to share this type of code unless you are sharing it with an auditor
+- Hopefully the sample application, IaC and CI/CD pipelines *aren't overly complex*. There are more complex examples of open source companies out there, but their repos have steep learning curves and a lot going on
+- People often ask about how to split up IaC deployments and application deployments. I want to be able to use this project to **show** people how it can be done
 
 **To encourage others (specifically Developer Advocates / Developer Relations / Solutions Architects in the CDK, Terraform and Pulumi communities) to share complete and non-trivial examples of IaC software **in use** with an actual application.**
 
@@ -89,16 +89,18 @@ The tools are not physical tools like our tools for building sandcastles, but in
 
 **I have nothing to sell you**
 
-- So many articles about Cloud/DevOps are trying to sell you a tool. Outside of what I consider to be mainstream, dominant vendors like GitHub and AWS, there are no products that I'm promoting here. I'm also not trying to sell anyone on using my IaC packages. Hopefully my IaC packages can serve as helpful reference or starting point.
+- So many articles about Cloud/DevOps are trying to sell you a tool. Outside of what I consider to be mainstream vendors like GitHub and AWS, there are no products that I'm promoting here
+- I'm also not trying to sell anyone on using my IaC packages
+- Hopefully my IaC packages can serve as helpful reference or starting point
 
 **Walk before running**
 
-- I want to build up confidence with vanilla without getting too fancy
+- I want to build up confidence with vanilla use cases before getting too fancy
 - With a solid foundation in these tools, I want to learn about some of the more advanced patterns teams are adopting (Pulumi Automation API, Terragrunt for Terraform, self-mutating CDK Pipelines)
 
 **12 Factor App, DevOps and Platform Engineering**
 
-- 12 Factor App is great, and has guided how I approach both Django application development and IaC library development
+- [12 Factor App](https://12factor.net/) is great, and has guided how I approach both Django application development and IaC library development
 - The [platformengineering.org](https://platformengineering.org/) has so good guiding principles
 
 ## CDK/Terraform/Pulumi terminology
@@ -109,15 +111,28 @@ A CDK construct, Terraform module and Pulumi component generally mean the same t
 
 In this article I will refer to **constructs/modules/components** as **c/m/c** for short, and the term **stack** can generally be used to refer to either a CloudFormation stack, a Pulumi Stack or a Terraform group of resources that are part of a module that has had `apply` ran against it.
 
-### What is a stack?
+### what is a stack?
 
-The word stack can be a loaded term for some people. "Full-stack", "up the stack", "down the stack". AWS has a resource called a CloudFormation Stack, and Pulumi also has a concept of stacks. Terraform documentation doesn't refer to stacks, and instead in Terraform docs use the words "Terraform configuration" to refer to some group of resources that were built using a module.
+The word stack can be a loaded term for some people. "Full-stack", "up the stack", "down the stack". AWS has a resource type called CloudFormation Stacks, and Pulumi also has a concept of stacks. Terraform documentation doesn't refer to stacks, and instead in Terraform docs use the words "Terraform configuration" to refer to some group of resources that were built using a module.
 
 CDK Constructs and Pulumi Components are somewhat similar. CDK Constructs map to CloudFormation and the Pulumi components I'm using from the `@pulumi/aws` package generally map directly to Terraform resources from the AWS Provider (the Pulumi AWS Provider uses much of the same code that the Terraform AWS Provider uses).
 
-- CDK: constructs and stacks
-- Terraform: modules (and stacks/configurations) [discuss.hashicorp.com/t/what-is-a-terraform-stack/31985](https://discuss.hashicorp.com/t/what-is-a-terraform-stack/31985)
-- Pulumi: components and stacks
+### verbs
+
+In Pulumi you
+
+Before building any cloud resources, you can get a preview of the changes you intend to make with your code. In CDK, you can run `synth` to generate the
+
+### config, props, args and tfvars
+
+
+
+To summarize:
+
+- In CDK you synth CloudFormation and use these templates to deploy stacks made up of constructs. An "app" can contain multiple stacks, and you can deploy one or more stacks in an app at a time
+- In Terraform you plan a configuration made up of modules, and then run `terraform apply` to build the configuration/stack ([discuss.hashicorp.com/t/what-is-a-terraform-stack/31985](https://discuss.hashicorp.com/t/what-is-a-terraform-stack/31985))
+- Pulumi: You preview a Pulumi stack made up of components, and then run `pulumi up` to build the resources
+- To tear down a stack in all three tools, you run `destroy`
 
 ## Infrastructure as Code library repos
 
@@ -129,34 +144,71 @@ Let's look at the three repos that I wrote for deploying the same type of 3-tier
 
 ### Language
 
-`cdk-django` and `pulumi-aws-django` are both written in TypeScript. `terraform-aws-django` is written in HCL.
+`cdk-django` and `pulumi-aws-django` are both written in TypeScript. `terraform-aws-django` is written in HCL, a domain specific language created by HashiCorp. The `cdk-django` is published to both npm and PyPI, so you can use it in JavaScript, TypeScript and Python projects, other languages are supported as well, but you need to write your library in TypeScript so it can be transpiled to other languages using [jsii](https://github.com/aws/jsii).
 
-### Release management and publishing
+My Pulumi library is written in TypeScript and is published to NPM. For now it can only be used in JavaScript and TypeScript projects. There is a way in Pulumi to write in any language and then publish to any other major language, but I haven't  done this yet. See [this GitHub repo](https://github.com/pulumi/pulumi-component-provider-ts-boilerplate) for more information on this.
 
-`pulumi-aws-django` and `terraform-aws-django` both use `release-please` for automatically generating a changelog file and bumping versions.
+The HCL is pretty simple when you get used to it. I find that I don't like adding lots of logic in Terraform code because it takes away from the readability of a module. There is a tool called [CDKTF](https://developer.hashicorp.com/terraform/cdktf) which allows you to write HCL Terraform in TypeScript, but I haven't used it yet.
 
-`cdk-django` uses [`projen`](https://github.com/projen/projen) for maintaining the changelog and bumping versions and publishing to npm.
+### Release management, versioning and publishing
 
-These tools use conventional commits to automatically generate Changelog files and bump the version of the project, and push new versions to npm and PyPI. Terraform modules on the Terraform Registry are published automatically once you have connected your GitHub repo to the registry.
+`pulumi-aws-django` and `terraform-aws-django` both use `release-please` for automatically generating a changelog file and bumping versions. `release-please` is an open source tool from Google that they use to version their GCP modules. Whenever I push new commits to `main`, a new PR is created that adds changes to the CHANGELOG.md file, bumps the version of the library in `package.json` and adds a new git tag (e.g. `v1.2.3`) based on commit messages.
+
+`cdk-django` uses [`projen`](https://github.com/projen/projen) for maintaining the changelog and bumping versions and publishing to npm. It is popular among developers in the CDK community and is a really awesome tool since it basically uses one file (`.projenrc.ts`) to configure your entire repo, including files like `tsconfig.json`, `package.json`, and even GitHub Action workflows. It has a lot of configuration options, but I'm using it in a pretty simple way. It generates a new release and items to the changelog when I manually trigger a GitHub Action to run.
+
+These tools are both based on [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) to automatically update the Changelog file.
+
+I'm still manually publishing my `pulumi-aws-django` package from the CLI. I need to add a GitHub Action to do this for me. This and other backlog items are listed at the end of the article!
 
 ### Makefile, examples and local development
 
 Each repo has a Makefile that includes commands that I frequently use when developing new features or fixing bugs. Each repo has commands for the following:
 
 - synthesizing CDK to CloudFormation / running `terraform plan` / previewing pulumi up for both the base and app stacks
-- creating/updating an ad-hoc base environment called `dev`
-- destroying all resources in the ad-hoc base environment called `dev`
-- creating an ad-hoc app environment called `alpha` that uses resources from `dev`
-- destroying an ad-hoc app environment called `alpha` that uses resources from `dev`
+- creating/updating an ad hoc base stack called `dev`
+- destroying resources in the ad-hoc base stack called `dev`
+- creating an ad hoc app stack called `alpha` that uses resources from `dev`
+- destroying an ad hoc app stack called `alpha` that uses resources from `dev`
+- creating/updating a prod base stack called `stage`
+- destroying resources in the prod base stack called `stage`
+- creating a prod app stack using called `stage` that uses resources from the `stage` base stack
+- destroying resources in the prod app stack called `stage`
+
+Here's an example of what these commands look like in `pulumi-aws-django` for prod infrastructure base and app stacks:
+
+```Makefile
+prod-base-preview:	build
+	pulumi -C examples/prod/base --stack stage --non-interactive preview
+
+prod-base-up:	build
+	pulumi -C examples/prod/base --stack stage --non-interactive up --yes
+
+prod-base-destroy:	build
+	pulumi -C examples/prod/base --stack stage --non-interactive destroy --yes
+
+prod-app-preview:	build
+	pulumi -C examples/prod/app --stack stage --non-interactive preview
+
+prod-app-preview-diff:	build
+	pulumi -C examples/prod/app --stack stage --non-interactive preview --diff
+
+prod-app-up:	build
+	pulumi -C examples/prod/app --stack stage --non-interactive up --yes
+
+prod-app-destroy:	build
+	pulumi -C examples/prod/app --stack stage --non-interactive destroy --yes
+```
 
 I currently don't have tests for all of these libraries, but for now the most effective way of testing that things are working correctly is to use the `c/m/c`s to create environments and smoke check the environments to make sure everything works correctly.
+
+Adding unit tests is another item for the backlog.
 
 ### ad-hoc vs prod
 
 - [the last article I wrote was about ad hoc environments](https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions). Also known as "on-demand" environments or "preview" environments.
 - the motivation for using ad-hoc environments is speed and cost (you can stand up an environment in less time and you share the costs of the base environment, including VPC, ALB, RDS)
 - you can completely ignore "ad-hoc" environments and use the "prod" infrastructure for any number of environments (such as dev, QA, RC, stage and prod)
-- prod can be used for prod and any number of pre-prod environments
+- prod can be used for a production environment and any number of pre-production environments
 - multiple environments built with "prod" infrastructure can be configured with a "knobs and dials" (e.g., how big are app and DB instances, how many tasks to run in a service, etc.)
 - the "prod" infrastructure should be the same for the "production" environment and the "staging" environment
 
@@ -288,14 +340,6 @@ examples/
         └── tsconfig.json
 ```
 
-There is a balance to be found between single stacks vs micro stacks.
-Both the base and app modules/components/constructs could be split out further. For example, the `base` modules/components/constructs could be split into `networking` and `rds`. The `app` stack could be split into different ECS services so that their infrastructure can be deployed independently.
-
-The rule of thumbs are:
-
-- single stacks are bad because you don't want to put all your eggs in one basket, however your IaC tool should give you confidence about what is going to change when you try to make a change
-- Lots of small stacks can cause overhead and make things more complex than they need to be
-
 ### CLOC
 
 Let's use CLOC (count lines of code) to compare the lines of code used in the `c/m/c` of CDK/CloudFormation/Terraform/Pulumi.
@@ -371,7 +415,7 @@ The CDK, Terraform and Pulumi communities all great and a lot of people helped w
 
 ![ublog](/static/ublog_screenshot.png)
 
-It is a pretty simple app. Users can write posts with text and an optional images
+It is a pretty simple app. Users can write posts with text and an optional images. Logged in users can write posts and like posts.
 
 ### Mono-repo structure
 
@@ -423,6 +467,13 @@ Also, on-demand environments really lends itself to stacks that are split up.
 
 In the section ["Passing unique identifiers"](https://docs.aws.amazon.com/cdk/v2/guide/resources.html), the CDK recommends that we keep the two stacks in the same app. In Terraform and Pulumi, each stack environment is in its own app.
 
+There is a balance to be found between single stacks vs micro stacks. Both the base and app `c/m/c`s could be split out further. For example, the `base` `c/m/c`s could be split into `networking` and `rds`. The `app` stack could be split into different ECS services so that their infrastructure can be deployed independently. The more resources that a stack has, the longer it takes to deploy and the more risky it gets, but adding lots of stacks can add to mental overhead, and pipeline complexity. Each tool has ways of dealing with this complexity and tradeoff (CDK Pipelines, Terragrunt, Pulumi Automation API), but I won't be getting into any of these options in this article. I would like to try these out and share in a future article.
+
+My rules of thumbs are:
+
+- single stacks are bad because you don't want to put all your eggs in one basket, however your IaC tool should give you confidence about what is going to change when you try to make a change
+- Lots of small stacks can cause overhead and make things more complex than they need to be
+
 ## Ad hoc base overview
 
 Here's an overview of the resources used in an ad hoc base environment.
@@ -438,13 +489,13 @@ Here's an overview of the resources used in an ad hoc base environment.
 
 ### Visualization
 
-Here's a dependency graph showing all of the resources in ad hoc base stack. This can be found on the `Resources` tab of the ad hoc base stack.
+Here's a dependency graph showing all of the resources in ad hoc base stack. This can be found on the `Resources` tab of the ad hoc base stack in the Pulumi console.
 
 ![Graph view of ad hoc base infrastructure](/static/pulumi_ad_hoc_base_dep_graph.png)
 
 ### Inputs
 
-There are only two inputs for the ad hoc base stack
+There are only two required inputs for the ad hoc base stack
 
 - ACM certificate ARN
 - Domain Name
@@ -464,11 +515,15 @@ The setting in the Terraform VPC module `one_nat_gateway_per_az = false` doesn't
 
 ### Security Groups
 
-Pulumi and Terraform can be used in a similar way to define security groups. CDK has a much more concise way of defining ingress and egress rules for security groups.
+Pulumi and Terraform can be used in a similar way to define security groups. CDK has a much more concise option for defining ingress and egress rules for security groups.
 
-```
-# TODO add examples here
+```ts
+    const albSecurityGroup = new SecurityGroup(scope, 'AlbSecurityGroup', {
+      vpc: props.vpc,
+    });
 
+    albSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(443), 'HTTPS');
+    albSecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(80), 'HTTP');
 ```
 
 ### Load Balancer Resources
@@ -490,6 +545,31 @@ All three libraries have the RDS security group and Subnet Group in the same `c/
 
 Currently the RDS resources are part of the "base" stack for each library. A future optimization may be to break the RDS instance out of the "base" stack and put it in its own stack. The "RDS" stack would be dependent on the "base" stack, and then "app" stack would then be dependent on both the "base" stack and the "RDS" stack. More stacks isn't necessarily a bad thing, but for my initial implementation of these libraries I have decided to keep the "micro stacks" approach limited to only 2 stacks for an environment.
 
+The way that database secrets are handled is another difference between CDK and Terraform and Pulumi. I am currently "hardcoding" the RDS password for Terraform and Pulumi, and in CDK I am using a Secrets Manager Secret for the database credential.
+
+```ts
+    const secret = new Secret(scope, 'dbSecret', {
+      secretName: props.dbSecretName,
+      description: 'secret for rds',
+      generateSecretString: {
+        secretStringTemplate: JSON.stringify({ username: 'postgres' }),
+        generateStringKey: 'password',
+        excludePunctuation: true,
+        includeSpace: false,
+      },
+    });
+```
+
+In the `DatabaseInstance` props we can then use this secret like so:
+
+```
+    credentials: Credentials.fromSecret(secret),
+```
+
+In the application deployed with CDK, I use a Django settings module package that uses a package called `aws_secretsmanager_caching` to get and cache the secrets manager secret for the database, whereas in the apps deployed with Terraform and Pulumi I read in the password from an environment variable.
+
+The Terraform and Pulumi database instance arguments simply accept a `password` field. This will be another item for the backlog for Terraform and Pulumi. The [`randompassword`](https://www.pulumi.com/registry/packages/random/api-docs/randompassword/) and [`secretversion`](https://www.pulumi.com/registry/packages/aws/api-docs/secretsmanager/secretversion/) components can be used to do this.
+
 ### Bastion Host
 
 There are two main use cases for the bastion host in ad-hoc environments.
@@ -498,13 +578,15 @@ There are two main use cases for the bastion host in ad-hoc environments.
 
 - If you using a database management tool on you local machine like DBeaver, the bastion host can help you connect to the RDS instance in a private subnet. The bastion host instance is configured to run a service that forwards traffic on port 5432 to the RDS instance. You can connect to the
 
-You don't need to manage SSH keys since you connect
+You don't need to manage SSH keys since you connect to the instance in a private subnet using SSM:
 
-The bastion host runs in a private subnet and the following script can be used to connect to it:
+```bash
+aws ssm start-session --target $INSTANCE_ID
+```
 
 ### Outputs
 
-Here are the outputs for the ad hoc base stack:
+Here are the outputs for the ad hoc base stack used in Terraform and Pulumi:
 
 - vpc_id
 - assets_bucket_name
@@ -516,6 +598,8 @@ Here are the outputs for the ad hoc base stack:
 - task_role_arn
 - execution_role_arn
 - rds_address
+
+In CDK, the stack references in the app stack don't reference the unique identifiers from the base stack (such as the VPC id or bastion host instance id), but instead they reference the properties of the stack which have types like `Vpc` and `RdsInstance`. More on this later in the following section **Passing data between stacks**.
 
 ## Ad hoc app overview
 
@@ -534,16 +618,35 @@ https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-ecs.CapacityProviderStr
 
 > NOTE: defaultCapacityProviderStrategy on cluster not currently supported.
 
-
-
 ### Shared environment variables
 
-- Struggled to get this right in pulumi. A lot of Pulumi examples used `JSON.stringify` for containerDefinitions in task definitions. I was able to get help from the Pulumi Slack channel; someone recommended that I use `pulumi.jsonStringify` which was added in a relatively recent version of `pulumi/pulumi`.
+- I struggled to get this right in pulumi. A lot of Pulumi examples used `JSON.stringify` for containerDefinitions in task definitions. I was able to get help from the Pulumi Slack channel; someone recommended that I use `pulumi.jsonStringify` which was added in a relatively recent version of `pulumi/pulumi`.
 
 - CDK allows you to declare environment variables for a containerDefinition like `{ FOO: "bar" }`
 - Pulumi and Terraform require that values are passed like `{ name: "FOO", value: "bar"}`
 - You could transform `{ FOO: "bar" }` into the name/value format, but I didn't bother to do this
-- extra env vars in Terraform to allow for dynamically passing extra environment variables
+- extra env vars in Terraform to allow for dynamically passing extra environment variables, and I used the `concat` function to add these to the list of default environment variables.
+
+Here's what the code looks like for joining extra environment variables to the default environment variables:
+
+```ts
+    // CDK
+    if (extraEnvVars) {
+      environmentVariables = { ...extraEnvVars, ...environmentVariables };
+    }
+```
+
+```
+    # terraform
+    env_vars = concat(local.env_vars, var.extra_env_vars)
+```
+
+```
+    // Pulumi
+    if (extraEnvVars) {
+      envVars = envVars.apply(x => x.concat(extraEnvVars!))
+    }
+```
 
 ### Route53 Record
 
@@ -561,9 +664,9 @@ I decided to not make this service use any persistent storage. It may be a good 
 
 The web service is what defines the main Django application as well as the frontend website (JavaScript SPA or SSR site). I designed the Web Service resources group to be able to support both traditional Django apps (powered by templates), or for Django apps that service only a limited number of endpoints. This `c/m/c` has an input parameter called `pathPatterns` which determines which paths it serves. For example, you Django container may serve traffic for `/api/*` and `/admin/*` only, or it may want to serve all traffic (`/*`).
 
-The way I use these components in ad hoc and prod environments is heavily opinionated in that it:
+The way I use these components in ad hoc and prod environments is heavily opinionated in that:
 
-- assumes that the frontend SPA/SSR site should have a lower priority rule than the backend service and should route request paths matching `/*`, while the backend service routes requests for a specific list of path patterns (`/api/*`, `/admin/*`, `/graphql/*`, etc.).
+- it assumes that the frontend SPA/SSR site should have a lower priority rule than the backend service and should route request paths matching `/*`, while the backend service routes requests for a specific list of path patterns (`/api/*`, `/admin/*`, `/graphql/*`, etc.).
 
 You may want Django to handle most of your routes and 404 pages, in which case you would want the SPA to only handle requests matching certain paths. This would require some more consideration and careful refactoring.
 
@@ -673,10 +776,10 @@ const adHocAppComponent = new AdHocAppComponent("AdHocAppComponent", {
 
 CDK and Pulumi have some good options for how to scaffold a project.
 
-- Pulumi has `pulumi new aws-typescript` among lots of other options (run `pulumi new -l` to see over 200 project types)
+- Pulumi has `pulumi new aws-typescript` among lots of other options (run `pulumi new -l` to see over 200 project types). I used this to create the library itself, the examples and the pulumi projects that I use in `django-step-by-step` that consume the library.
 - CDK has `projen` CLI commands which can help set up either library code or project code
 - The major benefits of these tools is setting up `tsconfig.json` and `package.json` correctly
-- Terraform is so simple that it doesn't really need tooling for this
+- Terraform is so simple that it doesn't really need tooling for scaffolding
 
 ## Best practices
 
@@ -690,7 +793,7 @@ For Pulumi and CDK, I mostly tried to follow along with recommendations from the
 
 ## Environment configuration
 
-Environment configuration allows for either a base or app stack to be configured with non-default values. For example,
+Environment configuration allows for either a base or app stack to be configured with non-default values. For example:
 
 - you may decide to start a new base environment but you want to provision a powerful database instance class and size. You would change this using environment configuration
 - You might want to create an ad hoc app environment but you need it to include some special environment variables, you could set these in environment config.
@@ -701,11 +804,56 @@ In the examples above, our IaC can optionally take environment configuration val
 - Terraform uses `{env}.tfvars` for this type of configuration
 - CDK has several options for this type of configuration (`cdk.context.json`, extending stack props, etc.)
 
-For CDK I have been using `setContext` and the `tryGetContext` and `getContext`. Pulumi has similar
+For CDK I have been using `setContext` and the `tryGetContext` method:
 
-Environment configurationI have tried to use sensible defaults for the ad hoc environments.
+`setContext` needs to be set on the node before any child nodes are added:
 
-Ad hoc app environments are configured
+```ts
+const baseStack = new Stack(app, 'ExampleAdHocBaseStack', { env, stackName: adHocBaseEnvName });
+baseStack.node.setContext('config', adHocBaseEnvConfig);
+
+const appStack = new Stack(app, 'ExampleAdHocAppStack', { env, stackName: adHocAppEnvName });
+appStack.node.setContext('config', adHocAppEnvConfig);
+```
+
+And the config objects are read from JSON files like this:
+
+```ts
+var adHocBaseEnvConfig = JSON.parse(fs.readFileSync(`src/examples/ad-hoc/base/config/${adHocBaseEnvName}.json`, 'utf8'));
+var adHocAppEnvConfig = JSON.parse(fs.readFileSync(`src/examples/ad-hoc/app/config/${adHocAppEnvName}.json`, 'utf8'));
+```
+
+The context can be used in constructs like this:
+
+```ts
+    const extraEnvVars = this.node.tryGetContext('config').extraEnvVars;
+```
+
+Pulumi has similar functions for getting context values, here's an example of how I get extra environment variables for app environments using Pulumi's config:
+
+```ts
+    interface EnvVar {
+      name: string;
+      value: string;
+    }
+
+    let config = new pulumi.Config();
+    let extraEnvVars = config.getObject<EnvVar[]>("extraEnvVars");
+```
+
+In my `Pulumi.alpha.yaml` file I have the `extraEnvVars` set like this:
+
+```yaml
+config:
+  aws:region: us-east-1
+  extraEnvVars:
+    - name: FOO
+      value: BAR
+    - name: BIZ
+      value: BUZ
+```
+
+I haven't done too much with configuration, but it seems like the right place to build our all of the dials and switches for configuring optional settings in stack resources.
 
 ## Local development
 
@@ -803,7 +951,9 @@ Resources:
 
 ## Running infrastructure pipelines in GitHub Actions
 
-In the `.github/workflows` directory of the `django-step-by-step` repo, I have the following `2 * 2 * 2 * 3 = 24` pipelines for running infrastructure as code pipelines:
+*I don't currently have GitHub Actions working for all tools in all environments, this part is still a WIP but is working at a basic level. Another item for the backlog!*
+
+In the `.github/workflows` directory of the `django-step-by-step` repo, I will have the following `2 * 2 * 2 * 3 = 24` pipelines for running infrastructure as code pipelines:
 
 ```bash
 {ad_hoc,prod}_{base,app}_{create_update,destroy}_{cdk,terraform,pulumi}.yml
@@ -817,9 +967,9 @@ Pulumi has [a great article](https://www.pulumi.com/docs/guides/continuous-deliv
 
 The general pattern that all of these pipelines use is:
 
-- Do a synth/plan/preview
+- Do a synth/plan/preview, and upload the synth/plan/preview file to artifacts
 - Pause and wait on manual review of the planned changes
-- deploy/apply/up
+- download the artifacts and run deploy/apply/up against the synth/plan/preview from the artifact, or optionally cancel the operation if the changes you see in the GitHub Actions pipeline logs are not what you expected.
 
 I do this by having two jobs in each GitHub Action: one for synth/plan/preview and one for deploy/apply/up.
 
@@ -841,9 +991,7 @@ The job for deploy/apply/up includes an `environment` that is configured in GitH
 
 > `aws_native` "manages and provisions resources using the AWS Cloud Control API, which typically supports new AWS features on the day of launch."
 
-`aws_native` looks like a really interesting option, but it is currently in public preview so I have not decided to use it.
-
-I am using the AWSx library only for my VPC and associated resources, everything else uses the AWS Classic provider.
+`aws_native` looks like a really interesting option, but it is currently in public preview so I have not decided to use it. I am using the AWSx library only for my VPC and associated resources, everything else uses the AWS Classic provider.
 
 For CDK I use mostly L2 constructs and some L1 constructs.
 
@@ -851,58 +999,13 @@ Fot Terraform I use the VPC from the `terraform-aws-modules`, and everything els
 
 ## What I did not put in IaC
 
-- ECR
-- ACM
-- Roles used for deployment (OIDC in GitHub Actions)
+- ECR (Elastic Container Registry)
+- ACM (Amazon Certificate Manager)
+- (Roles used for deployments)
 
 I created the Elastic Container Registry `backend` and `frontend` repos manually in the AWS Console. I also manually requested an ACM certificate for `*.mydomain.com` for the domain that I use for testing that I purchased through Route53 domains.
 
-## Completion
-
-- Local
-  - CDK
-    - ad-hoc
-      - [ ] base
-      - [ ] app
-    - prod
-      - [ ] base
-      - [ ] app
-  - Terraform
-    - ad-hoc
-      - [ ] base
-      - [ ] app
-    - prod
-      - [x] base
-      - [x] app
-  - Pulumi
-    - ad-hoc
-      - [ ] base
-      - [ ] app
-    - prod
-      - [ ] base
-      - [ ] app
-- GHA
-  - CDK
-    - ad-hoc
-      - [ ] base
-      - [ ] app
-    - prod
-      - [ ] base
-      - [ ] app
-  - Terraform
-    - ad-hoc
-      - [ ] base
-      - [ ] app
-    - prod
-      - [ ] base
-      - [ ] app
-  - Pulumi
-    - ad-hoc
-      - [ ] base
-      - [ ] app
-    - prod
-      - [ ] base
-      - [ ] app
+I currently am using another less-than best practice of using Administrative Credentials stored in GitHub secrets. The better approach here is to make roles for different pipelines and use OIDC to authenticate instead of storing credentials.
 
 ## Tagging
 
@@ -911,6 +1014,7 @@ I created the Elastic Container Registry `backend` and `frontend` repos manually
 - [https://www.pulumi.com/blog/automatically-enforcing-aws-resource-tagging-policies/](https://www.pulumi.com/blog/automatically-enforcing-aws-resource-tagging-policies/)
 - [https://github.com/joeduffy/aws-tags-example/tree/master/autotag-ts](https://github.com/joeduffy/aws-tags-example/tree/master/autotag-ts)
 - Tagging is important since I look up resources by tag in GitHub Actions pipelines (for example, the Bastion Host is looked up by tag)
+- Automatically tagging resources works through [stack transformations](https://www.pulumi.com/docs/intro/vs/terraform/) are unique to Pulumi
 
 ## Smoke checking application environments
 
@@ -926,33 +1030,40 @@ Here's the list of things I check when standing up an application environment:
 - [x] Publish a blog post
 - [x] Publish a blog post with an image
 - [x] Check celery worker logs for successfully complete scheduled tasks
-- [ ] Can we trigger a scaling event by running our load test?
+- [x] Trigger a an autoscaling event by running k6 load tests against an environment
+- [x] Optionally deploy another backend or frontend image tag using the GitHub Actions pipelines for backend and frontend updates
 - [x] Destroy the app stack
 - [x] Destroy the base stack
 
-## Extras
+## Backlog and next steps
 
-- [Transformations](https://www.pulumi.com/docs/intro/vs/terraform/) are unique to Pulumi
+Here are some of the next things I'll be working on in these project, roughly in order of importance:
 
-## Next steps
-
-Here are some of the next things I'll be working on in these project, in order of importance:
-
-- (WIP) Introduce manual approvals in GitHub Actions for all deployments and allow for the previewing or "planning" before proceeding with an live operations in infrastructure pipelines
-- (WIP) Switch to using OIDC for AWS authentication from GitHub Actions and remove AWS secrets from GitHub
+- Introduce manual approvals in GitHub Actions for all deployments and allow for the previewing or "planning" before proceeding with an live operations in infrastructure pipelines
+- Switch to using OIDC for AWS authentication from GitHub Actions and remove AWS secrets from GitHub
 - Show how to do account isolation (different accounts for prod vs pre-prod environments)
-- For Pulumi and Terraform, use a Secrets Manager secret for the database instead of hardcoding it. Use the `random` functions to do this.
+- GitHub Actions deployment pipeline for publishing `pulumi-aws-django` package
+- Complete all GitHub Action deployment pipelines for base and app stacks (both ad hoc and prod)
+- For Pulumi and Terraform, use a Secrets Manager secret for the database instead of hardcoding it. Use the `random` functions to do this
 - Refactor GitHub Actions and make them reusable across different projects
 - Writing tests for Pulumi and CDK. Figure out how to write tests for Terraform modules
 - Use graviton instances and have the option to select between different architectures
 - Standardize all resources names across CDK, Terraform and Pulumi
 - The Pulumi components that define the resources associated with each ECS service are not very dry
 - Interfaces could be constructed with inheritance (base set of properties that is extended for different types of services)
-- Set up a "maintenance" mode where I can take parts of the system offline and display a "Down for maintenance, be right back" message.
+- Fix the CDK issue with priority rule on ALB listeners. I need to used a custom resource for this which is currently a WIP. Terraform and Pulumi look up the next highest listener rule priority under the hood, so you are not required to provide it, but CDK requires it, which means that you can't do ad hoc environments in CDK without a custom resource that looks up what the next available priority number is.
 - Make all three of the libraries less opinionated about how the application as a whole. Celery worker and scheduler should be optional, the frontend component should also be optional
-- experiment with using a frontend with SSR. This is supported by Quasar, the framework I'm currently using to build my frontend SPA site.
+- experiment with using a frontend with SSR. This is supported by Quasar, the framework I'm currently using to build my frontend SPA site
+
+If you want to get involved or help with any of the above, please let me know!
+
+## Conclusion
+
+I first started out with IaC following this project [aws-samples/ecs-refarch-cloudformation](https://github.com/aws-samples/ecs-refarch-cloudformation) (which is pretty old at this point) and wrote a lot of CloudFormation by hand. The pain of doing that lead me explore the CDK using Python. I learned TypeScript by rewriting the Python CDK code I wrote in TypeScript. I later worked with a team that was more experienced in Terraform and learned how to use that. I feel like Pulumi takes the best of the two tools and has a really great developer experience. There is a little bit of a learning curve with Pulumi, and you give up some of the simplicity of Terraform.
 
 ## Sharing
+
+Thank you for reading to the end! I have posted the article on the following channels, please like and share the article and follow me wherever you are active. Also please share your feedback!
 
 - my personal blog (briancaffey.github.io)
 - DEV.to
