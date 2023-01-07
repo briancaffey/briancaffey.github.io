@@ -1,6 +1,6 @@
 ---
-title: My Infrastructure as Code Rosetta Stone - Deploying the same web application on AWS ECS with CDK, Terraform and Pulumi
-date: '2022-06-26'
+title: My Infrastructure as Code Rosetta Stone - Deploying the same web application on AWS ECS Fargate with CDK, Terraform and Pulumi
+date: '2023-01-07'
 description: "I wrote three reusable infrastructure as code libraries to develop high-level abstractions for deploying containerized web apps on AWS ECS. This article will provide an overview of my experience working with CDK, Terraform and Pulumi and will cover how I use these libraries in automated infrastructure deployment pipelines using GitHub Actions"
 image: /static/iac_rosetta_stone_og_image.png
 tags:
@@ -12,11 +12,11 @@ tags:
   - github-actions
   - aws
   - ecs
+  - fargate
   - containers
   - docker
-  - fargate
 
-draft: true
+draft: false
 
 # external:
   # - link: https://news.ycombinator.com/item?id=31704417
@@ -41,7 +41,7 @@ comments: true
 
 ## tl;dr
 
-I wrote three infrastructure as code libraries for deploying containerized 3-tier web apps on AWS ECS Fargate. This article will provide an overview of my experience working with CDK, Terraform and Pulumi and will cover how I use my libraries in automated infrastructure deployment pipelines with GitHub Actions.
+I wrote three infrastructure as code libraries for deploying containerized 3-tier web apps on AWS ECS Fargate using CDK, Terraform and Pulumi. This article will provide an overview of my experience working with these three IaC tools and will show how I use my libraries in automated infrastructure deployment pipelines with GitHub Actions.
 
 - **CDK Construct Library**: [github.com/briancaffey/cdk-django](https://github.com/briancaffey/cdk-django)
 - **Terraform Modules**: [github.com/briancaffey/terraform-aws-django](https://github.com/briancaffey/terraform-aws-django)
@@ -139,7 +139,7 @@ Let's look at the three repos that I wrote for deploying the same type of 3-tier
 
 These tools use conventional commits to automatically generate Changelog files and bump the version of the project, and push new versions to npm and PyPI. Terraform modules on the Terraform Registry are published automatically once you have connected your GitHub repo to the registry.
 
-### Makefile and local development
+### Makefile, examples and local development
 
 Each repo has a Makefile that includes commands that I frequently use when developing new features or fixing bugs. Each repo has commands for the following:
 
@@ -436,12 +436,20 @@ Here's an overview of the resources used in an ad hoc base environment.
 - RDS
 - Bastion Host
 
+### Visualization
+
+Here's a dependency graph showing all of the resources in ad hoc base stack. This can be found on the `Resources` tab of the ad hoc base stack.
+
+![Graph view of ad hoc base infrastructure](/static/pulumi_ad_hoc_base_dep_graph.png)
+
 ### Inputs
 
-There are only i
+There are only two inputs for the ad hoc base stack
 
 - ACM certificate ARN
 - Domain Name
+
+I store these values in environment variables for the pipelines in CDK, Terraform and Pulumi. When running pipelines from my local environment, they are exported in my shell before running deploy/apply/up or synth/plan/preview.
 
 ### VPC
 
@@ -512,6 +520,10 @@ Here are the outputs for the ad hoc base stack:
 ## Ad hoc app overview
 
 The ad hoc app is an group of resources that powers an on-demand environment that is meant to be short lived for testing, QA, validation, demos, etc.
+
+This visualization shows all of the resources in the ad hoc app stack. It also comes from the Pulumi console.
+
+![Graph view of ad hoc app infrastructure](/static/pulumi_ad_hoc_app_dep_graph.png)
 
 ### ECS Cluster
 
@@ -791,7 +803,7 @@ Resources:
 
 ## Running infrastructure pipelines in GitHub Actions
 
-In the `.github/workflows` directory of the `django-step-by-step` repo, I have the following `2 * 2 * 3 = 24` pipelines for running infrastructure as code pipelines:
+In the `.github/workflows` directory of the `django-step-by-step` repo, I have the following `2 * 2 * 2 * 3 = 24` pipelines for running infrastructure as code pipelines:
 
 ```bash
 {ad_hoc,prod}_{base,app}_{create_update,destroy}_{cdk,terraform,pulumi}.yml
