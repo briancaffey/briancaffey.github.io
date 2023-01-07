@@ -72,7 +72,7 @@ The tools are not physical tools like the ones for building sandcastles, but ins
 
 **To take an application-first approach to DevOps**
 
-- Application developers who are increasingly being tasked with operational duties
+- Application developers are increasingly being tasked with operational duties
 - While learning about IaC, I had a hard time finding in-depth materials covering application development, CI/CD pipelines and automation and Infrastructure as Code and how these three knowledge domains work together. There are important considerations to make when  between a Hello World docker image
 - You could probably use another framework with these IaC libraries like Flask or Rails, but for now I'm building these projects with Django first-in-mind
 
@@ -101,7 +101,7 @@ The tools are not physical tools like the ones for building sandcastles, but ins
 **12 Factor App, DevOps and Platform Engineering**
 
 - [12 Factor App](https://12factor.net/) is great, and has guided how I approach both Django application development and IaC library development
-- The [platformengineering.org](https://platformengineering.org/) has so good guiding principles
+- The [platformengineering.org](https://platformengineering.org/) community has some good guiding principles
 
 ## CDK/Terraform/Pulumi terminology
 
@@ -113,19 +113,17 @@ In this article I will refer to **constructs/modules/components** as **c/m/c** f
 
 ### what is a stack?
 
-The word stack can be a loaded term for some people. "Full-stack", "up the stack", "down the stack". AWS has a resource type called CloudFormation Stacks, and Pulumi also has a concept of stacks. Terraform documentation doesn't refer to stacks, and instead in Terraform docs use the words "Terraform configuration" to refer to some group of resources that were built using a module.
+AWS has a resource type called CloudFormation Stacks, and Pulumi also has a concept of stacks. Terraform documentation doesn't refer to stacks, and instead in Terraform docs use the words "Terraform configuration" to refer to some group of resources that were built using a module.
 
-CDK Constructs and Pulumi Components are somewhat similar. CDK Constructs map to CloudFormation and the Pulumi components I'm using from the `@pulumi/aws` package generally map directly to Terraform resources from the AWS Provider (the Pulumi AWS Provider uses much of the same code that the Terraform AWS Provider uses).
+CDK Constructs and Pulumi Components are somewhat similar, however CDK Constructs map to CloudFormation and the Pulumi components I'm using from the `@pulumi/aws` package generally map directly to Terraform resources from the AWS Provider (the Pulumi AWS Provider uses much of the same code that the Terraform AWS Provider uses).
 
 ### verbs
 
-In Pulumi you
+In CDK you `synth` CDK code to generate CloudFormation templates. You can also run `diff` to see what changes would be applied during a stack update.
 
-Before building any cloud resources, you can get a preview of the changes you intend to make with your code. In CDK, you can run `synth` to generate the
+In Terraform you `init` to download all providers and modules. This is sort of like running `npm install` in CDK and Pulumi. You then run `terraform plan` to see the changes that would result. `terraform apply` does CRUD operations on your cloud resources.
 
-### config, props, args and tfvars
-
-
+In Pulumi you run `pulumi preview` to see what changes would be made to a stack. You can use the `--diff` flag to see the specifics of what would change.
 
 To summarize:
 
@@ -152,9 +150,9 @@ The HCL is pretty simple when you get used to it. I find that I don't like addin
 
 ### Release management, versioning and publishing
 
-`pulumi-aws-django` and `terraform-aws-django` both use `release-please` for automatically generating a changelog file and bumping versions. `release-please` is an open source tool from Google that they use to version their GCP modules. Whenever I push new commits to `main`, a new PR is created that adds changes to the CHANGELOG.md file, bumps the version of the library in `package.json` and adds a new git tag (e.g. `v1.2.3`) based on commit messages.
+`pulumi-aws-django` and `terraform-aws-django` both use `release-please` for automatically generating a changelog file and bumping versions. `release-please` is an open source tool from Google that they use to version their Terraform GCP modules. Whenever I push new commits to `main`, a new PR is created that adds changes to the CHANGELOG.md file, bumps the version of the library in `package.json` and adds a new git tag (e.g. `v1.2.3`) based on commit messages.
 
-`cdk-django` uses [`projen`](https://github.com/projen/projen) for maintaining the changelog and bumping versions and publishing to npm. It is popular among developers in the CDK community and is a really awesome tool since it basically uses one file (`.projenrc.ts`) to configure your entire repo, including files like `tsconfig.json`, `package.json`, and even GitHub Action workflows. It has a lot of configuration options, but I'm using it in a pretty simple way. It generates a new release and items to the changelog when I manually trigger a GitHub Action to run.
+`cdk-django` uses [`projen`](https://github.com/projen/projen) for maintaining the changelog and bumping versions and publishing to npm. It is popular among developers in the CDK community and is a really awesome tool since it basically uses one file (`.projenrc.ts`) to configure your entire repo, including files like `tsconfig.json`, `package.json`, and even GitHub Action workflows. It has a lot of configuration options, but I'm using it in a pretty simple way. It generates a new release and items to the changelog when I manually trigger a GitHub Action.
 
 These tools are both based on [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) to automatically update the Changelog file.
 
@@ -216,9 +214,9 @@ Adding unit tests is another item for the backlog.
 
 The directory structures for each repo are all similar with some minor differences.
 
-There are two types of environments: `ad-hoc` and `production`. Within ad-hoc and production, there are two directories `base` and `app`.
+There are two types of environments: `ad-hoc` and `prod`. Within ad-hoc and production, there are two directories `base` and `app`.
 
-Each repo has a directory called `internal` which contain building blocks used by the modules/components/constructs that are exposed. The contents of the `internal` directories are not intended to be used by anyone who is using the libraries.
+Each repo has a directory called `internal` which contain building blocks used by the `c/m/c`s that are exposed. The contents of the `internal` directories are not intended to be used by anyone who is using the libraries.
 
 **CDK construct library repo structure**
 
@@ -403,7 +401,7 @@ SUM:                            15            116            176           1149
 
 ## Communities
 
-The CDK, Terraform and Pulumi communities all great and a lot of people helped when I got stuck on issues writing these libraries. Thank you!
+The CDK, Terraform and Pulumi communities are all great and a lot of people helped when I got stuck on issues writing these libraries. Thank you!
 
 - [cdk.dev](https://cdk.dev/)
 - [Terraform Section of HashiCorp Discuss Forum](https://discuss.hashicorp.com/c/terraform-core/27)
@@ -426,14 +424,14 @@ It lives in a GitHub mono repo called `django-step-by-step`. This mono repo cont
 - IaC code that uses c/m/c from `cdk-django`, `terraform-aws-django` and `pulumi-aws-django`
 - GitHub Actions workflows for both Infrastructure deployments and application deployments
 
-μblog is the reference application that I deploy to infrastructure created with CDK, Terraform and Pulumi. μblog is meant to represent a generic application uses:
+μblog is the reference application that I deploy to infrastructure created with CDK, Terraform and Pulumi. μblog is meant to represent a generic 12 Factor application that uses:
 
 - gunicorn for a backend API
 - Vue.js for a client that consumes the backend API
 - celery for async task processing
 - celery beat for scheduling tasks
 - Postgres for relational data
-- Redis for caching and message brokering (and maybe websocket backend)
+- Redis for caching and message brokering
 - S3 for object storage
 - Django admin for a simple admin interface
 
@@ -451,7 +449,7 @@ Let's go through each of the `c/m/c`s used in the three libraries. I'll cover so
 
 I'll first talk about the two stacks used in ad hoc environments: `base` and `app`. Then I'll talk about the prod environments which are also composed of `base` and `app` stacks.
 
-Keep in mind that there aren't that many differences between the ad hoc environment base and app stacks and the prod environment app and base stacks. A future optimization could be to use a single base and app stack, but I think there is a tradeoff between readability and DRYness of infrastructure code, **especially with Terraform**. In general I try to use very little conditionals with Terraform code. It is much easier to have dynamic configuration in CDK and Pulumi, and probably also for other tools like CDKTF (that I have not yet tried).
+Keep in mind that there aren't that many differences between the ad hoc environment base and app stacks and the prod environment app and base stacks. A future optimization could be to use a single base and app stack, but I think there is a trade-off between readability and DRYness of infrastructure code, **especially with Terraform**. In general I try to use very little conditionals and logic with Terraform code. It is much easier to have dynamic configuration in CDK and Pulumi, and probably also for other tools like CDKTF (that I have not yet tried).
 
 ## Splitting up the stacks
 
@@ -467,7 +465,7 @@ Also, on-demand environments really lends itself to stacks that are split up.
 
 In the section ["Passing unique identifiers"](https://docs.aws.amazon.com/cdk/v2/guide/resources.html), the CDK recommends that we keep the two stacks in the same app. In Terraform and Pulumi, each stack environment is in its own app.
 
-There is a balance to be found between single stacks vs micro stacks. Both the base and app `c/m/c`s could be split out further. For example, the `base` `c/m/c`s could be split into `networking` and `rds`. The `app` stack could be split into different ECS services so that their infrastructure can be deployed independently. The more resources that a stack has, the longer it takes to deploy and the more risky it gets, but adding lots of stacks can add to mental overhead, and pipeline complexity. Each tool has ways of dealing with this complexity and tradeoff (CDK Pipelines, Terragrunt, Pulumi Automation API), but I won't be getting into any of these options in this article. I would like to try these out and share in a future article.
+There is a balance to be found between single stacks vs micro stacks. Both the base and app `c/m/c`s could be split out further. For example, the `base` `c/m/c`s could be split into `networking` and `rds`. The `app` stack could be split into different ECS services so that their infrastructure can be deployed independently, like `cluster`, `backend` and `frontend`. The more resources that a stack has, the longer it takes to deploy and the more risky it gets, but adding lots of stacks can add to mental overhead, and pipeline complexity. Each tool has ways of dealing with these complexities (CDK Pipelines, Terragrunt, Pulumi Automation API), but I won't be getting into any of these options in this article. I would like to try these out and share in a future article.
 
 My rules of thumbs are:
 
@@ -478,9 +476,9 @@ My rules of thumbs are:
 
 Here's an overview of the resources used in an ad hoc base environment.
 
-- Inputs
-- Option environment configs
-- VPC (and Service Discovery)
+- (Inputs)
+- (Optional environment configs)
+- VPC and Service Discovery
 - S3
 - Security Groups
 - Load Balancer
@@ -504,14 +502,13 @@ I store these values in environment variables for the pipelines in CDK, Terrafor
 
 ### VPC
 
-The VPC is the first resource that is create as part of the `base` stack.
-- There official, high-level constructs in each IaC tool for building VPCs and all related networking resources.
+The VPC is the first resource that is created as part of the `base` stack. There official, high-level constructs in each IaC tool for building VPCs and all related networking resources.
 
 - `awsx` has a VPC module
 - `terraform-aws-vpc` module
 - L2 VPC Construct in CDK
 
-The setting in the Terraform VPC module `one_nat_gateway_per_az = false` doesn't seem to exist on the `awsx.ec2.Vpc` module. This will add to cost savings since it will use 1 NAT Gateway instead of 2.
+The setting in the Terraform VPC module `one_nat_gateway_per_az = false` doesn't seem to exist on the `awsx.ec2.Vpc` module. This will add to cost savings since it will use 1 NAT Gateway instead of 2 or 3.
 
 ### Security Groups
 
@@ -576,7 +573,7 @@ There are two main use cases for the bastion host in ad-hoc environments.
 
 - When creating a new ad hoc app environment, the bastion host is used to create a new database called `{ad-hoc-env-name}-db` that the new ad hoc environment will use. (There might be another way of doing this, but using a bastion host is working well for now).
 
-- If you using a database management tool on you local machine like DBeaver, the bastion host can help you connect to the RDS instance in a private subnet. The bastion host instance is configured to run a service that forwards traffic on port 5432 to the RDS instance. You can connect to the
+- If you using a database management tool on you local machine like DBeaver, the bastion host can help you connect to the RDS instance in a private subnet. The bastion host instance is configured to run a service that forwards traffic on port 5432 to the RDS instance. If you port forward from your local machine to the bastion host on port 5432, you can connect RDS by simple connecting to `localhost:5432` on your local machine.
 
 You don't need to manage SSH keys since you connect to the instance in a private subnet using SSM:
 
@@ -614,14 +611,13 @@ This visualization shows all of the resources in the ad hoc app stack. It also c
 - This is a small component that defines both ECS Cluster and the default capacity providers
 - It defaults to not using `FARGATE_SPOT`; ad hoc environments do use `FARGATE_SPOT` for cost savings
 
-https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-ecs.CapacityProviderStrategy.html
-
-> NOTE: defaultCapacityProviderStrategy on cluster not currently supported.
+> NOTE: defaultCapacityProviderStrategy on cluster not currently supported. ([link](https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-ecs.CapacityProviderStrategy.html))
 
 ### Shared environment variables
 
-- I struggled to get this right in pulumi. A lot of Pulumi examples used `JSON.stringify` for containerDefinitions in task definitions. I was able to get help from the Pulumi Slack channel; someone recommended that I use `pulumi.jsonStringify` which was added in a relatively recent version of `pulumi/pulumi`.
+The backend containers should all have the same environment variables, so I define them once in the app stack and pass these into the service resource `c/m/c`s.
 
+- I struggled to get this right in pulumi. A lot of Pulumi examples used `JSON.stringify` for containerDefinitions in task definitions. I was able to get help from the Pulumi Slack channel; someone recommended that I use `pulumi.jsonStringify` which was added in a relatively recent version of `pulumi/pulumi`.
 - CDK allows you to declare environment variables for a containerDefinition like `{ FOO: "bar" }`
 - Pulumi and Terraform require that values are passed like `{ name: "FOO", value: "bar"}`
 - You could transform `{ FOO: "bar" }` into the name/value format, but I didn't bother to do this
@@ -656,13 +652,13 @@ This part is pretty opinionated in that it assumes you want to host the frontend
 
 ### Redis
 
-I go into more depth about why I run a Redis instance in an ECS service in my other article. This is only for the ad hoc environments. Production environments will be configured with ElastiCache for managed Redis.
+I go into more depth about why I run a Redis instance in an ECS service in my other article. This is only for the ad hoc environments. Production environments are configured with ElastiCache running Redis.
 
 I decided to not make this service use any persistent storage. It may be a good idea to not use FARGATE_SPOT for this service, since restarts to the redis service could cause issues in ad hoc environments. For example, you may get a lot of celery errors in ad hoc environments if redis is not reachable.
 
 ### Web Service
 
-The web service is what defines the main Django application as well as the frontend website (JavaScript SPA or SSR site). I designed the Web Service resources group to be able to support both traditional Django apps (powered by templates), or for Django apps that service only a limited number of endpoints. This `c/m/c` has an input parameter called `pathPatterns` which determines which paths it serves. For example, you Django container may serve traffic for `/api/*` and `/admin/*` only, or it may want to serve all traffic (`/*`).
+The web service is what defines the main Django application as well as the frontend website (JavaScript SPA or SSR site). I designed the Web Service resources group to be able to support both traditional Django apps (powered by templates), or for Django apps that service only a limited number of endpoints. This `c/m/c` has an input parameter called `pathPatterns` which determines which paths it serves. For example, the API container may serve traffic for `/api/*` and `/admin/*` only, or it may want to serve all traffic (`/*`).
 
 The way I use these components in ad hoc and prod environments is heavily opinionated in that:
 
@@ -681,6 +677,47 @@ The terminology for this resource group could be better. Celery is one of many o
 
 - Defines a task that can be used to run commands like `collectstatic` and `migrate`
 - These tasks are ran both after the initial `app` stack deployment and before rolling application upgrades
+
+In my Django app I have a single management command that calls `migrate` and `collectstatic` and runs them in the same process one after another. This management command could also be used for clearing caches during updates, loading fixtures, etc.
+
+One other thing to note about this `c/m/c` is that it outputs a complete script that can be used in GitHub Actions (or on your CLI when testing locally) that does the following:
+
+- saves the `START` timestamp
+- runs the task with the required settings
+- waits for the task to complete
+- saves the `END` timestamp
+- collects the logs for the task between `START` and `END` and prints them to `stdout`
+
+Here's an example of what the script looks like in Pulumi:
+
+```ts
+    const executionScript = pulumi.interpolate`#!/bin/bash
+START_TIME=$(date +%s000)
+TASK_ID=$(aws ecs run-task --cluster ${props.ecsClusterId} --task-definition ${taskDefinition.arn} --launch-type FARGATE --network-configuration "awsvpcConfiguration={subnets=[${props.privateSubnetIds.apply(x => x.join(","))}],securityGroups=[${props.appSgId}],assignPublicIp=ENABLED}" | jq -r '.tasks[0].taskArn')
+aws ecs wait tasks-stopped --tasks $TASK_ID --cluster ${props.ecsClusterId}
+END_TIME=$(date +%s000)
+aws logs get-log-events --log-group-name ${cwLoggingResources.cwLogGroupName} --log-stream-name ${props.name}/${props.name}/\${TASK_ID##*/} --start-time $START_TIME --end-time $END_TIME | jq -r '.events[].message'
+`;
+    this.executionScript = executionScript;
+```
+
+In GitHub Actions we get this command as a stack output, save it to a file, make it executable and then run it. This is what it looks like with CDK as a CloudFormation stack output:
+
+```yaml
+      - name: "Run backend update command"
+        id: run_backend_update
+        run: |
+          # get the script from the stack output with an output key that contains the string `backendUpdate`
+          BACKEND_UPDATE_SCRIPT=$(aws cloudformation describe-stacks \
+            --stack-name $AD_HOC_APP_NAME \
+            | jq -r '.Stacks[0].Outputs[]|select(.OutputKey | contains("backendUpdate")) | .OutputValue' \
+          )
+
+          echo "$BACKEND_UPDATE_SCRIPT" > backend_update_command.sh
+          cat backend_update_command.sh
+          sudo chmod +x backend_update_command.sh
+          ./backend_update_command.sh
+```
 
 ### Passing data between stacks
 
@@ -787,9 +824,9 @@ For `terraform-aws-django`, I tried to follow the recommendations from [terrafor
 
 - use the name `this` for resources in a module where that resource is the only resource of its type
 
-I think CDK and Pulumi lend themselves to more nesting and abstractions because they can be written in more familiar programming languages with better abstractions, function, loops, classes, etc., so there are some differences in directory structure of my libraries when comparing Terraform to both CDK and Pulumi.
+CDK and Pulumi lend themselves to more nesting and abstractions because they can be written in more familiar programming languages with better abstractions, functions, loops, classes, etc., so there are some differences in directory structure of my libraries when comparing Terraform to both CDK and Pulumi.
 
-For Pulumi and CDK, I mostly tried to follow along with recommendations from their documentation and example projects. While working with Pulumi I struggled a bit with concepts of `Inputs`, `Outputs`, `pulumi.interpolate`, `apply()`, `all()` and the differences between `getX` and `getXOutput`. There is a little bit of a learning curve here, but the documentation and examples go a long way in showing how to do things the right way.
+For Pulumi and CDK, I mostly tried to follow along with recommendations from their documentation and example projects. While working with Pulumi I struggled a bit with the concepts of `Inputs`, `Outputs`, `pulumi.interpolate`, `apply()`, `all()` and the differences between `getX` and `getXOutput`. There is a little bit of a learning curve here, but the documentation and examples go a long way in showing how to do things the right way.
 
 ## Environment configuration
 
@@ -853,11 +890,11 @@ config:
       value: BUZ
 ```
 
-I haven't done too much with configuration, but it seems like the right place to build our all of the dials and switches for configuring optional settings in stack resources.
+I haven't done too much with configuration, but it seems like the right place to build out all of the dials and switches for optional settings in stack resources that you want people to be able to change in their ad hoc environments, or that you want to set per "production" environment (QA, stage, prod, etc.)
 
 ## Local development
 
-Using the Makefile targets in each library repo, my process for developing c/m/c involves making code changes followed by Makefile targets that preview/plan/diff against my AWS account, then running deploy/apply/up and waiting for things to finish deploying. Once I can validate that things are looking correct in my account, I run the destroy command and make sure that all of the resources are removed successfully. RDS instances can take up to 10 minutes to create, which means that the base stack takes some time to test. The app environment is able to be spun up quickly, but it can sometimes get stuck and take some time to delete services.
+Using the Makefile targets in each library repo, my process for developing `c/m/c`s involves making code changes followed by Makefile targets that preview/plan/diff against my AWS account, then running deploy/apply/up and waiting for things to finish deploying. Once I can validate that things are looking correct in my account, I run the destroy command and make sure that all of the resources are removed successfully. RDS instances can take up to 10 minutes to create, which means that the base stack takes some time to test. The app environment is able to be spun up quickly, but it can sometimes get stuck and take some time to delete services.
 
 Here are some sample times for deploying ad hoc stacks with CDK.
 
@@ -967,9 +1004,9 @@ Pulumi has [a great article](https://www.pulumi.com/docs/guides/continuous-deliv
 
 The general pattern that all of these pipelines use is:
 
-- Do a synth/plan/preview, and upload the synth/plan/preview file to artifacts
+- Do a synth/plan/preview, and upload the synth/plan/preview file to an artifact
 - Pause and wait on manual review of the planned changes
-- download the artifacts and run deploy/apply/up against the synth/plan/preview from the artifact, or optionally cancel the operation if the changes you see in the GitHub Actions pipeline logs are not what you expected.
+- download the artifact and run deploy/apply/up against it, or optionally cancel the operation if the changes you see in the GitHub Actions pipeline logs are not what you expected.
 
 I do this by having two jobs in each GitHub Action: one for synth/plan/preview and one for deploy/apply/up.
 
@@ -1005,7 +1042,7 @@ Fot Terraform I use the VPC from the `terraform-aws-modules`, and everything els
 
 I created the Elastic Container Registry `backend` and `frontend` repos manually in the AWS Console. I also manually requested an ACM certificate for `*.mydomain.com` for the domain that I use for testing that I purchased through Route53 domains.
 
-I currently am using another less-than best practice of using Administrative Credentials stored in GitHub secrets. The better approach here is to make roles for different pipelines and use OIDC to authenticate instead of storing credentials.
+I currently am using another less-than best practice of using Administrative Credentials stored in GitHub secrets. The better approach here is to make roles for different pipelines and use OIDC to authenticate instead of storing credentials. This is another good item for the backlog.
 
 ## Tagging
 
@@ -1022,15 +1059,15 @@ Here's the list of things I check when standing up an application environment:
 
 - [x] Run the init/tsc, synth/plan/preview and deploy/apply/up commands successfully
 - [x] Access the bastion host (`make aws-ssm-start-session`)
-- [x] Run ecs exec and access the shell (`make aws-ecs-exec`)
-- [x] Can we reach the database? (`python manage.py showmigrations`)
-- [x] run the migrations (`python manage.py migrate`)
-- [x] run collectstatic (`python manage.py collectstatic`)
+- [x] Run ECSExec to access a shell in a backend container (`make aws-ecs-exec`)
+- [x] Test database connectivity (`python manage.py showmigrations`)
+- [x] Run the migrations (`python manage.py migrate`)
+- [x] Run collectstatic (`python manage.py collectstatic`)
 - [x] Visit the site (`alpha.example.com`)
 - [x] Publish a blog post
 - [x] Publish a blog post with an image
 - [x] Check celery worker logs for successfully complete scheduled tasks
-- [x] Trigger a an autoscaling event by running k6 load tests against an environment
+- [x] Trigger an autoscaling event by running k6 load tests against an environment
 - [x] Optionally deploy another backend or frontend image tag using the GitHub Actions pipelines for backend and frontend updates
 - [x] Destroy the app stack
 - [x] Destroy the base stack
@@ -1052,18 +1089,20 @@ Here are some of the next things I'll be working on in these project, roughly in
 - The Pulumi components that define the resources associated with each ECS service are not very dry
 - Interfaces could be constructed with inheritance (base set of properties that is extended for different types of services)
 - Fix the CDK issue with priority rule on ALB listeners. I need to used a custom resource for this which is currently a WIP. Terraform and Pulumi look up the next highest listener rule priority under the hood, so you are not required to provide it, but CDK requires it, which means that you can't do ad hoc environments in CDK without a custom resource that looks up what the next available priority number is.
-- Make all three of the libraries less opinionated about how the application as a whole. Celery worker and scheduler should be optional, the frontend component should also be optional
+- Make all three of the libraries less opinionated. For example, the celery worker and scheduler should be optional and the frontend component should also be optional
 - experiment with using a frontend with SSR. This is supported by Quasar, the framework I'm currently using to build my frontend SPA site
 
 If you want to get involved or help with any of the above, please let me know!
 
 ## Conclusion
 
-I first started out with IaC following this project [aws-samples/ecs-refarch-cloudformation](https://github.com/aws-samples/ecs-refarch-cloudformation) (which is pretty old at this point) and wrote a lot of CloudFormation by hand. The pain of doing that lead me explore the CDK using Python. I learned TypeScript by rewriting the Python CDK code I wrote in TypeScript. I later worked with a team that was more experienced in Terraform and learned how to use that. I feel like Pulumi takes the best of the two tools and has a really great developer experience. There is a little bit of a learning curve with Pulumi, and you give up some of the simplicity of Terraform.
+I first started out with IaC following this project [aws-samples/ecs-refarch-cloudformation](https://github.com/aws-samples/ecs-refarch-cloudformation) (which is pretty old at this point) and wrote a lot of CloudFormation by hand. The pain of doing that lead me to explore the CDK with Python. I learned TypeScript by rewriting the Python CDK code I wrote in TypeScript. I later worked with a team that was more experienced in Terraform and learned how to use that. I feel like Pulumi takes the best of the two tools and has a really great developer experience. There is a little bit of a learning curve with Pulumi, and you give up some of the simplicity of Terraform.
 
 ## Sharing
 
 Thank you for reading to the end! I have posted the article on the following channels, please like and share the article and follow me wherever you are active. Also please share your feedback!
+
+(links pending)
 
 - my personal blog (briancaffey.github.io)
 - DEV.to
