@@ -18,23 +18,19 @@ tags:
 
 draft: false
 
-# external:
-  # - link: https://news.ycombinator.com/item?id=31704417
-  #   site: hn
-  # - link: https://www.reddit.com/r/aws/comments/v9ycwh/my_approach_to_building_ad_hoc_developer/
-  #   site: reddit
-  # - link: https://dev.to/briancaffey/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions-4abh
-  #   site: dev
-  # - link: https://medium.com/@briancaffey/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-84d26e710539
-  #   site: medium
-  # - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
-  #   site: hashnode
-  # - link: https://twitter.com/briancaffey/status/1535683865330831360
-  #   site: twitter
-  # - link: https://briancaffey.substack.com/p/setting-up-ad-hoc-development-environments
-  #   site: substack
-  # - link: https://hackernoon.com/ad-hoc-environments-for-django-applications-with-ecs-terraform-and-github-actions
-  #   site: hackernoon
+external:
+  - link: https://news.ycombinator.com/item?id=34291336
+    site: hn
+  - link: https://www.reddit.com/r/aws/comments/105vo53/my_infrastructure_as_code_rosetta_stone_deploying/
+    site: reddit
+  - link: https://dev.to/briancaffey/my-infrastructure-as-code-rosetta-stone-deploying-the-same-web-application-on-aws-ecs-fargate-with-cdk-terraform-and-pulumi-oe4
+    site: dev
+  - link: https://medium.com/@briancaffey/my-infrastructure-as-code-rosetta-stone-with-cdk-terraform-and-pulumi-44fcb8233e6a
+    site: medium
+  - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
+    site: hashnode
+  - link: https://briancaffey.substack.com/p/my-infrastructure-as-code-rosetta
+    site: substack
 
 comments: true
 ---
@@ -51,56 +47,56 @@ I wrote three infrastructure as code libraries for deploying containerized 3-tie
 
 ## eli5
 
-Pretend we are at the beach building sandcastles. We can build sandcastles using our hands, but this takes a lot of time, and we might bump into each other and accidentally knock over part of our sandcastle. I made some tools for building sandcastles. We have one tool for building a sand castle base that includes the wall around the outside, the moat, the door and different sections inside the walls. And I made another tool for deploying smaller sand castle houses inside the walls of the sandcastle base. We fill the tool with sand and water and then turn it over inside of our base and we can build an entire city of sandcastles. Also, the tool lets us carefully remove parts of our sandcastle without knocking over any of the other parts. We can share the tool with all of our friends and they can make cool sandcastles too, and the tool is free for them to use.
+Pretend we are at the beach building sandcastles. We can build sandcastles using our hands, but this takes a lot of time, and we might bump into each other and accidentally knock over part of our sandcastle. I made some tools for building sandcastles. We have one tool for building a sand castle base that includes the wall around the outside, the moat, the door, and different sections inside the walls. And I made another tool for deploying smaller sand \castle houses inside the walls of the sandcastle base. We fill the tool with sand and water and then turn it over inside of our base and we can build an entire city of sandcastles. Also, the tool lets us carefully remove parts of our sandcastle without knocking over any of the other parts. We can share the tool with all of our friends and they can make cool sandcastles too, and the tool is free for them to use.
 
 Instead of sandcastles, I'm working with computer systems that can power internet applications, like YouTube for example. I'm building tools that can allow me or anyone else to build really awesome internet applications using computers.
 
-The tools are not physical tools like the ones for building sandcastles, but instead these tools are made with code. The code for websites like YouTube allow you upload videos *to YouTube*, but the code I'm writing allows you to upload any type of website (even on like YouTube) *to the internet*. When we run this code, it creates applications on the internet. Also, sand is very expensive and Jeff Bezos owns the beach.
+The tools are not physical tools like the ones for building sandcastles, but instead, these tools are made with code. The code for websites like YouTube allows you to upload videos *to YouTube*, but the code I'm writing allows you to upload any type of website (even site YouTube) *to the internet*. When we run this code, it creates applications on the internet. Also, sand is very expensive and Jeff Bezos owns the beach.
 
 ## Why I made an Infrastructure as Code Rosetta Stone with CDK, Terraform and Pulumi
 
-**To push myself to learn more about AWS, IaC, CI/CD, automation and Platform Engineering**
+**To push me to learn more about AWS, IaC, CI/CD, automation, and Platform Engineering**
 
-- Learn differences between major IaC tools and how to use them to do exactly the same thing (build a web app) on the same Cloud (AWS) in the same way (serverless container technology using ECS Fargate).
+- Learn the differences between major IaC tools and how to use them to do exactly the same thing (build a web app) on the same Cloud (AWS) in the same way (serverless container technology using ECS Fargate).
 - Get more experience publishing software packages (npm) and finding the right level of abstraction for IaC libraries that is both dynamic and straightforward
 
 **To fail as many times as possible**
 
 - Every time I fail when I think I have things right, I learn something new
-- Failed IaC pipelines can sometimes be scary, and every failure I have on these project can teach me about potential failure modes for live projects running in production
-- You can often times be "stuck" where you have a set of resources that you can't update or delete. Learning to get unstuck from these scenarios is important
+- Failed IaC pipelines can sometimes be scary, and every failure I have on these projects can teach me about potential failure modes for live projects running in production
+- You can oftentimes be "stuck" where you have a set of resources that you can't update or delete. Learning to get unstuck from these scenarios is important
 
 **To take an application-first approach to DevOps**
 
 - Application developers are increasingly being tasked with operational duties
-- While learning about IaC, I had a hard time finding in-depth materials covering application development, CI/CD pipelines and automation and Infrastructure as Code and how these three knowledge domains work together. There are important considerations to make when  between a Hello World docker image
+- While learning about IaC, I had a hard time finding in-depth materials covering application development, CI/CD pipelines, automation, and Infrastructure as Code and how these three knowledge domains work together. There are important considerations to make when  between a Hello World docker image
 - You could probably use another framework with these IaC libraries like Flask or Rails, but for now I'm building these projects with Django first-in-mind
 
 **To develop a project I can reference when helping myself and others**
 
 - companies and projects that do IaC and CI/CD for the most part have things in private repos for obvious reasons, there isn't any good reason to share this type of code unless you are sharing it with an auditor
-- Hopefully the sample application, IaC and CI/CD pipelines *aren't overly complex*. There are more complex examples of open source companies out there, but their repos have steep learning curves and a lot going on
+- Hopefully, the sample application, IaC, and CI/CD pipelines *aren't overly complex*. There are more complex examples of open-source companies out there, but their repos have steep learning curves and a lot going on
 - People often ask about how to split up IaC deployments and application deployments. I want to be able to use this project to **show** people how it can be done
 
-**To encourage others (specifically Developer Advocates / Developer Relations / Solutions Architects in the CDK, Terraform and Pulumi communities) to share complete and non-trivial examples of IaC software **in use** with an actual application.**
+**To encourage others (specifically Developer Advocates / Developer Relations / Solutions Architects in the CDK, Terraform, and Pulumi communities) to share complete and non-trivial examples of IaC software **in use** with an actual application.**
 
-- There are many ways one could create "IaC Rosetta Stone" (`public cloud providers x CI/CD providers x IaC tools` is a big number)
+- There are many ways one could create an "IaC Rosetta Stone" (`public cloud providers x CI/CD providers x IaC tools` is a big number)
 - This takes a lot of effort and time
 
 **I have nothing to sell you**
 
 - So many articles about Cloud/DevOps are trying to sell you a tool. Outside of what I consider to be mainstream vendors like GitHub and AWS, there are no products that I'm promoting here
 - I'm also not trying to sell anyone on using my IaC packages
-- Hopefully my IaC packages can serve as helpful reference or starting point
+- Hopefully, my IaC packages can serve as a helpful reference or starting point
 
 **Walk before running**
 
 - I want to build up confidence with vanilla use cases before getting too fancy
 - With a solid foundation in these tools, I want to learn about some of the more advanced patterns teams are adopting (Pulumi Automation API, Terragrunt for Terraform, self-mutating CDK Pipelines)
 
-**12 Factor App, DevOps and Platform Engineering**
+**12 Factor App, DevOps, and Platform Engineering**
 
-- [12 Factor App](https://12factor.net/) is great, and has guided how I approach both Django application development and IaC library development
+- [12 Factor App](https://12factor.net/) is great and has guided how I approach both Django application development and IaC library development
 - The [platformengineering.org](https://platformengineering.org/) community has some good guiding principles
 
 ## CDK/Terraform/Pulumi terminology
@@ -1097,26 +1093,3 @@ If you want to get involved or help with any of the above, please let me know!
 ## Conclusion
 
 I first started out with IaC following this project [aws-samples/ecs-refarch-cloudformation](https://github.com/aws-samples/ecs-refarch-cloudformation) (which is pretty old at this point) and wrote a lot of CloudFormation by hand. The pain of doing that lead me to explore the CDK with Python. I learned TypeScript by rewriting the Python CDK code I wrote in TypeScript. I later worked with a team that was more experienced in Terraform and learned how to use that. I feel like Pulumi takes the best of the two tools and has a really great developer experience. There is a little bit of a learning curve with Pulumi, and you give up some of the simplicity of Terraform.
-
-## Sharing
-
-Thank you for reading to the end! I have posted the article on the following channels, please like and share the article and follow me wherever you are active. Also please share your feedback!
-
-(links pending)
-
-- my personal blog (briancaffey.github.io)
-- DEV.to
-- Ops Community
-- Medium
-- Substack
-- My MailChimp mailing list
-- Hacker News
-- Twitter
-- LinkedIn
-- Facebook
-- HashNode
-- Hackernoon
-- Reddit (r/aws, r/Terraform, r/pulumi, r/django, r/devops)
-- Terraform Forum
-- Pulumi Slack channel
-- CDK.dev Slack channel
