@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/in/blog/tags/cloudformation", {data:[{articles:[]}],fetch:{},mutations:[]});
