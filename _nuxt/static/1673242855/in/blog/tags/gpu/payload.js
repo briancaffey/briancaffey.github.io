@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/in/blog/tags/gpu", {data:[{articles:[]}],fetch:{},mutations:[]});

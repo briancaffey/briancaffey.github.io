@@ -1,0 +1,968 @@
+<!doctype html>
+<html data-n-head-ssr lang="en" data-n-head="%7B%22lang%22:%7B%22ssr%22:%22en%22%7D%7D">
+  <head>
+    <title>Installing Stable Diffusion on my 2016 Desktop Computer</title><meta data-n-head="ssr" charset="utf-8"><meta data-n-head="ssr" name="viewport" content="width=device-width,initial-scale=1"><meta data-n-head="ssr" data-hid="description" name="description" content="Brian Caffey's personal website"><meta data-n-head="ssr" name="robots" content="noindex"><meta data-n-head="ssr" property="og:title" content="Installing Stable Diffusion on my 2016 Desktop Computer"><meta data-n-head="ssr" property="og:description" content="Installing Stable Diffusion on my old PC as fast as possible"><meta data-n-head="ssr" property="og:image" content="https://briancaffey.github.ioundefined"><meta data-n-head="ssr" property="twitter:card" content="https://briancaffey.github.ioundefined"><link data-n-head="ssr" rel="icon" type="image/x-icon" href="/favicon.ico"><script data-n-head="ssr" data-hid="adsbygoogle-script" defer crossorigin="anonymous" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4924597640144289"></script><script data-n-head="ssr" data-hid="adsbygoogle">window.__abg_called||((adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=0,(window.adsbygoogle=window.adsbygoogle||[]).push({google_ad_client:"ca-pub-4924597640144289",enable_page_level_ads:!1,overlays:{bottom:!1}}),window.__abg_called=!0)</script><link rel="preload" href="/_nuxt/b3a03c5.js" as="script"><link rel="preload" href="/_nuxt/9ee0ef6.js" as="script"><link rel="preload" href="/_nuxt/f51c3d4.js" as="script"><link rel="preload" href="/_nuxt/d4698ff.js" as="script"><link rel="preload" href="/_nuxt/9d8324e.js" as="script"><style data-vue-ssr-id="38dfa7e4:0 f52d43e0:0 9592d830:0 517a8dd7:0 072b2f8a:0 fa7ff0ca:0 56b15182:0 5a4b6265:0 14b1eaf9:0 a0fa61ae:0 7f6c3ed0:0 68771c59:0 5586ddaf:0">/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}details{display:block}summary{display:list-item}[hidden],template{display:none}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}button{background-color:transparent;background-image:none}button:focus{outline:1px dotted;outline:5px auto -webkit-focus-ring-color}fieldset,ol,ul{margin:0;padding:0}ol,ul{list-style:none}html{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}hr{border-top-width:1px}img{border-style:solid}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{color:#a0aec0}input:-ms-input-placeholder,textarea:-ms-input-placeholder{color:#a0aec0}input::placeholder,textarea::placeholder{color:#a0aec0}[role=button],button{cursor:pointer}table{border-collapse:collapse}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}button,input,optgroup,select,textarea{padding:0;line-height:inherit;color:inherit}code,kbd,pre,samp{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}.container{width:100%}@media (min-width:640px){.container{max-width:640px}}@media (min-width:768px){.container{max-width:768px}}@media (min-width:1024px){.container{max-width:1024px}}@media (min-width:1280px){.container{max-width:1280px}}.bg-black{--bg-opacity:1;background-color:#000;background-color:rgba(0,0,0,var(--bg-opacity))}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.bg-red-300{--bg-opacity:1;background-color:#feb2b2;background-color:rgba(254,178,178,var(--bg-opacity))}.border-white{--border-opacity:1;border-color:#fff;border-color:rgba(255,255,255,var(--border-opacity))}.rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-lg{border-radius:.5rem}.rounded-full{border-radius:9999px}.rounded-t{border-top-left-radius:.25rem;border-top-right-radius:.25rem}.border{border-width:1px}.cursor-pointer{cursor:pointer}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.table{display:table}.grid{display:grid}.contents{display:contents}.hidden{display:none}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.flex-1{flex:1 1 0%}.flex-grow{flex-grow:1}.float-right{float:right}.font-bold{font-weight:700}.h-3{height:.75rem}.h-4{height:1rem}.h-12{height:3rem}.h-32{height:8rem}.h-64{height:16rem}.text-lg{font-size:1.125rem}.text-xl{font-size:1.25rem}.text-2xl{font-size:1.5rem}.text-3xl{font-size:1.875rem}.text-4xl{font-size:2.25rem}.leading-8{line-height:2rem}.leading-9{line-height:2.25rem}.m-2{margin:.5rem}.m-4{margin:1rem}.mx-1{margin-left:.25rem;margin-right:.25rem}.my-4{margin-top:1rem;margin-bottom:1rem}.mx-auto{margin-left:auto;margin-right:auto}.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-4{margin-top:1rem}.mb-4{margin-bottom:1rem}.mb-8{margin-bottom:2rem}.-ml-1{margin-left:-.25rem}.max-w-5xl{max-width:64rem}.max-w-6xl{max-width:72rem}.object-cover{-o-object-fit:cover;object-fit:cover}.p-3{padding:.75rem}.p-4{padding:1rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.px-1{padding-left:.25rem;padding-right:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-4{padding-left:1rem;padding-right:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-32{padding-top:8rem;padding-bottom:8rem}.pt-2{padding-top:.5rem}.pt-4{padding-top:1rem}.pr-4{padding-right:1rem}.pb-4{padding-bottom:1rem}.pt-8{padding-top:2rem}.pb-8{padding-bottom:2rem}.pt-16{padding-top:4rem}.static{position:static}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.right-0{right:0}.bottom-0{bottom:0}.left-0{left:0}.resize{resize:both}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06)}.fill-current{fill:currentColor}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.text-black{--text-opacity:1;color:#000;color:rgba(0,0,0,var(--text-opacity))}.text-white{--text-opacity:1;color:#fff;color:rgba(255,255,255,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-red-400{--text-opacity:1;color:#fc8181;color:rgba(252,129,129,var(--text-opacity))}.text-red-600{--text-opacity:1;color:#e53e3e;color:rgba(229,62,62,var(--text-opacity))}.uppercase{text-transform:uppercase}.visible{visibility:visible}.w-3{width:.75rem}.w-4{width:1rem}.w-12{width:3rem}.w-32{width:8rem}.w-full{width:100%}.z-10{z-index:10}.gap-4{grid-gap:1rem;gap:1rem}.gap-6{grid-gap:1.5rem;gap:1.5rem}.gap-8{grid-gap:2rem;gap:2rem}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.transform{--transform-translate-x:0;--transform-translate-y:0;--transform-rotate:0;--transform-skew-x:0;--transform-skew-y:0;--transform-scale-x:1;--transform-scale-y:1;transform:translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y))}.transition-all{transition-property:all}.transition{transition-property:background-color,border-color,color,fill,stroke,opacity,box-shadow,transform}.duration-150{transition-duration:.15s}.delay-150{transition-delay:.15s}@-webkit-keyframes spin{to{transform:rotate(1turn)}}@keyframes spin{to{transform:rotate(1turn)}}@-webkit-keyframes ping{75%,to{transform:scale(2);opacity:0}}@keyframes ping{75%,to{transform:scale(2);opacity:0}}@-webkit-keyframes pulse{50%{opacity:.5}}@keyframes pulse{50%{opacity:.5}}@-webkit-keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:none;-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@keyframes bounce{0%,to{transform:translateY(-25%);-webkit-animation-timing-function:cubic-bezier(.8,0,1,1);animation-timing-function:cubic-bezier(.8,0,1,1)}50%{transform:none;-webkit-animation-timing-function:cubic-bezier(0,0,.2,1);animation-timing-function:cubic-bezier(0,0,.2,1)}}@media (min-width:640px){.sm\:inline{display:inline}.sm\:hidden{display:none}.sm\:p-16{padding:4rem}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:w-2\/3{width:66.666667%}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:768px){.md\:flex{display:flex}.md\:hidden{display:none}.md\:px-1{padding-left:.25rem;padding-right:.25rem}.md\:px-4{padding-left:1rem;padding-right:1rem}.md\:w-1\/2{width:50%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width:1024px){.lg\:px-16{padding-left:4rem;padding-right:4rem}.lg\:px-32{padding-left:8rem;padding-right:8rem}.lg\:pl-64{padding-left:16rem}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1280px){.xl\:pb-16{padding-bottom:4rem}}:root{--color:#243746;--color-primary:#158876;--color-secondary:#0e2233;--bg:#f3f5f4;--bg-secondary:#fff;--bg-code:#ddd;--border-color:#ddd}.dark-mode{--color:#ebf4f1;--color-primary:#41b38a;--color-secondary:#fdf9f3;--bg:#091a28;--bg-secondary:#071521;--bg-code:#ddd;--border-color:#0d2538}.sepia-mode{--color:#433422;--color-primary:#504231;--color-secondary:#504231;--bg:#f1e7d0;--bg-code:#ddd;--bg-secondary:#eae0c9;--border-color:#ded0bf}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;background-color:#f3f5f4;background-color:var(--bg);color:#243746;color:var(--color);transition:background-color .7s}a{color:#158876;color:var(--color-primary)}.py-05{padding-top:.125rem;padding-bottom:.125rem}.markdown{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity));line-height:1.5;color:#0e2233;color:var(--color-secondary)}.markdown .token.operator{background:0 0}.markdown>*+*{margin-top:0;margin-bottom:1rem}.markdown li+li{margin-top:.25rem}.markdown li>p+p{margin-top:1.5rem;color:#158876;color:var(--color-primary)}.markdown img{margin:auto}.markdown a,.markdown strong{font-weight:600}.markdown strong a{font-weight:700}.markdown h1{font-size:2.25rem}.markdown h1,.markdown h2{border-color:#158876;border-color:var(--color-primary);line-height:1.25;border-bottom-width:1px;font-weight:600;margin-bottom:1rem;margin-top:1.5rem;padding-bottom:.5rem}.markdown h2{font-size:1.5rem}.markdown h3{line-height:1.375;font-size:1.125rem}.markdown h3,.markdown h4{border-color:#158876;border-color:var(--color-primary);font-weight:600;margin-bottom:1rem;margin-top:1.5rem}.markdown h4{line-height:1;font-size:1rem}.markdown h5{border-color:#158876;border-color:var(--color-primary)}.markdown h5,.markdown h6{line-height:1.25;font-size:.875rem;font-weight:600;margin-bottom:1rem;margin-top:1.5rem}.markdown blockquote,.markdown h6{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.markdown blockquote{font-size:1rem;border-left-width:4px;--border-opacity:1;border-color:#e2e8f0;border-color:rgba(226,232,240,var(--border-opacity));padding-left:1rem;padding-right:1rem;border-color:#158876;border-color:var(--color-primary)}.markdown code{font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:.875rem;display:inline;background-color:#edf2f7;background-color:rgba(237,242,247,var(--bg-opacity));padding:.125rem .25rem;background-color:#ddd;background-color:var(--bg-code);color:#000}.markdown code,.markdown pre{--bg-opacity:1;border-radius:.25rem}.markdown pre{background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity));padding:1rem}.markdown pre code{display:block;background-color:transparent;padding:0;overflow:visible;border-radius:0;color:#000}.markdown p{margin-bottom:10px}code[class*=language-],pre[class*=language-]{background:#ddd!important;background:var(--bg-code)!important;text-shadow:none!important}.markdown ul{list-style-type:disc}.markdown ol,.markdown ul{font-size:1rem;padding-left:2rem}.markdown ol{list-style-type:decimal}.markdown kbd{font-size:.75rem;display:inline-block;border-radius:.25rem;border-width:1px;padding:.125rem .25rem;vertical-align:middle;font-weight:400;font-family:Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.markdown table,td,th{font-size:1rem;border:1px solid #243746;border-color:var(--color)}.markdown table{overflow-x:scroll}.markdown td,.markdown th{border-width:1px;padding:.25rem .75rem}.markdown .highlight pre{--bg-opacity:1!important;background-color:#f7fafc!important;background-color:rgba(247,250,252,var(--bg-opacity))!important}.article-card{box-shadow:0 5px 10px 0 #0e2233;box-shadow:0 5px 10px 0 var(--color-secondary);transition:box-shadow .2s,transform .2s;height:100%}.article-card:hover{box-shadow:0 10px 40px 0 #0e2233;box-shadow:0 10px 40px 0 var(--color-secondary);transform:scale(1.025)}.blog-card-description,.blog-date{color:#0e2233;color:var(--color-secondary)}.blog-date{font-style:italic}hr{background-color:#243746;background-color:var(--color);border:none;height:1px}.menu-icon{background-color:#ddd;background-color:var(--border-color)}.menu-icon,.mobile-menu{color:#243746;color:var(--color)}.mobile-menu{background-color:#fff;background-color:var(--bg-secondary)}.btn{border-radius:1;border-color:#158876;border-color:var(--color-primary)}.btn:hover{background-color:#fff;background-color:var(--bg-secondary)}.hero{border-color:#158876;border-color:var(--color-primary)}.markdown{word-wrap:break-word}.markdown h2:before,.markdown h3:before{content:" ";margin-top:-85px;pointer-events:none}.markdown h2>a,.markdown h3>a{margin-left:1.25rem}.markdown h2>a:before,.markdown h3>a:before{content:"#";font-weight:400;font-size:1.25rem;line-height:2rem;margin-left:-1.25rem;padding-right:.5rem;position:absolute;opacity:1}@media (min-width:1024px){.markdown h2>a,.markdown h3>a{margin-left:0}.markdown h2>a:before,.markdown h3>a:before{opacity:0}}.markdown h2:hover>a:before,.markdown h3:hover>a:before{opacity:1}& pre[class*=language-]{--bg-opacity:1;background-color:#2d3748;background-color:rgba(45,55,72,var(--bg-opacity));position:static}.mc{background-color:#f3f5f4;background-color:var(--bg);border-color:#158876;border-color:var(--color-primary);border-width:1px;color:#158876;color:var(--color-primary);justify-content:center;padding:5px 10px;border-radius:5px;width:100%}.mc-btn{color:#fff;color:var(--bg-secondary);background-color:#0e2233;background-color:var(--color-secondary);cursor:pointer}.page-enter-active,.page-leave-active{transition:filter 2s linear;transition:margin-top .15s,opacity .15s}.page-enter,.page-leave-to{opacity:0;margin-top:5px}code[class*=language-],pre[class*=language-]{color:#000;background:0 0;text-shadow:0 1px #fff;font-family:Consolas,Monaco,"Andale Mono","Ubuntu Mono",monospace;font-size:1em;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-] ::-moz-selection,code[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection{text-shadow:none;background:#b3d4fc}code[class*=language-] ::selection,code[class*=language-]::selection,pre[class*=language-] ::selection,pre[class*=language-]::selection{text-shadow:none;background:#b3d4fc}@media print{code[class*=language-],pre[class*=language-]{text-shadow:none}}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto}:not(pre)>code[class*=language-],pre[class*=language-]{background:#f5f2f0}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.token.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{color:#9a6e3a;background:hsla(0,0%,100%,.5)}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.class-name,.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}.emoji-mart,.emoji-mart *{-webkit-box-sizing:border-box;box-sizing:border-box;line-height:1.15}.emoji-mart{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;font-size:16px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;height:420px;color:#222427;border:1px solid #d9d9d9;border-radius:5px;background:#fff}.emoji-mart-emoji{padding:6px;border:none;background:0 0;-webkit-box-shadow:none;box-shadow:none}.emoji-mart-emoji span{display:inline-block}.emoji-mart-preview-emoji .emoji-mart-emoji span{width:38px;height:38px;font-size:32px}.emoji-type-native{font-family:"Segoe UI Emoji","Segoe UI Symbol","Segoe UI","Apple Color Emoji","Twemoji Mozilla","Noto Color Emoji","EmojiOne Color","Android Emoji";word-break:keep-all}.emoji-type-image{background-size:5700%}.emoji-type-image.emoji-set-apple{background-image:url(https://unpkg.com/emoji-datasource-apple@6.0.1/img/apple/sheets-256/64.png)}.emoji-type-image.emoji-set-facebook{background-image:url(https://unpkg.com/emoji-datasource-facebook@6.0.1/img/facebook/sheets-256/64.png)}.emoji-type-image.emoji-set-google{background-image:url(https://unpkg.com/emoji-datasource-google@6.0.1/img/google/sheets-256/64.png)}.emoji-type-image.emoji-set-twitter{background-image:url(https://unpkg.com/emoji-datasource-twitter@6.0.1/img/twitter/sheets-256/64.png)}.emoji-mart-bar{border:0 solid #d9d9d9}.emoji-mart-bar:first-child{border-bottom-width:1px;border-top-left-radius:5px;border-top-right-radius:5px}.emoji-mart-bar:last-child{border-top-width:1px;border-bottom-left-radius:5px;border-bottom-right-radius:5px}.emoji-mart-scroll{position:relative;overflow-y:scroll;-webkit-box-flex:1;-ms-flex:1;flex:1;padding:0 6px 6px;z-index:0;will-change:transform;-webkit-overflow-scrolling:touch}.emoji-mart-anchors{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;padding:0 6px;color:#858585;line-height:0}.emoji-mart-anchor{position:relative;display:block;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;text-align:center;padding:12px 4px;overflow:hidden;-webkit-transition:color .1s ease-out;-o-transition:color .1s ease-out;transition:color .1s ease-out;border:none;background:0 0;-webkit-box-shadow:none;box-shadow:none}.emoji-mart-anchor-selected,.emoji-mart-anchor:hover{color:#464646}.emoji-mart-anchor-selected .emoji-mart-anchor-bar{bottom:0}.emoji-mart-anchor-bar{position:absolute;bottom:-3px;left:0;width:100%;height:3px;background-color:#464646}.emoji-mart-anchors i{display:inline-block;width:100%;max-width:22px}.emoji-mart-anchors svg{fill:currentColor;max-height:18px}.emoji-mart .scroller{height:250px;position:relative;-webkit-box-flex:1;-ms-flex:1;flex:1;padding:0 6px 6px;z-index:0;will-change:transform;-webkit-overflow-scrolling:touch}.emoji-mart-search{margin-top:6px;padding:0 6px}.emoji-mart-search input{font-size:16px;display:block;width:100%;padding:.2em .6em;border-radius:25px;border:1px solid #d9d9d9;outline:0}.emoji-mart-search-results{height:250px;overflow-y:scroll}.emoji-mart-category{position:relative}.emoji-mart-category .emoji-mart-emoji span{z-index:1;position:relative;text-align:center;cursor:default}.emoji-mart-category .emoji-mart-emoji:hover:before,.emoji-mart-emoji-selected:before{z-index:0;content:"";position:absolute;top:0;left:0;width:100%;height:100%;background-color:#f4f4f4;border-radius:100%;opacity:0;opacity:1}.emoji-mart-category-label{position:-webkit-sticky;position:sticky;top:0}.emoji-mart-static .emoji-mart-category-label{z-index:2;position:relative}.emoji-mart-category-label h3{display:block;font-size:16px;width:100%;font-weight:500;padding:5px 6px;background-color:#fff;background-color:hsla(0,0%,100%,.95)}.emoji-mart-emoji{position:relative;display:inline-block;font-size:0}.emoji-mart-no-results{font-size:14px;text-align:center;padding-top:70px;color:#858585}.emoji-mart-no-results .emoji-mart-category-label{display:none}.emoji-mart-no-results .emoji-mart-no-results-label{margin-top:.2em}.emoji-mart-no-results .emoji-mart-emoji:hover:before{content:none}.emoji-mart-preview{position:relative;height:70px}.emoji-mart-preview-data,.emoji-mart-preview-emoji,.emoji-mart-preview-skins{position:absolute;top:50%;-webkit-transform:translateY(-50%);-ms-transform:translateY(-50%);transform:translateY(-50%)}.emoji-mart-preview-emoji{left:12px}.emoji-mart-preview-data{left:68px;right:12px;word-break:break-all}.emoji-mart-preview-skins{right:30px;text-align:right}.emoji-mart-preview-name{font-size:14px}.emoji-mart-preview-shortname{font-size:12px;color:#888}.emoji-mart-preview-emoticon+.emoji-mart-preview-emoticon,.emoji-mart-preview-shortname+.emoji-mart-preview-emoticon,.emoji-mart-preview-shortname+.emoji-mart-preview-shortname{margin-left:.5em}.emoji-mart-preview-emoticon{font-size:11px;color:#bbb}.emoji-mart-title span{display:inline-block;vertical-align:middle}.emoji-mart-title .emoji-mart-emoji{padding:0}.emoji-mart-title-label{color:#999a9c;font-size:21px;font-weight:300}.emoji-mart-skin-swatches{font-size:0;padding:2px 0;border:1px solid #d9d9d9;border-radius:12px;background-color:#fff}.emoji-mart-skin-swatches-opened .emoji-mart-skin-swatch{width:16px;padding:0 2px}.emoji-mart-skin-swatches-opened .emoji-mart-skin-swatch-selected:after{opacity:.75}.emoji-mart-skin-swatch{display:inline-block;width:0;vertical-align:middle;-webkit-transition-property:width,padding;-o-transition-property:width,padding;transition-property:width,padding;-webkit-transition-duration:.125s;-o-transition-duration:.125s;transition-duration:.125s;-webkit-transition-timing-function:ease-out;-o-transition-timing-function:ease-out;transition-timing-function:ease-out}.emoji-mart-skin-swatch:first-child{-webkit-transition-delay:0s;-o-transition-delay:0s;transition-delay:0s}.emoji-mart-skin-swatch:nth-child(2){-webkit-transition-delay:.03s;-o-transition-delay:.03s;transition-delay:.03s}.emoji-mart-skin-swatch:nth-child(3){-webkit-transition-delay:.06s;-o-transition-delay:.06s;transition-delay:.06s}.emoji-mart-skin-swatch:nth-child(4){-webkit-transition-delay:.09s;-o-transition-delay:.09s;transition-delay:.09s}.emoji-mart-skin-swatch:nth-child(5){-webkit-transition-delay:.12s;-o-transition-delay:.12s;transition-delay:.12s}.emoji-mart-skin-swatch:nth-child(6){-webkit-transition-delay:.15s;-o-transition-delay:.15s;transition-delay:.15s}.emoji-mart-skin-swatch-selected{position:relative;width:16px;padding:0 2px}.emoji-mart-skin-swatch-selected:after{content:"";position:absolute;top:50%;left:50%;width:4px;height:4px;margin:-2px 0 0 -2px;background-color:#fff;border-radius:100%;pointer-events:none;opacity:0;-webkit-transition:opacity .2s ease-out;-o-transition:opacity .2s ease-out;transition:opacity .2s ease-out}.emoji-mart-skin{display:inline-block;width:100%;padding-top:100%;max-width:12px;border-radius:100%}.emoji-mart-skin-tone-1{background-color:#ffc93a}.emoji-mart-skin-tone-2{background-color:#fadcbc}.emoji-mart-skin-tone-3{background-color:#e0bb95}.emoji-mart-skin-tone-4{background-color:#bf8f68}.emoji-mart-skin-tone-5{background-color:#9b643d}.emoji-mart-skin-tone-6{background-color:#594539}.emoji-mart .vue-recycle-scroller{position:relative}.emoji-mart .vue-recycle-scroller.direction-vertical:not(.page-mode){overflow-y:auto}.emoji-mart .vue-recycle-scroller.direction-horizontal:not(.page-mode){overflow-x:auto}.emoji-mart .vue-recycle-scroller.direction-horizontal{display:-webkit-box;display:-ms-flexbox;display:flex}.emoji-mart .vue-recycle-scroller__slot{-webkit-box-flex:1;-ms-flex:auto 0 0px;flex:auto 0 0}.emoji-mart .vue-recycle-scroller__item-wrapper{-webkit-box-flex:1;-ms-flex:1;flex:1;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden;position:relative}.emoji-mart .vue-recycle-scroller.ready .vue-recycle-scroller__item-view{position:absolute;top:0;left:0;will-change:transform}.emoji-mart .vue-recycle-scroller.direction-vertical .vue-recycle-scroller__item-wrapper{width:100%}.emoji-mart .vue-recycle-scroller.direction-horizontal .vue-recycle-scroller__item-wrapper{height:100%}.emoji-mart .vue-recycle-scroller.ready.direction-vertical .vue-recycle-scroller__item-view{width:100%}.emoji-mart .vue-recycle-scroller.ready.direction-horizontal .vue-recycle-scroller__item-view{height:100%}.emoji-mart .resize-observer[data-v-b329ee4c]{border:none;background-color:transparent;opacity:0}.emoji-mart .resize-observer[data-v-b329ee4c],.emoji-mart .resize-observer[data-v-b329ee4c] object{position:absolute;top:0;left:0;z-index:-1;width:100%;height:100%;pointer-events:none;display:block;overflow:hidden}.emoji-mart-search .hidden{display:none;visibility:hidden}.nuxt-progress{position:fixed;top:0;left:0;right:0;height:2px;width:0;opacity:1;transition:width .1s,opacity .4s;background-color:#000;z-index:999999}.nuxt-progress.nuxt-progress-notransition{transition:none}.nuxt-progress-failed{background-color:red}html{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16px;word-spacing:1px;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;box-sizing:border-box}*,:after,:before{box-sizing:border-box;margin:0}.button--green{display:inline-block;border-radius:4px;border:1px solid #3b8070;color:#3b8070;text-decoration:none;padding:10px 30px}.button--green:hover{color:#fff;background-color:#3b8070}.button--grey{display:inline-block;border-radius:4px;border:1px solid #35495e;color:#35495e;text-decoration:none;padding:10px 30px;margin-left:15px}.button--grey:hover{color:#fff;background-color:#35495e}span.emoji-mart-emoji[data-v-3f691362]{padding:0}.selected[data-v-3f691362]{text-shadow:.25px 0 0 #000}.picker[data-v-3f691362]{position:absolute;top:10px;margin-left:auto;margin-right:auto;transform:translate(50%,50%)}.top[data-v-3f691362]{width:100%;background-color:var(--color-primary);height:3px}.selected[data-v-107ae01e]{text-shadow:.9px 0 0}span.emoji-mart-emoji[data-v-288717a6]{padding:0;transition:transform .2s}span.emoji-mart-emoji[data-v-288717a6]:hover{transform:scale(1.3)}.centered[data-v-288717a6]{position:absolute;left:50vw;right:50vw;margin-left:auto;margin-right:auto}span.emoji-mart-emoji[data-v-4f7c5820]{padding:0}.modal[data-v-4f7c5820]{z-index:100000000;top:0;-webkit-backdrop-filter:blur(.4px);backdrop-filter:blur(.4px);background-color:rgba(0,0,0,.2)}.modal[data-v-4f7c5820],.picker[data-v-4f7c5820]{position:absolute;left:0}.picker[data-v-4f7c5820]{z-index:10000000000;right:0;margin-left:auto;margin-right:auto}.tag[data-v-3fbcd028]{background-color:var(--color-primary);transition:transform .2s}.tag[data-v-3fbcd028]:hover{transform:scale(1.05)}</style><link rel="preload" href="/_nuxt/static/1673242855/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer/state.js" as="script"><link rel="preload" href="/_nuxt/static/1673242855/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer/payload.js" as="script"><link rel="preload" href="/_nuxt/static/1673242855/manifest.js" as="script">
+  </head>
+  <body>
+    <script data-n-head="ssr" data-hid="nuxt-color-mode-script" data-pbody="true">!function(){"use strict";var t=window,r=document,s=r.documentElement,n=["dark","light"],e=function(){for(var e="nuxt-color-mode=",t=r.cookie.split(";"),s=0;s<t.length;s++){for(var n=t[s];" "===n.charAt(0);)n=n.substring(1,n.length);if(0===n.indexOf(e))return n.substring(e.length,n.length)}return null}()||"system",a="system"===e?l():e;function c(e){e+="-mode";s.classList?s.classList.add(e):s.className+=" "+e}function o(e){return t.matchMedia("(prefers-color-scheme"+e+")")}function l(){if(t.matchMedia&&"not all"!==o("").media)for(var e of n)if(o(":"+e).matches)return e;return"light"}c(a),t.__NUXT_COLOR_MODE__={preference:e,value:a,getColorScheme:l,addClass:c,removeClass:function(e){e+="-mode";s.classList?s.classList.remove(e):s.className=s.className.replace(new RegExp(e,"g"),"")}}}()</script><div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div><div data-v-3f691362><div class="top" data-v-3f691362></div> <div class="mx-auto flex py-2 px-2 sm:px-4 items-center max-w-6xl justify-center" data-v-3f691362><div class="justify-left flex-grow flex-cols-4" data-v-3f691362><a href="/" class="text-xl nuxt-link-active" data-v-3f691362><span class="hidden sm:inline text-2xl" data-v-3f691362>Brian Caffey</span><span class="inline sm:hidden" data-v-3f691362>JBC</span></a></div> <div class="flex-grow relative" data-v-3f691362><nav z-index="10000" data-v-107ae01e data-v-3f691362><div data-v-107ae01e><ul class="items-right float-right hidden md:flex" data-v-107ae01e><li class="px-4 text-lg" data-v-107ae01e><a href="/blog/1" data-v-107ae01e>
+          Blog
+        </a></li> <li class="px-4 text-lg" data-v-107ae01e><a href="/projects" data-v-107ae01e>
+          Projects
+        </a></li> <li class="px-4 text-lg" data-v-107ae01e><a href="/contact" data-v-107ae01e>
+          Contact
+        </a></li></ul> <div class="flex justify-end md:hidden z-1000" data-v-107ae01e><button class="flex items-center px-3 py-2 border rounded menu-icon" data-v-107ae01e><svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="fill-current h-3 w-3" data-v-107ae01e><title data-v-107ae01e>Menu</title> <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" data-v-107ae01e></path></svg></button></div> <!----></div></nav></div></div> <div class="picker" data-v-3f691362><div class="centered" data-v-288717a6 data-v-3f691362><div class="grid items-center justify-center" data-v-288717a6><ul class="flex px-4" data-v-288717a6><li class="md:px-1 px-1 cursor-pointer" data-v-288717a6><span aria-label="🖥️, desktop_computer" class="emoji-mart-emoji" data-v-288717a6><span class="emoji-set-apple emoji-type-image" style="background-position:52.63% 12.28%;width:32px;height:32px"></span></span></li><li class="md:px-1 px-1 cursor-pointer" data-v-288717a6><span aria-label="🌞, sun_with_face" class="emoji-mart-emoji" data-v-288717a6><span class="emoji-set-apple emoji-type-image" style="background-position:8.77% 77.19%;width:32px;height:32px"></span></span></li><li class="md:px-1 px-1 cursor-pointer" data-v-288717a6><span aria-label="🌚, new_moon_with_face" class="emoji-mart-emoji" data-v-288717a6><span class="emoji-set-apple emoji-type-image" style="background-position:8.77% 70.18%;width:32px;height:32px"></span></span></li><li class="md:px-1 px-1 cursor-pointer" data-v-288717a6><span aria-label="☕, coffee" class="emoji-mart-emoji" data-v-288717a6><span class="emoji-set-apple emoji-type-image" style="background-position:94.74% 8.77%;width:32px;height:32px"></span></span></li> <li class="md:px-1 px-1 cursor-pointer" data-v-288717a6><div data-v-4f7c5820 data-v-288717a6><!----> <ul data-v-4f7c5820><li class="md:px-1 px-1 cursor-pointer" data-v-4f7c5820><span aria-label="🇺🇸, us, flag-us" class="emoji-mart-emoji" data-v-4f7c5820><span class="emoji-set-apple emoji-type-image" style="background-position:7.02% 68.42%;width:32px;height:32px"></span></span></li></ul> <div class="rounded-md z-10 picker" data-v-4f7c5820><div class="bg-white shadow-md rounded px-4 py-2 w-32 text" style="display:none" data-v-4f7c5820><a href="/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer" aria-current="page" class="nuxt-link-exact-active nuxt-link-active" data-v-4f7c5820><span aria-label="🇺🇸, us, flag-us" class="emoji-mart-emoji" data-v-4f7c5820><span class="emoji-set-apple emoji-type-image" style="background-position:7.02% 68.42%;width:16px;height:16px"></span></span> English <br data-v-4f7c5820></a><a href="/fr/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer" data-v-4f7c5820><span aria-label="🇫🇷, fr, flag-fr" class="emoji-mart-emoji" data-v-4f7c5820><span class="emoji-set-apple emoji-type-image" style="background-position:1.75% 91.23%;width:16px;height:16px"></span></span> Français <br data-v-4f7c5820></a><a href="/zh/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer" data-v-4f7c5820><span aria-label="🇨🇳, cn, flag-cn" class="emoji-mart-emoji" data-v-4f7c5820><span class="emoji-set-apple emoji-type-image" style="background-position:1.75% 36.84%;width:16px;height:16px"></span></span> 简体中文 <br data-v-4f7c5820></a><a href="/ru/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer" data-v-4f7c5820><span aria-label="🇷🇺, ru, flag-ru" class="emoji-mart-emoji" data-v-4f7c5820><span class="emoji-set-apple emoji-type-image" style="background-position:5.26% 92.98%;width:16px;height:16px"></span></span> Русский <br data-v-4f7c5820></a><a href="/jp/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer" data-v-4f7c5820><span aria-label="🇯🇵, jp, flag-jp" class="emoji-mart-emoji" data-v-4f7c5820><span class="emoji-set-apple emoji-type-image" style="background-position:3.51% 59.65%;width:16px;height:16px"></span></span> 日本語 <br data-v-4f7c5820></a><a href="/in/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer" data-v-4f7c5820><span aria-label="🇮🇳, flag-in" class="emoji-mart-emoji" data-v-4f7c5820><span class="emoji-set-apple emoji-type-image" style="background-position:3.51% 43.86%;width:16px;height:16px"></span></span> हिंदी <br data-v-4f7c5820></a></div></div></div></li></ul></div></div></div></div> <article data-v-07b74c72><!----> <div class="mx-auto max-w-5xl px-2 sm:px-4 md:px-4 lg:px-16 mt-2" data-v-07b74c72><h1 class="prose text-4xl leading-9 py-4 font-bold" data-v-07b74c72>
+      Installing Stable Diffusion on my 2016 Desktop Computer
+    </h1> <div class="flex flex-wrap -ml-1 py-2" data-v-21780fb6 data-v-07b74c72><a href="/blog/tags/stable-diffusion" data-v-3fbcd028 data-v-21780fb6><div class="px-2 text-lg text-white shadow rounded-lg bg-black mx-1 mt-1 uppercase cursor-pointer tag" data-v-3fbcd028>
+    stable-diffusion 🏷️
+    <!----></div></a><a href="/blog/tags/gpu" data-v-3fbcd028 data-v-21780fb6><div class="px-2 text-lg text-white shadow rounded-lg bg-black mx-1 mt-1 uppercase cursor-pointer tag" data-v-3fbcd028>
+    gpu 🏷️
+    <!----></div></a><a href="/blog/tags/ai" data-v-3fbcd028 data-v-21780fb6><div class="px-2 text-lg text-white shadow rounded-lg bg-black mx-1 mt-1 uppercase cursor-pointer tag" data-v-3fbcd028>
+    ai 🏷️
+    <!----></div></a></div> <!----> <p class="blog-date text-gray-500 mb-4" data-v-07b74c72>
+      Last Updated on
+      January 8, 2023
+    </p> <div class="p-4 my-4 bg-red-300 rounded" data-v-07b74c72><p data-v-07b74c72><strong data-v-07b74c72>
+          ⚠️ This article is a draft and is not yet complete. ⚠️
+        </strong></p></div> <div class="markdown nuxt-content" data-v-07b74c72 data-v-07b74c72><p data-v-07b74c72 data-v-07b74c72>This article will be me trying to install Stable Diffusion on my computer as fast as possible. I built my desktop computer 5 years ago, and I want to see how well it can run stable diffusion.</p>
+<h2 id="computer-specs" data-v-07b74c72 data-v-07b74c72><a href="#computer-specs" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a>Computer Specs</h2>
+<h3 id="cpu" data-v-07b74c72 data-v-07b74c72><a href="#cpu" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a>CPU</h3>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>$ lscpu
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   39 bits physical, 48 bits virtual
+CPU(s):                          8
+On-line CPU(s) list:             0-7
+Thread(s) per core:              2
+Core(s) per socket:              4
+Socket(s):                       1
+Vendor ID:                       GenuineIntel
+CPU family:                      6
+Model:                           94
+Model name:                      Intel(R) Core(TM) i7-6700K CPU @ 4.00GHz
+Stepping:                        3
+CPU MHz:                         4008.000
+BogoMIPS:                        8016.00
+Hypervisor vendor:               Microsoft
+Virtualization type:             full
+L1d cache:                       128 KiB
+L1i cache:                       128 KiB
+L2 cache:                        1 MiB
+L3 cache:                        8 MiB
+</code></pre></div>
+<h3 id="gpu" data-v-07b74c72 data-v-07b74c72><a href="#gpu" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a>GPU</h3>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>$ nvidia-smi -L
+GPU 0: NVIDIA GeForce GTX 1080 (UUID: GPU-a4668849-8693-dced-f317-c7af17e8c6ee)
+$ nvidia-smi
+Sun Jan  8 22:11:06 2023
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 525.65       Driver Version: 527.37       CUDA Version: 12.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA GeForce ...  On   | 00000000:01:00.0  On |                  N/A |
+| 28%   32C    P0    39W / 172W |   2319MiB /  8192MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+</code></pre></div>
+<h2 id="invoke-ai" data-v-07b74c72 data-v-07b74c72><a href="#invoke-ai" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a>Invoke AI</h2>
+<p data-v-07b74c72 data-v-07b74c72>This looks like a good fork that serves as the basis for many commercial products. It has over 9K stars on GitHub and it includes a Web UI, as well as an automatic installation script.</p>
+<p data-v-07b74c72 data-v-07b74c72><a href="https://invoke-ai.github.io/InvokeAI/installation/" rel="nofollow noopener noreferrer" target="_blank" data-v-07b74c72 data-v-07b74c72>https://invoke-ai.github.io/InvokeAI/installation/</a></p>
+<h3 id="invokeai-automated-installation" data-v-07b74c72 data-v-07b74c72><a href="#invokeai-automated-installation" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a>InvokeAI Automated Installation</h3>
+<blockquote data-v-07b74c72 data-v-07b74c72>
+<p data-v-07b74c72 data-v-07b74c72>Introduction</p>
+<p data-v-07b74c72 data-v-07b74c72>The automated installer is a shell script that attempts to automate every step needed to install and run InvokeAI on a stock computer running recent versions of Linux, MacOS or Windows. It will leave you with a version that runs a stable version of InvokeAI with the option to upgrade to experimental versions later.</p>
+</blockquote>
+<h3 id="hardware-requirements" data-v-07b74c72 data-v-07b74c72><a href="#hardware-requirements" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a>Hardware Requirements</h3>
+<h3 id="httpsinvoke-aigithubioinvokeaihardware-requirements" data-v-07b74c72 data-v-07b74c72><a href="#httpsinvoke-aigithubioinvokeaihardware-requirements" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a><a href="https://invoke-ai.github.io/InvokeAI/#hardware-requirements" rel="nofollow noopener noreferrer" target="_blank" data-v-07b74c72 data-v-07b74c72>https://invoke-ai.github.io/InvokeAI/#hardware-requirements</a></h3>
+<blockquote data-v-07b74c72 data-v-07b74c72>
+<p data-v-07b74c72 data-v-07b74c72>Installation requires roughly 18G of free disk space to load the libraries and recommended model weights files.</p>
+<p data-v-07b74c72 data-v-07b74c72>Regardless of your destination disk, your system drive (C:\ on Windows, / on macOS/Linux) requires at least 6GB of free disk space to download and cache python dependencies. NOTE for Linux users: if your temporary directory is mounted as a tmpfs, ensure it has sufficient space.</p>
+</blockquote>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>C:\Users\Brian>dir|find "bytes free"
+              45 Dir(s)  23,610,232,832 bytes free (23GB)
+</code></pre></div>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>C:\Users\Brian>dir d:|find "bytes free"
+              17 Dir(s)  258,141,052,928 bytes free (258)
+</code></pre></div>
+<h3 id="python-version" data-v-07b74c72 data-v-07b74c72><a href="#python-version" aria-hidden="true" tabindex="-1" data-v-07b74c72 data-v-07b74c72><span class="icon icon-link" data-v-07b74c72 data-v-07b74c72></span></a>Python version</h3>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>C:\Users\Brian>python --version
+Python 3.9.5
+</code></pre></div>
+<p data-v-07b74c72 data-v-07b74c72><a href="https://learn.microsoft.com/en-us/cpp/windows/deploying-native-desktop-applications-visual-cpp?view=msvc-170" rel="nofollow noopener noreferrer" target="_blank" data-v-07b74c72 data-v-07b74c72>https://learn.microsoft.com/en-us/cpp/windows/deploying-native-desktop-applications-visual-cpp?view=msvc-170</a></p>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>This script will install InvokeAI and its dependencies.
+
+BEFORE YOU START PLEASE MAKE SURE TO DO THE FOLLOWING
+1. Install python 3.9 or higher.
+2. Double-click on the file WinLongPathsEnabled.reg in order to
+   enable long path support on your system.
+3. Install the Visual C++ core libraries.
+   Pleaase download and install the libraries from:
+   https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+See https://invoke-ai.github.io/InvokeAI/installation/INSTALL_AUTOMATED/ for more details.
+
+Press any key to continue . . .
+***** Checking and Updating Python *****
+
+Setting up requirements file for your system.
+        1 file(s) copied.
+Select the path to install InvokeAI's directory into [C:\Users\Brian]: D:\InvokeAI
+You have chosen to install InvokeAI into "D:\InvokeAI\invokeai". OK? [Y/n]:
+
+...
+
+Collecting k-diffusion
+  Downloading https://github.com/Birch-san/k-diffusion/archive/refs/heads/mps.zip (38 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+    Preparing wheel metadata ... done
+Collecting pypatchmatch
+  Downloading https://github.com/invoke-ai/PyPatchMatch/archive/refs/tags/0.1.5.zip (19 kB)
+Collecting clip
+  Downloading https://github.com/openai/CLIP/archive/eaa22acb90a5876642d0507623e859909230a52d.zip (4.3 MB)
+     |████████████████████████████████| 4.3 MB 6.8 MB/s
+Collecting clipseg
+  Downloading https://github.com/invoke-ai/clipseg/archive/relaxed-python-requirement.zip
+     / 1.4 MB ...
+Collecting albumentations
+  Downloading albumentations-1.3.0-py3-none-any.whl (123 kB)
+     |████████████████████████████████| 123 kB 2.2 MB/s
+Collecting diffusers==0.10.*
+  Downloading diffusers-0.10.2-py3-none-any.whl (503 kB)
+     |████████████████████████████████| 503 kB ...
+Collecting einops
+  Downloading einops-0.6.0-py3-none-any.whl (41 kB)
+     |████████████████████████████████| 41 kB ...
+Collecting eventlet
+  Downloading eventlet-0.33.2-py2.py3-none-any.whl (226 kB)
+     |████████████████████████████████| 226 kB ...
+Collecting facexlib
+  Downloading facexlib-0.2.5-py3-none-any.whl (59 kB)
+     |████████████████████████████████| 59 kB 3.4 MB/s
+Collecting flask==2.1.3
+  Downloading Flask-2.1.3-py3-none-any.whl (95 kB)
+     |████████████████████████████████| 95 kB 6.4 MB/s
+Collecting flask_cors==3.0.10
+  Downloading Flask_Cors-3.0.10-py2.py3-none-any.whl (14 kB)
+Collecting flask_socketio==5.3.0
+  Downloading Flask_SocketIO-5.3.0-py3-none-any.whl (17 kB)
+Collecting flaskwebgui==1.0.3
+  Downloading flaskwebgui-1.0.3-py3-none-any.whl (6.7 kB)
+Collecting getpass_asterisk
+  Downloading getpass_asterisk-1.0.1-py3-none-any.whl (6.8 kB)
+Collecting gfpgan==1.3.8
+  Downloading gfpgan-1.3.8-py3-none-any.whl (52 kB)
+     |████████████████████████████████| 52 kB ...
+Collecting huggingface-hub
+  Downloading huggingface_hub-0.11.1-py3-none-any.whl (182 kB)
+     |████████████████████████████████| 182 kB 6.4 MB/s
+Collecting imageio
+  Downloading imageio-2.24.0-py3-none-any.whl (3.4 MB)
+     |████████████████████████████████| 3.4 MB ...
+Collecting imageio-ffmpeg
+  Downloading imageio_ffmpeg-0.4.7-py3-none-win_amd64.whl (22.6 MB)
+     |████████████████████████████████| 22.6 MB 6.4 MB/s
+Collecting kornia
+  Downloading kornia-0.6.9-py2.py3-none-any.whl (569 kB)
+     |████████████████████████████████| 569 kB 6.4 MB/s
+Collecting numpy==1.23.*
+  Downloading numpy-1.23.5-cp39-cp39-win_amd64.whl (14.7 MB)
+     |████████████████████████████████| 14.7 MB 6.4 MB/s
+Collecting omegaconf
+  Downloading omegaconf-2.3.0-py3-none-any.whl (79 kB)
+     |████████████████████████████████| 79 kB 5.5 MB/s
+Collecting opencv-python
+  Downloading opencv_python-4.7.0.68-cp37-abi3-win_amd64.whl (38.2 MB)
+     |████████████████████████████████| 38.2 MB 6.4 MB/s
+Collecting picklescan
+  Downloading picklescan-0.0.7-py3-none-any.whl (10 kB)
+Collecting pillow
+  Downloading Pillow-9.4.0-cp39-cp39-win_amd64.whl (2.5 MB)
+     |████████████████████████████████| 2.5 MB ...
+Collecting pip>=22
+  Downloading pip-22.3.1-py3-none-any.whl (2.1 MB)
+     |████████████████████████████████| 2.1 MB ...
+Collecting pudb
+  Downloading pudb-2014.1-py2.py3-none-any.whl (49 kB)
+     |████████████████████████████████| 49 kB ...
+Collecting pyreadline3
+  Downloading pyreadline3-3.4.1-py3-none-any.whl (95 kB)
+     |████████████████████████████████| 95 kB 6.4 MB/s
+Collecting pytorch-lightning==1.7.7
+  Downloading pytorch_lightning-1.7.7-py3-none-any.whl (708 kB)
+     |████████████████████████████████| 708 kB 6.8 MB/s
+Collecting realesrgan
+  Downloading realesrgan-0.3.0-py3-none-any.whl (26 kB)
+Collecting requests==2.25.1
+  Downloading requests-2.25.1-py2.py3-none-any.whl (61 kB)
+     |████████████████████████████████| 61 kB ...
+Collecting scikit-image>=0.19
+  Downloading scikit_image-0.19.3-cp39-cp39-win_amd64.whl (12.1 MB)
+     |████████████████████████████████| 12.1 MB 6.4 MB/s
+Collecting send2trash
+  Downloading Send2Trash-1.8.0-py3-none-any.whl (18 kB)
+Collecting streamlit
+  Downloading streamlit-1.16.0-py2.py3-none-any.whl (9.2 MB)
+     |████████████████████████████████| 9.2 MB ...
+Collecting taming-transformers-rom1504
+  Downloading taming_transformers_rom1504-0.0.6-py3-none-any.whl (51 kB)
+     |████████████████████████████████| 51 kB 100 kB/s
+Collecting test-tube>=0.7.5
+  Downloading test_tube-0.7.5.tar.gz (21 kB)
+Collecting torch-fidelity
+  Downloading torch_fidelity-0.3.0-py3-none-any.whl (37 kB)
+Collecting torchmetrics
+  Downloading torchmetrics-0.11.0-py3-none-any.whl (512 kB)
+     |████████████████████████████████| 512 kB 6.4 MB/s
+Collecting transformers==4.25.*
+  Downloading transformers-4.25.1-py3-none-any.whl (5.8 MB)
+     |████████████████████████████████| 5.8 MB ...
+Collecting torch==1.12.1
+  Downloading https://download.pytorch.org/whl/cu116/torch-1.12.1%2Bcu116-cp39-cp39-win_amd64.whl (2388.0 MB)
+     |█████████████████               | 1266.9 MB 6.8 MB/s eta 0:02:45
+</code></pre></div>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>This script will install InvokeAI and its dependencies.
+
+BEFORE YOU START PLEASE MAKE SURE TO DO THE FOLLOWING
+1. Install python 3.9 or higher.
+2. Double-click on the file WinLongPathsEnabled.reg in order to
+   enable long path support on your system.
+3. Install the Visual C++ core libraries.
+   Pleaase download and install the libraries from:
+   https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+See https://invoke-ai.github.io/InvokeAI/installation/INSTALL_AUTOMATED/ for more details.
+
+Press any key to continue . . .
+***** Checking and Updating Python *****
+
+Setting up requirements file for your system.
+        1 file(s) copied.
+Select the path to install InvokeAI's directory into [C:\Users\Brian]: D:\InvokeAI
+You have chosen to install InvokeAI into "D:\InvokeAI\invokeai". OK? [Y/n]:
+
+*** Creating Runtime Directory D:\InvokeAI\invokeai ***
+Successful.
+
+** Creating Virtual Environment for InvokeAI **
+Successful.
+
+*** Installing InvokeAI Requirements ***
+Activating environment
+updating pip with "D:\InvokeAI\invokeai\.venv\Scripts\python"
+Looking in links: c:\Users\Brian\AppData\Local\Temp\tmp6cex7v5c
+Requirement already satisfied: setuptools in d:\invokeai\invokeai\.venv\lib\site-packages (56.0.0)
+Requirement already satisfied: pip in d:\invokeai\invokeai\.venv\lib\site-packages (21.1.1)
+adding trusted host: 'https://download.pytorch.org' (from line 3 of requirements.txt)
+Looking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu116
+Collecting k-diffusion
+  Downloading https://github.com/Birch-san/k-diffusion/archive/refs/heads/mps.zip (38 kB)
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... done
+  Installing backend dependencies ... done
+    Preparing wheel metadata ... done
+Collecting pypatchmatch
+  Downloading https://github.com/invoke-ai/PyPatchMatch/archive/refs/tags/0.1.5.zip (19 kB)
+Collecting clip
+  Downloading https://github.com/openai/CLIP/archive/eaa22acb90a5876642d0507623e859909230a52d.zip (4.3 MB)
+     |████████████████████████████████| 4.3 MB 6.8 MB/s
+Collecting clipseg
+  Downloading https://github.com/invoke-ai/clipseg/archive/relaxed-python-requirement.zip
+     / 1.4 MB ...
+Collecting albumentations
+  Downloading albumentations-1.3.0-py3-none-any.whl (123 kB)
+     |████████████████████████████████| 123 kB 2.2 MB/s
+Collecting diffusers==0.10.*
+  Downloading diffusers-0.10.2-py3-none-any.whl (503 kB)
+     |████████████████████████████████| 503 kB ...
+Collecting einops
+  Downloading einops-0.6.0-py3-none-any.whl (41 kB)
+     |████████████████████████████████| 41 kB ...
+Collecting eventlet
+  Downloading eventlet-0.33.2-py2.py3-none-any.whl (226 kB)
+     |████████████████████████████████| 226 kB ...
+Collecting facexlib
+  Downloading facexlib-0.2.5-py3-none-any.whl (59 kB)
+     |████████████████████████████████| 59 kB 3.4 MB/s
+Collecting flask==2.1.3
+  Downloading Flask-2.1.3-py3-none-any.whl (95 kB)
+     |████████████████████████████████| 95 kB 6.4 MB/s
+Collecting flask_cors==3.0.10
+  Downloading Flask_Cors-3.0.10-py2.py3-none-any.whl (14 kB)
+Collecting flask_socketio==5.3.0
+  Downloading Flask_SocketIO-5.3.0-py3-none-any.whl (17 kB)
+Collecting flaskwebgui==1.0.3
+  Downloading flaskwebgui-1.0.3-py3-none-any.whl (6.7 kB)
+Collecting getpass_asterisk
+  Downloading getpass_asterisk-1.0.1-py3-none-any.whl (6.8 kB)
+Collecting gfpgan==1.3.8
+  Downloading gfpgan-1.3.8-py3-none-any.whl (52 kB)
+     |████████████████████████████████| 52 kB ...
+Collecting huggingface-hub
+  Downloading huggingface_hub-0.11.1-py3-none-any.whl (182 kB)
+     |████████████████████████████████| 182 kB 6.4 MB/s
+Collecting imageio
+  Downloading imageio-2.24.0-py3-none-any.whl (3.4 MB)
+     |████████████████████████████████| 3.4 MB ...
+Collecting imageio-ffmpeg
+  Downloading imageio_ffmpeg-0.4.7-py3-none-win_amd64.whl (22.6 MB)
+     |████████████████████████████████| 22.6 MB 6.4 MB/s
+Collecting kornia
+  Downloading kornia-0.6.9-py2.py3-none-any.whl (569 kB)
+     |████████████████████████████████| 569 kB 6.4 MB/s
+Collecting numpy==1.23.*
+  Downloading numpy-1.23.5-cp39-cp39-win_amd64.whl (14.7 MB)
+     |████████████████████████████████| 14.7 MB 6.4 MB/s
+Collecting omegaconf
+  Downloading omegaconf-2.3.0-py3-none-any.whl (79 kB)
+     |████████████████████████████████| 79 kB 5.5 MB/s
+Collecting opencv-python
+  Downloading opencv_python-4.7.0.68-cp37-abi3-win_amd64.whl (38.2 MB)
+     |████████████████████████████████| 38.2 MB 6.4 MB/s
+Collecting picklescan
+  Downloading picklescan-0.0.7-py3-none-any.whl (10 kB)
+Collecting pillow
+  Downloading Pillow-9.4.0-cp39-cp39-win_amd64.whl (2.5 MB)
+     |████████████████████████████████| 2.5 MB ...
+Collecting pip>=22
+  Downloading pip-22.3.1-py3-none-any.whl (2.1 MB)
+     |████████████████████████████████| 2.1 MB ...
+Collecting pudb
+  Downloading pudb-2014.1-py2.py3-none-any.whl (49 kB)
+     |████████████████████████████████| 49 kB ...
+Collecting pyreadline3
+  Downloading pyreadline3-3.4.1-py3-none-any.whl (95 kB)
+     |████████████████████████████████| 95 kB 6.4 MB/s
+Collecting pytorch-lightning==1.7.7
+  Downloading pytorch_lightning-1.7.7-py3-none-any.whl (708 kB)
+     |████████████████████████████████| 708 kB 6.8 MB/s
+Collecting realesrgan
+  Downloading realesrgan-0.3.0-py3-none-any.whl (26 kB)
+Collecting requests==2.25.1
+  Downloading requests-2.25.1-py2.py3-none-any.whl (61 kB)
+     |████████████████████████████████| 61 kB ...
+Collecting scikit-image>=0.19
+  Downloading scikit_image-0.19.3-cp39-cp39-win_amd64.whl (12.1 MB)
+     |████████████████████████████████| 12.1 MB 6.4 MB/s
+Collecting send2trash
+  Downloading Send2Trash-1.8.0-py3-none-any.whl (18 kB)
+Collecting streamlit
+  Downloading streamlit-1.16.0-py2.py3-none-any.whl (9.2 MB)
+     |████████████████████████████████| 9.2 MB ...
+Collecting taming-transformers-rom1504
+  Downloading taming_transformers_rom1504-0.0.6-py3-none-any.whl (51 kB)
+     |████████████████████████████████| 51 kB 100 kB/s
+Collecting test-tube>=0.7.5
+  Downloading test_tube-0.7.5.tar.gz (21 kB)
+Collecting torch-fidelity
+  Downloading torch_fidelity-0.3.0-py3-none-any.whl (37 kB)
+Collecting torchmetrics
+  Downloading torchmetrics-0.11.0-py3-none-any.whl (512 kB)
+     |████████████████████████████████| 512 kB 6.4 MB/s
+Collecting transformers==4.25.*
+  Downloading transformers-4.25.1-py3-none-any.whl (5.8 MB)
+     |████████████████████████████████| 5.8 MB ...
+Collecting torch==1.12.1
+  Downloading https://download.pytorch.org/whl/cu116/torch-1.12.1%2Bcu116-cp39-cp39-win_amd64.whl (2388.0 MB)
+     |████████████████████████████████| 2388.0 MB 2.4 kB/s
+Collecting torchvision==0.13.1
+  Downloading https://download.pytorch.org/whl/cu116/torchvision-0.13.1%2Bcu116-cp39-cp39-win_amd64.whl (2.6 MB)
+     |████████████████████████████████| 2.6 MB ...
+Collecting tqdm
+  Downloading tqdm-4.64.1-py2.py3-none-any.whl (78 kB)
+     |████████████████████████████████| 78 kB 5.1 MB/s
+Collecting accelerate
+  Downloading accelerate-0.15.0-py3-none-any.whl (191 kB)
+     |████████████████████████████████| 191 kB ...
+Collecting scipy
+  Downloading scipy-1.10.0-cp39-cp39-win_amd64.whl (42.5 MB)
+     |████████████████████████████████| 42.5 MB 109 kB/s
+Collecting torchsde
+  Downloading torchsde-0.2.5-py3-none-any.whl (59 kB)
+     |████████████████████████████████| 59 kB 3.0 MB/s
+Collecting torchdiffeq
+  Downloading torchdiffeq-0.2.3-py3-none-any.whl (31 kB)
+Collecting jsonmerge
+  Downloading jsonmerge-1.9.0.tar.gz (32 kB)
+Collecting clean-fid
+  Downloading clean_fid-0.1.35-py3-none-any.whl (26 kB)
+Collecting resize-right
+  Downloading resize_right-0.0.2-py3-none-any.whl (8.9 kB)
+Collecting wandb
+  Downloading wandb-0.13.7-py2.py3-none-any.whl (1.9 MB)
+     |████████████████████████████████| 1.9 MB 6.4 MB/s
+Collecting ftfy
+  Downloading ftfy-6.1.1-py3-none-any.whl (53 kB)
+     |████████████████████████████████| 53 kB 711 kB/s
+Collecting regex
+  Downloading regex-2022.10.31-cp39-cp39-win_amd64.whl (267 kB)
+     |████████████████████████████████| 267 kB ...
+Collecting matplotlib
+  Downloading matplotlib-3.6.2-cp39-cp39-win_amd64.whl (7.2 MB)
+     |████████████████████████████████| 7.2 MB ...
+Collecting filelock
+  Downloading filelock-3.9.0-py3-none-any.whl (9.7 kB)
+Collecting importlib-metadata
+  Downloading importlib_metadata-6.0.0-py3-none-any.whl (21 kB)
+Collecting itsdangerous>=2.0
+  Downloading itsdangerous-2.1.2-py3-none-any.whl (15 kB)
+Collecting Jinja2>=3.0
+  Downloading Jinja2-3.1.2-py3-none-any.whl (133 kB)
+     |████████████████████████████████| 133 kB 6.4 MB/s
+Collecting Werkzeug>=2.0
+  Downloading Werkzeug-2.2.2-py3-none-any.whl (232 kB)
+     |████████████████████████████████| 232 kB 6.4 MB/s
+Collecting click>=8.0
+  Downloading click-8.1.3-py3-none-any.whl (96 kB)
+     |████████████████████████████████| 96 kB 2.8 MB/s
+Collecting Six
+  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Collecting python-socketio>=5.0.2
+  Downloading python_socketio-5.7.2-py3-none-any.whl (56 kB)
+     |████████████████████████████████| 56 kB 2.1 MB/s
+Collecting psutil==5.9.4
+  Downloading psutil-5.9.4-cp36-abi3-win_amd64.whl (252 kB)
+     |████████████████████████████████| 252 kB ...
+Collecting lmdb
+  Downloading lmdb-1.4.0-cp39-cp39-win_amd64.whl (105 kB)
+     |████████████████████████████████| 105 kB ...
+Collecting pyyaml
+  Downloading PyYAML-6.0-cp39-cp39-win_amd64.whl (151 kB)
+     |████████████████████████████████| 151 kB ...
+Collecting basicsr>=1.4.2
+  Downloading basicsr-1.4.2.tar.gz (172 kB)
+     |████████████████████████████████| 172 kB 6.8 MB/s
+Collecting yapf
+  Downloading yapf-0.32.0-py2.py3-none-any.whl (190 kB)
+     |████████████████████████████████| 190 kB 6.4 MB/s
+Collecting tb-nightly
+  Downloading tb_nightly-2.12.0a20230107-py3-none-any.whl (5.7 MB)
+     |████████████████████████████████| 5.7 MB ...
+Collecting pyDeprecate>=0.3.1
+  Downloading pyDeprecate-0.3.2-py3-none-any.whl (10 kB)
+Collecting typing-extensions>=4.0.0
+  Using cached typing_extensions-4.4.0-py3-none-any.whl (26 kB)
+Collecting tensorboard>=2.9.1
+  Downloading tensorboard-2.11.0-py3-none-any.whl (6.0 MB)
+     |████████████████████████████████| 6.0 MB 6.4 MB/s
+Collecting fsspec[http]!=2021.06.0,>=2021.05.0
+  Downloading fsspec-2022.11.0-py3-none-any.whl (139 kB)
+     |████████████████████████████████| 139 kB ...
+Collecting packaging>=17.0
+  Downloading packaging-23.0-py3-none-any.whl (42 kB)
+     |████████████████████████████████| 42 kB 572 kB/s
+Collecting certifi>=2017.4.17
+  Downloading certifi-2022.12.7-py3-none-any.whl (155 kB)
+     |████████████████████████████████| 155 kB 6.8 MB/s
+Collecting chardet&lt;5,>=3.0.2
+  Downloading chardet-4.0.0-py2.py3-none-any.whl (178 kB)
+     |████████████████████████████████| 178 kB 6.4 MB/s
+Collecting urllib3&lt;1.27,>=1.21.1
+  Downloading urllib3-1.26.13-py2.py3-none-any.whl (140 kB)
+     |████████████████████████████████| 140 kB 6.8 MB/s
+Collecting idna&lt;3,>=2.5
+  Downloading idna-2.10-py2.py3-none-any.whl (58 kB)
+     |████████████████████████████████| 58 kB 2.9 MB/s
+Collecting tokenizers!=0.11.3,&lt;0.14,>=0.11.1
+  Downloading tokenizers-0.13.2-cp39-cp39-win_amd64.whl (3.3 MB)
+     |████████████████████████████████| 3.3 MB 6.4 MB/s
+Collecting filterpy
+  Downloading filterpy-1.4.5.zip (177 kB)
+     |████████████████████████████████| 177 kB ...
+Collecting numba
+  Downloading numba-0.56.4-cp39-cp39-win_amd64.whl (2.5 MB)
+     |████████████████████████████████| 2.5 MB 6.4 MB/s
+Collecting tifffile>=2019.7.26
+  Downloading tifffile-2022.10.10-py3-none-any.whl (210 kB)
+     |████████████████████████████████| 210 kB ...
+Collecting PyWavelets>=1.1.1
+  Downloading PyWavelets-1.4.1-cp39-cp39-win_amd64.whl (4.2 MB)
+     |████████████████████████████████| 4.2 MB ...
+Collecting networkx>=2.2
+  Downloading networkx-3.0-py3-none-any.whl (2.0 MB)
+     |████████████████████████████████| 2.0 MB 6.8 MB/s
+Collecting pandas>=0.20.3
+  Downloading pandas-1.5.2-cp39-cp39-win_amd64.whl (10.9 MB)
+     |████████████████████████████████| 10.9 MB 6.4 MB/s
+Collecting future
+  Downloading future-0.18.2.tar.gz (829 kB)
+     |████████████████████████████████| 829 kB ...
+Collecting addict
+  Downloading addict-2.4.0-py3-none-any.whl (3.8 kB)
+Collecting colorama
+  Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Collecting aiohttp!=4.0.0a0,!=4.0.0a1
+  Downloading aiohttp-3.8.3-cp39-cp39-win_amd64.whl (323 kB)
+     |████████████████████████████████| 323 kB ...
+Collecting multidict&lt;7.0,>=4.5
+  Downloading multidict-6.0.4-cp39-cp39-win_amd64.whl (28 kB)
+Collecting frozenlist>=1.1.1
+  Downloading frozenlist-1.3.3-cp39-cp39-win_amd64.whl (34 kB)
+Collecting attrs>=17.3.0
+  Downloading attrs-22.2.0-py3-none-any.whl (60 kB)
+     |████████████████████████████████| 60 kB 3.5 MB/s
+Collecting charset-normalizer&lt;3.0,>=2.0
+  Downloading charset_normalizer-2.1.1-py3-none-any.whl (39 kB)
+Collecting yarl&lt;2.0,>=1.0
+  Downloading yarl-1.8.2-cp39-cp39-win_amd64.whl (56 kB)
+     |████████████████████████████████| 56 kB 3.8 MB/s
+Collecting async-timeout&lt;5.0,>=4.0.0a3
+  Downloading async_timeout-4.0.2-py3-none-any.whl (5.8 kB)
+Collecting aiosignal>=1.1.2
+  Downloading aiosignal-1.3.1-py3-none-any.whl (7.6 kB)
+Collecting zipp>=0.5
+  Downloading zipp-3.11.0-py3-none-any.whl (6.6 kB)
+Collecting MarkupSafe>=2.0
+  Downloading MarkupSafe-2.1.1-cp39-cp39-win_amd64.whl (17 kB)
+Collecting python-dateutil>=2.8.1
+  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+Collecting pytz>=2020.1
+  Downloading pytz-2022.7-py2.py3-none-any.whl (499 kB)
+     |████████████████████████████████| 499 kB ...
+Collecting python-engineio>=4.3.0
+  Downloading python_engineio-4.3.4-py3-none-any.whl (52 kB)
+     |████████████████████████████████| 52 kB 619 kB/s
+Collecting bidict>=0.21.0
+  Downloading bidict-0.22.1-py3-none-any.whl (35 kB)
+Collecting google-auth-oauthlib&lt;0.5,>=0.4.1
+  Downloading google_auth_oauthlib-0.4.6-py2.py3-none-any.whl (18 kB)
+Collecting markdown>=2.6.8
+  Downloading Markdown-3.4.1-py3-none-any.whl (93 kB)
+     |████████████████████████████████| 93 kB 756 kB/s
+Collecting google-auth&lt;3,>=1.6.3
+  Downloading google_auth-2.15.0-py2.py3-none-any.whl (177 kB)
+     |████████████████████████████████| 177 kB ...
+Collecting wheel>=0.26
+  Using cached wheel-0.38.4-py3-none-any.whl (36 kB)
+Collecting tensorboard-data-server&lt;0.7.0,>=0.6.0
+  Downloading tensorboard_data_server-0.6.1-py3-none-any.whl (2.4 kB)
+Collecting protobuf&lt;4,>=3.9.2
+  Downloading protobuf-3.20.3-cp39-cp39-win_amd64.whl (904 kB)
+     |████████████████████████████████| 904 kB 6.4 MB/s
+Collecting absl-py>=0.4
+  Downloading absl_py-1.3.0-py3-none-any.whl (124 kB)
+     |████████████████████████████████| 124 kB ...
+Collecting tensorboard-plugin-wit>=1.6.0
+  Downloading tensorboard_plugin_wit-1.8.1-py3-none-any.whl (781 kB)
+     |████████████████████████████████| 781 kB 6.4 MB/s
+Requirement already satisfied: setuptools>=41.0.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=2.9.1->pytorch-lightning==1.7.7->-r environments-and-requirements/requirements-base.txt (line 25)) (56.0.0)
+Collecting grpcio>=1.24.3
+  Downloading grpcio-1.51.1-cp39-cp39-win_amd64.whl (3.7 MB)
+     |████████████████████████████████| 3.7 MB 6.8 MB/s
+Collecting pyasn1-modules>=0.2.1
+  Downloading pyasn1_modules-0.2.8-py2.py3-none-any.whl (155 kB)
+     |████████████████████████████████| 155 kB ...
+Collecting cachetools&lt;6.0,>=2.0.0
+  Downloading cachetools-5.2.1-py3-none-any.whl (9.3 kB)
+Collecting rsa&lt;5,>=3.1.4
+  Downloading rsa-4.9-py3-none-any.whl (34 kB)
+Collecting requests-oauthlib>=0.7.0
+  Downloading requests_oauthlib-1.3.1-py2.py3-none-any.whl (23 kB)
+Collecting pyasn1&lt;0.5.0,>=0.4.6
+  Downloading pyasn1-0.4.8-py2.py3-none-any.whl (77 kB)
+     |████████████████████████████████| 77 kB 2.7 MB/s
+Collecting oauthlib>=3.0.0
+  Downloading oauthlib-3.2.2-py3-none-any.whl (151 kB)
+     |████████████████████████████████| 151 kB 6.8 MB/s
+Collecting opencv-python-headless>=4.1.1
+  Downloading opencv_python_headless-4.7.0.68-cp37-abi3-win_amd64.whl (38.1 MB)
+     |████████████████████████████████| 38.1 MB 35 kB/s
+Collecting qudida>=0.0.4
+  Downloading qudida-0.0.4-py3-none-any.whl (3.5 kB)
+Collecting scikit-learn>=0.19.1
+  Downloading scikit_learn-1.2.0-cp39-cp39-win_amd64.whl (8.3 MB)
+     |████████████████████████████████| 8.3 MB 6.4 MB/s
+Collecting joblib>=1.1.1
+  Downloading joblib-1.2.0-py3-none-any.whl (297 kB)
+     |████████████████████████████████| 297 kB ...
+Collecting threadpoolctl>=2.0.0
+  Downloading threadpoolctl-3.1.0-py3-none-any.whl (14 kB)
+Collecting greenlet>=0.3
+  Downloading greenlet-2.0.1-cp39-cp39-win_amd64.whl (190 kB)
+     |████████████████████████████████| 190 kB ...
+Collecting dnspython>=1.15.0
+  Downloading dnspython-2.2.1-py3-none-any.whl (269 kB)
+     |████████████████████████████████| 269 kB 6.8 MB/s
+Collecting antlr4-python3-runtime==4.9.*
+  Downloading antlr4-python3-runtime-4.9.3.tar.gz (117 kB)
+     |████████████████████████████████| 117 kB 6.4 MB/s
+Collecting pygments>=1.0
+  Downloading Pygments-2.14.0-py3-none-any.whl (1.1 MB)
+     |████████████████████████████████| 1.1 MB 6.8 MB/s
+Collecting urwid>=1.1.1
+  Downloading urwid-2.1.2.tar.gz (634 kB)
+     |████████████████████████████████| 634 kB ...
+Collecting gitpython!=3.1.19
+  Downloading GitPython-3.1.30-py3-none-any.whl (184 kB)
+     |████████████████████████████████| 184 kB ...
+Collecting pydeck>=0.1.dev5
+  Downloading pydeck-0.8.0-py2.py3-none-any.whl (4.7 MB)
+     |████████████████████████████████| 4.7 MB 6.8 MB/s
+Collecting blinker>=1.0.0
+  Downloading blinker-1.5-py2.py3-none-any.whl (12 kB)
+Collecting altair>=3.2.0
+  Downloading altair-4.2.0-py3-none-any.whl (812 kB)
+     |████████████████████████████████| 812 kB 6.8 MB/s
+Collecting semver
+  Downloading semver-2.13.0-py2.py3-none-any.whl (12 kB)
+Collecting tornado>=5.0
+  Downloading tornado-6.2-cp37-abi3-win_amd64.whl (425 kB)
+     |████████████████████████████████| 425 kB 6.8 MB/s
+Collecting pyarrow>=4.0
+  Downloading pyarrow-10.0.1-cp39-cp39-win_amd64.whl (20.3 MB)
+     |████████████████████████████████| 20.3 MB 113 kB/s
+Collecting toml
+  Using cached toml-0.10.2-py2.py3-none-any.whl (16 kB)
+Collecting rich>=10.11.0
+  Downloading rich-13.0.1-py3-none-any.whl (238 kB)
+     |████████████████████████████████| 238 kB 6.8 MB/s
+Collecting pympler>=0.9
+  Downloading Pympler-1.0.1-py3-none-any.whl (164 kB)
+     |████████████████████████████████| 164 kB ...
+Collecting tzlocal>=1.1
+  Downloading tzlocal-4.2-py3-none-any.whl (19 kB)
+Collecting watchdog
+  Downloading watchdog-2.2.1-py3-none-win_amd64.whl (78 kB)
+     |████████████████████████████████| 78 kB 3.6 MB/s
+Collecting validators>=0.2
+  Downloading validators-0.18.2-py3-none-any.whl (19 kB)
+Collecting jsonschema>=3.0
+  Downloading jsonschema-4.17.3-py3-none-any.whl (90 kB)
+     |████████████████████████████████| 90 kB 622 kB/s
+Collecting toolz
+  Downloading toolz-0.12.0-py3-none-any.whl (55 kB)
+     |████████████████████████████████| 55 kB 4.1 MB/s
+Collecting entrypoints
+  Downloading entrypoints-0.4-py3-none-any.whl (5.3 kB)
+Collecting gitdb&lt;5,>=4.0.1
+  Downloading gitdb-4.0.10-py3-none-any.whl (62 kB)
+     |████████████████████████████████| 62 kB 604 kB/s
+Collecting smmap&lt;6,>=3.0.1
+  Downloading smmap-5.0.0-py3-none-any.whl (24 kB)
+Collecting pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0
+  Downloading pyrsistent-0.19.3-cp39-cp39-win_amd64.whl (62 kB)
+     |████████████████████████████████| 62 kB 555 kB/s
+Collecting commonmark&lt;0.10.0,>=0.9.0
+  Downloading commonmark-0.9.1-py2.py3-none-any.whl (51 kB)
+     |████████████████████████████████| 51 kB 3.2 MB/s
+Collecting tzdata
+  Downloading tzdata-2022.7-py2.py3-none-any.whl (340 kB)
+     |████████████████████████████████| 340 kB 6.4 MB/s
+Collecting pytz-deprecation-shim
+  Downloading pytz_deprecation_shim-0.1.0.post0-py2.py3-none-any.whl (15 kB)
+Collecting decorator>=3.4.0
+  Downloading decorator-5.1.1-py3-none-any.whl (9.1 kB)
+Collecting wcwidth>=0.2.5
+  Using cached wcwidth-0.2.5-py2.py3-none-any.whl (30 kB)
+Collecting contourpy>=1.0.1
+  Downloading contourpy-1.0.6-cp39-cp39-win_amd64.whl (161 kB)
+     |████████████████████████████████| 161 kB ...
+Collecting kiwisolver>=1.0.1
+  Downloading kiwisolver-1.4.4-cp39-cp39-win_amd64.whl (55 kB)
+     |████████████████████████████████| 55 kB ...
+Collecting pyparsing>=2.2.1
+  Downloading pyparsing-3.0.9-py3-none-any.whl (98 kB)
+     |████████████████████████████████| 98 kB 6.4 MB/s
+Collecting fonttools>=4.22.0
+  Downloading fonttools-4.38.0-py3-none-any.whl (965 kB)
+     |████████████████████████████████| 965 kB 6.4 MB/s
+Collecting cycler>=0.10
+  Downloading cycler-0.11.0-py3-none-any.whl (6.4 kB)
+Collecting llvmlite&lt;0.40,>=0.39.0dev0
+  Downloading llvmlite-0.39.1-cp39-cp39-win_amd64.whl (23.2 MB)
+     |████████████████████████████████| 23.2 MB 6.4 MB/s
+Collecting trampoline>=0.1.2
+  Downloading trampoline-0.1.2-py3-none-any.whl (5.2 kB)
+Collecting boltons>=20.2.1
+  Downloading boltons-21.0.0-py2.py3-none-any.whl (193 kB)
+     |████████████████████████████████| 193 kB 6.4 MB/s
+Collecting setproctitle
+  Downloading setproctitle-1.3.2-cp39-cp39-win_amd64.whl (11 kB)
+Collecting pathtools
+  Downloading pathtools-0.1.2.tar.gz (11 kB)
+Collecting promise&lt;3,>=2.0
+  Using cached promise-2.3.tar.gz (19 kB)
+Collecting sentry-sdk>=1.0.0
+  Downloading sentry_sdk-1.12.1-py2.py3-none-any.whl (174 kB)
+     |████████████████████████████████| 174 kB 6.4 MB/s
+Collecting shortuuid>=0.5.0
+  Downloading shortuuid-1.0.11-py3-none-any.whl (10 kB)
+Collecting docker-pycreds>=0.4.0
+  Downloading docker_pycreds-0.4.0-py2.py3-none-any.whl (9.0 kB)
+Using legacy 'setup.py install' for pypatchmatch, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for clip, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for clipseg, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for test-tube, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for basicsr, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for antlr4-python3-runtime, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for urwid, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for filterpy, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for future, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for jsonmerge, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for promise, since package 'wheel' is not installed.
+Using legacy 'setup.py install' for pathtools, since package 'wheel' is not installed.
+Building wheels for collected packages: k-diffusion
+  Building wheel for k-diffusion (PEP 517) ... done
+  Created wheel for k-diffusion: filename=k_diffusion-0.0.1-py3-none-any.whl size=25377 sha256=3793194d98e3e161949f0a4d010043c36a9bfabed3435361a1c2f758acb2713c
+  Stored in directory: C:\Users\Brian\AppData\Local\Temp\pip-ephem-wheel-cache-te96pj6l\wheels\1b\0c\29\c19405029546be30cef46f8304dfd3b14d8858d59dfdb9f96e
+Successfully built k-diffusion
+Installing collected packages: urllib3, pyasn1, idna, chardet, certifi, zipp, Six, rsa, requests, pyasn1-modules, oauthlib, numpy, cachetools, typing-extensions, requests-oauthlib, python-dateutil, pyparsing, pillow, packaging, multidict, MarkupSafe, kiwisolver, importlib-metadata, google-auth, frozenlist, fonttools, cycler, contourpy, yarl, wheel, Werkzeug, torch, tifffile, tensorboard-plugin-wit, tensorboard-data-server, smmap, scipy, PyWavelets, protobuf, networkx, matplotlib, markdown, llvmlite, imageio, grpcio, google-auth-oauthlib, colorama, charset-normalizer, attrs, async-timeout, aiosignal, absl-py, yapf, wcwidth, tzdata, tqdm, torchvision, threadpoolctl, tb-nightly, scikit-image, pyyaml, pytz, pyrsistent, opencv-python, numba, lmdb, joblib, gitdb, future, fsspec, filterpy, aiohttp, addict, trampoline, torchmetrics, toolz, tensorboard, shortuuid, setproctitle, sentry-sdk, scikit-learn, regex, pytz-deprecation-shim, python-engineio, pygments, pyDeprecate, psutil, promise, pathtools, pandas, opencv-python-headless, jsonschema, Jinja2, itsdangerous, gitpython, ftfy, filelock, facexlib, entrypoints, docker-pycreds, decorator, commonmark, click, boltons, bidict, basicsr, antlr4-python3-runtime, watchdog, wandb, validators, urwid, tzlocal, tornado, torchsde, torchdiffeq, toml, tokenizers, semver, rich, resize-right, qudida, pytorch-lightning, python-socketio, pympler, pydeck, pyarrow, omegaconf, kornia, jsonmerge, huggingface-hub, greenlet, gfpgan, flask, einops, dnspython, clip, clean-fid, blinker, altair, accelerate, transformers, torch-fidelity, test-tube, taming-transformers-rom1504, streamlit, send2trash, realesrgan, pyreadline3, pypatchmatch, pudb, pip, picklescan, k-diffusion, imageio-ffmpeg, getpass-asterisk, flaskwebgui, flask-socketio, flask-cors, eventlet, diffusers, clipseg, albumentations
+    Running setup.py install for future ... done
+    Running setup.py install for filterpy ... done
+    Running setup.py install for promise ... done
+    Running setup.py install for pathtools ... done
+    Running setup.py install for basicsr ... done
+    Running setup.py install for antlr4-python3-runtime ... done
+    Running setup.py install for urwid ... done
+    Running setup.py install for jsonmerge ... done
+    Running setup.py install for clip ... done
+    Running setup.py install for test-tube ... done
+    Running setup.py install for pypatchmatch ... done
+  Attempting uninstall: pip
+    Found existing installation: pip 21.1.1
+    Uninstalling pip-21.1.1:
+      Successfully uninstalled pip-21.1.1
+    Running setup.py install for clipseg ... done
+Successfully installed Jinja2-3.1.2 MarkupSafe-2.1.1 PyWavelets-1.4.1 Six-1.16.0 Werkzeug-2.2.2 absl-py-1.3.0 accelerate-0.15.0 addict-2.4.0 aiohttp-3.8.3 aiosignal-1.3.1 albumentations-1.3.0 altair-4.2.0 antlr4-python3-runtime-4.9.3 async-timeout-4.0.2 attrs-22.2.0 basicsr-1.4.2 bidict-0.22.1 blinker-1.5 boltons-21.0.0 cachetools-5.2.1 certifi-2022.12.7 chardet-4.0.0 charset-normalizer-2.1.1 clean-fid-0.1.35 click-8.1.3 clip-1.0 clipseg-0.0.1 colorama-0.4.6 commonmark-0.9.1 contourpy-1.0.6 cycler-0.11.0 decorator-5.1.1 diffusers-0.10.2 dnspython-2.2.1 docker-pycreds-0.4.0 einops-0.6.0 entrypoints-0.4 eventlet-0.33.2 facexlib-0.2.5 filelock-3.9.0 filterpy-1.4.5 flask-2.1.3 flask-cors-3.0.10 flask-socketio-5.3.0 flaskwebgui-1.0.3 fonttools-4.38.0 frozenlist-1.3.3 fsspec-2022.11.0 ftfy-6.1.1 future-0.18.2 getpass-asterisk-1.0.1 gfpgan-1.3.8 gitdb-4.0.10 gitpython-3.1.30 google-auth-2.15.0 google-auth-oauthlib-0.4.6 greenlet-2.0.1 grpcio-1.51.1 huggingface-hub-0.11.1 idna-2.10 imageio-2.24.0 imageio-ffmpeg-0.4.7 importlib-metadata-6.0.0 itsdangerous-2.1.2 joblib-1.2.0 jsonmerge-1.9.0 jsonschema-4.17.3 k-diffusion-0.0.1 kiwisolver-1.4.4 kornia-0.6.9 llvmlite-0.39.1 lmdb-1.4.0 markdown-3.4.1 matplotlib-3.6.2 multidict-6.0.4 networkx-3.0 numba-0.56.4 numpy-1.23.5 oauthlib-3.2.2 omegaconf-2.3.0 opencv-python-4.7.0.68 opencv-python-headless-4.7.0.68 packaging-23.0 pandas-1.5.2 pathtools-0.1.2 picklescan-0.0.7 pillow-9.4.0 pip-22.3.1 promise-2.3 protobuf-3.20.3 psutil-5.9.4 pudb-2014.1 pyDeprecate-0.3.2 pyarrow-10.0.1 pyasn1-0.4.8 pyasn1-modules-0.2.8 pydeck-0.8.0 pygments-2.14.0 pympler-1.0.1 pyparsing-3.0.9 pypatchmatch-0.1.4 pyreadline3-3.4.1 pyrsistent-0.19.3 python-dateutil-2.8.2 python-engineio-4.3.4 python-socketio-5.7.2 pytorch-lightning-1.7.7 pytz-2022.7 pytz-deprecation-shim-0.1.0.post0 pyyaml-6.0 qudida-0.0.4 realesrgan-0.3.0 regex-2022.10.31 requests-2.25.1 requests-oauthlib-1.3.1 resize-right-0.0.2 rich-13.0.1 rsa-4.9 scikit-image-0.19.3 scikit-learn-1.2.0 scipy-1.10.0 semver-2.13.0 send2trash-1.8.0 sentry-sdk-1.12.1 setproctitle-1.3.2 shortuuid-1.0.11 smmap-5.0.0 streamlit-1.16.0 taming-transformers-rom1504-0.0.6 tb-nightly-2.12.0a20230107 tensorboard-2.11.0 tensorboard-data-server-0.6.1 tensorboard-plugin-wit-1.8.1 test-tube-0.7.5 threadpoolctl-3.1.0 tifffile-2022.10.10 tokenizers-0.13.2 toml-0.10.2 toolz-0.12.0 torch-1.12.1+cu116 torch-fidelity-0.3.0 torchdiffeq-0.2.3 torchmetrics-0.11.0 torchsde-0.2.5 torchvision-0.13.1+cu116 tornado-6.2 tqdm-4.64.1 trampoline-0.1.2 transformers-4.25.1 typing-extensions-4.4.0 tzdata-2022.7 tzlocal-4.2 urllib3-1.26.13 urwid-2.1.2 validators-0.18.2 wandb-0.13.7 watchdog-2.2.1 wcwidth-0.2.5 wheel-0.38.4 yapf-0.32.0 yarl-1.8.2 zipp-3.11.0
+Installation successful.
+
+*** Installing InvokeAI Modules and Executables ***
+Collecting https://github.com/invoke-ai/InvokeAI/archive/refs/tags/v2.2.5.zip
+  Downloading https://github.com/invoke-ai/InvokeAI/archive/refs/tags/v2.2.5.zip
+     \ 89.3 MB 9.2 MB/s 0:00:10
+  Preparing metadata (setup.py) ... done
+Requirement already satisfied: accelerate in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.15.0)
+Requirement already satisfied: albumentations in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.3.0)
+Requirement already satisfied: diffusers in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.10.2)
+Requirement already satisfied: eventlet in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.33.2)
+Requirement already satisfied: flask_cors in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (3.0.10)
+Requirement already satisfied: flask_socketio in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (5.3.0)
+Requirement already satisfied: flaskwebgui in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.0.3)
+Requirement already satisfied: getpass_asterisk in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.0.1)
+Requirement already satisfied: imageio-ffmpeg in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.4.7)
+Requirement already satisfied: pyreadline3 in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (3.4.1)
+Requirement already satisfied: realesrgan in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.3.0)
+Requirement already satisfied: send2trash in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.8.0)
+Requirement already satisfied: streamlit in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.16.0)
+Requirement already satisfied: taming-transformers-rom1504 in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.0.6)
+Requirement already satisfied: test-tube in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.7.5)
+Requirement already satisfied: torch-fidelity in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.3.0)
+Requirement already satisfied: torch in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.12.1+cu116)
+Requirement already satisfied: torchvision in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.13.1+cu116)
+Requirement already satisfied: transformers in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (4.25.1)
+Requirement already satisfied: picklescan in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.0.7)
+Requirement already satisfied: clip in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.0)
+Requirement already satisfied: clipseg in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.0.1)
+Requirement already satisfied: gfpgan in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (1.3.8)
+Requirement already satisfied: k-diffusion in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.0.1)
+Requirement already satisfied: pypatchmatch in d:\invokeai\invokeai\.venv\lib\site-packages (from InvokeAI==2.2.5) (0.1.4)
+Requirement already satisfied: packaging>=20.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from accelerate->InvokeAI==2.2.5) (23.0)
+Requirement already satisfied: psutil in d:\invokeai\invokeai\.venv\lib\site-packages (from accelerate->InvokeAI==2.2.5) (5.9.4)
+Requirement already satisfied: pyyaml in d:\invokeai\invokeai\.venv\lib\site-packages (from accelerate->InvokeAI==2.2.5) (6.0)
+Requirement already satisfied: numpy>=1.17 in d:\invokeai\invokeai\.venv\lib\site-packages (from accelerate->InvokeAI==2.2.5) (1.23.5)
+Requirement already satisfied: typing-extensions in d:\invokeai\invokeai\.venv\lib\site-packages (from torch->InvokeAI==2.2.5) (4.4.0)
+Requirement already satisfied: qudida>=0.0.4 in d:\invokeai\invokeai\.venv\lib\site-packages (from albumentations->InvokeAI==2.2.5) (0.0.4)
+Requirement already satisfied: scikit-image>=0.16.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from albumentations->InvokeAI==2.2.5) (0.19.3)
+Requirement already satisfied: scipy in d:\invokeai\invokeai\.venv\lib\site-packages (from albumentations->InvokeAI==2.2.5) (1.10.0)
+Requirement already satisfied: opencv-python-headless>=4.1.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from albumentations->InvokeAI==2.2.5) (4.7.0.68)
+Requirement already satisfied: ftfy in d:\invokeai\invokeai\.venv\lib\site-packages (from clip->InvokeAI==2.2.5) (6.1.1)
+Requirement already satisfied: regex in d:\invokeai\invokeai\.venv\lib\site-packages (from clip->InvokeAI==2.2.5) (2022.10.31)
+Requirement already satisfied: tqdm in d:\invokeai\invokeai\.venv\lib\site-packages (from clip->InvokeAI==2.2.5) (4.64.1)
+Requirement already satisfied: matplotlib in d:\invokeai\invokeai\.venv\lib\site-packages (from clipseg->InvokeAI==2.2.5) (3.6.2)
+Requirement already satisfied: opencv-python in d:\invokeai\invokeai\.venv\lib\site-packages (from clipseg->InvokeAI==2.2.5) (4.7.0.68)
+Requirement already satisfied: importlib-metadata in d:\invokeai\invokeai\.venv\lib\site-packages (from diffusers->InvokeAI==2.2.5) (6.0.0)
+Requirement already satisfied: Pillow in d:\invokeai\invokeai\.venv\lib\site-packages (from diffusers->InvokeAI==2.2.5) (9.4.0)
+Requirement already satisfied: huggingface-hub>=0.10.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from diffusers->InvokeAI==2.2.5) (0.11.1)
+Requirement already satisfied: filelock in d:\invokeai\invokeai\.venv\lib\site-packages (from diffusers->InvokeAI==2.2.5) (3.9.0)
+Requirement already satisfied: requests in d:\invokeai\invokeai\.venv\lib\site-packages (from diffusers->InvokeAI==2.2.5) (2.25.1)
+Requirement already satisfied: dnspython>=1.15.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from eventlet->InvokeAI==2.2.5) (2.2.1)
+Requirement already satisfied: greenlet>=0.3 in d:\invokeai\invokeai\.venv\lib\site-packages (from eventlet->InvokeAI==2.2.5) (2.0.1)
+Requirement already satisfied: six>=1.10.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from eventlet->InvokeAI==2.2.5) (1.16.0)
+Requirement already satisfied: Flask>=0.9 in d:\invokeai\invokeai\.venv\lib\site-packages (from flask_cors->InvokeAI==2.2.5) (2.1.3)
+Requirement already satisfied: python-socketio>=5.0.2 in d:\invokeai\invokeai\.venv\lib\site-packages (from flask_socketio->InvokeAI==2.2.5) (5.7.2)
+Requirement already satisfied: lmdb in d:\invokeai\invokeai\.venv\lib\site-packages (from gfpgan->InvokeAI==2.2.5) (1.4.0)
+Requirement already satisfied: tb-nightly in d:\invokeai\invokeai\.venv\lib\site-packages (from gfpgan->InvokeAI==2.2.5) (2.12.0a20230107)
+Requirement already satisfied: basicsr>=1.4.2 in d:\invokeai\invokeai\.venv\lib\site-packages (from gfpgan->InvokeAI==2.2.5) (1.4.2)
+Requirement already satisfied: facexlib>=0.2.5 in d:\invokeai\invokeai\.venv\lib\site-packages (from gfpgan->InvokeAI==2.2.5) (0.2.5)
+Requirement already satisfied: yapf in d:\invokeai\invokeai\.venv\lib\site-packages (from gfpgan->InvokeAI==2.2.5) (0.32.0)
+Requirement already satisfied: einops in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (0.6.0)
+Requirement already satisfied: kornia in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (0.6.9)
+Requirement already satisfied: jsonmerge in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (1.9.0)
+Requirement already satisfied: torchdiffeq in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (0.2.3)
+Requirement already satisfied: wandb in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (0.13.7)
+Requirement already satisfied: clean-fid in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (0.1.35)
+Requirement already satisfied: resize-right in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (0.0.2)
+Requirement already satisfied: torchsde in d:\invokeai\invokeai\.venv\lib\site-packages (from k-diffusion->InvokeAI==2.2.5) (0.2.5)
+Requirement already satisfied: toml in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (0.10.2)
+Requirement already satisfied: tzlocal>=1.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (4.2)
+Requirement already satisfied: click>=7.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (8.1.3)
+Requirement already satisfied: pyarrow>=4.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (10.0.1)
+Requirement already satisfied: pydeck>=0.1.dev5 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (0.8.0)
+Requirement already satisfied: watchdog in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (2.2.1)
+Requirement already satisfied: semver in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (2.13.0)
+Requirement already satisfied: cachetools>=4.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (5.2.1)
+Requirement already satisfied: tornado>=5.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (6.2)
+Requirement already satisfied: validators>=0.2 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (0.18.2)
+Requirement already satisfied: blinker>=1.0.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (1.5)
+Requirement already satisfied: protobuf&lt;4,>=3.12 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (3.20.3)
+Requirement already satisfied: rich>=10.11.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (13.0.1)
+Requirement already satisfied: altair>=3.2.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (4.2.0)
+Requirement already satisfied: gitpython!=3.1.19 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (3.1.30)
+Requirement already satisfied: pandas>=0.21.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (1.5.2)
+Requirement already satisfied: python-dateutil in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (2.8.2)
+Requirement already satisfied: pympler>=0.9 in d:\invokeai\invokeai\.venv\lib\site-packages (from streamlit->InvokeAI==2.2.5) (1.0.1)
+Requirement already satisfied: pytorch-lightning>=1.0.8 in d:\invokeai\invokeai\.venv\lib\site-packages (from taming-transformers-rom1504->InvokeAI==2.2.5) (1.7.7)
+Requirement already satisfied: omegaconf>=2.0.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from taming-transformers-rom1504->InvokeAI==2.2.5) (2.3.0)
+Requirement already satisfied: imageio>=2.3.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from test-tube->InvokeAI==2.2.5) (2.24.0)
+Requirement already satisfied: tensorboard>=1.15.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from test-tube->InvokeAI==2.2.5) (2.11.0)
+Requirement already satisfied: future in d:\invokeai\invokeai\.venv\lib\site-packages (from test-tube->InvokeAI==2.2.5) (0.18.2)
+Requirement already satisfied: tokenizers!=0.11.3,&lt;0.14,>=0.11.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from transformers->InvokeAI==2.2.5) (0.13.2)
+Requirement already satisfied: toolz in d:\invokeai\invokeai\.venv\lib\site-packages (from altair>=3.2.0->streamlit->InvokeAI==2.2.5) (0.12.0)
+Requirement already satisfied: entrypoints in d:\invokeai\invokeai\.venv\lib\site-packages (from altair>=3.2.0->streamlit->InvokeAI==2.2.5) (0.4)
+Requirement already satisfied: jinja2 in d:\invokeai\invokeai\.venv\lib\site-packages (from altair>=3.2.0->streamlit->InvokeAI==2.2.5) (3.1.2)
+Requirement already satisfied: jsonschema>=3.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from altair>=3.2.0->streamlit->InvokeAI==2.2.5) (4.17.3)
+Requirement already satisfied: addict in d:\invokeai\invokeai\.venv\lib\site-packages (from basicsr>=1.4.2->gfpgan->InvokeAI==2.2.5) (2.4.0)
+Requirement already satisfied: colorama in d:\invokeai\invokeai\.venv\lib\site-packages (from click>=7.0->streamlit->InvokeAI==2.2.5) (0.4.6)
+Requirement already satisfied: filterpy in d:\invokeai\invokeai\.venv\lib\site-packages (from facexlib>=0.2.5->gfpgan->InvokeAI==2.2.5) (1.4.5)
+Requirement already satisfied: numba in d:\invokeai\invokeai\.venv\lib\site-packages (from facexlib>=0.2.5->gfpgan->InvokeAI==2.2.5) (0.56.4)
+Requirement already satisfied: Werkzeug>=2.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from Flask>=0.9->flask_cors->InvokeAI==2.2.5) (2.2.2)
+Requirement already satisfied: itsdangerous>=2.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from Flask>=0.9->flask_cors->InvokeAI==2.2.5) (2.1.2)
+Requirement already satisfied: gitdb&lt;5,>=4.0.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from gitpython!=3.1.19->streamlit->InvokeAI==2.2.5) (4.0.10)
+Requirement already satisfied: zipp>=0.5 in d:\invokeai\invokeai\.venv\lib\site-packages (from importlib-metadata->diffusers->InvokeAI==2.2.5) (3.11.0)
+Requirement already satisfied: antlr4-python3-runtime==4.9.* in d:\invokeai\invokeai\.venv\lib\site-packages (from omegaconf>=2.0.0->taming-transformers-rom1504->InvokeAI==2.2.5) (4.9.3)
+Requirement already satisfied: pytz>=2020.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from pandas>=0.21.0->streamlit->InvokeAI==2.2.5) (2022.7)
+Requirement already satisfied: python-engineio>=4.3.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from python-socketio>=5.0.2->flask_socketio->InvokeAI==2.2.5) (4.3.4)
+Requirement already satisfied: bidict>=0.21.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from python-socketio>=5.0.2->flask_socketio->InvokeAI==2.2.5) (0.22.1)
+Requirement already satisfied: torchmetrics>=0.7.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (0.11.0)
+Requirement already satisfied: fsspec[http]!=2021.06.0,>=2021.05.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (2022.11.0)
+Requirement already satisfied: pyDeprecate>=0.3.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (0.3.2)
+Requirement already satisfied: scikit-learn>=0.19.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from qudida>=0.0.4->albumentations->InvokeAI==2.2.5) (1.2.0)
+Requirement already satisfied: certifi>=2017.4.17 in d:\invokeai\invokeai\.venv\lib\site-packages (from requests->diffusers->InvokeAI==2.2.5) (2022.12.7)
+Requirement already satisfied: chardet&lt;5,>=3.0.2 in d:\invokeai\invokeai\.venv\lib\site-packages (from requests->diffusers->InvokeAI==2.2.5) (4.0.0)
+Requirement already satisfied: urllib3&lt;1.27,>=1.21.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from requests->diffusers->InvokeAI==2.2.5) (1.26.13)
+Requirement already satisfied: idna&lt;3,>=2.5 in d:\invokeai\invokeai\.venv\lib\site-packages (from requests->diffusers->InvokeAI==2.2.5) (2.10)
+Requirement already satisfied: pygments&lt;3.0.0,>=2.6.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from rich>=10.11.0->streamlit->InvokeAI==2.2.5) (2.14.0)
+Requirement already satisfied: commonmark&lt;0.10.0,>=0.9.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from rich>=10.11.0->streamlit->InvokeAI==2.2.5) (0.9.1)
+Requirement already satisfied: tifffile>=2019.7.26 in d:\invokeai\invokeai\.venv\lib\site-packages (from scikit-image>=0.16.1->albumentations->InvokeAI==2.2.5) (2022.10.10)
+Requirement already satisfied: PyWavelets>=1.1.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from scikit-image>=0.16.1->albumentations->InvokeAI==2.2.5) (1.4.1)
+Requirement already satisfied: networkx>=2.2 in d:\invokeai\invokeai\.venv\lib\site-packages (from scikit-image>=0.16.1->albumentations->InvokeAI==2.2.5) (3.0)
+Requirement already satisfied: google-auth&lt;3,>=1.6.3 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (2.15.0)
+Requirement already satisfied: grpcio>=1.24.3 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (1.51.1)
+Requirement already satisfied: markdown>=2.6.8 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (3.4.1)
+Requirement already satisfied: google-auth-oauthlib&lt;0.5,>=0.4.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (0.4.6)
+Requirement already satisfied: setuptools>=41.0.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (56.0.0)
+Requirement already satisfied: wheel>=0.26 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (0.38.4)
+Requirement already satisfied: absl-py>=0.4 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (1.3.0)
+Requirement already satisfied: tensorboard-plugin-wit>=1.6.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (1.8.1)
+Requirement already satisfied: tensorboard-data-server&lt;0.7.0,>=0.6.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (0.6.1)
+Requirement already satisfied: tzdata in d:\invokeai\invokeai\.venv\lib\site-packages (from tzlocal>=1.1->streamlit->InvokeAI==2.2.5) (2022.7)
+Requirement already satisfied: pytz-deprecation-shim in d:\invokeai\invokeai\.venv\lib\site-packages (from tzlocal>=1.1->streamlit->InvokeAI==2.2.5) (0.1.0.post0)
+Requirement already satisfied: decorator>=3.4.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from validators>=0.2->streamlit->InvokeAI==2.2.5) (5.1.1)
+Requirement already satisfied: wcwidth>=0.2.5 in d:\invokeai\invokeai\.venv\lib\site-packages (from ftfy->clip->InvokeAI==2.2.5) (0.2.5)
+Requirement already satisfied: fonttools>=4.22.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from matplotlib->clipseg->InvokeAI==2.2.5) (4.38.0)
+Requirement already satisfied: kiwisolver>=1.0.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from matplotlib->clipseg->InvokeAI==2.2.5) (1.4.4)
+Requirement already satisfied: contourpy>=1.0.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from matplotlib->clipseg->InvokeAI==2.2.5) (1.0.6)
+Requirement already satisfied: pyparsing>=2.2.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from matplotlib->clipseg->InvokeAI==2.2.5) (3.0.9)
+Requirement already satisfied: cycler>=0.10 in d:\invokeai\invokeai\.venv\lib\site-packages (from matplotlib->clipseg->InvokeAI==2.2.5) (0.11.0)
+Requirement already satisfied: trampoline>=0.1.2 in d:\invokeai\invokeai\.venv\lib\site-packages (from torchsde->k-diffusion->InvokeAI==2.2.5) (0.1.2)
+Requirement already satisfied: boltons>=20.2.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from torchsde->k-diffusion->InvokeAI==2.2.5) (21.0.0)
+Requirement already satisfied: promise&lt;3,>=2.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from wandb->k-diffusion->InvokeAI==2.2.5) (2.3)
+Requirement already satisfied: shortuuid>=0.5.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from wandb->k-diffusion->InvokeAI==2.2.5) (1.0.11)
+Requirement already satisfied: pathtools in d:\invokeai\invokeai\.venv\lib\site-packages (from wandb->k-diffusion->InvokeAI==2.2.5) (0.1.2)
+Requirement already satisfied: docker-pycreds>=0.4.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from wandb->k-diffusion->InvokeAI==2.2.5) (0.4.0)
+Requirement already satisfied: sentry-sdk>=1.0.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from wandb->k-diffusion->InvokeAI==2.2.5) (1.12.1)
+Requirement already satisfied: setproctitle in d:\invokeai\invokeai\.venv\lib\site-packages (from wandb->k-diffusion->InvokeAI==2.2.5) (1.3.2)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in d:\invokeai\invokeai\.venv\lib\site-packages (from fsspec[http]!=2021.06.0,>=2021.05.0->pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (3.8.3)
+Requirement already satisfied: smmap&lt;6,>=3.0.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from gitdb&lt;5,>=4.0.1->gitpython!=3.1.19->streamlit->InvokeAI==2.2.5) (5.0.0)
+Requirement already satisfied: rsa&lt;5,>=3.1.4 in d:\invokeai\invokeai\.venv\lib\site-packages (from google-auth&lt;3,>=1.6.3->tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (4.9)
+Requirement already satisfied: pyasn1-modules>=0.2.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from google-auth&lt;3,>=1.6.3->tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (0.2.8)
+Requirement already satisfied: requests-oauthlib>=0.7.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from google-auth-oauthlib&lt;0.5,>=0.4.1->tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (1.3.1)
+Requirement already satisfied: MarkupSafe>=2.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from jinja2->altair>=3.2.0->streamlit->InvokeAI==2.2.5) (2.1.1)
+Requirement already satisfied: pyrsistent!=0.17.0,!=0.17.1,!=0.17.2,>=0.14.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from jsonschema>=3.0->altair>=3.2.0->streamlit->InvokeAI==2.2.5) (0.19.3)
+Requirement already satisfied: attrs>=17.4.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from jsonschema>=3.0->altair>=3.2.0->streamlit->InvokeAI==2.2.5) (22.2.0)
+Requirement already satisfied: threadpoolctl>=2.0.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from scikit-learn>=0.19.1->qudida>=0.0.4->albumentations->InvokeAI==2.2.5) (3.1.0)
+Requirement already satisfied: joblib>=1.1.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from scikit-learn>=0.19.1->qudida>=0.0.4->albumentations->InvokeAI==2.2.5) (1.2.0)
+Requirement already satisfied: llvmlite&lt;0.40,>=0.39.0dev0 in d:\invokeai\invokeai\.venv\lib\site-packages (from numba->facexlib>=0.2.5->gfpgan->InvokeAI==2.2.5) (0.39.1)
+Requirement already satisfied: multidict&lt;7.0,>=4.5 in d:\invokeai\invokeai\.venv\lib\site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]!=2021.06.0,>=2021.05.0->pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (6.0.4)
+Requirement already satisfied: aiosignal>=1.1.2 in d:\invokeai\invokeai\.venv\lib\site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]!=2021.06.0,>=2021.05.0->pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (1.3.1)
+Requirement already satisfied: charset-normalizer&lt;3.0,>=2.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]!=2021.06.0,>=2021.05.0->pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (2.1.1)
+Requirement already satisfied: async-timeout&lt;5.0,>=4.0.0a3 in d:\invokeai\invokeai\.venv\lib\site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]!=2021.06.0,>=2021.05.0->pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (4.0.2)
+Requirement already satisfied: frozenlist>=1.1.1 in d:\invokeai\invokeai\.venv\lib\site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]!=2021.06.0,>=2021.05.0->pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (1.3.3)
+Requirement already satisfied: yarl&lt;2.0,>=1.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from aiohttp!=4.0.0a0,!=4.0.0a1->fsspec[http]!=2021.06.0,>=2021.05.0->pytorch-lightning>=1.0.8->taming-transformers-rom1504->InvokeAI==2.2.5) (1.8.2)
+Requirement already satisfied: pyasn1&lt;0.5.0,>=0.4.6 in d:\invokeai\invokeai\.venv\lib\site-packages (from pyasn1-modules>=0.2.1->google-auth&lt;3,>=1.6.3->tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (0.4.8)
+Requirement already satisfied: oauthlib>=3.0.0 in d:\invokeai\invokeai\.venv\lib\site-packages (from requests-oauthlib>=0.7.0->google-auth-oauthlib&lt;0.5,>=0.4.1->tensorboard>=1.15.0->test-tube->InvokeAI==2.2.5) (3.2.2)
+Building wheels for collected packages: InvokeAI
+  Building wheel for InvokeAI (setup.py) ... done
+  Created wheel for InvokeAI: filename=InvokeAI-2.2.5-py3-none-any.whl size=2049642 sha256=d0245509233cbae3d7cc56dff4f406f8bde47606acb129c86e3845838d4304ab
+  Stored in directory: C:\Users\Brian\AppData\Local\Temp\pip-ephem-wheel-cache-1y43eb6u\wheels\67\b0\49\9f21042c65e73a757c112ca6c1b781394f90d52a3ddf5d3c8d
+Successfully built InvokeAI
+Installing collected packages: InvokeAI
+Successfully installed InvokeAI-2.2.5
+Installation successful.
+.\templates\rootdir\configs\INITIAL_MODELS.yaml
+.\templates\rootdir\configs\models.yaml.example
+.\templates\rootdir\configs\sd-concepts.txt
+.\templates\rootdir\configs\stable-diffusion\v1-finetune.yaml
+.\templates\rootdir\configs\stable-diffusion\v1-finetune_style.yaml
+.\templates\rootdir\configs\stable-diffusion\v1-inference.yaml
+.\templates\rootdir\configs\stable-diffusion\v1-inpainting-inference.yaml
+.\templates\rootdir\configs\stable-diffusion\v1-m1-finetune.yaml
+8 File(s) copied
+Loading Python libraries...
+
+Welcome to InvokeAI. This script will help download the Stable Diffusion weight files
+and other large models that are needed for text to image generation. At any point you may interrupt
+this program and resume later.
+
+** INITIALIZING INVOKEAI RUNTIME DIRECTORY **
+Select the default directory for image outputs [D:\InvokeAI\invokeai\outputs]: D:\InvokeAI\invokeai\outputs
+
+InvokeAI image outputs will be placed into "D:\InvokeAI\invokeai\outputs".
+Accept this location? [y]
+
+You may change the chosen output directory at any time by editing the --outdir options in "invokeai.init",
+You may also change the runtime directory by setting the environment variable INVOKEAI_ROOT.
+
+The NSFW (not safe for work) checker blurs out images that potentially contain sexual imagery.
+It can be selectively enabled at run time with --nsfw_checker, and disabled with --no-nsfw_checker.
+The following option will set whether the checker is enabled by default. Like other options, you can
+change this setting later by editing the file invokeai.init.
+This is NOT recommended for systems with less than 6G VRAM because of the checker's memory requirements.
+Enable the NSFW checker by default? [y]
+</code></pre></div>
+<div class="nuxt-content-highlight" data-v-07b74c72 data-v-07b74c72><pre class="language-text line-numbers" data-v-07b74c72 data-v-07b74c72><code data-v-07b74c72 data-v-07b74c72>Creating the initialization file at "D:\InvokeAI\invokeai\invokeai.init".
+
+** DOWNLOADING DIFFUSION WEIGHTS **
+You can download and configure the weights files manually or let this
+script do it for you. Manual installation is described at:
+
+https://invoke-ai.github.io/InvokeAI/installation/020_INSTALL_MANUAL/
+
+You may download the recommended models (about 10GB total), select a customized set, or
+completely skip this step.
+
+Download &lt;r>ecommended models, &lt;a>ll models, &lt;c>ustomized list, or &lt;s>kip this step? [r]:
+</code></pre></div>
+<p data-v-07b74c72 data-v-07b74c72><img alt="Invoke AI Web UI" src="/static/invoke.png" data-v-07b74c72 data-v-07b74c72></p></div> <div class="text-center pb-4 pt-8" data-v-07b74c72><button class="mc-btn rounded py-1 px-2" data-v-07b74c72>
+        Show Disqus Comments 💬
+      </button></div> <!----> <h1 data-v-07b74c72></h1></div></article> <div class="mx-auto max-w-6xl p-4 lg:px-16 text-center" data-v-7b3a3fe4><hr class="mt-4" data-v-7b3a3fe4> <div class="mx-auto py-4" data-v-7b3a3fe4><div class="pb-4" data-v-7b3a3fe4>
+      Join my mailing list to get updated whenever I publish a new article.
+    </div> <div class="mx-auto" data-v-89248ae4 data-v-7b3a3fe4><div id="mc_embed_signup" class="mx-auto w-full md:w-1/2" data-v-89248ae4><form id="mc-embedded-subscribe-form" action="https://github.us2.list-manage.com/subscribe/post?u=43a795784ca963e25903a0da6&id=9937fe4fc5" method="post" name="mc-embedded-subscribe-form" target="_blank" novalidate class="validate" data-v-89248ae4><div id="mc_embed_signup_scroll" class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center" data-v-89248ae4><input id="mce-EMAIL" type="email" name="EMAIL" placeholder="Enter your email address" class="rounded mc text-center" data-v-89248ae4> <div aria-hidden="true" style="position:absolute;left:-5000px" data-v-89248ae4><input name="b_43a795784ca963e25903a0da6_9937fe4fc5" tabindex="-1" data-v-89248ae4></div> <div data-v-89248ae4><input id="mc-embedded-subscribe" type="submit" name="subscribe" value="Subscribe" class="mc-btn rounded px-2 py-1 w-full" data-v-89248ae4></div></div></form></div></div></div> <hr data-v-7b3a3fe4> <div class="py-4" data-v-7b3a3fe4>
+    Thanks for checking out my site!
+  </div> <div class="pb-4" data-v-7b3a3fe4>
+    © 2023 Brian Caffey
+  </div></div></div></div></div><script defer src="/_nuxt/static/1673242855/2023/01/08/installing-stable-diffusion-on-my-2016-desktop-computer/state.js"></script><script src="/_nuxt/b3a03c5.js" defer></script><script src="/_nuxt/9d8324e.js" defer></script><script src="/_nuxt/9ee0ef6.js" defer></script><script src="/_nuxt/f51c3d4.js" defer></script><script src="/_nuxt/d4698ff.js" defer></script>
+  </body>
+</html>
