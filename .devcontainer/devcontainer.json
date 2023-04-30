@@ -1,0 +1,29 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "hostRequirements": {
+    "cpus": 2
+  },
+  "waitFor": "onCreateCommand",
+  "updateContentCommand": "yarn",
+  "postCreateCommand": "",
+  "postAttachCommand": {
+    "server": "yarn dev"
+  },
+  "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "pages/index.vue"
+      ]
+    }
+  },
+  "portsAttributes": {
+    "3000": {
+      "label": "Application",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "forwardPorts": [3000],
+  "remoteEnv": {
+    "NODE_OPTIONS": "--openssl-legacy-provider"
+ }
+}
