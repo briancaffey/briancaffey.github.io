@@ -200,3 +200,5 @@ For a static website like my personal blog that is mostly markdown files, I don'
 ![Codespaces on iPad](/static/codespaces-on-ipad-2.png)
 
 You can't use the built in terminal to commit to git, but you can use the `Source Control` panel in VSCode to commit changes using the GUI.
+
+You can create branches in the `Source Control` panel as well. I typically don't use git with a GUI tool like the one built into VSCode, but it should be pretty intuitive. 
