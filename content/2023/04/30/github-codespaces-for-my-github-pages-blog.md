@@ -171,7 +171,7 @@ My personal blog is a fairly simple application and the Codespaces configuration
 
 `django-step-by-step` is a sample microblogging application I built with Djangoa nd Vue.js, mostly to better understand AWS ECS, Infrastructure as Code and GitHub Actions pipelines with CDK, Terraform and Pulumi. It has a Django backend, a static frontend client and uses Postgres and Redis. The project also uses celery for asynchronous task processing and utilities like PgAdmin and MailHog.
 
-Another focus of this project is local development environments and tooling. The backend can be easily started with docker and docker-compose, or using python virtual environments. The frontend is started in another terminal and runs a frontend client that makes API calls to the backend. I then use NGINX to Route all `/api/*` requests to the Django application and all other requests are routed to the Vue.js application. 
+Another focus of this project is local development environments and tooling. The backend can be easily started with docker and docker-compose, or using python virtual environments. The frontend is started in another terminal and runs a frontend client that makes API calls to the backend. I then use NGINX to Route all `/api/*` requests to the Django application and all other requests are routed to the Vue.js application.
 
 I'll try setting this up with codespaces. I'm not exactly sure to do this, and I'm not sure if what I want to do is possible with GitHub Codespaces, but I'm going to try to find out.
 
@@ -182,3 +182,5 @@ With my free GitHub account, it looks like I can access my GitHub Codespace for 
 Here is more information about what is included with a free GitHub account and how pricing works for more use cases: [https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts](https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts).
 
 Anther great feature of Codespaces is that I can use the built-in Settings Sync app to use my custom VSCode settings on any device (from the browser).
+
+Be careful! When using Codespaces in the browser, `cmd + W` closes the browser window which contains all of the VSCode windows. If we were just using VSCode on a laptop, this would only close the current VSCode window. You can restore all of the windows in the Codespace by restoring the browser tab (`cmd + shift + T`).
