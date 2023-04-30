@@ -192,3 +192,11 @@ Opening and closing a terminal is a little bit tricky on an iPad in Safari. To o
 ### Stopping a Codespace
 
 You can stop the current codespace by clicking on `Codespaces` in the bottom-left corner of VSCode and then click on `Stop Current Codespace`. 
+
+### Using github.dev to edit a repo without using Codespaces
+
+For a static website like my personal blog that is mostly markdown files, I don't always need to have a GitHub Codespace running to work on the project. For this use case I can use [github.dev](https://github.dev):
+
+![Codespaces on iPad](/static/codespaces-on-ipad-2.png)
+
+You can't use the built in terminal to commit to git, but you can use the `Source Control` panel in VSCode to commit changes using the GUI.
