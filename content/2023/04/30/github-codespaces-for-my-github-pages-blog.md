@@ -135,3 +135,26 @@ From [this documentation on environment variables](https://docs.github.com/en/en
  }
  ```
 
+Changing the image to Node version 16 in `.devcontainer/devcontainer.json` got things working.
+
+```
+"image": "mcr.microsoft.com/devcontainers/javascript-node:0-18-bullseye"
+```
+
+I took a screenshot of my VSCode environment and now I'm trying to get it to display using the following syntax:
+
+```
+![png](/static/codespaces-vscode-environment.png)
+```
+
+![png](/static/codespaces-vscode-environment.png)
+
+![png](/static/codespaces-vscode-environment-2.png)
+
+In my VSCode application window for this repository I can see that window title ends in `[Codespaces]`. When the terminal is opened, it is opening a terminal on the remote VM where the devcontainers are running:
+
+```
+@briancaffey ➜ /workspaces/briancaffey.github.io (master) $
+```
+
+We can commit changes in git using the terminal or the VSCode UI
