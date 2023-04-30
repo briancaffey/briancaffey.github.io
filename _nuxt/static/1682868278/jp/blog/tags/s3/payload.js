@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/jp/blog/tags/s3", {data:[{articles:[]}],fetch:{},mutations:[]});
