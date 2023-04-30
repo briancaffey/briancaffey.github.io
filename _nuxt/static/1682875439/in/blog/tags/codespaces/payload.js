@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/in/blog/tags/codespaces", {data:[{articles:[]}],fetch:{},mutations:[]});
