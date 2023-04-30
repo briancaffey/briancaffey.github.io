@@ -95,8 +95,8 @@ This looks like a good fork that serves as the basis for many commercial product
 
 ### InvokeAI Automated Installation
 
-> Introduction 
-> 
+> Introduction
+>
 > The automated installer is a shell script that attempts to automate every step needed to install and run InvokeAI on a stock computer running recent versions of Linux, MacOS or Windows. It will leave you with a version that runs a stable version of InvokeAI with the option to upgrade to experimental versions later.
 
 ### Hardware Requirements
@@ -104,7 +104,7 @@ This looks like a good fork that serves as the basis for many commercial product
 ### https://invoke-ai.github.io/InvokeAI/#hardware-requirements
 
 > Installation requires roughly 18G of free disk space to load the libraries and recommended model weights files.
-> 
+>
 > Regardless of your destination disk, your system drive (C:\ on Windows, / on macOS/Linux) requires at least 6GB of free disk space to download and cache python dependencies. NOTE for Linux users: if your temporary directory is mounted as a tmpfs, ensure it has sufficient space.
 
 ```
@@ -990,3 +990,263 @@ Download <r>ecommended models, <a>ll models, <c>ustomized list, or <s>kip this s
 ```
 
 ![Invoke AI Web UI](/static/invoke.png)
+
+## Containers and Cloud
+
+
+[https://invoke-ai.github.io/InvokeAI/installation/040_INSTALL_DOCKER/](https://invoke-ai.github.io/InvokeAI/installation/040_INSTALL_DOCKER/)
+
+On Mac M1 you will have the following error following the guide above:
+
+```
+~/git/github/InvokeAI/docker-build$ make build
+DOCKER_BUILDKIT=1 docker build -t local/invokeai:latest -f Dockerfile.cloud ..
+[+] Building 188.9s (11/19)
+ => [internal] load build definition from Dockerfile.cloud                                                                    0.0s
+ => => transferring dockerfile: 2.56kB                                                                                        0.0s
+ => [internal] load .dockerignore                                                                                             0.0s
+ => => transferring context: 354B                                                                                             0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:22.04                                                               1.0s
+ => [auth] library/ubuntu:pull token for registry-1.docker.io                                                                 0.0s
+ => [builder 1/8] FROM docker.io/library/ubuntu:22.04@sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a  2.8s
+ => => resolve docker.io/library/ubuntu:22.04@sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a9         0.0s
+ => => sha256:e77aa65a8a2bccbc47b96b4256995dd7ff447024ed5319527040f7cc465f6511 529B / 529B                                    0.0s
+ => => sha256:4c2c87c6c36efcba52fe55e88b05af548de25e295d2ebddf10dacbf605ac78b7 1.48kB / 1.48kB                                0.0s
+ => => sha256:10175de2f0c4f7d306f660ee073bce12b824c8012dd19b3c140aae053fabd1cc 28.38MB / 28.38MB                              1.7s
+ => => sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a9 1.42kB / 1.42kB                                0.0s
+ => => extracting sha256:10175de2f0c4f7d306f660ee073bce12b824c8012dd19b3c140aae053fabd1cc                                     1.0s
+ => [internal] load build context                                                                                             0.7s
+ => => transferring context: 14.57MB                                                                                          0.7s
+ => [runtime 2/7] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked     --mount=type=cache,target=/var/lib/apt,sh  78.7s
+ => [builder 2/8] RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /e  0.4s
+ => [builder 3/8] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked     --mount=type=cache,target=/var/lib/apt,s  184.2s
+ => [runtime 3/7] WORKDIR /invokeai                                                                                           0.0s
+ => ERROR [builder 4/8] RUN cd /usr/lib/x86_64-linux-gnu/pkgconfig/ &&   ln -sf opencv4.pc opencv.pc                          0.3s
+------
+ > [builder 4/8] RUN cd /usr/lib/x86_64-linux-gnu/pkgconfig/ &&   ln -sf opencv4.pc opencv.pc:
+#10 0.337 /bin/sh: 1: cd: can't cd to /usr/lib/x86_64-linux-gnu/pkgconfig/
+------
+executor failed running [/bin/sh -c cd /usr/lib/x86_64-linux-gnu/pkgconfig/ &&   ln -sf opencv4.pc opencv.pc]: exit code: 2
+make: *** [build] Error 1
+~/git/github/InvokeAI/docker-build$ export
+```
+
+Try running the following:
+
+```
+DOCKER_DEFAULT_PLATFORM=linux/amd64 make build
+```
+
+It finally finished:
+
+```
+~/git/github/InvokeAI/docker-build$ export DOCKER_DEFAULT_PLATFORM=linux/amd64
+~/git/github/InvokeAI/docker-build$ make build
+DOCKER_BUILDKIT=1 docker build -t local/invokeai:latest -f Dockerfile.cloud ..
+[+] Building 1146.6s (14/19)
+ => => transferring dockerfile: 43B                                                                                           0.0s
+ => [internal] load .dockerignore                                                                                             0.0s
+ => => transferring context: 35B                                                                                              0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:22.04                                                               0.9s
+ => [auth] library/ubuntu:pull token for registry-1.docker.io                                                                 0.0s
+ => [internal] load build context                                                                                             0.1s
+ => => transferring context: 53.09kB                                                                                          0.1s
+ => [builder 1/8] FROM docker.io/library/ubuntu:22.04@sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a  2.8s
+ => => resolve docker.io/library/ubuntu:22.04@sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a9         0.0s
+ => => sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a9 1.42kB / 1.42kB                                0.0s
+ => => sha256:965fbcae990b0467ed5657caceaec165018ef44a4d2d46c7cdea80a9dff0d1ea 529B / 529B                                    0.0s
+ => => sha256:6b7dfa7e8fdbe18ad425dd965a1049d984f31cf0ad57fa6d5377cca355e65f03 1.46kB / 1.46kB                                0.0s
+ => => sha256:6e3729cf69e0ce2de9e779575a1fec8b7fb5efdfa822829290ab6d5d1bc3e797 30.43MB / 30.43MB                              1.4s
+ => => extracting sha256:6e3729cf69e0ce2de9e779575a1fec8b7fb5efdfa822829290ab6d5d1bc3e797                                     1.2s
+[+] Building 1931.5s (14/19)                                                                                                       [+] Building 2357.0s (20/20) FINISHED
+ => [internal] load build definition from Dockerfile.cloud                                                                    0.0s  => => transferring dockerfile: 43B                                                                                           0.0s
+ => [internal] load .dockerignore                                                                                             0.0sr => => transferring context: 35B                                                                                              0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:22.04                                                               0.9s  => [auth] library/ubuntu:pull token for registry-1.docker.io                                                                 0.0s
+ => [internal] load build context                                                                                             0.1s2 => => transferring context: 53.09kB                                                                                          0.1s
+ => [builder 1/8] FROM docker.io/library/ubuntu:22.04@sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a  2.8se => => resolve docker.io/library/ubuntu:22.04@sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a9         0.0s
+ => => sha256:27cb6e6ccef575a4698b66f5de06c7ecd61589132d5a91d098f7f3f9285415a9 1.42kB / 1.42kB                                0.0sf => => sha256:965fbcae990b0467ed5657caceaec165018ef44a4d2d46c7cdea80a9dff0d1ea 529B / 529B                                    0.0s
+ => => sha256:6b7dfa7e8fdbe18ad425dd965a1049d984f31cf0ad57fa6d5377cca355e65f03 1.46kB / 1.46kB                                0.0st => => sha256:6e3729cf69e0ce2de9e779575a1fec8b7fb5efdfa822829290ab6d5d1bc3e797 30.43MB / 30.43MB                              1.4s
+ => => extracting sha256:6e3729cf69e0ce2de9e779575a1fec8b7fb5efdfa822829290ab6d5d1bc3e797                                     1.2st => [runtime 2/7] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked     --mount=type=cache,target=/var/lib/apt,s  337.7s
+ => [builder 2/8] RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /e  0.5sl => [builder 3/8] RUN --mount=type=cache,target=/var/cache/apt,sharing=locked     --mount=type=cache,target=/var/lib/apt,s  715.2s
+ => [runtime 3/7] WORKDIR /invokeai                                                                                           0.0st => [builder 4/8] RUN cd /usr/lib/x86_64-linux-gnu/pkgconfig/ &&   ln -sf opencv4.pc opencv.pc                                0.3s
+ => [builder 5/8] WORKDIR /invokeai                                                                                           0.0st => [builder 6/8] RUN --mount=type=cache,target=/root/.cache/pip     python3 -m venv /invokeai/.venv &&    pip install --e  358.9s
+ => [builder 7/8] COPY . .                                                                                                    0.3s  => [builder 8/8] RUN --mount=type=cache,target=/root/.cache/pip     cp environments-and-requirements/requirements-lin-cu  1143.5s
+ => [runtime 4/7] COPY --from=builder /invokeai /invokeai                                                                    33.6s  => [runtime 5/7] COPY --from=builder /usr/lib/x86_64-linux-gnu/pkgconfig /usr/lib/x86_64-linux-gnu/pkgconfig                 0.2s
+ => [runtime 6/7] RUN python -c "from patchmatch import patch_match"                                                         35.3s  => [runtime 7/7] RUN touch /root/.invokeai                                                                                   0.3s
+ => exporting to image                                                                                                       44.4s
+ => => exporting layers                                                                                                      44.4s
+ => => writing image sha256:45ee3ba5ec932029a8b626f5d890f3409e8374f17ed134e7a0838bb96dc66af6                                  0.0s
+ => => naming to docker.io/local/invokeai:latest
+```
+
+## Configure
+
+Next, run `make configure`
+
+Falied with the following:
+
+```
+~/git/github/InvokeAI/docker-build$ make configure
+docker run --rm -it --runtime=nvidia --gpus=all \
+                -v /Users/brian/invokeai:/mnt/invokeai \
+                -e INVOKEAI_ROOT=/mnt/invokeai \
+                local/invokeai:latest -c "python scripts/configure_invokeai.py"
+docker: Error response from daemon: Unknown runtime specified nvidia.
+See 'docker run --help'.
+make: *** [configure] Error 125
+~/git/github/InvokeAI/docker-build$
+```
+
+I don't want to use GPUs since I'm on a Mac M1, so I can edit the Makefile command:
+
+```
+configure:
+	docker run --rm -it --runtime=nvidia \
+		-v ${HOST_MOUNT_PATH}:${INVOKEAI_ROOT} \
+		-e INVOKEAI_ROOT=${INVOKEAI_ROOT} \
+		${IMAGE} -c "python scripts/configure_invokeai.py"
+```
+
+Running it with:
+
+```
+~/git/github/InvokeAI/docker-build$ make configure
+docker run --rm -it \
+                -v /Users/brian/invokeai:/mnt/invokeai \
+                -e INVOKEAI_ROOT=/mnt/invokeai \
+                local/invokeai:latest -c "python scripts/configure_invokeai.py"
+```
+
+We then go through the following interactive dialog:
+
+```
+Loading Python libraries...
+
+Welcome to InvokeAI. This script will help download the Stable Diffusion weight files
+and other large models that are needed for text to image generation. At any point you may interrupt
+this program and resume later.
+
+** INITIALIZING INVOKEAI RUNTIME DIRECTORY **
+Select the default directory for image outputs [/mnt/invokeai/outputs]: /mnt/invokeai/outputs
+```
+
+This is the volume we mounted with out `-v /Users/brian/invokeai:/mnt/invokeai` argument in the `docker run` command above, so we keep this as the default.
+
+Next we will be asked to configure the NSFW checker:
+
+```
+InvokeAI image outputs will be placed into "/mnt/invokeai/outputs".
+Accept this location? [y]
+
+You may change the chosen output directory at any time by editing the --outdir options in "invokeai.init",
+You may also change the runtime directory by setting the environment variable INVOKEAI_ROOT.
+
+The NSFW (not safe for work) checker blurs out images that potentially contain sexual imagery.
+It can be selectively enabled at run time with --nsfw_checker, and disabled with --no-nsfw_checker.
+The following option will set whether the checker is enabled by default. Like other options, you can
+change this setting later by editing the file invokeai.init.
+This is NOT recommended for systems with less than 6G VRAM because of the checker's memory requirements.
+Enable the NSFW checker by default? [y] N
+```
+
+This creates the initialization file on our local machine.
+
+```
+Creating the initialization file at "/mnt/invokeai/invokeai.init".
+
+** DOWNLOADING DIFFUSION WEIGHTS **
+You can download and configure the weights files manually or let this
+script do it for you. Manual installation is described at:
+
+https://invoke-ai.github.io/InvokeAI/installation/020_INSTALL_MANUAL/
+
+You may download the recommended models (about 10GB total), select a customized set, or
+completely skip this step.
+
+Download <r>ecommended models, <a>ll models, <c>ustomized list, or <s>kip this step? [r]:
+```
+
+Type `r`, press `Enter`, the accept the license terms:
+
+```
+** LICENSE AGREEMENT FOR WEIGHT FILES **
+=========================================================================================
+
+By downloading the Stable Diffusion weight files from the official Hugging Face
+repository, you agree to have read and accepted the CreativeML Responsible AI License.
+The license terms are located here:
+
+   https://huggingface.co/spaces/CompVis/stable-diffusion-license
+
+
+=========================================================================================
+Accept the above License terms? [y]
+```
+
+Next we are asked to authenticate to Huggingface. Create a token there an enter it.
+
+```
+=========================================================================================
+Accept the above License terms? [y]
+Thank you!
+=========================================================================================
+Authenticating to Huggingface
+Huggingface token not found in cache.
+Token was not found in the environment variable HUGGING_FACE_HUB_TOKEN.
+Token was not found in the environment variable HUGGINGFACE_TOKEN.
+ You may optionally enter your Huggingface token now. InvokeAI
+*will* work without it but you will not be able to automatically
+download some of the Hugging Face style concepts.  See
+https://invoke-ai.github.io/InvokeAI/features/CONCEPTS/#using-a-hugging-face-concept
+for more information.
+
+Visit https://huggingface.co/settings/tokens to generate a token. (Sign up for an account if needed).
+
+Paste the token below using Ctrl-V on macOS/Linux, or Ctrl-Shift-V or right-click on Windows.
+Alternatively press 'Enter' to skip this step and continue.
+You may re-run the configuration script again in the future if you do not wish to set the token right now.
+
+HF Token ⮞
+```
+
+Next it starts to download weights. I started at 1:45
+
+
+```
+** DOWNLOADING WEIGHTS **
+stable-diffusion-2.1-768...
+Downloading: 100%|███████████████████████████████████████| 539/539 [00:00<00:00, 123kB/s]
+Downloading: 100%|██████████████████████████████████████| 342/342 [00:00<00:00, 86.3kB/s]
+Downloading: 100%|██████████████████████████████████████| 345/345 [00:00<00:00, 86.0kB/s]
+Downloading: 100%|███████████████████████████████████████| 633/633 [00:00<00:00, 161kB/s]
+Downloading: 100%|██████████████████████████████████| 1.36G/1.36G [04:56<00:00, 4.59MB/s]
+Downloading: 100%|████████████████████████████████████| 525k/525k [00:00<00:00, 3.64MB/s]
+Downloading: 100%|███████████████████████████████████████| 460/460 [00:00<00:00, 115kB/s]
+Downloading: 100%|███████████████████████████████████████| 824/824 [00:00<00:00, 203kB/s]
+Downloading: 100%|██████████████████████████████████| 1.06M/1.06M [00:00<00:00, 4.40MB/s]
+Downloading: 100%|███████████████████████████████████████| 939/939 [00:00<00:00, 202kB/s]
+Downloading: 100%|██████████████████████████████████| 3.46G/3.46G [15:24<00:00, 3.75MB/s]
+Downloading: 100%|███████████████████████████████████████| 611/611 [00:00<00:00, 150kB/s]
+Downloading: 100%|████████████████████████████████████| 335M/335M [01:30<00:00, 3.69MB/s]
+Fetching 13 files: 100%|████████████████████████████████| 13/13 [22:06<00:00, 102.00s/it]
+stable-diffusion-1.5...
+Downloading: 100%|██████████████████████████████████████| 543/543 [00:00<00:00, 87.8kB/s]
+Downloading: 100%|██████████████████████████████████████| 342/342 [00:00<00:00, 39.0kB/s]
+Downloading: 100%|███████████████████████████████████| 4.72k/4.72k [00:00<00:00, 616kB/s]
+Downloading: 100%|██████████████████████████████████| 1.22G/1.22G [05:01<00:00, 4.04MB/s]
+Downloading: 100%|██████████████████████████████████████| 308/308 [00:00<00:00, 71.2kB/s]
+Downloading: 100%|███████████████████████████████████████| 617/617 [00:00<00:00, 137kB/s]
+Fetching 15 files:  40%|██████████████████████████████████| 6/15 [05:08<07:17, 48.64s/it]
+Downloading: 100%|████████████████████████████████████| 492M/492M [01:56<00:00, 4.23MB/s]
+Downloading: 100%|████████████████████████████████████| 525k/525k [00:00<00:00, 1.11MB/s]
+Downloading: 100%|███████████████████████████████████████| 472/472 [00:00<00:00, 128kB/s]
+Downloading: 100%|███████████████████████████████████████| 806/806 [00:00<00:00, 180kB/s]
+Downloading: 100%|██████████████████████████████████| 1.06M/1.06M [00:00<00:00, 1.66MB/s]
+Downloading: 100%|███████████████████████████████████████| 743/743 [00:00<00:00, 171kB/s]
+Fetching 15 files:  80%|█████████████████████████████████| 12/15 [07:38<01:54, 38.25s/it]
+An unexpected error occurred while downloading the model: [Errno 5] Input/output error)       | 97.0M/3.44G [00:24<14:30, 3.84MB/s]
+Downloading:   3%|██▏                                                                         | 97.4M/3.44G [00:24<13:59, 3.98MB/s]
+```
+
+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
+
