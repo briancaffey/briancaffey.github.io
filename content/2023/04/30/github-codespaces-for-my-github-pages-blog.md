@@ -30,7 +30,7 @@ comments: true
 
 ## tl;dr
 
-I'm interested in trying out GitHub Codespaces and submitting an entry to the [GitHub + DEV 2023 Hackathon]. This article will document my first attempt at using Codespaces. My goal is to set up a cloud development environment for my personal GitHub Pages blog ([briancaffey.github.io](https://briancaffey.github.io)) using GitHub Codespaces.
+I'm interested in trying out GitHub Codespaces and submitting an entry to the [GitHub + DEV 2023 Hackathon](https://dev.to/devteam/announcing-the-github-dev-2023-hackathon-4ocn). This article will document my first attempt at using Codespaces. My goal is to set up a cloud development environment for my personal GitHub Pages blog ([briancaffey.github.io](https://briancaffey.github.io)) using GitHub Codespaces.
 
 Hopefully I'll be able to show that I can edit code on github.dev and then view real-time changes on some URL that corresponds to my GitHub Codespace.
 
@@ -158,3 +158,27 @@ In my VSCode application window for this repository I can see that window title 
 ```
 
 We can commit changes in git using the terminal or the VSCode UI
+
+## Working with Codespace on my iPad
+
+This is another major reason I wanted to try out Codespaces. Sometimes I want to go work somewhere but don't want to bring my computer. I may just have my iPad. With Codespaces I can access a consistent development environment from my computer or my iPad without the need to install any local tools or dependencies. Here's a screenshot that I took on my iPad, saved to Files on my iPad, and then drag-and-dropped int the directory tree VSCode running in Safari. Cool!
+
+![GitHub Codespaces running on my iPad](/static/codespaces-on-ipad.png)
+
+### Next steps
+
+My personal blog is a fairly simple application and the Codespaces configuration is relatively straightforward. Next, I want to see if I can setup one of my open-source projects with Codespaces that significantly more complex. 
+
+`django-step-by-step` is a sample microblogging application I built with Djangoa nd Vue.js, mostly to better understand AWS ECS, Infrastructure as Code and GitHub Actions pipelines with CDK, Terraform and Pulumi. It has a Django backend, a static frontend client and uses Postgres and Redis. The project also uses celery for asynchronous task processing and utilities like PgAdmin and MailHog.
+
+Another focus of this project is local development environments and tooling. The backend can be easily started with docker and docker-compose, or using python virtual environments. The frontend is started in another terminal and runs a frontend client that makes API calls to the backend. I then use NGINX to Route all `/api/*` requests to the Django application and all other requests are routed to the Vue.js application. 
+
+I'll try setting this up with codespaces. I'm not exactly sure to do this, and I'm not sure if what I want to do is possible with GitHub Codespaces, but I'm going to try to find out.
+
+I know there is a `django` template for GitHub Codespaces: [https://github.com/github/codespaces-django](https://github.com/github/codespaces-django). This should be a helpful resource for me to learn about running more complex applications with GitHub Codespaces. So far I love working on my personal blog using GitHub Codespaces. I get a live preview of what the site looks like, and then as soon as I push changes, GitHub Actions builds the site again and deploys the changes in seconds. It is nice to know that I can do work on my personal blog without needing to carry my laptop around if I'm on the move. Excellent!
+
+With my free GitHub account, it looks like I can access my GitHub Codespace for 120 hours per month. Another nice feature is that the codespace automatically shuts down after 30 minutes of idling.
+
+Here is more information about what is included with a free GitHub account and how pricing works for more use cases: [https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts](https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts).
+
+Anther great feature of Codespaces is that I can use the built-in Settings Sync app to use my custom VSCode settings on any device (from the browser).
