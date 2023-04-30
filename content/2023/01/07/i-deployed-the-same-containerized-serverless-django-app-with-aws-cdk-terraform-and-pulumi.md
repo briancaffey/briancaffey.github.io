@@ -1072,7 +1072,7 @@ Here's the list of things I check when standing up an application environment:
 
 Here are some of the next things I'll be working on in these project, roughly in order of importance:
 
-- Introduce manual approvals in GitHub Actions for all deployments and allow for the previewing or "planning" before proceeding with an live operations in infrastructure pipelines
+- [x] Introduce manual approvals in GitHub Actions for all deployments and allow for the previewing or "planning" before proceeding with an live operations in infrastructure pipelines
 - Switch to using OIDC for AWS authentication from GitHub Actions and remove AWS secrets from GitHub
 - Show how to do account isolation (different accounts for prod vs pre-prod environments)
 - GitHub Actions deployment pipeline for publishing `pulumi-aws-django` package
