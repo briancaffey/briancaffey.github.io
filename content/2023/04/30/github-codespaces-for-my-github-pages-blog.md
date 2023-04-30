@@ -184,3 +184,11 @@ Here is more information about what is included with a free GitHub account and h
 Anther great feature of Codespaces is that I can use the built-in Settings Sync app to use my custom VSCode settings on any device (from the browser).
 
 Be careful! When using Codespaces in the browser, `cmd + W` closes the browser window which contains all of the VSCode windows. If we were just using VSCode on a laptop, this would only close the current VSCode window. You can restore all of the windows in the Codespace by restoring the browser tab (`cmd + shift + T`).
+
+### Keyboard shortcuts
+
+Opening and closing a terminal is a little bit tricky on an iPad in Safari. To open a new terminal window you can use `^ + shift + ~` and to hide the terminal window you can use `^ + ~`
+
+### Stopping a Codespace
+
+You can stop the current codespace by clicking on `Codespaces` in the bottom-left corner of VSCode and then click on `Stop Current Codespace`. 
