@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
     <!-- Begin Mailchimp Signup Form -->
-    <div id="mc_embed_signup" class="mx-auto w-full md:w-1/2">
+    <div id="mc_embed_signup" class="w-full md:w-1/2 justify-center">
       <form
         id="mc-embedded-subscribe-form"
         action="https://github.us2.list-manage.com/subscribe/post?u=43a795784ca963e25903a0da6&amp;id=9937fe4fc5"
@@ -13,7 +13,7 @@
       >
         <div
           id="mc_embed_signup_scroll"
-          class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center"
+          class="grid grid-cols-1 sm:grid-cols-2 gap-4"
         >
           <input
             id="mce-EMAIL"
@@ -32,13 +32,13 @@
               value=""
             >
           </div>
-          <div class="">
+          <div class="text-left">
             <input
               id="mc-embedded-subscribe"
               type="submit"
               :value="$t('newsletter.subscribe')"
               name="subscribe"
-              class="mc-btn rounded px-2 py-1 w-full"
+              class="mc-btn rounded px-2 py-1"
             >
           </div>
         </div>

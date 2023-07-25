@@ -9,7 +9,7 @@
         rounded-lg
         bg-black
         mx-1
-        mt-1
+        mb-1
         uppercase
         cursor-pointer
         tag

@@ -1,5 +1,4 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-16-bullseye",
   "hostRequirements": {
     "cpus": 2
   },

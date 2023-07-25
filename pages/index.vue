@@ -1,39 +1,39 @@
 <template>
   <div class="mx-auto max-w-6xl">
-    <div class="px-4 lg:px-32">
+    <div class="px-4 lg:px-32 mb-8">
       <div class="sm:p-16 text-center py-4">
         <div class="p-3 rounded border border-white hero">
           {{ $t('home.welcome') }}
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
         <div>
-          <h2 class="text-2xl pb-4 text-center">
+          <h2 class="text-4xl pb-4 text-left">
             {{ $t('home.blogPost') }}
           </h2>
           <ul>
             <blog-card :article="articles[0]" />
           </ul>
-          <div class="pt-8 text-center">
+          <div class="pt-8 text-right">
             <nuxt-link
               :to="localePath('/blog/1')"
-              class="p-4 m-4 rounded border btn"
+              class="px-16 py-4 rounded border btn"
             >
-              {{ $t('home.allArticles') }}
+              {{ $t('home.allArticles') }} →
             </nuxt-link>
           </div>
         </div>
         <div>
-          <h2 class="text-2xl pb-4 text-center">
+          <h2 class="text-4xl pb-4 text-left">
             {{ $t('home.tags') }}
           </h2>
           <tag-cloud :articles="articles" :limit="30" />
-          <div class="pt-8 text-center">
+          <div class="mt-8 text-right">
             <nuxt-link
               :to="localePath('/blog/tags/')"
-              class="p-4 m-4 rounded border btn"
+              class="mx-16 my-4 p-4 rounded border btn"
             >
-              {{ $t('home.allTags') }}
+              {{ $t('home.allTags') }} →
             </nuxt-link>
           </div>
         </div>
