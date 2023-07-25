@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/ru/blog/tags/invokeai", {data:[{articles:[]}],fetch:{},mutations:[]});
