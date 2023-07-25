@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap justify-center">
+  <div class="flex flex-wrap justify-left">
     <tag
       v-for="tag in tagCounts().slice(0, limit)"
       :key="tag[0]"
