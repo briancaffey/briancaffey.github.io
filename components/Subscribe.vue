@@ -1,7 +1,7 @@
 <template>
-  <div class="mx-auto">
+  <div class="flex align-center justify-center">
     <!-- Begin Mailchimp Signup Form -->
-    <div id="mc_embed_signup" class="w-full md:w-1/2 justify-center">
+    <div id="mc_embed_signup" class="w-full md:w-1/2 flex-shrink justify-center">
       <form
         id="mc-embedded-subscribe-form"
         action="https://github.us2.list-manage.com/subscribe/post?u=43a795784ca963e25903a0da6&amp;id=9937fe4fc5"
@@ -32,13 +32,13 @@
               value=""
             >
           </div>
-          <div class="text-left">
+          <div class="text-right" style="width: 100%">
             <input
               id="mc-embedded-subscribe"
               type="submit"
               :value="$t('newsletter.subscribe')"
               name="subscribe"
-              class="mc-btn rounded px-2 py-1"
+              class="mc-btn rounded px-2 py-1 w-full"
             >
           </div>
         </div>

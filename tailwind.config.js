@@ -9,7 +9,15 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true
   },
-  theme: {},
+  theme: {
+    extend: {
+      fontFamily: {
+        heading: ['Montserrat', 'sans-serif'],
+        body: ['Montserrat', 'sans-serif']
+      }
+    }
+  },
+
   variants: {},
   plugins: [],
   purge: {

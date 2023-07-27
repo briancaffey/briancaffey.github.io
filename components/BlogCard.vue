@@ -1,15 +1,15 @@
 <template>
-  <li class="rounded article-card">
+  <li class="rounded-lg article-card">
     <nuxt-link :to="localePath(article.path)">
       <div>
         <img
           v-if="article.image"
           :src="article.image"
-          class="h-32 w-full object-cover rounded-t"
+          class="h-32 w-full object-cover rounded-t-lg"
         >
       </div>
-      <div class="pt-4 px-4 sm:px-4">
-        <p class="text-2xl leading-8">
+      <div class="py-4 px-4 sm:px-4">
+        <p class="text-2xl leading-8 pb-2">
           {{ article.title }}
         </p>
         <p class="blog-card-description">

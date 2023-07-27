@@ -73,10 +73,10 @@ export default {
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     '@nuxtjs/sitemap',
     '@nuxtjs/feed',
-    'nuxt-i18n',
-    ['@nuxtjs/google-adsense', {
-      id: 'ca-pub-4924597640144289'
-    }]
+    'nuxt-i18n'
+    // ['@nuxtjs/google-adsense', {
+    //   id: 'ca-pub-4924597640144289'
+    // }]
   ],
   /*
    ** Axios module configuration
