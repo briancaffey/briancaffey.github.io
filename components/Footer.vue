@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto max-w-6xl p-4 lg:px-16 text-center">
     <hr class="mt-4">
-    <div class="mx-auto py-4">
+    <div class="align-center py-4">
       <div class="pb-4">
         {{ $t('newsletter.joinNewsletter') }}
       </div>

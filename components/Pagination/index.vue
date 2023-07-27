@@ -1,9 +1,8 @@
 <template>
   <div class="mx-auto text-center">
     <nuxt-link
-      v-if="pageNo > 1"
       :to="prevLink"
-      class="
+      :class="`
         px-2
         py-2
         text-xl
@@ -14,8 +13,8 @@
         mt-1
         uppercase
         cursor-pointer
-        pagination
-        "
+        ${pageNo == 1 ? 'pagination-disabled' : 'pagination'}
+        `"
     >
       &nbsp;←
     </nuxt-link>
@@ -41,10 +40,8 @@
       &nbsp;{{ pageNo }}
     </nuxt-link>
     <nuxt-link
-
-      v-if="nextPage"
       :to="localePath(`/blog/${pageNo + 1}`)"
-      class="
+      :class="`
         px-2
         py-2
         text-lg
@@ -56,8 +53,8 @@
         mt-1
         uppercase
         cursor-pointer
-        pagination
-        "
+        ${nextPage ? 'pagination' : 'pagination-disabled'}
+        `"
     >
       &nbsp;→&nbsp;
     </nuxt-link>
@@ -95,5 +92,9 @@ export default {
 <style scoped>
 .pagination {
   background-color: var(--color-primary);
+}
+.pagination-disabled {
+  background-color: gray;
+  cursor: not-allowed;
 }
 </style>

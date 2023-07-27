@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="top" />
+    <!-- <div class="top" /> -->
     <div
       class="mx-auto flex py-2 px-2 sm:px-4 items-center max-w-6xl justify-center"
     >

@@ -1,8 +1,8 @@
 <template>
   <div class="mx-auto max-w-6xl">
     <div class="px-4 lg:px-32 mb-8">
-      <div class="sm:p-16 text-center py-4">
-        <div class="p-3 rounded border border-white hero">
+      <div class="sm:py-16 text-center py-4">
+        <div class="py-3 rounded hero text-left text-2xl">
           {{ $t('home.welcome') }}
         </div>
       </div>
@@ -31,7 +31,7 @@
           <div class="mt-8 text-right">
             <nuxt-link
               :to="localePath('/blog/tags/')"
-              class="mx-16 my-4 p-4 rounded border btn"
+              class="px-16 p-4 rounded border btn"
             >
               {{ $t('home.allTags') }} →
             </nuxt-link>

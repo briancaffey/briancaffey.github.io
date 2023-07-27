@@ -11,11 +11,11 @@ module.exports = {
     tags: 'Popular tags',
     blogPost: 'My latest blog post',
     welcome:
-      "Welcome to Brian Caffey's personal website. This site is mostly a blog about software engineering as well as some of my other hobbies and interests."
+      'Welcome to my site! I write about software engineering and other fun things.'
   },
   common: {
     name: 'Brian Caffey',
-    lastUpdated: 'Last Updated on'
+    lastUpdated: 'Last updated'
   },
   footer: {
     thanks: 'Thanks for checking out my site!'
