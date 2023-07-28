@@ -9,7 +9,7 @@ module.exports = {
     allTags: 'All Tags',
     allArticles: 'All Posts',
     tags: 'Popular tags',
-    blogPost: 'My latest blog post',
+    blogPost: 'Latest post',
     welcome:
       'Welcome to my site! I write about software engineering and other fun things.'
   },
