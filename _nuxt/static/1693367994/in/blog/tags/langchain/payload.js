@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/in/blog/tags/langchain", {data:[{articles:[]}],fetch:{},mutations:[]});

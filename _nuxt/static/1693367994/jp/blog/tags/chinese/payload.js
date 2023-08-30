@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/jp/blog/tags/chinese", {data:[{articles:[]}],fetch:{},mutations:[]});
