@@ -1,6 +1,6 @@
 ---
 title: Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem
-date: '2023-06-17'
+date: '2023-09-29'
 description:
 image: /img/three-body-problem/invokeai/confucius/1.png
 tags:
@@ -16,6 +16,7 @@ tags:
   - stable-diffusion
   - langchain
   - vue
+  - three.js
 
 draft: true
 
@@ -40,7 +41,7 @@ comments: true
 
 This articles brings together several of my interest, both old and new:
 
-- The Chinese Sci-Fi book series 'Three-Body Problem'
+- The Sci-Fi book series 'Three-Body Problem' by Liu Cixun
 - Chinese language
 - NLP techniques
 - AI
@@ -50,19 +51,19 @@ This articles brings together several of my interest, both old and new:
 - Mathematics
 - NVIDIA / CUDA
 
-I translated 'The Three-Body Problem' into English using Meta's LLaMa 2, `llama.cpp`, `llama-cpp-python` and the [`Chinese-LLaMa-2` model from Hugging Face](https://huggingface.co/ziqingyang/chinese-llama-2-7b). I implemented a basic Retrieval Augmented Generated (RAG) program using LangChain with a local vector database that allowed me to ask the LLM questions about the book. To visualize scenes from the book I wrote prompts for Stable Diffusion. Finally, I dipped my toes into nbody simulations with both CuPy (Python library for CUDA) and Three.js. This article will walk through code samples and give more background on the tools, libraries and languages used.
+This is an experimental linguistic and artistic adventure where I get my hands dirty with large language models and stable diffusion. I use the best performing open-source LLMs from China’s tech sector to translate and summarize the text of Chinese author Liu Cixin’s award-winning Science Fiction novel: The Three-Body Problem. The novel’s core story line is based on a classical physics problem: how do you predict the movement of celestial objects in a solar system with three stars? With the same LLM tools, I generate code for running simulations and visualizations of this physics problem to present my own solution to the three-body problem based on parallel computation. Finally, I use stable diffusion to portray the imaginitive solutions to three-body physics problem from one of the book’s main settings: an immersive virtual reality game that spans centuries of world history.
 
-When discussing particulars of the Three Body novel series, I will add the emoji for the Chinese character for "secret" ㊙️ (秘).
+I also share some of my experiences in China as an exchange student and research manager in the energy technology sector. I wrote this article in English and  translated it into Chinese using the same large language models I used to translate the Chinese text of the sci-fi novel into English. There will be some major spoilers in the article, which I will mark with emoji for the Chinese character for secret: ㊙️
 
 > The "㊙" emote, also known as the "Chinese Character" emote, is a symbol used in Japanese culture to indicate secrecy or confidentiality. It is derived from the Chinese character "秘" (mì), which means "secret." In online communication, it is often used to suggest that something should be kept private or not discussed openly.
 
 ## Back story
 
-About a month ago my company announced that another round of layoffs was coming the following week. I'm on an engineering team that had already been impacted by two rounds of layoffs in the past year, and I was fully expecting to be let go this time. In an impulse-buy I ordered a book at the top of my reading list from Amazon: "The Three-Body Problem". It is a Sci-Fi trilogy written by Liu Cixin, a Chinese computer engineer who started writing the book as a series of essays that were published in China's "World of Sci-Fi" publication. I bought the original trilogy of books written in Chinese as well as the English translation, six books in total.
+A few months ago my company announced that another round of layoffs was coming the following week. I'm on an engineering team that had already been impacted by two rounds of layoffs in the past year, and I was fully expecting to be let go this time. In an impulse-buy I ordered a book at the top of my reading list from Amazon: "The Three-Body Problem". It is a Sci-Fi trilogy written by Liu Cixin, a Chinese computer engineer who started writing the book as a series of essays that were published in China's "World of Sci-Fi" publication.
 
 ![Images of Three Body Problem Book Series](/img/three-body-problem/books.png)
 
-I started learning Chinese in college, adding a major in Chinese Language to the mathematics major I decided on in my sophomore year. I did an exchange program through my college with Fudan University, a top Chinese University. In 2007, living and studying Chinese in Shanghai as a 19 year old American was a really fun time. I was placed in an advanced-level course with a diverse group of students where English was not the lowest common linguistic denominator. We had a demanding cirriculum that emphasized reading, listening and speaking Chinese. Alcohol, food and partying was an effective catalyst for absorbing the Chinese language. I also took a course on Differential Equations with my college's mathematics department chair who was on sebatical at Fudan during the same time.
+I started learning Chinese in college, adding a major in Chinese Language to the mathematics major I decided on in my freshman year. I did an exchange program through my college with Fudan University at the . In 2007, living and studying Chinese in Shanghai as a 19 year old American was a really fun time. I was placed in an advanced-level course with a diverse group of students where English was not the lowest common linguistic denominator. We had a demanding cirriculum that emphasized reading, listening and speaking Chinese. Alcohol, food and partying was an effective catalyst for absorbing the Chinese language. I also took a course on Differential Equations with my college's mathematics department chair who was on sebatical at Fudan during the same time.
 
 ![3-6-9 drinking game rules](/img/three-body-problem/3-6-9.jpeg)
 
@@ -70,17 +71,15 @@ My favorite memory of that semester at Fudan was travelling on an epic over-nigh
 
 ![20 yuan note with Guilin rock formations](/img/three-body-problem/20_yuan_note.jpeg)
 
-After college, my second job took me back to China where I specialized in the technologies, policies and applications of large scale battery storage systems for use in renewable energy projects. I worked for a man in Beijing who founded China's energy storage industry association after pioneering the commercialization of vinadium redox flow batteries for renewable energy projects. The job exposed me to exciting battery projects all over China, and also sharpened my technical Chinese skills as I was frequently reading, translating and intepreting in a bi-linguagl, hi-tech environment. At one of the annual industry conferences our organization hosted, I had the opportunity to be an interpreter for a conversation between American battery entrepreurs and representative from China's State Grid. State Grid is China's state-owned power utility and was the world's 3rd largest company by revenue in 2022 behind Walmart and Amazon.
+After college, my second job took me back to China where I specialized in the technologies, policies and applications of large scale battery storage systems for use in renewable energy projects. I worked for a man in Beijing who founded China's energy storage industry association after pioneering the commercialization of vinadium redox flow batteries for renewable energy projects. The job exposed me to exciting battery projects all over China, and also sharpened my technical Chinese skills as I was frequently reading, translating and intepreting in a bi-linguagl, hi-tech environment. At one of the annual industry conferences our organization hosted, I had the opportunity to be an interpreter for a conversation between American battery entrepreurs and representatives from China's State Grid. State Grid is China's state-owned power utility and was the world's 3rd largest company by revenue in 2022 behind Walmart and Amazon.
 
 ![State Grid HQ in Xi Cheng](/img/three-body-problem/invokeai/castles.png)
 
 My first introduction to the 'Three-Body' book came from one of my very best friends from college. He lived at the inner-most leaf-node of one of Beijing's more labrythnian hutongs next to a family that raised and trained pigeons. Visiting my friend where he lived often involved exchanges with his pigeon master neighbor in the narrow alleys of their corner of the hutong. In one such exchange the neighbor quipped to me with a croaking voice: 他怕你琴！, or "he's afraid of your guitar!". The pigeons cooing at my were apparently fearful of the backpack case for my classical guitar which extended over my head by about a foot, an unwelcomed advance into their roost! This simple pleasentry became a refrain that echoed every time we joked about life in the hutong. My friend and I bonded over Chinese language, classical guitar among many other things. I strongly considered his recommendation to check out 三体 (Three Body), the Chinese Sci-Fi novel about alien life in a solar system with three stars as he described it, but with already lots going on in Beijing I never had the chance to check out the book.
 
-***
-
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/5lj99Uz1d50?si=TwrypbY4vTfeWGRf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-Almost 10 years later I came across across a preview for the Netflix production of "3 Body Problem" scheduled to come out in early 2024. With the possibility of loosing my job weighing heavily on me, I picked up the books on Amazon on an impulse buy hoping to have something to do if I was layed off this time. I ended up reading the first book on my Kindle. Reading Chinese on the kindle is nice because your can use built in dictionaries and Google translate for looking up difficult passages with just a few taps on the Kindle or Kindle iPad app.
+Almost 10 years later I came across across a preview for the Netflix production of "3 Body Problem" scheduled to come out in early 2024. With the possibility of loosing my job weighing heavily on me, I picked up the books on Amazon on an impulse buy hoping to have something to do if I was layed off this time. I read the first book in about 2 weeks, mostly using my Kindle. Looking up words and translating entire selections with the kindle is quick and easy, but it is a little bit distracting.
 
 Even though these look ups are simple, it can still be a distraction to have to do lots of look ups for certain chapters or passages that were hard to follow without doing so. I got the idea to build a simple online reader with built-in translation of each word. I scraped the Chinese text of the book from an online 山寨版 (a term from Shen Zhen--the heart of China's electronics industry--which referes to an unofficial version of something, a copy-cat or knock-off). This online version of the book contains some simple watermarks that I was able to remove, and I noticed that some words are rarely replaced with incorrect synonym characters, for examlpe:
 
@@ -88,32 +87,44 @@ Even though these look ups are simple, it can still be a distraction to have to 
 
 For the most part the text from the website seemed to be a faithful reproduction of the book. I found two open source projects that could be use to parse text and translate words:
 
-- CC-CEDICT
-    - an open-source Chinese->English dictionary
-    - [https://www.mdbg.net/chinese/dictionary?page=cedict](https://www.mdbg.net/chinese/dictionary?page=cedict)
-- Chinese Natural Language Processing (spaCy) (NTNU)
-    - [https://alvinntnu.github.io/python-notes/nlp/nlp-spacy-zh.html](https://alvinntnu.github.io/python-notes/nlp/nlp-spacy-zh.html)
+## Chinese by the numbers
 
-The spaCy tool parses words which in Chinese are typically two characters long, and sometimes three or four characters in length. The Chinese -> English dictionary contains tranlsations both for both individual Chinese characters and multiple character words. I wrote some Python scripts to loop over each paragraph of each chapter of each book and parse then Chinese words and look up definitions from them in the Chinese dictonary with over 150K entries. I saved each chapter as a file containing the parsed text and definitions as well as pinyin. I also added the frequency rank for each character to visualize the "difficulty" of reading certain passages. The darker the background of an individual character, the less frequent the character occurs in written Chinese. Hovering over a word you can see the meaning of an individual character as well as the word or "linguistic token" that the NLP software parsed.
+Here's a primer on the Chinese language from a mathematical perspective. This will be helpful before jumping into using NLP and LLMs with Chinese text later in this article.
 
-I built a simple UI to parse and display the text and related "metadata" using Vue, a popular library that rival the dominant UI framework that Facebook, now Meta, is famous for open sourcing. I love Vue's simple API and have had a lot of luck getting it to do what I want it to do.
+How many Chinese characters are there? This question isn't specific enough to have a single answer. A common rule of thumb that I have heard before says that there are over 50,000 characters in total with roughly 10,000 characters in use and about 3,000 characters frequently used in Chinese media and newspapers ([source](https://en.wikipedia.org/wiki/Chinese_language#Vocabulary)). [This answer](https://stackoverflow.com/a/1366113/6084948) from StackOverflow's legendary #1 ranked user VonC gives a good answer based on the number of Unicode characters in the CJK Unified Ideographs block: 20,992.
 
-I'm also a big fan of Vue's author and BDFL, Evan You. His chinese name is 尤雨溪 （You YuXi）. The word "You" in Chinese is pronounced "yo" as in "yo-yo", but Evan seems to have adopted the pronciation "you" as in "you and me" which in Chinese pinyin would actually be "yu". Chinese and English in my experience are totally butchered. For example my name is "Brian" but it is more than not misspelled as "Brain" but native Chinese speakers. 🤷‍♂️ So I typically adopt the phonetic translation of Brian: 布莱恩 (Bu Lai En) or 小布 (Little Bu).
+Here are some numbers and statistics to be better understand the text of the Three-Body Problem Chinese text:
 
-Here are some quick facts about the first book in the series:
-
+- 188,380 total charactes in the book
+- 2,859 unique characters in the book (this comes in close to the )
 - 36 chapters in the book
-- 188380 total charactes in the book
-- average of 69.78 chapters per paragraph
-- 2859 unique characters in the book (TODO: look this up)
-- total of 2512 in the book
+- average of 69.78 paragraphs per chapter
+- total of 2,512 paragraphs in the book
 - average of 74.99 characters per paragraph
+
+### Character Frequency
+
+Let's look at how frequently each character in the book is used. We can also combine this with some data on the overall frequency of Chinese characters. The best measurement I found for overall character frequency is from [Middle Tennessee State University](https://lingua.mtsu.edu/chinese-computing/statistics/char/list.php?Which=MO). Here's a visualization that shows of all of unique characters in the book. The height of a column represents how frequently a character occurs, and the color represents the relatively frequency of the character in Chinese language overall.
 
 ![Character Frequency](/img/three-body-problem/char_freq.png)
 
 <div class='wrap'>
 <iframe class="p-4" src="https://briancaffey.github.io/three-body-problem/freq/" width=100% height=550></iframe>
 </div>
+
+[TODO: add character viz](#add-char-viz)
+
+This is an example [Zipf's law](https://en.wikipedia.org/wiki/Zipf%27s_law): the frequency of something is inversely proportional to its rank:
+
+[TODO: Add Zipf formula](#add-zipf-formula)
+
+### Building a Chinese reader with Vue
+
+Chinese words are typically composed of 2 or 3 characters. There are commas for separating parts of a sentence, but there are no spaces between words like there are in English. This makes parsing words or tokens a little bit harder in Chinese (we can't just split a sentence on space characters to get the individual words). To parse individual words from Chinese text we can use a python NLP package spaCy with a Chinese language pipeline. A spaCy pipeline takes a raw text string and does token splitting, part-of-speech tagging, parsing (which defines dependency labels), and name-entity-recognition.
+
+Once we have a spaCy `Doc` object we can look up the meanings of individual characters and words using the `CC-CEDICT`, [an open-source Chinese->English dictionary](https://www.mdbg.net/chinese/dictionary?page=cedict).
+
+I built a simple UI to parse and display the text and related "metadata" using Vue, a popular open-source javascript library. I'm a big fan of Vue and its creator and BDFL, Evan You. His chinese name is 尤雨溪 （You YuXi）. The word "You" in Chinese is pronounced "yo" as in "yo-yo", but Evan seems to have adopted the pronciation "you" as in "you and me" which in Chinese pinyin would actually be "yu". Names translated to and from Chinese and English can easily be confused, misspelled or mispronounced. For example my name is "Brian" but it is more than not misspelled as "Brain" but native Chinese speakers. I typically adopt the phonetic translation of Brian: 布莱恩 (Bu Lai En) or 小布 (Little Bu).
 
 ## LLMs, Meta's LLaMA 2 and Chinese-LLaMA-2
 
@@ -129,13 +140,29 @@ I requested access to Meta's LLaMa 2 models as soon as they came out and was abl
 
 https://github.com/haonan-li/CMMLU
 
+One of the popular benchmarks for measuring LLM proficiency in Chinese language is the CMMCU: Chinese Massive Multitask Language Understanding.
+
 ![image of CMMLU](/img/three-body-problem/cmmlu.jpeg)
 
 ## Translation
 
-㊙️ From the documents of the the Red Coast Base we learn about the plans to develop a universal language based on math and physics that can be understood by any sufficiently advanced civilization. There is also a plan to build a full linguistic system on top of this universal language which effectively allows for communication with alien civilizations in Chinese and Esperanto.
+There are two important plot developments related to language translation in the Three-Body Problem novel, both of which involve book’s main female protagonist Ye Wenjie. First, her transcribing the Chinese translation of Rachel Carson’s Silent Spring ultimately results in being sent to the Red Coast. Ye Wenjie communicates with extraterrestrial life through a universal translation technology developed by the top-secret project.
 
-The books idea of universal translation made me think a lot about LLMs that are so popular today. In essence they are calculators for words. When you feed a prompt to an LLM, it first puts the prompt through a process called tokenization. Tokenization takes a string of text and breaks it down into tokens (defined by the Large Language Model you are using). These tokens are numbers. Here's an example of tokenization in action:
+Ken Liu’s translation of the Three-Body Problem book from Chinese to English places the events during the Cultural Revolution at the beginning of the book rather than in the middle of the book. This was done in order to avoid attention of government censors.
+
+I tried translating the Chinese text of the Three-Body Problem book using Large Language Models (LLMs). I tried a few different models: Chinese-Llama-2, Qwen-7B-Chat and Baichuan-13B-Chat. Using OpenAI's ChatGPT-4 model I was able to translate selected chapter from the book as well.
+
+How do you get an LLM to translate text? Ultimately the quality of the translation returned by the LLM depends on the quality of the prompt used. I experimented with both chat and completion approaches and tried lots of different kinds of prompts. The models I worked with have a 4K context window (the number of tokens the model can take as input when generating responses), so for translation tasks I had the LLM work on one paragraph at a time.
+
+It was interesting to see the failure modes of translation tasks for the different models. Most of the time the LLM was able to provided accurate translations. Some of the failure modes I observed were:
+
+- a few Chinese characters would show up in the English translations
+- a complete Chinese sentence would show up in an otherwise complete translation of a paragraph
+- The LLM refused to translate certain paragraphs that included violent imagery, such as the open scenes from the Cultural Revolution
+
+The text of this article was also translated paragraph by paragraph using LLMs. I used the following:
+
+The books idea of universal translation made me think a lot about LLMs that are so popular today. In essence they are calculators for words. When you feed a prompt to an LLM, it first puts the prompt through a process called tokenization. Tokenization takes a string of text and breaks it down into tokens (defined by the Large Language Model you are using). The process of tokenization is similar to the tokenization done by spaCy mentioned earlier. These tokens produced by LLM tokenizations are numbers. Here's an example of tokenization in action using the Chinese-Llama-2 model:
 
 ```python
 import json
@@ -187,9 +214,9 @@ This is a good time to talk about some of the obvious differences between Chines
 - The Chinese does not use spaces between words like English does
 - Chinese words are typically formed from 2 or more characters
 - Chinese does not conjugate verbs
-- Chinese characters not have capitization like ASCII characters
-
-(TODO: compare how other LLMs tokenize Chinese text.)
+- Words don't have singular and plural variants
+- Chinese grammar is very simple and is similar to English
+- Chinese characters do not have capitization like ASCII characters
 
 After using basic NLP techniques to translate individual words, I did some basic prompt engineering to get the LLM to translate the books in the Three-Body problem paragraph by paragraph. My computer was able to translate the first book overnight in under 500 minutes. Here's the prompt I used:
 
@@ -217,7 +244,7 @@ Here are the results of my translation of Three-Body Problem with Chinese-Alpaca
 
 I used `nvtop` to monitor GPU usage:
 
-[image of nvtop]
+![image of nvtop](/img/three-body-problem/nvtop.png)
 
 Here are some of the statistics from individual paragraph translations:
 
@@ -363,13 +390,11 @@ Congrats to the InvokeAI team on the 3.0 release. It has been awesome to use and
 
 ## n-body simulations, CUDA and CuPy
 
-🚧 Warning: this section contains errors that I'm still working out. My nbody CuPy simulation can run by I don't think the forces are calucalated properly. I dumped the simulation data into blender to model the position of three spheres and the spheres instantly shot off in different directions. 🚧
-
 > "Other than Stable Eras, all times are Chaotic Eras"
 
 This is one of my favorite lines from the book. It said twice by King Wen of Zhou during Wang Miao's first experience in the Three-Body game where we start to learn about the peculiarities of irregular gravity in a solar system with three suns.
 
-NVIDIA released CUDA was realease in 2006, back when the company's stock price was around $5, compared to its recent peak of around $450 in July 2023. If the Three-Body Problem book was written any later, it would perhaps make references to a juggernaut private enterprise that develops specialized hardware for physics simulations like the n-body problem.
+NVIDIA released CUDA in 2006 back when the company's stock price was around $5, compared to its recent peak of around $450 in July 2023. If the Three-Body Problem book was written any later, it would perhaps make references to a juggernaut private enterprise that develops specialized hardware for physics simulations like the n-body problem.
 
 The nbody problem is supposed to be unsolvable, but it can be silumated pretty easily using graphics cards. NVIDIA provides some sample code for running nbody simulations, but I wasn't able to get these samples working due to appears to be driver issues. I could write a long article about my misadventures in installing and uninstalling CUDA and NVIDIA drivers to get things working for all things related that use the GPU: stable diffusion, LLMs and CUDA programs. I have a decent understanding now of how things should be installed but I'm still slightly nervous of unintentionally breaking things in my development environment. As a DevOps engineer, Murphy's law elementary. Everything I love about containers for simplifying developer environments seems to not really apply to graphics cards and their drivers, even when you are using the `nvidia-container-toolkit`.
 
@@ -540,6 +565,12 @@ cp_positions += DT * cp_velocities
 
 In the last step I append the updated positions to an array that holds every "tick" (the positions of each particle between each time interval, `DT` - "delta time")
 
+## Three.js
+
+Here's another 3-Body Problem simulation that I made with Three.js:
+
+<iframe src="https://briancaffey.github.io/three-body-problem/three/" width=100% height=350></iframe>
+
 A simpler way to view particle physics can be acheived with Three.js:
 
 <iframe src="https://briancaffey.github.io/three-body-problem/three/" width=100% height=350></iframe>
@@ -548,3 +579,7 @@ Three.js and WebGL and still feels like alien technologies to me. It doesn't fee
 
 ㊙️
 > 《三体》正是这样，它的海量信息是隐藏在深处的，汪淼能感觉到，但说不清。他突然悟出，《三体》的不寻常在于，与其他的游戏相比，它的设计者是反其道而行之——一般游戏的设计者都是尽可能地增加显示的信息量，以产生真实感；但《三体》的设计者却是在极力压缩信息量，以隐藏某种巨大的真实，就像那张看似空旷的天空照片。
+
+## Screen Adaptations
+
+Dream of the Red Chamber is one of China's Four Great Classical Novels. It was written in the mid 18th century and first pulblished in 1791. It is a long saga that totals 960 thousand characters.
