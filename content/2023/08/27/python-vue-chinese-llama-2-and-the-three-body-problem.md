@@ -20,13 +20,13 @@ tags:
 
 # draft: true
 
-# external:
-#   - link: https://news.ycombinator.com/item?id=34291336
-#     site: hn
-#   - link: https://www.reddit.com/r/aws/comments/105vo53/my_infrastructure_as_code_rosetta_stone_deploying/
-#     site: reddit
-#   - link: https://dev.to/briancaffey/my-infrastructure-as-code-rosetta-stone-deploying-the-same-web-application-on-aws-ecs-fargate-with-cdk-terraform-and-pulumi-oe4
-#     site: dev
+external:
+  - link: https://news.ycombinator.com/item?id=38393757
+    site: hn
+  - link: https://www.reddit.com/r/threebodyproblem/comments/1823l5j/python_vue_chinesellama2_and_the_threebody_problem/
+    site: reddit
+  - link: https://twitter.com/briancaffey/status/1727710878349332614
+    site: x
 #   - link: https://medium.com/@briancaffey/my-infrastructure-as-code-rosetta-stone-with-cdk-terraform-and-pulumi-44fcb8233e6a
 #     site: medium
 #   - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
