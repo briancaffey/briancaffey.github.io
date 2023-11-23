@@ -69,6 +69,7 @@ a {
 
 .markdown img {
   margin: auto;
+  @apply my-6;
 }
 
 .markdown strong {
