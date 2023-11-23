@@ -1,8 +1,8 @@
 ---
 title: Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem
-date: '2023-09-29'
+date: '2023-11-23'
 description:
-image: /img/three-body-problem/invokeai/confucius/1.png
+image: /img/three-body-problem/cover.png
 tags:
   - three-body-problem
   - llama
@@ -18,7 +18,7 @@ tags:
   - vue
   - three.js
 
-draft: true
+# draft: true
 
 # external:
 #   - link: https://news.ycombinator.com/item?id=34291336
