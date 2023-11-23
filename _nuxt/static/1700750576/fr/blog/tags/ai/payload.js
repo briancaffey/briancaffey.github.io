@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/fr/blog/tags/ai", {data:[{articles:[]}],fetch:{},mutations:[]});

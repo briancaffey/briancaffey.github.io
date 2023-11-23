@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/jp/blog/tags/three-body-problem", {data:[{articles:[]}],fetch:{},mutations:[]});
