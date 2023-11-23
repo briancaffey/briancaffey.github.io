@@ -4,10 +4,15 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Thu, 23 Nov 2023 14:43:33 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 23 Nov 2023 14:51:29 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem]]></title>
+            <link>https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem</link>
+            <guid>https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem</guid>
+        </item>
         <item>
             <title><![CDATA[My Infrastructure as Code Rosetta Stone - Deploying the same web application on AWS ECS Fargate with CDK, Terraform and Pulumi]]></title>
             <link>https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi</link>
@@ -277,14 +282,14 @@
             <guid>https://briancaffey.github.io/projects/bucksamonth</guid>
         </item>
         <item>
-            <title><![CDATA[Rendering SketchUp models with Kerkythea]]></title>
-            <link>https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea.html</link>
-            <guid>https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea.html</guid>
-        </item>
-        <item>
             <title><![CDATA[Building a 3D model from 60 photographs with VisualSFM and Meshlab]]></title>
             <link>https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry.html</link>
             <guid>https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry.html</guid>
+        </item>
+        <item>
+            <title><![CDATA[Rendering SketchUp models with Kerkythea]]></title>
+            <link>https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea.html</link>
+            <guid>https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea.html</guid>
         </item>
         <item>
             <title><![CDATA[Python script for generating 2D n-state Langton's Ant animations]]></title>
