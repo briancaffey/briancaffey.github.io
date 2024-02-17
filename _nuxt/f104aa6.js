@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[26],{303:function(e,t,n){"use strict";n.r(t);var c={},o=n(6),component=Object(o.a)(c,(function(){var e=this,t=e.$createElement;return(e._self._c||t)("p",{staticStyle:{"text-color":"white","font-size":"3rem"}},[e._v("\n  𝕏\n")])}),[],!1,null,"1ea59725",null);t.default=component.exports}}]);
