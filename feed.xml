@@ -4,7 +4,7 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Sat, 17 Feb 2024 19:29:41 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 17 Feb 2024 22:37:16 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
@@ -18,18 +18,6 @@
             <link>https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi</link>
             <guid>https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi</guid>
             <description><![CDATA[I wrote three reusable infrastructure as code libraries to develop high-level abstractions for deploying containerized web apps on AWS ECS. This article will provide an overview of my experience working with CDK, Terraform and Pulumi and will cover how I use these libraries in automated infrastructure deployment pipelines using GitHub Actions]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application]]></title>
-            <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
-            <guid>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</guid>
-            <description><![CDATA[This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Session Authentication with Django, Django REST Framework and Nuxt]]></title>
-            <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
-            <guid>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
-            <description><![CDATA[This article shows how to use session authentication with Django + Nuxt.js applications]]></description>
         </item>
         <item>
             <title><![CDATA[Setting up ad hoc development environments for Django applications with AWS ECS, Terraform and GitHub Actions]]></title>
@@ -78,6 +66,18 @@
             <link>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</link>
             <guid>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</guid>
             <description><![CDATA[This article will summarize my experience implementing internationalization (i18n) for a statically-generated Nuxt.js site]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application]]></title>
+            <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
+            <guid>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</guid>
+            <description><![CDATA[This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Session Authentication with Django, Django REST Framework and Nuxt]]></title>
+            <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
+            <guid>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
+            <description><![CDATA[This article shows how to use session authentication with Django + Nuxt.js applications]]></description>
         </item>
         <item>
             <title><![CDATA[Building web applications with Django, Django REST Framework, Nuxt.js and docker]]></title>
@@ -247,14 +247,14 @@
             <guid>https://briancaffey.github.io/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html</guid>
         </item>
         <item>
-            <title><![CDATA[Reading RSS with Python]]></title>
-            <link>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</link>
-            <guid>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</guid>
-        </item>
-        <item>
             <title><![CDATA[Moving from Gnome Desktop to i3 window manager on Arch Linux]]></title>
             <link>https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html</link>
             <guid>https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html</guid>
+        </item>
+        <item>
+            <title><![CDATA[Reading RSS with Python]]></title>
+            <link>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</link>
+            <guid>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</guid>
         </item>
         <item>
             <title><![CDATA[Simple Board Games in ReactJS]]></title>
