@@ -42,6 +42,12 @@ Here's my project submission post on 𝕏:
 
 [link to x.com post]
 
+Rocket Leauge BotChat - powered by TensorRT-LLM
+⚽️🚗⚡️🤖💬
+
+My submission for NVIDIA's Gen AI on RTX PCs Developer Contest
+@NVIDIAAIDev #RocketLeague #GTC24 #NVIDIA #LLM #LLaMA
+
 ## NVIDIA's Gen AI Developer Contest
 
 The following email caught my attention last month:
@@ -78,7 +84,7 @@ One other thing I learned about Rocket League is that it has an active modding c
 
 Bots are built into the Rocket League game and you can with or against them in offline matches, but the built-in bots are not very good. Another 3rd-party project called RLBot allows players to play against community-developed AI bots that are developed with machine learning frameworks like TensorFlow. These bots are very good, but they are not infallible. Also, there is a known problem in Rocket League where some players use these bots to play in ranked online matches to gain an unfair advantage against human players. Playing through the night, these bots can ascend to the upper levels of the ranked gameplay undetected. My plugin is only intended to be used in offline games against AI bots. My goal was to find the most advanced Rocket League bot and have it to send me in-game chat messages while playing against it.
 
-![RLBot Ascii Art](/img/rlbc/RLBot.png)
+![RLBot Ascii Art](/img/rlbc/rlbot.png)
 
 ## Putting together the puzzle pieces
 

@@ -80,6 +80,14 @@ export default {
           content: this.article.draft ? 'noindex' : 'all'
         },
         {
+          property: 'twitter:creator',
+          content: '@briancaffey'
+        },
+        {
+          property: 'twitter:site',
+          content: '@briancaffey'
+        },
+        {
           property: 'og:title',
           content: this.article.title
         },
@@ -92,8 +100,12 @@ export default {
           content: process.env.baseUrl + this.article.image
         },
         {
-          property: 'twitter:card',
+          property: 'twitter:image',
           content: process.env.baseUrl + this.article.image
+        },
+        {
+          property: 'twitter:card',
+          content: 'summary_large_image'
         }
       ]
     }
