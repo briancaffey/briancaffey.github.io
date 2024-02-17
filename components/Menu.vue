@@ -10,14 +10,14 @@
             {{ $t('nav.blog') }}
           </nuxt-link>
         </li>
-        <li class="px-4 text-lg">
+        <!-- <li class="px-4 text-lg">
           <nuxt-link
             :to="localePath('projects')"
             :class="$route.name.startsWith('projects') ? 'selected' : ''"
           >
             {{ $t('nav.projects') }}
           </nuxt-link>
-        </li>
+        </li> -->
         <li class="px-4 text-lg">
           <nuxt-link
             :to="localePath('contact')"
