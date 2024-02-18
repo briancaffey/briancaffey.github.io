@@ -15,7 +15,7 @@ tags:
   - gaming
   - windows
 
-draft: true
+# draft: true
 
 # external:
 #   - link: https://news.ycombinator.com/
@@ -40,13 +40,7 @@ This article is about my submission to NVIDIA's Generative AI on RTX PCs Develop
 
 Here's my project submission post on 𝕏:
 
-[link to x.com post]
-
-Rocket League BotChat - powered by TensorRT-LLM
-⚽️🚗⚡️🤖💬
-
-My submission for NVIDIA's Gen AI on RTX PCs Developer Contest
-@NVIDIAAIDev #RocketLeague #GTC24 #NVIDIA #LLM #LLaMA
+<blockquote class="twitter-tweet tw-align-center" data-theme="dark"><p lang="en" dir="ltr">Rocket League BotChat - powered by TensorRT-LLM<br>⚽️🚗⚡️🤖💬<br>My submission for NVIDIA&#39;s Gen AI on RTX PCs Developer Contest<a href="https://twitter.com/NVIDIAAIDev?ref_src=twsrc%5Etfw">@NVIDIAAIDev</a> <a href="https://twitter.com/hashtag/RocketLeague?src=hash&amp;ref_src=twsrc%5Etfw">#RocketLeague</a> <a href="https://twitter.com/hashtag/GTC24?src=hash&amp;ref_src=twsrc%5Etfw">#GTC24</a> <a href="https://twitter.com/hashtag/NVIDIA?src=hash&amp;ref_src=twsrc%5Etfw">#NVIDIA</a> <a href="https://twitter.com/hashtag/LLM?src=hash&amp;ref_src=twsrc%5Etfw">#LLM</a> <a href="https://twitter.com/hashtag/Llama?src=hash&amp;ref_src=twsrc%5Etfw">#Llama</a> <a href="https://twitter.com/hashtag/AI?src=hash&amp;ref_src=twsrc%5Etfw">#AI</a> <a href="https://twitter.com/hashtag/Windows11?src=hash&amp;ref_src=twsrc%5Etfw">#Windows11</a> <a href="https://t.co/A7ON3lyTC6">pic.twitter.com/A7ON3lyTC6</a></p>&mdash; Brian Caffey (@briancaffey) <a href="https://twitter.com/briancaffey/status/1759265152275292644?ref_src=twsrc%5Etfw">February 18, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 Here's a link to the [Rocket League BotChat GitHub repoository](https://github.com/briancaffey/RocketLeagueBotChat).
 
@@ -274,6 +268,8 @@ These values are included in the body of the request to the LLM, but I didn't ha
 This section of the UI displays the messages that are used in requests to the LLM. In order keep the prompt within the context window limit, I only used the most recent six messages sent from the "user" (which are messages about game events) and the "assistant" (which are LLM responses from the bot). Whenever the user changes the system prompt, the messages vector is reset to only include the new system prompt.
 
 ## Demo Video for Contest Submission
+
+<blockquote class="twitter-tweet tw-align-center" data-media-max-width="560"><p lang="en" dir="ltr">Rocket League BotChat - powered by TensorRT-LLM<br>⚽️🚗⚡️🤖💬<br>My submission for NVIDIA&#39;s Gen AI on RTX PCs Developer Contest<a href="https://twitter.com/NVIDIAAIDev?ref_src=twsrc%5Etfw">@NVIDIAAIDev</a> <a href="https://twitter.com/hashtag/RocketLeague?src=hash&amp;ref_src=twsrc%5Etfw">#RocketLeague</a> <a href="https://twitter.com/hashtag/GTC24?src=hash&amp;ref_src=twsrc%5Etfw">#GTC24</a> <a href="https://twitter.com/hashtag/NVIDIA?src=hash&amp;ref_src=twsrc%5Etfw">#NVIDIA</a> <a href="https://twitter.com/hashtag/LLM?src=hash&amp;ref_src=twsrc%5Etfw">#LLM</a> <a href="https://twitter.com/hashtag/Llama?src=hash&amp;ref_src=twsrc%5Etfw">#Llama</a> <a href="https://twitter.com/hashtag/AI?src=hash&amp;ref_src=twsrc%5Etfw">#AI</a> <a href="https://twitter.com/hashtag/Windows11?src=hash&amp;ref_src=twsrc%5Etfw">#Windows11</a> <a href="https://t.co/A7ON3lyTC6">pic.twitter.com/A7ON3lyTC6</a></p>&mdash; Brian Caffey (@briancaffey) <a href="https://twitter.com/briancaffey/status/1759265152275292644?ref_src=twsrc%5Etfw">February 18, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 I used Blender's sequence editor to create a demo video for my contest submission. I don't edit a lot of videos, but it is a fun process and I learned a lot about Blender and non-linear video editing in the process. Here's how I approached creating the demo video for my project.
 
