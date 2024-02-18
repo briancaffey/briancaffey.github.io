@@ -42,11 +42,13 @@ Here's my project submission post on 𝕏:
 
 [link to x.com post]
 
-Rocket Leauge BotChat - powered by TensorRT-LLM
+Rocket League BotChat - powered by TensorRT-LLM
 ⚽️🚗⚡️🤖💬
 
 My submission for NVIDIA's Gen AI on RTX PCs Developer Contest
 @NVIDIAAIDev #RocketLeague #GTC24 #NVIDIA #LLM #LLaMA
+
+Here's a link to the [Rocket League BotChat GitHub repoository](https://github.com/briancaffey/RocketLeagueBotChat).
 
 ## NVIDIA's Gen AI Developer Contest
 
@@ -54,13 +56,13 @@ The following email caught my attention last month:
 
 > Generative AI on RTX PCs Developer Contest: Build your next innovative Gen AI project using NVIDIA TensorRT or TensorRT-LLM on Windows PC with NVIDIA RTX systems
 
-The part about “on Windows PC” made me think: why would a developer contest focus on a particular operating system? I use all three of the major operating systems: macOS, Ubuntu and Windows 11, but most of the development work I do is on macOS and Ubuntu. I discovered WSL (Windows Subsystem for Linux) a few years ago and really enjoy using that for development as well, but I had never considered doing development work on Windows outside of WSL. I had never used any of the Windows-specific development frameworks like .NET or Visual Studio.
+The part about “on Windows PC” made me think: why would a developer contest focus on a particular operating system? I use all three of the major operating systems: macOS, Ubuntu and Windows 11, but most of the development work I do is on macOS and Ubuntu. I discovered WSL (Windows Subsystem for Linux) a few years ago and really enjoy using that for development as well, but I had never considered doing development work on Windows outside of WSL. I had also never used any of the Windows-specific development frameworks like .NET or Visual Studio.
 
-I built my first personal computer in 2016. It uses an NVIDIA GeForce GTX 1080 graphics card. When I built another personal computer last year in 2023, getting the NVIDIA GeForce RTX 4090 graphics card was a big step up. I bought two NVMe drives so I could dual boot into both Windows and Ubuntu operating systems.Switching between the operating systems requires turning off the computer, going into the BIOS settings and changing the boot order and restarting the computer.
+My experience with Windows goes back to 2016 when I built my fist PC with an NVIDIA GeForce GTX 1080 graphics card. When I built another personal computer last year in 2023, getting the NVIDIA GeForce RTX 4090 graphics card was a big step up. I bought two NVMe drives in order to dual boot into both Windows and Ubuntu operating systems. Switching between the operating systems requires turning off the computer, going into the BIOS settings and changing the boot order and restarting the computer.
 
-Last year I started learning more about AI image generation using Stable Diffusion with programs like Automatic1111, InvokeAI and ComfyUI. I set up everything on my Ubuntu operating system, and frequently had to switch between using Ubuntu for working with Stable Diffusion and Windows for gaming and other Windows-specific software. The friction of having to constantly switch operating systems is ultimately what led me to move my stable diffusion software workflows to Windows. All of my models and images are stored to external drives, so moving things over to Windows was pretty easy.
+Last year I started learning more about AI image generation using Stable Diffusion with programs like Automatic1111, InvokeAI and ComfyUI. I set up everything on my PC's Ubuntu operating system, and frequently had to switch between using Ubuntu for working with stable diffusion and Windows for gaming and other Windows-specific software. The friction of having to constantly switch operating systems pushed me to move my stable diffusion software workflows to Windows. All of my models and images are stored to external drives, so moving things over to Windows was pretty easy.
 
-I learned PowerShell and got more familiar with how Windows works as a development machine. Environment variables and system variables are one example of how Windows does things differently. And just like that, I became a Windows developer! This got me interested in coming up with an idea for the NVIDIA Generative AI on NVIDIA RTX PCs Developer Contest.
+I learned PowerShell and got more familiar with how Windows works as a development machine. Environment variables and system variables are one example of how Windows does things differently compared ot Linux-based operating systems. And just like that, I became a Windows developer! This experience got me interested in coming up with an idea for the NVIDIA Generative AI on NVIDIA RTX PCs Developer Contest.
 
 ![Windows winfetch screenshot](/img/rlbc/winfetch.png)
 
@@ -72,23 +74,23 @@ The contest description and some related NVIDIA articles about the contest helpe
 
 > Many use cases would benefit from running LLMs locally on Windows PCs, including gaming, creativity, productivity, and developer experiences.
 
-This contest is focused on NVIDIA's consumer hardware line: GeForce RTX. It has a diverse set of use cases including gaming, crypto mining, VR, simulation software and new AI techniques including image generation and LLM (Large Language Model) inference.
+This contest is focused on NVIDIA's consumer hardware line: GeForce RTX. It has a diverse set of use cases including gaming, crypto mining, VR, simulation software, creative tools and new AI techniques including image generation and LLM (Large Language Model) inference.
 
 ![A stacked bar chart showing the composition of Nvidia's revenue each quarter going back to fiscal 2019.](https://g.foolcdn.com/image/?url=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F764886%2Fnvda_revenue_bar.png&op=resize&w=700)
 
 Gaming seemed like an interesting avenue for me to explore. PC gaming is still an industry that is developed primarily for Windows operating systems, and the gaming industry has been the largest revenue driver of NVIDIA in recent years, only recently surpassed by the data center segment. GPUs are needed to render graphics of enormous open-world environments. Some story-driven games include huge amounts of dialogue that can be considered as huge literary works in their own right. Red Dead Redemption and Genshin Impact are two massively popular games of this type. There might be an interesting project idea that could use LLMs and RAG (retrieval augmented generation), but I don't play these types of games and it didn't seem practical for a project that would be built in just over a month. I thought about trying to build something for a simpler game that I already know.
 
-Rocket League is a vehicular soccer game that is played on both game consoles and on PCs. It is an eSports with a very high skill ceiling and a massive player base (85 million active players in the last 30 days). I started playing it during the pandemic with some of my friends and we quickly came to learn that the in-game chat can be very entertaining, or annoying, or toxic and in some cases, sportsmanlike.
+Rocket League is a vehicular soccer game that is played on both game consoles and on PCs. It is an eSports with a very high skill ceiling and a massive player base (85 million active players in the last 30 days). I started playing it during the pandemic with some of my friends and all got hooked. We also came to learn that Rocket League's in-game is varies from entertaining, annoying, toxic and in some cases, sportsmanlike.
 
 One other thing I learned about Rocket League is that it has an active modding community. Developers create plugins for the game for all different purposes, such as coaching, practice drills, capturing replays, tracking player statistics, etc. Most Rocket League Mods are written in a popular framework called Bakkesmod (developed Andreas "bakkes" Bakke, a Norwegian software engineer). Rocket League's in-game chat inspired the idea for my submission to NVIDIA's Generative AI Developer Contest: Rocket League BotChat. The idea for my project is to build a plugin with Bakkesmod that allows Rocket League bots to send chat messages based on game events using an LLM accelerated and optimized by TensorRT-LLM (more on TensorRT-LLM soon!)
 
-Bots are built into the Rocket League game and you can with or against them in offline matches, but the built-in bots are not very good. Another 3rd-party project called RLBot allows players to play against community-developed AI bots that are developed with machine learning frameworks like TensorFlow. These bots are very good, but they are not infallible. Also, there is a known problem in Rocket League where some players use these bots to play in ranked online matches to gain an unfair advantage against human players. Playing through the night, these bots can ascend to the upper levels of the ranked gameplay undetected. My plugin is only intended to be used in offline games against AI bots. My goal was to find the most advanced Rocket League bot and have it to send me in-game chat messages while playing against it.
+Bots are built into the Rocket League game and you can play with or against them in offline matches. However, the built-in bots are not very good. Another 3rd-party project called RLBot allows players to play against community-developed AI bots that are developed with machine learning frameworks like TensorFlow and PyTorch. These bots are very good, but they are not infallible. My contest project idea was now clear: develop a plugin for Rocket League capable of sending messages from bot players. This idea seemed to check the boxes for the large language model category of NVIDIA's developer contest: develop a project in a Windows environment for a Windows-specific program, and use an LLM powered by TensorRT-LLM.
 
 ![RLBot Ascii Art](/img/rlbc/rlbot.png)
 
 ## Putting together the puzzle pieces
 
-With this idea in mind, I looked into the overall feasibility. I really had no idea if this would this would work. I looked through the Bakkesmod documentation and found some helpful resources that gave me confidence that I could pull something together for at least a proof-of-concept.
+With this idea in mind, I looked into the project's feasibility. I really had no idea if this would work. I looked through the Bakkesmod documentation and found some helpful resources that gave me confidence that I could pull something together for at least a proof-of-concept.
 
 - The Bakkesmod Plugin Wiki [https://wiki.bakkesplugins.com/](https://wiki.bakkesplugins.com/)
 	- [`HttpWrapper`](https://wiki.bakkesplugins.com/code_snippets/using_http_wrapper/) for sending HTTP requests from Bakkesmod
@@ -100,21 +102,21 @@ With this idea in mind, I looked into the overall feasibility. I really had no i
   - BetterChat: [https://github.com/JulienML/BetterChat](https://github.com/JulienML/BetterChat)
   - Translate: [https://github.com/0xleft/trnslt](https://github.com/0xleft/trnslt)
 
-Starting with the Plugin Template, I wrote a simple console command that when triggered sends an HTTP request to `localhost:8000/hello`. I set up a Hello World Flask app running on `localhost:8000` and I was able to get a response from my Hello World server! There seemed to be no weird network or permission errors that would prevent my game code from communicating.
+Starting with the Plugin Template, I wrote a simple console command that when triggered sends an HTTP request to `localhost:8000/hello`. I set up a Hello World Flask app running on `localhost:8000` and I was able to get a response from my Hello World server! There didn't seem to be any network or permission errors that would prevent my game code from communicating with other applications on my PC.
 
-Next I started looking into how to build and run optimized LLMs with NVIDIA's TensorRT-LLM library, the software that this contest is promoting. The contest announcement included another interesting building block that I thought could be very useful: an example repo showing how to run `CodeLlama-13b-instruct-hf` optimized by TensorRT-LLM to provide inference for a VSCode extension called Continue (Continue.dev).
+Next I started looking into how to build and run optimized LLMs with NVIDIA's TensorRT-LLM library, the software that this contest is promoting. The contest announcement included an interesting building block that I thought could be very useful: an example repo showing how to run `CodeLlama-13b-instruct-hf` optimized by TensorRT-LLM to provide inference for a VSCode extension called Continue (Continue.dev).
 
 - `CodeLlama-13b-instruct-hf` is an open source model from Meta that is trained on code and can help with code generation tasks
 - TensorRT-LLM is a Python library that accelerates and optimizes inference performance of large language models. It takes a Large Language Model like `CodeLlama-13b-instruct-hf` and generates an engine that can be used for doing inference
-- VSCode is an open source code editor developed by Microsoft
+- VSCode is an open source code editor developed by Microsoft with an large number of community plugins
 - Continue.dev is a startup backed by Y Combinator that is developing an open-source autopilot (code assistant) for VSCode and JetBrains that works with local LLMs or paid services like ChatGPT
 
-To get this working you need to build the TensorRT-LLM engine. Building TensorRT-LLM engines on Windows can be done in one of two ways:
+To get the coding assistant project working I needed to build the TensorRT-LLM engine. Building TensorRT-LLM engines on Windows can be done in one of two ways:
 
 - using a "bare-metal" virtual environment on Windows (with PowerShell)
 - using WSL
 
-At the time of writing, using building a TensorRT-LLM engine on Windows can only be done with version `v0.6.1` of the TensorRT-LLM repo and version `v0.7.1` of the `tensorrt_llm` Python package.
+At the time of writing, building a TensorRT-LLM engine on Windows can only be done with version `v0.6.1` of the TensorRT-LLM repo and version `v0.7.1` of the `tensorrt_llm` Python package.
 
 With WSL you can use the up-to-date versions of the TensorRT-LLM repo (main branch). The engines produced by Windows and WSL (Ubuntu) are not interchangeable and you will get errors if you try to use an engine created with one operating system on another operating system.
 
@@ -136,7 +138,7 @@ The Continue.dev extension using `CodeLlama-13b-instruct-hf` accelerated and opt
 
 > C++ has one of the largest presences on GitHub and Stack Overflow. This shows up in its representation in public LLM datasets, where it is one of the languages with the most data. Its performance is near the top of the MultiPL-E, BabelCode / TP3, MBXP / Multilingual HumanEval, and HumanEval-X benchmarks. However, given that C++ is often used when code performance and exact algorithm implementation is very important, many developers don’t believe that LLMs are as helpful for C++ as some of the other languages in this tier.
 
-Most of the time I'm working with either Python and TypeScript. I've read about C++ but haven't used it for anything before doing this project. I primarily used Microsoft Visual Studio to build the plugin, but VSCode with Continue.dev was helpful for tackling smaller problems a REPL-like environment. For example, I used the `nlohmann/json` JSON library to figure out how to handle JSON. Coming from Python and JavaScript, the syntax is quite different. For example, here is how to build the `messages` for the body of an OpenAI API request:
+Most of the time I'm working with either Python and TypeScript. I've read about C++ but haven't used it for anything before doing this project. I primarily used Microsoft Visual Studio to build the plugin, but VSCode with the Continue.dev autopilot extension was helpful for tackling smaller problems in a REPL-like environment. For example, I used Continue.dev in VSCode to figure out how to handle JSON. Coming from Python and JavaScript languages, I found the `nlohmann/json` JSON library syntax to be somewhat different. For example, here is how to add a message to `messages` in the body of an OpenAI API request:
 
 ```cpp
 messages.push_back({ {"role", role}, {"content", content } });
@@ -150,20 +152,18 @@ messages.append({"role": role, "content": content})
 
 ## Development environment
 
-While working on different projects using web technologies and frameworks across the Python and JavaScript ecosystems, I have an appreciation for well-structured development environments. Development environments refers to the tools and processes by which a developer can make a change to source code and see these changes reflected in some version of the application running a local environment. The local environment (the developer's computer) should be a close proxy the production environment where the code will ultimately deployed to for end users. For this project the local development environment is our PC itself, which simplifies things. A development environment should support hot-reloading so incremental changes can be run to test functionality. I really like the development environment for this project. Here's a screenshot that shows the different parts of the development environment for Rocket League BotChat:
+While working on different projects using web technologies and frameworks in the Python and JavaScript ecosystems, I developed an appreciation for well-structured development environments that are easy to use. Development environment refers to the tools and processes by which a developer can make a change to source code and see these changes reflected in some version of the application running on a local environment. The local environment (the developer's computer) should be a close proxy for the production environment where the code will ultimately deployed to for end users. For this project the local development environment is our PC itself, which simplifies things. A development environment should support hot-reloading so incremental changes can be run to test functionality, offering a tight feedback loop. I really like the development environment for this project. Here's a screenshot that shows the different parts of the development environment I used for working on Rocket League BotChat:
 
 ![Screenshot of Rocket League BotChat development environment](/img/rlbc/devenv2.png)
 
-- Rocket League (running with the `-dev` flag turned on). The console is helpful viewing log messages and the plugin settings panel can be used to view and change plugin configuration values. The BakkesMod plugin also needs to be running in order to inject plugin code into the game engine
-- Visual Studio for working on the plugin code. Controol+Shift+B rebuilds the code and automatically reloads the plugin in the game
+- Rocket League (running with the `-dev` flag turned on). The console is helpful for viewing log messages and the plugin settings panel can be used to view and change plugin configuration values. The BakkesMod plugin also needs to be running in order to inject plugin code into the game engine
+- Visual Studio for working on the plugin code. `Control`+`Shift`+`B` rebuilds the code and automatically reloads the plugin in the game
 - OpenAI-compatible LLM server powered by TensorRT-LLM (using `Llama-2-13b-chat-hf` with AWQ INT4 quantization) running in a docker container on Ubuntu in WSL
 - VSCode for debugging C++ code with Continue.dev extension powered by TensorRT-LLM (using `CodeLlama-13b-instruct-hf` with AWQ INT4 quantization) running in a virtual environment on Windows
 
 ### Building the TensorRT-LLM engines
 
-I was able to build and run the TensorRT LLM engines for my game plugin's inference and the Continue.dev extension's inference both in Python virtual environments on Windows and on Ubuntu in WSL. Here's what these commands look like.
-
-For building the `Llama-2-13b-chat-hf` model with INT4 AWQ quantization on Windows 11 I used this command:
+I was able to build and run the TensorRT LLM engines for my game plugin's inference and the Continue.dev extension's inference both in Python virtual environments on Windows and on Ubuntu in WSL. For building the `Llama-2-13b-chat-hf` model with INT4 AWQ quantization on Windows 11 I used this command:
 
 ```powershell
 (.venv) PS C:\Users\My PC\GitHub\TensorRT-LLM\examples\llama> python build.py --model_dir D:\llama\Llama-2-13b-chat-hf\ --quant_ckpt_path D:\llama\Llama-2-13b-chat-hf\llama_tp1_rank0.npz --dtype float16 --use_gpt_attention_plugin float16 --use_gemm_plugin float16 --use_weight_only --weight_only_precision int4_awq --per_group --enable_context_fmha --max_batch_size 1 --max_input_len 3500 --max_output_len 1024 --output_dir D:\llama\Llama-2-13b-chat-hf\single-gpu\ --vocab_size 32064
@@ -189,13 +189,17 @@ Note: Here I also add `--host 0.0.0.0`, but this is required in order for the se
 
 BakkesMod includes a console window that came in handy for debugging errors during development.
 
+At the beginning of this developer contest on January 9, NVIDIA announced Chat with RTX. This is a demo program for Windows that automates a lots of the processes needed to set up a TensorRT-LLM-powered LLM running on your PC. Keep an eye on this project as it may become the best way to install and manage large language models on Windows PCs.
+
+![Chat with RTX image](/img/rlbc/chat_with_rtx.jpeg)
+
 ## How it works
 
-Here's a quick look at key parts of the plugin source code that make it work.
+Here's a quick look at key parts of the plugin source code ([https://github.com/briancaffey/RocketLeagueBotChat](https://github.com/briancaffey/RocketLeagueBotChat)).
 
 ### Hooking events
 
-Hooking events the core of how this plugin works. `StatTickerMessage` events cover most of the events that are triggered in Rocket League, such as scoring a goal, making a save or demolishing a car.
+Hooking events is the core of how this plugin works. `StatTickerMessage` events cover most of the events that are triggered in Rocket League, such as scoring a goal, making a save or demolishing a car.
 
 ```cpp
 	// Hooks different types of events that are handled in onStatTickerMessage
@@ -259,7 +263,7 @@ The system prompt instructs the bot on how it shoud reply. This is an important 
 	std::string initial_system_prompt = ai_player + one_v_one + instructions + details;
 ```
 
-The last part about "no more than 12 words long" was the most effective way of controlling the responses from the LLM. I tried changing the `max_output_len` when building the TensorRT engine, but this degraded the quality of the responses. The system prompt can be changed by the user.
+The last part about `no more than 12 words long` was the most effective way of controlling the length responses from the LLM. I tried changing the `max_output_len` when building the TensorRT engine, but this degraded the quality of the responses. The system prompt can be changed by the user. Changing the system prompt was a lot of fun to expirment with!
 
 ### Temperature and Seed
 
