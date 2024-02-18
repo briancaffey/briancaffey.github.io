@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/fr/blog/tags/rocket-league", {data:[{articles:[]}],fetch:{},mutations:[]});

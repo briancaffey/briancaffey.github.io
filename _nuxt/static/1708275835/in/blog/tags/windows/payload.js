@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/in/blog/tags/windows", {data:[{articles:[]}],fetch:{},mutations:[]});
