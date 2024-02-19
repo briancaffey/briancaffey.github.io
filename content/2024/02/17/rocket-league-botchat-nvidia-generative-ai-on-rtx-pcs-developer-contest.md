@@ -20,10 +20,10 @@ tags:
 external:
 #   - link: https://news.ycombinator.com/
 #     site: hn
-  - link: https://www.reddit.com/r/RocketLeague/comments/1au0po3/rocket_league_botchat_an_llmpowered_bakkesmod/
-    site: reddit
   - link: https://twitter.com/briancaffey/status/1759265152275292644
     site: x
+  - link: https://www.reddit.com/r/RocketLeague/comments/1au0po3/rocket_league_botchat_an_llmpowered_bakkesmod/
+    site: reddit
 #   - link: https://medium.com/@briancaffey/my-infrastructure-as-code-rosetta-stone-with-cdk-terraform-and-pulumi-44fcb8233e6a
 #     site: medium
 #   - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
