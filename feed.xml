@@ -4,7 +4,7 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Sun, 18 Feb 2024 17:28:45 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 19 Feb 2024 02:00:51 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
@@ -26,6 +26,42 @@
             <description><![CDATA[I wrote three reusable infrastructure as code libraries to develop high-level abstractions for deploying containerized web apps on AWS ECS. This article will provide an overview of my experience working with CDK, Terraform and Pulumi and will cover how I use these libraries in automated infrastructure deployment pipelines using GitHub Actions]]></description>
         </item>
         <item>
+            <title><![CDATA[Authenticating requests with JWT tokens stored in HTTPOnly cookies in Django]]></title>
+            <link>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</link>
+            <guid>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</guid>
+            <description><![CDATA[This article describes how you can use JWT tokens in Django applications with decoupled frontend JavaScript applications running the browser in secure way using HttpOnly cookies.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup]]></title>
+            <link>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</link>
+            <guid>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</guid>
+            <description><![CDATA[Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application]]></title>
+            <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
+            <guid>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</guid>
+            <description><![CDATA[This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Session Authentication with Django, Django REST Framework and Nuxt]]></title>
+            <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
+            <guid>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
+            <description><![CDATA[This article shows how to use session authentication with Django + Nuxt.js applications]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Adding internationalization to a statically generated Nuxt site]]></title>
+            <link>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</link>
+            <guid>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</guid>
+            <description><![CDATA[This article will summarize my experience implementing internationalization (i18n) for a statically-generated Nuxt.js site]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Building web applications with Django, Django REST Framework, Nuxt.js and docker]]></title>
+            <link>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</link>
+            <guid>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</guid>
+            <description><![CDATA[This article documents my progress combining the Django web framework with Nuxt JS to build applications that have both great SEO and a smooth SPA user experience.]]></description>
+        </item>
+        <item>
             <title><![CDATA[Setting up ad hoc development environments for Django applications with AWS ECS, Terraform and GitHub Actions]]></title>
             <link>https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</link>
             <guid>https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</guid>
@@ -44,12 +80,6 @@
             <description><![CDATA[This article describes how to write and share technical articles in 2021]]></description>
         </item>
         <item>
-            <title><![CDATA[Authenticating requests with JWT tokens stored in HTTPOnly cookies in Django]]></title>
-            <link>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</link>
-            <guid>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</guid>
-            <description><![CDATA[This article describes how you can use JWT tokens in Django applications with decoupled frontend JavaScript applications running the browser in secure way using HttpOnly cookies.]]></description>
-        </item>
-        <item>
             <title><![CDATA[GitHub Action for my Nuxt.js blog hosted on GitHub Pages]]></title>
             <link>https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages</link>
             <guid>https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages</guid>
@@ -60,36 +90,6 @@
             <link>https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions</link>
             <guid>https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions</guid>
             <description><![CDATA[This is a detailed guide showing how to setup a dedicated Valheim server using serverless technologies on AWS]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup]]></title>
-            <link>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</link>
-            <guid>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</guid>
-            <description><![CDATA[Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Adding internationalization to a statically generated Nuxt site]]></title>
-            <link>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</link>
-            <guid>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</guid>
-            <description><![CDATA[This article will summarize my experience implementing internationalization (i18n) for a statically-generated Nuxt.js site]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application]]></title>
-            <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
-            <guid>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</guid>
-            <description><![CDATA[This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Session Authentication with Django, Django REST Framework and Nuxt]]></title>
-            <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
-            <guid>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
-            <description><![CDATA[This article shows how to use session authentication with Django + Nuxt.js applications]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Building web applications with Django, Django REST Framework, Nuxt.js and docker]]></title>
-            <link>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</link>
-            <guid>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</guid>
-            <description><![CDATA[This article documents my progress combining the Django web framework with Nuxt JS to build applications that have both great SEO and a smooth SPA user experience.]]></description>
         </item>
         <item>
             <title><![CDATA[Weekend project update: Open SEC Data]]></title>
