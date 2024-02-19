@@ -17,13 +17,13 @@ tags:
 
 # draft: true
 
-# external:
+external:
 #   - link: https://news.ycombinator.com/
 #     site: hn
-#   - link: https://www.reddit.com/r/
-#     site: reddit
-#   - link: https://twitter.com/briancaffey/
-#     site: x
+  - link: https://www.reddit.com/r/RocketLeague/comments/1au0po3/rocket_league_botchat_an_llmpowered_bakkesmod/
+    site: reddit
+  - link: https://twitter.com/briancaffey/status/1759265152275292644
+    site: x
 #   - link: https://medium.com/@briancaffey/my-infrastructure-as-code-rosetta-stone-with-cdk-terraform-and-pulumi-44fcb8233e6a
 #     site: medium
 #   - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
@@ -42,7 +42,7 @@ Here's my project submission post on 𝕏:
 
 <blockquote class="twitter-tweet tw-align-center" data-theme="dark"><p lang="en" dir="ltr">Rocket League BotChat - powered by TensorRT-LLM<br>⚽️🚗⚡️🤖💬<br>My submission for NVIDIA&#39;s Gen AI on RTX PCs Developer Contest<a href="https://twitter.com/NVIDIAAIDev?ref_src=twsrc%5Etfw">@NVIDIAAIDev</a> <a href="https://twitter.com/hashtag/RocketLeague?src=hash&amp;ref_src=twsrc%5Etfw">#RocketLeague</a> <a href="https://twitter.com/hashtag/GTC24?src=hash&amp;ref_src=twsrc%5Etfw">#GTC24</a> <a href="https://twitter.com/hashtag/NVIDIA?src=hash&amp;ref_src=twsrc%5Etfw">#NVIDIA</a> <a href="https://twitter.com/hashtag/LLM?src=hash&amp;ref_src=twsrc%5Etfw">#LLM</a> <a href="https://twitter.com/hashtag/Llama?src=hash&amp;ref_src=twsrc%5Etfw">#Llama</a> <a href="https://twitter.com/hashtag/AI?src=hash&amp;ref_src=twsrc%5Etfw">#AI</a> <a href="https://twitter.com/hashtag/Windows11?src=hash&amp;ref_src=twsrc%5Etfw">#Windows11</a> <a href="https://t.co/A7ON3lyTC6">pic.twitter.com/A7ON3lyTC6</a></p>&mdash; Brian Caffey (@briancaffey) <a href="https://twitter.com/briancaffey/status/1759265152275292644?ref_src=twsrc%5Etfw">February 18, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-Here's a link to the [Rocket League BotChat GitHub repoository](https://github.com/briancaffey/RocketLeagueBotChat).
+Here's a link to the [Rocket League BotChat GitHub repository](https://github.com/briancaffey/RocketLeagueBotChat).
 
 ## NVIDIA's Gen AI Developer Contest
 
@@ -80,7 +80,7 @@ One other thing I learned about Rocket League is that it has an active modding c
 
 Bots are built into the Rocket League game and you can play with or against them in offline matches. However, the built-in bots are not very good. Another 3rd-party project called RLBot allows players to play against community-developed AI bots that are developed with machine learning frameworks like TensorFlow and PyTorch. These bots are very good, but they are not infallible. My contest project idea was now clear: develop a plugin for Rocket League capable of sending messages from bot players. This idea seemed to check the boxes for the large language model category of NVIDIA's developer contest: develop a project in a Windows environment for a Windows-specific program, and use an LLM powered by TensorRT-LLM.
 
-![RLBot Ascii Art](/img/rlbc/rlbot.png)
+![RLBot Ascii Art](/img/rlbc/bot.png)
 
 ## Putting together the puzzle pieces
 
