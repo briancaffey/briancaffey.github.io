@@ -4,10 +4,16 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Fri, 23 Feb 2024 12:17:37 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 17 Jun 2024 17:38:25 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Agents of Inference: My submission for NVIDIA's Generative AI Agents Developer Contest by NVIDIA and LangChain]]></title>
+            <link>https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest</link>
+            <guid>https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest</guid>
+            <description><![CDATA[This article discusses my entry for NVIDIA's Generative AI Agents Developer Contest entry: Agents of Inference]]></description>
+        </item>
         <item>
             <title><![CDATA[Rocket League BotChat powered by TensorRT-LLM: My submission for NVIDIA's Generative AI on RTX PCs Developer Contest]]></title>
             <link>https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest</link>
@@ -253,14 +259,14 @@
             <guid>https://briancaffey.github.io/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html</guid>
         </item>
         <item>
-            <title><![CDATA[Reading RSS with Python]]></title>
-            <link>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</link>
-            <guid>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</guid>
-        </item>
-        <item>
             <title><![CDATA[Moving from Gnome Desktop to i3 window manager on Arch Linux]]></title>
             <link>https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html</link>
             <guid>https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html</guid>
+        </item>
+        <item>
+            <title><![CDATA[Reading RSS with Python]]></title>
+            <link>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</link>
+            <guid>https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html</guid>
         </item>
         <item>
             <title><![CDATA[Simple Board Games in ReactJS]]></title>
