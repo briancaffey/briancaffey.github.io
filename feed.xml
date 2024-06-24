@@ -4,10 +4,16 @@
         <title>briancaffey.github.io</title>
         <link>https://briancaffey.github.io/feed.xml</link>
         <description>RSS feed for briancaffey.github.io</description>
-        <lastBuildDate>Mon, 17 Jun 2024 18:24:48 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 24 Jun 2024 23:03:55 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/nuxt-community/feed-module</generator>
         <category>Nuxt.js</category>
+        <item>
+            <title><![CDATA[Agents of Inference: Speed of Light -- Accelerating my Generative AI Agents project with NVIDIA NIMs, TensorRT and TensorRT-LLM]]></title>
+            <link>https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update</link>
+            <guid>https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update</guid>
+            <description><![CDATA[This article is a brief discusion on recent updates to my project for the Generative AI Agents Developer Contest by NVIDIA and LangChain]]></description>
+        </item>
         <item>
             <title><![CDATA[Agents of Inference: My submission for NVIDIA's Generative AI Agents Developer Contest by NVIDIA and LangChain]]></title>
             <link>https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest</link>
@@ -19,18 +25,6 @@
             <link>https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest</link>
             <guid>https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest</guid>
             <description><![CDATA[This article discusses my entry for NVIDIA's Generative AI on RTX PCs Developer Contest: Rocket Leauge BotChat]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application]]></title>
-            <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
-            <guid>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</guid>
-            <description><![CDATA[This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js]]></description>
-        </item>
-        <item>
-            <title><![CDATA[Session Authentication with Django, Django REST Framework and Nuxt]]></title>
-            <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
-            <guid>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
-            <description><![CDATA[This article shows how to use session authentication with Django + Nuxt.js applications]]></description>
         </item>
         <item>
             <title><![CDATA[Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem]]></title>
@@ -90,6 +84,18 @@
             <link>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</link>
             <guid>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</guid>
             <description><![CDATA[This article will summarize my experience implementing internationalization (i18n) for a statically-generated Nuxt.js site]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application]]></title>
+            <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
+            <guid>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</guid>
+            <description><![CDATA[This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js]]></description>
+        </item>
+        <item>
+            <title><![CDATA[Session Authentication with Django, Django REST Framework and Nuxt]]></title>
+            <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
+            <guid>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
+            <description><![CDATA[This article shows how to use session authentication with Django + Nuxt.js applications]]></description>
         </item>
         <item>
             <title><![CDATA[Building web applications with Django, Django REST Framework, Nuxt.js and docker]]></title>
