@@ -41,6 +41,11 @@ comments: true
 ---
 
 
+## Update
+
+I recently posted another article about optimizing this project with TensorRT and TensorRT-LLM running on local NVIDIA NIM inference microservices, please have a look here: [https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update](https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update)
+
+
 ## tl;dr
 
 “Agents of Inference” is my entry for the Generative AI Agents Developer Contest by NVIDIA and LangChain. This project aims to integrate techniques for generating text, images and video to create an application capable of producing short thematic films. In this article, I will detail how I developed the project leveraging LangGraph—a library for building stateful, multi-actor applications with LLMs--and hybrid AI workflows using NVIDIA AI-powered tools and technologies running on RTX PCs and in the cloud.
