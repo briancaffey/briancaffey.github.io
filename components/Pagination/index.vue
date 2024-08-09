@@ -40,7 +40,7 @@
       &nbsp;{{ pageNo }}
     </nuxt-link>
     <nuxt-link
-      :to="`/blog/${pageNo + 1}`"
+      :to="nextPage ? `/blog/${pageNo + 1}` : `/blog/${pageNo}`"
       :class="`
         px-2
         py-2

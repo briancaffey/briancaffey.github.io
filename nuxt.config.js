@@ -1,5 +1,5 @@
-const { resolve } = require('path');
 import { defineNuxtConfig } from 'nuxt/config'
+const { resolve } = require('path');
 
 export default defineNuxtConfig({
   env: {
@@ -87,7 +87,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@nuxtjs/color-mode',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxt/eslint'
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     // '@nuxtjs/sitemap',
     // '@nuxtjs/feed',

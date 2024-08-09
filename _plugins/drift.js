@@ -1,9 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable no-void */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-sequences */
-/* eslint-disable no-console */
-/* eslint-disable one-var */
 
 export default () => {
   !(function () {

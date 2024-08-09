@@ -15,7 +15,7 @@
 defineProps({
   data: {
     type: Object,
-    default: () => []
+    default: () => {}
   }
 })
 </script>

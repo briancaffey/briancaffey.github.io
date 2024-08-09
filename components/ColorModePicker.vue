@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import data from "emoji-mart-vue-fast/data/all.json";
+import data from "emoji-mart-vue-fast/data/twitter.json";
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 import { EmojiIndex, Emoji } from "emoji-mart-vue-fast/src";
 

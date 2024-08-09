@@ -7,42 +7,25 @@
   </div>
 </template>
 
-<script>
-export default {
-  // async asyncData ({ $content, params }) {
-  //   let articles = await $content({ deep: true })
-  //     .only([
-  //       'title',
-  //       'description',
-  //       'image',
-  //       'slug',
-  //       'author',
-  //       'date',
-  //       'path',
-  //       'tags',
-  //       'external'
-  //     ])
-  //     .where({ draft: { $eq: true } })
-  //     .sortBy('date', 'desc')
-  //     .fetch()
-
-  //   articles = articles.filter(x => !x.path.startsWith('/projects/'))
+<script setup>
+const { data: articles } = await useAsyncData('drafts', () =>
+  queryContent("/")
+    .where({ draft: { $eq: true } })
+    .sort({'date': -1})
+    .find()
+)
+  // head () {
   //   return {
-  //     articles
+  //     title: "Brian Caffey's Blog",
+  //     meta: [
+  //       {
+  //         name: 'robots',
+  //         content: 'noindex'
+  //       }
+  //     ]
   //   }
-  // },
-  head () {
-    return {
-      title: "Brian Caffey's Blog",
-      meta: [
-        {
-          name: 'robots',
-          content: 'noindex'
-        }
-      ]
-    }
-  }
-}
+  // }
+
 </script>
 
 <style></style>
