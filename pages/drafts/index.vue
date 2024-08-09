@@ -9,28 +9,28 @@
 
 <script>
 export default {
-  async asyncData ({ $content, params }) {
-    let articles = await $content({ deep: true })
-      .only([
-        'title',
-        'description',
-        'image',
-        'slug',
-        'author',
-        'date',
-        'path',
-        'tags',
-        'external'
-      ])
-      .where({ draft: { $eq: true } })
-      .sortBy('date', 'desc')
-      .fetch()
+  // async asyncData ({ $content, params }) {
+  //   let articles = await $content({ deep: true })
+  //     .only([
+  //       'title',
+  //       'description',
+  //       'image',
+  //       'slug',
+  //       'author',
+  //       'date',
+  //       'path',
+  //       'tags',
+  //       'external'
+  //     ])
+  //     .where({ draft: { $eq: true } })
+  //     .sortBy('date', 'desc')
+  //     .fetch()
 
-    articles = articles.filter(x => !x.path.startsWith('/projects/'))
-    return {
-      articles
-    }
-  },
+  //   articles = articles.filter(x => !x.path.startsWith('/projects/'))
+  //   return {
+  //     articles
+  //   }
+  // },
   head () {
     return {
       title: "Brian Caffey's Blog",

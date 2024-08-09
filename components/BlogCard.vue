@@ -1,6 +1,6 @@
 <template>
   <li class="rounded-lg article-card">
-    <nuxt-link :to="localePath(article.path)">
+    <nuxt-link :to="article._path"> <!-- localePath-->
       <div>
         <img
           v-if="article.image"
@@ -26,7 +26,7 @@
     <div class="blog-date mb-4 px-4 pb-4">
       <p>
         {{ $t('common.lastUpdated') }}
-        {{ article.date | formatDate($i18n.locale) }}
+        {{ article.date }}
       </p>
     </div>
   </li>

@@ -6,7 +6,7 @@
     >
       <div class="justify-left flex-grow flex-cols-4">
         <nuxt-link
-          :to="localePath('/')"
+          to="/"
           class="text-xl"
           :class="$route.name.startsWith('index') ? 'selected' : ''"
         >

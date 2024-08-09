@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :key="tag" :to="localePath(`/blog/tags/${tag}/`)">
+  <nuxt-link :key="tag" :to="`/blog/tags/${tag}/`">
     <div
       class="
         px-2

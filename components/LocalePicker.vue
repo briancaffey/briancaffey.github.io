@@ -1,13 +1,12 @@
 <template>
   <div>
     <div v-if="showOptions" class="modal" @click="showOptions = false" />
-    <!-- {{ $i18n.locales }} -->
     <ul>
       <li
         class="md:px-1 px-1 cursor-pointer"
         @click="showOptions = !showOptions"
       >
-        <emoji :data="emojiIndex" :emoji="availableLocales.find((x) => x['code'] === $i18n.locale).emoji" :size="32" />
+        TODO fix this<!-- <emoji :data="emojiIndex" :emoji="availableLocales.find((x) => x['code'] === $i18n.locale).emoji" :size="32" /> -->
       </li>
     </ul>
     <div class="rounded-md z-10 picker">
@@ -22,15 +21,15 @@
           w-32
           text
         "
-      >
-        <nuxt-link
+      >TODO - fix locales
+        <!-- <nuxt-link
           v-for="locale in availableLocales"
           :key="`${locale.code}-option`"
           :to="switchLocalePath(locale.code)"
           @click.native="toggleShowOptions"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
-        </nuxt-link>
+        </nuxt-link> -->
       </div>
     </div>
   </div>
@@ -54,23 +53,22 @@ export default {
     getEmojiByCode () {
       return emojiIndex.findEmoji(':santa:')
     },
-    currentLocaleObject () {
-      const currentLocale = this.$i18n.locale
+    // currentLocaleObject () {
+    //   const currentLocale = this.$i18n.locale
 
-      return this.$i18n.locales.find((obj) => {
-        return (obj.code = currentLocale)
-      })
-    },
-    availableLocales () {
-      return this.$i18n.locales
-    },
+    //   return this.$i18n.locales.find((obj) => {
+    //     return (obj.code = currentLocale)
+    //   })
+    // },
+    // availableLocales () {
+    //   return this.$i18n.locales
+    // },
     getShowOptions () {
       return this.showOptions
     }
   },
   methods: {
     toggleShowOptions () {
-      // alert(this.$i18n.locale)
       this.showOptions = !this.showOptions
     }
   }
