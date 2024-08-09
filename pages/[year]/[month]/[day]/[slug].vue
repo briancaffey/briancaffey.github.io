@@ -14,7 +14,7 @@
       <external v-if="article.external" :external="article.external" />
       <p class="blog-date text-gray-500 mb-4">
         {{ $t('common.lastUpdated') }}
-        <!-- {{ article.date | formatDate($i18n.locale) }} -->
+        {{ formatDate(article.date, $i18n.locale) }}
       </p>
       <div v-if="article.draft" class="p-4 my-4 bg-red-300 rounded">
         <p>
@@ -23,9 +23,8 @@
           </strong>
         </p>
       </div>
-      <ContentRenderer class="markdown" :value="article" />
+      <ContentDoc class="markdown"/>
 
-      <!-- <Narration :utterance="article.raw" /> -->
       <div class="text-center pb-4 pt-8">
         <button
           v-if="!showComments"
@@ -42,11 +41,10 @@
           Hide Comments
         </button>
       </div>
-      <disqus
+      <Disqus
         v-if="article.comments === true && showComments"
         :key="$colorMode.preference"
         shortname="briancaffey"
-        :identifier="article.disqus_id || article.slug"
       />
       <h1 />
     </div>
@@ -60,26 +58,16 @@ const page = `/${year}/${month}/${day}/${slug}`;
 const { data: article } = await useAsyncData('article', () =>
   queryContent(page).findOne()
 );
+const showComments = ref(false);
+const formatDate = (date, locale) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = new Date(date).toLocaleDateString(locale, options);
+  return formattedDate
+}
 
-// todo(migration): add data, methods, head from below
+// todo(migration): head from below
 
 // export default {
-//   async asyncData ({ $content, params }) {
-//     const file = `${params.year}/${params.month}/${params.day}/${params.slug}`
-//     const article = await $content(file).fetch()
-//     return { article }
-//   },
-//   data () {
-//     return {
-//       showComments: false
-//     }
-//   },
-//   methods: {
-//     formatDate (date) {
-//       const options = { year: 'numeric', month: 'long', day: 'numeric' }
-//       return new Date(date).toLocaleDateString('en', options)
-//     }
-//   },
 //   head () {
 //     return {
 //       title: this.article.title,

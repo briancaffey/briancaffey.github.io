@@ -31,14 +31,6 @@
             }}
           </nuxt-link> <!--localePath-->
         </li>
-        <!-- <li>
-          <nuxt-link
-            to="projects"
-            @click.native="$emit('toggle')"
-          >
-            {{ $t('nav.projects') }}
-          </nuxt-link>
-        </li> -->
         <li>
           <nuxt-link
             to="contact"

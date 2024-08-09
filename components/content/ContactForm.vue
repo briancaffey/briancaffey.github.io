@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import FsContactForm from '../ContactForm.vue'
+import FsContactForm from '../FsContactForm.vue'
 export default {
   components: { FsContactForm }
 }

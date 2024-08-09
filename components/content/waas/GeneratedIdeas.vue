@@ -2,14 +2,13 @@
   <div>
     <div class="flex-1 text-center">
       <button
-        :disabled="$store.getters['waas/getIdeaIndex'] == 0"
-        class=""
+        :disabled="ideaIndex === 0"
         @click="decrementIdeasIndex"
       >
         Previous Idea
       </button>
-      <div>Idea #{{ this.$store.getters['waas/getIdeaIndex'] + 1 }}</div>
-      <button class="" @click="incrementIdeasIndex">
+      <div>Idea #{{ ideaIndex + 1 }}</div>
+      <button @click="incrementIdeasIndex">
         Next Idea
       </button>
     </div>
@@ -17,29 +16,36 @@
     <br>
     <div class="text-center">
       <div class="p-3 rounded border border-white hero">
-        {{
-          this.$store.getters['waas/getGeneratedIdeas'](
-            this.$store.getters['waas/getIdeaIndex']
-          )
-        }}
+        {{ currentIdea }}
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  created () {
-    this.$store.dispatch('waas/fetchGeneratedIdeas')
-  },
-  methods: {
-    incrementIdeasIndex () {
-      this.$store.dispatch('waas/changeIdeasIndex', 1)
-    },
-    decrementIdeasIndex () {
-      this.$store.dispatch('waas/changeIdeasIndex', -1)
-    }
-  }
+<script setup>
+import { computed, onMounted } from 'vue';
+import { useWaasStore } from '@/stores/waas'; // Import the Pinia store
+
+const store = useWaasStore();
+
+// Fetch generated ideas when the component is mounted
+onMounted(() => {
+  store.fetchGeneratedIdeas();
+});
+
+// Computed properties for accessing the store's state
+const ideaIndex = computed(() => store.getIdeaIndex);
+const currentIdea = computed(() =>
+  store.getGeneratedIdeas(ideaIndex.value)
+);
+
+// Methods to increment and decrement the idea index
+function incrementIdeasIndex() {
+  store.changeIdeasIndex(1);
+}
+
+function decrementIdeasIndex() {
+  store.changeIdeasIndex(-1);
 }
 </script>
 

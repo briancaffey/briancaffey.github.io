@@ -6,7 +6,7 @@
         class="md:px-1 px-1 cursor-pointer"
         @click="showOptions = !showOptions"
       >
-        TODO fix this<!-- <emoji :data="emojiIndex" :emoji="availableLocales.find((x) => x['code'] === $i18n.locale).emoji" :size="32" /> -->
+        <emoji :data="emojiIndex" :emoji="availableLocales.find((x) => x['code'] === $i18n.locale).emoji" :size="32" />
       </li>
     </ul>
     <div class="rounded-md z-10 picker">
@@ -21,24 +21,24 @@
           w-32
           text
         "
-      >TODO - fix locales
-        <!-- <nuxt-link
+      >
+        <nuxt-link
           v-for="locale in availableLocales"
           :key="`${locale.code}-option`"
           :to="switchLocalePath(locale.code)"
           @click.native="toggleShowOptions"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
-        </nuxt-link> -->
+        </nuxt-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
-import data from 'emoji-mart-vue-fast/data/all.json'
-import { Emoji, EmojiIndex } from 'emoji-mart-vue-fast'
+import data from "emoji-mart-vue-fast/data/all.json";
+import "emoji-mart-vue-fast/css/emoji-mart.css";
+import { EmojiIndex, Emoji } from "emoji-mart-vue-fast/src";
 
 const emojiIndex = new EmojiIndex(data)
 export default {
@@ -50,19 +50,9 @@ export default {
     }
   },
   computed: {
-    getEmojiByCode () {
-      return emojiIndex.findEmoji(':santa:')
+    availableLocales () {
+      return this.$i18n.locales
     },
-    // currentLocaleObject () {
-    //   const currentLocale = this.$i18n.locale
-
-    //   return this.$i18n.locales.find((obj) => {
-    //     return (obj.code = currentLocale)
-    //   })
-    // },
-    // availableLocales () {
-    //   return this.$i18n.locales
-    // },
     getShowOptions () {
       return this.showOptions
     }

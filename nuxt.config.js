@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   env: {
     baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io'
   },
+  app: {
+    pageTransition: { name: 'page', mode: 'in-out' }
+  },
 
   /*
    ** Nuxt target
@@ -43,9 +46,9 @@ export default defineNuxtConfig({
    ** https://nuxtjs.org/guide/plugins
    */
   plugins: [
-    // '~/plugins/disqus',
-    // '~/plugins/filters',
-    // { src: '~/plugins/apexcharts', mode: 'client' },
+    '~/plugins/disqus',
+    // '~/plugins/apexcharts'
+    { src: '~/plugins/apexcharts', mode: 'client' },
     // { src: '~plugins/drift.js', mode: 'client' }
   ],
 
@@ -53,6 +56,7 @@ export default defineNuxtConfig({
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
    */
+  // todo(migration): fix or remove auto imports for components
   components: true,
 
   /*
@@ -62,8 +66,8 @@ export default defineNuxtConfig({
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss',
-    // '@nuxtjs/color-mode',
+    // '@nuxtjs/tailwindcss',
+
     // [
     //   '@nuxtjs/google-analytics',
     //   {
@@ -81,7 +85,9 @@ export default defineNuxtConfig({
     // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/i18n'
+    '@nuxtjs/i18n',
+    '@nuxtjs/color-mode',
+    '@pinia/nuxt'
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     // '@nuxtjs/sitemap',
     // '@nuxtjs/feed',
@@ -132,14 +138,6 @@ export default defineNuxtConfig({
 
   hooks: {
     'content:file:beforeInsert': (document) => {
-      // if (document.path.startsWith('/blog/')) {
-      //   let date = document.slug.substring(0, 10)
-      //   date = date.replace(/-/g, '/')
-      //   const url = date + '/' + document.slug.substring(11) + '.html'
-      //   document.url = url
-      //   document.slug = document.slug + '.html'
-      //   document.path = document.path + '.html'
-      // }
       if (document.extension === '.md') {
         const raw = document.text
         document.raw = raw
@@ -153,7 +151,7 @@ export default defineNuxtConfig({
     }
   },
 
-  build: {},
+  build: { transpile: ['emoji-mart-vue-fast'] },
 
   // sitemap: {
   //   hostname: 'https://briancaffey.github.io',
@@ -164,15 +162,12 @@ export default defineNuxtConfig({
   //       .only(['path', 'draft'])
   //       .where({ draft: { $ne: true } })
   //       .fetch()
-  //     const projects = await $content('projects').only(['path']).fetch()
 
   //     return []
   //       .concat(
   //         ...posts
-  //           .filter(x => !x.path.startsWith('/projects/'))
   //           .map(w => w.path)
   //       )
-  //       .concat(...projects.map(p => p.path))
   //   }
   // },
 
@@ -221,94 +216,68 @@ export default defineNuxtConfig({
     host: '0.0.0.0'
   },
 
-  // generate: {
-  //   dir: 'docs',
-  //   async routes () {
-  //     const { $content } = require('@nuxt/content')
-
-  //     const posts = await $content({ deep: true }).only(['path']).fetch()
-  //     return posts.map(x => x.path)
-  //   }
+  // todo(migration): tried adding this to get rid of a warning but it did not work
+  // vue: {
+  //   compilerOptions: {
+  //     isCustomElement: (tag) => tag.startsWith('client-') || tag.startsWith('Client'),
+  //   },
   // },
 
-  // router: {
-  //   extendRoutes (routes, resolve) {
-  //     routes.push({
-  //       path: '/:year/:month/:day/:slug',
-  //       component: resolve(__dirname, 'pages/_year/_month/_day/_slug.vue')
-  //     })
-  //   }
-  // },
   i18n: {
-    vueI18n: "./i18n.config.js"
+    vueI18n: "./i18n.config.js",
+    strategy: 'prefix_except_default',
+    defaultLocale: 'en',
+    locale: 'en',
+    locales: [
+      {
+        code: 'en',
+        emoji: 'flag-us',
+        iso: 'en-US',
+        file: 'i18n/en-US.js',
+        name: 'English',
+        flag: '🇺🇸'
+      },
+      {
+        code: 'fr',
+        emoji: 'flag-fr',
+        iso: 'fr-FR',
+        file: 'i18n/fr-FR.js',
+        name: 'Français',
+        flag: '🇫🇷'
+      },
+      {
+        code: 'zh',
+        emoji: 'flag-cn',
+        iso: 'zh-ZH',
+        file: 'i18n/zh-ZH.js',
+        name: '简体中文',
+        flag: '🇨🇳'
+      },
+      {
+        code: 'ru',
+        emoji: 'flag-ru',
+        iso: 'ru-RU',
+        file: 'i18n/ru-RU.js',
+        name: 'Русский',
+        flag: '🇷🇺'
+      },
+      {
+        code: 'jp',
+        emoji: 'flag-jp',
+        iso: 'jp-JP',
+        file: 'i18n/jp-JP.js',
+        name: '日本語',
+        flag: '🇯🇵'
+      },
+      {
+        code: 'in',
+        emoji: 'flag-in',
+        iso: 'hi-IN',
+        file: 'i18n/hi-IN.js',
+        name: 'हिंदी',
+        flag: '🇮🇳'
+      }
+    ]
   },
-  // i18n: {
-  //   vueI18n: {
-  //     fallbackLocale: 'en'
-  //   },
-  //   defaultLocale: 'en',
-  //   parsePages: false,
-  //   detectBrowserLanguage: false,
-  //   seo: false,
-  //   lazy: true,
-  //   vuex: {
-  //     moduleName: 'i18n',
-  //     syncLocale: false,
-  //     syncMessages: false,
-  //     syncRouteParams: true
-  //   },
-  //   langDir: 'i18n/',
-    // locales: [
-    //   {
-    //     code: 'en',
-    //     emoji: 'flag-us',
-    //     iso: 'en-US',
-    //     file: 'en-US.js',
-    //     name: 'English',
-    //     flag: '🇺🇸'
-    //   },
-    //   {
-    //     code: 'fr',
-    //     emoji: 'flag-fr',
-    //     iso: 'fr-FR',
-    //     file: 'fr-FR.js',
-    //     name: 'Français',
-    //     flag: '🇫🇷'
-    //   },
-    //   {
-    //     code: 'zh',
-    //     emoji: 'flag-cn',
-    //     iso: 'zh-ZH',
-    //     file: 'zh-ZH.js',
-    //     name: '简体中文',
-    //     flag: '🇨🇳'
-    //   },
-    //   {
-    //     code: 'ru',
-    //     emoji: 'flag-ru',
-    //     iso: 'ru-RU',
-    //     file: 'ru-RU.js',
-    //     name: 'Русский',
-    //     flag: '🇷🇺'
-    //   },
-    //   {
-    //     code: 'jp',
-    //     emoji: 'flag-jp',
-    //     iso: 'jp-JP',
-    //     file: 'jp-JP.js',
-    //     name: '日本語',
-    //     flag: '🇯🇵'
-    //   },
-    //   {
-    //     code: 'in',
-    //     emoji: 'flag-in',
-    //     iso: 'hi-IN',
-    //     file: 'hi-IN.js',
-    //     name: 'हिंदी',
-    //     flag: '🇮🇳'
-    //   }
-    // ]
-  // },
-
   compatibilityDate: '2024-08-08'
 })

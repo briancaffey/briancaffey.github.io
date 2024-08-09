@@ -1,6 +1,6 @@
 .page-enter-active,
 .page-leave-active {
-  transition: 2s filter linear;
+  transition: all 2s filter linear;
   transition: margin-top 0.15s, opacity 0.15s;
 }
 .page-enter,

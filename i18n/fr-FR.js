@@ -25,7 +25,7 @@ export default {
     yourName: 'Nom',
     sampleName: 'J. Appleseed',
     yourEmail: 'Courriel',
-    sampleEmail: 'jappleseed@appleseed.co',
+    sampleEmail: 'jappleseed_at_appleseed.co',
     yourWebsite: 'Votre site web',
     sampleWebsite: 'https://appleseed.co',
     message: 'Message',

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   nav: {
     home: 'घर',
     blog: 'ब्लॉग',

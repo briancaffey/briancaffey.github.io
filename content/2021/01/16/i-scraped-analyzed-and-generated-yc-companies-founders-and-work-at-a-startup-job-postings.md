@@ -46,7 +46,13 @@ const scroll = setInterval(() => {window.scrollTo(0,document.body.scrollHeight);
 
 // when it no longer scrolls, clear the interval
 clearInterval(scroll)
-
+    <vue-apex-charts
+      v-if="chartOptions && series"
+      type="bar"
+      height="350"
+      :options="chartOptions"
+      :series="series"
+    ></vue-apex-charts>
 // expand each job listing:
 const jobs = document.getElementsByClassName("job-name")
 for (let job of jobs) {
@@ -139,7 +145,6 @@ print(top_skills)
 <client-only>
 <skill-count />
 </client-only>
-
 
 I'll try to briefly describe what I know about each of these if I know what it means (without Googling!):
 
