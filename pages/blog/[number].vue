@@ -22,7 +22,9 @@
 </template>
 
 <script setup>
-
+defineI18nRoute({
+  locales: ['en']
+});
 const route = useRoute();
 const pageNo = parseInt(route.params.number);
 
@@ -35,7 +37,7 @@ const { data: articles } = await useAsyncData('all-articles', () =>
 
 const { data: paginatedItems } = await useAsyncData('paginated-items', () =>
   queryContent("/")
-    .where({ draft: { $ne: true }, layout: { $ne: 'project' } })
+    .where({ draft: { $ne: true } })
     .sort({'date': -1})
     .limit(10)
     .skip(9 * (pageNo - 1))

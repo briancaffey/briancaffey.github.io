@@ -34,35 +34,19 @@
 </template>
 
 <script setup>
+defineI18nRoute({
+  locales: ['en']
+});
+const route = useRoute();
+const tag = route.params.tag;
 const { data: articles } = await useAsyncData('all-articles', () =>
   queryContent("/")
     .where({ draft: { $ne: true } })
+    .where({ tags: { $containsAny: [tag]}})
     .sort({'date': -1})
     .find()
 )
 
-  // async asyncData ({ $content, params }) {
-  //   let articles = await $content({ deep: true })
-  //     .only([
-  //       'title',
-  //       'description',
-  //       'image',
-  //       'slug',
-  //       'author',
-  //       'date',
-  //       'path',
-  //       'tags'
-  //     ])
-  //     .where({ draft: { $ne: true } })
-  //     .where({ tags: { $containsAny: [params.tag] } })
-  //     .sortBy('date', 'desc')
-  //     .fetch()
-
-  //   articles = articles.filter(x => !x.path.startsWith('/projects/'))
-  //   return {
-  //     articles
-  //   }
-  // }
 
 </script>
 

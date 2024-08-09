@@ -2,12 +2,16 @@
   <div>
     <Navigation />
     <!-- <PleaseDisableAdblock v-if="$store.getters['adblock/isAdblockEnabled']" /> -->
-    <NuxtPage />
+    <NuxtPage :pageKey="route.fullPath" />
     <!-- <AdBlockerBlocker /> -->
 
     <Footer />
   </div>
 </template>
+
+<script setup>
+const route = useRoute();
+</script>
 
 <style>
 html {

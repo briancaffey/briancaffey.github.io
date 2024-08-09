@@ -9,7 +9,7 @@
       height="350"
       :options="chartOptions"
       :series="series"
-      ></apexchart>
+      />
     </client-only>
   </div>
 </template>

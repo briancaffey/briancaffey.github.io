@@ -23,7 +23,7 @@
           </strong>
         </p>
       </div>
-      <ContentDoc class="markdown"/>
+      <ContentDoc :value="article" class="markdown"/>
 
       <div class="text-center pb-4 pt-8">
         <button
@@ -52,6 +52,9 @@
 </template>
 
 <script setup>
+defineI18nRoute({
+  locales: ['en']
+});
 const route = useRoute();
 const { year, month, day, slug } = route.params;
 const page = `/${year}/${month}/${day}/${slug}`;

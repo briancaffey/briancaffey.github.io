@@ -26,7 +26,7 @@
           v-for="locale in availableLocales"
           :key="`${locale.code}-option`"
           :to="switchLocalePath(locale.code)"
-          @click.native="toggleShowOptions"
+          @click="toggleShowOptions"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
         </nuxt-link>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import data from "emoji-mart-vue-fast/data/all.json";
+import data from "emoji-mart-vue-fast/data/twitter.json";
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 import { EmojiIndex, Emoji } from "emoji-mart-vue-fast/src";
 
