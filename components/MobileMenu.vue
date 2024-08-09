@@ -18,22 +18,22 @@
       <ul class="text-center flex-wrap text-3xl">
         <li>
           <nuxt-link
-            :to="localePath('index')"
+            to="index"
             @click.native="$emit('toggle')"
-          >
+          > <!--localePath-->
             {{ $t('nav.home') }}
           </nuxt-link>
         </li>
         <li>
-          <nuxt-link :to="localePath('blog')" @click.native="$emit('toggle')">
+          <nuxt-link to="blog" @click.native="$emit('toggle')">
             {{
-              $t('nav.blog')
+              'nav.blog'
             }}
-          </nuxt-link>
+          </nuxt-link> <!--localePath-->
         </li>
         <!-- <li>
           <nuxt-link
-            :to="localePath('projects')"
+            to="projects"
             @click.native="$emit('toggle')"
           >
             {{ $t('nav.projects') }}
@@ -41,9 +41,9 @@
         </li> -->
         <li>
           <nuxt-link
-            :to="localePath('contact')"
+            to="contact"
             @click.native="$emit('toggle')"
-          >
+          > <!--localPath-->
             {{ $t('nav.contact') }}
           </nuxt-link>
         </li>

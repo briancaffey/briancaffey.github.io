@@ -7,42 +7,23 @@
   </div>
 </template>
 
-<script>
-export default {
-  async asyncData ({ $content, params }) {
-    const allArticles = await $content({ deep: true })
-      .only(['title'])
-      .where({ draft: { $ne: true }, layout: { $eq: 'post' } })
-      .sortBy('date', 'desc')
-      .fetch()
+<script setup>
 
-    let articles = await $content({ deep: true })
-      .only([
-        'title',
-        'description',
-        'image',
-        'slug',
-        'author',
-        'date',
-        'path',
-        'tags',
-        'external'
-      ])
-      .where({ draft: { $ne: true } })
-      .sortBy('date', 'desc')
-      .fetch()
+// Fetching articles with specific fields excluding drafts
+const { data: articles } = await useAsyncData('all-articles', () =>
+  queryContent("/")
+    .where({ draft: { $ne: true } })
+    .sort({'date': -1})
+    .find()
+)
 
-    articles = articles.filter(x => !x.path.startsWith('/projects/'))
-    return {
-      articles, allArticles
-    }
-  },
-  head () {
-    return {
-      title: "Brian Caffey's Blog"
-    }
-  }
-}
+// TODO: fix
+// head () {
+//   return {
+//     title: "Brian Caffey's Blog"
+//   }
+// }
+
 </script>
 
 <style></style>

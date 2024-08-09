@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   nav: {
     home: 'Home',
     blog: 'Blog',
@@ -26,7 +26,7 @@ module.exports = {
     yourName: 'Your Name',
     sampleName: 'J. Appleseed',
     yourEmail: 'Your Email',
-    sampleEmail: 'jappleseed@appleseed.co',
+    sampleEmail: 'jappleseed\@appleseed.co',
     yourWebsite: 'Your Website',
     sampleWebsite: 'https://appleseed.co',
     message: 'Message',

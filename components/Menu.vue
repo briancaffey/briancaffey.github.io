@@ -4,9 +4,9 @@
       <ul class="items-right float-right hidden md:flex">
         <li class="px-4 text-lg">
           <nuxt-link
-            :to="localePath('/blog/1')"
+            to="/blog/1"
             :class="$route.name.startsWith('blog') ? 'selected' : ''"
-          >
+          > <!-- localePath -->
             {{ $t('nav.blog') }}
           </nuxt-link>
         </li>
@@ -20,9 +20,9 @@
         </li> -->
         <li class="px-4 text-lg">
           <nuxt-link
-            :to="localePath('contact')"
+            to="contact"
             :class="$route.name.startsWith('contact') ? 'selected' : ''"
-          >
+          > <!--localePath-->
             {{ $t('nav.contact') }}
           </nuxt-link>
         </li>

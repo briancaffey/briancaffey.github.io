@@ -20,7 +20,7 @@
     </nuxt-link>
 
     <nuxt-link
-      :to="localePath(`/blog/${pageNo}`)"
+      :to="`/blog/${pageNo}`"
       class="
         px-2
         py-2
@@ -40,7 +40,7 @@
       &nbsp;{{ pageNo }}
     </nuxt-link>
     <nuxt-link
-      :to="localePath(`/blog/${pageNo + 1}`)"
+      :to="`/blog/${pageNo + 1}`"
       :class="`
         px-2
         py-2
@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     prevLink () {
-      return this.pageNo === 1 ? this.localePath('/blog/1') : this.localePath(`/blog/${this.pageNo - 1}`)
+      return this.pageNo === 1 ? '/blog/1' : `/blog/${this.pageNo - 1}`
     }
   }
 }
