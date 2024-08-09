@@ -1,28 +1,43 @@
 <template>
   <div>
-    <apexchart
+
+    <client-only>
+
+      <apexchart
+      v-if="chartOptions && series"
       type="bar"
       height="350"
       :options="chartOptions"
       :series="series"
-    />
+      ></apexchart>
+    </client-only>
   </div>
 </template>
 
-<script>
-/* eslint-disable */
-export default {
-  name: 'skill-count',
-  created() {
-    this.$store.dispatch('waas/fetchData')
-  },
-  data() {
-    return {
-      chartOptions: {
+<script setup>
+import { useWaasStore } from '@/stores/waas';
+// import { VueApexCharts } from 'vue3-apexcharts';
+import { computed } from 'vue';
+const colorMode = useColorMode();
+const store = useWaasStore();
+onMounted(() => {
+  store.fetchData();
+});
+const series = computed(() => {
+  return [
+    {
+      name: 'Skill Count',
+      // Using Pinia store for data
+      data: store.getTopSkillCounts,
+    },
+  ];
+});
+const chartOptions = computed(() => {
+  return {
         theme: {
           mode:
-            this.$colorMode.preference === 'light' ||
-            this.$colorMode.preference === 'system'
+            colorMode.preference === 'light' ||
+            colorMode.preference === 'system'
               ? 'light'
               : 'dark',
         },
@@ -42,41 +57,24 @@ export default {
           },
         },
         xaxis: {
-        title: {
-          text: "Skill",
-        },
-          categories: this.$store.getters['waas/getTopSkills'],
+          title: {
+            text: "Skill",
+          },
+          // Using Pinia store for categories
+          categories: store.getTopSkills,
           tickAmount: 10,
           labels: {
             show: false,
-            // formatter: function (val) {
-            //   return parseFloat(val).toFixed(1)
-            // },
           },
         },
         dataLabels: {
           enabled: false,
         },
-
         yaxis: {
           title: {
             text: "Count",
           },
-        },
-      },
-    }
-  },
-  computed: {
-    series() {
-      return [
-        {
-          name: 'Skill Count',
-          data: this.$store.getters['waas/getTopSkillCounts'],
-        },
-      ]
-    },
-  },
-}
+        }
+      }
+    });
 </script>
-
-<style scoped></style>

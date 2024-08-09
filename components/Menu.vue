@@ -10,17 +10,9 @@
             {{ $t('nav.blog') }}
           </nuxt-link>
         </li>
-        <!-- <li class="px-4 text-lg">
-          <nuxt-link
-            :to="localePath('projects')"
-            :class="$route.name.startsWith('projects') ? 'selected' : ''"
-          >
-            {{ $t('nav.projects') }}
-          </nuxt-link>
-        </li> -->
         <li class="px-4 text-lg">
           <nuxt-link
-            to="contact"
+            to="/contact"
             :class="$route.name.startsWith('contact') ? 'selected' : ''"
           > <!--localePath-->
             {{ $t('nav.contact') }}

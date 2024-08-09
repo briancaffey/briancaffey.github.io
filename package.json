@@ -19,12 +19,15 @@
     "@nuxtjs/google-adsense": "^3.0.0",
     "@nuxtjs/i18n": "^8.3.3",
     "@nuxtjs/sitemap": "^5.3.5",
-    "apexcharts": "^3.23.1",
+    "@pinia/nuxt": "^0.5.3",
+    "apexcharts": "^3.52.0",
     "detab": "^3.0.2",
-    "emoji-mart-vue-fast": "^10.0.1",
+    "emoji-mart-vue-fast": "^15.0.2",
     "nuxt": "^3.12.4",
+    "pinia": "^2.2.1",
     "vue-apexcharts": "^1.6.0",
-    "vue-disqus": "^4.0.1"
+    "vue-disqus": "^5.1.0",
+    "vue3-apexcharts": "^1.5.3"
   },
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.4.2",

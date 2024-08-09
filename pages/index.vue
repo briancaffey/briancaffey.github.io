@@ -12,7 +12,7 @@
             {{ $t('home.blogPost') }}
           </h2>
           <ul>
-            <!-- <blog-card :article="articles[0]" /> TODO fix -->
+            <blog-card :article="articles[0]" />
           </ul>
           <div class="pt-8 text-right">
             <nuxt-link
@@ -42,37 +42,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  // async asyncData ({ $content, params }) {
-  //   let articles = await $content({ deep: true })
-  //     .only([
-  //       'title',
-  //       'description',
-  //       'image',
-  //       'slug',
-  //       'author',
-  //       'date',
-  //       'path',
-  //       'tags',
-  //       'external'
-  //     ])
-  //     .where({ draft: { $ne: true } })
-  //     .sortBy('date', 'desc')
-  //     .fetch()
-
-  //   articles = articles.filter(x => !x.path.startsWith('/projects/'))
-  //   return {
-  //     articles
-  //   }
-  // },
-  head () {
-    return {
-      title: 'Brian Caffey'
-    }
-  },
-  transition: 'page'
-}
+<script setup>
+const { data: articles } = await useAsyncData('all-articles', () =>
+  queryContent("/")
+    .where({ draft: { $ne: true } })
+    .sort({'date': -1})
+    .find()
+)
 </script>
-
-<style></style>

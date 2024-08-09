@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   nav: {
     home: '主页',
     blog: '博客',

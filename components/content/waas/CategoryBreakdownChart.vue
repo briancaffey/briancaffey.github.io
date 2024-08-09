@@ -1,13 +1,11 @@
 <template>
-  <apexchart height="1000" :options="chartOptions" :series="series" />
+  <client-only>
+    <apexchart height="1000" :options="chartOptions" :series="series" />
+  </client-only>
 </template>
 
 <script>
-/* eslint-disable */
 export default {
-  // created() {
-  //   this.$store.dispatch('waas/fetchData')
-  // },
   data() {
     return {
       series: [
@@ -135,12 +133,5 @@ export default {
       },
     }
   },
-  computed: {
-    // series() {
-    //   return this.$store.getters['waas/getSalaryEquitySeriesTest']
-    // },
-  },
 }
 </script>
-
-<style scoped></style>

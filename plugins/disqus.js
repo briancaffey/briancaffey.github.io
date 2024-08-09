@@ -1,4 +1,6 @@
-import Vue from 'vue'
+import { defineNuxtPlugin } from '#app'
 import VueDisqus from 'vue-disqus'
 
-Vue.use(VueDisqus)
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(VueDisqus)
+})

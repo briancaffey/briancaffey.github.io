@@ -128,6 +128,7 @@ a {
   @apply bg-gray-100 rounded p-4;
   /* background-color: blue; */
   /* color: red; */
+  overflow-x: auto;
 }
 
 .markdown pre code {
