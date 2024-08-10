@@ -67,50 +67,46 @@ const formatDate = (date, locale) => {
   const formattedDate = new Date(date).toLocaleDateString(locale, options);
   return formattedDate
 }
+const config = useRuntimeConfig()
 
-// todo(migration): head from below
-
-// export default {
-//   head () {
-//     return {
-//       title: this.article.title,
-//       meta: [
-//         {
-//           name: 'robots',
-//           content: this.article.draft ? 'noindex' : 'all'
-//         },
-//         {
-//           property: 'twitter:creator',
-//           content: '@briancaffey'
-//         },
-//         {
-//           property: 'twitter:site',
-//           content: '@briancaffey'
-//         },
-//         {
-//           property: 'og:title',
-//           content: this.article.title
-//         },
-//         {
-//           property: 'og:description',
-//           content: this.article.description
-//         },
-//         {
-//           property: 'og:image',
-//           content: process.env.baseUrl + this.article.image
-//         },
-//         {
-//           property: 'twitter:image',
-//           content: process.env.baseUrl + this.article.image
-//         },
-//         {
-//           property: 'twitter:card',
-//           content: 'summary_large_image'
-//         }
-//       ]
-//     }
-//   }
-// }
+// Set the page head
+useHead(() => ({
+  title: article.value.title,
+  meta: [
+    {
+      name: 'robots',
+      content: article.value.draft ? 'noindex' : 'all',
+    },
+    {
+      property: 'twitter:creator',
+      content: '@briancaffey',
+    },
+    {
+      property: 'twitter:site',
+      content: '@briancaffey',
+    },
+    {
+      property: 'og:title',
+      content: article.value.title,
+    },
+    {
+      property: 'og:description',
+      content: article.value.description,
+    },
+    {
+      property: 'og:image',
+      content: config.public.url + article.value.image,
+    },
+    {
+      property: 'twitter:image',
+      content: config.public.url + article.value.image,
+    },
+    {
+      property: 'twitter:card',
+      content: 'summary_large_image',
+    },
+  ],
+}));
 </script>
 
 <style scoped>

@@ -2,7 +2,7 @@
 title: "Agents of Inference: Speed of Light -- Accelerating my Generative AI Agents project with NVIDIA NIMs, TensorRT and TensorRT-LLM"
 date: '2024-06-24'
 description: "This article is a brief discusion on recent updates to my project for the Generative AI Agents Developer Contest by NVIDIA and LangChain"
-image: /img/aoi/aoi_title.png
+image: /static/aoi/aoi_title.png
 tags:
   - nvidia
   - langchain
@@ -56,13 +56,13 @@ I thought NVIDIA NIMs was one of the most exciting announcements from GTC 2024. 
 
 A few weeks ago NVIDIA announced that NVIDIA NIMs can be downloaded and run anywhere. I was able to download this NIM for the `meta/llama3-8b-instruct` model:
 
-![llama3 nim](/img/aoi/meta-llama3-nim.png)
+![llama3 nim](/static/aoi/meta-llama3-nim.png)
 
 Here are the logs for my NVIDIA NIM `Meta/Llama-3-8B-Instruct` running in docker container on Windows Subsystem for Linux on my NVIDIA GeForce RTX 4090 GPU-powered PC. Notice that it generates over 50 tokens per second!
 
-![trt llama3 local](/img/aoi/trt-llama3.png)
+![trt llama3 local](/static/aoi/trt-llama3.png)
 
-![token factory](/img/aoi/token-factory.png)
+![token factory](/static/aoi/token-factory.png)
 
 The one main hurdle I faced when running the NIM local was an error about no runnable profiles being available:
 
@@ -76,7 +76,7 @@ SYSTEM INFO
 
 This seemed odd, and I found another user with the same issue on the NVIDIA Developer Forum. I was able to get around this by going into the EUFI/BIOS of my PC and switch to integrated graphics:
 
-![bios](/img/aoi/bios.jpg)
+![bios](/static/aoi/bios.jpg)
 
 It was great to be able to run "Agents of Inference" using NVIDIA NIM because it is just as simple as running a docker container:
 
@@ -126,7 +126,7 @@ You can read more about the difference between Llama 2 and 3 on the [Model Card 
 
 I recently started using LangSmith. It is an awesome product and it ties in really well to doing prototype work like in my project "Agents of Inference". I wish I had started using it earlier in my development cycle! All you need to do is add an API key to your environment and your application automatically starts tracing LLM calls. It also works well with LangGraph and allows you to trace the execution path of your graph. Also it is good to be aware that there are other products similar to LangSmith like LangFuse. I also saw a really neat demo from Datadog at GTC showing an alpha version of their LLM tracing and observability product.
 
-![langsmith screenshot](/img/aoi/langsmith.png)
+![langsmith screenshot](/static/aoi/langsmith.png)
 
 LangSmith can also be helpful when the wrong JSON shape is parsed. I had a lot of difficulty with this in my project. When I used the Q4_K_M gguf quantized `Meta-Llama-3 8B-Instruct` model I had no issues with output parsing. Switching to the TensorRT-LLM model provided by the NIM resulted in some parsing errors. The application would report that JSON could not be parsed because the result contained text like: "Here is the JSON that you requested". I was able to get around this by changing the prompt template from:
 
@@ -148,15 +148,15 @@ My goal with "Agents of Inference" was to be able to test out how small upstream
 
 Building a TensorRT engine for ComfyUI can be done using the following workflow:
 
-![trt comfyUI build process](/img/aoi/comfyui-trt-svd-xt.png)
+![trt comfyUI build process](/static/aoi/comfyui-trt-svd-xt.png)
 
 The engines can then be used in custom workflows like the following:
 
-![trt comfyui workflow](/img/aoi/svd-workflow-trt.png)
+![trt comfyui workflow](/static/aoi/svd-workflow-trt.png)
 
 Once these workflows are configured and are working as expected, you can export them in API format (JSON) and use them to make API calls to the ComfyUI backend. The agents for stable diffusion and stable video diffusion made API calls in this way and it worked pretty well.
 
-![comfy its](/img/aoi/comfy-its.png)
+![comfy its](/static/aoi/comfy-its.png)
 
 Using 50 iterations, I was able to generate 1024x576 images in 3 seconds or about 19 iterations per second (it/s). Videos
 

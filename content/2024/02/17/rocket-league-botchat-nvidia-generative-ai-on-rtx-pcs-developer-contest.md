@@ -2,7 +2,7 @@
 title: "Rocket League BotChat powered by TensorRT-LLM: My submission for NVIDIA's Generative AI on RTX PCs Developer Contest"
 date: '2024-02-17'
 description: "This article discusses my entry for NVIDIA's Generative AI on RTX PCs Developer Contest: Rocket Leauge BotChat"
-image: /img/rlbc/cover.png
+image: /static/rlbc/cover.png
 tags:
   - nvidia
   - rtx
@@ -54,7 +54,7 @@ Last year I started learning more about AI image generation using Stable Diffusi
 
 I learned PowerShell and got more familiar with how Windows works as a development machine. Environment variables and system variables are one example of how Windows does things differently compared ot Linux-based operating systems. And just like that, I became a Windows developer! This experience got me interested in coming up with an idea for the NVIDIA Generative AI on NVIDIA RTX PCs Developer Contest.
 
-![Windows winfetch screenshot](/img/rlbc/winfetch.png)
+![Windows winfetch screenshot](/static/rlbc/winfetch.png)
 
 ## Coming up with an Idea
 
@@ -76,7 +76,7 @@ One other thing I learned about Rocket League is that it has an active modding c
 
 Bots are built into the Rocket League game and you can play with or against them in offline matches. However, the built-in bots are not very good. Another 3rd-party project called RLBot allows players to play against community-developed AI bots that are developed with machine learning frameworks like TensorFlow and PyTorch. These bots are very good, but they are not infallible. My contest project idea was now clear: develop a plugin for Rocket League capable of sending messages from bot players. This idea seemed to check the boxes for the large language model category of NVIDIA's developer contest: develop a project in a Windows environment for a Windows-specific program, and use an LLM powered by TensorRT-LLM.
 
-![RLBot Ascii Art](/img/rlbc/bot.png)
+![RLBot Ascii Art](/static/rlbc/bot.png)
 
 ## Putting together the puzzle pieces
 
@@ -144,7 +144,7 @@ messages.append({"role": role, "content": content})
 
 While working on different projects using web technologies and frameworks in the Python and JavaScript ecosystems, I developed an appreciation for well-structured development environments that are easy to use. Development environment refers to the tools and processes by which a developer can make a change to source code and see these changes reflected in some version of the application running on a local environment. The local environment (the developer's computer) should be a close proxy for the production environment where the code will ultimately deployed to for end users. For this project the local development environment is our PC itself, which simplifies things. A development environment should support hot-reloading so incremental changes can be run to test functionality, offering a tight feedback loop. I really like the development environment for this project. Here's a screenshot that shows the different parts of the development environment I used for working on Rocket League BotChat:
 
-![Screenshot of Rocket League BotChat development environment](/img/rlbc/devenv2.png)
+![Screenshot of Rocket League BotChat development environment](/static/rlbc/devenv2.png)
 
 - Rocket League (running with the `-dev` flag turned on). The console is helpful for viewing log messages and the plugin settings panel can be used to view and change plugin configuration values. The BakkesMod plugin also needs to be running in order to inject plugin code into the game engine
 - Visual Studio for working on the plugin code. `Control`+`Shift`+`B` rebuilds the code and automatically reloads the plugin in the game
@@ -181,7 +181,7 @@ BakkesMod includes a console window that came in handy for debugging errors duri
 
 At the beginning of this developer contest on January 9, NVIDIA announced Chat with RTX. This is a demo program for Windows that automates a lots of the processes needed to set up a TensorRT-LLM-powered LLM running on your PC. Keep an eye on this project as it may become the best way to install and manage large language models on Windows PCs.
 
-![Chat with RTX image](/img/rlbc/chat_with_rtx.jpeg)
+![Chat with RTX image](/static/rlbc/chat_with_rtx.jpeg)
 
 ## How it works
 
@@ -238,7 +238,7 @@ That's it! The code isn't that complicated. I had to sanitize the message so tha
 
 Most BakkesMod plugins for RocketLeague UIs that allow for controlling settings. Here's what the UI for Rocket League BotChat looks like:
 
-![Rocket League BotChat Plugin UI](/img/rlbc/rlbcui.png)
+![Rocket League BotChat Plugin UI](/static/rlbc/rlbcui.png)
 
 ### System prompt
 
@@ -269,7 +269,7 @@ This section of the UI displays the messages that are used in requests to the LL
 
 I used Blender's sequence editor to create a demo video for my contest submission. I don't edit a lot of videos, but it is a fun process and I learned a lot about Blender and non-linear video editing in the process. Here's how I approached creating the demo video for my project.
 
-![Blender video sequence editor UI used to create my project video](/img/rlbc/blender.png)
+![Blender video sequence editor UI used to create my project video](/static/rlbc/blender.png)
 
 - Structure the video in three main parts: introduction to my project and the contest, description of how it works, demo of my project in action
 - Find an upbeat song from playlists included in Rocket League with no vocals to use as background music. I used ["Dads in Space" by Steven Walking](https://open.spotify.com/track/68ahXxPJrxcEvQFjRmC2ja?si=2147d6d652064d51)
@@ -277,11 +277,11 @@ I used Blender's sequence editor to create a demo video for my contest submissio
 - Record myself playing Rocket League with my plugin enabled using NVIDIA Share. Miraculously, I was able to score against the Nexto bot!
 - Use ComfyUI to animate some of the images used in the contest description and use these in my video
 
-![ComfyUI workflow for animating images using img2vid model](/img/rlbc/comfyui.png)
+![ComfyUI workflow for animating images using img2vid model](/static/rlbc/comfyui.png)
 
 - Use ElevenLabs to narrate a simple voice over script that describes the video content. This tuned out a lot better than I expected. I paid $1 for the ElevenLabs creator plan and got lots of tokens to experiment with different settings for voice generation using a clone of my voice.
 
-![Eleven Labs Voice Generation Web UI](/img/rlbc/elevenlabs.png)
+![Eleven Labs Voice Generation Web UI](/static/rlbc/elevenlabs.png)
 
 [Embed twitter video here](#)
 
