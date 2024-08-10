@@ -3,7 +3,8 @@ layout: post
 title: Reading 13F SEC filings with python
 date: 2018-01-30
 comments: true
-image: /static/sec.jpg
+description: How to read SEC filing data with Python
+image: /static/sec/sec.jpg
 tags:
   - sec
   - python
@@ -93,7 +94,7 @@ plt.yticks()
 plt.xticks(rotation='vertical')
 ```
 
-![png](/static/fund_size.png)
+![png](/static/sec/fund_size.png)
 
 ## Fund Positions with Bubble Chart
 
@@ -185,4 +186,4 @@ plt.ylabel('USD (10 MM))')
 plt.show()
 ```
 
-![png](/static/2017_filing.png)
+![png](/static/sec/2017_filing.png)

@@ -2,7 +2,7 @@
 title: Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup
 date: '2021-01-16'
 description: Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup
-image: /static/yc.png
+image: /static/waas/yc.png
 tags:
   - python
   - data
@@ -443,7 +443,7 @@ Let's take a look at the founders. I came across the [deepface](https://pypi.org
 
 Here's a sample of YC Founder headshots:
 
-![png](/static/yc_founders_sample.png)
+![png](/static/waas/yc_founders_sample.png)
 
 Here's how I used the deepface library to add race, gender and age data for each of the headshot images:
 

@@ -3,7 +3,7 @@ layout: post
 title: Analysis of AUR and Official Arch Repository data
 date: 2017-12-02
 comments: true
-image: /static/official_repos.png
+image: /static/aur/official_repos.png
 tags:
   - arch-linux
   - data
@@ -18,7 +18,7 @@ The repo with all of the data I collected as well as the code I used to do so is
 
 The first questions I had about the dataset were about visualizing the growth of the AUR over time. Each package in the AUR has a `First Submitted` date, so I was able to put this together easily:
 
-![png](/static/aur_packages.png)
+![png](/static/aur/aur_packages.png)
 
 ```python
 sns.set()
@@ -39,7 +39,7 @@ It looks like there was a big boost in the number of packages submitted in mid-2
 
 The official repositories contain just under 10,000 packages. Here is a force-directed graph (undirected graph) in D3.js that shows these packages as nodes and package dependencies as edges. This image shows a sample of about 1,000 packages and it is somewhat representative of the whole graph show further below.
 
-![png](/static/official_repos.png)
+![png](/static/aur/official_repos.png)
 
 There are four main repo in the official repositories:
 
@@ -167,7 +167,7 @@ show(p)
 
 Let's make a word cloud out of text descriptions for packages in the AUR.
 
-![png](/aur/word_cloud.png)
+![png](/static/aur/word_cloud.png)
 
 We can use a popular python package for making word clouds. Here's the code:
 
@@ -204,7 +204,7 @@ plt.show()
 
 The Arch wiki is the first place I go for troubleshooting any issue with Arch. Users of other Linux distributions have also said how useful it can be even if you don't user Arch Linux. Here's a look at the number of registered users on the Arch Wiki over time:
 
-![png](/aur/wiki_users.png)
+![png](/static/aur/wiki_users.png)
 
 ```python
 sns.set()
