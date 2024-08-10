@@ -18,6 +18,7 @@
             <nuxt-link
               to="/blog/1"
               class="px-16 py-4 rounded border btn"
+              external
             >
               {{ $t('home.allArticles') }} →
             </nuxt-link>
@@ -32,6 +33,7 @@
             <nuxt-link
               to="/blog/tags/"
               class="px-16 p-4 rounded border btn"
+              external
             >
               {{ $t('home.allTags') }} →
             </nuxt-link>

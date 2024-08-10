@@ -27,7 +27,7 @@ export default {
     yourName: '名字',
     sampleName: '陈某某',
     yourEmail: '您的邮箱',
-    sampleEmail: 'chenmoumou@qq.com',
+    sampleEmail: '您的邮箱',
     yourWebsite: '您的网页',
     sampleWebsite: 'https://chenmoumou.cn',
     message: '信息',
@@ -44,7 +44,8 @@ export default {
     projects: '项目'
   },
   blog: {
-    blogPosts: '文章'
+    blogPosts: '文章',
+    drafts: 'Drafts'
   },
   tags: {
     allTags: '所有标签'

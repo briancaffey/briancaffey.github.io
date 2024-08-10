@@ -4,7 +4,6 @@
       fixed
       inset-0
       z-10
-      opacity-30
       justify-center
       mobile-menu
       items-center
@@ -18,16 +17,17 @@
       <ul class="text-center flex-wrap text-3xl">
         <li>
           <nuxt-link
-            to="index"
+            to="/"
             @click="$emit('toggle')"
+            external
           > <!--localePath-->
             {{ $t('nav.home') }}
           </nuxt-link>
         </li>
         <li>
-          <nuxt-link to="blog" @click="$emit('toggle')">
+          <nuxt-link to="/blog/1" @click="$emit('toggle')" external>
             {{
-              'nav.blog'
+              $t('nav.blog')
             }}
           </nuxt-link> <!--localePath-->
         </li>
@@ -35,6 +35,7 @@
           <nuxt-link
             to="contact"
             @click="$emit('toggle')"
+            external
           > <!--localPath-->
             {{ $t('nav.contact') }}
           </nuxt-link>

@@ -1,6 +1,7 @@
 ---
 title: Authenticating requests with JWT tokens stored in HTTPOnly cookies in Django
 date: '2021-08-01'
+image: /static/djjwt/dj_jwt.png
 description: This article describes how you can use JWT tokens in Django applications with decoupled frontend JavaScript applications running the browser in secure way using HttpOnly cookies.
 tags:
   - django

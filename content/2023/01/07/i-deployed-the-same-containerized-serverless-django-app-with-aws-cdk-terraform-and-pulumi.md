@@ -1,7 +1,7 @@
 ---
 title: My Infrastructure as Code Rosetta Stone - Deploying the same web application on AWS ECS Fargate with CDK, Terraform and Pulumi
 date: '2023-01-07'
-description: "I wrote three reusable infrastructure as code libraries to develop high-level abstractions for deploying containerized web apps on AWS ECS. This article will provide an overview of my experience working with CDK, Terraform and Pulumi and will cover how I use these libraries in automated infrastructure deployment pipelines using GitHub Actions"
+description: Three reusable infrastructure as code libraries for abstracting containerized web app architecture on AWS ECS
 image: /static/iac_rosetta_stone_og_image.png
 tags:
   - django
@@ -170,7 +170,7 @@ Each repo has a Makefile that includes commands that I frequently use when devel
 
 Here's an example of what these commands look like in `pulumi-aws-django` for prod infrastructure base and app stacks:
 
-```Makefile
+```make
 prod-base-preview:	build
 	pulumi -C examples/prod/base --stack stage --non-interactive preview
 
@@ -721,7 +721,7 @@ Pulumi uses stack references, Terraform uses remote state and CDK uses Stack Out
 
 Here's what this looks like in Terraform
 
-```h
+```terraform
 data "terraform_remote_state" "this" {
   backend = "local"
 

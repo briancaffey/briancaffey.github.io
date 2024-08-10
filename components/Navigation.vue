@@ -9,6 +9,7 @@
           to="/"
           class="text-xl"
           :class="$route.name.startsWith('index') ? 'selected' : ''"
+          external
         >
           <span class="hidden sm:inline text-2xl">{{ $t('common.name') }}</span><span class="inline sm:hidden">JBC</span>
         </nuxt-link>

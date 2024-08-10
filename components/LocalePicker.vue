@@ -27,6 +27,7 @@
           :key="`${locale.code}-option`"
           :to="switchLocalePath(locale.code)"
           @click="toggleShowOptions"
+          external
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
         </nuxt-link>

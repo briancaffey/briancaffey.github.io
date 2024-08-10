@@ -139,7 +139,7 @@ Here's an overview of each part:
 
 This is the key part of how the AdBlock detection works. If the client is unable to download the `adsbygoogle.js` file, then that indicates that the user is using AdBlock.
 
-```vue
+```html
 <template>
   <div />
 </template>
@@ -222,7 +222,7 @@ export const mutations = {
 
 **default.vue layout logic**
 
-```vue
+```vue-html
 <template>
   <div>
     <Navigation />

@@ -2,7 +2,7 @@
   <div class="mx-auto max-w-6xl">
     <div class="text-xl text-center py-4">
       <div class="mb-4">
-        <nuxt-link to="/blog/tags/">
+        <nuxt-link to="/blog/tags/" external>
           <span
             class="inline-block bg-white rounded-lg text-small px-2 py-1 shadow"
           >
@@ -11,7 +11,7 @@
         </nuxt-link>
       </div>
       <div class="mb-4">
-        <nuxt-link :to="`/blog/tags/${$route.params.tag}/`">
+        <nuxt-link :to="`/blog/tags/${$route.params.tag}/`" external>
           <span
             class="
               inline-block
