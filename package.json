@@ -9,7 +9,8 @@
     "generate": "nuxt generate",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
-    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
+    "analyze": "nuxt analyze"
   },
   "dependencies": {
     "@nuxt/content": "^2.13.2",
