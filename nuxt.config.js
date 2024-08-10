@@ -1,7 +1,13 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import { queryContent } from '@nuxt/content';
 const { resolve } = require('path');
 
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      url: 'https://briancaffey.github.io'
+    }
+  },
   devtools: {
     enabled: true,
 
@@ -15,6 +21,10 @@ export default defineNuxtConfig({
   // app: {
   //   pageTransition: { name: 'page', mode: 'in-out' }
   // },
+  site: {
+    url: 'https://briancaffey.github.io',
+    name: "Brian Caffey's personal website"
+  },
 
   /*
    ** Nuxt target
@@ -95,9 +105,9 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
     '@nuxt/eslint',
-    'nuxt-gtag'
+    'nuxt-gtag',
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
-    // '@nuxtjs/sitemap',
+    '@nuxtjs/sitemap',
     // '@nuxtjs/feed',
     // 'nuxt-i18n'
     // ['@nuxtjs/google-adsense', {
@@ -169,24 +179,9 @@ export default defineNuxtConfig({
 
   build: { transpile: ['emoji-mart-vue-fast'] },
 
-  // sitemap: {
-  //   hostname: 'https://briancaffey.github.io',
-  //   routes: async () => {
-  //     const { $content } = require('@nuxt/content')
-
-  //     const posts = await $content({ deep: true })
-  //       .only(['path', 'draft'])
-  //       .where({ draft: { $ne: true } })
-  //       .fetch()
-
-  //     return []
-  //       .concat(
-  //         ...posts
-  //           .map(w => w.path)
-  //       )
-  //   }
-  // },
-
+  // todo(migration): add feed when it is supported by nuxt 3
+  // for now, the feed is manually configured in public/feed.xml
+  // https://nuxt.com/modules/feed
   // feed: [
   //   // A default feed configuration object
   //   {
@@ -231,13 +226,6 @@ export default defineNuxtConfig({
     port: 3000,
     host: '0.0.0.0'
   },
-
-  // todo(migration): tried adding this to get rid of a warning but it did not work
-  // vue: {
-  //   compilerOptions: {
-  //     isCustomElement: (tag) => tag.startsWith('client-') || tag.startsWith('Client'),
-  //   },
-  // },
 
   i18n: {
     vueI18n: "./i18n.config.js",
