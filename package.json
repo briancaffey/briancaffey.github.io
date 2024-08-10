@@ -10,7 +10,9 @@
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
-    "analyze": "nuxt analyze"
+    "analyze": "nuxt analyze",
+    "clean": "npx nuxi cleanup",
+    "serve": "npx serve .output/public"
   },
   "dependencies": {
     "@nuxt/content": "^2.13.2",
