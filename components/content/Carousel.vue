@@ -1,7 +1,7 @@
 <template>
   <div class="image-carousel">
     <div class="carousel-container">
-      <img :src="`/img/three-body-problem/invokeai/${dir}/${currentIndex}.png`" alt="Carousel Image" class="carousel-image">
+      <img :src="`/static/three-body-problem/invokeai/${dir}/${currentIndex}.png`" alt="Carousel Image" class="carousel-image">
     </div>
     <div class="button-container text-center p-4 text-black rounded">
       <button class="p-2 bg-green-100 rounded" :disabled="currentIndex == 1" @click="prevImage">

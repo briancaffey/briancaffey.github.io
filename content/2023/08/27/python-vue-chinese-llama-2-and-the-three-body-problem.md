@@ -2,7 +2,7 @@
 title: Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem
 date: '2023-11-23'
 description: Translating The Three-Body Problem book to English with Chinese LLMs, making visualizations with stable diffusion and running n-body simulations with CUDA
-image: /img/three-body-problem/cover.png
+image: /static/three-body-problem/cover.png
 tags:
   - three-body-problem
   - llama
@@ -50,21 +50,21 @@ I also share some of my experiences in China as an exchange student and research
 
 A few months ago my company announced that another round of layoffs was to come the following week. I'm on an engineering team that had already been impacted by a few rounds of layoffs in the past year, and I was expecting to be let go. On an impulse I bought a book at the top of my reading list from Amazon: "Three-Body Problem". It is an award-winning Sci-Fi trilogy written by Liu Cixin, a Chinese computer engineer who started writing the book as a series of essays that were published in China's "World of Sci-Fi" magazine.
 
-![Images of Three Body Problem Book Series](/img/three-body-problem/books.png)
+![Images of Three Body Problem Book Series](/static/three-body-problem/books.png)
 
 I started learning Chinese in college, adding a major in Chinese Language to the mathematics major I decided on in my freshman year after taking vector calculus and linear algebra. In my sophmore year I did a semester abroad at Fudan University's [International Cultural Exchange School](https://ices.fudan.edu.cn/6628/list.htm). In 2007, living and studying Chinese in Shanghai as a 19 year old American was a really fun time. I was placed in an advanced-level course with a diverse group of students where English was not the lowest common linguistic denominator. We had a demanding cirriculum that emphasized reading, listening and speaking Chinese, but most of the language learning came through extracirricular activities: exploring Shanghai's food scene, bartering with vendors at the fabric markets, late night clubbing, walking around the Bund and the French Concession and chatting with my taxi cab drivers. It is hard to imagine how I did this without an iPhone, but I was able to get pretty far with an old Nokia 3310.
 
 At the end of one night of particularly heavy drinking, some of my classmates and I dropped in on an wangba (internet cafe) before heading back to the international dorm. Chinese internet cafes in 2007 were an expansive underground dens of computers, monitors, MMORPGs, FPSs, cigarets, and on-demand instant noodles delivered directly to your seat through an app on the desktop. That night our game of choice was Counter-Strike. In one of the lowest points of my gaming career, my classmates and I were crushed by our Chinese counterterrorist opponent.
 
-![Chinese internet cafe](/img/three-body-problem/wangba.webp)
+![Chinese internet cafe](/static/three-body-problem/wangba.webp)
 
 My favorite memory of that semester at Fudan University was travelling on an epic over-night sleeper train from Shanghai to Guangxi province with a school-sponsored class trip to see Guilin. Multiple games of sam-yuk-gu (3-6-9) ran in parallel across the matrix of 3-by-2 sleeper car bunk beds lining the train car like workloads distributed across multiple GPU cores. The rules of 3-6-9 are simple: a group of people go around in a circle counting up from 1. If your number contains a 3, 6 or 9, you clap once for each occurance of the number instead of saying your number. The first person to break the rules takes a drink. Then repeat indefinitely. The next morning we all boarded a boat cruise in a daze to see the Lijiang river's stunning limestone peaks featured on the 20 yuan note:
 
-![20 yuan note with Guilin rock formations](/img/three-body-problem/twenty_small.gif)
+![20 yuan note with Guilin rock formations](/static/three-body-problem/twenty_small.gif)
 
 My second job after college took me back to China where I specialized in the technologies, policies and applications of large scale battery projects as a research manager for China's energy storage industry association. The job exposed me to the power industry and cutting-edge battery projects, and also sharpened my technical Chinese as I was frequently reading, translating in a bi-linguagl environment. It was fun  I didn't realize it at the time, but that job was great preperation for reading Chinese Sci-Fi novels.
 
-![State Grid HQ in Xi Cheng](/img/three-body-problem/invokeai/castles.png)
+![State Grid HQ in Xi Cheng](/static/three-body-problem/invokeai/castles.png)
 
 My first introduction to the 'Three-Body Problem' book came from one of my best friends from college. He lived at the inner-most leaf-node of one of Beijing's most labrythnian hutongs next to a family that trained racing pigeons. My friend and I bonded over our study of Chinese language, classical guitar and our experiences in Beijing. I strongly considered his recommendation to check out 三体 (Three Body), the Chinese Sci-Fi novel about alien life in a solar system with three stars as he described it, but I never had the chance to read the book.
 
@@ -103,7 +103,7 @@ In recent months I have been following the development of big open source AI pro
 
 I requested access to Meta's LLaMa 2 models as soon as they came out and I was able to get it to run on my NVIDIA RTX 4090 GPU. I also joined a subreddit called [`r/LocalLLaMa`](https://www.reddit.com/r/LocalLLaMA/) with over seventy thousand members discussing how to run large language models on consumer hardware. Another annoucement that caught my attention in July was the release of [Chinese LLaMa 2](https://github.com/ymcui/Chinese-LLaMA-Alpaca-2), an open-source large language model trained on Chinese and English which does very well against Chinese Language LLM Benchmarks such as the CMMCU: Chinese Massive Multitask Language Understanding.
 
-![image of CMMLU](/img/three-body-problem/cmmlu.jpeg)
+![image of CMMLU](/static/three-body-problem/cmmlu.jpeg)
 
 ## Translation in and of The Three-Body Problem
 
@@ -354,7 +354,7 @@ Here's the formula for the mathematical equation used to calculate the force on 
 
 To test that the simulation was working correctly I used ChatGPT again to construct a 3D scene in Blender with a Python script:
 
-![Blender Animation](/img/three-body-problem/blender.png)
+![Blender Animation](/static/three-body-problem/blender.png)
 
 ### Three.js
 
@@ -366,11 +366,11 @@ Imagine that we are working for a Chinese startup called the Qin Dynasty. The fo
 
 Dream of the Red Chamber is one of China's Four Great Classical Novels and is often seen as the pinacle of Chinese fiction. It was written in the mid 18th century and first published in 1791. It is a long saga that totals 960,000 characters in length, on similar scale to the length of the Three-Body Problem trilogy. Sun Wen, a Qing dynasty artist, spent 36 years of his life doing a series of 230 paintings depicting scenes from the Dream of the Red Chamber: dream sequences, demons, goddesses, nuns, nobles, beggars, raging fires, landscapes, interiors, wildlife, gardens, temples, funerals, battles, processions, banquets, trials, operas, marriages.
 
-![Sun Wen paintings sample](/img/three-body-problem/dorc.png)
+![Sun Wen paintings sample](/static/three-body-problem/dorc.png)
 
 Following in this tradition of celebrating great literature, Tencent Video and China Central Television produced a 30-episode adaptation of the Three-Body Problem that was released in Feburary 2023. It is a surprisingly faithful reproduction of the book that is worth checking out. The portrayal of Shi Qiang (Da Shi) was easily my favorite part of the series. I was also impressed by how the Three-Body VR game scenes were done with computer graphics. It got me thinking about how China is represented in some of the worlds most popular video games.
 
-![games](/static/three-body/game.png)
+![games](/static/three-body-problem/game.png)
 
 This is Rocket League, a competitive vehicular soccer game where players, like in the Three-Body game, must master the laws of gravity. The Chinese-themed Forbiden Temple arena shown here is one of many virtual international venues in the game. Epic Games (creator of Fortnite) bought Rocket League in 2019 for an estimated $250 to $300 million.
 
@@ -392,4 +392,4 @@ Layoffs in both China and the U.S. have been pummled the tech sector over the la
 
 It is an exciting time for AI. Elon Musk and Kaifu Lee have both recently released open-source large language models: Grok and Yi. Sam Altman was fired as CEO of OpenAI, then came back. Stable Diffusion just released a text to video model. AGI might already be here. In the U.S., we are going into our first presidential election cycle with AI fully turned on. Here's a [link to The Three-Body Problem book on Amazon](https://www.amazon.com/Three-Body-Problem-Cixin-Liu/dp/0765382032). Thanks for reading and Happy Thanksgiving!
 
-![Happy Thanksgiving](/img/three-body-problem/thanksgiving.png)
+![Happy Thanksgiving](/static/three-body-problem/thanksgiving.png)
