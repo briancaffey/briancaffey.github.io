@@ -3,7 +3,7 @@ layout: post
 title: PCPartPicker data
 date: 2017-01-01
 comments: true
-image: /img/pcpp/hist.png
+image: /static/pcpp/hist.png
 tags:
   - python
   - scraping
@@ -222,7 +222,7 @@ At this point we can do a quick visualization of the distribution of PC prices:
 df.total[(df.total>0)&(df.total<7000)].hist(bins=100, figsize=(20,10))
 ```
 
-![png](/img/pcpp/hist.png)
+![png](/static/pcpp/hist.png)
 
 The mean PC price is **\$1,292**. However, the price of PCs is not reflected accurately in `df.total`. I noticed that some builds include multiple monitors while others don't include any and some builders don't include prices for components from their previous PC builds.
 
@@ -405,7 +405,7 @@ plt.yticks(fontsize=14)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/psu/watts_vs_price.png'))
 ```
 
-![png](/img/psu/watts_vs_price.png)
+![png](/static/pcpp/psu/watts_vs_price.png)
 
 The data points along the x-axis are PSUs with no price data. There's a pretty nice correlation between watts and price, and Efficiency Rating should help make price predictions even more accurate than using wattage alone. A quick and easy way to determine how influential each feature of our data is on the target variable (price) is to train the data on machine learning algorithm called a random forest.
 
@@ -480,7 +480,7 @@ plt.xlabel('n_estimators')
 plt.ylabel('RMSE (lower is better)')
 ```
 
-![png](/img/psu/n_est_vs_rmse.png)
+![png](/static/pcpp/psu/n_est_vs_rmse.png)
 
 This graph shows the error in the model for 30 different settings of the parameter `n_estimators`. However, each time we test a new `n_estimators` value we are caluculating the error using cross-validation. Cross-validataion, or K-fold cross-validation helps improve the accuracy of error estimation by averaging the results of `k` models. In the model above, we see that `cv=5`, so we are running the model 5 times for every value of `n_estimators`, for a total of 150 times.
 
@@ -547,7 +547,7 @@ df[(df['Efficiency Certification']=='80+ Gold')&(df.power>0)&(df.avg>0)].groupby
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/psu/average_price_by_manufacturer.png'))
 ```
 
-![png](/img/psu/average_price_by_manufacturer.png)
+![png](/static/pcpp/psu/average_price_by_manufacturer.png)
 
 The most expensive 80+ Gold PSUs are more than twice as expensive as the cheapest PSUs by price per watt. This could explain the significance that the random forest regressor attached to this feature.
 
@@ -564,7 +564,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/psu/price_by_modular.png'))
 ```
 
-![png](/img/psu/price_by_modular.png)
+![png](/static/pcpp/psu/price_by_modular.png)
 
 The distributions aren't surprising: fully-modular is more expensive than semi-modular, and semi-modular PSUs are more expensive than PSUs that are not modular. However, there is quite a bit of overlap in the prices of each modular type, so this feature only contributes roughly 3% of importance for predicting the price of PSUs with the random forest regressor model.
 
@@ -581,7 +581,7 @@ plt.xlabel('Memory Slot, Form Factor and Socket combinations')
 plt.figure()
 ```
 
-![png](/img/motherboard/features_vs_price.png)
+![png](/static/pcpp/motherboard/features_vs_price.png)
 
 Of the 2400 motherboards in the dataset, there is price information for only 618 motherboards. The average motherboard price is \$157.50. Here's a visualizations of motherboard prices:
 
@@ -596,7 +596,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/motherboard/price_histogram.png'))
 ```
 
-![png](/img/motherboard/price_histogram.png)
+![png](/static/pcpp/motherboard/price_histogram.png)
 
 Another feature that may be indicative of price is SLI support. Here's a description of SLI from a [superuser](http://superuser.com/questions/562631/what-does-sli-ready-mean-and-how-do-i-use-it) forum post:
 
@@ -618,7 +618,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/motherboard/SLI_prices.png'))
 ```
 
-![png](/img/motherboard/SLI_prices.png)
+![png](/static/pcpp/motherboard/SLI_prices.png)
 
 Memory slots on motherboard determine what type of memory and how much memory can be included in a PC. The amount of memory is also limited by the maximum supported memory of the CPU. Here'a a breakdown of the count of motherboards by memory type:
 
@@ -632,7 +632,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/motherboard/motherboard_count_by_mem_type.png'))
 ```
 
-![png](/img/motherboard/motherboard_count_by_mem_type.png)
+![png](/static/pcpp/motherboard/motherboard_count_by_mem_type.png)
 
 And here are price boxplots for the top three most common memory slot types:
 
@@ -649,7 +649,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/motherboard/prices_by_mem_slot.png'))
 ```
 
-![png](/img/motherboard/prices_by_mem_slot.png)
+![png](/static/pcpp/motherboard/prices_by_mem_slot.png)
 
 Now let's perform a random forest regression for motherboards in the same way we did for PSUs to rank the importance of these features.
 
@@ -741,7 +741,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/motherboard/n_est_vs_rmse.png'))
 ```
 
-![png](/img/motherboard/n_est_vs_rmse.png)
+![png](/static/pcpp/motherboard/n_est_vs_rmse.png)
 
 The predictive accuracy is not great. Let's look at a few random motherboards with no pricing data and compare the model's prediction to prices on Amazon.
 
@@ -801,7 +801,7 @@ plt.scatter(df[df.Manufacturer=="AMD"].Lithography, df[df.Manufacturer=="AMD"].a
 plt.legend(['Intel','AMD'], fontsize=14)
 ```
 
-![png](/img/cpu/lith_vs_price.png)
+![png](/static/pcpp/cpu/lith_vs_price.png)
 
 Intel's 22 nm and 14 nm lithography set it apart from AMD. From what I understand, AMD contracts its semi-conducter fabrication to other companies and Intel has its own advanced fabrication processes.
 
@@ -822,7 +822,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu/speed_vs_cores.png'))
 ```
 
-![png](/img/cpu/speed_vs_cores.png)
+![png](/static/pcpp/cpu/speed_vs_cores.png)
 
 So once there are 22 cooks in the kitchen, everyone has to go slower, but the team of cooks can easily handle things that would totally swamp an individual cook, like rendering 4K video while live-streaming a AAA title at 1080p60.
 
@@ -839,7 +839,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu/price_by_core.png'))
 ```
 
-![png](/img/cpu/price_by_core.png)
+![png](/static/pcpp/cpu/price_by_core.png)
 
 A kitchen with 22 cooks gets very hot in the same way that a CPU with 22 cores generates a lot of heat. The next graph shows how much heat (measured in something called TDP, or thermal design power) CPUs generate by core count:
 
@@ -855,7 +855,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu/tdp_by_cores.png'))
 ```
 
-![png](/img/cpu/tdp_by_cores.png)
+![png](/static/pcpp/cpu/tdp_by_cores.png)
 
 # Thermal Design Power (TDP)
 
@@ -877,7 +877,7 @@ plt.xlabel('Core clock (MHz)', fontsize=14)
 plt.axis([1500,5000,1500,5000])
 ```
 
-![png](/img/cpu/core_v_boost.png)
+![png](/static/pcpp/cpu/core_v_boost.png)
 
 Here are two more graphs that show the relationship between clock speed, core count, TDP and price:
 
@@ -894,7 +894,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu/freq_v_cores.png'))
 ```
 
-![png](/img/cpu/freq_v_cores.png)
+![png](/static/pcpp/cpu/freq_v_cores.png)
 
 The CPUs shown in the graph above are all Intel CPUs that utilize a proprietary technology called hyper-threading. Hyper-threading is a new feature on CPUs that allows them to better schedule the tasks that they do so that they can minimize the time the need to wait for information to process. Another good analogy I have heard to explain hyper-threading is eating M&Ms as fast as possible with one hand vs. two hands. Hyper-threading is like using two hands to eat M&Ms, while you are eating an M&M with your left hand, your right hand is retrieving the next M&M from the bowl. Here is the same data with price on the y-axis and core count by color:
 
@@ -911,7 +911,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu/freq_v_price.png'))
 ```
 
-![png](/img/cpu/freq_v_price.png)
+![png](/static/pcpp/cpu/freq_v_price.png)
 
 And finally, here is one more graph showing the difference in price between CPUs with and without hyperthreading technology:
 
@@ -928,7 +928,7 @@ plt.legend(fontsize=13, loc='upper left')
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu/hyper_threading_prices.png'))
 ```
 
-![png](/img/cpu/hyper_threading_prices.png)
+![png](/static/pcpp/cpu/hyper_threading_prices.png)
 
 # CPU Cooler
 
@@ -949,7 +949,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu_cooler/prices_hist.png'))
 ```
 
-![png](/img/cpu_cooler/prices_hist.png)
+![png](/static/pcpp/cpu_cooler/prices_hist.png)
 
 Liquid coolers come with radiators in five different sizes. This chart shows average prices for liquid coolrs by radiator length:
 
@@ -963,7 +963,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu_cooler/rad_vs_price.png'))
 ```
 
-![png](/img/cpu_cooler/rad_vs_price.png)
+![png](/static/pcpp/cpu_cooler/rad_vs_price.png)
 
 Non-liquid coolers can be quite large and bulky to allow for more heat dispersion. Here's a scatterplot showing CPU cooler height and prices:
 
@@ -979,7 +979,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu_cooler/cooler_height.png'))
 ```
 
-![png](/img/cpu_cooler/cooler_height.png)
+![png](/static/pcpp/cpu_cooler/cooler_height.png)
 
 Here's one more graph on non-liquid coolers showing the relationship between maximum fan RPM and the maximum level of noise generated by the cooler:
 
@@ -997,7 +997,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/cpu_cooler/rpm_vs_noise.png'))
 ```
 
-![png](/img/cpu_cooler/rpm_vs_noise.png)
+![png](/static/pcpp/cpu_cooler/rpm_vs_noise.png)
 
 # Memory
 
@@ -1029,7 +1029,7 @@ plt.plot(size ,pred, color='red')
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/memory/size_vs_price.png'))
 ```
 
-![png](/img/memory/size_vs_price.png)
+![png](/static/pcpp/memory/size_vs_price.png)
 
 The R^2 value from the regression is 0.767, which means that 76 percent of the variation in the data is explained by the model. The variation might come from the fact that there are two important features that differentiate regular memory from enthusiast-grade memory: memory speed and CAS.
 
@@ -1062,7 +1062,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/memory/speed_vs_price.png'))
 ```
 
-![png](/img/memory/speed_vs_price.png)
+![png](/static/pcpp/memory/speed_vs_price.png)
 
 CAS stands for column access strobe (CAS) latency, and it is the delay time between the moment a memory controller tells the memory module to access a particular memory column on a RAM module, and the moment the data from the given array location is available on the module's output pins (from the [Wikipedia article on CAS latency](https://en.wikipedia.org/wiki/CAS_latency)).
 
@@ -1092,7 +1092,7 @@ plt.legend(['DDR3', 'DDR4'], loc='upper left', fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/memory/cas_vs_speed.png'))
 ```
 
-![png](/img/memory/cas_vs_speed.png)
+![png](/static/pcpp/memory/cas_vs_speed.png)
 
 It's a misconception that faster memory has higher latency, because CAS is not actually a good representation of memory's latency. This is because it is measured in clock cycles, which become smaller as the memory clock speed increases. Here's how the math for memory and true latency works out:
 
@@ -1156,11 +1156,11 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/memory/true_latency.png'))
 ```
 
-![png](/img/memory/true_latency.png)
+![png](/static/pcpp/memory/true_latency.png)
 
 Here's an graph from the Crucial article showing speed vs true latency:
 
-![png](/img/memory/crucial_latency.png)
+![png](/static/pcpp/memory/crucial_latency.png)
 
 And here is a similar graph from our dataset:
 
@@ -1177,7 +1177,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/memory/speed_vs_true_latency.png'))
 ```
 
-![png](/img/memory/speed_vs_true_latency.png)
+![png](/static/pcpp/memory/speed_vs_true_latency.png)
 
 Here's another look at memory prices, showing memory module prices and price per GB of memory:
 
@@ -1208,7 +1208,7 @@ plt.legend(['2GB','4GB', '8GB', '16GB', '32GB', '64GB'], fontsize=14)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/memory/price_vs_ppgb.png'))
 ```
 
-![png](/img/memory/price_vs_ppgb.png)
+![png](/static/pcpp/memory/price_vs_ppgb.png)
 
 This graph shows the variation in price for the most popular memrory kit sizes, and it also shows the variation in pricing data. The price per GB corresponds to one price (which is usually the lowest listed price) and the price is the average of all vendors' prices.
 
@@ -1227,7 +1227,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/memory/voltage.png'))
 ```
 
-![png](/img/memory/voltage.png)
+![png](/static/pcpp/memory/voltage.png)
 
 # Video Card / Graphics Card / GPU
 
@@ -1248,7 +1248,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/prices_by_display.png'))
 ```
 
-![png](/img/gpu/prices_by_display.png)
+![png](/static/pcpp/gpu/prices_by_display.png)
 
 GPUs also sometimes the largest components, here's a histogram for the height of all GPUs:
 
@@ -1263,7 +1263,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/length_hist.png'))
 ```
 
-![png](/img/gpu/length_hist.png)
+![png](/static/pcpp/gpu/length_hist.png)
 
 Length is an interesting feature, because you can pack more GPUs into a graphics card that is larger, and you can also have more fans and cooling equipment on larger cards. Here's a look at the relationship between video card length, price, memory and clock speed:
 
@@ -1281,7 +1281,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/length_vs_price.png'))
 ```
 
-![png](/img/gpu/length_vs_price.png)
+![png](/static/pcpp/gpu/length_vs_price.png)
 
 And here is another look at the same data, filtered for graphics cards under \$1,100:
 
@@ -1299,7 +1299,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/length_vs_price_2.png'))
 ```
 
-![png](/img/gpu/length_vs_price_2.png)
+![png](/static/pcpp/gpu/length_vs_price_2.png)
 
 GPUs are also measured in thermal design power (TDP) that we previously examined in CPUs. This scatterplot shows the relationship between TDP, Price, clockspeed and memory:
 
@@ -1317,7 +1317,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/tdp_vs_price.png'))
 ```
 
-![png](/img/gpu/tdp_vs_price.png)
+![png](/static/pcpp/gpu/tdp_vs_price.png)
 
 Here is a look at the top 20 most common GPU chipsets for graphics cards:
 
@@ -1333,7 +1333,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/gpu_chipsets.png'))
 ```
 
-![png](/img/gpu/gpu_chipsets.png)
+![png](/static/pcpp/gpu/gpu_chipsets.png)
 
 And here is the same graph with average prices for the top 20 most common GPU chipsets:
 
@@ -1347,7 +1347,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/gpu_chipsets_by_price.png'))
 ```
 
-![png](/img/gpu/gpu_chipsets_by_price.png)
+![png](/static/pcpp/gpu/gpu_chipsets_by_price.png)
 
 In the next graph we can see clusters of GPU chipset families by plotting the clock speed and prices of video cards:
 
@@ -1365,7 +1365,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/clock_speed_vs_price_and_memory.png'))
 ```
 
-![png](/img/gpu/clock_speed_vs_price_and_memory.png)
+![png](/static/pcpp/gpu/clock_speed_vs_price_and_memory.png)
 
 Now let's look at six generations of NVIDIA GPUs by clock speed:
 
@@ -1408,7 +1408,7 @@ plt.show()
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/six_NVIDIA.png'))
 ```
 
-![png](/img/gpu/six_NVIDIA.png)
+![png](/static/pcpp/gpu/six_NVIDIA.png)
 
 It's also helpful to compare the most recent two series of NVIDIA GPUs by chipset families:
 
@@ -1463,7 +1463,7 @@ plt.show()
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/9_vs_10.png'))
 ```
 
-![png](/img/gpu/9_vs_10.png)
+![png](/static/pcpp/gpu/9_vs_10.png)
 
 Finally, as we did for CPUs, we can look at the core memory clock and the boost clock for GPUs:
 
@@ -1501,7 +1501,7 @@ plt.legend([ 'Line of best fit', 'y = x', 'Core vs. Boost Clock (NVIDIA)', 'Core
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/gpu_clock_vs_boost.png'))
 ```
 
-![png](/img/gpu/gpu_clock_vs_boost.png)
+![png](/static/pcpp/gpu/gpu_clock_vs_boost.png)
 
 The latest generation of GPUs at much higher clock speeds than previous generations are able to boost clocks even faster than previous generations, on average. This is shown by the slightly steeper curve of the line of best fit as compared with `y = x`.
 
@@ -1509,7 +1509,7 @@ The latest generation of GPUs at much higher clock speeds than previous generati
 
 Hard drive sizes have been growing at an exponential rate since the 1950s. This [chart from Wikipedia](https://en.wikipedia.org/wiki/File:Hard_drive_capacity_over_time.svg) shows the growth of storage sizes on a logarithmic scale in recent decades:
 
-![png](/img/storage/storage_growth.png)
+![png](/static/pcpp/storage/storage_growth.png)
 
 Linear growth on a logarithmic scale corresponds to exponential growth on a linear scale, which is the basis of Moore's Law. Hard drive disks follow a growth pattern similar to Moore's Law called [Kryder's Law](https://en.wikipedia.org/wiki/Mark_Kryder).
 Here is a scatter plot of storage drive sizes and prices:
@@ -1532,7 +1532,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/storage/storage_vs_price.png'))
 ```
 
-![png](/img/storage/storage_vs_price.png)
+![png](/static/pcpp/storage/storage_vs_price.png)
 
 HDD refers to a spinning hard drive disk. Electromechanical magnetic disks spin at high freuencies and a physical arm reads and writes data to and from the spinning disks. SSDs, or Solid state drives, have a number of advantages over spinning drives. SSDs have no moving parts, which makes them more shock resistant and quiter than HDDs. SSDs also have lower access time and lower latency, but they come at a much higher price per GB of storage than HDDs.
 
@@ -1552,7 +1552,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/storage/ssd_storage_vs_price.png'))
 ```
 
-![png](/img/storage/ssd_storage_vs_price.png)
+![png](/static/pcpp/storage/ssd_storage_vs_price.png)
 
 For HDDs, the color of each point represent the speed in rotations per minute of the spinning disk:
 
@@ -1570,7 +1570,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/storage/hdd_storage_vs_price.png'))
 ```
 
-![png](/img/storage/hdd_storage_vs_price.png)
+![png](/static/pcpp/storage/hdd_storage_vs_price.png)
 
 This graph shows the price and the price per GB for SSDs and HDDs:
 
@@ -1589,7 +1589,7 @@ plt.legend(['SSD', 'HDD'], loc='upper right', fontsize=14)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/storage/storage_vs_ppgb.png'))
 ```
 
-![png](/img/storage/storage_vs_ppgb.png)
+![png](/static/pcpp/storage/storage_vs_ppgb.png)
 
 Both HDDs and SSDs become less expensive per GB as they scale.
 
@@ -1609,7 +1609,7 @@ plt.title('Case Fan Maximum RPM vs. Maximum Noise (dbA) and Price (color)', font
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/fan/rpm_vs_noise.png'))
 ```
 
-![png](/img/fan/rpm_vs_noise.png)
+![png](/static/pcpp/fan/rpm_vs_noise.png)
 
 260 of 1192 case fans in this dataset include a rating for static pressure. Static pressure can be thought of as the force by which air is pushed out of the fan. If you put your hand in front of a fan with low static pressure, you will feel a gentle flow of air. Fans with high static pressure have stronger airflow, but not necessarily more airflow, as measured in CFM.
 
@@ -1645,7 +1645,7 @@ print lreg.score(X, y, sample_weight=None)
 
 `0.0345903950712`
 
-![png](/img/fan/air_flow_v_static_pressure.png)
+![png](/static/pcpp/fan/air_flow_v_static_pressure.png)
 
 Two fan features with a strong correlation are maximum RPM and static pressure:
 
@@ -1678,7 +1678,7 @@ print lreg.score(X,y,sample_weight=None)
 
 `0.711316685518`
 
-![png](/img/fan/rpm_max_vs_static_pressure.png)
+![png](/static/pcpp/fan/rpm_max_vs_static_pressure.png)
 
 The stronger force of the air flow from high static pressure fans is better at blowing hot air off of hot surfaces, so these fans are often attached to liquid CPU cooler radiators and CPU cooler heat blocks.
 
@@ -1701,7 +1701,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/monitor/screen_size.png'))
 ```
 
-![png](/img/monitor/screen_size.png)
+![png](/static/pcpp/monitor/screen_size.png)
 
 Monitors are measured not only in size, but in a number of different measures related to _time_. Framerate refers to how many frames per second are rendered in programs, typically games. A display monitor can show as many frames per second as its _refresh rate_ allows. Most modern games and monitors use a technology called V-Sync (vertical-sync), which limits the _frame rate_ to the maximum _refresh rate_ that the monitor can handle.
 
@@ -1759,7 +1759,7 @@ plt.yticks(fontsize=13)
 plt.legend(['Average Z-score'], loc='upper left', fontsize=14)
 ```
 
-![png](/img/monitor/average_z_score_by_vendor.png)
+![png](/static/pcpp/monitor/average_z_score_by_vendor.png)
 
 One problem with this method of scoring is that there is a very small number of price observations for each part, and the price observations generally are not normally distributed. Also, some vendors offer significantly more products than others. However, it does support my guess that Amazon has the most competitive product offerings overall.
 
@@ -1781,7 +1781,7 @@ plt.yticks(fontsize=13)
 plt.legend(['Count'], fontsize=14, loc='upper left')
 ```
 
-![png](/img/monitor/monitors_by_vendor.png)
+![png](/static/pcpp/monitor/monitors_by_vendor.png)
 
 ## User Reviews
 
@@ -1797,7 +1797,7 @@ plt.yticks(fontsize=13)
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/gpu/star_ratings.png'))
 ```
 
-![png](/img/gpu/star_ratings.png)
+![png](/static/pcpp/gpu/star_ratings.png)
 
 Here's one text rating from each of the 5 categories:
 
