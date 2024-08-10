@@ -4,7 +4,7 @@ title: Arch Linux Installation Guide
 date: 2017-08-03
 description: A comprehensive guide to installing Arch Linux
 comments: true
-image: /static/arch.png
+image: /static/aur/arch.png
 tags:
   - arch-linux
 ---
