@@ -1,6 +1,6 @@
 <template>
   <li class="rounded-lg article-card">
-    <nuxt-link :to="article._path"> <!-- localePath-->
+    <nuxt-link :to="article._path" external> <!-- localePath-->
       <div>
         <img
           v-if="article.image"
@@ -26,20 +26,23 @@
     <div class="blog-date mb-4 px-4 pb-4">
       <p>
         {{ $t('common.lastUpdated') }}
-        {{ article.date }}
+        {{ formatDate(article.date, $i18n.locale) }}
       </p>
     </div>
   </li>
 </template>
 
-<script>
-export default {
-  props: {
-    article: {
-      type: Object,
-      default: () => {}
-    }
+<script setup>
+const props = defineProps({
+  article: {
+    type: Object,
+    default: () => ({})
   }
+})
+const formatDate = (date, locale) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = new Date(date).toLocaleDateString(locale, options);
+  return formattedDate
 }
 </script>
 

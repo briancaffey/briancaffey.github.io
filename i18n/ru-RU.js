@@ -25,7 +25,7 @@ export default {
     yourName: 'Ваше имя',
     sampleName: 'J. Appleseed',
     yourEmail: 'Эл. адрес',
-    sampleEmail: 'jappleseed_at_appleseed.co',
+    sampleEmail: 'Email',
     yourWebsite: 'Ваш сайт',
     sampleWebsite: 'https://appleseed.co',
     message: 'Сообщение',
@@ -43,7 +43,8 @@ export default {
     projects: 'Проекты'
   },
   blog: {
-    blogPosts: 'Сообщения в блоге'
+    blogPosts: 'Сообщения в блоге',
+    drafts: 'Drafts'
   },
   tags: {
     allTags: 'Все теги'

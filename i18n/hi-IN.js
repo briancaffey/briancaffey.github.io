@@ -26,7 +26,7 @@ export default {
     yourName: 'आपका नाम',
     sampleName: 'Ashok Kumar',
     yourEmail: 'तुम्हारा ईमेल',
-    sampleEmail: 'ashok@kumar.in',
+    sampleEmail: 'Email',
     yourWebsite: 'आपकी वेबसाइट',
     sampleWebsite: 'https://ashokkumar.com',
     message: 'संदेश',
@@ -44,7 +44,8 @@ export default {
     projects: 'परियोजनाओं'
   },
   blog: {
-    blogPosts: 'वेबदैनिकी डाक'
+    blogPosts: 'वेबदैनिकी डाक',
+    drafts: 'Drafts'
   },
   tags: {
     allTags: 'सभी टैग'

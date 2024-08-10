@@ -103,9 +103,30 @@ export default defineNuxtConfig({
    */
   content: {
     highlight: {
-      // todo(migration): add languages used in code blocks
+      // https://shiki.matsu.io/languages#bundled-languages
       langs: [
-        "py", "python", "bash", "cpp"
+        "py",
+        "python",
+        "bash",
+        "cpp",
+        "yaml",
+        "yml",
+        "powershell",
+        "json",
+        "sql",
+        "html",
+        "vue-html",
+        "javascript",
+        "js",
+        "php",
+        "dockerfile",
+        "docker",
+        "make",
+        "makefile",
+        "typescript",
+        "ts",
+        "terraform"
+
       ],
       theme: {
         // Default theme (same as single string)
@@ -126,12 +147,12 @@ export default defineNuxtConfig({
         document.raw = raw
       }
     },
-    'pages:extend' (routes) {
-      routes.push({
-        path: '/:year/:month/:day/:slug',
-        component: resolve(__dirname, 'pages/_year/_month/_day/_slug.vue')
-      })
-    }
+    // 'pages:extend' (routes) {
+    //   routes.push({
+    //     path: '/:year/:month/:day/:slug',
+    //     component: resolve(__dirname, 'pages/[year]/[month]/[day]/[slug].vue')
+    //   })
+    // }
   },
 
   build: { transpile: ['emoji-mart-vue-fast'] },

@@ -25,7 +25,7 @@ export default {
     yourName: 'あなたの名前',
     sampleName: 'J. Appleseed',
     yourEmail: 'メールアドレス',
-    sampleEmail: 'jappleseed_at_appleseed.co',
+    sampleEmail: 'Email',
     yourWebsite: 'あなたのウェブサイト',
     sampleWebsite: 'https://appleseed.co',
     message: 'メッセージ',
@@ -42,7 +42,8 @@ export default {
     projects: 'プロジェクト'
   },
   blog: {
-    blogPosts: 'ブログ投稿'
+    blogPosts: 'ブログ投稿',
+    drafts: 'Drafts'
   },
   tags: {
     allTags: 'すべてのタグ'

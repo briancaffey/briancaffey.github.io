@@ -1,7 +1,7 @@
 ---
 title: Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem
 date: '2023-11-23'
-description:
+description: Translating The Three-Body Problem book to English with Chinese LLMs, making visualizations with stable diffusion and running n-body simulations with CUDA
 image: /img/three-body-problem/cover.png
 tags:
   - three-body-problem
@@ -18,8 +18,6 @@ tags:
   - vue
   - three.js
 
-# draft: true
-
 external:
   - link: https://news.ycombinator.com/item?id=38393757
     site: hn
@@ -27,12 +25,6 @@ external:
     site: reddit
   - link: https://twitter.com/briancaffey/status/1727710878349332614
     site: x
-#   - link: https://medium.com/@briancaffey/my-infrastructure-as-code-rosetta-stone-with-cdk-terraform-and-pulumi-44fcb8233e6a
-#     site: medium
-#   - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
-#     site: hashnode
-#   - link: https://briancaffey.substack.com/p/my-infrastructure-as-code-rosetta
-#     site: substack
 
 comments: true
 ---

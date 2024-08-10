@@ -22,20 +22,8 @@ tags:
 draft: false
 
 external:
-#   - link: https://news.ycombinator.com/
-#     site: hn
   - link: https://x.com/briancaffey/status/1802754703207583886
     site: x
-  # - link: https://www.reddit.com/r/RocketLeague/comments/1au0po3/rocket_league_botchat_an_llmpowered_bakkesmod/
-  #   site: reddit
-  # - link: https://dev.to/briancaffey/rocket-league-botchat-powered-by-tensorrt-llm-my-submission-for-nvidias-generative-ai-on-rtx-pcs-developer-contest-2oao
-  #   site: dev
-#   - link: https://medium.com/@briancaffey/my-infrastructure-as-code-rosetta-stone-with-cdk-terraform-and-pulumi-44fcb8233e6a
-#     site: medium
-#   - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
-#     site: hashnode
-#   - link: https://briancaffey.substack.com/p/my-infrastructure-as-code-rosetta
-#     site: substack
 
 comments: true
 ---

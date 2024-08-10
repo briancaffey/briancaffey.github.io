@@ -10,12 +10,6 @@
         <a href="https://github.com/briancaffey">
           <GitHubIcon />
         </a>
-        <!-- <a href="https://gitlab.com/briancaffey">
-          <GitLabIcon />
-        </a> -->
-        <!-- <a href="https://stackoverflow.com/users/6084948/briancaffey">
-          <StackOverflowIcon />
-        </a> -->
         <a href="https://linkedin.com/in/brian-caffey-06b22a18">
           <LinkedInIcon />
         </a>
@@ -29,23 +23,7 @@
     </div>
     <div>
       <div class="flex mx-auto justify-center py-4">
-        <div class="grid grid-cols-5 items-center gap-4 px-4">
-          <!-- <a href="https://dev.to/briancaffey">
-            <img class="follow" src="/icons/dev.png">
-          </a> -->
-          <!-- <a href="https://briancaffey.substack.com">
-            <img class="follow" src="/icons/substack.png">
-          </a> -->
-          <!-- <a href="https://briancaffey.hashnode.dev/">
-            <img class="follow" src="/icons/hashnode.png">
-          </a> -->
-          <!-- <a href="https://medium.com/@briancaffey">
-            <img class="follow" src="/icons/medium.png">
-          </a> -->
-          <!-- <a href="https://hackernoon.com/u/briancaffey">
-            <img class="follow" src="/icons/hackernoon.png">
-          </a> -->
-        </div>
+        <div class="grid grid-cols-5 items-center gap-4 px-4"></div>
       </div>
     </div>
     <div>
