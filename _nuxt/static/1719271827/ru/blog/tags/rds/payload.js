@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/ru/blog/tags/rds", {data:[{articles:[]}],fetch:{},mutations:[]});

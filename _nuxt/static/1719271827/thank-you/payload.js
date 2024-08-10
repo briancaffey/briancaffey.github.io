@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/thank-you", {data:[{}],fetch:{},mutations:[]});

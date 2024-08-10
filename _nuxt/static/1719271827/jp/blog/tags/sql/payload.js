@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/jp/blog/tags/sql", {data:[{articles:[{slug:"simple-sql-tasks-with-mariadb.html",title:"How to do simple SQL tasks with MariaDB",date:"2018-01-28T00:00:00.000Z",image:"\u002Fstatic\u002Fmariadb.png",tags:["maria-db","sql","databases"],path:"\u002F2018\u002F01\u002F28\u002Fsimple-sql-tasks-with-mariadb.html"}]}],fetch:{},mutations:[]});
