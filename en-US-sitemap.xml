@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="/__sitemap__/style.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://briancaffey.github.io/</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/blog" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr/blog" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh/blog" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru/blog" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp/blog" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in/blog" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/blog" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/colors</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/colors" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr/colors" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh/colors" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru/colors" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp/colors" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in/colors" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/colors" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/confirm-subscription</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/confirm-subscription" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr/confirm-subscription" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh/confirm-subscription" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru/confirm-subscription" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp/confirm-subscription" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in/confirm-subscription" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/confirm-subscription" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/contact</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/contact" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr/contact" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh/contact" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru/contact" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp/contact" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in/contact" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/contact" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/drafts</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/drafts" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr/drafts" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh/drafts" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru/drafts" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp/drafts" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in/drafts" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/drafts" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/thank-you</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/thank-you" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr/thank-you" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh/thank-you" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru/thank-you" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp/thank-you" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in/thank-you" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/thank-you" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/1</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/2</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/3</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/4</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/5</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/6</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags</loc>
+        <xhtml:link rel="alternate" hreflang="en-US" href="https://briancaffey.github.io/blog/tags" />
+        <xhtml:link rel="alternate" hreflang="fr-FR" href="https://briancaffey.github.io/fr/blog/tags" />
+        <xhtml:link rel="alternate" hreflang="zh-ZH" href="https://briancaffey.github.io/zh/blog/tags" />
+        <xhtml:link rel="alternate" hreflang="ru-RU" href="https://briancaffey.github.io/ru/blog/tags" />
+        <xhtml:link rel="alternate" hreflang="jp-JP" href="https://briancaffey.github.io/jp/blog/tags" />
+        <xhtml:link rel="alternate" hreflang="hi-IN" href="https://briancaffey.github.io/in/blog/tags" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://briancaffey.github.io/blog/tags" />
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/3d-modeling</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/007</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/adblock</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/ads</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/adsense</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/agents</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/ai</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/api</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/arch-linux</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/authentication</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/aws</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/bash</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/blogging</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/bootstrap</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/cdk</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/celery</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/cellular-automata</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/chinese</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/cloudformation</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/comfyui</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/containers</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/content</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/crypto</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/cuda</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/data</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/data-tables</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/databases</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/deluge</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/development</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/digital-ocean</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/discord</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/django</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/dns</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/docker</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/drf</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/ecs</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/emoji</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/ens</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/ethereum</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/fargate</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/flask</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/gaming</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/github</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/github-actions</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/github-pages</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/gitlab</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/gnome</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/gpu</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/graphs</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/guitar</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/heroku</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/i3</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/i18n</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/jwt</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/kerkythea</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/lambda</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/langchain</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/leaflet</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/linux</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/llama</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/llm</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/machine-learning</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/mailchimp</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/mapbox</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/maria-db</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/media</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/midi</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/mini-dlna</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/music</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/nginx</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/nuxt</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/nvidia</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/photogrammetry</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/poker</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/publishing</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/pulumi</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/python</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/raspberry-pi</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/react</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/reddit</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/regex</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/rex-ray</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/rocket-league</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/rss</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/rtx</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/scraping</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/sec</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/serverless</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/sketchup</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/sql</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/stable-diffusion</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/stable-video-diffusion</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/startups</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/static-site</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/stripe</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/swarm</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/tensorflow</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/tensorrt</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/tensorrt-llm</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/terraform</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/three-body-problem</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/traefik</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/travis-ci</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/twisted</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/valheim</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/vue</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/web</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/windows</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/writing</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/yc</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2016/04/07/home-media-setup</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/01/01/pc-data</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/03/03/graph_subreddit</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/03/04/settinging-up-django-with-heroku</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/04/02/langton-ant-notebook</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/08/03/arch-linux-installation-guide</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/10/03/simple-games-in-react</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/10/17/reading-rss-with-python</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/10/31/a-binary-clock-written-in-bash</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/11/28/remove-root-partition-bloat-from-docker</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/12/02/arch-linux-package-data-analysis</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/12/09/setting-up-flask-cli-with-docker</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2017/12/22/getting-started-with-twisted</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2018/01/28/simple-sql-tasks-with-mariadb</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/09/17/migrating-from-jekyll-to-nuxt-static-site</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/11/27/how-to-authenticate-django-rest-framework-from-vue-app-with-session-authentication-httponly-cookies</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2021/11/18/i-bought-briancaffey-eth-with-ethereum-name-server</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update</loc>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/three.js/</loc>
+    </url>
+</urlset>
+<!-- XML Sitemap generated by @nuxtjs/sitemap v5.3.5 at 2024-08-10T22:42:39.395Z -->
