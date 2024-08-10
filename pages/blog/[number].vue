@@ -43,9 +43,4 @@ const { data: paginatedItems } = await useAsyncData('paginated-items', () =>
     .skip(9 * (pageNo - 1))
     .find()
 )
-
 </script>
-
-<style scoped>
-
-</style>
