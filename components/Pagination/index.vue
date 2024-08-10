@@ -18,7 +18,7 @@
         external
     >
       &nbsp;←
-    </nuxt-link>
+    </nuxt-link>&nbsp;
 
     <nuxt-link
       :to="`/blog/${pageNo}`"
@@ -39,8 +39,8 @@
         "
         external
     >
-      &nbsp;{{ pageNo }}
-    </nuxt-link>
+      {{ pageNo }}
+    </nuxt-link>&nbsp;
     <nuxt-link
       :to="nextPage ? `/blog/${pageNo + 1}` : `/blog/${pageNo}`"
       :class="`
