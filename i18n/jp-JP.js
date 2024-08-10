@@ -29,7 +29,8 @@ export default {
     yourWebsite: 'あなたのウェブサイト',
     sampleWebsite: 'https://appleseed.co',
     message: 'メッセージ',
-    sampleMessage: 'ここにメッセージを入力してください'
+    sampleMessage: 'ここにメッセージを入力してください',
+    send: 'Send'
   },
   newsletter: {
     joinNewsletter:

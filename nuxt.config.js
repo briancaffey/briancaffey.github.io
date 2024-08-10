@@ -76,43 +76,25 @@ export default defineNuxtConfig({
    ** See https://nuxtjs.org/api/configuration-components
    */
   components: [
+    '~/components/ui',
+    '~/components/blog',
     '~/components/icons',
     '~/components'
-  ],
-
-  /*
-   ** Nuxt.js dev-modules
-   */
-  buildModules: [
-    // [
-    //   '@nuxtjs/google-analytics',
-    //   {
-    //     id: 'UA-75060954-1'
-    //   }
-    // ]
   ],
 
   /*
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    // '@nuxtjs/axios',
-    // Doc: https://github.com/nuxt/content
     '@nuxt/content',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
     '@nuxt/eslint',
-    'nuxt-gtag',
-    // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     '@nuxtjs/sitemap',
+    'nuxt-gtag',
     // '@nuxtjs/feed',
-    // 'nuxt-i18n'
-    // ['@nuxtjs/google-adsense', {
-    //   id: 'ca-pub-4924597640144289'
-    // }]
   ],
 
   /*

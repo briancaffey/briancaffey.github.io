@@ -3,7 +3,7 @@
     <img
       v-if="article.image"
       :src="article.image"
-      class="pt-2 w-full object-cover cover-image"
+      class="pt-2 w-full object-cover"
       style="height: 32rem;"
     >
     <div class="mx-auto max-w-5xl px-2 sm:px-4 md:px-4 lg:px-16 mt-2">
@@ -69,7 +69,6 @@ const formatDate = (date, locale) => {
 }
 const config = useRuntimeConfig()
 
-// Set the page head
 useHead(() => ({
   title: article.value.title,
   meta: [
@@ -108,13 +107,3 @@ useHead(() => ({
   ],
 }));
 </script>
-
-<style scoped>
-/* .cover-image {
-  transition: transform .2s;
-}
-
-.cover-image:hover {
-  transform: scale(1.025);
-} */
-</style>
