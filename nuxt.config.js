@@ -5,9 +5,9 @@ export default defineNuxtConfig({
   env: {
     baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io'
   },
-  app: {
-    pageTransition: { name: 'page', mode: 'in-out' }
-  },
+  // app: {
+  //   pageTransition: { name: 'page', mode: 'in-out' }
+  // },
 
   /*
    ** Nuxt target
@@ -39,7 +39,10 @@ export default defineNuxtConfig({
   /*
    ** Global CSS
    */
-  css: ['~/assets/css/main.css', '~/assets/css/transitions.css'],
+  css: [
+    '~/assets/css/main.css',
+    // '~/assets/css/transitions.css'
+  ],
 
   /*
    ** Plugins to load before mounting the App
@@ -47,7 +50,6 @@ export default defineNuxtConfig({
    */
   plugins: [
     '~/plugins/disqus',
-    // '~/plugins/apexcharts'
     { src: '~/plugins/apexcharts', mode: 'client' },
     // { src: '~plugins/drift.js', mode: 'client' }
   ],
@@ -56,18 +58,15 @@ export default defineNuxtConfig({
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
    */
-  // todo(migration): fix or remove auto imports for components
-  components: true,
+  components: [
+    '~/components/icons',
+    '~/components'
+  ],
 
   /*
    ** Nuxt.js dev-modules
    */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    // '@nuxtjs/eslint-module',
-    // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    // '@nuxtjs/tailwindcss',
-
     // [
     //   '@nuxtjs/google-analytics',
     //   {
@@ -99,24 +98,12 @@ export default defineNuxtConfig({
   ],
 
   /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
-  // axios: {
-  //   baseURL:
-  //     process.env.NODE_ENV === 'production'
-  //       ? 'https://briancaffey.github.io'
-  //       : 'http://localhost:3000'
-  // },
-  /*
    ** Content module configuration
    ** See https://content.nuxtjs.org/configuration
    */
   content: {
     highlight: {
-      // Theme used in all color schemes.
-      // theme: 'github-light'
-      // OR
+      // todo(migration): add languages used in code blocks
       langs: [
         "py", "python", "bash", "cpp"
       ],
@@ -131,11 +118,6 @@ export default defineNuxtConfig({
     }
 
   },
-
-  /*
-   ** Build configuration
-   ** See https://nuxtjs.org/api/configuration-build/
-   */
 
   hooks: {
     'content:file:beforeInsert': (document) => {

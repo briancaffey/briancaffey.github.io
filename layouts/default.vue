@@ -1,9 +1,7 @@
 <template>
   <div>
     <Navigation />
-    <!-- <PleaseDisableAdblock v-if="$store.getters['adblock/isAdblockEnabled']" /> -->
-    <NuxtPage :pageKey="route.fullPath" />
-    <!-- <AdBlockerBlocker /> -->
+    <slot />
 
     <Footer />
   </div>
