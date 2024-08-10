@@ -7,10 +7,6 @@
   </div>
 </template>
 
-<script setup>
-const route = useRoute();
-</script>
-
 <style>
 html {
   font-family: Montserrat, Arial, Sans Serif;

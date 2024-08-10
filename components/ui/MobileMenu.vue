@@ -18,14 +18,14 @@
         <li>
           <nuxt-link
             to="/"
-            @click="$emit('toggle')"
             external
+            @click="$emit('toggle')"
           > <!--localePath-->
             {{ $t('nav.home') }}
           </nuxt-link>
         </li>
         <li>
-          <nuxt-link to="/blog/1" @click="$emit('toggle')" external>
+          <nuxt-link to="/blog/1" external @click="$emit('toggle')">
             {{
               $t('nav.blog')
             }}
@@ -34,8 +34,8 @@
         <li>
           <nuxt-link
             to="contact"
-            @click="$emit('toggle')"
             external
+            @click="$emit('toggle')"
           > <!--localPath-->
             {{ $t('nav.contact') }}
           </nuxt-link>

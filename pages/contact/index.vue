@@ -23,7 +23,7 @@
     </div>
     <div>
       <div class="flex mx-auto justify-center py-4">
-        <div class="grid grid-cols-5 items-center gap-4 px-4"></div>
+        <div class="grid grid-cols-5 items-center gap-4 px-4" />
       </div>
     </div>
     <div>
