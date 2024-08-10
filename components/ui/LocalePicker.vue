@@ -26,8 +26,8 @@
           v-for="locale in availableLocales"
           :key="`${locale.code}-option`"
           :to="switchLocalePath(locale.code)"
-          @click="toggleShowOptions"
           external
+          @click="toggleShowOptions"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
         </nuxt-link>

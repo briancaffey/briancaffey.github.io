@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   article: {
     type: Object,
     default: () => ({})

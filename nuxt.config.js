@@ -1,6 +1,4 @@
 import { defineNuxtConfig } from 'nuxt/config'
-import { queryContent } from '@nuxt/content';
-const { resolve } = require('path');
 
 export default defineNuxtConfig({
   runtimeConfig: {
