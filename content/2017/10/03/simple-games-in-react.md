@@ -3,7 +3,7 @@ layout: post
 title: Simple Board Games in ReactJS
 date: 2017-10-03
 comments: true
-image: /img/wuziqi.png
+image: /static/react/wuziqi.png
 tags:
   - react
 ---
@@ -14,7 +14,7 @@ Here's the final result:
 
 ![png](/img/download.png)
 
-You can play this game <a href="/react/tic-tac-react/tic-tac-react.html" target="_blank">here</a>
+You can play this game <a href="/static/react/tic-tac-react/tic-tac-react.html" target="_blank">here</a>
 
 I wanted to give the game some additional features, so I let the player set the dimensions of the board to be any integer greater than 1. Here's a look at the main component called "Board" which contains most of the business logic:
 
@@ -160,7 +160,7 @@ Here's a look at the result of my Gomoku game:
 
 ![png](/img/wuziqi.png)
 
-You can play this game <a href="/react/wuziqi/wuziqi.html" target="_blank">here</a>
+You can play this game <a href="/static/react/wuziqi/wuziqi.html" target="_blank">here</a>
 
 Here's the main component for this game with heavy commenting:
 
