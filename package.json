@@ -28,6 +28,7 @@
     "detab": "^3.0.2",
     "emoji-mart-vue-fast": "^15.0.2",
     "nuxt": "^3.12.4",
+    "nuxt-gtag": "^2.1.0",
     "pinia": "^2.2.1",
     "typescript": "^5.5.4",
     "vue-apexcharts": "^1.6.0",

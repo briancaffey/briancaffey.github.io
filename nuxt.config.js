@@ -2,6 +2,13 @@ import { defineNuxtConfig } from 'nuxt/config'
 const { resolve } = require('path');
 
 export default defineNuxtConfig({
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true
+    }
+  },
   env: {
     baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io'
   },
@@ -87,7 +94,8 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    'nuxt-gtag'
     // Doc: https://www.npmjs.com/package/@nuxtjs/sitemap
     // '@nuxtjs/sitemap',
     // '@nuxtjs/feed',
@@ -138,6 +146,10 @@ export default defineNuxtConfig({
       }
     }
 
+  },
+
+  gtag: {
+    id: 'G-S8TVBBMW66'
   },
 
   hooks: {
