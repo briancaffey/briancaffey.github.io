@@ -12,7 +12,7 @@ To ease into learning ReactJS, I took a shot at implementing a simple tic-tac-to
 
 Here's the final result:
 
-![png](/img/download.png)
+![png](/static/react/ttt.png)
 
 You can play this game <a href="/static/react/tic-tac-react/tic-tac-react.html" target="_blank">here</a>
 
