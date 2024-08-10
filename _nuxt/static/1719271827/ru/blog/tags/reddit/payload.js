@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/ru/blog/tags/reddit", {data:[{articles:[{slug:"graph_subreddit.html",title:"Related subreddit graph exploration with NetworkX",date:"2017-03-03T00:00:00.000Z",image:"\u002Fstatic\u002Fsubreddits.png",tags:["reddit","python","scraping","data","graphs"],path:"\u002F2017\u002F03\u002F03\u002Fgraph_subreddit.html"}]}],fetch:{},mutations:[]});

@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/blog/tags/twisted", {data:[{articles:[{slug:"getting-started-with-twisted.html",title:"Getting started with Python's Twisted Framework",date:"2017-12-22T00:00:00.000Z",image:"\u002Fstatic\u002Ftwisted-snakes.png",tags:["python","twisted"],path:"\u002F2017\u002F12\u002F22\u002Fgetting-started-with-twisted.html"}]}],fetch:{},mutations:[]});
