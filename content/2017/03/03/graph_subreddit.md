@@ -240,10 +240,10 @@ _ = plt.plot(list_of_dates, counts)
 _ = plt.title('Number of subreddits over time')
 _ = plt.xlabel('Date')
 _ = plt.ylabel('Cummulative Count')
-plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/subreddit_graph/subreddits_count.png'))
+plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/static/subreddit_graph/subreddits_count.png'))
 ```
 
-![png](/img/subreddit_graph/subreddits_count.png)
+![png](/static/subreddit_graph/subreddits_count.png)
 
 # Setting up a graph with NetworkX
 
@@ -499,7 +499,7 @@ _ = plt.ylabel('Centrality')
 plt.savefig(os.path.expanduser('~/Documents/GitHub/briancaffey.github.io/img/subreddit_graph/centrality.png'))
 ```
 
-![png](/img/subreddit_graph/centrality.png)
+![png](/static/subreddit_graph/centrality.png)
 
 # Connectedness
 
