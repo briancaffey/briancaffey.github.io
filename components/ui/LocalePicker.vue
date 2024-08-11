@@ -6,12 +6,12 @@
         class="md:px-1 px-1 cursor-pointer"
         @click="showOptions = !showOptions"
       >
-        <emoji :data="emojiIndex" :emoji="availableLocales.find((x) => x['code'] === $i18n.locale).emoji" :size="32" />
+        <emoji :data="emojiIndex" :emoji="availableLocales.value.find((x) => x['code'] === $i18n.locale).emoji" :size="32" />
       </li>
     </ul>
     <div class="rounded-md z-10 picker">
       <div
-        v-show="getShowOptions"
+        v-show="showOptions"
         class="
           bg-white
           shadow-md
@@ -23,7 +23,7 @@
         "
       >
         <nuxt-link
-          v-for="locale in availableLocales"
+          v-for="locale in availableLocales.value"
           :key="`${locale.code}-option`"
           @click="switchLocale(locale.code)"
         >
@@ -34,38 +34,28 @@
   </div>
 </template>
 
-<script>
-import data from "emoji-mart-vue-fast/data/twitter.json";
-import "emoji-mart-vue-fast/css/emoji-mart.css";
-import { EmojiIndex, Emoji } from "emoji-mart-vue-fast/src";
+<script setup>
+import { ref, computed } from 'vue';
+import data from 'emoji-mart-vue-fast/data/twitter.json';
+import 'emoji-mart-vue-fast/css/emoji-mart.css';
+import { EmojiIndex, Emoji } from 'emoji-mart-vue-fast/src';
+import { useI18n } from '#imports';
 
-const emojiIndex = new EmojiIndex(data)
-export default {
-  components: { Emoji },
-  data () {
-    return {
-      emojiIndex,
-      showOptions: false
-    }
-  },
-  computed: {
-    availableLocales () {
-      return this.$i18n.locales
-    },
-    getShowOptions () {
-      return this.showOptions
-    }
-  },
-  methods: {
-    switchLocale(locale) {
-      this.$i18n.setLocale(locale);
-      this.toggleShowOptions();
-    },
-    toggleShowOptions () {
-      this.showOptions = !this.showOptions
-    }
-  }
-}
+const emojiIndex = new EmojiIndex(data);
+const showOptions = ref(false);
+
+const { locales, setLocale } = useI18n();
+
+const availableLocales = computed(() => locales);
+
+const toggleShowOptions = () => {
+  showOptions.value = !showOptions.value;
+};
+
+const switchLocale = (locale) => {
+  setLocale(locale);
+  toggleShowOptions();
+};
 </script>
 
 <style scoped>

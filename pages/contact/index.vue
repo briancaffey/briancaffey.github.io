@@ -35,14 +35,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  head () {
-    return {
-      title: 'Contact Brian Caffey'
-    }
-  }
-}
+<script setup>
+useHead({
+  title: 'Contact Brian Caffey'
+})
 </script>
 
 <style scoped>

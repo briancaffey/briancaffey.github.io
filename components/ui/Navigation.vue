@@ -22,12 +22,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Navigation'
-}
-</script>
-
 <style scoped>
 span.emoji-mart-emoji {
   padding: 0px;

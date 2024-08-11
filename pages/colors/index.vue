@@ -11,12 +11,6 @@
   </div>
 </template>
 
-<script>
-export default {
-
-}
-</script>
-
 <style scoped>
 .palette {
   border-color: white;

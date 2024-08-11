@@ -48,9 +48,3 @@
     <!--End mc_embed_signup-->
   </div>
 </template>
-
-<script>
-export default {}
-</script>
-
-<style scoped></style>
