@@ -209,7 +209,7 @@ export default defineNuxtConfig({
 
   i18n: {
     vueI18n: "./i18n.config.js",
-    strategy: 'prefix_except_default',
+    strategy: 'no_prefix',
     defaultLocale: 'en',
     locale: 'en',
     locales: [
@@ -246,9 +246,9 @@ export default defineNuxtConfig({
         flag: '🇷🇺'
       },
       {
-        code: 'jp',
+        code: 'ja',
         emoji: 'flag-jp',
-        iso: 'jp-JP',
+        iso: 'ja-JP',
         file: 'i18n/jp-JP.js',
         name: '日本語',
         flag: '🇯🇵'

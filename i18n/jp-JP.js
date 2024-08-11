@@ -25,7 +25,7 @@ export default {
     yourName: 'あなたの名前',
     sampleName: 'J. Appleseed',
     yourEmail: 'メールアドレス',
-    sampleEmail: 'Email',
+    sampleEmail: 'Eメール',
     yourWebsite: 'あなたのウェブサイト',
     sampleWebsite: 'https://appleseed.co',
     message: 'メッセージ',
