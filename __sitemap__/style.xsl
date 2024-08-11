@@ -109,7 +109,7 @@
             <div>
              <div id="content">
           <h1 class="text-2xl mb-3">XML Sitemap</h1>
-          <h2>Brian Caffey's personal website</h2>
+          <h2>briancaffey.github.io</h2>
           
           <xsl:if test="count(sitemap:sitemapindex/sitemap:sitemap) &gt; 0">
             <p class="expl" style="margin-bottom: 1rem;">
