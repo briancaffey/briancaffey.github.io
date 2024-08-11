@@ -1,1 +1,0 @@
-import{_ as o}from"./CSxnyb1_.js";import{_ as t,o as s,k as c}from"./BM76a5Lt.js";const n={components:{Subscribe:o}};function r(_,p,a,m,f,i){const e=o;return s(),c(e)}const d=t(n,[["render",r]]);export{d as default};

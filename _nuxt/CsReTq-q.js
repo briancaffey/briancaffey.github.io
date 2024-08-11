@@ -1,0 +1,1 @@
+import{_ as t,o as s,c as a,a as n,t as o}from"./BRngrO-e.js";const c={},r={class:"text-center text-2xl py-32"};function l(e,_){return s(),a("div",null,[n("h2",r,o(e.$t("newsletter.thankYou")),1)])}const d=t(c,[["render",l]]);export{d as default};
