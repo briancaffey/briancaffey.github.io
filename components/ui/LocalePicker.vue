@@ -26,7 +26,6 @@
           v-for="locale in availableLocales"
           :key="`${locale.code}-option`"
           :to="switchLocalePath(locale.code)"
-          external
           @click="toggleShowOptions"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>

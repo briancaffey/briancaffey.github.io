@@ -2,7 +2,7 @@
   <div class="mx-auto max-w-6xl">
     <div class="text-xl text-center py-4">
       <div class="mb-4">
-        <nuxt-link to="/blog/tags/" external>
+        <nuxt-link to="/blog/tags/">
           <span
             class="inline-block bg-white rounded-lg text-small px-2 py-1 shadow"
           >
@@ -11,7 +11,7 @@
         </nuxt-link>
       </div>
       <div class="mb-4">
-        <nuxt-link :to="`/blog/tags/${$route.params.tag}/`" external>
+        <nuxt-link :to="`/blog/tags/${$route.params.tag}/`">
           <span
             class="
               inline-block
@@ -39,7 +39,7 @@ defineI18nRoute({
 });
 const route = useRoute();
 const tag = route.params.tag;
-const { data: articles } = await useAsyncData('all-articles', () =>
+const { data: articles } = await useAsyncData(route.path, () =>
   queryContent("/")
     .where({ draft: { $ne: true } })
     .where({ tags: { $containsAny: [tag]}})

@@ -1,6 +1,5 @@
 <template>
-  <div class="">
-    <!-- <div class="top" /> -->
+  <div>
     <div
       class="mx-auto flex py-2 px-2 sm:px-4 items-center max-w-6xl justify-center"
     >
@@ -9,7 +8,6 @@
           to="/"
           class="text-xl"
           :class="$route.name.startsWith('index') ? 'selected' : ''"
-          external
         >
           <span class="hidden sm:inline text-2xl">{{ $t('common.name') }}</span><span class="inline sm:hidden">JBC</span>
         </nuxt-link>

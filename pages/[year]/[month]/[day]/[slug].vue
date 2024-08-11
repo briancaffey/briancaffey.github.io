@@ -58,7 +58,7 @@ defineI18nRoute({
 const route = useRoute();
 const { year, month, day, slug } = route.params;
 const page = `/${year}/${month}/${day}/${slug}`;
-const { data: article } = await useAsyncData('article', () =>
+const { data: article } = await useAsyncData(route.params.slug, () =>
   queryContent(page).findOne()
 );
 const showComments = ref(false);

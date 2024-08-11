@@ -18,14 +18,13 @@
         <li>
           <nuxt-link
             to="/"
-            external
             @click="$emit('toggle')"
           > <!--localePath-->
             {{ $t('nav.home') }}
           </nuxt-link>
         </li>
         <li>
-          <nuxt-link to="/blog/1" external @click="$emit('toggle')">
+          <nuxt-link to="/blog/1" @click="$emit('toggle')">
             {{
               $t('nav.blog')
             }}
@@ -33,8 +32,7 @@
         </li>
         <li>
           <nuxt-link
-            to="contact"
-            external
+            to="/contact"
             @click="$emit('toggle')"
           > <!--localPath-->
             {{ $t('nav.contact') }}
@@ -68,10 +66,6 @@
     </button>
   </div>
 </template>
-
-<script>
-export default {}
-</script>
 
 <style scoped>
 ul > li {

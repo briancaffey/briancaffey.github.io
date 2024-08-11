@@ -6,7 +6,6 @@
           <nuxt-link
             to="/blog/1"
             :class="$route.name.startsWith('blog') ? 'selected' : ''"
-            external
           > <!-- localePath -->
             {{ $t('nav.blog') }}
           </nuxt-link>
@@ -15,7 +14,6 @@
           <nuxt-link
             to="/contact"
             :class="$route.name.startsWith('contact') ? 'selected' : ''"
-            external
           > <!--localePath-->
             {{ $t('nav.contact') }}
           </nuxt-link>
