@@ -22,20 +22,8 @@ tags:
 draft: false
 
 external:
-#   - link: https://news.ycombinator.com/
-#     site: hn
   - link: https://x.com/briancaffey/status/1802754703207583886
     site: x
-  # - link: https://www.reddit.com/r/RocketLeague/comments/1au0po3/rocket_league_botchat_an_llmpowered_bakkesmod/
-  #   site: reddit
-  # - link: https://dev.to/briancaffey/rocket-league-botchat-powered-by-tensorrt-llm-my-submission-for-nvidias-generative-ai-on-rtx-pcs-developer-contest-2oao
-  #   site: dev
-#   - link: https://medium.com/@briancaffey/my-infrastructure-as-code-rosetta-stone-with-cdk-terraform-and-pulumi-44fcb8233e6a
-#     site: medium
-#   - link: https://briancaffey.hashnode.dev/setting-up-ad-hoc-development-environments-for-django-applications-with-aws-ecs-terraform-and-github-actions
-#     site: hashnode
-#   - link: https://briancaffey.substack.com/p/my-infrastructure-as-code-rosetta
-#     site: substack
 
 comments: true
 ---
@@ -46,7 +34,7 @@ comments: true
 
 Here's my original project submission post on 𝕏 that introduces the idea of generating short 007-style films using agents, LLMs and stable diffusion:
 
-<blockquote class="twitter-tweet tw-align-center" data-theme="dark"><p lang="en" dir="ltr">Agents of Inference<br>🍸🤵🏼‍♂️⚡️🎥🎬<a href="https://twitter.com/hashtag/NVIDIADevContest?src=hash&amp;ref_src=twsrc%5Etfw">#NVIDIADevContest</a> <a href="https://twitter.com/hashtag/LangChain?src=hash&amp;ref_src=twsrc%5Etfw">#LangChain</a> <a href="https://twitter.com/NVIDIAAIDev?ref_src=twsrc%5Etfw">@NVIDIAAIDev</a> <a href="https://t.co/VT3rgzFbD6">pic.twitter.com/VT3rgzFbD6</a></p>&mdash; Brian Caffey (@briancaffey) <a href="https://twitter.com/briancaffey/status/1802754703207583886?ref_src=twsrc%5Etfw">June 17, 2024</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<AgentsOfInferenceTweet></AgentsOfInferenceTweet>
 
 Here's a link to the [Agents of Inference code repository on GitHub](https://github.com/briancaffey/agents-of-inference).
 
