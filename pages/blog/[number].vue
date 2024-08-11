@@ -35,7 +35,7 @@ const { data: articles } = await useAsyncData('all-articles', () =>
     .find()
 );
 
-const { data: paginatedItems } = await useAsyncData('paginated-items', () =>
+const { data: paginatedItems } = await useAsyncData(route.path, () =>
   queryContent("/")
     .where({ draft: { $ne: true } })
     .sort({'date': -1})

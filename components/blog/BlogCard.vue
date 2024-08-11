@@ -1,6 +1,6 @@
 <template>
   <li class="rounded-lg article-card">
-    <nuxt-link :to="article._path" external> <!-- localePath-->
+    <nuxt-link :to="article._path" >
       <div>
         <img
           v-if="article.image"

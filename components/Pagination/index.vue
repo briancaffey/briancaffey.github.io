@@ -15,7 +15,6 @@
         cursor-pointer
         ${pageNo == 1 ? 'pagination-disabled' : 'pagination'}
         `"
-        external
     >
       &nbsp;←
     </nuxt-link>&nbsp;
@@ -37,7 +36,6 @@
         pagination
         text-center
         "
-        external
     >
       {{ pageNo }}
     </nuxt-link>&nbsp;
@@ -57,7 +55,6 @@
         cursor-pointer
         ${nextPage ? 'pagination' : 'pagination-disabled'}
         `"
-        external
     >
       &nbsp;→&nbsp;
     </nuxt-link>
