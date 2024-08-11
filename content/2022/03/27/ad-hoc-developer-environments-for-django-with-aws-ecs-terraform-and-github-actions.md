@@ -275,8 +275,6 @@ I. NAT Gateway used to give traffic in private subnets a route to the public int
 
 Let's have a detailed look at the terraform configuration for shared resources that will support ad hoc environments.
 
-![Shared AWS resources for ad hoc environment](/image/shared-resources.png)
-
 ### VPC
 
 We can use the [AWS VPC module](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest) for creating the shared VPC with Terraform. This module provides a high level interface that will provision lots of the components that are needed for a VPC following best practices, and it is less code for the DevOps team to manage compared to defining each component of a VPC (route tables, subnets, internet gateways, etc.).

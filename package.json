@@ -26,7 +26,7 @@
     "@pinia/nuxt": "^0.5.3",
     "apexcharts": "^3.52.0",
     "detab": "^3.0.2",
-    "emoji-mart-vue-fast": "^15.0.2",
+    "emoji-mart-vue-fast": "git+https://github.com/briancaffey/emoji-mart-vue.git#8032cc38e24b931f4d5bd86a915e0e481dc259a2",
     "nuxt": "^3.12.4",
     "nuxt-gtag": "^2.1.0",
     "pinia": "^2.2.1",

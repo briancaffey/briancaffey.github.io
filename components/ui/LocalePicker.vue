@@ -22,13 +22,14 @@
           text
         "
       >
-        <nuxt-link
+        <div
           v-for="locale in availableLocales.value"
           :key="`${locale.code}-option`"
+          class="text-black"
           @click="switchLocale(locale.code)"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
-        </nuxt-link>
+        </div>
       </div>
     </div>
   </div>

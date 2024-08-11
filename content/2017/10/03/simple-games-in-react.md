@@ -158,7 +158,7 @@ I had so much fun putting together this tic-tac-toe app that I decided to write 
 
 Here's a look at the result of my Gomoku game:
 
-![png](/img/wuziqi.png)
+![png](/static/react/wuziqi.png)
 
 You can play this game <a href="/static/react/wuziqi/wuziqi.html" target="_blank">here</a>
 

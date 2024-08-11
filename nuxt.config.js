@@ -16,39 +16,28 @@ export default defineNuxtConfig({
   env: {
     baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io'
   },
-  // app: {
-  //   pageTransition: { name: 'page', mode: 'in-out' }
-  // },
-  site: {
-    url: 'https://briancaffey.github.io',
-    name: "Brian Caffey's personal website"
-  },
-
-  /*
-   ** Nuxt target
-   ** See https://nuxtjs.org/api/configuration-target
-   */
-  target: 'static',
-
-  /*
-   ** Headers of the page
-   ** See https://nuxtjs.org/api/configuration-head
-   */
-  head: {
-    htmlAttrs: {
-      lang: 'en'
+  app: {
+    // pageTransition: { name: 'page', mode: 'in-out' }
+    head: {
+      htmlAttrs: {
+        lang: 'en'
+      },
+      title: 'Brian Caffey',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          hid: 'description',
+          name: 'description',
+          content: "Brian Caffey's personal website"
+        }
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     },
-    title: 'Brian Caffey',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: "Brian Caffey's personal website"
-      }
-    ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+  },
+  site: {
+    url: "https://briancaffey.github.io",
+    name: "briancaffey.github.io"
   },
 
   /*
@@ -91,6 +80,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/eslint',
     '@nuxtjs/sitemap',
+    '@nuxt/image',
     'nuxt-gtag',
     // '@nuxtjs/feed',
   ],

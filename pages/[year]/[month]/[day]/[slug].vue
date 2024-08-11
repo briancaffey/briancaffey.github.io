@@ -1,11 +1,13 @@
 <template>
   <article>
-    <img
+    <nuxt-img
       v-if="article.image"
       :src="article.image"
+      :alt="article.description"
       class="pt-2 w-full object-cover"
       style="height: 32rem;"
-    >
+      format="webp"
+    />
     <div class="mx-auto max-w-5xl px-2 sm:px-4 md:px-4 lg:px-16 mt-2">
       <h1 class="prose text-4xl leading-9 py-4 font-bold">
         {{ article.title }}

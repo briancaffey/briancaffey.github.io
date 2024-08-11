@@ -38,7 +38,7 @@ defineProps({
 
 <style scoped>
 .tag {
-  background-color: var(--color-primary);
+  background-color: var(--color-tag);
   transition: transform .2s;
 }
 .tag:hover {

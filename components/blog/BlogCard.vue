@@ -2,11 +2,14 @@
   <li class="rounded-lg article-card">
     <nuxt-link :to="article._path" >
       <div>
-        <img
+        <nuxt-img
           v-if="article.image"
           :src="article.image"
           class="h-32 w-full object-cover rounded-t-lg"
-        >
+          :alt="article.description"
+          format="webp"
+          sizes="400px"
+        />
       </div>
       <div class="py-4 px-4 sm:px-4">
         <p class="text-2xl leading-8 pb-2">
