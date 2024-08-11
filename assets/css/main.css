@@ -6,6 +6,7 @@
   --bg-secondary: #fff;
   --bg-code: #ddd;
   --border-color: #ddd;
+  --color-tag: #2E604E;
 }
 
 .dark-mode {
@@ -16,6 +17,7 @@
   --bg-secondary: #071521;
   --bg-code: #ddd;
   --border-color: #0d2538;
+  --color-tag: #2E604E;
 }
 
 .sepia-mode {
@@ -26,6 +28,7 @@
   --bg-code: #ddd;
   --bg-secondary: #eae0c9;
   --border-color: #ded0bf;
+  --color-tag: #504231;
 }
 
 body {

@@ -384,7 +384,7 @@ Here's a scatterplot showing average salary and average equity for positions cat
 
 Here's a look at about 600 of the 750 logos that were made available in the list of companies. The logos are sorted by their average hex color, which puts them on a gradient of dark to light:
 
-![png](/static/yc.png)
+![png](/static/waas/yc.png)
 
 ```py
 import os

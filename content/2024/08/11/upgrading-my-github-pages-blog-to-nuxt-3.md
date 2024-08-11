@@ -242,6 +242,16 @@ In this upgrade I switched to the `no_prefix` option which instead stores the lo
 
 I currently do not have i18n for the articles on my blog, but I'm hoping to add this in a future update once there is better support for it in Nuxt Content.
 
+## Lighthouse
+
+I made a number of improvements to the site to get an almost-perfect Lighthouse score for the home page of my site:
+
+![Lighthouse results for briancaffey.github.io](/static/nuxt/lighthouse.png)
+
+- using `@nuxt/image` for optimized image formats (`webp`)
+- adjust colors for improved contrast (measured using [webaim.org](https://webaim.org/resources/contrastchecker/))
+- fixes for `head` metadata
+
 ## TODO
 
 ### feed.xml

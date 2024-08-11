@@ -29,7 +29,6 @@ jobs:
       - run: yarn build
       - run: yarn lint
       - run: yarn generate
-      - run: ls -al
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v4
