@@ -1,0 +1,1 @@
+import{_ as e,o as t,c,a as n}from"./DfhGPHfS.js";const o={},s=n("h2",{class:"text-center text-2xl py-32"}," Please confirm your subscription to my newsletter by clicking the confirmation link in the email we just sent you. ",-1),r=[s];function i(a,l){return t(),c("div",null,r)}const f=e(o,[["render",i]]);export{f as default};

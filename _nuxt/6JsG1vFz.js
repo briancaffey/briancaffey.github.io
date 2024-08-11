@@ -1,1 +1,0 @@
-import{_ as o,o as c,c as r}from"./CoIRpROe.js";const s={layout({redirect:t,route:e}){return e.path==="/abc"&&t(301,"/contact"),"default"}},a={class:"py-8 px-4 text-center text-red-400"};function n(t,e,p,_,d,i){return c(),r("div",a," This page does not exist. ")}const l=o(s,[["render",n]]);export{l as default};
