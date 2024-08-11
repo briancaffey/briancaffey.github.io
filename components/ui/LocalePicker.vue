@@ -25,8 +25,7 @@
         <nuxt-link
           v-for="locale in availableLocales"
           :key="`${locale.code}-option`"
-          :to="switchLocalePath(locale.code)"
-          @click="toggleShowOptions"
+          @click="switchLocale(locale.code)"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
         </nuxt-link>
@@ -58,6 +57,10 @@ export default {
     }
   },
   methods: {
+    switchLocale(locale) {
+      this.$i18n.setLocale(locale);
+      this.toggleShowOptions();
+    },
     toggleShowOptions () {
       this.showOptions = !this.showOptions
     }
