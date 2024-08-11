@@ -61,32 +61,29 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    paginatedItems: {
-      type: Array,
-      default: () => []
-    },
-    nextPage: {
-      type: Boolean,
-      default: false
-    },
-    pageNo: {
-      type: Number,
-      default: 0
-    },
-    allItems: {
-      type: Array,
-      default: () => []
-    }
+<script setup>
+const props = defineProps({
+  paginatedItems: {
+    type: Array,
+    default: () => []
   },
-  computed: {
-    prevLink () {
-      return this.pageNo === 1 ? '/blog/1' : `/blog/${this.pageNo - 1}`
-    }
+  nextPage: {
+    type: Boolean,
+    default: false
+  },
+  pageNo: {
+    type: Number,
+    default: 0
+  },
+  allItems: {
+    type: Array,
+    default: () => []
   }
-}
+})
+
+const prevLink = computed(() => {
+  return props.pageNo === 1 ? '/blog/1' : `/blog/${props.pageNo - 1}`
+})
 </script>
 
 <style scoped>

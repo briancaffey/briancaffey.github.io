@@ -6,15 +6,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    external: {
-      type: Array,
-      default: () => []
-    }
+<script setup>
+defineProps({
+  external: {
+    type: Array,
+    default: () => []
   }
-}
+});
 </script>
-
-<style scoped></style>

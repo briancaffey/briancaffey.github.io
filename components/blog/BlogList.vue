@@ -10,15 +10,13 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    articles: {
-      type: Array,
-      default: () => []
-    }
+<script setup>
+defineProps({
+  articles: {
+    type: Array,
+    default: () => []
   }
-}
+});
 </script>
 
 <style scoped></style>

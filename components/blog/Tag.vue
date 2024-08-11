@@ -23,19 +23,17 @@
   </nuxt-link>
 </template>
 
-<script>
-export default {
-  props: {
-    tag: {
-      type: String,
-      default: ''
-    },
-    count: {
-      type: Number,
-      default: null
-    }
+<script setup>
+defineProps({
+  tag: {
+    type: String,
+    default: ''
+  },
+  count: {
+    type: Number,
+    default: null
   }
-}
+});
 </script>
 
 <style scoped>

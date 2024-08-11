@@ -19,26 +19,19 @@
   </div>
 </template>
 
-<script>
-import data from "emoji-mart-vue-fast/data/twitter.json";
-import "emoji-mart-vue-fast/css/emoji-mart.css";
-import { EmojiIndex, Emoji } from "emoji-mart-vue-fast/src";
+<script setup>
+import data from 'emoji-mart-vue-fast/data/twitter.json';
+import 'emoji-mart-vue-fast/css/emoji-mart.css';
+import { EmojiIndex, Emoji } from 'emoji-mart-vue-fast/src';
 
-const emojiIndex = new EmojiIndex(data)
-export default {
-  components: { Emoji },
-  data () {
-    return {
-      emojiIndex,
-      colors: [
-        ['system', '🖥️', 'desktop_computer'],
-        ['light', '🌞', 'sun_with_face'],
-        ['dark', '🌚', 'new_moon_with_face'],
-        ['sepia', '☕', 'coffee']
-      ]
-    }
-  }
-}
+const emojiIndex = new EmojiIndex(data);
+
+const colors = ref([
+  ['system', '🖥️', 'desktop_computer'],
+  ['light', '🌞', 'sun_with_face'],
+  ['dark', '🌚', 'new_moon_with_face'],
+  ['sepia', '☕', 'coffee']
+]);
 </script>
 
 <style scoped>
