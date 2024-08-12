@@ -88,7 +88,7 @@ const prevLink = computed(() => {
 
 <style scoped>
 .pagination {
-  background-color: var(--color-primary);
+  background-color: var(--color-tag);
 }
 .pagination-disabled {
   background-color: gray;

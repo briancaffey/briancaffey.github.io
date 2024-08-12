@@ -12,7 +12,7 @@
         />
       </div>
       <div class="py-4 px-4 sm:px-4">
-        <p class="text-2xl leading-8 pb-2">
+        <p class="text-2xl leading-8 pb-2 article-title">
           {{ article.title }}
         </p>
         <p class="blog-card-description">
