@@ -13,19 +13,23 @@
           <input
             :placeholder="$t('contactForm.sampleName')"
             type="text"
+            id="name"
             name="name"
             required
             class="mc"
+            autocomplete="on"
           >
         </div>
         <div>
-          <label for="name">{{ $t('contactForm.yourEmail') }}</label>
+          <label for="email">{{ $t('contactForm.yourEmail') }}</label>
           <input
             :placeholder="$t('contactForm.sampleEmail')"
             type="email"
+            id="email"
             name="email"
             required
             class="mc"
+            autocomplete="on"
           >
         </div>
         <div>
@@ -34,8 +38,10 @@
             :placeholder="$t('contactForm.sampleWebsite')"
             type="url"
             name="website"
+            id="website"
             class="mc"
             required="false"
+            autocomplete="on"
           >
         </div>
       </div>
@@ -48,6 +54,7 @@
           :placeholder="$t('contactForm.sampleMessage')"
           type="text"
           name="message"
+          id="message"
           required
           class="mc w-full"
         />

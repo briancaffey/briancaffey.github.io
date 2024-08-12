@@ -22,6 +22,7 @@
             name="EMAIL"
             :placeholder="$t('newsletter.enterEmail')"
             class="rounded mc text-center"
+            autocomplete="on"
           >
           <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
           <div style="position: absolute; left: -5000px" aria-hidden="true">

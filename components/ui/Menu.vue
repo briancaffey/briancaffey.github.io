@@ -6,7 +6,7 @@
           <nuxt-link
             to="/blog/1"
             :class="$route.name.startsWith('blog') ? 'selected' : ''"
-          > <!-- localePath -->
+          >
             {{ $t('nav.blog') }}
           </nuxt-link>
         </li>
@@ -14,7 +14,7 @@
           <nuxt-link
             to="/contact"
             :class="$route.name.startsWith('contact') ? 'selected' : ''"
-          > <!--localePath-->
+          >
             {{ $t('nav.contact') }}
           </nuxt-link>
         </li>
@@ -32,7 +32,6 @@
         </button>
       </div>
       <MobileMenu v-if="show" @toggle="show = false" />
-    <!-- <div class="block md:hidden text-right cursor-pointer">Menu</div> -->
     </div>
   </nav>
 </template>
