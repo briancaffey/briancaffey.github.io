@@ -1342,13 +1342,6 @@
     "@vueuse/core" "^10.4.1"
     defu "^6.1.2"
 
-"@nuxtjs/google-analytics@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/google-analytics/-/google-analytics-2.4.0.tgz#3bb9f398a05cc23340d1f423f8d8653dc4114f46"
-  integrity sha512-rDQTwHIjyjVrx8GywHPuWykJ3jRFGaHl5Iqji/y8tQWUc0yGEeHxOoR0yimzxnTS1Ph2/PubQYpgnVeEPEdL/A==
-  dependencies:
-    vue-analytics "^5.22.1"
-
 "@nuxtjs/i18n@^8.3.3":
   version "8.3.3"
   resolved "https://registry.yarnpkg.com/@nuxtjs/i18n/-/i18n-8.3.3.tgz#d9fd328e527416fc91fa5c233abfc16ad4ba0477"
@@ -3528,11 +3521,6 @@ duplexer@^0.1.2:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-eastasianwidth@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
-  integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
-
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -3555,11 +3543,6 @@ emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
   integrity sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==
-
-emoji-regex@^9.2.2:
-  version "9.2.2"
-  resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-9.2.2.tgz#840c8803b0d8047f4ff0cf963176b32d4ef3ed72"
-  integrity sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==
 
 emojilib@^2.4.0:
   version "2.4.0"
@@ -7058,13 +7041,6 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
 
-push-dir@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/push-dir/-/push-dir-0.4.1.tgz#29481eacd9c2106bbb7941db6d37d122a071ecb4"
-  integrity sha512-Nrrsly0c3kCfu725Jnif/s5adHpBwKCGWBttHVxTndF4iyGBSFtNi/pduFxHF5ks0kWtHcbA3XXP5MEra6iiCA==
-  dependencies:
-    minimist "^1.2.0"
-
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
@@ -7431,7 +7407,7 @@ rollup-plugin-visualizer@^5.12.0:
     source-map "^0.7.4"
     yargs "^17.5.1"
 
-rollup@^4.13.0, rollup@^4.18.0:
+rollup@^4.13.0, rollup@^4.18.0, rollup@^4.20.0:
   version "4.20.0"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-4.20.0.tgz#f9d602161d29e178f0bf1d9f35f0a26f83939492"
   integrity sha512-6rbWBChcnSGzIlXeIdNIZTopKYad8ZG8ajhl78lGRLsI2rX8IkaotQhVas2Ma+GPxJav19wrSzvRvuiv0YKzWw==
@@ -7828,7 +7804,7 @@ streamx@^2.15.0, streamx@^2.18.0:
   optionalDependencies:
     bare-events "^2.2.0"
 
-"string-width-cjs@npm:string-width@^4.2.0", "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0", string-width@4.2.3, "string-width@^1.0.2 || 2 || 3 || 4", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3, string-width@^5.0.1, string-width@^5.1.2:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -7836,15 +7812,6 @@ streamx@^2.15.0, streamx@^2.18.0:
     emoji-regex "^8.0.0"
     is-fullwidth-code-point "^3.0.0"
     strip-ansi "^6.0.1"
-
-string-width@^5.0.1, string-width@^5.1.2:
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-5.1.2.tgz#14f8daec6d81e7221d2a357e668cab73bdbca794"
-  integrity sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA==
-  dependencies:
-    eastasianwidth "^0.2.0"
-    emoji-regex "^9.2.2"
-    strip-ansi "^7.0.1"
 
 string_decoder@^1.1.1, string_decoder@^1.3.0:
   version "1.3.0"
@@ -8672,7 +8639,7 @@ vite-plugin-vue-inspector@^5.1.2:
     kolorist "^1.8.0"
     magic-string "^0.30.4"
 
-vite@^5.0.0, vite@^5.3.4:
+vite@^5.0.0, vite@^5.3.4, vite@^5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/vite/-/vite-5.4.0.tgz#11dca8a961369ba8b5cae42d068c7ad684d5370f"
   integrity sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==
@@ -8726,16 +8693,6 @@ vscode-uri@^3.0.2:
   version "3.0.8"
   resolved "https://registry.yarnpkg.com/vscode-uri/-/vscode-uri-3.0.8.tgz#1770938d3e72588659a172d0fd4642780083ff9f"
   integrity sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==
-
-vue-analytics@^5.22.1:
-  version "5.22.1"
-  resolved "https://registry.yarnpkg.com/vue-analytics/-/vue-analytics-5.22.1.tgz#9d6b32da56daee1b9dfb23a267b50349a03f710f"
-  integrity sha512-HPKQMN7gfcUqS5SxoO0VxqLRRSPkG1H1FqglsHccz6BatBatNtm/Vyy8brApktZxNCfnAkrSVDpxg3/FNDeOgQ==
-
-vue-apexcharts@^1.6.0:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/vue-apexcharts/-/vue-apexcharts-1.6.2.tgz#0547826067f97e8ea67ca9423e524eb6669746ad"
-  integrity sha512-9HS3scJwWgKjmkcWIf+ndNDR0WytUJD8Ju0V2ZYcjYtlTLwJAf2SKUlBZaQTkDmwje/zMgulvZRi+MXmi+WkKw==
 
 vue-bundle-renderer@^2.1.0:
   version "2.1.0"
@@ -8795,7 +8752,7 @@ vue3-apexcharts@^1.5.3:
   resolved "https://registry.yarnpkg.com/vue3-apexcharts/-/vue3-apexcharts-1.5.3.tgz#45f685a2dd21058c0d76ab2145eb3ec27d8fb14c"
   integrity sha512-yaHTPoj0iVKAtEVg8wEwIwwvf0VG+lPYNufCf3txRzYQOqdKPoZaZ9P3Dj3X+2A1XY9O1kcTk9HVqvLo+rppvQ==
 
-vue@^3.0.5, vue@^3.4.32:
+vue@^3.0.5, vue@^3.4.32, vue@^3.4.37:
   version "3.4.37"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.4.37.tgz#64ce0eeb8de16a29fb74e504777ee8c0c1cf229e"
   integrity sha512-3vXvNfkKTBsSJ7JP+LyR7GBuwQuckbWvuwAid3xbqK9ppsKt/DUvfqgZ48fgOLEfpy1IacL5f8QhUVl77RaI7A==

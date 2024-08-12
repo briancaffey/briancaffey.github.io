@@ -3,15 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt dev --host",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate",
+    "dev": "nuxi dev --host",
+    "build": "nuxi build",
+    "start": "nuxi start",
+    "generate": "nuxi generate",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
-    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
-    "analyze": "nuxt analyze",
-    "clean": "npx nuxi cleanup",
+    "analyze": "nuxi analyze",
+    "clean": "nuxi cleanup",
     "serve": "npx serve .output/public"
   },
   "dependencies": {
@@ -30,17 +29,18 @@
     "nuxt": "^3.12.4",
     "nuxt-gtag": "^2.1.0",
     "pinia": "^2.2.1",
+    "rollup": "^4.20.0",
     "typescript": "^5.5.4",
-    "vue-apexcharts": "^1.6.0",
+    "vue": "^3.4.37",
+    "vite": "^5.4.0",
     "vue-disqus": "^5.1.0",
     "vue3-apexcharts": "^1.5.3"
   },
   "devDependencies": {
     "@nuxtjs/color-mode": "^3.4.2",
-    "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "eslint": "^9.8.0",
-    "push-dir": "^0.4.1"
+    "nuxi": "^3.12.0"
   },
   "resolutions": {
       "string-width": "4.2.3"

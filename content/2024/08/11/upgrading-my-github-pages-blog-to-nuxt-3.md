@@ -2,7 +2,7 @@
 title: "Upgrading my GitHub Pages blog to Nuxt 3"
 date: '2024-08-11'
 description: "An overview of my newly upgraded GitHub Pages blog powered by Nuxt 3"
-# image: /static/nuxt3/title.png
+image: /static/nuxt/nuxt3.png
 tags:
   - vue
   - nuxt
@@ -26,6 +26,33 @@ I recently went through the process of upgrading from Nuxt 2 to Nuxt 3. This upg
 
 ## Features of my blog
 
+### Modules and plugins overview
+
+Here are the modules and plugins I use on my site defined in `nuxt.config.js`:
+
+```javascript
+export default defineNuxtConfig({
+  modules: [
+    '@nuxt/content',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/i18n',
+    '@nuxtjs/color-mode',
+    '@pinia/nuxt',
+    '@nuxt/eslint',
+    '@nuxtjs/sitemap',
+    '@nuxt/image',
+    'nuxt-gtag',
+    // '@nuxtjs/feed', --> this module is not yet supported in Nuxt 3!
+  ],
+
+  plugins: [
+    '~/plugins/disqus',
+    { src: '~/plugins/apexcharts', mode: 'client' },
+    { src: '~/plugins/drift', mode: 'client' }
+  ]
+})
+```
+
 ### Nuxt Content
 
 The Nuxt Content module is a powerful git-based CMS. Articles written in Markdown are converted to HTML. My site is prerendered
@@ -43,11 +70,6 @@ export default {
     const file = `${params.year}/${params.month}/${params.day}/${params.slug}`
     const article = await $content(file).fetch()
     return { article }
-  },
-  data () {
-    return {
-      showComments: false
-    }
   }
 }
 </script>
@@ -251,6 +273,26 @@ I made a number of improvements to the site to get an almost-perfect Lighthouse 
 - using `@nuxt/image` for optimized image formats (`webp`)
 - adjust colors for improved contrast (measured using [webaim.org](https://webaim.org/resources/contrastchecker/))
 - fixes for `head` metadata
+
+## Interactivity
+
+I use a few plugins for interactity on my site. These plugins needed some slighy modifications and upgrades
+
+### Drift
+
+Drift is a chat box that lets users send me message. When someone sends me a message I can see what page of my website they are on and I can also see their location (based on their IP address). I get messages in the Drift app on my phone. In total I have had 320 conversations since I initially added the plugin a few years ago.
+
+### MailChimp email list
+
+I have an email list of 55 people that I manage through MailChimp. Occasionally I send out emails about new articles on my blog and other updates. It is a fun way to practice email marketing!
+
+### FormSubmit
+
+FormSubmit is a free service that lets people send me a message through a form on my site's Contact page.
+
+### Disqus
+
+Disqus is a comments plugin that I use on my blog articles. I don't get a lot of comments, but comments are always welcome!
 
 ## TODO
 
