@@ -2,18 +2,18 @@
 title: "Upgrading my GitHub Pages blog to Nuxt 3"
 date: '2024-08-11'
 description: "An overview of my newly upgraded GitHub Pages blog powered by Nuxt 3"
-image: /static/nuxt/nuxt3.png
+image: /static/nuxt/new-site.png
 tags:
   - vue
   - nuxt
   - github
   - pinia
 
-draft: true
+# draft: true
 
-external:
-  - link: https://x.com/briancaffey/
-    site: x
+# external:
+#   - link: https://x.com/briancaffey/
+#     site: x
 
 comments: true
 ---
@@ -23,6 +23,10 @@ comments: true
 My personal website has always lived on GitHub Pages at [`briancaffey.github.io`](https://briancaffey.github.io). The first version was built with the Jekyll framework. I started learning about Vue, and Nuxt seemed like an interesting alternative to Jekyll that would allow me to practice frontend development. In September 2020 I deployed the first version of the new site using Nuxt 2 and Vue 2.
 
 I recently went through the process of upgrading from Nuxt 2 to Nuxt 3. This upgrade path also included an upgrade from Vue 2 to Vue 3. My previous attempts to upgrade this site from Nuxt 2 to Nuxt 3 failed because of error messages that I couldn't work through. This time, with a big help from AI, I got through the entire upgrade and learned a lot in the process. I'm happy to share my new blog that is powered by Vue 3, Nuxt 3, Nuxt Content v2!
+
+This article will go over the features of my site, how I'm using Nuxt and Vue and some of the changes I had to make when doing the upgrade. Let's go!
+
+![New site powered by Nuxt 3, Tailwind and Pinia](/static/nuxt/nuxt3.png)
 
 ## Features of my blog
 
@@ -55,11 +59,33 @@ export default defineNuxtConfig({
 
 ### Nuxt Content
 
-The Nuxt Content module is a powerful git-based CMS. Articles written in Markdown are converted to HTML. My site is prerendered
+The Nuxt Content module is a powerful git-based CMS. Articles are written in Markdown files that contains frontmatter like the following:
 
-- `contentQuery` for getting content from
+```yaml
+---
+title: "Upgrading my GitHub Pages blog to Nuxt 3" # used on the page and in the <head> metadata
+date: '2024-08-11'
+description: "An overview of my newly upgraded GitHub Pages blog powered by Nuxt 3"
+image: /static/nuxt/nuxt3.png # cover image and og:image + twitter:image
+tags: # tags are used to categorize and navigate content
+  - vue
+  - nuxt
+  - github
+  - pinia
 
-Here's a comparison of the old and new way of fetching data from Nuxt content.
+draft: true # drafts are publicly available but not displayed in the list of blog articles and not indexed
+
+external: # a list of external links where the article has been shared or republished
+  - link: https://x.com/briancaffey/status/abc123
+    site: x
+
+comments: true # shows disqus comments
+---
+```
+
+Files for articles are stored in `/content/[year]/[month]/[day]/[slug].md`, and the URLs for the articles are `/${year}/${month}/${day}/${slug}`. This URL scheme was used in the Jekyll blog on my GitHub Pages site and kept this URL structure when I switched to Nuxt.
+
+`contentQuery` is used for getting content from Nuxt Content. Here's a comparison of the old and new way of fetching data from Nuxt content.
 
 Old way using `asyncData`:
 
@@ -75,7 +101,7 @@ export default {
 </script>
 ```
 
-New way using `useAsyncData` and `<script setup>`:
+Here's the new way of fetching content using `useAsyncData` with `<script setup>` syntax:
 
 ```html
 <script setup>
@@ -88,7 +114,7 @@ const { data: article } = await useAsyncData(route.params.slug, () =>
 </script>
 ```
 
-Note: using `route.param.slug` is important when using `useAsyncData`. I initially misunderstood the statement about this needing to be a unique value and I gave it a value of `article`, but this caused a strange cache issue when I viewed different articles. The problem didn't show when I was developing with `yarn dev`, it only showed up when I built the site and served in locally with `yarn generate && yarn serve`. Since it is used in a dynamic page `[slug].vue`, it needs to have a unique value for every page for the dynamic route.
+Note: using `route.param.slug` as the first argument for `useAsyncData` is important when using `useAsyncData`. I initially misunderstood the statement about this needing to be a unique value and I gave it a value of `article`, but this caused a strange cache issue when I viewed different articles. The problem didn't show when I was developing with `yarn dev`, it only showed up when I built the site and served in locally with `yarn generate && yarn serve`. Since it is used in a dynamic page `[slug].vue`, it needs to have a unique value for every individual page for the dynamic route.
 
 I learned about this from [an example](https://nuxt.com/docs/getting-started/upgrade#shared-prerender-data) on the Nuxt 3 site about migration to Nuxt 4:
 
@@ -106,7 +132,6 @@ const { data } = await useAsyncData(route.params.slug, async () => {
 ```
 
 Wow, there is already a Nuxt 4 in the works! Hopefully the upgrade process from Nuxt 3 to 4 is easier than Nuxt 2 to 3.
-
 
 ### Development process
 
@@ -258,7 +283,7 @@ The upgrade from Nuxt 2 to Nuxt 3 broke some twitter embeds that were working in
 
 ### Internationalization (i18n)
 
-I added i18n to my site mostly to learn how it works. Nuxt i18n has different strategies for how different locales are displayed. Previously I used a URL prefix for all locales other than the default locale (English). Switching to other locales would switch to `/zh/contact-me` for examlpe.
+I added i18n to my site mostly to learn how it works. Nuxt i18n has different strategies for how different locales are displayed. Previously I used a URL prefix for all locales other than the default locale (English). Switching to other locales would switch from `/contact-me` to `/zh/contact-me` for examlpe.
 
 In this upgrade I switched to the `no_prefix` option which instead stores the locale in a cookie. This makes generating my site easier because it does not require generating a locale for each blog tag or blog article.
 
@@ -284,11 +309,18 @@ Drift is a chat box that lets users send me message. When someone sends me a mes
 
 ### MailChimp email list
 
-I have an email list of 55 people that I manage through MailChimp. Occasionally I send out emails about new articles on my blog and other updates. It is a fun way to practice email marketing!
+I have an email list of 55 people that I manage through MailChimp. Occasionally I send out emails about new articles on my blog and other updates. It is a fun way to practice email marketing! It uses a global component in the `content/components` directory so I can use the `<Subscribe>` component here in the Markdown file where I am writing this article:
+
+<br>
+<Subscribe></Subscribe>
+<br>
+
+I also use this component in the footer of the site. Feel free to sign up to get updates about what I'm doing on this site!
+
 
 ### FormSubmit
 
-FormSubmit is a free service that lets people send me a message through a form on my site's Contact page.
+FormSubmit is a free service that lets people send me a message through a form on my site's [Contact](/contact) page.
 
 ### Disqus
 
@@ -298,4 +330,45 @@ Disqus is a comments plugin that I use on my blog articles. I don't get a lot of
 
 ### feed.xml
 
-I need to find a way to automate `feed.xml` generation. [The feed module](https://nuxt.com/modules/feed) is not yet compatible with Nuxt 3. I do use the RSS feed with DEV.to which allows me to link back to my GitHub Pages site.
+I need to find a way to automate `feed.xml` generation. [The feed module](https://nuxt.com/modules/feed) is not yet compatible with Nuxt 3. I do use the RSS feed with DEV.to which allows me to set up canonical links back to my GitHub Pages site.
+
+For now I am going to copy the `feed.xml` to a file in the public directory and update it manually. Here's the entry I'll make for this article:
+
+```html
+		<item>
+			<title>
+				<![CDATA[ Upgrading my GitHub Pages blog to Nuxt 3 ]]>
+			</title>
+			<link>
+				https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3
+			</link>
+			<guid>
+				https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3
+			</guid>
+			<description>
+				<![CDATA[ An overview of my newly upgraded GitHub Pages blog powered by Nuxt 3 ]]>
+			</description>
+		</item>
+```
+
+### Console errors
+
+I have tried to clean up as many of the errors as I could, but there are stil some that I see in the dev console. Here is one of the issues that puzzles me:
+
+`Hydration completed but contains mismatches.`: I only see this error on the production build; I don't see it when running `yarn dev`. As I understand, this error message means that the HTML that was built during prerendering is not the same as the HTML on the site once the Javascript has all been loaded.
+
+### Build errors
+
+I recently got some errors in my CI/CD pipeline related to the `string-width` package, and I was able to add the following to `package.json` to fix the build pipeline:
+
+```javascript
+  "resolutions": {
+      "string-width": "4.2.3"
+  }
+```
+
+I'm still not exactly sure what this is about.
+
+### Refactoring
+
+I like using TailwindCSS, and I was able to use it to build a responsive design for my site. After upgrading to Nuxt 3, I feel like most of the technical debt is now in the design. I also don't change the design that often, but I think I could do a lot to refactor the use of Tailwind and use `@apply` in CSS to

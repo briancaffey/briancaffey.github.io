@@ -11,9 +11,9 @@
           >{{ $t('contactForm.yourName') }}
             <span class="text-red-600">*</span></label>
           <input
+            id="name"
             :placeholder="$t('contactForm.sampleName')"
             type="text"
-            id="name"
             name="name"
             required
             class="mc"
@@ -23,9 +23,9 @@
         <div>
           <label for="email">{{ $t('contactForm.yourEmail') }}</label>
           <input
+            id="email"
             :placeholder="$t('contactForm.sampleEmail')"
             type="email"
-            id="email"
             name="email"
             required
             class="mc"
@@ -35,10 +35,10 @@
         <div>
           <label for="website">{{ $t('contactForm.yourWebsite') }}</label>
           <input
+            id="website"
             :placeholder="$t('contactForm.sampleWebsite')"
             type="url"
             name="website"
-            id="website"
             class="mc"
             required="false"
             autocomplete="on"
@@ -51,10 +51,10 @@
         >{{ $t('contactForm.message') }}
           <span class="text-red-600">*</span></label>
         <textarea
+          id="message"
           :placeholder="$t('contactForm.sampleMessage')"
           type="text"
           name="message"
-          id="message"
           required
           class="mc w-full"
         />
