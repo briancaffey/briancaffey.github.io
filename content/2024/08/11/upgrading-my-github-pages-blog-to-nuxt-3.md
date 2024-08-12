@@ -22,7 +22,7 @@ comments: true
 
 My personal website has always lived on GitHub Pages at [`briancaffey.github.io`](https://briancaffey.github.io). The first version was built with the Jekyll framework. I started learning about Vue, and Nuxt seemed like an interesting alternative to Jekyll that would allow me to practice frontend development. In September 2020 I deployed the first version of the new site using Nuxt 2 and Vue 2.
 
-I recently went through the process of upgrading from Nuxt 2 to Nuxt 3. This upgrade path also included an upgrade from Vue 2 to Vue 3. My previous attempts to upgrade this site from Nuxt 2 to Nuxt 3 failed because of error messages that I couldn't work through. This time, with a big help from AI, I got through the entire upgrade and learned a lot in the process. I'm happy to share my new blog that is powered by Vue 3, Nuxt 3, Nuxt Content v2!
+I recently went through the process of upgrading from Nuxt 2 to Nuxt 3. This upgrade path also included an upgrade from Vue 2 to Vue 3. My previous attempts to upgrade this site from Nuxt 2 to Nuxt 3 failed because of error messages that I couldn't work through. This time, with a big help from AI, I got through the entire upgrade and learned a lot in the process. I'm happy to share my new blog that is powered by Vue 3, Nuxt 3 and Nuxt Content v2!
 
 This article will go over the features of my site, how I'm using Nuxt and Vue and some of the changes I had to make when doing the upgrade. Let's go!
 
@@ -59,7 +59,7 @@ export default defineNuxtConfig({
 
 ### Nuxt Content
 
-The Nuxt Content module is a powerful git-based CMS. Articles are written in Markdown files that contains frontmatter like the following:
+The Nuxt Content module is a powerful git-based CMS. Articles on my site are written in Markdown files that contains frontmatter like the following:
 
 ```yaml
 ---
@@ -283,7 +283,7 @@ The upgrade from Nuxt 2 to Nuxt 3 broke some twitter embeds that were working in
 
 ### Internationalization (i18n)
 
-I added i18n to my site mostly to learn how it works. Nuxt i18n has different strategies for how different locales are displayed. Previously I used a URL prefix for all locales other than the default locale (English). Switching to other locales would switch from `/contact-me` to `/zh/contact-me` for examlpe.
+I added i18n to my site mostly to learn how it works. Nuxt i18n has different strategies for how different locales are displayed. Previously I used a URL prefix for all locales other than the default locale (English). Switching to other locales would switch from `/contact-me` to `/zh/contact-me` for example.
 
 In this upgrade I switched to the `no_prefix` option which instead stores the locale in a cookie. This makes generating my site easier because it does not require generating a locale for each blog tag or blog article.
 
@@ -301,7 +301,7 @@ I made a number of improvements to the site to get an almost-perfect Lighthouse 
 
 ## Interactivity
 
-I use a few plugins for interactity on my site. These plugins needed some slighy modifications and upgrades
+I use a few plugins for interactity on my site. These plugins needed some slight modifications and upgrades
 
 ### Drift
 
@@ -371,4 +371,6 @@ I'm still not exactly sure what this is about.
 
 ### Refactoring
 
-I like using TailwindCSS, and I was able to use it to build a responsive design for my site. After upgrading to Nuxt 3, I feel like most of the technical debt is now in the design. I also don't change the design that often, but I think I could do a lot to refactor the use of Tailwind and use `@apply` in CSS to
+I like using TailwindCSS, and I was able to use it to build a responsive design for my site. After upgrading to Nuxt 3, I feel like most of the technical debt is now in the design. I also don't change the design that often, but I think I could do a lot to refactor the use of Tailwind, such as using `@apply` in CSS to make classes more DRY across the different components I use to build this site.
+
+Please let me know if you have any questions, suggestions or tips for using Nuxt and Vue to build static prerendered sites. Thanks for reading!
