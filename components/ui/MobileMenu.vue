@@ -19,7 +19,7 @@
           <nuxt-link
             to="/"
             @click="$emit('toggle')"
-          > <!--localePath-->
+          >
             {{ $t('nav.home') }}
           </nuxt-link>
         </li>
@@ -28,13 +28,13 @@
             {{
               $t('nav.blog')
             }}
-          </nuxt-link> <!--localePath-->
+          </nuxt-link>
         </li>
         <li>
           <nuxt-link
             to="/contact"
             @click="$emit('toggle')"
-          > <!--localPath-->
+          >
             {{ $t('nav.contact') }}
           </nuxt-link>
         </li>

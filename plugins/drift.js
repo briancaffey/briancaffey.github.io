@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 export default defineNuxtPlugin(() => {
 
+  // from drift documentation
   !(function () {
     const t = (window.driftt = window.drift = window.driftt || [])
     if (!t.init) {

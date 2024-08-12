@@ -7,7 +7,7 @@
         <nuxt-link
           to="/"
           class="text-xl"
-          :class="$route.name.startsWith('index') ? 'selected' : ''"
+          :class="route.path === '/' ? 'selected' : ''"
         >
           <span class="hidden sm:inline text-2xl">{{ $t('common.name') }}</span><span class="inline sm:hidden">JBC</span>
         </nuxt-link>
@@ -21,6 +21,10 @@
     </div>
   </div>
 </template>
+
+<script setup>
+const route = useRoute();
+</script>
 
 <style scoped>
 span.emoji-mart-emoji {
