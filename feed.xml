@@ -24,6 +24,20 @@
 		</category>
 		<item>
 			<title>
+				<![CDATA[ Upgrading my GitHub Pages blog to Nuxt 3 ]]>
+			</title>
+			<link>
+				https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3
+			</link>
+			<guid>
+				https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3
+			</guid>
+			<description>
+				<![CDATA[ An overview of my newly upgraded GitHub Pages blog powered by Nuxt 3 ]]>
+			</description>
+		</item>
+		<item>
+			<title>
 				<![CDATA[ Agents of Inference: Speed of Light -- Accelerating my Generative AI Agents project with NVIDIA NIMs, TensorRT and TensorRT-LLM ]]>
 			</title>
 			<link>
