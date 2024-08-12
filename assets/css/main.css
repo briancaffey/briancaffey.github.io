@@ -7,6 +7,7 @@
   --bg-code: #ddd;
   --border-color: #ddd;
   --color-tag: #2E604E;
+  --color-title: #2E604E;
 }
 
 .dark-mode {
@@ -18,6 +19,7 @@
   --bg-code: #ddd;
   --border-color: #0d2538;
   --color-tag: #2E604E;
+  --color-title: #ebf4f1;
 }
 
 .sepia-mode {
@@ -29,6 +31,7 @@
   --bg-secondary: #eae0c9;
   --border-color: #ded0bf;
   --color-tag: #504231;
+  --color-title: #504231;
 }
 
 body {
@@ -129,8 +132,6 @@ a {
 
 .markdown pre {
   @apply bg-gray-100 rounded p-4;
-  /* background-color: blue; */
-  /* color: red; */
   overflow-x: auto;
 }
 
@@ -197,6 +198,11 @@ td {
   /* transition:  */
   transition: box-shadow .2s, transform .2s;
   height: 100%;
+}
+
+.article-title {
+  color: var(--color-title);
+  font-weight: bold;
 }
 
 .article-card:hover {
