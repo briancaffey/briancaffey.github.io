@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div v-if="showOptions" class="modal" @click="showOptions = false" />
     <ul>
       <li
         class="md:px-1 px-1 cursor-pointer"
@@ -11,10 +10,11 @@
     </ul>
     <div class="rounded-md z-10 picker">
       <div
-        v-show="showOptions"
+        v-if="showOptions"
+        v-on-click-outside="closeModal"
         class="
-          bg-white
-          shadow-md
+          localepicker
+          shadow-xl
           rounded
           px-4
           py-2
@@ -25,7 +25,7 @@
         <div
           v-for="locale in availableLocales.value"
           :key="`${locale.code}-option`"
-          class="text-black"
+          class="localeText"
           @click="switchLocale(locale.code)"
         >
           <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
@@ -41,6 +41,7 @@ import data from 'emoji-mart-vue-fast/data/twitter.json';
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
 import { EmojiIndex, Emoji } from 'emoji-mart-vue-fast/src';
 import { useI18n } from '#imports';
+import { vOnClickOutside } from '@vueuse/components'
 
 const emojiIndex = new EmojiIndex(data);
 const showOptions = ref(false);
@@ -52,6 +53,10 @@ const availableLocales = computed(() => locales);
 const toggleShowOptions = () => {
   showOptions.value = !showOptions.value;
 };
+
+const closeModal = () => {
+  showOptions.value = false;
+}
 
 const switchLocale = (locale) => {
   setLocale(locale);
@@ -70,14 +75,7 @@ span.emoji-mart-emoji {
 span.emoji-mart-emoji:hover {
   transform: scale(1.3);
 }
-.modal {
-  z-index: 100000000;
-  position: absolute;
-  top: 0;
-  left: 0;
-  backdrop-filter: blur(0.4px);
-  background-color: rgba(0, 0, 0, 0.2);
-}
+
 .picker {
   z-index: 10000000000;
   position: absolute;
@@ -85,5 +83,13 @@ span.emoji-mart-emoji:hover {
   right: 0;
   margin-left: auto;
   margin-right: auto;
+}
+
+.localepicker {
+  background-color: var(--bg);
+}
+
+.localeText {
+  color: var(--color-primary);
 }
 </style>
