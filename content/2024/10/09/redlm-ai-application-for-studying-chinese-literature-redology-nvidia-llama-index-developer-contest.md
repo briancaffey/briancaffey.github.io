@@ -30,9 +30,10 @@ This article will cover how I built the project, challenges I faced and some of 
 
 ### Links
 
-<RedLMTweet></RedLMTweet>
+- 𝕏 Post
+<RedLmTweet></RedLmTweet>
 
-[RedLM GitHub repository](https://github.com/briancaffey/RedLM)
+- [RedLM GitHub repository](https://github.com/briancaffey/RedLM)
 
 ## What is RedLM?
 
@@ -52,11 +53,11 @@ I used this article to create a "Deep Dive" podcast episode for RedLM using Goog
 
 ![NotebookLM](/static/redlm/notebooklm.png)
 
-You can listen to this podcast episode here:
+You can listen to this podcast episode here on 𝕏:
 
-<RedLMDeepDiveVideo></RedLMDeepDiveVideo>
+<RedLmDeepDiveVideo></RedLmDeepDiveVideo>
 
-![RedLM Deep Dive](/static/redlm/redlm_deep_dive.png)
+<!-- ![RedLM Deep Dive](/static/redlm/redlm_deep_dive.png) -->
 
 ## How I built RedLM
 
@@ -676,7 +677,7 @@ Three renditions of Journey West: Songokū (The Monkey King) polychrome woodbloc
 
 ## RedLM video
 
-<RedLMVideo></RedLMVideo>
+<RedLmVideo></RedLmVideo>
 
 I created the video for this project using Blender.The Blender sequencer editor is a great non-linear video editing tool for simple video projects like this one. I used the following formula to create the project video for RedLM:
 
