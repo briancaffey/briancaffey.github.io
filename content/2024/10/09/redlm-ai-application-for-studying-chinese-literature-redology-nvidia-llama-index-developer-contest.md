@@ -15,9 +15,9 @@ tags:
 
 draft: false
 
-# external:
-#   - link: https://x.com/briancaffey/
-#     site: x
+external:
+  - link: https://x.com/briancaffey/status/1855186768452321330
+    site: x
 
 comments: true
 ---
@@ -30,9 +30,9 @@ This article will cover how I built the project, challenges I faced and some of 
 
 ### Links
 
-- 𝕏 Post
 <RedLmTweet></RedLmTweet>
 
+- [𝕏 Post](https://x.com/briancaffey/status/1855186768452321330)
 - [RedLM GitHub repository](https://github.com/briancaffey/RedLM)
 
 ## What is RedLM?
@@ -53,11 +53,9 @@ I used this article to create a "Deep Dive" podcast episode for RedLM using Goog
 
 ![NotebookLM](/static/redlm/notebooklm.png)
 
-You can listen to this podcast episode here on 𝕏:
+You can [listen to this podcast episode here on 𝕏](https://x.com/briancaffey/status/1855186771409244491).
 
 <RedLmDeepDiveVideo></RedLmDeepDiveVideo>
-
-<!-- ![RedLM Deep Dive](/static/redlm/redlm_deep_dive.png) -->
 
 ## How I built RedLM
 
@@ -466,6 +464,18 @@ The response to the following query did a good job of combining information gath
 
 ![Ou Guan Example](/static/redlm/qa_example_ou_guan.png)
 
+This is one of my favorite examples of the RedLM image Q&A bot in action. The query here in Chinese says: "What are these two people doing"? The answer incorporates a description of what is happening in the story (Jia Baoyu comes across Ou Guan while visiting a temple) and also describes the significance of what is happening ([burning paper money as a form of Chinese ancestral worship](https://en.wikipedia.org/wiki/Joss_paper)). But this answer is not perfect and it demonstrates some of the difficulties I had with the prompt engineering for this project. The first part makes a lot of sense:
+
+> 这段参考资料来自中国古典小说《红楼梦》，讲述了贾宝玉在探访寺庙时发现藕官在河边烧纸钱的情景。藕官是贾府中的一个戏子，她的行为可能代表了对去世亲人的哀悼或祭奥。贾宝玉询问她烧纸的原因，藕官透露了自己有私下的情感问题，并且提到了芳官和蕊官，暗示了她们之间可能存在某种秘密或情感联系。
+
+> This reference is from the classical Chinese novel Dream of the Red Chamber, describing a scene where Jia Baoyu discovers Ou Guan burning paper money by the river during his visit to a temple. Ou Guan is a performer in the Jia household, and her actions might represent mourning or honoring deceased loved ones. Jia Baoyu asks her why she is burning the paper, and Ou Guan reveals that she has private emotional issues, mentioning Fang Guan and Rui Guan, hinting that there might be some kind of secret or emotional connection among them.
+
+But the second part seems to contradict the first part of the response:
+
+> 相比之下，你描述的画作场景与《红楼梦》中的描述不同。画作描绘的是两个人在河边的场景，左边的人跪在地上，似乎在烧东西，右边的人站在旁边，似乎在观察或指导。根据你提供的描述，无法确定画中人物的具体行为，如可能是烧水、煮饭、烧药等。因此，这幅画可能是一幅现实主义作品，描绘了日常生活中的一幕。它可能没有像《红楼梦》中的情节那样深刻的情感或秘密背景，而是单纯地表现了人与人之间的关系和行为。此外，画中的背景、人物的表情和姿态等细节也会对画面的意义产生影响，需要结合具体的画作进行分析。
+
+> In contrast, the scene you described in the painting differs from the depiction in Dream of the Red Chamber. The painting shows two people by the river: the person on the left is kneeling on the ground, seemingly burning something, while the person on the right stands nearby, possibly observing or guiding. Based on your description, it’s unclear what specific action the figures are engaged in, such as possibly boiling water, cooking, or burning herbs. Therefore, this painting might be a realist work, portraying a moment from everyday life. It may not have the profound emotional or secretive background found in the storyline of Dream of the Red Chamber, instead simply highlighting the relationships and actions between individuals. Additionally, details such as the background, expressions, and postures of the figures in the painting would also influence the scene’s meaning and would require analysis based on the specific artwork.
+
 ## LlamaIndex Developer Experience
 
 Overall, I found the LlamaIndex documentation to be very helpful. Before using LlamaIndex for this project I had used LangChain to build a RAG POC, but I didn’t get very good results. I love how the LlamaIndex documentation has a 5-line starter example for building a RAG system:
@@ -677,6 +687,8 @@ Three renditions of Journey West: Songokū (The Monkey King) polychrome woodbloc
 
 ## RedLM video
 
+![Watch the RedLM video on 𝕏](https://x.com/briancaffey/status/1855186768452321330)
+
 <RedLmVideo></RedLmVideo>
 
 I created the video for this project using Blender.The Blender sequencer editor is a great non-linear video editing tool for simple video projects like this one. I used the following formula to create the project video for RedLM:
@@ -718,7 +730,11 @@ I also like how this contest is not team based. Working on this project I was ab
 
 NVIDIA’s contests are “global developer contests”, but the contests so far are not open to developers in India and China. This is probably due to local rules and regulations governing how contests, prizes and taxes work. It is too bad; I would love to see what types of applications would come from participants in these countries. Also, there are also a lot of really interesting developments happening in the LLM space in both China and India!
 
-The LLMs I used in this project were developed by some of the Chinese AI companies, and they are competitive with LLMs from Western countries on LLM benchmarks despite having access to fewer GPU resources. [Kaifu Lee mentioned in a Bloomberg interview](https://www.youtube.com/watch?v=UitJxc9LE60) that the scarcity of GPU resources in China will force Chinese engineers to innovate in new ways to gain an advantage. One example of this we saw recently was when Chinese hardware hackers doubled the usable memory of the RTX 4090D (a variant of the RTX 4090 card with lower processing power to comply with US export regulations for China - the D stands for Dragon, apparently!).
+The LLMs I used in this project were developed by leading Chinese AI companies, and they are competitive with LLMs from Western countries on LLM benchmarks despite having access to fewer GPU resources. [Qwen recently released a new model called `Qwen2.5-Coder-32B`](https://qwenlm.github.io/blog/qwen2.5-coder-family/) that has outperfomed leading models at coding tasks.
+
+![Qwen coder model](/static/redlm/qwen_coder.png)
+
+[Kaifu Lee mentioned in a Bloomberg interview](https://www.youtube.com/watch?v=UitJxc9LE60) that the scarcity of GPU resources in China will force Chinese engineers to innovate in new ways to gain an advantage. One example of this we saw recently was when Chinese hardware hackers doubled the usable memory of the RTX 4090D (a variant of the RTX 4090 card with lower processing power to comply with US export regulations for China - the D stands for Dragon, apparently!)
 
 ![RTX 4090D 48GB](/static/redlm/RTX4090D.jpg)
 
