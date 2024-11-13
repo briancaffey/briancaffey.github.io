@@ -687,7 +687,7 @@ Three renditions of Journey West: Songokū (The Monkey King) polychrome woodbloc
 
 ## RedLM video
 
-![Watch the RedLM video on 𝕏](https://x.com/briancaffey/status/1855186768452321330)
+[Watch the RedLM video on 𝕏](https://x.com/briancaffey/status/1855186768452321330)
 
 <RedLmVideo></RedLmVideo>
 
