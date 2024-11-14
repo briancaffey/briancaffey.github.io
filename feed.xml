@@ -24,6 +24,20 @@
 		</category>
 		<item>
 			<title>
+				<![CDATA[ RedLM: My submission for the NVIDIA and LlamaIndex Developer Contest ]]>
+			</title>
+			<link>
+				https://briancaffey.github.io/2024/10/09/redlm-ai-application-for-studying-chinese-literature-redology-nvidia-llama-index-developer-contest
+			</link>
+			<guid>
+				https://briancaffey.github.io/2024/10/09/redlm-ai-application-for-studying-chinese-literature-redology-nvidia-llama-index-developer-contest
+			</guid>
+			<description>
+				<![CDATA[ RedLM is a new way to study art and literature powered by artificial intelligence. It is an application that applies LLMs to the study of one of China’s most famous literary works: Dream of the Red Chamber. ]]>
+			</description>
+		</item>
+		<item>
+			<title>
 				<![CDATA[ Upgrading my GitHub Pages blog to Nuxt 3 ]]>
 			</title>
 			<link>
