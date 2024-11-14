@@ -18,6 +18,8 @@ draft: false
 external:
   - link: https://x.com/briancaffey/status/1855186768452321330
     site: x
+  - link: https://dev.to/briancaffey/redlm-my-submission-for-the-nvidia-and-llamaindex-developer-contest-1c3k
+    site: dev
 
 comments: true
 ---
