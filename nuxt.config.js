@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import { devtools } from 'vue'
 
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -81,9 +82,16 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxtjs/sitemap',
     '@nuxt/image',
-    'nuxt-gtag',
     // '@nuxtjs/feed',
+    'nuxt-gtag',
+    '@tresjs/nuxt',
+    '@nuxt/devtools'
   ],
+
+  tres: {
+    devtools: true,
+    glsl: true,
+  },
 
   /*
    ** Content module configuration
