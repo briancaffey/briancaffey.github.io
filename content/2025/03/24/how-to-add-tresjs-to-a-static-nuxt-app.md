@@ -24,3 +24,8 @@ comments: true
 ## Another canvas
 
 <Tres></Tres>
+
+
+## Custom Model
+
+<Model></Model>

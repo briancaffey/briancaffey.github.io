@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { data: articles } = await useAsyncData('all-articles', () =>
   queryContent("/")
     .where({ draft: { $ne: true } })
