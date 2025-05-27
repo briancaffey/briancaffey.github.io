@@ -1,6 +1,6 @@
 ---
 title: "Mediation Simulator: My submission for the NVIDIA Agent Intelligence Toolkit Hackathon"
-date: '2024-11-09'
+date: '2025-05-27'
 description: "Mediation Simulator is an AI application designed to help legal students and professionals build dispute resolution skills through simulated mediation sessions"
 image: /static/mediation-simulator/mediation_simulator_title_image.png
 tags:
@@ -20,11 +20,13 @@ external:
 comments: true
 ---
 
-
-
 # Building Mediation Simulator for the NVIDIA Agent Intelligence Toolkit Hackathon!
 
 I'm excited to share a project I've been building for the NVIDIA Agent Intelligence Toolkit Hackathon: **Mediation Simulator**! The NVIDIA Agent Intelligence Toolkit (or AgentIQ Toolkit, as it's often called) is a powerful open-source library designed for connecting, evaluating, and accelerating teams of AI agents. My goal? To see if I could leverage this toolkit to build AI agent teams capable of simulating the entire, complex process of a law school mediation competition.
+
+Check out my [𝕏 Post](https://x.com/briancaffey/status/1926036369597510117) that introduces the project:
+
+<MediationSimulatorTweet></MediationSimulatorTweet>
 
 ## What is Mediation Simulator? And Why Mediation?
 
