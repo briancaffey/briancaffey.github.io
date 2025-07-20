@@ -292,10 +292,10 @@ Your plugin automatically logs to `flux_plugin.log` in your user's profile direc
 - **Missing logs?** Ensure write permissions in user profile directory
 
 ## Want to Contribute?
-We'd love your help making this template even better! Check out [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute.
+We'd love your help making this template even better! Check out `CONTRIBUTING.md` for guidelines on how to contribute.
 
 ## License
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the `LICENSE` file for details.
 
 ## Hardware
 
