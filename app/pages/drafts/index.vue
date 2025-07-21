@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { data: articles } = await useAsyncData('drafts', () =>
   queryCollection("blog")
     .where('draft', '=', true)

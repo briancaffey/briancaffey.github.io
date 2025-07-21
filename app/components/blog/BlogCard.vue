@@ -35,15 +35,15 @@
   </li>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
   article: {
     type: Object,
     default: () => ({})
   }
 })
-const formatDate = (date, locale) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+const formatDate = (date: string, locale: string): string => {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
   const formattedDate = new Date(date).toLocaleDateString(locale, options);
   return formattedDate
 }

@@ -53,7 +53,7 @@
   </article>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineI18nRoute({
   locales: ['en']
 });

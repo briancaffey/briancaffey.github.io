@@ -1,4 +1,3 @@
-
 <template>
   <div class="centered">
     <div class="grid items-center justify-center">
@@ -19,19 +18,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import data from 'emoji-mart-vue-fast/data/twitter.json';
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
+// @ts-expect-error - emoji-mart-vue-fast has incomplete TypeScript definitions
 import { EmojiIndex, Emoji } from 'emoji-mart-vue-fast/src';
 
 const emojiIndex = new EmojiIndex(data);
 
-const colors = ref([
+const colors: [string, string, string][] = [
   ['system', '🖥️', 'desktop_computer'],
   ['light', '🌞', 'sun_with_face'],
   ['dark', '🌚', 'new_moon_with_face'],
   ['sepia', '☕', 'coffee']
-]);
+];
 </script>
 
 <style scoped>

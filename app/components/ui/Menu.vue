@@ -36,7 +36,7 @@
   </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const show = ref(false)
 </script>
 

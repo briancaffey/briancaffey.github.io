@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useWaasStore } from '@/stores/waas'; // Import the Pinia store
 

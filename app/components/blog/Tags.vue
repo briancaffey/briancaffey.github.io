@@ -4,12 +4,9 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  tags: {
-    type: Array,
-    default: () => []
-  }
-});
+<script setup lang="ts">
+defineProps<{
+  tags: string[];
+}>();
 </script>
 

@@ -5,7 +5,7 @@
         class="md:px-1 px-1 cursor-pointer"
         @click="showOptions = !showOptions"
       >
-        <emoji :data="emojiIndex" :emoji="availableLocales.value.find((x) => x['code'] === $i18n.locale).emoji" :size="32" />
+        <emoji :data="emojiIndex" :emoji="availableLocales.value.find((x) => x['code'] === $i18n.locale)?.emoji" :size="32" />
       </li>
     </ul>
     <div class="rounded-md z-10 picker">
@@ -35,10 +35,11 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
 import data from 'emoji-mart-vue-fast/data/twitter.json';
 import 'emoji-mart-vue-fast/css/emoji-mart.css';
+// @ts-expect-error - emoji-mart-vue-fast has incomplete TypeScript definitions
 import { EmojiIndex, Emoji } from 'emoji-mart-vue-fast/src';
 import { useI18n } from '#imports';
 import { vOnClickOutside } from '@vueuse/components'
@@ -58,7 +59,7 @@ const closeModal = () => {
   showOptions.value = false;
 }
 
-const switchLocale = (locale) => {
+const switchLocale = (locale: "fr" | "ru" | "in" | "ja" | "en" | "zh") => {
   setLocale(locale);
   toggleShowOptions();
 };

@@ -28,7 +28,7 @@
     "better-sqlite3": "^12.2.0",
     "detab": "^3.0.2",
     "emoji-mart-vue-fast": "^15.0.4",
-    "nuxt": "^4.0.0",
+    "nuxt": "^4.0.1",
     "nuxt-gtag": "^3.0.3",
     "pinia": "^3.0.3",
     "rollup": "^4.45.1",
