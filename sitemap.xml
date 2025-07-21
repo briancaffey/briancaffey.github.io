@@ -2,9 +2,195 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://briancaffey.github.io/</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/technologies.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/guitar.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec/sec.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/the-12-factor-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/official_repos.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/baobab.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/tf.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/binaryclock.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/react/wuziqi.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/arch.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sunhat.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sketchup/sketchup_1.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/ant.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django-heroku.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/colors</loc>
@@ -14,6 +200,12 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/contact</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/JBC_PA.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/icons/dev.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/drafts</loc>
@@ -23,540 +215,3075 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/1</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/2</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/4</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/technologies.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/guitar.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec/sec.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/the-12-factor-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/5</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/the-12-factor-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/official_repos.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/baobab.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/tf.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/binaryclock.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/react/wuziqi.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/6</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/react/wuziqi.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/arch.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sunhat.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sketchup/sketchup_1.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/ant.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django-heroku.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags</loc>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/3d-modeling</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sketchup/sketchup_1.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/007</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/adblock</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/ads</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/adsense</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/agents</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/ai</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/api</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/arch-linux</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/official_repos.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/arch.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/authentication</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/aws</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/bash</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/binaryclock.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/blogging</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/bootstrap</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/cdk</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/celery</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/cellular-automata</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/ant.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/chinese</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/cloudformation</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/cms</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/comfyui</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/containers</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/content</loc>
-    </url>
-    <url>
-        <loc>https://briancaffey.github.io/blog/tags/crypto</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/cuda</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/data</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec/sec.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/official_repos.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/data-tables</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/databases</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/deluge</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/development</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/the-12-factor-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/digital-ocean</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/discord</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/django</loc>
-    </url>
-    <url>
-        <loc>https://briancaffey.github.io/blog/tags/dns</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/technologies.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django-heroku.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/docker</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/technologies.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/the-12-factor-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/baobab.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/tf.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/drf</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/ecs</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/emoji</loc>
-    </url>
-    <url>
-        <loc>https://briancaffey.github.io/blog/tags/ens</loc>
-    </url>
-    <url>
-        <loc>https://briancaffey.github.io/blog/tags/ethereum</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/fargate</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/flask</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/flux</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/gaming</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/github</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/github-actions</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/github-pages</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/gitlab</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/technologies.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/gnome</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/gpu</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/graphs</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/guitar</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/guitar.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/heroku</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django-heroku.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/i3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/i18n</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/jwt</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/kerkythea</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sketchup/sketchup_1.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/lambda</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/langchain</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/leaflet</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/linux</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/baobab.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/llama</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/llama-index</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/llm</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/machine-learning</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/mailchimp</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/mapbox</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/maria-db</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/media</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/mediation</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/midi</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/guitar.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/mini-dlna</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/music</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/guitar.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/nginx</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/nim</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/nuxt</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/nvidia</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/photogrammetry</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sunhat.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/pinia</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/poker</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/publishing</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/pulumi</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/python</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/guitar.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec/sec.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aur/official_repos.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/ant.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/rag</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/raspberry-pi</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/react</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/react/wuziqi.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/reddit</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/redology</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/regex</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/guitar.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/rex-ray</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/rocket-league</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/rss</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/rtx</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/scraping</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec/sec.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/sec</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec/sec.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/serverless</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/sketchup</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sketchup/sketchup_1.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/sql</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/stable-diffusion</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/stable-video-diffusion</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/startups</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/static-site</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/stripe</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/swarm</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/tensorflow</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/tf.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/tensorrt</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/tensorrt-llm</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/terraform</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/three-body-problem</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/three.js</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/traefik</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/travis-ci</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/twisted</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/valheim</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/vue</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/technologies.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/web</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/windows</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/writing</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/yc</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2016/04/07/home-media-setup</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/media-setup.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/media-setup.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/01/01/pc-data</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/hist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/psu/watts_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/psu/n_est_vs_rmse.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/psu/average_price_by_manufacturer.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/psu/price_by_modular.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/motherboard/features_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/motherboard/price_histogram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/motherboard/SLI_prices.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/motherboard/motherboard_count_by_mem_type.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/motherboard/prices_by_mem_slot.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/motherboard/n_est_vs_rmse.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/lith_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/speed_vs_cores.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/price_by_core.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/tdp_by_cores.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/core_v_boost.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/freq_v_cores.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/freq_v_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu/hyper_threading_prices.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu_cooler/prices_hist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu_cooler/rad_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu_cooler/cooler_height.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/cpu_cooler/rpm_vs_noise.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/size_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/speed_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/cas_vs_speed.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/true_latency.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/crucial_latency.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/speed_vs_true_latency.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/price_vs_ppgb.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/memory/voltage.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/prices_by_display.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/length_hist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/length_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/length_vs_price_2.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/tdp_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/gpu_chipsets.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/gpu_chipsets_by_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/clock_speed_vs_price_and_memory.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/six_NVIDIA.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/9_vs_10.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/gpu_clock_vs_boost.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/storage/storage_growth.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/storage/storage_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/storage/ssd_storage_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/storage/hdd_storage_vs_price.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/storage/storage_vs_ppgb.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/fan/rpm_vs_noise.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/fan/air_flow_v_static_pressure.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/fan/rpm_max_vs_static_pressure.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/monitor/screen_size.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/monitor/average_z_score_by_vendor.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/monitor/monitors_by_vendor.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pcpp/gpu/star_ratings.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/03/03/graph_subreddit</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/subreddits.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/subreddit_graph/subreddits_count.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/subreddit_graph/centrality.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/03/04/settinging-up-django-with-heroku</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/django-heroku.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/04/02/langton-ant-notebook</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/ant.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/LLRRRLRRRRR.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_20_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_28_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_30_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_38_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_44_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_45_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_46_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_47_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_48_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_49_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_50_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_51_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_52_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_54_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_55_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_56_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_57_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_58_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_59_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_60_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_61_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_62_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_63_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_64_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_65_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_66_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_67_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_68_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_69_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_70_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_71_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_72_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_73_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_74_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_75_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_76_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_77_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_78_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_79_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_80_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_81_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_92_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ants_files/ants_93_1.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/sunhat.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/sunhat.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/sketchup/sketchup_1.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/sketchup/sketchup_1.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/sketchup/sketchup_2.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/sketchup/sketchup_3.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/08/03/arch-linux-installation-guide</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/aur/arch.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/10/03/simple-games-in-react</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/react/wuziqi.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/react/ttt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/react/wuziqi.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gnome.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/10/17/reading-rss-with-python</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/python_rss.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/10/31/a-binary-clock-written-in-bash</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/binaryclock.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/binaryclock.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/trump.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/trump.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/trump_original.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/tf.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/tf.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/11/28/remove-root-partition-bloat-from-docker</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/baobab.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pacgraph.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/baobab.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/12/02/arch-linux-package-data-analysis</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/aur/official_repos.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aur/aur_packages.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aur/official_repos.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aur/graph.svg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aur/word_cloud.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aur/wiki_users.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/the-12-factor-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/the-12-factor-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/12/09/setting-up-flask-cli-with-docker</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/flask-docker.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flask-docker.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2017/12/22/getting-started-with-twisted</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/twisted-snakes.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/twisted-snakes.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/event-driven.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/poker.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/poker.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2018/01/28/simple-sql-tasks-with-mariadb</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/mariadb.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/sql.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/sec/sec.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/sec/fund_size.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/sec/2017_filing.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/map_homepage.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/map_entire.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/great_circle.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://travis-ci.org/briancaffey/django-leaflet-demo.svg?branch=master</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/guitar.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/technologies.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/architecture.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/architecture_verbose_equals_true.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/djambda.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/djambda.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/shark.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://docs.traefik.io/assets/img/traefik-architecture.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/09/17/migrating-from-jekyll-to-nuxt-static-site</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt-app.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/chimps.webp</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/11/27/how-to-authenticate-django-rest-framework-from-vue-app-with-session-authentication-httponly-cookies</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/sec-update.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/django_nuxt_app_diagram.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/django_nuxt_auth_og.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/django_nuxt_auth.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/django_vue_stripe.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/django_vue_stripe_diagram.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/waas/yc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/company_desc_wc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/waas/yc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/waas/yc_founders_sample.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/founders_wc.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/valheim/hall.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/valheim/diagram.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/jwt-authentication.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/dev-sites.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website</loc>
-    </url>
-    <url>
-        <loc>https://briancaffey.github.io/2021/11/18/i-bought-briancaffey-eth-with-ethereum-name-server</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/google_letter.jpeg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/twitter.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/adhoc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/adhoc/ad_hoc.backend_update.drawio.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/ublog_screenshot.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pulumi_ad_hoc_base_dep_graph.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pulumi_ad_hoc_app_dep_graph.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/books.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/wangba.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/twenty_small.gif</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/invokeai/castles.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/cmmlu.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/blender.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/dorc.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/game.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/three-body-problem/thanksgiving.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/rlbc/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/winfetch.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://g.foolcdn.com/image?url=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F764886%2Fnvda_revenue_bar.png&amp;amp;op=resize&amp;amp;w=700</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/bot.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/devenv2.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/chat_with_rtx.jpeg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/rlbcui.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/blender.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/comfyui.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/rlbc/elevenlabs.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/graph.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/graph_with_cycle.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/ethan.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/sophia.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/aoi/aoi_title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/meta-llama3-nim.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/trt-llama3.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/token-factory.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/bios.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/langsmith.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/comfyui-trt-svd-xt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/svd-workflow-trt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/aoi/comfy-its.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt/nuxt3.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt/nuxt_dev_tools.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt/gha.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt/gha_deploy.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt/lighthouse.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2024/10/09/redlm-ai-application-for-studying-chinese-literature-redology-nvidia-llama-index-developer-contest</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/title.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/notebooklm.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/translations.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/paragraphs.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/rag_example.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/cosine_similarity.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/vectordbs.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/milvus.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qa_example_01.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qa_example_flower_pedals.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qa_example_flower_pedals_a.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/hlm_mcq.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/rag_eval.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/painting_131.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/image-qa.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/redlm.drawio.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qa_example_02.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qa_example_03.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qa_example_carriage.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qa_example_ou_guan.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/llmrerank_prompt.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/rag_workflow.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/langfuse.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/trt-llm-roadmap.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/build.nvidia.com.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/rtxpcs.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/k8s-dashboard.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/wukong.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/blender_sequence_editor.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/chattts_ui.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/deep_dive_blender.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/llama-contest-og.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/qwen_coder.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/RTX4090D.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/mukesh_ambani.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/ramakien.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/stone_story.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/redlm/stone_story_analysis.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2025/05/27/mediation-simulator-project-for-nvidia-agent-intelligence-toolkit</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/mediation-simulator/mediation_simulator_viewer.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/mediation-simulator/interactive_mediation_screenshot.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/mediation-simulator/mediation_workflow.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/mediation-simulator/viewer.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/mediation-simulator/Phoenix.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/mediation-simulator/fastapi.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/mediation-simulator/redis.png</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/2025/07/17/flux-plugin-for-project-g-assist-hackathon</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flux/cat_spaceship.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flux/cat_spaceship_cartoon.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flux/invokeai_workflow.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flux/desert_nomad.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flux/controls.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flux/nyc_heli.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/flux/nyc_heli_watercolor.png</image:loc>
+        </image:image>
     </url>
     <url>
-        <loc>https://briancaffey.github.io/blog/tags/three.js/</loc>
+        <loc>https://briancaffey.github.io/2025/07/21/upgrading-my-static-nuxt-blog-from-nuxt-3-to-nuxt-4</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/nuxt4/nuxt4.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt4/nuxt-dev-tools.png</image:loc>
+        </image:image>
     </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v5.3.5 at 2025-07-20T18:37:14.327Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2025-07-21T20:36:33.839Z -->
