@@ -1,6 +1,6 @@
 ---
 title: Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application
-date: 2021-01-02
+date: '2021-01-02'
 description: This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js
 image: /static/django_vue_stripe.png
 tags:
@@ -8,6 +8,7 @@ tags:
   - vue
   - drf
   - stripe
+draft: false
 ---
 
 # Using Stripe for recurring monthly payments to a paid SaaS subscription in a Django + Vue.js application

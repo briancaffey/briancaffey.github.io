@@ -109,7 +109,7 @@ const route = useRoute();
 const { year, month, day, slug } = route.params;
 const page = `/${year}/${month}/${day}/${slug}`;
 const { data: article } = await useAsyncData(route.params.slug, () =>
-  queryContent(page).findOne()
+  queryCollection(page).findOne()
 );
 </script>
 ```

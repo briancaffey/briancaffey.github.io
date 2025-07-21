@@ -24,12 +24,12 @@
               shadow
             "
           >
-            {{ $route.params.tag }} 🏷️
+            {{ $route.params.tag }} 🏷️ ({{  filteredArticles.length }})
           </span>
         </nuxt-link>
       </div>
     </div>
-    <blog-list :articles="articles" />
+    <blog-list :articles="filteredArticles || []" />
   </div>
 </template>
 
@@ -40,14 +40,17 @@ defineI18nRoute({
 const route = useRoute();
 const tag = route.params.tag;
 const { data: articles } = await useAsyncData(route.path, () =>
-  queryContent("/")
-    .where({ draft: { $ne: true } })
-    .where({ tags: { $containsAny: [tag]}})
-    .sort({'date': -1})
-    .find()
+  queryCollection("blog")
+    .order('date', 'DESC')
+    .all()
 )
 
-
+// Filter articles that contain the specified tag
+const filteredArticles = computed(() => {
+  return articles.value?.filter(article =>
+    article.tags && Array.isArray(article.tags) && article.tags.includes(tag)
+  ) || []
+})
 </script>
 
 <style scoped></style>

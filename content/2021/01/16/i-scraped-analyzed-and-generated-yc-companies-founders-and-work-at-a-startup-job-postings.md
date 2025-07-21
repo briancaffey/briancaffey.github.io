@@ -9,21 +9,6 @@ tags:
   - scraping
   - startups
   - yc
-# external:
-#   - link: https://news.ycombinator.com/
-#     site: hn
-#   - link: https://reddit.com
-#     site: reddit
-#   - link: https://dev.to
-#     site: dev
-#   - link: https://medium.com
-#     site: medium
-#   - link: https://briancaffey.hashnode.com
-#     site: hashnode
-#   - link: https://briancaffey.substack.com
-#     site: substack
-#   - link: https://hackernoon.com/
-#     site: hackernoon
 ---
 
 I always enjoy reading about new batches of YC companies. I came across YC's [Work at a Startup](https://www.workatastartup.com/) (WaaS) recently while browsing HN and got pretty curious about all of the available data points on companies, jobs and founders.

@@ -1,9 +1,9 @@
 <template>
   <div class="mx-auto max-w-6xl">
     <h1 class="text-center text-3xl py-8">
-      {{ $t('blog.blogPosts') }} ({{ articles.length }})
+      {{ $t('blog.blogPosts') }} ({{ articles?.length || 0 }})
     </h1>
-    <blog-list :articles="articles" />
+    <blog-list :articles="articles || []" />
   </div>
 </template>
 
@@ -11,10 +11,10 @@
 
 // Fetching articles with specific fields excluding drafts
 const { data: articles } = await useAsyncData('all-articles', () =>
-  queryContent("/")
-    .where({ draft: { $ne: true } })
-    .sort({'date': -1})
-    .find()
+  queryCollection("blog")
+    .where('draft', '<>', true)
+    .order('date', 'DESC')
+    .all()
 )
 
 // TODO: fix

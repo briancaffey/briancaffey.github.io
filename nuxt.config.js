@@ -85,62 +85,8 @@ export default defineNuxtConfig({
     // '@nuxtjs/feed',
   ],
 
-  /*
-   ** Content module configuration
-   ** See https://content.nuxtjs.org/configuration
-   */
-  content: {
-    highlight: {
-      // https://shiki.matsu.io/languages#bundled-languages
-      langs: [
-        "py",
-        "python",
-        "bash",
-        "cpp",
-        "yaml",
-        "yml",
-        "powershell",
-        "json",
-        "sql",
-        "html",
-        "vue-html",
-        "javascript",
-        "js",
-        "php",
-        "dockerfile",
-        "docker",
-        "make",
-        "makefile",
-        "typescript",
-        "ts",
-        "terraform"
-      ],
-      theme: {
-        default: 'github-light',
-        dark: 'github-dark',
-        sepia: 'monokai'
-      }
-    }
-
-  },
-
   gtag: {
     id: 'G-S8TVBBMW66'
-  },
-
-  hooks: {
-    'content:file:beforeInsert': (document) => {
-      if (document.extension === '.md') {
-        const raw = document.text
-        document.raw = raw
-      }
-    },
-    // 'pages:extend' (routes) {
-    //   routes.push({
-    //     path: '/:year/:month/:day/:slug',
-    //     component: resolve(__dirname, 'pages/[year]/[month]/[day]/[slug].vue')
-    //   })
-    // }
   },
 
   build: { transpile: ['emoji-mart-vue-fast'] },

@@ -24,7 +24,8 @@ const props = defineProps({
 });
 
 const mergeArrays = (arr) => {
-  return [].concat.apply([], arr);
+  // Filter out undefined/null values and flatten the array
+  return arr.filter(item => item && Array.isArray(item)).flat();
 };
 
 const counter = (list) => {
@@ -38,9 +39,19 @@ const counter = (list) => {
 };
 
 const tagCounts = computed(() => {
-  return Object.entries(
-    counter(mergeArrays(props.articles.map(x => x.tags)))
-  ).sort((a, b) => b[1] - a[1]);
+  // Filter articles that have tags and extract the tags
+  const articlesWithTags = props.articles.filter(article =>
+    article && article.tags && Array.isArray(article.tags) && article.tags.length > 0
+  );
+
+  // Extract all tags from articles
+  const allTags = articlesWithTags.map(article => article.tags).flat();
+
+  // Count tags
+  const counts = counter(allTags);
+
+  // Convert to array and sort by count
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
 });
 </script>
 

@@ -3,7 +3,7 @@ export default defineI18nConfig(() => {
     lazy: {
       skipNuxtState: true,
     },
-    langDir: "i18n/",
+    langDir: "app/i18n/",
     strategy: "prefix_except_default",
     defaultLocale: "en",
     vueI18n: {
