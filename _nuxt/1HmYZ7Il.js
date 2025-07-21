@@ -1,0 +1,1 @@
+import{_ as o,c as r,o as n,E as s}from"./DTOJyF60.js";const t={};function c(e,a){return n(),r("strong",null,[s(e.$slots,"default")])}const l=Object.assign(o(t,[["render",c]]),{__name:"ProseStrong"});export{l as default};
