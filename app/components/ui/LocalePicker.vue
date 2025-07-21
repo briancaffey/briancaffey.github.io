@@ -5,7 +5,7 @@
         class="md:px-1 px-1 cursor-pointer"
         @click="showOptions = !showOptions"
       >
-        <emoji :data="emojiIndex" :emoji="availableLocales.value.find((x) => x['code'] === $i18n.locale)?.emoji" :size="32" />
+        <emoji :data="emojiIndex" :emoji="availableLocales.value.find((x: any) => x['code'] === $i18n.locale)?.emoji" :size="32" />
       </li>
     </ul>
     <div class="rounded-md z-10 picker">
