@@ -23,11 +23,6 @@ const props = defineProps({
   }
 });
 
-const mergeArrays = (arr) => {
-  // Filter out undefined/null values and flatten the array
-  return arr.filter(item => item && Array.isArray(item)).flat();
-};
-
 const counter = (list) => {
   return list.reduce(
     (prev, curr) => ({

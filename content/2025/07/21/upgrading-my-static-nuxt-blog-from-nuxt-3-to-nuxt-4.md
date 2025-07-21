@@ -514,4 +514,51 @@ I updated `"20"` to `"22.17.1"`
 Something else I noticed is this new sqlite file. This is just for debugging, so we can add `.data` to `.gitignore` ([https://content.nuxt.com/docs/advanced/tools#locate-your-sqlite-database](https://content.nuxt.com/docs/advanced/tools#locate-your-sqlite-database))
 
 
-##
+## `yarn lint` error
+
+I forgot to see if the code would properly lint, so on pushing to the master branch I got a failed deployment pipeline. Running `yarn lint` from my Mac I get the same error:
+
+```
+~/git/briancaffey.github.io$ yarn lint
+yarn run v1.22.22
+$ eslint .
+
+Oops! Something went wrong! :(
+
+ESLint: 9.31.0
+
+TypeError [ERR_INVALID_MODULE_SPECIFIER]: Invalid module ".nuxt/eslint.config.mjs" is not a valid package name imported from /Users/brian/git/briancaffey.github.io/eslint.config.mjs
+    at parsePackageName (node:internal/modules/package_json_reader:211:11)
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:222:53)
+    at packageResolve (node:internal/modules/esm/resolve:768:81)
+    at moduleResolve (node:internal/modules/esm/resolve:854:18)
+    at defaultResolve (node:internal/modules/esm/resolve:984:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:780:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:687:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:305:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:175:49)
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+```
+
+The error seems to be related to the file `eslint.config.mjs`. I'm not familiar with what `.mjs` files are, so I asked cursor:
+
+> What are .mjs files?
+>
+> .mjs stands for "Module JavaScript" and is a file extension that explicitly tells Node.js to treat the file as an ES module, regardless of your project's configuration.
+
+
+I was able to fix the error by making a small change to the input line that was throwing the error:
+
+```
+import withNuxt from '.nuxt/eslint.config.mjs'
+```
+
+changed to
+
+```
+import withNuxt from './.nuxt/eslint.config.mjs'
+```
+
+Now running `yarn lint` gave me small error in one of my components. Fixing that resulted in a successful `yarn lint`! OK, it should work this time!
