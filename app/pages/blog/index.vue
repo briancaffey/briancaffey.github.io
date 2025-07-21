@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 // Fetching articles with specific fields excluding drafts
 const { data: articles } = await useAsyncData('all-articles', () =>

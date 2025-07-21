@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useWaasStore } from '@/stores/waas';
 // import { VueApexCharts } from 'vue3-apexcharts';
 import { computed } from 'vue';

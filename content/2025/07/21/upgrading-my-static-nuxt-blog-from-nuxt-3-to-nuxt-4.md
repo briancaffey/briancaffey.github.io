@@ -8,6 +8,7 @@ tags:
   - vue
   - blogging
   - cms
+  - typescript
 
 draft: false
 
@@ -562,3 +563,7 @@ import withNuxt from './.nuxt/eslint.config.mjs'
 ```
 
 Now running `yarn lint` gave me small error in one of my components. Fixing that resulted in a successful `yarn lint`! OK, it should work this time!
+
+## TypeScript
+
+I also migrated this site from JavaScript to TypeScript, something I have been meaning to do for a while now. I was able to work down to 0 Problems in the VS Code/Cursor terminal toolbar.

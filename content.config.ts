@@ -23,35 +23,4 @@ export default defineContentConfig({
       })
     })
   },
-  // Add highlight configuration for code blocks
-  highlight: {
-    langs: [
-      "py",
-      "python",
-      "bash",
-      "cpp",
-      "yaml",
-      "yml",
-      "powershell",
-      "json",
-      "sql",
-      "html",
-      "vue-html",
-      "javascript",
-      "js",
-      "php",
-      "dockerfile",
-      "docker",
-      "make",
-      "makefile",
-      "typescript",
-      "ts",
-      "terraform"
-    ],
-    theme: {
-      default: 'github-light',
-      dark: 'github-dark',
-      sepia: 'monokai'
-    }
-  }
 })

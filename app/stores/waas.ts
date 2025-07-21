@@ -1,13 +1,43 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+// Type definitions
+interface JobDetails {
+  salary?: { avg: number };
+  equity?: { avg: number };
+  min_years_experience: number;
+}
+
+interface Job {
+  job_title: string;
+  details: JobDetails;
+}
+
+interface Company {
+  company_name: string;
+  jobs: Job[];
+}
+
+interface SkillFrequency {
+  [key: string]: string[];
+}
+
+interface DataRow {
+  x: number;
+  y: number;
+  jobTitle: string;
+  companyName: string;
+}
+
+interface JobDataSeries {
+  name: number | string;
+  data: DataRow[];
+}
 
 export const useWaasStore = defineStore('waas', () => {
   // State
-  const companies = ref([]);
-  const ideaIndex = ref(0);
-  const generatedIdeas = ref(['loading gpt-2 generated ideas...']);
-  const skillFrequencies = ref([]);
-  const topSkills = ref([
+  const companies = ref<Company[]>([]);
+  const ideaIndex = ref<number>(0);
+  const generatedIdeas = ref<string[]>(['loading gpt-2 generated ideas...']);
+  const skillFrequencies = ref<SkillFrequency>({});
+  const topSkills = ref<[string, number][]>([
     ['JAVASCRIPT', 330],
     ['REACT', 323],
     ['PYTHON', 312],
@@ -105,19 +135,19 @@ export const useWaasStore = defineStore('waas', () => {
   const getTopSkills = computed(() => topSkills.value.map(x => x[0]));
   const getTopSkillCounts = computed(() => topSkills.value.map(x => x[1]));
   const getSkillFrequencies = computed(() => skillFrequencies.value);
-  const getGeneratedIdeas = computed(() => (idx) => generatedIdeas.value[idx]);
-  const getRelatedSkillsForSkill = computed(() => (selectedSkill) => skillFrequencies.value[selectedSkill]);
+  const getGeneratedIdeas = computed(() => (idx: number) => generatedIdeas.value[idx]);
+  const getRelatedSkillsForSkill = computed(() => (selectedSkill: string) => skillFrequencies.value[selectedSkill]);
   const getCompanies = computed(() => companies.value);
   const getSalaryEquitySeries = computed(() => {
-    let jobData = [];
-    for (let company of companies.value) {
-      for (let job of company.jobs) {
+    const jobData: JobDataSeries[] = [];
+    for (const company of companies.value) {
+      for (const job of company.jobs) {
         const companyName = company.company_name;
         const avgSalary = job.details.salary ? job.details.salary.avg : 0;
         const avgEquity = job.details.equity ? job.details.equity.avg : 0;
         const experience = job.details.min_years_experience;
         const jobTitle = job.job_title;
-        const dataRow = { x: avgSalary, y: avgEquity, jobTitle, companyName };
+        const dataRow: DataRow = { x: avgSalary, y: avgEquity, jobTitle, companyName };
 
         const series = jobData.find((x) => x.name === experience);
         if (series) {
@@ -134,41 +164,41 @@ export const useWaasStore = defineStore('waas', () => {
   });
 
   // Actions
-  async function fetchData() {
+  async function fetchData(): Promise<void> {
     const response = await fetch('/static/waas_10.json');
-    const data = await response.json();
+    const data: Company[] = await response.json();
     SET_COMPANIES(data);
   }
 
-  async function fetchSkillFrequencyData() {
+  async function fetchSkillFrequencyData(): Promise<void> {
     const response = await fetch('/static/waas/skill_pairs.json');
-    const data = await response.json();
+    const data: SkillFrequency = await response.json();
     SET_SKILL_FREQUENCIES(data);
   }
 
-  async function fetchGeneratedIdeas() {
+  async function fetchGeneratedIdeas(): Promise<void> {
     const response = await fetch('/static/waas/generated_ideas.json');
-    const data = await response.json();
+    const data: string[] = await response.json();
     SET_GENERATED_IDEAS(data);
   }
 
-  function changeIdeasIndex(payload) {
+  function changeIdeasIndex(payload: number): void {
     SET_IDEAS_INDEX(payload);
   }
 
-  function SET_IDEAS_INDEX(payload) {
+  function SET_IDEAS_INDEX(payload: number): void {
     ideaIndex.value += payload;
   }
 
-  function SET_GENERATED_IDEAS(payload) {
+  function SET_GENERATED_IDEAS(payload: string[]): void {
     generatedIdeas.value = payload;
   }
 
-  function SET_COMPANIES(payload) {
+  function SET_COMPANIES(payload: Company[]): void {
     companies.value = payload;
   }
 
-  function SET_SKILL_FREQUENCIES(payload) {
+  function SET_SKILL_FREQUENCIES(payload: SkillFrequency): void {
     skillFrequencies.value = payload;
   }
 

@@ -9,23 +9,22 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 
-const props = defineProps({
-  articles: {
-    type: Array,
-    default: () => []
-  },
-  limit: {
-    type: Number,
-    default: Infinity
-  }
-});
+// Define a minimal interface that only requires the tags property
+interface ArticleWithTags {
+  tags?: string[];
+}
 
-const counter = (list) => {
+const props = defineProps<{
+  articles: ArticleWithTags[];
+  limit?: number;
+}>();
+
+const counter = (list: string[]): Record<string, number> => {
   return list.reduce(
-    (prev, curr) => ({
+    (prev: Record<string, number>, curr: string) => ({
       ...prev,
       [curr]: 1 + (prev[curr] || 0)
     }),
@@ -35,19 +34,17 @@ const counter = (list) => {
 
 const tagCounts = computed(() => {
   // Filter articles that have tags and extract the tags
-  const articlesWithTags = props.articles.filter(article =>
+  const articlesWithTags = props.articles.filter((article: ArticleWithTags) =>
     article && article.tags && Array.isArray(article.tags) && article.tags.length > 0
   );
 
   // Extract all tags from articles
-  const allTags = articlesWithTags.map(article => article.tags).flat();
+  const allTags = articlesWithTags.map((article: ArticleWithTags) => article.tags!).flat();
 
   // Count tags
   const counts = counter(allTags);
 
   // Convert to array and sort by count
-  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  return Object.entries(counts).sort((a, b) => (b[1] as number) - (a[1] as number));
 });
 </script>
-
-<style scoped></style>

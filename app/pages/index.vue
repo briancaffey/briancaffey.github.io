@@ -12,7 +12,7 @@
             {{ $t('home.blogPost') }}
           </h2>
           <ul>
-            <blog-card v-if="!!articles" :article="articles[0]" />
+            <blog-card v-if="articles && articles.length > 0" :article="articles[0]" />
           </ul>
           <div class="pt-8 text-right">
             <nuxt-link
@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { data: articles } = await useAsyncData('all-articles', () =>
   queryCollection("blog")
     .order('date', 'DESC')

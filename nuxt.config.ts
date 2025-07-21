@@ -1,9 +1,44 @@
-import { defineNuxtConfig } from 'nuxt/config'
-
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       url: 'https://briancaffey.github.io'
+    }
+  },
+  content: {
+    build: {
+      markdown: {
+        highlight: {
+          langs: [
+            "py",
+            "python",
+            "bash",
+            "cpp",
+            "yaml",
+            "yml",
+            "powershell",
+            "json",
+            "sql",
+            "html",
+            "vue-html",
+            "javascript",
+            "js",
+            "php",
+            "dockerfile",
+            "docker",
+            "make",
+            "makefile",
+            "typescript",
+            "ts",
+            "terraform"
+          ],
+          theme: {
+            default: 'github-light',
+            dark: 'github-dark',
+            sepia: 'monokai'
+          }
+        }
+      }
     }
   },
   devtools: {
@@ -13,10 +48,8 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
-  env: {
-    baseUrl: process.env.BASE_URL || 'https://briancaffey.github.io'
-  },
   app: {
+    // baseURL: process.env.BASE_URL || 'https://briancaffey.github.io',
     // pageTransition: { name: 'page', mode: 'in-out' }
     head: {
       htmlAttrs: {
@@ -27,7 +60,6 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
-          hid: 'description',
           name: 'description',
           content: "Brian Caffey's personal website"
         }
@@ -45,7 +77,6 @@ export default defineNuxtConfig({
    */
   css: [
     '~/assets/css/main.css',
-    // '~/assets/css/transitions.css'
   ],
 
   /*
@@ -134,22 +165,21 @@ export default defineNuxtConfig({
   //   }
   // ],
 
-  server: {
+  devServer: {
     port: 3000,
     host: '0.0.0.0'
   },
 
   i18n: {
-    vueI18n: "./i18n.config.js",
+    vueI18n: "./i18n.config.ts",
     strategy: 'no_prefix',
     defaultLocale: 'en',
-    locale: 'en',
     locales: [
       {
         code: 'en',
         emoji: 'flag-us',
         iso: 'en-US',
-        file: 'i18n/en-US.js',
+        file: 'i18n/en-US.ts',
         name: 'English',
         flag: '🇺🇸'
       },
@@ -157,7 +187,7 @@ export default defineNuxtConfig({
         code: 'fr',
         emoji: 'flag-fr',
         iso: 'fr-FR',
-        file: 'i18n/fr-FR.js',
+        file: 'i18n/fr-FR.ts',
         name: 'Français',
         flag: '🇫🇷'
       },
@@ -165,7 +195,7 @@ export default defineNuxtConfig({
         code: 'zh',
         emoji: 'flag-cn',
         iso: 'zh-ZH',
-        file: 'i18n/zh-ZH.js',
+        file: 'i18n/zh-ZH.ts',
         name: '简体中文',
         flag: '🇨🇳'
       },
@@ -173,7 +203,7 @@ export default defineNuxtConfig({
         code: 'ru',
         emoji: 'flag-ru',
         iso: 'ru-RU',
-        file: 'i18n/ru-RU.js',
+        file: 'i18n/ru-RU.ts',
         name: 'Русский',
         flag: '🇷🇺'
       },
@@ -181,7 +211,7 @@ export default defineNuxtConfig({
         code: 'ja',
         emoji: 'flag-jp',
         iso: 'ja-JP',
-        file: 'i18n/jp-JP.js',
+        file: 'i18n/jp-JP.ts',
         name: '日本語',
         flag: '🇯🇵'
       },
@@ -189,7 +219,7 @@ export default defineNuxtConfig({
         code: 'in',
         emoji: 'flag-in',
         iso: 'hi-IN',
-        file: 'i18n/hi-IN.js',
+        file: 'i18n/hi-IN.ts',
         name: 'हिंदी',
         flag: '🇮🇳'
       }

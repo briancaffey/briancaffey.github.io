@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const { data: articles } = await useAsyncData('all-articles', () =>
   queryCollection("blog")
     .order('date', 'DESC')

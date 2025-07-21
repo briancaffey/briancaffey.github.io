@@ -10,13 +10,16 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  articles: {
-    type: Array,
-    default: () => []
-  }
-});
+<script setup lang="ts">
+// Define a minimal interface that includes the slug property needed for the key
+interface ArticleWithSlug {
+  slug: string;
+  [key: string]: unknown;
+}
+
+defineProps<{
+  articles: ArticleWithSlug[];
+}>();
 </script>
 
 <style scoped></style>
