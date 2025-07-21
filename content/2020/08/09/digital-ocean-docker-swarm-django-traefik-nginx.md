@@ -398,7 +398,7 @@ In this block of `prod.conf`, we tell NGINX to serve files from `/usr/src/app/as
 
 Finally, NGINX can serve a Javascript SPA or similar if we choose to use one in our project. To understand how this is done, we need to understand multistage Dockerfiles. Here's the Dockerfile used for the `nginx` container:
 
-```Dockerfile
+```dockerfile
 # # build stage
 # FROM node:10-alpine as build-stage
 # WORKDIR /app/

@@ -1,7 +1,7 @@
 <template>
   <article>
     <nuxt-img
-      v-if="article.image"
+      v-if="article?.image"
       :src="article.image"
       :alt="article.description"
       class="pt-2 w-full object-cover"
@@ -10,22 +10,22 @@
     />
     <div class="mx-auto max-w-5xl px-2 sm:px-4 md:px-4 lg:px-16 mt-2">
       <h1 class="prose text-4xl leading-9 py-4 font-bold">
-        {{ article.title }}
+        {{ article?.title }}
       </h1>
-      <tags v-if="article.tags" :tags="article.tags" />
-      <external v-if="article.external" :external="article.external" />
+      <tags v-if="article?.tags" :tags="article.tags" />
+      <external v-if="article?.external" :external="article.external" />
       <p class="blog-date text-gray-500 mb-4">
         {{ $t('common.lastUpdated') }}
-        {{ formatDate(article.date, $i18n.locale) }}
+        {{ formatDate(article?.date, $i18n.locale) }}
       </p>
-      <div v-if="article.draft" class="p-4 my-4 bg-red-300 rounded">
+      <div v-if="article?.draft" class="p-4 my-4 bg-red-300 rounded">
         <p>
           <strong>
             ⚠️ This article is a draft and is not yet complete. ⚠️
           </strong>
         </p>
       </div>
-      <ContentDoc :value="article" class="markdown"/>
+      <ContentRenderer v-if="article" :value="article" class="markdown"/>
 
       <div class="text-center pb-4 pt-8">
         <button
@@ -44,7 +44,7 @@
         </button>
       </div>
       <Disqus
-        v-if="article.comments === true && showComments"
+        v-if="article?.comments === true && showComments"
         :key="$colorMode.preference"
         shortname="briancaffey"
       />
@@ -61,7 +61,7 @@ const route = useRoute();
 const { year, month, day, slug } = route.params;
 const page = `/${year}/${month}/${day}/${slug}`;
 const { data: article } = await useAsyncData(route.params.slug, () =>
-  queryContent(page).findOne()
+  queryCollection("blog").path(page).first()
 );
 const showComments = ref(false);
 const formatDate = (date, locale) => {
@@ -72,11 +72,11 @@ const formatDate = (date, locale) => {
 const config = useRuntimeConfig()
 
 useHead(() => ({
-  title: article.value.title,
+  title: article.value?.title,
   meta: [
     {
       name: 'robots',
-      content: article.value.draft ? 'noindex' : 'all',
+      content: article.value?.draft ? 'noindex' : 'all',
     },
     {
       property: 'twitter:creator',
@@ -88,19 +88,19 @@ useHead(() => ({
     },
     {
       property: 'og:title',
-      content: article.value.title,
+      content: article.value?.title,
     },
     {
       property: 'og:description',
-      content: article.value.description,
+      content: article.value?.description,
     },
     {
       property: 'og:image',
-      content: config.public.url + article.value.image,
+      content: config.public.url + article.value?.image,
     },
     {
       property: 'twitter:image',
-      content: config.public.url + article.value.image,
+      content: config.public.url + article.value?.image,
     },
     {
       property: 'twitter:card',

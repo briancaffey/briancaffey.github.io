@@ -12,7 +12,7 @@
             {{ $t('home.blogPost') }}
           </h2>
           <ul>
-            <blog-card :article="articles[0]" />
+            <blog-card v-if="!!articles" :article="articles[0]" />
           </ul>
           <div class="pt-8 text-right">
             <nuxt-link
@@ -27,7 +27,7 @@
           <h2 class="text-4xl pb-4 text-left">
             {{ $t('home.tags') }}
           </h2>
-          <tag-cloud :articles="articles" :limit="30" />
+          <tag-cloud :articles="articles || []" :limit="30" />
           <div class="mt-8 text-right">
             <nuxt-link
               to="/blog/tags/"
@@ -44,9 +44,8 @@
 
 <script setup>
 const { data: articles } = await useAsyncData('all-articles', () =>
-  queryContent("/")
-    .where({ draft: { $ne: true } })
-    .sort({'date': -1})
-    .find()
+  queryCollection("blog")
+    .order('date', 'DESC')
+    .all()
 )
 </script>
