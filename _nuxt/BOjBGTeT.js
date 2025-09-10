@@ -1,1 +1,0 @@
-import{_ as r,c as s,o,E as t}from"./jzUacxre.js";const n={};function c(e,a){return o(),s("tr",null,[t(e.$slots,"default")])}const l=Object.assign(r(n,[["render",c]]),{__name:"ProseTr"});export{l as default};
