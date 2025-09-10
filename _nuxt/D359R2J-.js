@@ -1,1 +1,0 @@
-import{_ as t,c as n,o,a as r}from"./jzUacxre.js";const s={};function c(i,e){return o(),n("div",null,e[0]||(e[0]=[r("h2",{class:"text-center text-2xl py-32"}," Please confirm your subscription to my newsletter by clicking the confirmation link in the email we just sent you. ",-1)]))}const l=t(s,[["render",c]]);export{l as default};
