@@ -3,11 +3,14 @@
     <url>
         <loc>https://briancaffey.github.io/</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
         </image:image>
@@ -216,6 +219,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/1</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
         </image:image>
         <image:image>
@@ -251,29 +257,23 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/2</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
@@ -317,12 +317,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/django_vue_stripe.png</image:loc>
         </image:image>
@@ -350,12 +350,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/4</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/architecture_verbose_equals_true.png</image:loc>
         </image:image>
@@ -383,12 +383,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/the-12-factor-app.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/5</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/the-12-factor-app.png</image:loc>
         </image:image>
@@ -416,12 +416,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/react/wuziqi.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/6</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/react/wuziqi.png</image:loc>
         </image:image>
@@ -446,6 +446,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
         </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/7</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
         </image:image>
@@ -554,6 +560,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/ai</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
         </image:image>
@@ -1123,6 +1132,12 @@
         </image:image>
     </url>
     <url>
+        <loc>https://briancaffey.github.io/blog/tags/fastapi</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
+    </url>
+    <url>
         <loc>https://briancaffey.github.io/blog/tags/flask</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
@@ -1133,6 +1148,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/flux</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
         </image:image>
@@ -1228,6 +1246,12 @@
         <loc>https://briancaffey.github.io/blog/tags/gnome</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/gpt-oss</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
     </url>
     <url>
@@ -1371,6 +1395,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/llm</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
         </image:image>
         <image:image>
@@ -1476,6 +1503,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/nuxt</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt4/nuxt4.png</image:loc>
         </image:image>
         <image:image>
@@ -1561,6 +1591,12 @@
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/openai</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
     </url>
     <url>
@@ -1984,6 +2020,12 @@
         <loc>https://briancaffey.github.io/blog/tags/travis-ci</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/map_homepage.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/tts</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
     </url>
     <url>
@@ -3291,5 +3333,11 @@
             <image:loc>https://briancaffey.github.io/_ipx/_/static/nuxt4/nuxt-dev-tools.png</image:loc>
         </image:image>
     </url>
+    <url>
+        <loc>https://briancaffey.github.io/2025/09/09/hnfm-openai-gpt-oss-hackathon-project-hacker-news-ai-podcast-app</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/hnfm/hnfm_cover.png</image:loc>
+        </image:image>
+    </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2025-07-21T23:37:33.664Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2025-09-10T00:24:33.529Z -->
