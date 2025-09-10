@@ -192,7 +192,30 @@ I also Dockerized the backend, which made running multiple services far more man
 
 ---
 
+## Similar Projects
 
+There are several other projects attempting to generate automated podcasts from Hacker News. Google's NotebookLM popularized the idea of creating podcasts of your documents, but it is not open source. NVIDIA has an open-source Blueprint called "pdf-to-podcast" that was a helpful reference, but it uses Eleven Labs for audio generation.
+
+The AI podcast generation landscape offers several distinct approaches:
+
+### Open Source Solutions:
+- Podcastfy.ai - Open-source Python tool for multi-modal content (websites, PDFs, videos) to multilingual audio conversations
+- TwoCast - One-click 3-5 minute two-person podcast generator with multiple TTS platform support
+
+### Hacker News Specialists:
+- Hackercast - Scrapes and summarizes Hacker Newsletter content using Langchain/GPT-4
+- Hacker News Recap - Daily AI-generated recaps of top HN posts
+- Hacker News 每日播报 - Chinese-language daily HN summaries with Edge TTS
+
+### Personalized & Automated:
+- Personalized News Generator - Custom podcasts based on user interests and news using Gemini/ElevenLabs
+- AutoPod - Converts reading lists to podcasts via n8n workflows (as low as $0.20/20min)
+Video Content:
+- HN to Video Content - n8n workflow converting HN articles to videos using AI image/video generation
+
+## Generative Video
+
+There are some amazing options for doing local generative video. Wan 2.2 is one such model. This would be interesting to explore, but I decided not to include any video generation in this project. Video generation takes a lot of time compared to image generation and TTS.
 
 ## Final Thoughts
 
@@ -210,6 +233,8 @@ For me, hnfm represents a "prosumer" approach to AI - consuming content from Hac
 I've made the project open source because I believe experiments like this should be shared. The closed-source AI ecosystem is growing rapidly, but it's vital that we also push forward what's possible with **open models** running on personal hardware. It's not just about cost or performance - it's about ownership, freedom, and creative expression.
 
 Building hnfm was challenging, rewarding, and a lot of fun. It's a small glimpse into what's possible with state-of-the-art open source AI running on consumer hardware.
+
+I made hnfm with AI assisted coding, but I think it would be interesting to try to replicate this project with n8n, a low-code/no-code workflow tool that is very popular for AI-powered content creation.
 
 ## Video
 
