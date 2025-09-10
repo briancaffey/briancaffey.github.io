@@ -1,1 +1,0 @@
-import{_ as t,c as s,o as a,a as n,t as o}from"./DTOJyF60.js";const c={},r={class:"text-center text-2xl py-32"};function l(e,_){return a(),s("div",null,[n("h2",r,o(e.$t("newsletter.thankYou")),1)])}const d=t(c,[["render",l]]);export{d as default};
