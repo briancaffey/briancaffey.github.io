@@ -3,11 +3,20 @@
     <url>
         <loc>https://briancaffey.github.io/</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
@@ -16,9 +25,6 @@
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
@@ -219,6 +225,12 @@
     <url>
         <loc>https://briancaffey.github.io/blog/1</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
         <image:image>
@@ -226,9 +238,6 @@
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
@@ -251,32 +260,29 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/2</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
@@ -314,12 +320,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/waas/yc.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/emoji_flags.png</image:loc>
         </image:image>
@@ -347,12 +353,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/4</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djambda.png</image:loc>
         </image:image>
@@ -380,12 +386,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/5</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
         </image:image>
@@ -413,12 +419,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/6</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
         </image:image>
@@ -446,12 +452,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/7</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
         </image:image>
@@ -561,13 +567,16 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/ai</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
@@ -1177,6 +1186,15 @@
         </image:image>
     </url>
     <url>
+        <loc>https://briancaffey.github.io/blog/tags/gcp</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+    </url>
+    <url>
         <loc>https://briancaffey.github.io/blog/tags/github</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
@@ -1240,6 +1258,15 @@
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/technologies.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/gke</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
     </url>
     <url>
@@ -1312,6 +1339,15 @@
         <loc>https://briancaffey.github.io/blog/tags/jwt</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/k8s</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
     </url>
     <url>
@@ -1395,13 +1431,16 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/llm</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
@@ -1491,10 +1530,13 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/nim</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
@@ -1560,10 +1602,13 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/nvidia</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/codelab/nvidia_google.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
@@ -3339,5 +3384,53 @@
             <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
     </url>
+    <url>
+        <loc>https://briancaffey.github.io/2026/02/20/nvidia-nim-on-google-cloud-gcp</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/codelab/nvidia_google.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_terminal_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_cloud_assist.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_cloud_assist_2.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_rate_limit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_cloud_assist_tool_use.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_inference.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_gemini.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_learning.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_codex.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_gke_clusters_dashboard.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_openwebui.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_openwebui_1.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/codelab/nvgcp_pulumi_destroy.png</image:loc>
+        </image:image>
+    </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2025-09-10T00:47:57.136Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2026-02-21T06:44:09.264Z -->
