@@ -15,7 +15,7 @@ tags:
 draft: false
 
 external:
-  - link: https://x.com/briancaffey/status/
+  - link: https://x.com/briancaffey/status/2025106078543888633
     site: x
 
 comments: true
