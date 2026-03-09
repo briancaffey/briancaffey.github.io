@@ -112,8 +112,8 @@ The PR Creation Agent commits fixes to a new branch (`blog-cleanup/nvidia-nim-im
 Here's where this gets exciting: **everything runs on my DGX Spark**, accessed through Telegram. No cloud APIs. No paid services. Just local LLMs doing the work.
 
 ### Hardware Setup
-- **DGX Spark** — NVIDIA's compact AI workstation with RTX 6000 Ada GPU
-- **Qwen3.5-35B** — My primary model running via LM Studio
+- **DGX Spark** — NVIDIA's compact AI workstation with GB10 chip
+- **Qwen3.5-35B-A3B (3 billion active parameters)** — My primary model running via LM Studio
 - **1 concurrent LLM request** — The DGX Spark limitation that actually makes this system simpler
 
 ### Why Telegram?
@@ -306,9 +306,9 @@ If you have the hardware, run inference locally for cost savings and privacy. DG
 | Component | Technology | Purpose |
 |-----------|------------|---------|
 | **Framework** | OpenClaw | Multi-agent orchestration system |
-| **Model** | Qwen3.5-35B | Primary LLM for review and PR creation |
+| **Model** | Qwen3.5-35B-A3B (3B active params) | Primary LLM for review and PR creation |
 | **Inference** | LM Studio | Local model serving on DGX Spark |
-| **Hardware** | DGX Spark | Compact AI workstation with RTX 6000 Ada GPU |
+| **Hardware** | DGX Spark | Compact AI workstation with GB10 chip |
 | **Communication** | Telegram | Access point to all agents (no context switching) |
 | **Version Control** | Git + GitHub | PR workflow and change tracking |
 | **CLI Tool** | `gh` | Create branches, open pull requests from terminal |
