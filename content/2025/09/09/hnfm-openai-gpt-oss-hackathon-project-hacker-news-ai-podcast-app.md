@@ -67,7 +67,7 @@ hnfm stitches together a chain of AI tasks into a single automated pipeline:
 4. **Image generation**
 
    * Use gpt-oss to create **visual descriptions** for each narration segment.
-   * Feed these prompts to **InvokeAI**, running the **Flux Krea [dev]** image model.
+   * Feed these prompts to **InvokeAI**, running the **Flux Krea (dev)** image model.
    * Save the generated images alongside the audio.
 
 5. **Speech recognition and subtitles**
@@ -99,7 +99,7 @@ At its core, hnfm runs on **Python** with a modular architecture. Here's the bre
 
   * **LM Studio** with gpt-oss-20b (LLM inference, embeddings, reasoning).
   * **dia** for text-to-speech (wrapped with a custom FastAPI server to manage VRAM usage).
-  * **InvokeAI** for image generation (Flux Krea [dev]).
+  * **InvokeAI** for image generation (Flux Krea (dev)).
   * **WhisperX** for speech recognition (ASR).
 
 * **Frontend**
@@ -187,7 +187,7 @@ I also Dockerized the backend, which made running multiple services far more man
 * **Service health is critical**: With multiple AI services, one offline process can derail the pipeline. My health-check API saved hours of frustration.
 * **Reasoning tuning matters**: Some steps benefit from deep thinking (scriptwriting), while others only need quick output (summaries). gpt-oss's reasoning control was invaluable, and no other model gives you this type of control.
 * **Prompt iteration is the fun part**: Most improvements came from refining prompts, not debugging code.
-* **Keep it simple**: Every time the architecture grew too complex, progress stalled. The best results came from aggressively simplifying, and telling code agents to write simple code that sticks to your requirements. Coding agents like Cursor will try to over-optimize
+* **Keep it simple**: Every time the architecture grew too complex, progress stalled. The best results came from aggressively simplifying, and telling code agents to write simple code that sticks to your requirements. Coding agents like Cursor will try to over-optimize features that add unnecessary complexity.
 * **Cursor rules and constraints help**: Encoding best practices into coding agents prevented regressions and kept the codebase clean.
 
 ---
