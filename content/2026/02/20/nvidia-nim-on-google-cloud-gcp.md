@@ -25,7 +25,7 @@ This article is an overview of my experience doing a CodeLab from Google and NVI
 
 This is a LONG and detailed article that is a complete walkthrough of the original CodeLab which can be found here: [Deploy an AI model on GKE with NVIDIA NIM](https://codelabs.developers.google.com/codelabs/nvidia-nim-google-cloud). Then I made my own adaptation of this lesson by redeploying the same application using Pulumi's Infrastructure as Code for automated spin up and tear down of the cloud resources: node pools, gpu pools, kubernetes clusters and LLM deployment.
 
-First I'll get go through the tutorial, then I'll use Codex to get help defining all of the components with code! The walkthrough contains some mistakes I made and other random issues I had running through this, as well as a bunch of logs, outputs and screenshots. **Feel free to skip to the end if you want to see how I'm planning to take my most recent vibe-coded app from my home network to the cloud with NVIDIA NIMs on GKE!**
+First I'll go through the tutorial, then I'll use Codex to get help defining all of the components with code! The walkthrough contains some mistakes I made and other random issues I had running through this, as well as a bunch of logs, outputs and screenshots. **Feel free to skip to the end if you want to see how I'm planning to take my most recent vibe-coded app from my home network to the cloud with NVIDIA NIMs on GKE!**
 
 Let's go!
 
@@ -1449,9 +1449,17 @@ Stack 'dev' has been removed!
 ~/git/waywo/nim-on-gke/infra$
 ```
 
-Awesome! We now have a way to spin up NIMs on GKE using Pulumi with just a few commands that run in under 10 minutes! This keeps the custom CLI commands to a minimum and caputres all of the dependencies in code while still being easily configurable via environment variables.
+Awesome! We now have a way to spin up NIMs on GKE using Pulumi with just a few commands that run in under 10 minutes! This keeps the custom CLI commands to a minimum and captures all of the dependencies in code while still being easily configurable via environment variables.
 
 The code for this can be found in my `waywo` repo: [https://github.com/briancaffey/waywo](https://github.com/briancaffey/waywo).
+
+## Security Best Practices & Disclaimers
+
+**Security Note:** This tutorial uses environment variables for configuration, which is good practice. Never commit `.env` files with real credentials to version control. Use GCP IAM roles and service accounts for production deployments.
+
+**Version Disclaimer:** The Kubernetes version shown (1.35.0) is current as of February 2026. Check [GKE release notes](https://cloud.google.com/kubernetes-engine/docs/release-notes) for the latest versions. For production environments, consider using the "stable" or "regular" release channels instead of "rapid" for better stability.
+
+**Project-Specific Details:** The project ID and project number shown in this tutorial are from my test environment. You'll see your own values when running these commands in your GCP account. Create a new project in the [Google Cloud Console](https://console.cloud.google.com) before following this tutorial.
 
 ## Now what's next?
 
