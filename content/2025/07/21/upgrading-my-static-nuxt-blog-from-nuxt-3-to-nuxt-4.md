@@ -283,7 +283,7 @@ yarn dev
 
 OK, we have an error related to i18n. I have struggled with i18n a fair bit when doing major changes to my site.
 
-It looks like Nuxt 4 expects the i18n folder to be under tha new `/app` directory, but it is still in the root directory, so let's move that and try running `yarn dev` again.
+It looks like Nuxt 4 expects the i18n folder to be under the new `/app` directory, but it is still in the root directory, so let's move that and try running `yarn dev` again.
 
 Cool, no errors:
 
@@ -378,7 +378,7 @@ After upgrading `@nuxtjs/i18n` to v10.0.0 I got another i18n error when running 
     at async initialize (node_modules/@nuxt/cli/dist/chunks/index.mjs:426:3)
 ```
 
-OK! So I rarranged my `i18n` folder to match watch it was looking for:
+OK! So I rearranged my `i18n` folder to match what it was looking for:
 
 ```
 ~/git/briancaffey.github.io$ tree i18n -L 3
