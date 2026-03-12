@@ -340,4 +340,4 @@ Drop a comment below or reach out on Twitter/X. The blog cleanup is ongoing — 
 
 ---
 
-*This article was reviewed and improved using OpenClaw, just like all my other content now. See [todo/blog-cleanup.md](https://github.com/briancaffey/briancaffey.github.io/blob/master/todo/blog-cleanup.md) to follow along with the project.*
+*This article was reviewed and improved using OpenClaw, just like all my other content now. See [todo/blog-cleanup.md](https://github.com/briancaffey/briancaffey.github.io/blob/master/todo/blog-cleanup.md) to follow along with the project.*<!-- retrigger: action -->
