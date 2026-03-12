@@ -2,7 +2,7 @@
 title: "Behind the Scenes: AI-Assisted Blog Cleanup with OpenClaw"
 date: '2026-03-09'
 description: "How I'm using OpenClaw, a multi-agent system running on DGX Spark, to systematically review and improve my personal blog articles through Telegram"
-image: /static/blog-meta/openclaw-blog-cleanup.png
+# image: /static/blog-meta/openclaw-blog-cleanup.png
 tags:
   - ai
   - agents
