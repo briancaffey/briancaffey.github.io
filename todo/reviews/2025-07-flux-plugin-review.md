@@ -75,5 +75,5 @@ Overall rating: **Very Good** - Minor fixes needed, no major issues requiring re
 
 *This review is part of the OpenClaw blog cleanup project.*
 *See [todo/blog-cleanup.md](../blog-cleanup.md) for task queue status.*
-*See [content/todo/blog-inventory.md](../todo/blog-inventory.md) for full article list.*
-*See [content/todo/blog-review-checklist.md](../todo/blog-review-checklist.md) for review guidelines.*
+*See [todo/blog-inventory.md](../todo/blog-inventory.md) for full article list.*
+*See [todo/blog-review-checklist.md](../todo/blog-review-checklist.md) for review guidelines.*
