@@ -125,7 +125,7 @@ InvokeAI has a Windows installer that can be found here: [https://invoke-ai.gith
 
 ### Step 7: Start the NVIDIA NIM
 
-Ask flux if this NIM is running. If it is not running, ask flux to start the NIM. This will run a command to star the NIM container in WSL using podman:
+Ask flux if this NIM is running. If it is not running, ask flux to start the NIM. This will run a command to start the NIM container in WSL using podman:
 
 ```python
 podman_cmd = [
@@ -142,7 +142,7 @@ podman_cmd = [
 
 Then ask if the NIM is ready. This will check the `/v1/health/live` and `/v1/health/ready` endpoints of the Flux NIM.
 
-### Step 8: Generete AI images using the Flux Plug-in in the G-Assist chat window
+### Step 8: Generate AI images using the Flux Plug-in in the G-Assist chat window
 
 Send a message to G-Assist:
 
@@ -158,15 +158,15 @@ When the image generation is complete you will find the image on your Desktop ba
 
 Take a screenshot using the NVIDIA Screenshot hotkey (usually `Alt + F1`), and then ask the Flux Plug-in to transform it to any style using Kontext.
 
-![Cat piloting spaceship](/static/flux/cat_spaceship.png)
+![AI-generated image of a cat piloting a spaceship](/static/flux/cat_spaceship.png)
 
 hey flux, use kontext with the prompt: cartoon style
 
-![Cat Spaceship Cartoon style with Kontext](/static/flux/cat_spaceship_cartoon.png)
+![AI-generated cartoon-style image of a cat piloting a spaceship using Flux Kontext](/static/flux/cat_spaceship_cartoon.png)
 
 Flux does this by triggering an InvokeAI graph workflow. The generated image and the workflow can both be viewed in the InvokeAI UI:
 
-![InvokeAI Flux Kontext Workflow](/static/flux/invokeai_workflow.png)
+![InvokeAI Flux Kontext workflow visualization showing image editing pipeline](/static/flux/invokeai_workflow.png)
 
 You can ask the Flux Plug-in to pause/resume InvokeAI processing to avoid running Flux Kontext image generation while your GPU is busy with other tasks. Also you can ask flux to empty the model cache in order to free up VRAM on your GPU.
 
@@ -193,7 +193,7 @@ The Flux plugin uses a `config.json` file to manage all settings. Copy `config.e
 
 ## Using the Flux.1-dev NVIDIA NIM for text-to-image generation
 
-![Desert Nomad](/static/flux/desert_nomad.png)
+![AI-generated image of a desert nomad in a sandy landscape](/static/flux/desert_nomad.png)
 
 On NVIDIA GeForce RTX AI PCs, the best way to do AI image inference is by using NVIDIA NIMs. Windows currently has beta support for running NVIDIA NIMs in WSL with Podman (a program for running containers, similar to Docker).
 
@@ -222,7 +222,7 @@ There are also commands for starting and stopping the Flux NIM, which runs Podma
 - **Stop NIM**: "hey flux, stop the Flux NIM server"
 - **Check Status**: "hey flux, check if the NIM server is running"
 
-![Flux Plug-in controls](/static/flux/controls.png)
+![Flux Plug-in controls showing start, stop, and status buttons for NIM server management](/static/flux/controls.png)
 
 ### Configuration
 Make sure your `config.json` includes the necessary credentials:
@@ -232,11 +232,13 @@ Make sure your `config.json` includes the necessary credentials:
 
 ## Image-to-image generation with Flux Kontext and InvokeAI
 
-![Helicopter over NYC](/static/flux/nyc_heli.png)
+![AI-generated image of a helicopter flying over New York City skyline](/static/flux/nyc_heli.png)
 
-![Helicopter over NYC](/static/flux/nyc_heli_watercolor.png)
+![AI-generated watercolor-style transformation of the same NYC helicopter image using Flux Kontext](/static/flux/nyc_heli_watercolor.png)
 
-The Flux Plug-in supports image-to-image generation using an open source image generation tool called InvokeAI. This tool is similar to ComfyUI and it has solid API support. Currently there is no NVIDIA NIM for Flux Kontext but the NVIDIA blog mentioned that this might be released as soon as May 2025.
+The Flux Plug-in supports image-to-image generation using an open source image generation tool called InvokeAI. This tool is similar to ComfyUI and it has solid API support.
+
+**Update:** NVIDIA released the FLUX.1 Kontext [dev] NIM microservice in August 2025, which can be used instead of InvokeAI for image-to-image workflows! The NIM version offers optimized performance with quantization reducing VRAM requirements from 24GB to 12GB (FP8 on Ada Generation GPUs) and 7GB (FP4). Check the [NVIDIA blog announcement](https://blogs.nvidia.com/blog/rtx-ai-garage-flux-kontext-nim-microservice-siggraph/) for details.
 
 You can interact with the InvokeAI program in a few different ways:
 
