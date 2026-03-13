@@ -21,6 +21,16 @@ export default defineContentConfig({
           site: z.string()
         })).optional()
       })
+    }),
+    // Define a separate collection for todo docs that won't be prerendered as routes
+    todo: defineCollection({
+      source: 'todo/**/*.md',
+      type: 'data',  // Data collections don't create pages/routes
+      schema: z.object({
+        title: z.string(),
+        date: z.string().optional(),
+        description: z.string().optional()
+      })
     })
   },
 })

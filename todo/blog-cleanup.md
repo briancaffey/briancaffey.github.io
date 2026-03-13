@@ -159,7 +159,7 @@ Articles with major version drift, likely broken code, or outdated infrastructur
 ### For Each Article:
 
 1. **Read the full article** without making changes (get context)
-2. **Apply the review checklist** (see `content/todo/blog-review-checklist.md`)
+2. **Apply the review checklist** (see `todo/blog-review-checklist.md`)
 3. **Document findings** in a new review file at `todo/reviews/YYYY-MM-article-name-review.md`
 4. **Create a PR branch**: `blog-cleanup/article-name-improvements`
 5. **Commit fixes** with clear messages:
@@ -253,4 +253,4 @@ gh pr create --title "Blog cleanup: Fix in article name" --body "See todo/review
 
 ---
 
-*This task queue is part of the OpenClaw blog cleanup project. For the full article inventory, see [content/todo/blog-inventory.md](./content/todo/blog-inventory.md). For the review checklist template, see [content/todo/blog-review-checklist.md](./content/todo/blog-review-checklist.md).*
+*This task queue is part of the OpenClaw blog cleanup project. For the full article inventory, see [todo/blog-inventory.md](./blog-inventory.md). For the review checklist template, see [todo/blog-review-checklist.md](./blog-review-checklist.md).*
