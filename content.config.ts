@@ -4,7 +4,7 @@ export default defineContentConfig({
   collections: {
     blog: defineCollection({
       // Load all markdown files in the content directory and subdirectories
-      source: '**/*.md',
+      source: ['**/*.md', '!todo/**'],
       // Specify the type of content in this collection
       type: 'page',
       // Define custom schema for blog collection
