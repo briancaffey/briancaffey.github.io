@@ -52,7 +52,7 @@ A few months ago my company announced that another round of layoffs was to come 
 
 ![Images of Three Body Problem Book Series](/static/three-body-problem/books.png)
 
-I started learning Chinese in college, adding a major in Chinese Language to the mathematics major I decided on in my freshman year after taking vector calculus and linear algebra. In my sophmore year I did a semester abroad at Fudan University's [International Cultural Exchange School](https://ices.fudan.edu.cn/6628/list.htm). In 2007, living and studying Chinese in Shanghai as a 19 year old American was a really fun time. I was placed in an advanced-level course with a diverse group of students where English was not the lowest common linguistic denominator. We had a demanding cirriculum that emphasized reading, listening and speaking Chinese, but most of the language learning came through extracirricular activities: exploring Shanghai's food scene, bartering with vendors at the fabric markets, late night clubbing, walking around the Bund and the French Concession and chatting with my taxi cab drivers. It is hard to imagine how I did this without an iPhone, but I was able to get pretty far with an old Nokia 3310.
+I started learning Chinese in college, adding a major in Chinese Language to the mathematics major I decided on in my freshman year after taking vector calculus and linear algebra. In my sophmore year I did a semester abroad at Fudan University's [International Cultural Exchange School](https://ices.fudan.edu.cn/6628/list.htm). In 2007, living and studying Chinese in Shanghai as a 19 year old American was a really fun time. I was placed in an advanced-level course with a diverse group of students where English was not the lowest common linguistic denominator. We had a demanding curriculum that emphasized reading, listening and speaking Chinese, but most of the language learning came through extracurricular activities: exploring Shanghai's food scene, bartering with vendors at the fabric markets, late night clubbing, walking around the Bund and the French Concession and chatting with my taxi cab drivers. It is hard to imagine how I did this without an iPhone, but I was able to get pretty far with an old Nokia 3310.
 
 At the end of one night of particularly heavy drinking, some of my classmates and I dropped in on an wangba (internet cafe) before heading back to the international dorm. Chinese internet cafes in 2007 were an expansive underground dens of computers, monitors, MMORPGs, FPSs, cigarets, and on-demand instant noodles delivered directly to your seat through an app on the desktop. That night our game of choice was Counter-Strike. In one of the lowest points of my gaming career, my classmates and I were crushed by our Chinese counterterrorist opponent.
 
@@ -66,11 +66,11 @@ My second job after college took me back to China where I specialized in the tec
 
 ![State Grid HQ in Xi Cheng](/static/three-body-problem/invokeai/castles.png)
 
-My first introduction to the 'Three-Body Problem' book came from one of my best friends from college. He lived at the inner-most leaf-node of one of Beijing's most labrythnian hutongs next to a family that trained racing pigeons. My friend and I bonded over our study of Chinese language, classical guitar and our experiences in Beijing. I strongly considered his recommendation to check out 三体 (Three Body), the Chinese Sci-Fi novel about alien life in a solar system with three stars as he described it, but I never had the chance to read the book.
+My first introduction to the 'Three-Body Problem' book came from one of my best friends from college. He lived at the inner-most leaf-node of one of Beijing's most labyrinthian hutongs next to a family that trained racing pigeons. My friend and I bonded over our study of Chinese language, classical guitar and our experiences in Beijing. I strongly considered his recommendation to check out 三体 (Three Body), the Chinese Sci-Fi novel about alien life in a solar system with three stars as he described it, but I never had the chance to read the book.
 
 <iframe width="100%" height="315" src="https://www.youtube.com/embed/5lj99Uz1d50?si=TwrypbY4vTfeWGRf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-Almost 10 years later I came across across a preview for the Netflix production of "3 Body Problem" scheduled to come out in early 2024. With the possibility of loosing my job weighing heavily on me, I picked up the books on Amazon hoping to have something to if I was going to be layed off. Over the weekend I was able to read a few of the chapters on my Kindle. I had not completely forgotten how to speak Chinese, and I could easily look up words and translate entire paragraphs with Google Translate.
+Almost 10 years later I came across a preview for the Netflix production of "3 Body Problem" scheduled to come out in early 2024. With the possibility of loosing my job weighing heavily on me, I picked up the books on Amazon hoping to have something to if I was going to be layed off. Over the weekend I was able to read a few of the chapters on my Kindle. I had not completely forgotten how to speak Chinese, and I could easily look up words and translate entire paragraphs with Google Translate.
 
 ## Chinese in numbers
 
@@ -124,7 +124,7 @@ I did some basic prompt engineering to get the LLM to translate the books in the
 
 <iframe class="p-4" src="https://briancaffey.github.io/three-body-problem/reader/?book=three_body&chapterNumber=1" width=100% height=550></iframe>
 
-It was interesting to see the failure modes of translation tasks for the different models. Most of the time the LLM was able to provided accurate translations. Some of the failure modes I observed were:
+It was interesting to see the failure modes of translation tasks for the different models. Most of the time the LLM was able to provide accurate translations. Some of the failure modes I observed were:
 
 - a few Chinese characters would show up in the English translations
 - a complete Chinese sentence would show up in an otherwise complete translation of a paragraph
@@ -364,11 +364,11 @@ Imagine that we are working for a Chinese startup called the Qin Dynasty. The fo
 
 ## Screen adaptations, the gaming industry and the CCP
 
-Dream of the Red Chamber is one of China's Four Great Classical Novels and is often seen as the pinacle of Chinese fiction. It was written in the mid 18th century and first published in 1791. It is a long saga that totals 960,000 characters in length, on similar scale to the length of the Three-Body Problem trilogy. Sun Wen, a Qing dynasty artist, spent 36 years of his life doing a series of 230 paintings depicting scenes from the Dream of the Red Chamber: dream sequences, demons, goddesses, nuns, nobles, beggars, raging fires, landscapes, interiors, wildlife, gardens, temples, funerals, battles, processions, banquets, trials, operas, marriages.
+Dream of the Red Chamber is one of China's Four Great Classical Novels and is often seen as the pinnacle of Chinese fiction. It was written in the mid 18th century and first published in 1791. It is a long saga that totals 960,000 characters in length, on similar scale to the length of the Three-Body Problem trilogy. Sun Wen, a Qing dynasty artist, spent 36 years of his life doing a series of 230 paintings depicting scenes from the Dream of the Red Chamber: dream sequences, demons, goddesses, nuns, nobles, beggars, raging fires, landscapes, interiors, wildlife, gardens, temples, funerals, battles, processions, banquets, trials, operas, marriages.
 
 ![Sun Wen paintings sample](/static/three-body-problem/dorc.png)
 
-Following in this tradition of celebrating great literature, Tencent Video and China Central Television produced a 30-episode adaptation of the Three-Body Problem that was released in Feburary 2023. It is a surprisingly faithful reproduction of the book that is worth checking out. The portrayal of Shi Qiang (Da Shi) was easily my favorite part of the series. I was also impressed by how the Three-Body VR game scenes were done with computer graphics. It got me thinking about how China is represented in some of the worlds most popular video games.
+Following in this tradition of celebrating great literature, Tencent Video and China Central Television produced a 30-episode adaptation of the Three-Body Problem that was released in February 2023. It is a surprisingly faithful reproduction of the book that is worth checking out. The portrayal of Shi Qiang (Da Shi) was easily my favorite part of the series. I was also impressed by how the Three-Body VR game scenes were done with computer graphics. It got me thinking about how China is represented in some of the worlds most popular video games.
 
 ![games](/static/three-body-problem/game.png)
 
