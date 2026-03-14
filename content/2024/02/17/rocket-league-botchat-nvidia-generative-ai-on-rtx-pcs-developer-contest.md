@@ -1,7 +1,7 @@
 ---
 title: "Rocket League BotChat powered by TensorRT-LLM: My submission for NVIDIA's Generative AI on RTX PCs Developer Contest"
 date: '2024-02-17'
-description: "This article discusses my entry for NVIDIA's Generative AI on RTX PCs Developer Contest: Rocket Leauge BotChat"
+description: "This article discusses my entry for NVIDIA's Generative AI on RTX PCs Developer Contest: Rocket League BotChat"
 image: /static/rlbc/cover.png
 tags:
   - nvidia
@@ -30,6 +30,8 @@ comments: true
 
 ## tl;dr
 
+**Version Note:** This article was published in February 2024 (~13 months old). The TensorRT-LLM versions referenced (v0.6.1/v0.7.1) and Llama-2 models mentioned may have updated versions since publication (Llama-3 is now available). Check official documentation for the latest releases and breaking changes.
+
 This article is about my submission to NVIDIA's Generative AI on RTX PCs Developer Contest: Rocket League BotChat. Rocket League BotChat is a BakkesMod plugin for Rocket League that allows bots to send chat messages based on in-game events. It is designed to be used with a local LLM service optimized and accelerated with NVIDIA's TensorRT-LLM library.
 
 Here's my project submission post on 𝕏:
@@ -48,11 +50,11 @@ The following email caught my attention last month:
 
 The part about “on Windows PC” made me think: why would a developer contest focus on a particular operating system? I use all three of the major operating systems: macOS, Ubuntu and Windows 11, but most of the development work I do is on macOS and Ubuntu. I discovered WSL (Windows Subsystem for Linux) a few years ago and really enjoy using that for development as well, but I had never considered doing development work on Windows outside of WSL. I had also never used any of the Windows-specific development frameworks like .NET or Visual Studio.
 
-My experience with Windows goes back to 2016 when I built my fist PC with an NVIDIA GeForce GTX 1080 graphics card. When I built another personal computer last year in 2023, getting the NVIDIA GeForce RTX 4090 graphics card was a big step up. I bought two NVMe drives in order to dual boot into both Windows and Ubuntu operating systems. Switching between the operating systems requires turning off the computer, going into the BIOS settings and changing the boot order and restarting the computer.
+My experience with Windows goes back to 2016 when I built my first PC with an NVIDIA GeForce GTX 1080 graphics card. When I built another personal computer last year in 2023, getting the NVIDIA GeForce RTX 4090 graphics card was a big step up. I bought two NVMe drives in order to dual boot into both Windows and Ubuntu operating systems. Switching between the operating systems requires turning off the computer, going into the BIOS settings and changing the boot order and restarting the computer.
 
 Last year I started learning more about AI image generation using Stable Diffusion with programs like Automatic1111, InvokeAI and ComfyUI. I set up everything on my PC's Ubuntu operating system, and frequently had to switch between using Ubuntu for working with stable diffusion and Windows for gaming and other Windows-specific software. The friction of having to constantly switch operating systems pushed me to move my stable diffusion software workflows to Windows. All of my models and images are stored to external drives, so moving things over to Windows was pretty easy.
 
-I learned PowerShell and got more familiar with how Windows works as a development machine. Environment variables and system variables are one example of how Windows does things differently compared ot Linux-based operating systems. And just like that, I became a Windows developer! This experience got me interested in coming up with an idea for the NVIDIA Generative AI on NVIDIA RTX PCs Developer Contest.
+I learned PowerShell and got more familiar with how Windows works as a development machine. Environment variables and system variables are one example of how Windows does things differently compared to Linux-based operating systems. And just like that, I became a Windows developer! This experience got me interested in coming up with an idea for the NVIDIA Generative AI on NVIDIA RTX PCs Developer Contest.
 
 ![Windows winfetch screenshot](/static/rlbc/winfetch.png)
 
@@ -70,9 +72,9 @@ This contest is focused on NVIDIA's consumer hardware line: GeForce RTX. It has 
 
 Gaming seemed like an interesting avenue for me to explore. PC gaming is still an industry that is developed primarily for Windows operating systems, and the gaming industry has been the largest revenue driver of NVIDIA in recent years, only recently surpassed by the data center segment. GPUs are needed to render graphics of enormous open-world environments. Some story-driven games include huge amounts of dialogue that can be considered as huge literary works in their own right. Red Dead Redemption and Genshin Impact are two massively popular games of this type. There might be an interesting project idea that could use LLMs and RAG (retrieval augmented generation), but I don't play these types of games and it didn't seem practical for a project that would be built in just over a month. I thought about trying to build something for a simpler game that I already know.
 
-Rocket League is a vehicular soccer game that is played on both game consoles and on PCs. It is an eSports with a very high skill ceiling and a massive player base (85 million active players in the last 30 days). I started playing it during the pandemic with some of my friends and all got hooked. We also came to learn that Rocket League's in-game is varies from entertaining, annoying, toxic and in some cases, sportsmanlike.
+Rocket League is a vehicular soccer game that is played on both game consoles and on PCs. It is an eSport with a very high skill ceiling and a massive player base (85 million active players in the last 30 days). I started playing it during the pandemic with some of my friends and all got hooked. We also came to learn that Rocket League's in-game chat varies from entertaining, annoying, toxic and in some cases, sportsmanlike.
 
-One other thing I learned about Rocket League is that it has an active modding community. Developers create plugins for the game for all different purposes, such as coaching, practice drills, capturing replays, tracking player statistics, etc. Most Rocket League Mods are written in a popular framework called Bakkesmod (developed Andreas "bakkes" Bakke, a Norwegian software engineer). Rocket League's in-game chat inspired the idea for my submission to NVIDIA's Generative AI Developer Contest: Rocket League BotChat. The idea for my project is to build a plugin with Bakkesmod that allows Rocket League bots to send chat messages based on game events using an LLM accelerated and optimized by TensorRT-LLM (more on TensorRT-LLM soon!)
+One other thing I learned about Rocket League is that it has an active modding community. Developers create plugins for the game for all different purposes, such as coaching, practice drills, capturing replays, tracking player statistics, etc. Most Rocket League Mods are written in a popular framework called Bakkesmod (developed by Andreas "bakkes" Bakke, a Norwegian software engineer). Rocket League's in-game chat inspired the idea for my submission to NVIDIA's Generative AI Developer Contest: Rocket League BotChat. The idea for my project is to build a plugin with Bakkesmod that allows Rocket League bots to send chat messages based on game events using an LLM accelerated and optimized by TensorRT-LLM (more on TensorRT-LLM soon!)
 
 Bots are built into the Rocket League game and you can play with or against them in offline matches. However, the built-in bots are not very good. Another 3rd-party project called RLBot allows players to play against community-developed AI bots that are developed with machine learning frameworks like TensorFlow and PyTorch. These bots are very good, but they are not infallible. My contest project idea was now clear: develop a plugin for Rocket League capable of sending messages from bot players. This idea seemed to check the boxes for the large language model category of NVIDIA's developer contest: develop a project in a Windows environment for a Windows-specific program, and use an LLM powered by TensorRT-LLM.
 
@@ -86,7 +88,7 @@ With this idea in mind, I looked into the project's feasibility. I really had no
 	- [`HttpWrapper`](https://wiki.bakkesplugins.com/code_snippets/using_http_wrapper/) for sending HTTP requests from Bakkesmod
 	- [`StatEvents`](https://wiki.bakkesplugins.com/functions/stat_events/) that allow for running custom code when specific event functions are triggered in the game (such as scoring a goal, or making a save).
 - The Bakkesmod plugin template: https://github.com/Martinii89/BakkesmodPluginTemplate
-	- This provides a great starting-off point for developing Bakkesmod plugins. Plugins for Bakkesmod are written in C++ and this repo provides an organized file structure that allows your to get started quickly
+	- This provides a great starting-off point for developing Bakkesmod plugins. Plugins for Bakkesmod are written in C++ and this repo provides an organized file structure that allows you to get started quickly
 - Plugin Tutorial: https://wiki.bakkesplugins.com/plugin_tutorial/getting_started/
 - Open-source chat-related Bakkesmod plugins on GitHub
   - BetterChat: [https://github.com/JulienML/BetterChat](https://github.com/JulienML/BetterChat)
@@ -279,7 +281,7 @@ I used Blender's sequence editor to create a demo video for my contest submissio
 
 ![ComfyUI workflow for animating images using img2vid model](/static/rlbc/comfyui.png)
 
-- Use ElevenLabs to narrate a simple voice over script that describes the video content. This tuned out a lot better than I expected. I paid $1 for the ElevenLabs creator plan and got lots of tokens to experiment with different settings for voice generation using a clone of my voice.
+- Use ElevenLabs to narrate a simple voice over script that describes the video content. This turned out a lot better than I expected. I paid $1 for the ElevenLabs creator plan and got lots of tokens to experiment with different settings for voice generation using a clone of my voice.
 
 ![Eleven Labs Voice Generation Web UI](/static/rlbc/elevenlabs.png)
 
@@ -291,9 +293,9 @@ This plugin is a proof of concept and it has some shortcomings. One issue is tha
 
 There are lots of events that are triggered that would be interesting things for the bot to react to, but I decided not to prompt on every event since the above situation would be triggered frequently. For example, suppose I listen for events like taking a shot on goal and scoring a goal. If the goal is scored immediately after the shot is taken, then the second prompt is sent before the response for the first prompt comes back. For this reason I decided to simply not listen to events like "shot on goal" to avoid prompt messages getting out of order. This could also be addressed with more code logic.
 
-Prompt engineering is something that can always be improved. It is hard to measure and testing it is subjective. I am pleased with the results I was able to capture for the demo video, but the quality of the LLM responses can very depending on what happens during gameplay. One idea I had to address this would be to provide multiple English translations for any given event, and then select one at random. This might help improve the variety of responses, for example.
+Prompt engineering is something that can always be improved. It is hard to measure and testing it is subjective. I am pleased with the results I was able to capture for the demo video, but the quality of the LLM responses can vary depending on what happens during gameplay. One idea I had to address this would be to provide multiple English translations for any given event, and then select one at random. This might help improve the variety of responses, for example.
 
-I faced some limitations that are built in to the game iteself. For example, it is not possible for a player to send messages to the in-game chat in offline matches, which makes sense! I built a backdoor for doing this through the BakkesMod developer console, so you can send messages to the bot by typing something like `SendMessage Good shot, bot!`, for example.
+I faced some limitations that are built in to the game itself. For example, it is not possible for a player to send messages to the in-game chat in offline matches, which makes sense! I built a backdoor for doing this through the BakkesMod developer console, so you can send messages to the bot by typing something like `SendMessage Good shot, bot!`, for example.
 
 ## What's next?
 
