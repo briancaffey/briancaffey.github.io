@@ -31,7 +31,9 @@ comments: true
 
 # tl;dr
 
-This articles brings together several of my interest, both old and new:
+**Version Note:** This article references models and tools from 2023 (Chinese-LLaMA-2, Qwen-7B-Chat, Baichuan-13B, Stable Diffusion, InvokeAI, CuPy/CUDA). These projects evolve quickly; check official documentation for current model names, versions, and best practices.
+
+This article brings together several of my interests, both old and new:
 
 - The Sci-Fi book series 'Three-Body Problem' by Liu Cixun
 - Chinese language
