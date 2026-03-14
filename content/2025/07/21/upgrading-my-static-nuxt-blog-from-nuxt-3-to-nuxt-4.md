@@ -17,6 +17,8 @@ comments: true
 
 This article will share my experience upgrading my Nuxt blog from Nuxt 3 to Nuxt 4. I'm following the official [Upgrade Guide](https://nuxt.com/docs/4.x/getting-started/upgrade) from Nuxt. It will be mostly unfiltered and I'll try to document things as they happen. Let's go!
 
+**Version Note:** This article was published in July 2025 (~8 months old) and references specific versions (Nuxt 4.0.0, Node 22.17.1, @nuxtjs/i18n v10, etc.). These packages evolve quickly; check official documentation for current best practices, breaking changes, and updated migration steps before implementing similar upgrades today.
+
 First, I'll do this on a new branch:
 
 ```
