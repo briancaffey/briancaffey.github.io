@@ -20,6 +20,8 @@ comments: true
 
 ## Blog history
 
+**Version Note:** This article was published in August 2024 (~7 months old). The Nuxt versions referenced (Nuxt 3.12.4, Nitro 2.9.7) may have updated since publication. Check official documentation for the latest releases and breaking changes.
+
 My personal website has always lived on GitHub Pages at [`briancaffey.github.io`](https://briancaffey.github.io). The first version was built with the Jekyll framework. I started learning about Vue, and Nuxt seemed like an interesting alternative to Jekyll that would allow me to practice frontend development. In September 2020 I deployed the first version of the new site using Nuxt 2 and Vue 2.
 
 I recently went through the process of upgrading from Nuxt 2 to Nuxt 3. This upgrade path also included an upgrade from Vue 2 to Vue 3. My previous attempts to upgrade this site from Nuxt 2 to Nuxt 3 failed because of error messages that I couldn't work through. This time, with a big help from AI, I got through the entire upgrade and learned a lot in the process. I'm happy to share my new blog that is powered by Vue 3, Nuxt 3 and Nuxt Content v2!
@@ -257,7 +259,7 @@ Shout out to GitHub user `peaceiris` for maintaining the `peaceiris/actions-gh-p
 
 Most of my blog articles only include text and images. In some articles I include dynamic content through iframes to other projects on my GitHub that are deployed on subdomains of `briancaffey.github.io`. Another way to add dynamic content it to write Vue components and then embed those directly in the Nuxt Content Markdown files. I wrote [an article about data from YC's Work at a Startup jobs page](https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings) and made components that get data from a data store and then render that data using Apex Charts.
 
-Previoulsy I had used Vuex to do this, but I switched to using Pinia which is Vue's new module for managing state. I use LLMs to convert the store module from Vuex to Pinia and also used LLMs to update the components that use the store, and it worked!
+Previously I had used Vuex to do this, but I switched to using Pinia which is Vue's new module for managing state. I use LLMs to convert the store module from Vuex to Pinia and also used LLMs to update the components that use the store, and it worked!
 
 Setting up the plugin for Apex Charts looks like this:
 
@@ -301,7 +303,7 @@ I made a number of improvements to the site to get an almost-perfect Lighthouse 
 
 ## Interactivity
 
-I use a few plugins for interactity on my site. These plugins needed some slight modifications and upgrades
+I use a few plugins for interactivity on my site. These plugins needed some slight modifications and upgrades
 
 ### Drift
 
@@ -353,7 +355,7 @@ For now I am going to copy the `feed.xml` to a file in the public directory and 
 
 ### Console errors
 
-I have tried to clean up as many of the errors as I could, but there are stil some that I see in the dev console. Here is one of the issues that puzzles me:
+I have tried to clean up as many of the errors as I could, but there are still some that I see in the dev console. Here is one of the issues that puzzles me:
 
 `Hydration completed but contains mismatches.`: I only see this error on the production build; I don't see it when running `yarn dev`. As I understand, this error message means that the HTML that was built during prerendering is not the same as the HTML on the site once the Javascript has all been loaded.
 
