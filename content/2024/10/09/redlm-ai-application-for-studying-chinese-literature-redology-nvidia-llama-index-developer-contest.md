@@ -24,9 +24,9 @@ external:
 comments: true
 ---
 
-## td;dr
+## tl;dr
 
-RedLM is a new way to study art and literature powered by artificial intelligence. It is an application that applies LLMs to the study of one of China’s most famous literary works: Dream of the Red Chamber. It uses leading language and vision models from Chinese AI groups including Alibaba’s Qwen, Baichuan Intelligence Technology and 01.AI. RedLM uses tools, techniques and services from NVIDIA and LlamaIndex including NVIDIA NIMs, Retrieval Augmented Generation and Multi-Modal RAG with vision language models. This project is my submission for the NVIDIA and LlamaIndex Developer Contest.
+RedLM is a new way to study art and literature powered by artificial intelligence. It is an application that applies LLMs to the study of one of China's most famous literary works: Dream of the Red Chamber. It uses leading language and vision models from Chinese AI groups including Alibaba's Qwen, Baichuan Intelligence Technology and 01.AI. RedLM uses tools, techniques and services from NVIDIA and LlamaIndex including NVIDIA NIMs, Retrieval Augmented Generation and Multi-Modal RAG with vision language models. This project is my submission for the NVIDIA and LlamaIndex Developer Contest.
 
 This article will cover how I built the project, challenges I faced and some of the lessons I learned while working with NVIDIA and LlamaIndex technologies.
 
@@ -39,7 +39,7 @@ This article will cover how I built the project, challenges I faced and some of 
 
 ## What is RedLM?
 
-RedLM is a combination of the word “Red” and LM, an abbreviation for “language model”. Dream of the Red Chamber is such an important book in Chinese literature that it has its own field of study called 红学 (literally “the study of red”), or Redology. So, RedLM is an application that uses language models for the study of Redology.
+RedLM is a combination of the word "Red" and LM, an abbreviation for "language model". Dream of the Red Chamber is such an important book in Chinese literature that it has its own field of study called 红学 (literally "the study of red"), or Redology. So, RedLM is an application that uses language models for the study of Redology.
 
 ![RedLM](/static/redlm/title.png)
 
@@ -47,7 +47,7 @@ In this project I focused on three applications of language models:
 
 1. Summary and translation of the source text
 2. A Q&A bot that can answer questions about the book providing references to the specific paragraphs used to give answers
-3. An image-based Q&A bot that can answer questions about sections of paintings that depict scenes from each of the book’s chapters.
+3. An image-based Q&A bot that can answer questions about sections of paintings that depict scenes from each of the book's chapters.
 
 ## NotebookLM
 
@@ -61,15 +61,15 @@ You can [listen to this podcast episode here on 𝕏](https://x.com/briancaffey/
 
 ## How I built RedLM
 
-RedLM consists of two parts: a web UI built with Vue 3 using the Nuxt Framework and a backend API built with Python, FastAPI and LlamaIndex. There are lots of great tools for building full-stack AI applications such as Gradio and Streamlit, but I wanted to build with the web tools that I’m most familiar with and that provide the most flexibility. These frameworks (Nuxt and FastAPI) are simple and effective and they allowed me to develop quickly.
+RedLM consists of two parts: a web UI built with Vue 3 using the Nuxt Framework and a backend API built with Python, FastAPI and LlamaIndex. There are lots of great tools for building full-stack AI applications such as Gradio and Streamlit, but I wanted to build with the web tools that I'm most familiar with and that provide the most flexibility. These frameworks (Nuxt and FastAPI) are simple and effective and they allowed me to develop quickly.
 
-Most of the code for this project was written by AI. I used OpenAI’s ChatGPT 4o, Anthropic’s Claude 3.5 Sonnet and 01.AI’s Yi-1.5-9B-Chat model. In my development process with AI, I prompted for one logical piece of the application at a time, such as one API route, one Vue component, one pinia store or one utility function, for example. In this article I'll share some of the prompts I used in my development workflow.
+Most of the code for this project was written by AI. I used OpenAI's ChatGPT 4o, Anthropic's Claude 3.5 Sonnet and 01.AI's Yi-1.5-9B-Chat model. In my development process with AI, I prompted for one logical piece of the application at a time, such as one API route, one Vue component, one pinia store or one utility function, for example. In this article I'll share some of the prompts I used in my development workflow.
 
-This project embraces a hybrid AI inference model, meaning that the AI inference can be done either on local RTX PCs or using NVIDIA’s Cloud APIs from `build.nvidia.com` depending on configuration via environment variables. I used PCs with NVIDIA GeForce RTX 4090 GPUs to do inference with language and vision models, and with a change of configuration, I was able to do similar inference using NVIDIA’s API endpoints. This allowed me to develop the project both on powerful RTX desktop workstations and Mac laptops.
+This project embraces a hybrid AI inference model, meaning that the AI inference can be done either on local RTX PCs or using NVIDIA's Cloud APIs from `build.nvidia.com` depending on configuration via environment variables. I used PCs with NVIDIA GeForce RTX 4090 GPUs to do inference with language and vision models, and with a change of configuration, I was able to do similar inference using NVIDIA's API endpoints. This allowed me to develop the project both on powerful RTX desktop workstations and Mac laptops.
 
 ## Translating Dream of the Red Chamber with TensorRT-LLM
 
-Translation is often mentioned as one of the capabilities of bilingual LLMs from China. I wanted to try translating this book from Chinese to English, but I also wanted to better understand the meaning of the original text written in vernacular Chinese. Written vernacular Chinese is essentially a form of Chinese that closely resembles the way Chinese was spoken in imperial China by common people. The use of vernacular Chinese (Baihua) in literary works marked a significant cultural shift that started to make literature and education more accessible. Before the emergence of written vernacular Chinese, Chinese literature was dominated by Classical Chinese (Wenyanwen) which is a more concise, ambiguous and specialized for of languages that assumes an understanding of ancient texts and Confucian classics. The difference between vernacular Chinese and modern Mandarin Chinese is somewhat analogous to the different between Shakespearian English (Early Modern English) and Modern English.
+Translation is often mentioned as one of the capabilities of bilingual LLMs from China. I wanted to try translating this book from Chinese to English, but I also wanted to better understand the meaning of the original text written in vernacular Chinese. Written vernacular Chinese is essentially a form of Chinese that closely resembles the way Chinese was spoken in imperial China by common people. The use of vernacular Chinese (Baihua) in literary works marked a significant cultural shift that started to make literature and education more accessible. Before the emergence of written vernacular Chinese, Chinese literature was dominated by Classical Chinese (Wenyanwen) which is a more concise, ambiguous and specialized form of language that assumes an understanding of ancient texts and Confucian classics. The difference between vernacular Chinese and modern Mandarin Chinese is somewhat analogous to the difference between Shakespearean English (Early Modern English) and Modern English.
 
 ![Baihua, Mandarin and English](/static/redlm/translations.png)
 
@@ -121,7 +121,7 @@ bai_prompts = [
 It was difficult to get good results consistently. Here are some observations I had:
 
 - Some of the translated paragraphs were perfect
-- some translated paragraphs would randomly hallucinate the same phrase over and over again
+- Some translated paragraphs would randomly hallucinate the same phrase over and over again
 - Some requests to translate text to English would reply in Mandarin Chinese rather than in English
 - Sometimes I would even see computer code generated when asking for a translation
 - The names of characters were sometimes translated inconsistently, sometimes literally and sometimes using differing versions of pinyin, the Romanization system for transcribing the sounds of Mandarin Chinese
@@ -134,17 +134,17 @@ My primary objective with this project was to implement a simple chat bot that r
 
 ![RAG Example](/static/redlm/rag_example.png)
 
-I haven't read that much of the book before working on this project, but I have read a lot *about* this book's characters, major themes and plot. This Q&A bot was a very interesting entrypoint to explore specific passages of the book starting with questions coming from my knowledge about the book. The question in the screenshots above is: “What does Jia Baoyu’s father think about him?” The response includes references to paragraphs where Jia Zheng (Baoyu’s father) is discussing his son. I was pretty amazed that the RAG query was able to pull out these two paragraphs.
+I haven't read that much of the book before working on this project, but I have read a lot *about* this book's characters, major themes and plot. This Q&A bot was a very interesting entrypoint to explore specific passages of the book starting with questions coming from my knowledge about the book. The question in the screenshots above is: "What does Jia Baoyu's father think about him?" The response includes references to paragraphs where Jia Zheng (Baoyu's father) is discussing his son. I was pretty amazed that the RAG query was able to pull out these two paragraphs.
 
-*In Dream of the Red Chamber, the relationship between protagonist Jia Baoyu and his father, Jia Zheng, is complex and fraught with tension. Jia Zheng, a strict, traditional Confucian patriarch, embodies values of discipline, scholarly rigor, and duty. He expects his son to excel in his studies and uphold the family’s honor by pursuing an official career in government. Baoyu, however, is sensitive, imaginative, and inclined toward poetry and the company of women, especially his cousins Lin Daiyu and Xue Baochai. This preference clashes with Jia Zheng’s expectations, leading to frequent misunderstandings and disappointment.*
+*In Dream of the Red Chamber, the relationship between protagonist Jia Baoyu and his father, Jia Zheng, is complex and fraught with tension. Jia Zheng, a strict, traditional Confucian patriarch, embodies values of discipline, scholarly rigor, and duty. He expects his son to excel in his studies and uphold the family's honor by pursuing an official career in government. Baoyu, however, is sensitive, imaginative, and inclined toward poetry and the company of women, especially his cousins Lin Daiyu and Xue Baochai. This preference clashes with Jia Zheng's expectations, leading to frequent misunderstandings and disappointment.*
 
-By default, LlamaIndex uses cosine similarity as the distance metric for finding the vectors representing the documents (paragraphs) that are “closest” to the vector representing the user query. This is the central mechanism by which RAG works. LlamaIndex provides an abstraction of this process, hiding the implementation details and allowing rapid development of retrieval systems.
+By default, LlamaIndex uses cosine similarity as the distance metric for finding the vectors representing the documents (paragraphs) that are "closest" to the vector representing the user query. This is the central mechanism by which RAG works. LlamaIndex provides an abstraction of this process, hiding the implementation details and allowing rapid development of retrieval systems.
 
 ![Cosine Similarity](/static/redlm/cosine_similarity.png)
 
 Source: https://medium.com/@kbdhunga/a-beginners-guide-to-similarity-search-vector-indexing-part-one-9cf5e9171976
 
-Here is some of the code I wrote for the text-based Q&A bot using LlamaIndex’s `CustomQueryEngine` class to fetch the nodes from which I get the referenced paragraph text, chapter number and paragraph number.
+Here is some of the code I wrote for the text-based Q&A bot using LlamaIndex's `CustomQueryEngine` class to fetch the nodes from which I get the referenced paragraph text, chapter number and paragraph number.
 
 ```python
 class QAndAQueryEngine(CustomQueryEngine):
@@ -313,7 +313,7 @@ Here are some results and other observations from this experiment:
 - I used the completion API rather than the chat API and set the `max_tokens` to 16. This was done to ensure that the LLM only gave a short response with a valid answer choice rather than giving a long response with an explanation.
 - The evaluation took longer for LLM + RAG test because of the time required for making the RAG query and the longer prompt (including both the original multiple-choice question and the referenced paragraphs).
 - I used the `01-ai/Yi-1.5-9B-Chat` model for this test, but I probably should have used the base model rather than the chat model.
-- Some questions would not be capable of being answered by RAG. For example, some of the questions are about film renditions of the novel. Most of the questions seemed relevant to the content of the book, so I didn’t bother to filter out the questions that were not directly related to the book’s content.
+- Some questions would not be capable of being answered by RAG. For example, some of the questions are about film renditions of the novel. Most of the questions seemed relevant to the content of the book, so I didn't bother to filter out the questions that were not directly related to the book's content.
 
 Here is an example of a question that the LLM test script answered *incorrectly* and the LLM + RAG test script answered **correctly**.
 
@@ -351,13 +351,13 @@ The correct answer for this question is C.
 
 ## Multi-modal RAG for visual reasoning
 
-Qwen2-VL is a new AI model that was released in late August 2024. Qwen is the name of Alibaba’s AI Lab, and it is an abbreviation of the Chinese characters: 千问 ("qian wen", meaning 1000 questions). VL stands for vision-language, meaning that the model is capable of understanding both text and images. I had tested out the previous version of Qwen’s vision-language model and was very impressed by how it could accurately describe the contents of images and also answer general questions about images.
+Qwen2-VL is a new AI model that was released in late August 2024. Qwen is the name of Alibaba's AI Lab, and it is an abbreviation of the Chinese characters: 千问 ("qian wen", meaning 1000 questions). VL stands for vision-language, meaning that the model is capable of understanding both text and images. I had tested out the previous version of Qwen's vision-language model and was very impressed by how it could accurately describe the contents of images and also answer general questions about images.
 
 Sun Wen was a Qing-era painter who spent 36 years of his life creating a series of 230 paintings capturing scenes from Dream of the Red Chamber. The paintings are incredibly detailed and often contain repeated figures in a temporal sequence. If you asked a Qwen-VL model to describe one of the images, it might return lengthy description that doesn't fully capture the full detail of the scene. It might also be difficult for a language model to "focus" on a portion of the whole image.
 
 ![Dream of the Red Chamber Painting 131](/static/redlm/painting_131.png)
 
-This sparked the idea to create a feature where users can click and drag over an image to select part of a painting, then ask questions specifically about the selected portion. I knew that while this could be achieved with tools like HTML canvas, writing it on my own would be quite time-consuming. It took me just a few minutes to write out the prompt, and Claude 3.5 Sonnet generated a perfect prototype of this feature in under a minute. Here’s the prompt I used:
+This sparked the idea to create a feature where users can click and drag over an image to select part of a painting, then ask questions specifically about the selected portion. I knew that while this could be achieved with tools like HTML canvas, writing it on my own would be quite time-consuming. It took me just a few minutes to write out the prompt, and Claude 3.5 Sonnet generated a perfect prototype of this feature in under a minute. Here's the prompt I used:
 
 > I'm going to describe a Vue component and I want you to write it using Vue 3 to the best of your ability.
 >
@@ -375,7 +375,7 @@ This sparked the idea to create a feature where users can click and drag over an
 
 ![RedLM Image Q&A](/static/redlm/image-qa.png)
 
-This shows the final result of the UI I built for the image Q&A feature in RedLM. It uses a similar chat layout that the text-based Q&A feature uses, with the addition of the image preview included in the chat log. The user query in this example just says “Please describe the contents of the image”. This was the first image that I tested when building the image Q&A feature to see if the correct passage can be referenced based on the description of an image. This pulled the exact passage and the answer provides details about what happened (a fire broke out) where it happened (at the Gourd Temple) and why it happened (a Monk accidentally set an oil pot on fire).
+This shows the final result of the UI I built for the image Q&A feature in RedLM. It uses a similar chat layout that the text-based Q&A feature uses, with the addition of the image preview included in the chat log. The user query in this example just says "Please describe the contents of the image". This was the first image that I tested when building the image Q&A feature to see if the correct passage can be referenced based on the description of an image. This pulled the exact passage and the answer provides details about what happened (a fire broke out) where it happened (at the Gourd Temple) and why it happened (a Monk accidentally set an oil pot on fire).
 
 Here is a diagram showing the overall flow of data in the image Q&A feature:
 
@@ -421,9 +421,9 @@ The prompt engineering for this feature was tricky. I was able to get some aweso
 
 There is another important concept from LlamaIndex that I used to build the image Q&A feature: metadata filtering. Metadata filtering is an important concept in RAG systems  because it helps you focus your query on relevant documents in a precise way. A very simple example might be a RAG system that indexes news articles and stores the associated date as metadata. You could allow a user to set a date range for their query and only include articles that match the given date range.
 
-For my image Q&A system, I have a mapping between the paintings and their associated chapters. When I ask a question about a painting, I want to use the description of the image to find similar paragraphs, but only the paragraphs that occur in the painting’s associated chapter. What I ended up doing was filtering the entire index before making the query. The alternative would be filtering the returned nodes after making the query, but this would have the possibility of not returning any nodes.
+For my image Q&A system, I have a mapping between the paintings and their associated chapters. When I ask a question about a painting, I want to use the description of the image to find similar paragraphs, but only the paragraphs that occur in the painting's associated chapter. What I ended up doing was filtering the entire index before making the query. The alternative would be filtering the returned nodes after making the query, but this would have the possibility of not returning any nodes.
 
-Here’s what some of the metadata filtering code looks like:
+Here's what some of the metadata filtering code looks like:
 
 ```python
 # main.py
@@ -476,11 +476,11 @@ But the second part seems to contradict the first part of the response:
 
 > 相比之下，你描述的画作场景与《红楼梦》中的描述不同。画作描绘的是两个人在河边的场景，左边的人跪在地上，似乎在烧东西，右边的人站在旁边，似乎在观察或指导。根据你提供的描述，无法确定画中人物的具体行为，如可能是烧水、煮饭、烧药等。因此，这幅画可能是一幅现实主义作品，描绘了日常生活中的一幕。它可能没有像《红楼梦》中的情节那样深刻的情感或秘密背景，而是单纯地表现了人与人之间的关系和行为。此外，画中的背景、人物的表情和姿态等细节也会对画面的意义产生影响，需要结合具体的画作进行分析。
 
-> In contrast, the scene you described in the painting differs from the depiction in Dream of the Red Chamber. The painting shows two people by the river: the person on the left is kneeling on the ground, seemingly burning something, while the person on the right stands nearby, possibly observing or guiding. Based on your description, it’s unclear what specific action the figures are engaged in, such as possibly boiling water, cooking, or burning herbs. Therefore, this painting might be a realist work, portraying a moment from everyday life. It may not have the profound emotional or secretive background found in the storyline of Dream of the Red Chamber, instead simply highlighting the relationships and actions between individuals. Additionally, details such as the background, expressions, and postures of the figures in the painting would also influence the scene’s meaning and would require analysis based on the specific artwork.
+> In contrast, the scene you described in the painting differs from the depiction in Dream of the Red Chamber. The painting shows two people by the river: the person on the left is kneeling on the ground, seemingly burning something, while the person on the right stands nearby, possibly observing or guiding. Based on your description, it's unclear what specific action the figures are engaged in, such as possibly boiling water, cooking, or burning herbs. Therefore, this painting might be a realist work, portraying a moment from everyday life. It may not have the profound emotional or secretive background found in the storyline of Dream of the Red Chamber, instead simply highlighting the relationships and actions between individuals. Additionally, details such as the background, expressions, and postures of the figures in the painting would also influence the scene's meaning and would require analysis based on the specific artwork.
 
 ## LlamaIndex Developer Experience
 
-Overall, I found the LlamaIndex documentation to be very helpful. Before using LlamaIndex for this project I had used LangChain to build a RAG POC, but I didn’t get very good results. I love how the LlamaIndex documentation has a 5-line starter example for building a RAG system:
+Overall, I found the LlamaIndex documentation to be very helpful. Before using LlamaIndex for this project I had used LangChain to build a RAG POC, but I didn't get very good results. I love how the LlamaIndex documentation has a 5-line starter example for building a RAG system:
 
 ```python
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
@@ -531,8 +531,8 @@ Using LlamaIndex Workflows also helped me add additional logic in a maintainable
 LLM Rerank was an interesting technique to try out, and LlamaIndex provides `LLMRerank` to make the implementation as simple as possible. Here's my understanding of how it works:
 
 - LLMRerank searches in the vector database for a high number of documents that are relevant to your query. This is done using cosine similarity, which essentially compares the vectors that represent the query and the documents.
-- Next, LLMRerank goes through a process of assigning a numerical to each document to score relevancy. It does this via a special prompt that requests relevancy score for each document in batches.
-- For example, I configured `LLMRerank` to initially fetch 4 documents from the vector database based on cosine similarity. Then in batches of 2, relevancy scores are assigned. Finally, the top 2 most relevant documents based on the LLM-give scores are used to make the RAG query.
+- Next, LLMRerank goes through a process of assigning a numerical score to each document to score relevancy. It does this via a special prompt that requests relevancy score for each document in batches.
+- For example, I configured `LLMRerank` to initially fetch 4 documents from the vector database based on cosine similarity. Then in batches of 2, relevancy scores are assigned. Finally, the top 2 most relevant documents based on the LLM-given scores are used to make the RAG query.
 - Adding LLMRerank can require a number of additional queries based on how you configure the batch size and the number of documents you would like to compare. This will increase latency for your application and use more resources to make the extra calls.
 
 Here's an example LLM query that `LLMRerank` uses to do assign scores:
@@ -568,9 +568,9 @@ INFO:     Prompt is
 
 这是相关的参考资料：
 ---------------------
-宝玉从来没有经历过这样的痛苦。起初，他觉得被打得很痛，乱喊乱叫。后来，他的气变得虚弱，声音变得嘶哑，无法说话。众门客见他被打得很惨，赶上来恳求他停下来。贾政不肯听，说：“你们知道他干了什么坏事，还能饶他吗？平时都是你们这些人把他带坏了，现在到了这步田地，你们还来劝他。明天，如果他杀父弑君，你们才不劝吗？”
+宝玉从来没有经历过这样的痛苦。起初，他觉得被打得很痛，乱喊乱叫。后来，他的气变得虚弱，声音变得嘶哑，无法说话。众门客见他被打得很惨，赶上来恳求他停下来。贾政不肯听，说："你们知道他干了什么坏事，还能饶他吗？平时都是你们这些人把他带坏了，现在到了这步田地，你们还来劝他。明天，如果他杀父弑君，你们才不劝吗？"
 
-宝玉从来没有经历过这样的痛苦。起初，他觉得打得很痛，乱喊乱叫。后来，他的气变得虚弱，声音变得嘶哑，无法说话。众门客见他被打得很惨，赶上来恳求他停下来。贾政不肯听，说：“你们知道他干了什么坏事，还能饶他吗？平时都是你们这些人把他带坏了，现在到了这步田地，你们还来劝他。明天，如果他杀父弑君，你们才不劝吗？”
+宝玉从来没有经历过这样的痛苦。起初，他觉得打得很痛，乱喊乱叫。后来，他的气变得虚弱，声音变得嘶哑，无法说话。众门客见他被打得很惨，赶上来恳求他停下来。贾政不肯听，说："你们知道他干了什么坏事，还能饶他吗？平时都是你们这些人把他带坏了，现在到了这步田地，你们还来劝他。明天，如果他杀父弑君，你们才不劝吗？"
 ---------------------
 根据上述的参考资料，回答下面的问题
 问题：宝玉和谁打架？
@@ -581,7 +581,7 @@ Response...
 
 My question here was basically asking "Who gets in a fight with Baoyu?" The reply says that his father, Jiazheng, gets in a fight with Baoyu, and the documents that are used here very similar, differing by only one character. One of the documents is supposed to be and English translation, but in fact there was a failure in the translation for this paragraph and it "translated" the Chinese by simply repeating it. A translation of this paragraph using GPT 4o describes a tense scene between protagonist Jia Baoyu and his father Jia Zheng:
 
-> Baoyu had never endured such agony before. At first, he felt the pain intensely and cried out loudly. Later, his breath grew weak, his voice turned hoarse, and he couldn’t speak. The attendants, seeing how severely he was being beaten, rushed forward to plead for him to stop. Jia Zheng refused to listen, saying, “Do you know the misdeeds he’s committed, and still you want to spare him? Normally, it’s you people who lead him astray, and now that it’s come to this, you still try to persuade him? Tomorrow, if he were to commit patricide or treason, would you still not advise him?”
+> Baoyu had never endured such agony before. At first, he felt the pain intensely and cried out loudly. Later, his breath grew weak, his voice turned hoarse, and he couldn't speak. The attendants, seeing how severely he was being beaten, rushed forward to plead for him to stop. Jia Zheng refused to listen, saying, "Do you know the misdeeds he's committed, and still you want to spare him? Normally, it's you people who lead him astray, and now that it's come to this, you still try to persuade him? Tomorrow, if he were to commit patricide or treason, would you still not advise him?"
 
 Another benefit of LlamaIndex workflows is the ability to create visualizations of each step, the branches between them and the overall flow of events and the functions that accept/emit them as arguments/return values. It took a little bit of getting used to the patterns used to create workflows, but the documentation for Workflows provided a good starting point that I could adapt for my application. Here's a visualization of the LlamaIndex Workflow that is used by the image and text-based Q&A bots:
 
@@ -601,7 +601,7 @@ Langfuse came in handy when debugging the prompts for the image-based Q&A bot. T
 
 ## NVIDIA inference stack (TensorRT-LLM and build.nvidia.com)
 
-The LLM API for TensorRT-LLM is a very nice developer experience compared with my earlier attempts with manually building inference engines. The roadmap for TensorRT-LLM looks promising, I’m looking forward to support for an OpenAI Compatible API and more models. NVIDIA NIMs using TensorRT-LLM are an easy way to run models as OpenAI compatible API servers, but the selection of models is still pretty limited. vLLM provides a strong alternative with a wide range of support models. NVIDIA NIMs for LLMs build on vLLM libraries and the TensorRT-LLM library, so it is helpful to have an understanding of both of these libraries to stay on the bleeding edge of performant inference engines.
+The LLM API for TensorRT-LLM is a very nice developer experience compared with my earlier attempts with manually building inference engines. The roadmap for TensorRT-LLM looks promising, I'm looking forward to support for an OpenAI Compatible API and more models. NVIDIA NIMs using TensorRT-LLM are an easy way to run models as OpenAI compatible API servers, but the selection of models is still pretty limited. vLLM provides a strong alternative with a wide range of support models. NVIDIA NIMs for LLMs build on vLLM libraries and the TensorRT-LLM library, so it is helpful to have an understanding of both of these libraries to stay on the bleeding edge of performant inference engines.
 
 ![trt-llm-roadmap](/static/redlm/trt-llm-roadmap.png)
 
@@ -609,7 +609,7 @@ The NVIDIA API catalog is a great way to test a variety of different models, esp
 
 ![build.nvidia.com](/static/redlm/build.nvidia.com.png)
 
-The NVIDIA API catalog doesn’t have every model in every size, however. For example, it has the qwen/qwen2-7b-instruct model, but doesn’t have the qwen/qwen2-7b-instruct model. Also, only some of the models are labeled as “Run Anywhere”; a lot of the models say “Self-Hosted API Coming Soon” meaning that they can’t be downloaded an run locally as a container. To get around this, I ran inferences services locally using both vLLM’s vllm/vllm-openai container and my own container running Qwen and other services.
+The NVIDIA API catalog doesn't have every model in every size, however. For example, it has the qwen/qwen2-7b-instruct model, but doesn't have the qwen/qwen2-7b-instruct model. Also, only some of the models are labeled as "Run Anywhere"; a lot of the models say "Self-Hosted API Coming Soon" meaning that they can't be downloaded an run locally as a container. To get around this, I ran inferences services locally using both vLLM's vllm/vllm-openai container and my own container running Qwen and other services.
 
 
 ## My local inference stack (RTX)
@@ -618,7 +618,7 @@ The NVIDIA API catalog doesn’t have every model in every size, however. For ex
 
 Two of the RTX PCs in my home network: `a1` and `a3`. `a1` was the first PC I built by myself and was the beginning of my GeForce journey. Luckily I built it with an over-provisioned PSU, so it can use a 4090 FE card! The front panel doesn't fit, however.
 
-One limitation of the NVIDIA API catalog is the number of free credits given for a trial account. Using 1 credit per API call, I would use up the 1000 credits very quickly when running scripts like translation or the RAG evaluation. The same would be true with rate limits of the OpenAI API. That’s why running LLMs locally is still an important part of the development cycle for this type of project.
+One limitation of the NVIDIA API catalog is the number of free credits given for a trial account. Using 1 credit per API call, I would use up the 1000 credits very quickly when running scripts like translation or the RAG evaluation. The same would be true with rate limits of the OpenAI API. That's why running LLMs locally is still an important part of the development cycle for this type of project.
 
 
 This project primarily uses two models: a large language model and a vision language models. Running the Yi-1.5-9B-Chat model from [01.AI](http://01.AI) takes up just about all of the GPU memory on one of my RTX 4090 PCs, so I had to run the vision model on another PC. In a previous project, I used Kubernetes to manage lots of different inference services: LLMs, ComfyUI, ChatTTS and MusicGen for making AI videos and I found it to a nice way to manage different containerized inference services.
@@ -679,13 +679,13 @@ I didn't use this model in my project, but it came out recently and looks awesom
 
 ## The success of Black Myth: Wukong
 
-I originally got the idea to build this project after seeing the release of Black Myth: Wukong. This game is a blockbuster success from a Chinese developer that tells the story of the Monkey King’s adventure in the Journey West universe. Journey West (西游记) is another one of the “Four Great Works” of Chinese literature. It tells the story of the legendary pilgrimage of the monk Xuanzang (also known as Tang Sanzang) to India, accompanied by his three disciples—Sun Wukong (the Monkey King), Zhu Bajie (Pigsy), and Sha Wujing (Sandy). The group travels from China to India to retrieve sacred Buddhist scriptures, facing numerous challenges, demons, and supernatural beings along the way.
+I originally got the idea to build this project after seeing the release of Black Myth: Wukong. This game is a blockbuster success from a Chinese developer that tells the story of the Monkey King's adventure in the Journey West universe. Journey West (西游记) is another one of the "Four Great Works" of Chinese literature. It tells the story of the legendary pilgrimage of the monk Xuanzang (also known as Tang Sanzang) to India, accompanied by his three disciples-Sun Wukong (the Monkey King), Zhu Bajie (Pigsy), and Sha Wujing (Sandy). The group travels from China to India to retrieve sacred Buddhist scriptures, facing numerous challenges, demons, and supernatural beings along the way.
 
 The novel blends elements of adventure, mythology, and spiritual allegory, with Sun Wukong's mischievous nature and extraordinary powers adding humor and excitement. Through their journey, the characters grow and overcome personal flaws, ultimately achieving enlightenment and spiritual success. The video game adaptation has set world records for numbers of concurrent players, and it has rewritten the narrative around what is possible with single-player, offline games in the gaming industry.
 
 ![Black Myth: Wukong](/static/redlm/wukong.png)
 
-Three renditions of Journey West: Songokū (The Monkey King) polychrome woodblock (surimono) (1824) by Yashima Gakutei (1786–1868), Black Myth: Wukong video game by Game Science (2024), Journey to the West TV series by CCTV (1982-2000)
+Three renditions of Journey West: Songokū (The Monkey King) polychrome woodblock (surimono) (1824) by Yashima Gakutei (1786-1868), Black Myth: Wukong video game by Game Science (2024), Journey to the West TV series by CCTV (1982-2000)
 
 ## RedLM video
 
@@ -695,12 +695,12 @@ Three renditions of Journey West: Songokū (The Monkey King) polychrome woodbloc
 
 I created the video for this project using Blender.The Blender sequencer editor is a great non-linear video editing tool for simple video projects like this one. I used the following formula to create the project video for RedLM:
 
-1. Background music: I used the AI music generation service called Suno with the prompt “mystical strange traditional Chinese music from the Qing Dynasty”. Here’s the link to my Suno playlist called “Qing Dynasty Music” where you can find the original song and some other good songs that I generated using this prompt. My [Qing Dynasty Music Playlist on Suno](https://suno.com/playlist/863ea0dd-1921-467c-8b69-16dbd126d966)
+1. Background music: I used the AI music generation service called Suno with the prompt "mystical strange traditional Chinese music from the Qing Dynasty". Here's the link to my Suno playlist called "Qing Dynasty Music" where you can find the original song and some other good songs that I generated using this prompt. My [Qing Dynasty Music Playlist on Suno](https://suno.com/playlist/863ea0dd-1921-467c-8b69-16dbd126d966)
 2. Outline: For this project, the main sections are the introduction, then explaining each part with a short demo: translation, text-based Q&A, evaluation for text-based Q&A, image-based Q&A, and finally a short outro. I wrote an outline and then ChatGPT helped with filling out the content.
 3. Narration: I used ElevenLabs to narrate the main part of the video using a clone of my voice using the ElevenLabs Voice Lab. The Chinese voices were generated on my computer with an open-source text-to-speech model called ChatTTS.
 4. Images and videos: I gathered images and screen captures of different parts of the project including code snippets, paintings of the book, flow diagrams and screen recordings of the application.
 
-The video is composed of different “strips”. The green strips represent the music and voice clips. Red strips are images and yellow strips are videos. Here is what the final cut of the video looks like in Blender’s Sequencer view:
+The video is composed of different "strips". The green strips represent the music and voice clips. Red strips are images and yellow strips are videos. Here is what the final cut of the video looks like in Blender's Sequencer view:
 
 ![Blender Sequence Editor](/static/redlm/blender_sequence_editor.png)
 
@@ -708,7 +708,7 @@ ChatTTS is one of the most impressive open-source models I have seen for generat
 
 ![ChatTTS UI](/static/redlm/chattts_ui.png)
 
-I was planning on streaming the narration audio for Q&A answers using my ChatTTS API service, but I didn’t get around to doing this. Instead, I just used the Gradio application to generate the Chinese narration for Q&A and image Q&A examples included in the video.
+I was planning on streaming the narration audio for Q&A answers using my ChatTTS API service, but I didn't get around to doing this. Instead, I just used the Gradio application to generate the Chinese narration for Q&A and image Q&A examples included in the video.
 
 ### RedLM Deep Dive video with NotebookLM
 
@@ -724,13 +724,13 @@ The `openai/whisper-base` model was used to get time stamps for the start and en
 
 ## Final thoughts
 
-I’m glad to have had the opportunity to join three NVIDIA developer contests this year. I like the idea of a “developer contest” that takes place over several weeks compared to hackathons that take place over just a few days. Having more time allows you to learn about a new tool or framework at a deeper level and think about how to apply it in a creative project.
+I'm glad to have had the opportunity to join three NVIDIA developer contests this year. I like the idea of a "developer contest" that takes place over several weeks compared to hackathons that take place over just a few days. Having more time allows you to learn about a new tool or framework at a deeper level and think about how to apply it in a creative project.
 
 ![NVIDIA and LlamaIndex Contest](/static/redlm/llama-contest-og.jpg)
 
 I also like how this contest is not team based. Working on this project I was able to do a lot of high-level thinking, write out features as detailed prompts, and then delegate the code writing to LLMs as if I was giving tasks to teammates.
 
-NVIDIA’s contests are “global developer contests”, but the contests so far are not open to developers in India and China. This is probably due to local rules and regulations governing how contests, prizes and taxes work. It is too bad; I would love to see what types of applications would come from participants in these countries. Also, there are also a lot of really interesting developments happening in the LLM space in both China and India!
+NVIDIA's contests are "global developer contests", but the contests so far are not open to developers in India and China. This is probably due to local rules and regulations governing how contests, prizes and taxes work. It is too bad; I would love to see what types of applications would come from participants in these countries. Also, there are also a lot of really interesting developments happening in the LLM space in both China and India!
 
 The LLMs I used in this project were developed by leading Chinese AI companies, and they are competitive with LLMs from Western countries on LLM benchmarks despite having access to fewer GPU resources. [Qwen recently released a new model called `Qwen2.5-Coder-32B`](https://qwenlm.github.io/blog/qwen2.5-coder-family/) that has outperfomed leading models at coding tasks.
 
@@ -740,7 +740,7 @@ The LLMs I used in this project were developed by leading Chinese AI companies, 
 
 ![RTX 4090D 48GB](/static/redlm/RTX4090D.jpg)
 
-NVIDIA recently concluded it's AI Summit in Mumbai. I was intrigued by the fact that Hindi has unique challenges that have have limited the development of Hindi LLMs compared to the development of English and Chinese LLMs. In a conversation with Jensen Huang, Indian industrial titan and CEO of Reliance Industries Mukesh Ambani spoke about his aspirations and ambition for India to overcome these challenges and develop a Hindi LLM. In a viral moment Mukesh Ambani shared that through devotion to attaining knowledge through the Hindu Goddess of knowledge Sarawati, India will be met by the Goddess of prosperity, Lakshmi.
+NVIDIA recently concluded its AI Summit in Mumbai. I was intrigued by the fact that Hindi has unique challenges that have have limited the development of Hindi LLMs compared to the development of English and Chinese LLMs. In a conversation with Jensen Huang, Indian industrial titan and CEO of Reliance Industries Mukesh Ambani spoke about his aspirations and ambition for India to overcome these challenges and develop a Hindi LLM. In a viral moment Mukesh Ambani shared that through devotion to attaining knowledge through the Hindu Goddess of knowledge Sarawati, India will be met by the Goddess of prosperity, Lakshmi.
 
 ![Mukesh Ambani](/static/redlm/mukesh_ambani.png)
 
@@ -748,11 +748,11 @@ NVIDIA recently released a small language model for Hindi at the AI Summit in Mu
 
 *The Ramayana is an ancient Indian epic that tells the story of Prince Rama's heroic quest to rescue his wife, Sita, who has been kidnapped by the demon king Ravana. Set in a world of gods, demons, and celestial beings, the story explores themes of duty, loyalty, and the triumph of good over evil. Guided by wisdom, strength, and the support of devoted allies like Hanuman, the monkey god, and his brother Lakshmana, Rama's journey is a deeply spiritual tale, celebrated for its poetic beauty and moral depth. The Ramayana continues to inspire and captivate audiences across cultures.*
 
-The Ramayana story journeyed to Thailand centuries ago, transforming into the Ramakien, a Thai adaptation that retains the essence of the original Indian epic while adding distinctive Thai cultural elements. Introduced through trade, diplomacy, and cultural exchange between India and Southeast Asia, the story became deeply woven into Thailand’s art, literature, and performance traditions. Thai kings, particularly King Rama I, adapted and documented the Ramakien, giving it a prominent place in Thai history. Lavishly detailed murals surrounding the Temple of the Emerald Buddha in Bangkok’s Grand Palace depict the Ramakien in over 178 panels that totaling over 2 kilometers in length. On a recent visit to the Grand Palace, I imagined having an application that could link the detailed murals to elements of the story in Hindi, Thai, English, Chinese or any language.
+The Ramayana story journeyed to Thailand centuries ago, transforming into the Ramakien, a Thai adaptation that retains the essence of the original Indian epic while adding distinctive Thai cultural elements. Introduced through trade, diplomacy, and cultural exchange between India and Southeast Asia, the story became deeply woven into Thailand's art, literature, and performance traditions. Thai kings, particularly King Rama I, adapted and documented the Ramakien, giving it a prominent place in Thai history. Lavishly detailed murals surrounding the Temple of the Emerald Buddha in Bangkok's Grand Palace depict the Ramakien in over 178 panels that totaling over 2 kilometers in length. On a recent visit to the Grand Palace, I imagined having an application that could link the detailed murals to elements of the story in Hindi, Thai, English, Chinese or any language.
 
 ![Ramakien murals surrounding Temple of the Emerald Buddha](/static/redlm/ramakien.png)
 
-The Dream of the Red Chamber, originally titled The Story of the Stone, is one of China’s greatest literary works and a masterpiece of world literature. The novel begins with a frame story centered on a magical stone, left over from the Chinese creation myth where the goddess Nuwa mends the heavens. Longing to experience the human world, the sentient stone persuades a Buddhist monk and a Taoist priest to reincarnate it as a boy. This boy, Baoyu, is born into a wealthy and influential family—a character partly based on the author, Cao Xueqin, and his own aristocratic upbringing. Through Baoyu's life, friendships, and romantic relationships, the novel delves into his family’s gradual decline, mirroring the instability of China’s own noble families in the late Qing dynasty. The story also portrays the era's customs, social structures, and beliefs, offering readers a richly detailed exploration of life in Qing China.
+The Dream of the Red Chamber, originally titled The Story of the Stone, is one of China's greatest literary works and a masterpiece of world literature. The novel begins with a frame story centered on a magical stone, left over from the Chinese creation myth where the goddess Nuwa mends the heavens. Longing to experience the human world, the sentient stone persuades a Buddhist monk and a Taoist priest to reincarnate it as a boy. This boy, Baoyu, is born into a wealthy and influential family-a character partly based on the author, Cao Xueqin, and his own aristocratic upbringing. Through Baoyu's life, friendships, and romantic relationships, the novel delves into his family's gradual decline, mirroring the instability of China's own noble families in the late Qing dynasty. The story also portrays the era's customs, social structures, and beliefs, offering readers a richly detailed exploration of life in Qing China.
 
 It was a lot of fun to work on this project with tools from LlamaIndex and NVIDIA. With AI technology, GPUs are now essentially sentient stones, and I was able to share this important touchstone of the human experience with my computers using LlamaIndex and open source language models. In turn, RedLM shared with me delightful insights into world of Dream of the Red Chamber.
 
@@ -760,4 +760,4 @@ It was a lot of fun to work on this project with tools from LlamaIndex and NVIDI
 
 ![Story of a Stone Analysis](/static/redlm/stone_story_analysis.png)
 
-> This scene describes a piece of traditional Chinese painting, depicting two elderly figures conversing amidst mountains and rivers. The painting likely visually represents the scene from the book where a monk and a Taoist are chatting at the foot of Qinggeng Peak. The two elderly figures in the painting may represent the monk and Taoist from the book, discussing their discovery of a bright and pristine stone, and planning to take it to a bustling, splendid place for a happy life. The painting’s elements—mountains, peaks, flowing water, trees, and rocks—might echo the book's descriptions, illustrating the natural environment at the base of Qinggeng Peak where the monk and Taoist reside. The painting’s tranquil and harmonious atmosphere may also align with the storyline, expressing the monk and Taoist's care for the stone and their wish for it to live a happy life. In summary, this painted scene might be an artistic portrayal of the story between the monk, the Taoist, and the stone from the book, using visual elements and ambiance to convey the narrative and themes within the story.
+> This scene describes a piece of traditional Chinese painting, depicting two elderly figures conversing amidst mountains and rivers. The painting likely visually represents the scene from the book where a monk and a Taoist are chatting at the foot of Qinggeng Peak. The two elderly figures in the painting may represent the monk and Taoist from the book, discussing their discovery of a bright and pristine stone, and planning to take it to a bustling, splendid place for a happy life. The painting's elements-mountains, peaks, flowing water, trees, and rocks-might echo the book's descriptions, illustrating the natural environment at the base of Qinggeng Peak where the monk and Taoist reside. The painting's tranquil and harmonious atmosphere may also align with the storyline, expressing the monk and Taoist's care for the stone and their wish for it to live a happy life. In summary, this painted scene might be an artistic portrayal of the story between the monk, the Taoist, and the stone from the book, using visual elements and ambiance to convey the narrative and themes within the story.
