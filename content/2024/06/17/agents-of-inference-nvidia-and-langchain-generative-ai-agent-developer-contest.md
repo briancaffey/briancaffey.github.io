@@ -31,6 +31,8 @@ comments: true
 
 ## Update
 
+**Version Note:** This article was published in June 2024. The models and services referenced (Meta-Llama-3-8B-Instruct, build.nvidia.com services, Stable Diffusion) may have updated versions since publication. Check official documentation for the latest releases and breaking changes.
+
 I recently posted another article about optimizing this project with TensorRT and TensorRT-LLM running on local NVIDIA NIM inference microservices, please have a look here: [https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update](https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update)
 
 
@@ -50,11 +52,11 @@ AI agents are having a moment. They are the building blocks for building "applic
 
 ## Coming up with an idea
 
-I love stable diffusion. I closely follow the development of the three leading applications for generating images with stable dissuion models: Stable Diffusion WebUI, InvokeAI and ComfyUI. Write a prompt, instantly see the result, tweak the prompt and generate again. This is the basic process by which I have previously used stable diffusion. It is a satisfying mental exercise that feeds the creative and imaginative part of my brain. My idea for this project came from wanting to automate this process: use large language models to build cohesive scenes and detailed prompts and then feed them into my stable diffusion programs via API. Using LangChain and LangGraph allowed me to rapidly prototype the idea and start generating short feature films in the style of my favorite British Secret Agent: 007.
+I love stable diffusion. I closely follow the development of the three leading applications for generating images with stable diffusion models: Stable Diffusion WebUI, InvokeAI and ComfyUI. Write a prompt, instantly see the result, tweak the prompt and generate again. This is the basic process by which I have previously used stable diffusion. It is a satisfying mental exercise that feeds the creative and imaginative part of my brain. My idea for this project came from wanting to automate this process: use large language models to build cohesive scenes and detailed prompts and then feed them into my stable diffusion programs via API. Using LangChain and LangGraph allowed me to rapidly prototype the idea and start generating short feature films in the style of my favorite British Secret Agent: 007.
 
 ## Putting together the puzzle pieces
 
-Here's how I set up an MVP for my project project to get started. I set up a simple graph (a linked list, really) that included the following nodes. *Important: in this context, a node is an agent, and that agent is a simple Python function. It takes one parameter which is the state, a Python dictionary, that holds the output of LLM calls that the agents make. Not all nodes make LLM calls, some just run basic functions like initializing directories or calling external stable diffusion APIs.
+Here's how I set up an MVP for my project to get started. I set up a simple graph (a linked list, really) that included the following nodes. *Important: in this context, a node is an agent, and that agent is a simple Python function. It takes one parameter which is the state, a Python dictionary, that holds the output of LLM calls that the agents make. Not all nodes make LLM calls, some just run basic functions like initializing directories or calling external stable diffusion APIs.
 
 - Casting Agent → come up with some characters
 - Location Agent → come up with some locations
@@ -152,7 +154,7 @@ scenes: |
   Characters Involved: List the main characters present in the scene, with a brief description of their roles and appearances.
   Description of What Happens: Provide a detailed account of the action, and key events that take place in the scene.
 shot: |
-  You are a film director working on a new British spy film and your writers have provided you with a scene. Your task is to come up with four to five shots that will be filmed during the scene. The shot descriptions needs to be specific and should include a varietry of closeup shots on characters, environment shots that consider the scene location and shots of specific items or other things that are featured in the scene. Each shot should also have a title. The description should be a brief densely worded block of text that captures the important elements of the scene. Consider the style of camera angle, lighting, character expressions, clothing, and other important visual elements for each shot. Be very descriptive. The description will be used to generate an image of the shot. Also, there should be at most one actor for each shot that contains people. Don't use the name of the character, instead use a physical description of the character based on their physical traits described below if needed. Also consider what the actor is wearing in the description.
+  You are a film director working on a new British spy film and your writers have provided you with a scene. Your task is to come up with four to five shots that will be filmed during the scene. The shot descriptions needs to be specific and should include a variety of closeup shots on characters, environment shots that consider the scene location and shots of specific items or other things that are featured in the scene. Each shot should also have a title. The description should be a brief densely worded block of text that captures the important elements of the scene. Consider the style of camera angle, lighting, character expressions, clothing, and other important visual elements for each shot. Be very descriptive. The description will be used to generate an image of the shot. Also, there should be at most one actor for each shot that contains people. Don't use the name of the character, instead use a physical description of the character based on their physical traits described below if needed. Also consider what the actor is wearing in the description.
 ```
 
 ### Stable Diffusion and Stable Video Diffusion agents
@@ -193,7 +195,7 @@ I developed this project on a MacBook Pro, and I used my RTX PC as if it were a 
 
 ## How it works
 
-To run the program, you need to install python dependencies and then run an OpenAI compatible LLM and Stable Duffsion WebUI server with the `--api` flag. You also need to run the Stable Video Diffusion service. Apologies for any hardcoded local IP address in the source code. Deadlines, you know! With everything configured, you can run the following command:
+To run the program, you need to install python dependencies and then run an OpenAI compatible LLM and Stable Diffusion WebUI server with the `--api` flag. You also need to run the Stable Video Diffusion service. Apologies for any hardcoded local IP address in the source code. Deadlines, you know! With everything configured, you can run the following command:
 
 ```
 ~/git/github/agents-of-inference$ poetry run python agents_of_inference/main.py
@@ -240,11 +242,11 @@ Also, I added a few short animations that I made with Blender. The final scene s
 
 ## Shortcomings of my project
 
-My goodness, how embarrasing. There are quite a few shortcomings that can be easily identified looking over the output and the source code. Here are a few:
+My goodness, how embarrassing. There are quite a few shortcomings that can be easily identified looking over the output and the source code. Here are a few:
 
 ### Character variety
 
-When generating characters I would frequently see one named Dr. Sophia Patel who is apparently a brilliant cryptologist. Other characters would often have different names or backgrounds, but a saw Dr. Sophia Patel more often than not.
+When generating characters I would frequently see one named Dr. Sophia Patel who is apparently a brilliant cryptologist. Other characters would often have different names or backgrounds, but I saw Dr. Sophia Patel more often than not.
 
 ### Character consistency
 
