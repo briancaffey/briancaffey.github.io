@@ -1,0 +1,28 @@
+<template>
+  <client-only>
+    <apexchart :key="isDark ? 'd' : 'l'" height="340" type="bar" :options="chartOptions" :series="series" />
+  </client-only>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      series: [{ name: 'correct', data: [310, 321, 271, 324, 253, 311, 377, 288, 326, 229, 342, 273, 376, 366, 260, 432, 258, 454, 306, 461, 483, 348, 450, 303, 427, 416, 213, 327, 206, 213, 130, 267] }, { name: 'incorrect', data: [521, 432, 353, 362, 278, 261, 254, 169, 194, 140, 138, 92, 114, 84, 52, 65, 40, 43, 30, 25, 19, 10, 10, 13, 4, 7, 4, 2, 1, 1, 0, 3] }],
+    }
+  },
+  computed: {
+    isDark() { return !!(this.$colorMode && this.$colorMode.value === 'dark') },
+    chartOptions() {
+      return {
+        theme: { mode: this.isDark ? 'dark' : 'light' },
+        chart: { background: 'transparent', fontFamily: 'inherit', animations: { enabled: false }, toolbar: { show: false } },
+        plotOptions: { bar: { columnWidth: '95%' } },
+        colors: ['#55A868', '#C44E52'], dataLabels: { enabled: false }, fill: { opacity: 0.7 },
+        title: { text: 'Confidence (top1-top2 log-prob gap): correct vs incorrect' },
+        xaxis: { categories: [0.16, 0.48, 0.81, 1.13, 1.45, 1.77, 2.09, 2.42, 2.74, 3.06, 3.38, 3.71, 4.03, 4.35, 4.67, 5.0, 5.32, 5.64, 5.96, 6.28, 6.61, 6.93, 7.25, 7.57, 7.9, 8.22, 8.54, 8.86, 9.18, 9.51, 9.83, 10.15], tickAmount: 10, title: { text: 'confidence margin' } },
+        yaxis: { title: { text: '# questions' } }
+      }
+    },
+  },
+}
+</script>
