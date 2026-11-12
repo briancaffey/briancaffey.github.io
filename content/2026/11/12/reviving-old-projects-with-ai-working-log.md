@@ -73,6 +73,23 @@ Measured on the home cluster, per block of five to nine minutes of air:
 | Speech match against script | 0.87 to 1.0 per line |
 | Loudness of finished files | minus 16.8 to minus 17.1 LUFS |
 
+### The first day of programming
+
+Once it was deployed, the station was asked for a block of every quarter of every show, one at a time. It made 24. Nineteen had enough speech to keep.
+
+| | |
+|---|---|
+| Archived editions | 19, across all six shows |
+| Programming | 98 minutes, 40 of them speech |
+| Stories covered | 56 |
+| Spoken pieces | 92 made, 10 dropped by the checks |
+| Speech match against script | 0.961 on average, 0.822 at worst |
+| Songs | 6 |
+| Tokens | 239,000 |
+| Work time | 24 minutes, spread over about an hour |
+
+They are on the station's listen page under "Listen again", and in its podcast feed.
+
 ### What the local model taught
 
 The text model is fast and small. It answers in about a second. Four things about it shaped the design more than any plan did.
@@ -118,10 +135,12 @@ Everything so far was done by one model, Claude Fable 5.2, working in a terminal
 
 ### 12 November 2026
 
-- hn.fm radio rebuilt and merged in the project repository; twelve issues filed there under one milestone, ten of them updated with results.
+- hn.fm radio rebuilt and merged in the project repository; thirteen issues filed there, twelve under one milestone, eleven of them updated with results.
 - Chart fixed to point at inference services that exist. Radio made deployable with no new secrets, switched on, and confirmed: the stream decodes.
 - Found that story fetching had been paused on the deployed copy since the end of September. Fetching and scoring were resumed, as part of rebooting the project. Generation (the e-reader digests and automatic videos) was left paused, because it sends mail.
 - First evaluation round run; eight defects found by reading the output and fixed.
+- Twenty-four blocks made on the cluster; nineteen archived.
+- A deploy stopped for a reason nobody would guess: one commit's twelve-character id was all digits, so the image tag was read as a number and the chart refused to render. The build was green and the old release kept running. Found by watching the rollout; the tag is now written in quotes.
 - The hn.fm article given a marked update section.
 - Project registry, projects page and this log added to the site.
 
