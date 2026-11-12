@@ -14,6 +14,8 @@ const { data: articles } = await useAsyncData('all-articles', () =>
   queryCollection("blog")
     .order('date', 'DESC')
     .all()
+    // Drafts are published for review but stay off the listings.
+    .then(list => list.filter(article => !article.draft))
 )
 </script>
 

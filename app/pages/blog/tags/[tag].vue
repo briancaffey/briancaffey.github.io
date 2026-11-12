@@ -43,6 +43,8 @@ const { data: articles } = await useAsyncData(route.path, () =>
   queryCollection("blog")
     .order('date', 'DESC')
     .all()
+    // Drafts are published for review but stay off the listings.
+    .then(list => list.filter(article => !article.draft))
 )
 
 // Filter articles that contain the specified tag
