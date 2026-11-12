@@ -1,3 +1,12 @@
+import { readdirSync, readFileSync } from 'node:fs'
+
+// Articles marked `draft: true` are published for review at their own URL, but are
+// kept out of the sitemap (their pages also carry a noindex tag).
+const draftPaths = (readdirSync('content', { recursive: true }) as string[])
+  .filter(file => file.endsWith('.md'))
+  .filter(file => /^draft:\s*true\s*$/m.test(readFileSync(`content/${file}`, 'utf8').split(/^---$/m)[1] ?? ''))
+  .map(file => `/${file.replace(/\\/g, '/').replace(/\.md$/, '')}`)
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -118,6 +127,10 @@ export default defineNuxtConfig({
 
   gtag: {
     id: 'G-S8TVBBMW66'
+  },
+
+  sitemap: {
+    exclude: ['/drafts', ...draftPaths]
   },
 
   // todo(migration): add feed when it is supported by nuxt 3
