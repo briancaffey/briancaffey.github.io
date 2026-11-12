@@ -3,7 +3,16 @@ export default {
     home: 'घर',
     blog: 'ब्लॉग',
     projects: 'परियोजनाओं',
-    contact: 'संपर्क'
+    contact: 'संपर्क',
+    menu: 'मेनू',
+    theme: 'रंग थीम',
+    language: 'भाषा'
+  },
+  theme: {
+    system: 'सिस्टम',
+    light: 'लाइट',
+    dark: 'डार्क',
+    sepia: 'सेपिया'
   },
   home: {
     allTags: 'सभी टैग',

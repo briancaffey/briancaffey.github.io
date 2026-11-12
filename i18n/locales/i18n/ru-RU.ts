@@ -3,7 +3,16 @@ export default {
     home: 'Домашняя страница',
     blog: 'блог',
     projects: 'Проекты',
-    contact: 'контакт'
+    contact: 'контакт',
+    menu: 'Меню',
+    theme: 'Цветовая тема',
+    language: 'Язык'
+  },
+  theme: {
+    system: 'Системная',
+    light: 'Светлая',
+    dark: 'Тёмная',
+    sepia: 'Сепия'
   },
   home: {
     allTags: 'Все теги',

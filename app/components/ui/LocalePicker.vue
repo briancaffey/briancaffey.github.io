@@ -1,96 +1,108 @@
 <template>
-  <div>
-    <ul>
-      <li
-        class="md:px-1 px-1 cursor-pointer"
-        @click="showOptions = !showOptions"
+  <div ref="root" class="relative flex">
+    <button
+      ref="trigger"
+      type="button"
+      class="picker-button"
+      aria-controls="locale-menu"
+      aria-haspopup="true"
+      :aria-expanded="open"
+      :aria-label="$t('nav.language')"
+      @click="open = !open"
+    >
+      <img
+        :src="`/icons/emoji/${current?.emoji ?? 'flag-us'}.svg`"
+        alt=""
+        width="32"
+        height="32"
       >
-        <emoji :data="emojiIndex" :emoji="availableLocales.value.find((x: any) => x['code'] === $i18n.locale)?.emoji" :size="32" />
+    </button>
+
+    <ul
+      v-if="open"
+      id="locale-menu"
+      class="locale-menu"
+    >
+      <li v-for="option in locales" :key="option.code">
+        <button
+          type="button"
+          class="locale-menu__option"
+          :lang="option.language"
+          :aria-current="option.code === locale ? 'true' : undefined"
+          @click="choose(option.code)"
+        >
+          <img
+            :src="`/icons/emoji/${option.emoji}.svg`"
+            alt=""
+            width="16"
+            height="16"
+          >
+          {{ option.name }}
+        </button>
       </li>
     </ul>
-    <div class="rounded-md z-10 picker">
-      <div
-        v-if="showOptions"
-        v-on-click-outside="closeModal"
-        class="
-          localepicker
-          shadow-xl
-          rounded
-          px-4
-          py-2
-          w-32
-          text
-        "
-      >
-        <div
-          v-for="locale in availableLocales.value"
-          :key="`${locale.code}-option`"
-          class="localeText"
-          @click="switchLocale(locale.code)"
-        >
-          <emoji :data="emojiIndex" :emoji="locale.emoji" :size="16" /> {{ locale.name }} <br>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import data from 'emoji-mart-vue-fast/data/twitter.json';
-import 'emoji-mart-vue-fast/css/emoji-mart.css';
-// @ts-expect-error - emoji-mart-vue-fast has incomplete TypeScript definitions
-import { EmojiIndex, Emoji } from 'emoji-mart-vue-fast/src';
-import { useI18n } from '#imports';
-import { vOnClickOutside } from '@vueuse/components'
+import { onClickOutside, onKeyStroke } from '@vueuse/core'
 
-const emojiIndex = new EmojiIndex(data);
-const showOptions = ref(false);
+const { locale, locales, setLocale } = useI18n()
 
-const { locales, setLocale } = useI18n();
+const current = computed(() => locales.value.find(option => option.code === locale.value))
 
-const availableLocales = computed(() => locales);
+const open = ref(false)
+const root = ref<HTMLElement | null>(null)
+const trigger = ref<HTMLButtonElement | null>(null)
 
-const toggleShowOptions = () => {
-  showOptions.value = !showOptions.value;
-};
-
-const closeModal = () => {
-  showOptions.value = false;
+async function choose(code: typeof locale.value) {
+  // Close first: loading a locale's messages can take a moment.
+  open.value = false
+  trigger.value?.focus()
+  await setLocale(code)
 }
 
-const switchLocale = (locale: "fr" | "ru" | "in" | "ja" | "en" | "zh") => {
-  setLocale(locale);
-  toggleShowOptions();
-};
+onClickOutside(root, () => { open.value = false })
+onKeyStroke('Escape', () => {
+  if (!open.value) return
+  open.value = false
+  trigger.value?.focus()
+})
 </script>
 
 <style scoped>
-span.emoji-mart-emoji {
-  padding: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  transition: transform .2s;
-}
-
-span.emoji-mart-emoji:hover {
-  transform: scale(1.3);
-}
-
-.picker {
-  z-index: 10000000000;
+.locale-menu {
   position: absolute;
-  left: 0;
+  top: 100%;
   right: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.localepicker {
+  z-index: var(--z-popover);
+  margin-top: 0.5rem;
+  padding: 0.25rem;
+  min-width: 9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
   background-color: var(--bg);
+  box-shadow: 0 12px 24px -8px rgb(0 0 0 / 0.35);
 }
 
-.localeText {
+.locale-menu__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
   color: var(--color-primary);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.locale-menu__option:hover,
+.locale-menu__option:focus-visible {
+  background-color: var(--bg-secondary);
+}
+
+.locale-menu__option[aria-current='true'] {
+  font-weight: 600;
 }
 </style>

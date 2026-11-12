@@ -57,7 +57,6 @@ jobs:
   # and uploads the comparison. Informational: layout changes are often intended.
   visual-diff:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -90,7 +89,16 @@ jobs:
 
       - name: Compare pull request against baseline
         id: compare
+        continue-on-error: true
         run: yarn test:visual
+
+      - name: Summarize
+        run: |
+          if [ "${{ steps.compare.outcome }}" = "success" ]; then
+            echo "No visual differences from the base branch." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Screenshots differ from the base branch. Download the \`visual-diff-report\` artifact to review them. This does not block the pull request." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - uses: actions/upload-artifact@v7.0.2
         if: always()
