@@ -2,8 +2,11 @@ import { defineConfig } from '@playwright/test'
 
 // Tests run against the statically generated site (`yarn generate`), the same
 // artifact that is deployed. SITE_DIR lets CI point the tests at another build.
+// BASE_URL skips the static server and targets something already running,
+// such as `yarn dev`, for quick iteration.
 const siteDir = process.env.SITE_DIR || '.output/public'
 const port = Number(process.env.PORT || 4173)
+const baseURL = process.env.BASE_URL || `http://localhost:${port}`
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -18,7 +21,7 @@ export default defineConfig({
     toHaveScreenshot: { maxDiffPixelRatio: 0.002, animations: 'disabled' }
   },
   use: {
-    baseURL: `http://localhost:${port}`,
+    baseURL,
     browserName: 'chromium',
     trace: 'retain-on-failure'
   },
@@ -27,10 +30,12 @@ export default defineConfig({
     { name: 'tablet', use: { viewport: { width: 768, height: 1024 } } },
     { name: 'desktop', use: { viewport: { width: 1440, height: 900 } } }
   ],
-  webServer: {
-    command: `yarn serve ${siteDir} --listen ${port} --no-request-logging`,
-    url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000
-  }
+  webServer: process.env.BASE_URL
+    ? undefined
+    : {
+        command: `yarn serve ${siteDir} --listen ${port} --no-request-logging`,
+        url: baseURL,
+        reuseExistingServer: !process.env.CI,
+        timeout: 60_000
+      }
 })

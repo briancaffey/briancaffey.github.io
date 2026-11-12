@@ -120,8 +120,6 @@ export default defineNuxtConfig({
     id: 'G-S8TVBBMW66'
   },
 
-  build: { transpile: ['emoji-mart-vue-fast'] },
-
   // todo(migration): add feed when it is supported by nuxt 3
   // for now, the feed is manually configured in public/feed.xml
   // https://nuxt.com/modules/feed
@@ -178,7 +176,7 @@ export default defineNuxtConfig({
       {
         code: 'en',
         emoji: 'flag-us',
-        iso: 'en-US',
+        language: 'en-US',
         file: 'i18n/en-US.ts',
         name: 'English',
         flag: '🇺🇸'
@@ -186,7 +184,7 @@ export default defineNuxtConfig({
       {
         code: 'fr',
         emoji: 'flag-fr',
-        iso: 'fr-FR',
+        language: 'fr-FR',
         file: 'i18n/fr-FR.ts',
         name: 'Français',
         flag: '🇫🇷'
@@ -194,7 +192,7 @@ export default defineNuxtConfig({
       {
         code: 'zh',
         emoji: 'flag-cn',
-        iso: 'zh-ZH',
+        language: 'zh-CN',
         file: 'i18n/zh-ZH.ts',
         name: '简体中文',
         flag: '🇨🇳'
@@ -202,7 +200,7 @@ export default defineNuxtConfig({
       {
         code: 'ru',
         emoji: 'flag-ru',
-        iso: 'ru-RU',
+        language: 'ru-RU',
         file: 'i18n/ru-RU.ts',
         name: 'Русский',
         flag: '🇷🇺'
@@ -210,7 +208,7 @@ export default defineNuxtConfig({
       {
         code: 'ja',
         emoji: 'flag-jp',
-        iso: 'ja-JP',
+        language: 'ja-JP',
         file: 'i18n/jp-JP.ts',
         name: '日本語',
         flag: '🇯🇵'
@@ -218,7 +216,7 @@ export default defineNuxtConfig({
       {
         code: 'in',
         emoji: 'flag-in',
-        iso: 'hi-IN',
+        language: 'hi-IN',
         file: 'i18n/hi-IN.ts',
         name: 'हिंदी',
         flag: '🇮🇳'

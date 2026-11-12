@@ -31,6 +31,6 @@ for (const mode of COLOR_MODES) {
 test('mobile menu, open', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'menu button only exists on mobile')
   await open(page, '/', { settle: true })
-  await page.getByRole('button', { name: 'Menu' }).first().click()
+  await page.getByRole('button', { name: 'Menu' }).click()
   await expect(page).toHaveScreenshot('mobile-menu-open.png')
 })

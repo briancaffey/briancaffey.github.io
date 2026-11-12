@@ -3,7 +3,16 @@ export default {
     home: "Page d'accueil",
     blog: 'Blog',
     projects: 'Projets',
-    contact: 'Contact'
+    contact: 'Contact',
+    menu: 'Menu',
+    theme: 'Thème de couleur',
+    language: 'Langue'
+  },
+  theme: {
+    system: 'Système',
+    light: 'Clair',
+    dark: 'Sombre',
+    sepia: 'Sépia'
   },
   home: {
     allTags: 'Tous les tags',
