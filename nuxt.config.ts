@@ -116,6 +116,12 @@ export default defineNuxtConfig({
     // '@nuxtjs/feed',
   ],
 
+  tailwindcss: {
+    // Without this the module looks beside the project root, misses the file
+    // under app/, and silently falls back to its built-in stylesheet.
+    cssPath: '~/assets/css/tailwind.css'
+  },
+
   gtag: {
     id: 'G-S8TVBBMW66'
   },

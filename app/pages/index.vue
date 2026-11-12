@@ -1,8 +1,8 @@
 <template>
-  <div class="mx-auto max-w-6xl">
-    <div class="px-4 lg:px-32 mb-8">
+  <div class="content-container">
+    <div class="mb-8">
       <div class="sm:py-16 text-center py-4">
-        <div class="py-3 rounded hero text-left text-2xl">
+        <div class="py-3 text-left text-2xl text-primary">
           {{ $t('home.welcome') }}
         </div>
       </div>
@@ -17,7 +17,7 @@
           <div class="pt-8 text-right">
             <nuxt-link
               to="/blog/1"
-              class="px-16 py-4 rounded border btn"
+              class="btn"
             >
               {{ $t('home.allArticles') }} →
             </nuxt-link>
@@ -31,7 +31,7 @@
           <div class="mt-8 text-right">
             <nuxt-link
               to="/blog/tags/"
-              class="px-16 p-4 rounded border btn"
+              class="btn"
             >
               {{ $t('home.allTags') }} →
             </nuxt-link>

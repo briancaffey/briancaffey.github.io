@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content-container">
     <h2 class="text-center text-2xl py-32">
       {{ $t('newsletter.thankYou') }}
     </h2>

@@ -1,20 +1,6 @@
 <template>
   <nuxt-link :key="tag" :to="`/blog/tags/${tag}/`">
-    <div
-      class="
-        px-2
-        text-lg
-        text-white
-        shadow
-        rounded-lg
-        bg-black
-        mx-1
-        mb-1
-        uppercase
-        cursor-pointer
-        tag
-      "
-    >
+    <div class="chip tag mx-1 mb-1">
       {{ tag }} 🏷️
       <span
         v-if="count"
@@ -38,7 +24,6 @@ defineProps({
 
 <style scoped>
 .tag {
-  background-color: var(--color-tag);
   transition: transform .2s;
 }
 .tag:hover {

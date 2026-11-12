@@ -1,11 +1,9 @@
 <template>
-  <div class="mx-auto max-w-6xl">
-    <div class="text-3xl text-center py-8">
+  <div class="content-container">
+    <h1 class="page-title">
       🏷️ {{ $t('tags.allTags') }} 🏷️
-      <div class="mt-4 p-4">
-        <tag-cloud :articles="articles || []" />
-      </div>
-    </div>
+    </h1>
+    <tag-cloud class="justify-center pb-8 text-3xl" :articles="articles || []" />
   </div>
 </template>
 

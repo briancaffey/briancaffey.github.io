@@ -39,8 +39,16 @@
   --color-title: #504231;
 }
 
+html {
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  word-spacing: 1px;
+  -webkit-text-size-adjust: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
 body {
-  font-family: Montserrat, Arial, Sans Serif;
   background-color: var(--bg);
   color: var(--color);
   transition: background-color 0.7s;
@@ -267,24 +275,10 @@ hr {
   outline-offset: 2px;
 }
 
-.btn {
-  border-radius: 1;
-  border-color: var(--color-primary);
-  /* background-color: var(--color-secondary); */
-}
-
-.btn:hover {
-  background-color: var(--bg-secondary);
-
-}
-
 .hero {
   border-color: var(--color-primary);
   color: var(--color-primary)
 }
-
-
-
 
 .markdown {
   @apply break-words;
@@ -335,23 +329,3 @@ hr {
   @apply bg-gray-800 static;
 }
 
-
-.mc {
-  background-color: var(--bg);
-  border-color: var(--color-primary);
-  border-width: 1px;
-  color: var(--color-primary);
-  justify-content: center;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 5px;
-  width: 100%;
-}
-
-.mc-btn {
-  color: var(--bg-secondary);
-  background-color: var(--color-secondary);
-  cursor: pointer;
-}

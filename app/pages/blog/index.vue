@@ -1,6 +1,6 @@
 <template>
-  <div class="mx-auto max-w-6xl">
-    <h1 class="text-center text-3xl py-8">
+  <div class="content-container">
+    <h1 class="page-title">
       {{ $t('blog.blogPosts') }} ({{ articles?.length || 0 }})
     </h1>
     <blog-list :articles="articles || []" />
