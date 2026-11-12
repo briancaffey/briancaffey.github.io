@@ -1,56 +1,38 @@
 <template>
-  <div class="centered">
-    <div class="grid items-center justify-center">
-      <ul class="flex px-4">
-        <li
-          v-for="color of colors"
-          :key="color[0]"
-          class="md:px-1 px-1 cursor-pointer"
-          @click="$colorMode.preference = color[0]"
-        >
-          <emoji :data="emojiIndex" :emoji="color[2]" :size="32" />
-        </li>
-        <li class="md:px-1 px-1 cursor-pointer">
-          <locale-picker />
-        </li>
-      </ul>
-    </div>
+  <div
+    class="flex items-center"
+    role="group"
+    :aria-label="$t('nav.theme')"
+  >
+    <button
+      v-for="mode in modes"
+      :key="mode.value"
+      type="button"
+      class="picker-button"
+      :aria-label="$t(`theme.${mode.value}`)"
+      :aria-pressed="mounted && $colorMode.preference === mode.value"
+      @click="$colorMode.preference = mode.value"
+    >
+      <img
+        :src="`/icons/emoji/${mode.icon}.svg`"
+        alt=""
+        width="32"
+        height="32"
+      >
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import data from 'emoji-mart-vue-fast/data/twitter.json';
-import 'emoji-mart-vue-fast/css/emoji-mart.css';
-// @ts-expect-error - emoji-mart-vue-fast has incomplete TypeScript definitions
-import { EmojiIndex, Emoji } from 'emoji-mart-vue-fast/src';
+const modes = [
+  { value: 'system', icon: 'desktop' },
+  { value: 'light', icon: 'sun' },
+  { value: 'dark', icon: 'moon' },
+  { value: 'sepia', icon: 'coffee' }
+]
 
-const emojiIndex = new EmojiIndex(data);
-
-const colors: [string, string, string][] = [
-  ['system', '🖥️', 'desktop_computer'],
-  ['light', '🌞', 'sun_with_face'],
-  ['dark', '🌚', 'new_moon_with_face'],
-  ['sepia', '☕', 'coffee']
-];
+// The stored preference is only known in the browser; rendering it before
+// mount would not match the server-rendered markup.
+const mounted = ref(false)
+onMounted(() => { mounted.value = true })
 </script>
-
-<style scoped>
-span.emoji-mart-emoji {
-  padding: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  transition: transform .2s;
-}
-
-span.emoji-mart-emoji:hover {
-  transform: scale(1.3);
-}
-
-.centered {
-  position: absolute;
-  left: 50vw;
-  right: 50vw;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>

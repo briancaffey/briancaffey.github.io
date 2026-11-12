@@ -8,6 +8,11 @@
   --border-color: #ddd;
   --color-tag: #2E604E;
   --color-title: #2E604E;
+
+  /* Layout scale shared by the site chrome. */
+  --header-height: 3.5rem;
+  --z-header: 40;
+  --z-popover: 50;
 }
 
 .dark-mode {
@@ -228,14 +233,38 @@ hr {
   height: 1px;
 }
 
-.menu-icon {
-  color: var(--color);
-  background-color: var(--border-color);
+/* Icon buttons in the header (colour mode and language). */
+.picker-button {
+  display: inline-flex;
+  padding: 0 0.125rem;
+  border-radius: 0.25rem;
+  line-height: 0;
+  transition: transform 0.2s;
 }
 
-.mobile-menu {
-  background-color: var(--bg-secondary);
-  color: var(--color);
+.picker-button img {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .picker-button {
+    padding: 0 0.25rem;
+  }
+
+  .picker-button img {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.picker-button:hover {
+  transform: scale(1.3);
+}
+
+:where(a, button):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .btn {

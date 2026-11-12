@@ -12,9 +12,7 @@ export const PAGES = [
 
 export const COLOR_MODES = ['light', 'dark', 'sepia'] as const
 
-// Everything else is blocked. That includes the CDN that serves the picker
-// emoji sprite, which paints too inconsistently to screenshot; the pickers are
-// therefore blank in screenshots until the header self-hosts them (#28).
+// Everything else is blocked so that tests do not depend on other services.
 const ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 /**

@@ -3,7 +3,16 @@ export default {
     home: 'ホームページ',
     blog: 'ブログ',
     projects: 'プロジェクト',
-    contact: '連絡先'
+    contact: '連絡先',
+    menu: 'メニュー',
+    theme: 'カラーテーマ',
+    language: '言語'
+  },
+  theme: {
+    system: 'システム',
+    light: 'ライト',
+    dark: 'ダーク',
+    sepia: 'セピア'
   },
   home: {
     allTags: 'すべてのタグ',
