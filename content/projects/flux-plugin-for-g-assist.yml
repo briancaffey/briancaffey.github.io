@@ -1,0 +1,16 @@
+slug: flux-plugin-for-g-assist
+title: "Flux Plug-in for Project G-Assist"
+year: 2025
+summary: "A plug-in that lets the G-Assist overlay generate and edit images by voice or text while a game is running."
+article: /2025/07/17/flux-plugin-for-project-g-assist-hackathon
+repo: https://github.com/briancaffey/flux-plugin-for-g-assist
+event: "Project G-Assist Hackathon"
+status: archived
+then:
+  stack:
+    - "Project G-Assist plug-in"
+    - "NIM"
+    - "InvokeAI"
+  models:
+    - "FLUX.1-dev"
+    - "FLUX.1 Kontext"

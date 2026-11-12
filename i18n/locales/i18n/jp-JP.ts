@@ -49,7 +49,19 @@ export default {
     thankYou: '登録ありがとうございます！'
   },
   projects: {
-    projects: 'プロジェクト'
+    projects: 'プロジェクト',
+    intro: 'これまでに作ったもの。多くはコンテストやハッカソン向けで、それぞれに記事があります。古いものは現在のモデルで作り直していて、ステータスがその進み具合を示します。',
+    then: '当時の構成',
+    now: '現在の構成',
+    source: 'ソースコード',
+    video: '動画',
+    all: 'すべてのプロジェクト',
+    updated: '更新日',
+    status: {
+      archived: '公開時のまま',
+      reviving: '再構築中',
+      running: '稼働中'
+    }
   },
   blog: {
     blogPosts: 'ブログ投稿',

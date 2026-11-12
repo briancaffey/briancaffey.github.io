@@ -24,6 +24,11 @@ The repository is public.
   Frontmatter is validated by the schema in `content.config.ts`
   (`title`, `date`, `description`, optional `image`, `tags`, `draft`,
   `comments`, `external`).
+- `content/projects/<slug>.yml` holds the project registry: one file per
+  project (what it was built with, what it runs on now, its article and
+  repo), validated by the `projects` schema in `content.config.ts`. The
+  `/projects` page and the status block at the top of a project's article
+  both read it; to change a project's status, edit its file.
 - `public/static/` holds article images and media, one directory per article
   or project. These files are large; do not add media without checking size.
 - `i18n/` holds interface strings for six locales. Articles are English only.

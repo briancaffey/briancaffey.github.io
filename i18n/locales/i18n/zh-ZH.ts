@@ -50,7 +50,19 @@ export default {
     thankYou: '感谢您的订阅！'
   },
   projects: {
-    projects: '项目'
+    projects: '项目',
+    intro: '我做过的项目，大多是为比赛和黑客松而做，每个都有对应的文章。我正在用现在的模型让旧项目重新运行，状态显示每个项目的进度。',
+    then: '当时使用',
+    now: '现在运行于',
+    source: '源代码',
+    video: '视频',
+    all: '全部项目',
+    updated: '更新于',
+    status: {
+      archived: '保持发布时的样子',
+      reviving: '重建中',
+      running: '运行中'
+    }
   },
   blog: {
     blogPosts: '文章',

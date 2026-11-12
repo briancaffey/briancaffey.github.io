@@ -1,0 +1,18 @@
+slug: agents-of-inference
+title: "Agents of Inference"
+year: 2024
+summary: "A team of agents that writes a short spy film and produces it: script, shots, images, clips and narration."
+article: /2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest
+repo: https://github.com/briancaffey/agents-of-inference
+event: "NVIDIA and LangChain Generative AI Agents Developer Contest"
+status: archived
+then:
+  stack:
+    - "LangGraph"
+    - "TensorRT-LLM"
+    - "ComfyUI"
+  models:
+    - "Llama 3 8B Instruct"
+    - "Llama 3 70B"
+    - "Stable Diffusion"
+    - "Stable Video Diffusion"
