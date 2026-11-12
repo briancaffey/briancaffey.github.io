@@ -11,7 +11,7 @@
   "customizations": {
     "codespaces": {
       "openFiles": [
-        "pages/index.vue"
+        "app/pages/index.vue"
       ]
     }
   },
@@ -21,8 +21,5 @@
       "onAutoForward": "openPreview"
     }
   },
-  "forwardPorts": [3000],
-  "remoteEnv": {
-    "NODE_OPTIONS": "--openssl-legacy-provider"
- }
+  "forwardPorts": [3000]
 }
