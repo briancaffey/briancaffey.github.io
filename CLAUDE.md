@@ -29,6 +29,22 @@ The repository is public.
 - `i18n/` holds interface strings for six locales. Articles are English only.
 - `tests/e2e/` holds the Playwright tests.
 
+## Design system
+
+- Colours are CSS variables per colour mode (`app/assets/css/main.css`),
+  exposed to Tailwind in `tailwind.config.ts`: `ink`, `primary`, `secondary`,
+  `title`, `tag`, `surface`, `surface-raised`, `code`, `line`. Use these
+  (`bg-surface`, `text-primary`, `border-line`) rather than Tailwind's fixed
+  palette, which does not follow the colour mode.
+- Shared classes live in the components layer of
+  `app/assets/css/tailwind.css`: `site-container` (header width),
+  `content-container` (reading width, used by every page body and the
+  footer), `page-title`, `btn`, `btn-solid`, `chip`, `chip-muted`,
+  `chip-outline`, `field`. Reuse them before writing new scoped CSS.
+- `/colors` renders every token and shared class in the current colour mode.
+- Montserrat is self-hosted in `public/fonts/` as a variable font split into
+  Latin, Latin Extended and Cyrillic subsets.
+
 ## Verifying changes
 
 Layout and component changes are verified with Playwright against the
@@ -55,6 +71,9 @@ generated site, at 390, 768 and 1440 px wide.
   cause timeouts, so treat the static build as the real check.
 - After changing interface strings in `i18n/`, run `yarn clean` before
   `yarn generate`. A cached build keeps serving the old translation files.
+
+- `NO_WEBFONT=1 yarn test:visual` renders with the fallback font, which
+  separates layout changes from typeface changes.
 
 - A test marked `test.fixme` names a known gap and the issue that tracks it.
   Turn it into a real test in the pull request that closes the issue.

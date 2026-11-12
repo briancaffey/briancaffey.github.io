@@ -64,7 +64,10 @@ export default defineNuxtConfig({
           content: "Brian Caffey's personal website"
         }
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/montserrat-latin.woff2', crossorigin: 'anonymous' }
+      ]
     },
   },
   site: {

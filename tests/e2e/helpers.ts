@@ -24,6 +24,9 @@ export async function open(page: Page, path: string, options: { settle?: boolean
     url => !ALLOWED_HOSTS.includes(url.hostname),
     route => route.abort()
   )
+  // NO_WEBFONT=1 renders with the fallback font, which separates layout
+  // changes from typeface changes when comparing two builds.
+  if (process.env.NO_WEBFONT) await page.route('**/fonts/*.woff2', route => route.abort())
   const response = await page.goto(path)
   await page.waitForFunction(() => {
     const nuxt = (window as unknown as { useNuxtApp?: () => { isHydrating?: boolean } }).useNuxtApp?.()

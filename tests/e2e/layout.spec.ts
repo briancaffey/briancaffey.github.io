@@ -50,3 +50,16 @@ test('tags, buttons and fields take their colours from the theme', async ({ page
   expect(await colour('.btn-solid', 'background-color')).toBe(await token('--color-secondary'))
   expect(await colour('.field', 'border-top-color')).toBe(await token('--color-primary'))
 })
+
+test('Montserrat is loaded and used for body text', async ({ page }) => {
+  await open(page, '/')
+  await page.evaluate(() => document.fonts.ready)
+
+  const { family, loaded } = await page.evaluate(() => ({
+    family: getComputedStyle(document.body).fontFamily,
+    loaded: Array.from(document.fonts).some(face => face.family.replace(/["']/g, '') === 'Montserrat' && face.status === 'loaded')
+  }))
+
+  expect(family).toMatch(/^"?Montserrat/)
+  expect(loaded).toBe(true)
+})
