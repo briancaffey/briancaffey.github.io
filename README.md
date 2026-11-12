@@ -1,20 +1,16 @@
 # [briancaffey.github.io](https://briancaffey.github.io)
 
-## Build Setup
+My personal site and blog. Statically generated with [Nuxt](https://nuxt.com)
+and [Nuxt Content](https://content.nuxt.com), published to GitHub Pages.
 
 ```bash
-# install dependencies
-$ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
+yarn install --frozen-lockfile   # Node version is in .nvmrc
+yarn dev                         # http://localhost:3000
+yarn generate                    # static build in .output/public
+yarn lint
+yarn test:e2e                    # Playwright, against the static build
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+Articles live in `content/YYYY/MM/DD/slug.md`. Conventions for contributors
+and coding agents are in [CLAUDE.md](CLAUDE.md). Changes are recorded in
+`CHANGELOG.md`, which is maintained by release-please.
