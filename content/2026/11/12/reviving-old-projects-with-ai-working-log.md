@@ -22,7 +22,7 @@ comments: false
 | Navigation rebuild | Merged and live |
 | Design system and the Montserrat font | Pull request open, waiting for review |
 | Project registry and this log | Pull request open, stacked on the one above |
-| hn.fm: the radio station rebuilt | Code merged in the project repo; deploying to the home cluster |
+| hn.fm: the radio station rebuilt | Deployed. The station is on the air on the home cluster |
 | Other projects | Not started |
 | Explainer videos, Hermes comparison, the final article | Not started |
 
@@ -36,6 +36,7 @@ comments: false
 3. **Video.** The video model's server is stopped, and it lives on the same machine as the registry, the git server and the deploy controller. Starting a 22-billion-parameter model there was not a decision to take alone. Show idents and song clips are designed and not built.
 4. **The public copy of hn.fm.** The public repository is far behind the code the cluster runs. Issues are tracked on the public side. Nothing was pushed there.
 5. **The release.** A release pull request (version 1.1.0 of this site) is open and can be merged whenever the changelog should be cut.
+6. **Generation on hn.fm.** Story fetching is running again. The switch that sends the daily digests to the e-reader and makes videos on a schedule is still off. It is one switch on the schedule page.
 
 ## hn.fm: what was found and what was done
 
@@ -81,7 +82,26 @@ The text model is fast and small. It answers in about a second. Four things abou
 3. **It follows an example and ignores a rule.** Each segment type has one worked example. A test holds the examples to the station's own rules, because an example that breaks a rule teaches the opposite.
 4. **It copies whatever it is shown.** Given the research brief, it read the brief back. Given the earlier items in the block for continuity, it lifted whole sentences from them into unrelated stories. It is now shown only a short fact sheet for the story in hand.
 
-Its editor prompt is the weak part. It scores nearly everything five out of five. The rules written in code are what hold quality; the editor's scores are recorded so that they can be compared with a stronger judge later.
+Its editor prompt is the weak part. It scores nearly everything five out of five. The rules written in code are what hold quality.
+
+### Was it better? A measured answer
+
+The same twelve stories were written twice: once by the old prompt (the title, then three bullet points read aloud) and once by the rebuilt writers' room. Both sets went through the same rule checks and the same editor.
+
+| | Old | New |
+|---|---|---|
+| Mean length (the slot wants about 70 words) | 84.6 | 68.2 |
+| Pieces with nothing for the rules to object to | 8 of 12 | 11 of 12 |
+| Pieces outside the length band | 2 | 0 |
+| Pieces where nothing usable was written | 0 | 1 |
+| Seconds per piece | 2.2 | 5.2 |
+| Tokens per piece | 1,967 | 3,066 |
+
+Then a stronger model read the twelve pairs as a listener, without being told which was which. It preferred the new piece in seven pairs and the old in three, with two ties. That reading is not fully blind, because a piece that opens on its own title is recognisably the old format.
+
+The more useful result was what the reading found. Four defects in the new pipeline showed up in those twelve pairs, and each was fixed the same hour with a test: a sentence cut in the middle of a spelled-out acronym, invented callers, "10th" read as "ten th", and notes about "the source" read on air. A second read of the two weakest segment types found four more. Measuring was worth more than the score.
+
+So the honest summary is: clearly better, not ten times better, at two and a half times the model time per piece. The gains that are closer to tenfold are structural. The station costs nothing when nobody listens. A wrong word no longer reaches the air unheard. A new segment type is one entry in one file.
 
 ## The site
 
@@ -98,8 +118,11 @@ Everything so far was done by one model, Claude Fable 5.2, working in a terminal
 
 ### 12 November 2026
 
-- hn.fm radio rebuilt and merged in the project repository; twelve issues filed there under one milestone, nine of them updated with results.
-- Chart fixed to point at inference services that exist. Radio made deployable with no new secrets.
+- hn.fm radio rebuilt and merged in the project repository; twelve issues filed there under one milestone, ten of them updated with results.
+- Chart fixed to point at inference services that exist. Radio made deployable with no new secrets, switched on, and confirmed: the stream decodes.
+- Found that story fetching had been paused on the deployed copy since the end of September. Fetching and scoring were resumed, as part of rebooting the project. Generation (the e-reader digests and automatic videos) was left paused, because it sends mail.
+- First evaluation round run; eight defects found by reading the output and fixed.
+- The hn.fm article given a marked update section.
 - Project registry, projects page and this log added to the site.
 
 ### 11 November 2026
