@@ -90,6 +90,20 @@ Once it was deployed, the station was asked for a block of every quarter of ever
 
 They are on the station's listen page under "Listen again", and in its podcast feed.
 
+### The second pass: fewer things, made better
+
+Brian's direction after hearing the station was to stop making radio around the clock and put the effort into the quality of what is made and into running the project from one place. Production was switched off the same hour. What followed:
+
+- **A sound.** Twelve effects are synthesised from sine waves and noise by ffmpeg, with no recordings: the pips before the bulletin, a ring and a click before a caller, static around a correspondent, a whoosh and a low hit around the announcer. Six treatments say where a voice is speaking from: the studio, a phone, a line from outside, the announcer's big voice, fine print read fast at the end of an advert. Segments name their effects in code. The model never chooses a sound.
+- **A cast.** Measuring the speech model showed every mood is a different voice (calm runs 40 to 90 per cent slower; only one host can sound happy, only two fearful) and that four speakers the station never used can be understood in English. There are now six hosts, three correspondents, an announcer and twelve caller voices.
+- **Three segments.** A cold open cut from the opening lines of the pieces that follow it, with no model call. The front page as a countdown. A report from a correspondent.
+- **Episodes.** A whole hour of a show is made as one programme with chapter marks, a transcript, cover art drawn by the image model, a page where the line being spoken is lit, and a video. The first, an hour of the morning show: 32 of 32 items, 21 minutes 38 seconds, made in about five minutes, speech matching its script at 0.96.
+- **The desk.** One page with a column each for reading, radio and video: what was last made, a button to make the next, and its switch. Radio production is now a setting, not a deploy.
+
+Two findings from this pass belong with the ones below. Given a paragraph describing a host's character, the model read it out as copy; of a story about a teacher assaulted by a student it wrote that the host "counts that among the small clever things that delight her". Character sheets are now two lines about manner, and any sentence sharing four words with one is cut. And asked to stop borrowing from the worked example, the model more than once handed back the example itself; the borrowed sentence is now cut by rule and the earlier draft kept. On the same twelve stories as before: none failed (one had), all twelve passed the rules (eleven had), eleven passed the editor (ten had).
+
+What is still not good, from reading that first episode: headlines that are a list of facts with no shape, one that made no sense, callers who introduce themselves as members of a demographic, and a two-host conversation that ran thirteen turns (now held to eight). The structure and the sound are the station's; the sentences are the local model's, and it shows.
+
 ### What the local model taught
 
 The text model is fast and small. It answers in about a second. Four things about it shaped the design more than any plan did.
@@ -132,6 +146,12 @@ So the honest summary is: clearly better, not ten times better, at two and a hal
 Everything so far was done by one model, Claude Fable 5.2, working in a terminal session with access to the repositories and read access to the cluster. The comparison Brian asked for, the same tasks handed to a local model through Hermes, has not been run yet. The radio work is a preview of what it will show: the local model is a capable writer inside a tight structure and an unreliable judge of its own work.
 
 ## Log
+
+### 12 November 2026, later
+
+- Radio production switched off at Brian's direction; the station plays what it has and makes episodes when asked.
+- Sound design, the cast, three new segments, whole-hour episodes, cover art, edition pages, edition video and the desk built, tested (116 radio tests, 593 in all) and deployed. Six more issues filed under a second milestone, each updated with what was done and what was not.
+- First whole-hour episode made on the cluster, with its video.
 
 ### 12 November 2026
 
