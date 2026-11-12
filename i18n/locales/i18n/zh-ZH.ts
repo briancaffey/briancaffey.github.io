@@ -3,7 +3,16 @@ export default {
     home: '主页',
     blog: '博客',
     projects: '项目',
-    contact: '联系'
+    contact: '联系',
+    menu: '菜单',
+    theme: '颜色主题',
+    language: '语言'
+  },
+  theme: {
+    system: '跟随系统',
+    light: '浅色',
+    dark: '深色',
+    sepia: '棕褐色'
   },
   home: {
     allTags: '所有标签',

@@ -18,7 +18,7 @@ The repository is public.
 ## Layout
 
 - `app/` holds the application: `pages/`, `layouts/`, `components/` (`ui/` for
-  site chrome, `blog/` for listings, `content/` for components embedded in
+  site chrome; the header is `ui/Navigation.vue`, `blog/` for listings, `content/` for components embedded in
   articles), `assets/css/`, `plugins/`, `stores/`.
 - `content/YYYY/MM/DD/slug.md` holds the articles. The path is the URL.
   Frontmatter is validated by the schema in `content.config.ts`
@@ -49,6 +49,12 @@ generated site, at 390, 768 and 1440 px wide.
   CI does the same on every pull request and uploads the report as the
   `visual-diff-report` artifact. That job is informational; attach the
   relevant before/after images to the pull request when layout changes.
+
+- `BASE_URL=http://localhost:3000 yarn test:e2e` runs the tests against a
+  running `yarn dev` for quick iteration. The dev server is slow enough to
+  cause timeouts, so treat the static build as the real check.
+- After changing interface strings in `i18n/`, run `yarn clean` before
+  `yarn generate`. A cached build keeps serving the old translation files.
 
 - A test marked `test.fixme` names a known gap and the issue that tracks it.
   Turn it into a real test in the pull request that closes the issue.
