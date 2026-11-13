@@ -23,6 +23,7 @@ comments: false
 | Design system and the Montserrat font | Pull request open, waiting for review |
 | Project registry and this log | Pull request open, stacked on the one above |
 | hn.fm: the radio station rebuilt | Deployed. The station is on the air on the home cluster |
+| hn.fm: story videos directed by Hermes | Deployed. A draft article is on its own pull request |
 | Other projects | Not started |
 | Explainer videos, Hermes comparison, the final article | Not started |
 
@@ -146,6 +147,14 @@ So the honest summary is: clearly better, not ten times better, at two and a hal
 Everything so far was done by one model, Claude Fable 5.2, working in a terminal session with access to the repositories and read access to the cluster. The comparison Brian asked for, the same tasks handed to a local model through Hermes, has not been run yet. The radio work is a preview of what it will show: the local model is a capable writer inside a tight structure and an unreliable judge of its own work.
 
 ## Log
+
+### 13 November 2026
+
+- hn.fm story videos: a narrated story is now one HyperFrames composition, and the Hermes agent directs it. For each scene the agent returns a small card (a figure, a comparison, bars, a list, a phrase and so on), code checks the card against the narration and builds the scene. The agent works from a profile with no tools and its own key.
+- A check of every model on the desk. Eight of ten answer. No model that can read pictures is running, which is the one real gap; the video-clip model is stopped on purpose.
+- One of each kind of output made from the day's stories: an illustrated episode, an audio episode, a digest (not sent), a radio block and three story videos. All were made. Doing it turned up five faults, now fixed, among them a digest of "the last day" that was filled with stories from September.
+- A draft article about hn.fm as it is now, with that day's output to play, is on its own pull request.
+- The cluster's writing model had stopped answering for a day and was restarted.
 
 ### 12 November 2026, later
 
