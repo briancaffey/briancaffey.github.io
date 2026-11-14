@@ -1,3 +1,51 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+/* Shared building blocks. They sit in the components layer so that a utility
+   class on the same element still wins. */
+@layer components {
+  /* Full site width: header and other chrome. */
+  .site-container {
+    @apply mx-auto w-full max-w-6xl px-4;
+  }
+
+  /* Reading width: every page body and the footer. */
+  .content-container {
+    @apply mx-auto w-full max-w-content px-4;
+  }
+
+  .page-title {
+    @apply py-8 text-center text-3xl;
+  }
+
+  .btn {
+    @apply inline-block rounded border border-primary px-16 py-4 text-center;
+  }
+
+  .btn:hover {
+    @apply bg-surface-raised;
+  }
+
+  .btn-solid {
+    @apply cursor-pointer rounded bg-secondary px-2 py-1 text-surface-raised;
+  }
+
+  /* Small filled label: tags and pagination. */
+  .chip {
+    @apply inline-block rounded-lg bg-tag px-2 text-lg uppercase text-white shadow;
+  }
+
+  .chip-muted {
+    @apply cursor-not-allowed bg-gray-500;
+  }
+
+  /* Outlined label on a raised surface. */
+  .chip-outline {
+    @apply inline-block rounded-lg bg-surface-raised px-2 py-1 shadow;
+  }
+
+  .field {
+    @apply w-full justify-center rounded border border-primary bg-surface px-2.5 py-1 text-primary;
+  }
+}

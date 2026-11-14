@@ -1,29 +1,16 @@
 <template>
-  <div class="mx-auto max-w-6xl">
+  <div class="content-container">
     <div class="text-xl text-center py-4">
       <div class="mb-4">
         <nuxt-link to="/blog/tags/">
-          <span
-            class="inline-block bg-white rounded-lg text-small px-2 py-1 shadow"
-          >
+          <span class="chip-outline">
             🏷️ {{ $t('home.allTags') }} 🏷️
           </span>
         </nuxt-link>
       </div>
       <div class="mb-4">
         <nuxt-link :to="`/blog/tags/${$route.params.tag}/`">
-          <span
-            class="
-              inline-block
-              bg-white
-              rounded-lg
-              text-small
-              px-2
-              py-1
-              uppercase
-              shadow
-            "
-          >
+          <span class="chip-outline uppercase">
             {{ $route.params.tag }} 🏷️ ({{  filteredArticles.length }})
           </span>
         </nuxt-link>

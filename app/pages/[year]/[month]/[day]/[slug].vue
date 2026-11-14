@@ -8,13 +8,13 @@
       style="height: 32rem;"
       format="webp"
     />
-    <div class="mx-auto max-w-5xl px-2 sm:px-4 md:px-4 lg:px-16 mt-2">
+    <div class="content-container mt-2">
       <h1 class="prose text-4xl leading-9 py-4 font-bold">
         {{ article?.title }}
       </h1>
       <tags v-if="article?.tags" :tags="article.tags" />
       <external v-if="article?.external" :external="article.external" />
-      <p class="blog-date text-gray-500 mb-4">
+      <p class="blog-date mb-4">
         {{ $t('common.lastUpdated') }}
         {{ formatDate(article?.date, $i18n.locale) }}
       </p>
@@ -30,14 +30,14 @@
       <div class="text-center pb-4 pt-8">
         <button
           v-if="!showComments"
-          class="mc-btn rounded py-1 px-2"
+          class="btn-solid"
           @click="showComments = true"
         >
           Show Disqus Comments 💬
         </button>
         <button
           v-else
-          class="mc-btn rounded py-1 px-2"
+          class="btn-solid"
           @click="showComments = false"
         >
           Hide Comments
@@ -48,7 +48,6 @@
         :key="$colorMode.preference"
         shortname="briancaffey"
       />
-      <h1 />
     </div>
   </article>
 </template>

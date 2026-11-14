@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center pt-8 mb-4">
+  <div class="content-container pt-8 mb-4 text-center">
     <img
       class="h-64 object-cover mx-auto rounded"
       src="/static/JBC_PA.jpg"
@@ -19,11 +19,6 @@
         <a href="https://dev.to/briancaffey">
           <img class="follow" src="/icons/dev.png">
         </a>
-      </div>
-    </div>
-    <div>
-      <div class="flex mx-auto justify-center py-4">
-        <div class="grid grid-cols-5 items-center gap-4 px-4" />
       </div>
     </div>
     <div>

@@ -150,8 +150,4 @@ test.describe('header', () => {
       expect(loaded, `${src} should load`).toBe(true)
     }
   })
-
-  // Known gap, tracked in the linked issue. It becomes a real test when the
-  // issue is closed.
-  test.fixme('Montserrat is actually loaded (#29)', () => {})
 })

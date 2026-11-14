@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto max-w-6xl px-4 w-full sm:w-2/3 lg:px-16">
+  <div class="content-container sm:w-2/3">
     <form
       action="https://formsubmit.co/briancaffey2010@gmail.com"
       method="POST"
@@ -16,7 +16,7 @@
             type="text"
             name="name"
             required
-            class="mc"
+            class="field"
             autocomplete="on"
           >
         </div>
@@ -28,7 +28,7 @@
             type="email"
             name="email"
             required
-            class="mc"
+            class="field"
             autocomplete="on"
           >
         </div>
@@ -39,7 +39,7 @@
             :placeholder="$t('contactForm.sampleWebsite')"
             type="url"
             name="website"
-            class="mc"
+            class="field"
             required="false"
             autocomplete="on"
           >
@@ -56,10 +56,10 @@
           type="text"
           name="message"
           required
-          class="mc w-full"
+          class="field"
         />
       </div>
-      <button type="submit" class="mc-btn rounded px-2 py-1 w-full mt-2">
+      <button type="submit" class="btn-solid rounded px-2 py-1 w-full mt-2">
         {{ $t('contactForm.send') }}
       </button>
     </form>

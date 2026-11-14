@@ -1,6 +1,6 @@
 <template>
   <header ref="header" class="site-header">
-    <div class="site-header__bar mx-auto max-w-6xl px-4">
+    <div class="site-header__bar site-container">
       <NuxtLink
         to="/"
         class="site-header__home nav-link"

@@ -1,68 +1,46 @@
 <template>
-  <div class="mx-auto max-w-6xl flex">
-    <div class="palette box-color" /> color
-    <div class="palette box-color-primary" /> color-primary
-    <div class="palette box-color-secondary" /> color-secondary
-    <div class="palette box-color-primary" /> color-primary
-    <div class="palette box-bg" /> color-bg
-    <div class="palette box-bg-secondary" /> color-bg-secondary
-    <div class="palette box-bg-code" /> color-bg-code
-    <div class="palette box-border-color" /> color-border-color
+  <div class="content-container">
+    <h1 class="page-title">
+      Design tokens
+    </h1>
+    <ul class="grid grid-cols-2 gap-4 pb-8 sm:grid-cols-3">
+      <li v-for="token in tokens" :key="token.name" class="rounded border border-line p-3">
+        <div class="h-16 rounded border border-line" :style="{ backgroundColor: `var(${token.variable})` }" />
+        <p class="pt-2 font-semibold">
+          {{ token.name }}
+        </p>
+        <p class="text-sm">
+          <code>{{ token.variable }}</code>
+        </p>
+      </li>
+    </ul>
+    <div class="flex flex-wrap items-center gap-4 pb-8">
+      <a class="btn" href="#">btn</a>
+      <button class="btn-solid" type="button">
+        btn-solid
+      </button>
+      <span class="chip">chip</span>
+      <span class="chip chip-muted">chip-muted</span>
+      <span class="chip-outline">chip-outline</span>
+      <input class="field max-w-xs" placeholder="field">
+    </div>
   </div>
 </template>
 
-<style scoped>
-.palette {
-  border-color: white;
-  border-width: 10px;
-}
-.box-color {
-  height: 100px;
-  width: 100px;
-  background-color: var(--color);
-}
+<script setup lang="ts">
+// A living reference for the names defined in tailwind.config.ts and the
+// component classes in app/assets/css/tailwind.css.
+const tokens = [
+  { name: 'ink', variable: '--color' },
+  { name: 'primary', variable: '--color-primary' },
+  { name: 'secondary', variable: '--color-secondary' },
+  { name: 'title', variable: '--color-title' },
+  { name: 'tag', variable: '--color-tag' },
+  { name: 'surface', variable: '--bg' },
+  { name: 'surface-raised', variable: '--bg-secondary' },
+  { name: 'code', variable: '--bg-code' },
+  { name: 'line', variable: '--border-color' }
+]
 
-.box-color-primary {
-  height: 100px;
-  width: 100px;
-  background-color: var(--color-primary);
-}
-
-.box-color-secondary {
-  height: 100px;
-  width: 100px;
-  background-color: var(--color-secondary);
-}
-
-.box-bg {
-  height: 100px;
-  width: 100px;
-  background-color: var(--color-bg);
-}
-
-.box-bg-secondary {
-  height: 100px;
-  width: 100px;
-  background-color: var(--bg-secondary);
-}
-
-.box-bg-code {
-  height: 100px;
-  width: 100px;
-  background-color: var(--bg-code);
-}
-
-.box-border-color {
-  height: 100px;
-  width: 100px;
-  background-color: var(--border-color);
-}
-
-  /* --color: #243746;
-  --color-primary: #158876;
-  --color-secondary: #0e2233;
-  --bg: #f3f5f4;
-  --bg-secondary: #fff;
-  --bg-code: #ddd;
-  --border-color: #ddd; */
-</style>
+useHead({ meta: [{ name: 'robots', content: 'noindex' }] })
+</script>

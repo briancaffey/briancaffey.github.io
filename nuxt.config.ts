@@ -73,7 +73,10 @@ export default defineNuxtConfig({
           content: "Brian Caffey's personal website"
         }
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preload', as: 'font', type: 'font/woff2', href: '/fonts/montserrat-latin.woff2', crossorigin: 'anonymous' }
+      ]
     },
   },
   site: {
@@ -124,6 +127,12 @@ export default defineNuxtConfig({
     'nuxt-gtag',
     // '@nuxtjs/feed',
   ],
+
+  tailwindcss: {
+    // Without this the module looks beside the project root, misses the file
+    // under app/, and silently falls back to its built-in stylesheet.
+    cssPath: '~/assets/css/tailwind.css'
+  },
 
   gtag: {
     id: 'G-S8TVBBMW66'

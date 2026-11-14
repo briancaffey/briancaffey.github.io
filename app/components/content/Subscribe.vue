@@ -21,7 +21,7 @@
             value=""
             name="EMAIL"
             :placeholder="$t('newsletter.enterEmail')"
-            class="rounded mc text-center"
+            class="field text-center"
             autocomplete="on"
           >
           <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
@@ -39,7 +39,7 @@
               type="submit"
               :value="$t('newsletter.subscribe')"
               name="subscribe"
-              class="mc-btn rounded px-2 py-1 w-full"
+              class="btn-solid w-full"
             >
           </div>
         </div>

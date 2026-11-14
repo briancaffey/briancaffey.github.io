@@ -2,61 +2,23 @@
   <div class="mx-auto text-center">
     <nuxt-link
       :to="prevLink"
-      :class="`
-        px-2
-        py-2
-        text-xl
-        text-white
-        shadow
-        rounded-lg
-        mx-1
-        mt-1
-        uppercase
-        cursor-pointer
-        ${pageNo == 1 ? 'pagination-disabled' : 'pagination'}
-        `"
+      class="chip mx-1 px-4 py-2 text-xl"
+      :class="{ 'chip-muted': pageNo === 1 }"
     >
-      &nbsp;←
-    </nuxt-link>&nbsp;
-
+      ←
+    </nuxt-link>
     <nuxt-link
       :to="`/blog/${pageNo}`"
-      class="
-        px-2
-        py-2
-        text-lg
-        text-xl
-        text-white
-        shadow
-        rounded-lg
-        mx-1
-        mt-1
-        uppercase
-        cursor-pointer
-        pagination
-        text-center
-        "
+      class="chip mx-1 py-2 text-xl"
     >
       {{ pageNo }}
-    </nuxt-link>&nbsp;
+    </nuxt-link>
     <nuxt-link
       :to="nextPage ? `/blog/${pageNo + 1}` : `/blog/${pageNo}`"
-      :class="`
-        px-2
-        py-2
-        text-lg
-        text-xl
-        text-white
-        shadow
-        rounded-lg
-        mx-1
-        mt-1
-        uppercase
-        cursor-pointer
-        ${nextPage ? 'pagination' : 'pagination-disabled'}
-        `"
+      class="chip mx-1 px-4 py-2 text-xl"
+      :class="{ 'chip-muted': !nextPage }"
     >
-      &nbsp;→&nbsp;
+      →
     </nuxt-link>
   </div>
 </template>
@@ -85,13 +47,3 @@ const prevLink = computed(() => {
   return props.pageNo === 1 ? '/blog/1' : `/blog/${props.pageNo - 1}`
 })
 </script>
-
-<style scoped>
-.pagination {
-  background-color: var(--color-tag);
-}
-.pagination-disabled {
-  background-color: gray;
-  cursor: not-allowed;
-}
-</style>

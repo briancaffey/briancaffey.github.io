@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto max-w-6xl p-4 lg:px-16 text-center">
+  <footer class="content-container py-4 text-center">
     <hr class="mt-4">
     <div class="align-center py-4">
       <div class="pb-4">
@@ -14,5 +14,5 @@
     <div class="pb-4">
       © {{ new Date().getFullYear() }} Brian Caffey
     </div>
-  </div>
+  </footer>
 </template>
