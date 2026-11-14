@@ -3,7 +3,7 @@
     <ul class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-8">
       <blog-card
         v-for="article of articles"
-        :key="article.slug"
+        :key="article.path"
         :article="article"
       />
     </ul>
@@ -11,9 +11,9 @@
 </template>
 
 <script setup lang="ts">
-// Define a minimal interface that includes the slug property needed for the key
+// Listing items come from useBlogListing; `path` is unique per article.
 interface ArticleWithSlug {
-  slug: string;
+  path: string;
   [key: string]: unknown;
 }
 

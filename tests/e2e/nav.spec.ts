@@ -4,10 +4,8 @@ import type { Box } from './helpers'
 
 const isMobile = (name: string) => name === 'mobile'
 
-// The first in-app navigation loads the content database in the browser and
-// takes several seconds (#39), and switching language fetches its messages.
-// Drop this once that issue is closed.
-const navigation = { timeout: 30_000 }
+// Switching language fetches that locale's messages, which can take a moment.
+const languageSwitch = { timeout: 30_000 }
 
 test.describe('header', () => {
   test('home link, pickers and menu sit side by side, pickers centred', async ({ page }) => {
@@ -37,17 +35,16 @@ test.describe('header', () => {
 
   test('links navigate and mark the current section on wide screens', async ({ page }, testInfo) => {
     test.skip(isMobile(testInfo.project.name), 'links are behind the menu button on mobile')
-    test.slow() // two in-app navigations, see #39
     await open(page, '/')
 
     const blog = page.getByRole('link', { name: 'Blog', exact: true })
     await blog.click()
-    await expect(page).toHaveURL(/\/blog\/1\/?$/, navigation)
+    await expect(page).toHaveURL(/\/blog\/1\/?$/)
     await expect(blog).toHaveAttribute('aria-current', 'page')
 
     const contact = page.getByRole('link', { name: 'Contact', exact: true })
     await contact.click()
-    await expect(page).toHaveURL(/\/contact\/?$/, navigation)
+    await expect(page).toHaveURL(/\/contact\/?$/)
     await expect(contact).toHaveAttribute('aria-current', 'page')
     await expect(blog).not.toHaveAttribute('aria-current', 'page')
   })
@@ -72,7 +69,7 @@ test.describe('header', () => {
       await expect(page.getByRole('button', { name: 'Dark' })).toBeVisible()
 
       await blog.click()
-      await expect(page).toHaveURL(/\/blog\/1\/?$/, navigation)
+      await expect(page).toHaveURL(/\/blog\/1\/?$/)
       await expect(blog).toBeHidden()
     })
 
@@ -134,7 +131,7 @@ test.describe('header', () => {
     await page.getByRole('button', { name: 'Français' }).click()
 
     await expect(page.getByRole('button', { name: 'Français' })).toBeHidden()
-    await expect(page.getByRole('button', { name: 'Langue' })).toBeVisible(navigation)
+    await expect(page.getByRole('button', { name: 'Langue' })).toBeVisible(languageSwitch)
   })
 
   test('picker icons are served by the site itself', async ({ page }) => {
