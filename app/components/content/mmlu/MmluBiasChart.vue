@@ -4,10 +4,12 @@
   </client-only>
 </template>
 <script>
+import { mmluBias } from '~/data/charts/mmlu'
+
 export default {
   data() {
     return {
-      series: [{ name: 'gold (correct answer)', data: [22.9, 24.7, 25.5, 26.9] }, { name: 'model picks', data: [24.8, 26.8, 24.9, 23.5] }],
+      series: mmluBias.series,
     }
   },
   computed: {
@@ -20,7 +22,7 @@ export default {
         colors: ['#8c8c8c', '#4C72B0'],
         dataLabels: { enabled: true, formatter: function (v) { return v + '%' } },
         title: { text: 'Answer-position bias: gold vs predicted letter' },
-        xaxis: { categories: ["A", "B", "C", "D"], title: { text: 'answer letter' } },
+        xaxis: { categories: mmluBias.categories, title: { text: 'answer letter' } },
         yaxis: { title: { text: 'fraction (%)' } }
       }
     },

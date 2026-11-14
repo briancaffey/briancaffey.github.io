@@ -4,10 +4,12 @@
   </client-only>
 </template>
 <script>
+import { mmluLengthAccuracy } from '~/data/charts/mmlu'
+
 export default {
   data() {
     return {
-      series: [{ name: 'accuracy', data: [82.1, 78.8, 79.7, 82.3, 70.8, 66.2, 65.5, 62.0] }],
+      series: mmluLengthAccuracy.series,
       counts: [1716, 1720, 1710, 1719, 1721, 1698, 1742, 1687],
     }
   },
@@ -20,7 +22,7 @@ export default {
         colors: ['#55A868'], stroke: { width: 3 }, markers: { size: 5 },
         dataLabels: { enabled: true, formatter: function (v) { return v + '%' } },
         title: { text: 'Accuracy vs prompt length' },
-        xaxis: { categories: [273, 342, 410, 474, 535, 609, 924, 1496], title: { text: 'prompt length (tokens, binned)' } },
+        xaxis: { categories: mmluLengthAccuracy.categories, title: { text: 'prompt length (tokens, binned)' } },
         yaxis: { title: { text: 'accuracy (%)' } },
         annotations: { yaxis: [ { y: 73.5, borderColor: '#888', strokeDashArray: 5, label: { text: 'overall', style: { background: '#475569', color: '#ffffff', fontSize: '11px' } } } ] }
       }
