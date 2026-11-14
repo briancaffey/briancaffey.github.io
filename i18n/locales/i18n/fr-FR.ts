@@ -2,7 +2,6 @@ export default {
   nav: {
     home: "Page d'accueil",
     blog: 'Blog',
-    projects: 'Projets',
     contact: 'Contact',
     menu: 'Menu',
     theme: 'Thème de couleur',
@@ -48,19 +47,22 @@ export default {
     thankYou: 'Merci de vous être abonné !'
   },
   projects: {
-    projects: 'Projets',
-    intro: 'Ce que j\'ai construit, le plus souvent pour des concours et des hackathons, avec l\'article correspondant. Je relance les plus anciens avec des modèles actuels ; le statut indique où en est chacun.',
     then: 'Construit avec',
     now: 'Fonctionne aujourd\'hui avec',
     source: 'Code source',
     video: 'Vidéo',
-    all: 'Tous les projets',
     updated: 'mis à jour le',
     status: {
       archived: 'Tel que publié',
       reviving: 'En reconstruction',
       running: 'En service'
     }
+  },
+  portrait: {
+    title: 'Labo portrait',
+    blurb: 'Une seule photo de moi devant la Liberty Bell, retravaillée de vingt-quatre façons par un modèle FLUX.3 Klein hébergé sur mon cluster. Choisissez un style ou laissez le hasard décider.',
+    random: 'Surprenez-moi',
+    original: 'Original'
   },
   blog: {
     blogPosts: 'Articles du blog',

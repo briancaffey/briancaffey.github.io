@@ -2,7 +2,6 @@ export default {
   nav: {
     home: 'ホームページ',
     blog: 'ブログ',
-    projects: 'プロジェクト',
     contact: '連絡先',
     menu: 'メニュー',
     theme: 'カラーテーマ',
@@ -49,19 +48,22 @@ export default {
     thankYou: '登録ありがとうございます！'
   },
   projects: {
-    projects: 'プロジェクト',
-    intro: 'これまでに作ったもの。多くはコンテストやハッカソン向けで、それぞれに記事があります。古いものは現在のモデルで作り直していて、ステータスがその進み具合を示します。',
     then: '当時の構成',
     now: '現在の構成',
     source: 'ソースコード',
     video: '動画',
-    all: 'すべてのプロジェクト',
     updated: '更新日',
     status: {
       archived: '公開時のまま',
       reviving: '再構築中',
       running: '稼働中'
     }
+  },
+  portrait: {
+    title: 'ポートレート・ラボ',
+    blurb: '自由の鐘の前で撮った一枚の写真を、自宅クラスターで動く FLUX.3 Klein モデルが24通りに描き直しました。好きなものを選ぶか、ランダムにどうぞ。',
+    random: 'ランダム',
+    original: 'オリジナル'
   },
   blog: {
     blogPosts: 'ブログ投稿',

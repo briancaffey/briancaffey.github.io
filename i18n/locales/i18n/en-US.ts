@@ -2,7 +2,6 @@ export default {
   nav: {
     home: 'Home',
     blog: 'Blog',
-    projects: 'Projects',
     contact: 'Contact',
     menu: 'Menu',
     theme: 'Color theme',
@@ -50,19 +49,22 @@ export default {
     thankYou: 'Thank you for subscribing!'
   },
   projects: {
-    projects: 'Projects',
-    intro: 'Things I have built, most of them for contests and hackathons, each with the article about it. I am bringing the older ones back to life with current models; the status shows how far each has got.',
     then: 'Built with',
     now: 'Runs on now',
     source: 'Source code',
     video: 'Video',
-    all: 'All projects',
     updated: 'updated',
     status: {
       archived: 'As published',
       reviving: 'Being rebuilt',
       running: 'Running'
     }
+  },
+  portrait: {
+    title: 'Portrait Lab',
+    blurb: 'One photo of me at the Liberty Bell, restyled twenty-four ways by a FLUX.3 Klein model running on my home cluster. Pick a look, or roll the dice.',
+    random: 'Surprise me',
+    original: 'Original'
   },
   blog: {
     blogPosts: 'Blog Posts',

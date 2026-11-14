@@ -102,3 +102,6 @@ notes
 test-results/
 playwright-report/
 tests/e2e/.snapshots/
+
+# Playwright MCP screenshots/snapshots
+.playwright-mcp

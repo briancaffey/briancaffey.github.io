@@ -2,7 +2,6 @@ export default {
   nav: {
     home: '主页',
     blog: '博客',
-    projects: '项目',
     contact: '联系',
     menu: '菜单',
     theme: '颜色主题',
@@ -50,19 +49,22 @@ export default {
     thankYou: '感谢您的订阅！'
   },
   projects: {
-    projects: '项目',
-    intro: '我做过的项目，大多是为比赛和黑客松而做，每个都有对应的文章。我正在用现在的模型让旧项目重新运行，状态显示每个项目的进度。',
     then: '当时使用',
     now: '现在运行于',
     source: '源代码',
     video: '视频',
-    all: '全部项目',
     updated: '更新于',
     status: {
       archived: '保持发布时的样子',
       reviving: '重建中',
       running: '运行中'
     }
+  },
+  portrait: {
+    title: '肖像实验室',
+    blurb: '同一张在自由钟前拍的照片，由我自建集群上的 FLUX.3 Klein 模型重绘成二十四种风格。挑一个，或者随机来一张。',
+    random: '随机一张',
+    original: '原图'
   },
   blog: {
     blogPosts: '文章',
