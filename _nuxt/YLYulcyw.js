@@ -1,0 +1,1 @@
+import{_ as t,c as n,o,a as s}from"./Cn1LGY2W.js";const c={},r={class:"content-container"};function i(a,e){return o(),n("div",r,e[0]||(e[0]=[s("h2",{class:"text-center text-2xl py-32"}," Please confirm your subscription to my newsletter by clicking the confirmation link in the email we just sent you. ",-1)]))}const f=t(c,[["render",i]]);export{f as default};
