@@ -4,130 +4,159 @@
       {{ $t('portrait.title') }}
     </h1>
     <p class="blurb mx-auto max-w-xl pt-2 pb-6">
-      {{ $t('portrait.blurb') }}
+      {{ $t('portrait.blurb', { count: styles.length }) }}
     </p>
 
     <figure class="frame mx-auto">
-      <img
-        :key="current.slug"
-        class="portrait"
-        :src="`${BASE}/${current.slug}.webp`"
-        :alt="`Brian Caffey at the Liberty Bell in Philadelphia, restyled as ${current.name}`"
-        width="960"
-        height="721"
-        :fetchpriority="index === 0 ? 'high' : 'auto'"
-      >
+      <div class="stage">
+        <img
+          :key="current.slug"
+          class="shot"
+          :src="`${BASE}/${current.slug}.webp`"
+          :alt="`Brian Caffey at the Liberty Bell in Philadelphia, restyled as ${current.name}`"
+          width="1024"
+          height="768"
+          fetchpriority="high"
+        >
+
+        <template v-if="compare">
+          <img
+            class="shot shot-original"
+            :src="`${BASE}/original.webp`"
+            :alt="$t('portrait.original')"
+            width="1024"
+            height="768"
+            :style="{ clipPath: `inset(0 ${100 - split}% 0 0)` }"
+          >
+          <div class="divider" :style="{ left: `${split}%` }" aria-hidden="true">
+            <span class="knob" />
+          </div>
+          <span class="edge-label edge-left" aria-hidden="true">{{ $t('portrait.original') }}</span>
+          <span class="edge-label edge-right" aria-hidden="true">{{ current.name }}</span>
+          <input
+            v-model.number="split"
+            class="range"
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            :aria-label="$t('portrait.compare')"
+          >
+        </template>
+      </div>
+
       <figcaption class="caption">
-        <span class="caption-name">{{ current.name }}</span>
-        <span class="caption-desc">{{ current.description }}</span>
+        <div class="caption-head">
+          <span class="caption-name">{{ current.name }}</span>
+          <span class="caption-category">{{ current.category }}</span>
+        </div>
+        <p class="caption-desc">{{ sentence }}</p>
+
+        <button class="disclosure" :aria-expanded="showPrompt" @click="showPrompt = !showPrompt">
+          {{ showPrompt ? $t('portrait.hidePrompt') : $t('portrait.showPrompt') }}
+        </button>
+
+        <div v-if="showPrompt" class="details">
+          <p class="prompt">{{ current.prompt }}</p>
+          <dl class="meta">
+            <div>
+              <dt>{{ $t('portrait.model') }}</dt>
+              <dd>{{ current.model }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('portrait.served') }}</dt>
+              <dd>{{ current.engine }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('portrait.node') }}</dt>
+              <dd>{{ current.node }} · {{ current.precision }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('portrait.sampling') }}</dt>
+              <dd>{{ current.steps }} steps · seed {{ current.seed }} · {{ current.seconds }}s</dd>
+            </div>
+          </dl>
+        </div>
       </figcaption>
     </figure>
 
     <div class="controls">
-      <button class="ctrl" :aria-label="`Previous style`" @click="step(-1)">
+      <button class="ctrl" :aria-label="$t('portrait.previous')" @click="step(-1)">
         ‹
       </button>
       <button class="ctrl ctrl-random" @click="randomize">
         🎲 {{ $t('portrait.random') }}
       </button>
-      <button class="ctrl" :aria-label="`Next style`" @click="step(1)">
+      <button class="ctrl" :aria-label="$t('portrait.next')" @click="step(1)">
         ›
       </button>
-      <span class="counter">{{ String(index + 1).padStart(2, '0') }} / {{ filters.length }}</span>
-    </div>
-
-    <div class="swatches" role="listbox" :aria-label="$t('portrait.title')">
       <button
-        v-for="(f, i) in filters"
-        :key="f.slug"
-        class="swatch"
-        :class="{ 'swatch-active': i === index }"
-        role="option"
-        :aria-selected="i === index"
-        :title="f.description"
-        @click="index = i"
-        @mouseenter="preload(f.slug)"
-        @focus="preload(f.slug)"
+        class="ctrl ctrl-toggle"
+        :class="{ 'ctrl-on': compare }"
+        :aria-pressed="compare"
+        @click="compare = !compare"
       >
-        <img
-          class="swatch-img"
-          :src="`${BASE}/${f.slug}.thumb.webp`"
-          :alt="f.name"
-          width="240"
-          height="180"
-          loading="lazy"
-          decoding="async"
-        >
-        <span class="swatch-name">{{ f.name }}</span>
+        {{ $t('portrait.compare') }}
       </button>
+      <span class="counter">{{ String(index + 1).padStart(3, '0') }} / {{ styles.length }}</span>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
+import { portraitStyles } from '~/data/portrait/styles'
 
-const BASE = '/static/contact/filters'
-
-// Generated by scripts/generate_profile_styles.py -- each one is an
-// image-to-image pass through FLUX.3 Klein. Keep the slugs in sync.
-const filters = computed(() => [
-  { slug: 'original', name: t('portrait.original'), description: 'Liberty Bell, Philadelphia, straight out of the phone' },
-  { slug: 'cartoon', name: 'Cartoon', description: 'Flat cel shading under thick ink outlines' },
-  { slug: 'anime', name: 'Anime Cel', description: 'A hand-painted 1990s animation cel' },
-  { slug: 'comic', name: 'Comic Book', description: 'Brush inks and Ben-Day halftone dots' },
-  { slug: 'pixar', name: '3D Animation', description: 'A feature-film character render' },
-  { slug: 'claymation', name: 'Claymation', description: 'Plasticine, thumbprints and all' },
-  { slug: 'lego', name: 'LEGO Bricks', description: 'Rebuilt in moulded ABS, studs included' },
-  { slug: 'oil', name: 'Oil Painting', description: 'Loaded impasto strokes on canvas' },
-  { slug: 'watercolor', name: 'Watercolour', description: 'Wet-on-wet washes on cold-press paper' },
-  { slug: 'impressionist', name: 'Impressionist', description: 'Broken dabs of complementary colour' },
-  { slug: 'renaissance', name: 'Old Master', description: 'Dutch chiaroscuro under cracked varnish' },
-  { slug: 'ukiyoe', name: 'Ukiyo-e', description: 'An indigo woodblock print on washi paper' },
-  { slug: 'woodcut', name: 'Woodcut', description: 'Carved gouge marks, black ink only' },
-  { slug: 'sketch', name: 'Pencil Sketch', description: 'A graphite study, smudged by hand' },
-  { slug: 'charcoal', name: 'Charcoal', description: 'Smudged blacks and white chalk on grey' },
-  { slug: 'stainedglass', name: 'Stained Glass', description: 'Glass panes set in black lead cames' },
-  { slug: 'mosaic', name: 'Roman Mosaic', description: 'Stone tesserae and visible grout' },
-  { slug: 'artdeco', name: 'Art Deco Poster', description: 'Flat geometry in gold and teal' },
-  { slug: 'popart', name: 'Pop Art', description: 'Off-register fluorescent silkscreen' },
-  { slug: 'streetart', name: 'Street Art', description: 'A two-layer stencil sprayed on brick' },
-  { slug: 'papercut', name: 'Papercut', description: 'Stacked paper with knife-cut edges' },
-  { slug: 'embroidery', name: 'Embroidery', description: 'Satin stitch in thread on felt' },
-  { slug: 'bronze', name: 'Bronze Statue', description: 'Cast metal with verdigris patina' },
-  { slug: 'cyberpunk', name: 'Cyberpunk', description: 'Neon signage and wet reflections' },
-  { slug: 'lowpoly', name: 'Low Poly', description: 'Flat triangular facets, no curves' }
-])
+const BASE = '/static/contact/portrait'
+const styles = portraitStyles
 
 const index = ref(0)
-const current = computed(() => filters.value[index.value]!)
+const compare = ref(false)
+const split = ref(50)
+const showPrompt = ref(false)
 
-function step (delta: number) {
-  const n = filters.value.length
-  index.value = (index.value + delta + n) % n
+const current = computed(() => styles[index.value]!)
+const sentence = computed(() => {
+  const d = current.value.description
+  return d.charAt(0).toUpperCase() + d.slice(1) + '.'
+})
+
+function go(next: number) {
+  index.value = (next + styles.length) % styles.length
+  showPrompt.value = false
 }
 
-function randomize () {
-  const n = filters.value.length
-  index.value = (index.value + 1 + Math.floor(Math.random() * (n - 1))) % n
+function step(delta: number) {
+  go(index.value + delta)
+  preload(index.value + delta)
 }
 
-// Fetch the full-size image before the click so switching looks instant.
+function randomize() {
+  go(index.value + 1 + Math.floor(Math.random() * (styles.length - 1)))
+}
+
+// Warm the neighbours so stepping through feels instant.
 const preloaded = new Set<string>()
-function preload (slug: string) {
-  if (import.meta.server || preloaded.has(slug)) { return }
+function preload(at: number) {
+  if (import.meta.server) return
+  const slug = styles[(at + styles.length) % styles.length]?.slug
+  if (!slug || preloaded.has(slug)) return
   preloaded.add(slug)
   const img = new Image()
   img.src = `${BASE}/${slug}.webp`
 }
 
-function onKey (e: KeyboardEvent) {
+function onKey(e: KeyboardEvent) {
   const el = e.target as HTMLElement | null
-  if (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) { return }
-  if (e.key === 'ArrowLeft') { step(-1) } else if (e.key === 'ArrowRight') { step(1) }
+  if (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return
+  if (e.key === 'ArrowLeft') step(-1)
+  else if (e.key === 'ArrowRight') step(1)
 }
 
-onMounted(() => window.addEventListener('keydown', onKey))
+onMounted(() => {
+  window.addEventListener('keydown', onKey)
+  preload(1)
+  preload(-1)
+})
 onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 </script>
 
@@ -142,35 +171,103 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 }
 
 .frame {
-  max-width: 640px;
+  max-width: 720px;
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
   background-color: var(--bg-secondary);
-  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.45);
 }
 
-.portrait {
+.stage {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.shot {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 960 / 721;
+  height: 100%;
   object-fit: cover;
-  animation: fade-in 0.35s ease;
+  animation: fade-in 0.3s ease;
+}
+
+.shot-original {
+  position: absolute;
+  inset: 0;
+  animation: none;
 }
 
 @keyframes fade-in {
-  from { opacity: 0.25; }
+  from { opacity: 0.3; }
   to { opacity: 1; }
 }
 
+.divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background-color: #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.35);
+  pointer-events: none;
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  border-radius: 9999px;
+  background-color: rgb(0 0 0 / 0.35);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.35);
+}
+
+.edge-label {
+  position: absolute;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background-color: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.edge-left { left: 8px; }
+.edge-right { right: 8px; }
+
+/* A transparent range input laid over the stage: drag anywhere, and keyboard
+   and screen-reader support come for free. */
+.range {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  appearance: none;
+  background: transparent;
+}
+
 .caption {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 10px 14px;
+  padding: 12px 16px 14px;
   text-align: left;
   border-top: 1px solid var(--border-color);
+}
+
+.caption-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .caption-name {
@@ -178,18 +275,79 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   color: var(--color-title);
 }
 
+.caption-category {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
 .caption-desc {
-  font-size: 0.8125rem;
+  padding-top: 4px;
+  font-size: 0.875rem;
   color: var(--color-secondary);
-  opacity: 0.8;
+  opacity: 0.85;
+}
+
+.disclosure {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.details {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.prompt {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-secondary);
+  opacity: 0.9;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 16px;
+  padding-top: 10px;
+  font-size: 0.75rem;
+}
+
+.meta > div {
+  min-width: 0;
+}
+
+.meta dt {
+  opacity: 0.55;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.625rem;
+}
+
+.meta dd {
+  overflow-wrap: anywhere;
 }
 
 .controls {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 18px 0 6px;
+  gap: 8px;
+  padding: 18px 0 4px;
 }
 
 .ctrl {
@@ -199,7 +357,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   border-radius: 9999px;
   background-color: var(--bg-secondary);
   color: var(--color);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   line-height: 1.2;
   cursor: pointer;
   transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
@@ -211,8 +369,15 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   box-shadow: 0 4px 14px -6px var(--color-primary);
 }
 
-.ctrl-random {
+.ctrl-random,
+.ctrl-toggle {
   font-weight: 600;
+}
+
+.ctrl-on {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--bg-secondary);
 }
 
 .counter {
@@ -222,70 +387,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   margin-left: 4px;
 }
 
-.swatches {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  padding-top: 14px;
-}
-
 @media (min-width: 640px) {
-  .swatches { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-}
-
-@media (min-width: 1024px) {
-  .swatches { grid-template-columns: repeat(7, minmax(0, 1fr)); }
-}
-
-.swatch {
-  display: block;
-  padding: 3px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: none;
-  cursor: pointer;
-  transition: border-color 0.15s, transform 0.15s;
-}
-
-.swatch:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-primary);
-}
-
-.swatch-active {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 1px var(--color-primary);
-}
-
-.swatch-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: 5px;
-}
-
-.swatch-name {
-  display: block;
-  padding-top: 3px;
-  font-size: 0.625rem;
-  line-height: 1.3;
-  color: var(--color-secondary);
-  opacity: 0.75;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.swatch-active .swatch-name {
-  opacity: 1;
-  font-weight: 600;
+  .meta { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .portrait { animation: none; }
-  .ctrl:hover,
-  .swatch:hover { transform: none; }
+  .shot { animation: none; }
+  .ctrl:hover { transform: none; }
 }
 </style>

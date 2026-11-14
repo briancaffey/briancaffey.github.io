@@ -62,9 +62,18 @@ export default {
   },
   portrait: {
     title: '肖像实验室',
-    blurb: '同一张在自由钟前拍的照片，由我自建集群上的 FLUX.3 Klein 模型重绘成二十四种风格。挑一个，或者随机来一张。',
+    blurb: '同一张在自由钟前拍的照片，由我自建集群上的 FLUX.3 Klein 模型重绘成 {count} 种风格。挑一个，或者随机来一张。',
     random: '随机一张',
-    original: '原图'
+    original: '原图',
+    compare: '对比',
+    previous: '上一个风格',
+    next: '下一个风格',
+    showPrompt: '查看提示词与模型',
+    hidePrompt: '隐藏提示词',
+    model: '模型',
+    served: '服务端',
+    node: '节点',
+    sampling: '采样'
   },
   blog: {
     blogPosts: '文章',

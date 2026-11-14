@@ -62,9 +62,18 @@ export default {
   },
   portrait: {
     title: 'Portrait Lab',
-    blurb: 'One photo of me at the Liberty Bell, restyled twenty-four ways by a FLUX.3 Klein model running on my home cluster. Pick a look, or roll the dice.',
+    blurb: 'One photo of me at the Liberty Bell, redrawn {count} ways by a FLUX.3 Klein model running on my home cluster. Pick a look, or roll the dice.',
     random: 'Surprise me',
-    original: 'Original'
+    original: 'Original',
+    compare: 'Compare',
+    previous: 'Previous style',
+    next: 'Next style',
+    showPrompt: 'Show the prompt and the model',
+    hidePrompt: 'Hide the prompt',
+    model: 'Model',
+    served: 'Served by',
+    node: 'Node',
+    sampling: 'Sampling'
   },
   blog: {
     blogPosts: 'Blog Posts',

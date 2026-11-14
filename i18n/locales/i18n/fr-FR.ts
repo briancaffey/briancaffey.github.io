@@ -60,9 +60,18 @@ export default {
   },
   portrait: {
     title: 'Labo portrait',
-    blurb: 'Une seule photo de moi devant la Liberty Bell, retravaillée de vingt-quatre façons par un modèle FLUX.3 Klein hébergé sur mon cluster. Choisissez un style ou laissez le hasard décider.',
+    blurb: 'Une seule photo de moi devant la Liberty Bell, redessinée de {count} façons par un modèle FLUX.3 Klein hébergé sur mon cluster. Choisissez un style ou laissez le hasard décider.',
     random: 'Surprenez-moi',
-    original: 'Original'
+    original: 'Original',
+    compare: 'Comparer',
+    previous: 'Style précédent',
+    next: 'Style suivant',
+    showPrompt: 'Afficher l\'invite et le modèle',
+    hidePrompt: 'Masquer l\'invite',
+    model: 'Modèle',
+    served: 'Servi par',
+    node: 'Nœud',
+    sampling: 'Échantillonnage'
   },
   blog: {
     blogPosts: 'Articles du blog',

@@ -61,9 +61,18 @@ export default {
   },
   portrait: {
     title: 'ポートレート・ラボ',
-    blurb: '自由の鐘の前で撮った一枚の写真を、自宅クラスターで動く FLUX.3 Klein モデルが24通りに描き直しました。好きなものを選ぶか、ランダムにどうぞ。',
+    blurb: '自由の鐘の前で撮った一枚の写真を、自宅クラスターで動く FLUX.3 Klein モデルが {count} 通りに描き直しました。好きなものを選ぶか、ランダムにどうぞ。',
     random: 'ランダム',
-    original: 'オリジナル'
+    original: 'オリジナル',
+    compare: '比較',
+    previous: '前のスタイル',
+    next: '次のスタイル',
+    showPrompt: 'プロンプトとモデルを表示',
+    hidePrompt: 'プロンプトを隠す',
+    model: 'モデル',
+    served: '提供元',
+    node: 'ノード',
+    sampling: 'サンプリング'
   },
   blog: {
     blogPosts: 'ブログ投稿',
