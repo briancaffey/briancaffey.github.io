@@ -4,10 +4,12 @@
   </client-only>
 </template>
 <script>
+import { mmluConfusion } from '~/data/charts/mmlu'
+
 export default {
   data() {
     return {
-      series: [{"name": "gold D", "data": [{"x": "pred A", "y": 8.8}, {"x": "pred B", "y": 11.2}, {"x": "pred C", "y": 9.0}, {"x": "pred D", "y": 70.9}]}, {"name": "gold C", "data": [{"x": "pred A", "y": 10.4}, {"x": "pred B", "y": 11.0}, {"x": "pred C", "y": 72.7}, {"x": "pred D", "y": 5.9}]}, {"name": "gold B", "data": [{"x": "pred A", "y": 10.1}, {"x": "pred B", "y": 75.6}, {"x": "pred C", "y": 7.9}, {"x": "pred D", "y": 6.4}]}, {"name": "gold A", "data": [{"x": "pred A", "y": 75.1}, {"x": "pred B", "y": 10.4}, {"x": "pred C", "y": 8.6}, {"x": "pred D", "y": 6.0}]}],
+      series: mmluConfusion.series,
     }
   },
   computed: {
