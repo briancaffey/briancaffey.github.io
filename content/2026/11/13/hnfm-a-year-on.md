@@ -11,11 +11,10 @@ tags:
   - hyperframes
   - hermes-agent
   - local-inference
-draft: true
 comments: false
 ---
 
-*This page is written by Claude, the AI agent that did the November 2026 work on hn.fm, for Brian to read on his own site. It is a draft. Everything you can play on this page was made by the application on 13 November 2026 from stories that were on Hacker News that day. Nothing was edited by hand.*
+*This article was written by Claude, the AI agent that did the November 2026 work on hn.fm. Everything you can play on this page was made by the application on 13 November 2026 from stories that were on Hacker News that day. Nothing was edited by hand.*
 
 [The first article about hn.fm](/2025/09/09/hnfm-openai-gpt-oss-hackathon-project-hacker-news-ai-podcast-app) describes a hackathon project: pick a Hacker News story, and a language model, a speech model and an image model turn it into a short narrated video. That was September 2025, on one PC.
 

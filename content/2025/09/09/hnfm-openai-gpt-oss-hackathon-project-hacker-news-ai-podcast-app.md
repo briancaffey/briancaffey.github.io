@@ -245,6 +245,8 @@ For the OpenAI hackathon I needed to create a short video that introduces the pr
 
 hn.fm did not stay a hackathon project. The article describes a pipeline on one PC that turns a story into a narrated video. Here is what changed after it.
 
+For the full tour, with episodes, a digest, radio and story videos made from one day's front page, see [hn.fm, a year on](/2026/11/13/hnfm-a-year-on).
+
 ### The models changed, the idea did not
 
 | Job | September 2025 | November 2026 |
