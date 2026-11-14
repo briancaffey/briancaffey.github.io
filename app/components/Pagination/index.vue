@@ -1,49 +1,43 @@
 <template>
-  <div class="mx-auto text-center">
+  <nav class="mx-auto text-center" :aria-label="`${$t('blog.blogPosts')} · ${pageNo} / ${pageCount}`">
     <nuxt-link
-      :to="prevLink"
+      v-if="pageNo > 1"
+      :to="`/blog/${pageNo - 1}`"
       class="chip mx-1 px-4 py-2 text-xl"
-      :class="{ 'chip-muted': pageNo === 1 }"
+      aria-label="Previous page"
+      rel="prev"
     >
       ←
     </nuxt-link>
+    <!-- At either end the arrow is not a link (it used to link to the current page). -->
+    <span
+      v-else
+      class="chip chip-muted mx-1 px-4 py-2 text-xl"
+      aria-disabled="true"
+    >←</span>
+    <span class="chip mx-1 py-2 text-xl" aria-current="page">
+      {{ pageNo }} / {{ pageCount }}
+    </span>
     <nuxt-link
-      :to="`/blog/${pageNo}`"
-      class="chip mx-1 py-2 text-xl"
-    >
-      {{ pageNo }}
-    </nuxt-link>
-    <nuxt-link
-      :to="nextPage ? `/blog/${pageNo + 1}` : `/blog/${pageNo}`"
+      v-if="pageNo < pageCount"
+      :to="`/blog/${pageNo + 1}`"
       class="chip mx-1 px-4 py-2 text-xl"
-      :class="{ 'chip-muted': !nextPage }"
+      aria-label="Next page"
+      rel="next"
     >
       →
     </nuxt-link>
-  </div>
+    <span
+      v-else
+      class="chip chip-muted mx-1 px-4 py-2 text-xl"
+      aria-disabled="true"
+    >→</span>
+  </nav>
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  paginatedItems: {
-    type: Array,
-    default: () => []
-  },
-  nextPage: {
-    type: Boolean,
-    default: false
-  },
-  pageNo: {
-    type: Number,
-    default: 0
-  },
-  allItems: {
-    type: Array,
-    default: () => []
-  }
-})
-
-const prevLink = computed(() => {
-  return props.pageNo === 1 ? '/blog/1' : `/blog/${props.pageNo - 1}`
-})
+defineProps<{
+  pageNo: number
+  pageCount: number
+}>()
 </script>

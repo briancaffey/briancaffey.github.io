@@ -1,11 +1,23 @@
 import { readdirSync, readFileSync } from 'node:fs'
 
+const articleFiles = (readdirSync('content', { recursive: true }) as string[])
+  .filter(file => file.endsWith('.md'))
+const isDraft = (file: string) =>
+  /^draft:\s*true\s*$/m.test(readFileSync(`content/${file}`, 'utf8').split(/^---$/m)[1] ?? '')
+
 // Articles marked `draft: true` are published for review at their own URL, but are
 // kept out of the sitemap (their pages also carry a noindex tag).
-const draftPaths = (readdirSync('content', { recursive: true }) as string[])
-  .filter(file => file.endsWith('.md'))
-  .filter(file => /^draft:\s*true\s*$/m.test(readFileSync(`content/${file}`, 'utf8').split(/^---$/m)[1] ?? ''))
+const draftPaths = articleFiles
+  .filter(isDraft)
   .map(file => `/${file.replace(/\\/g, '/').replace(/\.md$/, '')}`)
+
+// Every /blog/<n> listing page, prerendered explicitly. The crawler only finds
+// pages through the pager's "next" link, so a pager bug once left everything
+// after /blog/1 unpublished (#43). Must match BLOG_PAGE_SIZE in useBlogListing.
+const blogPageRoutes = Array.from(
+  { length: Math.max(1, Math.ceil(articleFiles.filter(file => !isDraft(file)).length / 10)) },
+  (_, i) => `/blog/${i + 1}`
+)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -136,6 +148,12 @@ export default defineNuxtConfig({
 
   gtag: {
     id: 'G-S8TVBBMW66'
+  },
+
+  nitro: {
+    prerender: {
+      routes: blogPageRoutes
+    }
   },
 
   sitemap: {

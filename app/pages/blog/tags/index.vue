@@ -8,13 +8,10 @@
 </template>
 
 <script setup lang="ts">
-const { data: articles } = await useAsyncData('all-articles', () =>
-  queryCollection("blog")
-    .order('date', 'DESC')
-    .all()
-    // Drafts are published for review but stay off the listings.
-    .then(list => list.filter(article => !article.draft))
-)
+const { t } = useI18n()
+const { data: articles } = await useBlogListing()
+
+useHead(() => ({ title: t('tags.allTags') }))
 </script>
 
 <style scoped></style>
