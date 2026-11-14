@@ -33,7 +33,6 @@
     <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
       <a v-if="project.repo" :href="project.repo" class="underline">{{ $t('projects.source') }}</a>
       <a v-if="project.video" :href="project.video" class="underline">{{ $t('projects.video') }}</a>
-      <NuxtLink v-if="!link" to="/projects" class="underline">{{ $t('projects.all') }}</NuxtLink>
       <span v-if="project.event" class="text-secondary">{{ project.event }}</span>
     </p>
   </aside>
@@ -42,7 +41,7 @@
 <script setup lang="ts">
 // A project's entry from the registry (content/projects/*.yml): what it was
 // built with, what it runs on now. Shown at the top of the project's article
-// and, with `summary` and `link`, as a row on /projects.
+// and, with `summary` and `link`, wherever a list of them is embedded.
 const props = withDefaults(defineProps<{
   project: {
     title: string, year: number, summary: string, article: string, repo?: string, event?: string,

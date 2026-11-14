@@ -7,7 +7,6 @@ export const PAGES = [
   { name: 'blog list', path: '/blog/1' },
   { name: 'tags', path: '/blog/tags' },
   { name: 'contact', path: '/contact' },
-  { name: 'projects', path: '/projects' },
   { name: 'article', path: ARTICLE }
 ]
 

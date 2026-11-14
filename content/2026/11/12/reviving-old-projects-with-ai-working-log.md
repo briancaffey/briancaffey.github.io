@@ -140,7 +140,7 @@ So the honest summary is: clearly better, not ten times better, at two and a hal
 - **Foundations.** Pull requests are checked for commit style, built, linted and tested in a browser at three widths. A second job screenshots the site before and after each change. Releases and the changelog are generated.
 - **Navigation.** One header for every width, a menu that works with a keyboard, and pickers for language and colour mode that announce their state.
 - **Design system.** Colours, containers, buttons and labels are shared classes. A reference page at `/colors` shows them in the current colour mode. Along the way: the site's Tailwind stylesheet had not been applied since the move to Nuxt 4, and the existing tests passed on a visibly broken page, so layout tests were added.
-- **Project registry.** One data file per project feeds the [projects page](/projects) and the status block at the top of each project article.
+- **Project registry.** One data file per project feeds the list below and the status block at the top of each project article.
 
 ## Who did what
 
