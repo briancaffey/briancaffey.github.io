@@ -1,806 +1,714 @@
-<rss version="2.0">
-	<script />
-	<channel>
-		<title>
-			briancaffey.github.io
-		</title>
-		<link>
-			https://briancaffey.github.io/feed.xml
-		</link>
-		<description>
-			RSS feed for briancaffey.github.io
-		</description>
-		<lastBuildDate>
-			Mon, 24 Jun 2024 23:31:09 GMT
-		</lastBuildDate>
-		<docs>
-			https://validator.w3.org/feed/docs/rss2.html
-		</docs>
-		<generator>
-			https://github.com/nuxt-community/feed-module
-		</generator>
-		<category>
-			Nuxt.js
-		</category>
-		<item>
-			<title>
-				<![CDATA[ RedLM: My submission for the NVIDIA and LlamaIndex Developer Contest ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2024/10/09/redlm-ai-application-for-studying-chinese-literature-redology-nvidia-llama-index-developer-contest
-			</link>
-			<guid>
-				https://briancaffey.github.io/2024/10/09/redlm-ai-application-for-studying-chinese-literature-redology-nvidia-llama-index-developer-contest
-			</guid>
-			<description>
-				<![CDATA[ RedLM is a new way to study art and literature powered by artificial intelligence. It is an application that applies LLMs to the study of one of China’s most famous literary works: Dream of the Red Chamber. ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Upgrading my GitHub Pages blog to Nuxt 3 ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3
-			</link>
-			<guid>
-				https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3
-			</guid>
-			<description>
-				<![CDATA[ An overview of my newly upgraded GitHub Pages blog powered by Nuxt 3 ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Agents of Inference: Speed of Light -- Accelerating my Generative AI Agents project with NVIDIA NIMs, TensorRT and TensorRT-LLM ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update
-			</link>
-			<guid>
-				https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update
-			</guid>
-			<description>
-				<![CDATA[ This article is a brief discusion on recent updates to my project for the Generative AI Agents Developer Contest by NVIDIA and LangChain ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Agents of Inference: My submission for NVIDIA's Generative AI Agents Developer Contest by NVIDIA and LangChain ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest
-			</link>
-			<guid>
-				https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest
-			</guid>
-			<description>
-				<![CDATA[ This article discusses my entry for NVIDIA's Generative AI Agents Developer Contest entry: Agents of Inference ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Rocket League BotChat powered by TensorRT-LLM: My submission for NVIDIA's Generative AI on RTX PCs Developer Contest ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest
-			</link>
-			<guid>
-				https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest
-			</guid>
-			<description>
-				<![CDATA[ This article discusses my entry for NVIDIA's Generative AI on RTX PCs Developer Contest: Rocket Leauge BotChat ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem
-			</link>
-			<guid>
-				https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ My Infrastructure as Code Rosetta Stone - Deploying the same web application on AWS ECS Fargate with CDK, Terraform and Pulumi ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi
-			</link>
-			<guid>
-				https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi
-			</guid>
-			<description>
-				<![CDATA[ I wrote three reusable infrastructure as code libraries to develop high-level abstractions for deploying containerized web apps on AWS ECS. This article will provide an overview of my experience working with CDK, Terraform and Pulumi and will cover how I use these libraries in automated infrastructure deployment pipelines using GitHub Actions ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Setting up ad hoc development environments for Django applications with AWS ECS, Terraform and GitHub Actions ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions
-			</link>
-			<guid>
-				https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions
-			</guid>
-			<description>
-				<![CDATA[ This article will show how software development teams can build on-demand environments for dog-food testing, quality review, internal and external demos and other use cases that require short-lived but feature-complete instances of a web application. ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ How and why I added AdSense and an AdBlock detector to my personal website ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website
-			</guid>
-			<description>
-				<![CDATA[ This article describes how I added AdSense to my personal website and how I request that site visitors pause AdBlock while reading my blog ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ How I write and share technical software development articles in 2021 ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021
-			</guid>
-			<description>
-				<![CDATA[ This article describes how to write and share technical articles in 2021 ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Authenticating requests with JWT tokens stored in HTTPOnly cookies in Django ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django
-			</guid>
-			<description>
-				<![CDATA[ This article describes how you can use JWT tokens in Django applications with decoupled frontend JavaScript applications running the browser in secure way using HttpOnly cookies. ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ GitHub Action for my Nuxt.js blog hosted on GitHub Pages ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages
-			</guid>
-			<description>
-				<![CDATA[ This article shows how to use GitHub Actions to update my Nuxt.js blog hosted on GitHub Pages. ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ On-demand, serverless Valheim server setup with AWS CDK, Discord Interactions and GitLab CI ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions
-			</guid>
-			<description>
-				<![CDATA[ This is a detailed guide showing how to setup a dedicated Valheim server using serverless technologies on AWS ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings
-			</guid>
-			<description>
-				<![CDATA[ Scraping, analyzing and generating companies, founders and job postings from YC's Work at a Startup ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application
-			</guid>
-			<description>
-				<![CDATA[ This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Adding internationalization to a statically generated Nuxt site ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site
-			</guid>
-			<description>
-				<![CDATA[ This article will summarize my experience implementing internationalization (i18n) for a statically-generated Nuxt.js site ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Session Authentication with Django, Django REST Framework and Nuxt ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt
-			</link>
-			<guid>
-				https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt
-			</guid>
-			<description>
-				<![CDATA[ This article shows how to use session authentication with Django + Nuxt.js applications ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Building web applications with Django, Django REST Framework, Nuxt.js and docker ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt
-			</guid>
-			<description>
-				<![CDATA[ This article documents my progress combining the Django web framework with Nuxt JS to build applications that have both great SEO and a smooth SPA user experience. ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Weekend project update: Open SEC Data ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data
-			</guid>
-			<description>
-				<![CDATA[ This project uses Django, DRF and Celery to read public SEC filings from sec.gov, build it into an API which is consumed through a Vue.js application. ]]>
-			</description>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Open SEC Data: A web app and API for processing 13F Filing data from SEC.gov ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/sec-filing-data-project
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/sec-filing-data-project
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ How to authenticate Django REST Framework API calls from a (Vue) JS client using Session Authentication and HttpOnly cookies ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/11/27/how-to-authenticate-django-rest-framework-from-vue-app-with-session-authentication-httponly-cookies
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/11/27/how-to-authenticate-django-rest-framework-from-vue-app-with-session-authentication-httponly-cookies
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ How to add an email signup form to a Nuxt site with MailChimp ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Migrating my personal GitHub pages blog from Jekyll to Nuxt ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/09/17/migrating-from-jekyll-to-nuxt-static-site.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/09/17/migrating-from-jekyll-to-nuxt-static-site.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Some of the tools and workflows I use for local Django application development ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/09/16/tools-for-developing-django-apps-locally.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/09/16/tools-for-developing-django-apps-locally.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Deploying serverless Django applications to AWS with CDK on a tiny budget using Lambda, API Gateway, awsgi and the Lambda proxy pattern ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Django + Vue.js web application template with AWS Cloud Development Kit (CDK), AWS Fargate and GitLab CI ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/django-postgres-vue-gitlab-ecs
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/django-postgres-vue-gitlab-ecs
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Using AWS CDK, GitLab, Fargate and CloudFront for Django + Vue.js applications ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Setup, Development and Deployment of a web app using Django, VueJS, VuePress, Docker, nginx, traefik and GitLab ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Full Stack web appliction with Django, VueJS, Docker, and other containerized services ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/verbose-equals-true
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/verbose-equals-true
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Generating MIDI files from guitar tablatures with Python and regular expressions ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Ubuntu 16.04.4 Installation and Setup Notes ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2018/02/21/ubuntu-installation-and-setup-notes.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2018/02/21/ubuntu-installation-and-setup-notes.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis-CI ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Using Leaflet to display geographical data in a Django app with Mapbox, DataTables, Bootstrap 4 and Travis CI ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/maps-django
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/maps-django
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Detailed setup of a mini Django News App project with Bootstrap, AJAX, Celery and RabbitMQ ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2018/02/09/a-sample-django-news-app.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2018/02/09/a-sample-django-news-app.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Reading 13F SEC filings with python ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ How to do simple SQL tasks with MariaDB ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2018/01/28/simple-sql-tasks-with-mariadb.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2018/01/28/simple-sql-tasks-with-mariadb.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Finding the best poker hand in five-card draw with python ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Getting started with Python's Twisted Framework ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/12/22/getting-started-with-twisted.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/12/22/getting-started-with-twisted.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Setting up a Flask project with Flask CLI and Docker ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/12/09/setting-up-flask-cli-with-docker.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/12/09/setting-up-flask-cli-with-docker.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Reflecting on my web-app development process after reading The Twelve-Factor App ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Analysis of AUR and Official Arch Repository data ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/12/02/arch-linux-package-data-analysis.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/12/02/arch-linux-package-data-analysis.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ AUR and Official Arch Linux Repository Data Analysis ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/arch-linux-data-project
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/arch-linux-data-project
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Removing root partition bloat caused by docker ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/11/28/remove-root-partition-bloat-from-docker.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/11/28/remove-root-partition-bloat-from-docker.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Using Tensorflow and Tensorboard with Docker ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ How to enable color emoji on Arch Linux with Emoji One Font ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Installing the GPU version of Tensorflow with Docker on Arch Linux ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Automating Django deployment with a Deploy-to-Heroku button ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/11/11/creating-a-heroku-deploy-button-for-django-template-project.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/11/11/creating-a-heroku-deploy-button-for-django-template-project.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ A binary clock written in bash ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/10/31/a-binary-clock-written-in-bash.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/10/31/a-binary-clock-written-in-bash.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ How to connect to Google Starbucks wifi using i3 and Arch Linux ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/10/20/how-to-connect-to-starbucks-wifi-with-i3.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Reading RSS with Python ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/10/17/reading-rss-with-python.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Moving from Gnome Desktop to i3 window manager on Arch Linux ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Simple Board Games in ReactJS ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/10/03/simple-games-in-react.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/10/03/simple-games-in-react.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Arch Linux Installation Guide ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/08/03/arch-linux-installation-guide.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/08/03/arch-linux-installation-guide.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ playquest.io ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/playquest-io
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/playquest-io
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Comparing different ways to build friend objects in Django ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/07/19/different-ways-to-build-friend-models-in-django.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/07/19/different-ways-to-build-friend-models-in-django.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ bucksamonth.com ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/bucksamonth
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/bucksamonth
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Rendering SketchUp models with Kerkythea ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Building a 3D model from 60 photographs with VisualSFM and Meshlab ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Python script for generating 2D n-state Langton's Ant animations ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/04/02/langton-ant-notebook.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/04/02/langton-ant-notebook.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Setting up a Django app on Heroku ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/03/04/settinging-up-django-with-heroku.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/03/04/settinging-up-django-with-heroku.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Related subreddit graph exploration with NetworkX ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/03/03/graph_subreddit.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/03/03/graph_subreddit.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ six degrees of subreddits ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/six-degrees-of-subreddits
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/six-degrees-of-subreddits
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ PCPartPicker data ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2017/01/01/pc-data.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2017/01/01/pc-data.html
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ PC PartPicker data analysis ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/projects/pc-part-picker-data
-			</link>
-			<guid>
-				https://briancaffey.github.io/projects/pc-part-picker-data
-			</guid>
-		</item>
-		<item>
-			<title>
-				<![CDATA[ Home media center meta-tutorial with miniDLNA, Raspberry Pi, Deluge and Apple TV ]]>
-			</title>
-			<link>
-				https://briancaffey.github.io/2016/04/07/home-media-setup.html
-			</link>
-			<guid>
-				https://briancaffey.github.io/2016/04/07/home-media-setup.html
-			</guid>
-		</item>
-	</channel>
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Brian Caffey</title>
+    <link>https://briancaffey.github.io</link>
+    <atom:link href="https://briancaffey.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Brian Caffey writes about software engineering, AI and other fun things.</description>
+    <language>en</language>
+    <lastBuildDate>Fri, 13 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>hn.fm, a year on: Hacker News as episodes, digests, a radio station and directed video</title>
+      <link>https://briancaffey.github.io/2026/11/13/hnfm-a-year-on</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2026/11/13/hnfm-a-year-on</guid>
+      <pubDate>Fri, 13 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A 2025 hackathon project that turned Hacker News stories into narrated video kept growing. This is what it does now, how each part works, and a set of things it made from one day&apos;s front page, all on models running at home.</description>
+      <category>ai</category>
+      <category>llm</category>
+      <category>tts</category>
+      <category>hacker-news</category>
+      <category>hyperframes</category>
+      <category>hermes-agent</category>
+      <category>local-inference</category>
+    </item>
+    <item>
+      <title>Running MMLU 5-shot on Nemotron Nano Omni with a DGX Spark</title>
+      <link>https://briancaffey.github.io/2026/06/18/running-mmlu-5shot-on-nemotron-nano-omni-with-a-dgx-spark</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2026/06/18/running-mmlu-5shot-on-nemotron-nano-omni-with-a-dgx-spark</guid>
+      <pubDate>Thu, 18 Jun 2026 00:00:00 GMT</pubDate>
+      <description>My first LLM eval end-to-end: scoring NVIDIA&apos;s Nemotron-3-Nano-Omni-30B (NVFP4) on MMLU 5-shot via vLLM on a DGX Spark, with interactive charts breaking down where it&apos;s strong, where it&apos;s weak, and how confident it is.</description>
+      <category>ai</category>
+      <category>llm</category>
+      <category>eval</category>
+      <category>mmlu</category>
+      <category>vllm</category>
+      <category>nemotron</category>
+      <category>dgx-spark</category>
+      <category>k8s</category>
+      <category>localmaxxing</category>
+    </item>
+    <item>
+      <title>Behind the Scenes: AI-Assisted Blog Cleanup with OpenClaw</title>
+      <link>https://briancaffey.github.io/2026/03/09/blog-meta-about-openclaw-blog-cleanup</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2026/03/09/blog-meta-about-openclaw-blog-cleanup</guid>
+      <pubDate>Mon, 09 Mar 2026 00:00:00 GMT</pubDate>
+      <description>How I&apos;m using OpenClaw, a multi-agent system running on DGX Spark, to systematically review and improve my personal blog articles through Telegram</description>
+      <category>ai</category>
+      <category>agents</category>
+      <category>openclaw</category>
+      <category>automation</category>
+      <category>blog</category>
+      <category>dgx-spark</category>
+    </item>
+    <item>
+      <title>Deploying an AI model on GKE with NVIDIA NIM</title>
+      <link>https://briancaffey.github.io/2026/02/20/nvidia-nim-on-google-cloud-gcp</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2026/02/20/nvidia-nim-on-google-cloud-gcp</guid>
+      <pubDate>Fri, 20 Feb 2026 00:00:00 GMT</pubDate>
+      <description>An overview of my experience with the Google CodeLabs tutorial for deploying an AI model on GKE with NVIDIA NIM</description>
+      <category>nvidia</category>
+      <category>ai</category>
+      <category>llm</category>
+      <category>nim</category>
+      <category>gcp</category>
+      <category>gke</category>
+      <category>k8s</category>
+    </item>
+    <item>
+      <title>hnfm: Building a Local-First AI Podcast Generator for Hacker News</title>
+      <link>https://briancaffey.github.io/2025/09/09/hnfm-openai-gpt-oss-hackathon-project-hacker-news-ai-podcast-app</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2025/09/09/hnfm-openai-gpt-oss-hackathon-project-hacker-news-ai-podcast-app</guid>
+      <pubDate>Tue, 09 Sep 2025 00:00:00 GMT</pubDate>
+      <description>hnfm transforms the Hacker News feed into your personalized AI-powered podcast</description>
+      <category>ai</category>
+      <category>llm</category>
+      <category>tts</category>
+      <category>flux</category>
+      <category>nuxt</category>
+      <category>fastapi</category>
+      <category>openai</category>
+      <category>gpt-oss</category>
+    </item>
+    <item>
+      <title>Upgrading my Blog to Nuxt 4</title>
+      <link>https://briancaffey.github.io/2025/07/21/upgrading-my-static-nuxt-blog-from-nuxt-3-to-nuxt-4</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2025/07/21/upgrading-my-static-nuxt-blog-from-nuxt-3-to-nuxt-4</guid>
+      <pubDate>Mon, 21 Jul 2025 00:00:00 GMT</pubDate>
+      <description>This article details my process of upgrading my static GitHub Pages Blog from Nuxt 3 to Nuxt 4, and an upgrade of the headless CMS that powers my site, Nuxt Content, from v2 to v3</description>
+      <category>nuxt</category>
+      <category>vue</category>
+      <category>blogging</category>
+      <category>cms</category>
+      <category>typescript</category>
+    </item>
+    <item>
+      <title>Flux Plug-in for Project G-Assist</title>
+      <link>https://briancaffey.github.io/2025/07/17/flux-plugin-for-project-g-assist-hackathon</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2025/07/17/flux-plugin-for-project-g-assist-hackathon</guid>
+      <pubDate>Sun, 20 Jul 2025 00:00:00 GMT</pubDate>
+      <description>A Plug-in for Project G-Assist that puts the power of AI image generation right at your fingertips</description>
+      <category>nvidia</category>
+      <category>ai</category>
+      <category>rtx</category>
+      <category>nim</category>
+      <category>flux</category>
+    </item>
+    <item>
+      <title>Mediation Simulator: My submission for the NVIDIA Agent Intelligence Toolkit Hackathon</title>
+      <link>https://briancaffey.github.io/2025/05/27/mediation-simulator-project-for-nvidia-agent-intelligence-toolkit</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2025/05/27/mediation-simulator-project-for-nvidia-agent-intelligence-toolkit</guid>
+      <pubDate>Tue, 27 May 2025 00:00:00 GMT</pubDate>
+      <description>Mediation Simulator is an AI application designed to help legal students and professionals build dispute resolution skills through simulated mediation sessions</description>
+      <category>nvidia</category>
+      <category>ai</category>
+      <category>agents</category>
+      <category>llm</category>
+      <category>nim</category>
+      <category>mediation</category>
+    </item>
+    <item>
+      <title>RedLM: My submission for the NVIDIA and LlamaIndex Developer Contest</title>
+      <link>https://briancaffey.github.io/2024/10/09/redlm-ai-application-for-studying-chinese-literature-redology-nvidia-llama-index-developer-contest</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2024/10/09/redlm-ai-application-for-studying-chinese-literature-redology-nvidia-llama-index-developer-contest</guid>
+      <pubDate>Sat, 09 Nov 2024 00:00:00 GMT</pubDate>
+      <description>RedLM is an AI-powered application for the study of China&apos;s greatest classical novel: Dream of the Red Chamber</description>
+      <category>nvidia</category>
+      <category>llama-index</category>
+      <category>ai</category>
+      <category>llm</category>
+      <category>rag</category>
+      <category>tensorrt-llm</category>
+      <category>chinese</category>
+      <category>redology</category>
+    </item>
+    <item>
+      <title>Upgrading my GitHub Pages blog to Nuxt 3</title>
+      <link>https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2024/08/11/upgrading-my-github-pages-blog-to-nuxt-3</guid>
+      <pubDate>Sun, 11 Aug 2024 00:00:00 GMT</pubDate>
+      <description>An overview of my newly upgraded GitHub Pages blog powered by Nuxt 3</description>
+      <category>vue</category>
+      <category>nuxt</category>
+      <category>github</category>
+      <category>pinia</category>
+    </item>
+    <item>
+      <title>Agents of Inference: Speed of Light -- Accelerating my Generative AI Agents project with NVIDIA NIMs, TensorRT and TensorRT-LLM</title>
+      <link>https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2024/06/24/agents-of-inference-speed-of-light-nvidia-langchain-generative-ai-agents-developer-contest-update</guid>
+      <pubDate>Mon, 24 Jun 2024 00:00:00 GMT</pubDate>
+      <description>This article is a brief discusion on recent updates to my project for the Generative AI Agents Developer Contest by NVIDIA and LangChain</description>
+      <category>nvidia</category>
+      <category>langchain</category>
+      <category>agents</category>
+      <category>rtx</category>
+      <category>gpu</category>
+      <category>tensorrt</category>
+      <category>tensorrt-llm</category>
+      <category>ai</category>
+      <category>llm</category>
+      <category>llama</category>
+      <category>007</category>
+      <category>stable-diffusion</category>
+      <category>stable-video-diffusion</category>
+      <category>comfyui</category>
+    </item>
+    <item>
+      <title>Agents of Inference: My submission for NVIDIA&apos;s Generative AI Agents Developer Contest by NVIDIA and LangChain</title>
+      <link>https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2024/06/17/agents-of-inference-nvidia-and-langchain-generative-ai-agent-developer-contest</guid>
+      <pubDate>Mon, 17 Jun 2024 00:00:00 GMT</pubDate>
+      <description>This article discusses my entry for NVIDIA&apos;s Generative AI Agents Developer Contest entry: Agents of Inference</description>
+      <category>nvidia</category>
+      <category>langchain</category>
+      <category>agents</category>
+      <category>rtx</category>
+      <category>gpu</category>
+      <category>tensorrt</category>
+      <category>tensorrt-llm</category>
+      <category>ai</category>
+      <category>llm</category>
+      <category>llama</category>
+      <category>007</category>
+      <category>stable-diffusion</category>
+      <category>stable-video-diffusion</category>
+      <category>comfyui</category>
+    </item>
+    <item>
+      <title>Rocket League BotChat powered by TensorRT-LLM: My submission for NVIDIA&apos;s Generative AI on RTX PCs Developer Contest</title>
+      <link>https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest</guid>
+      <pubDate>Sat, 17 Feb 2024 00:00:00 GMT</pubDate>
+      <description>This article discusses my entry for NVIDIA&apos;s Generative AI on RTX PCs Developer Contest: Rocket League BotChat</description>
+      <category>nvidia</category>
+      <category>rtx</category>
+      <category>gpu</category>
+      <category>tensorrt-llm</category>
+      <category>ai</category>
+      <category>llm</category>
+      <category>llama</category>
+      <category>rocket-league</category>
+      <category>gaming</category>
+      <category>windows</category>
+    </item>
+    <item>
+      <title>Python, Vue, Chinese-LLaMA-2 and The Three-Body Problem</title>
+      <link>https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2023/08/27/python-vue-chinese-llama-2-and-the-three-body-problem</guid>
+      <pubDate>Thu, 23 Nov 2023 00:00:00 GMT</pubDate>
+      <description>Translating The Three-Body Problem book to English with Chinese LLMs, making visualizations with stable diffusion and running n-body simulations with CUDA</description>
+      <category>three-body-problem</category>
+      <category>llama</category>
+      <category>llm</category>
+      <category>ai</category>
+      <category>chinese</category>
+      <category>python</category>
+      <category>nvidia</category>
+      <category>cuda</category>
+      <category>gpu</category>
+      <category>stable-diffusion</category>
+      <category>langchain</category>
+      <category>vue</category>
+      <category>three.js</category>
+    </item>
+    <item>
+      <title>My Infrastructure as Code Rosetta Stone - Deploying the same web application on AWS ECS Fargate with CDK, Terraform and Pulumi</title>
+      <link>https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2023/01/07/i-deployed-the-same-containerized-serverless-django-app-with-aws-cdk-terraform-and-pulumi</guid>
+      <pubDate>Sat, 07 Jan 2023 00:00:00 GMT</pubDate>
+      <description>Three reusable infrastructure as code libraries for abstracting containerized web app architecture on AWS ECS</description>
+      <category>django</category>
+      <category>cdk</category>
+      <category>terraform</category>
+      <category>pulumi</category>
+      <category>cloudformation</category>
+      <category>github-actions</category>
+      <category>aws</category>
+      <category>ecs</category>
+      <category>fargate</category>
+      <category>containers</category>
+      <category>docker</category>
+    </item>
+    <item>
+      <title>Setting up ad hoc development environments for Django applications with AWS ECS, Terraform and GitHub Actions</title>
+      <link>https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2022/03/27/ad-hoc-developer-environments-for-django-with-aws-ecs-terraform-and-github-actions</guid>
+      <pubDate>Sat, 11 Jun 2022 00:00:00 GMT</pubDate>
+      <description>This article will show how software development teams can build on-demand environments for dog-food testing, quality review, internal and external demos and other use cases that require short-lived but feature-complete instances of a web application.</description>
+      <category>django</category>
+      <category>terraform</category>
+      <category>github-actions</category>
+      <category>aws</category>
+      <category>ecs</category>
+      <category>containers</category>
+      <category>docker</category>
+    </item>
+    <item>
+      <title>How and why I added AdSense and an AdBlock detector to my personal website</title>
+      <link>https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/10/31/how-and-why-i-added-adsense-and-adblock-detector-to-my-website</guid>
+      <pubDate>Sun, 31 Oct 2021 00:00:00 GMT</pubDate>
+      <description>This article describes how I added AdSense to my personal website and how I request that site visitors pause AdBlock while reading my blog</description>
+      <category>nuxt</category>
+      <category>ads</category>
+      <category>adsense</category>
+      <category>adblock</category>
+    </item>
+    <item>
+      <title>How I write and share technical software development articles in 2021</title>
+      <link>https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/10/02/how-i-write-and-share-technical-software-development-articles-in-2021</guid>
+      <pubDate>Sat, 02 Oct 2021 00:00:00 GMT</pubDate>
+      <description>This article describes how to write and share technical articles in 2021</description>
+      <category>nuxt</category>
+      <category>vue</category>
+      <category>publishing</category>
+      <category>writing</category>
+      <category>blogging</category>
+    </item>
+    <item>
+      <title>Authenticating requests with JWT tokens stored in HTTPOnly cookies in Django</title>
+      <link>https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/08/07/authenticating-requests-with-jwt-tokens-stored-in-httponly-cookies-in-django</guid>
+      <pubDate>Sun, 01 Aug 2021 00:00:00 GMT</pubDate>
+      <description>This article describes how you can use JWT tokens in Django applications with decoupled frontend JavaScript applications running the browser in secure way using HttpOnly cookies.</description>
+      <category>django</category>
+      <category>vue</category>
+      <category>jwt</category>
+      <category>authentication</category>
+    </item>
+    <item>
+      <title>GitHub Action for my Nuxt.js blog hosted on GitHub Pages</title>
+      <link>https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/07/05/github-actions-for-my-nuxt-blog-hosted-on-github-pages</guid>
+      <pubDate>Mon, 05 Jul 2021 00:00:00 GMT</pubDate>
+      <description>This article shows how to use GitHub Actions to update my Nuxt.js blog hosted on GitHub Pages.</description>
+      <category>github</category>
+      <category>nuxt</category>
+      <category>github-actions</category>
+      <category>github-pages</category>
+    </item>
+    <item>
+      <title>On-demand, serverless Valheim server setup with AWS CDK, Discord Interactions and GitLab CI</title>
+      <link>https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/03/18/on-demand-dedicated-serverless-valheim-server-with-cdk-discrod-interactions</guid>
+      <pubDate>Thu, 18 Mar 2021 00:00:00 GMT</pubDate>
+      <description>This is a detailed guide showing how to setup a dedicated Valheim server using serverless technologies on AWS</description>
+      <category>valheim</category>
+      <category>gaming</category>
+      <category>python</category>
+      <category>flask</category>
+      <category>serverless</category>
+      <category>discord</category>
+    </item>
+    <item>
+      <title>Scraping, analyzing and generating companies, founders and job postings from YC&apos;s Work at a Startup</title>
+      <link>https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/01/16/i-scraped-analyzed-and-generated-yc-companies-founders-and-work-at-a-startup-job-postings</guid>
+      <pubDate>Sat, 16 Jan 2021 00:00:00 GMT</pubDate>
+      <description>Scraping, analyzing and generating companies, founders and job postings from YC&apos;s Work at a Startup</description>
+      <category>python</category>
+      <category>data</category>
+      <category>scraping</category>
+      <category>startups</category>
+      <category>yc</category>
+    </item>
+    <item>
+      <title>Adding internationalization to a statically generated Nuxt site</title>
+      <link>https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/01/15/adding-internationalization-to-a-statically-generated-nuxt-site</guid>
+      <pubDate>Fri, 15 Jan 2021 00:00:00 GMT</pubDate>
+      <description>This article will summarize my experience implementing internationalization (i18n) for a statically-generated Nuxt.js site</description>
+      <category>i18n</category>
+      <category>vue</category>
+      <category>nuxt</category>
+    </item>
+    <item>
+      <title>Using Stripe for recurring monthly SaaS subscriptions in a Django + Vue application</title>
+      <link>https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/01/02/using-the-stripe-api-for-recurring-monthly-saas-subscription-payments-in-django-and-vue-application</guid>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 GMT</pubDate>
+      <description>This article shares my experience learning and implementing the Stripe API for recurring monthly SaaS subscription payments in an application using Django and Vue.js</description>
+      <category>django</category>
+      <category>vue</category>
+      <category>drf</category>
+      <category>stripe</category>
+    </item>
+    <item>
+      <title>Session Authentication with Django, Django REST Framework and Nuxt</title>
+      <link>https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2021/01/01/session-authentication-with-django-django-rest-framework-and-nuxt</guid>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 GMT</pubDate>
+      <description>This article shows how to use session authentication with Django + Nuxt.js applications</description>
+      <category>django</category>
+      <category>vue</category>
+      <category>nuxt</category>
+      <category>drf</category>
+      <category>authentication</category>
+    </item>
+    <item>
+      <title>Building web applications with Django, Django REST Framework, Nuxt.js and docker</title>
+      <link>https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/12/27/building-web-applications-with-django-drf-and-nuxt</guid>
+      <pubDate>Sun, 27 Dec 2020 00:00:00 GMT</pubDate>
+      <description>This article documents my progress combining the Django web framework with Nuxt JS to build applications that have both great SEO and a smooth SPA user experience.</description>
+      <category>django</category>
+      <category>vue</category>
+      <category>nuxt</category>
+      <category>drf</category>
+      <category>docker</category>
+    </item>
+    <item>
+      <title>Weekend project update: Open SEC Data</title>
+      <link>https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/11/29/weekend-project-update-open-sec-data</guid>
+      <pubDate>Sun, 29 Nov 2020 00:00:00 GMT</pubDate>
+      <description>This project uses Django, DRF and Celery to read public SEC filings from sec.gov, build it into an API which is consumed through a Vue.js application.</description>
+      <category>django</category>
+      <category>vue</category>
+      <category>data</category>
+      <category>api</category>
+      <category>gitlab</category>
+      <category>docker</category>
+      <category>celery</category>
+    </item>
+    <item>
+      <title>How to authenticate Django REST Framework API calls from a (Vue) JS client using Session Authentication and HttpOnly cookies</title>
+      <link>https://briancaffey.github.io/2020/11/27/how-to-authenticate-django-rest-framework-from-vue-app-with-session-authentication-httponly-cookies</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/11/27/how-to-authenticate-django-rest-framework-from-vue-app-with-session-authentication-httponly-cookies</guid>
+      <pubDate>Fri, 27 Nov 2020 00:00:00 GMT</pubDate>
+      <description>This article will describe an authentication strategy using Django REST Framework with a Javascript frontend application. I&apos;ll be demonstrating this with Vue.js (Qusar Framework, using Vue 2), but the concepts should transfer to any other Javascript framework.</description>
+      <category>django</category>
+      <category>vue</category>
+      <category>authentication</category>
+      <category>api</category>
+    </item>
+    <item>
+      <title>How to add an email signup form to a Nuxt site with MailChimp</title>
+      <link>https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/10/10/how-to-add-email-signup-form-to-nuxt-site-with-mailchimp</guid>
+      <pubDate>Sun, 11 Oct 2020 00:00:00 GMT</pubDate>
+      <description>This is a guide for setting up a MailChimp-powered newsletter signup form on a static Nuxt site hosted on GitHub Pages. I wanted to implement this on my personal blog to grow a mailing list so I can update readers when I puslish a new blog article. I haven&apos;t done too much work with MailChimp before, but I&apos;ve definitely subscribed to plenty of MailChimp mailing lists.</description>
+      <category>nuxt</category>
+      <category>mailchimp</category>
+      <category>vue</category>
+    </item>
+    <item>
+      <title>Migrating my personal GitHub pages blog from Jekyll to Nuxt</title>
+      <link>https://briancaffey.github.io/2020/09/17/migrating-from-jekyll-to-nuxt-static-site</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/09/17/migrating-from-jekyll-to-nuxt-static-site</guid>
+      <pubDate>Thu, 17 Sep 2020 00:00:00 GMT</pubDate>
+      <description>Jekyll has served me well for a long time, but I&apos;ve decided to switch the static site generator I use for my personal blog from Jekyll to Nuxt. This article will hopefully be the first new article in my Nuxt blog.</description>
+      <category>nuxt</category>
+      <category>vue</category>
+      <category>content</category>
+      <category>static-site</category>
+      <category>web</category>
+    </item>
+    <item>
+      <title>Deploying Django applications with docker swarm on DigitalOcean using GitLab CI, Traefik, NGINX and REX-Ray</title>
+      <link>https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/08/09/digital-ocean-docker-swarm-django-traefik-nginx</guid>
+      <pubDate>Sun, 09 Aug 2020 00:00:00 GMT</pubDate>
+      <description>A guide to deploying Django applications with docker using popular open-source tools</description>
+      <category>django</category>
+      <category>docker</category>
+      <category>digital-ocean</category>
+      <category>vue</category>
+      <category>gitlab</category>
+      <category>rex-ray</category>
+      <category>traefik</category>
+      <category>nginx</category>
+      <category>swarm</category>
+    </item>
+    <item>
+      <title>Deploying serverless Django applications to AWS with CDK on a tiny budget using Lambda, API Gateway, awsgi and the Lambda proxy pattern</title>
+      <link>https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/08/01/django-and-lambda-with-cdk-and-api-gateway</guid>
+      <pubDate>Sat, 01 Aug 2020 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>serverless</category>
+      <category>django</category>
+      <category>aws</category>
+      <category>lambda</category>
+      <category>cdk</category>
+    </item>
+    <item>
+      <title>Using AWS CDK, GitLab, Fargate and CloudFront for Django + Vue.js applications</title>
+      <link>https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2020/06/02/django-postgres-vue-gitlab-ecs</guid>
+      <pubDate>Tue, 02 Jun 2020 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>fargate</category>
+      <category>django</category>
+      <category>gitlab</category>
+      <category>vue</category>
+      <category>cdk</category>
+    </item>
+    <item>
+      <title>Setup, Development and Deployment of a web app using Django, VueJS, VuePress, Docker, nginx, traefik and GitLab</title>
+      <link>https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2019/01/09/django-docker-vue-nginx-drf-traefik-celery</guid>
+      <pubDate>Wed, 09 Jan 2019 00:00:00 GMT</pubDate>
+      <description>This project is currently deployed on https://verbose-equals-true.tk. The source code is available at https://gitlab.com/briancaffey/verbose-equals-true.</description>
+      <category>django</category>
+      <category>vue</category>
+      <category>docker</category>
+      <category>gitlab</category>
+    </item>
+    <item>
+      <title>Generating MIDI files from guitar tablatures with Python and regular expressions</title>
+      <link>https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2018/04/26/generating-music-from-guitar-tabs-with-python</guid>
+      <pubDate>Thu, 26 Apr 2018 00:00:00 GMT</pubDate>
+      <description>Recently I have been playing lots of classical guitar. I use classtab.org, a website with hundreds of classical guitar pieces in tab form. Here&apos;s an example of a guitar tab:</description>
+      <category>midi</category>
+      <category>python</category>
+      <category>regex</category>
+      <category>guitar</category>
+      <category>music</category>
+    </item>
+    <item>
+      <title>Display, filter and export geographical data in a Django app with Leaflet, Mapbox, DataTables, Bootstrap 4 and Travis-CI</title>
+      <link>https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2018/02/19/leaflet-maps-with-django</guid>
+      <pubDate>Mon, 19 Feb 2018 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>leaflet</category>
+      <category>django</category>
+      <category>mapbox</category>
+      <category>data-tables</category>
+      <category>bootstrap</category>
+      <category>travis-ci</category>
+    </item>
+    <item>
+      <title>Reading 13F SEC filings with python</title>
+      <link>https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2018/01/30/reading-13f-sec-filings-with-python</guid>
+      <pubDate>Tue, 30 Jan 2018 00:00:00 GMT</pubDate>
+      <description>How to read SEC filing data with Python</description>
+      <category>sec</category>
+      <category>python</category>
+      <category>data</category>
+      <category>scraping</category>
+    </item>
+    <item>
+      <title>How to do simple SQL tasks with MariaDB</title>
+      <link>https://briancaffey.github.io/2018/01/28/simple-sql-tasks-with-mariadb</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2018/01/28/simple-sql-tasks-with-mariadb</guid>
+      <pubDate>Sun, 28 Jan 2018 00:00:00 GMT</pubDate>
+      <description>In this article I&apos;ll look at another interview takehome assignment. This assignment included SQL, python and some logic puzzles. If you read to the end I&apos;ll share a fun &quot;trick question&quot; that was also included.</description>
+      <category>maria-db</category>
+      <category>sql</category>
+      <category>databases</category>
+    </item>
+    <item>
+      <title>Finding the best poker hand in five-card draw with python</title>
+      <link>https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2018/01/02/checking-poker-hands-with-python</guid>
+      <pubDate>Tue, 02 Jan 2018 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>python</category>
+      <category>poker</category>
+    </item>
+    <item>
+      <title>Getting started with Python&apos;s Twisted Framework</title>
+      <link>https://briancaffey.github.io/2017/12/22/getting-started-with-twisted</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/12/22/getting-started-with-twisted</guid>
+      <pubDate>Fri, 22 Dec 2017 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>python</category>
+      <category>twisted</category>
+    </item>
+    <item>
+      <title>Setting up a Flask project with Flask CLI and Docker</title>
+      <link>https://briancaffey.github.io/2017/12/09/setting-up-flask-cli-with-docker</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/12/09/setting-up-flask-cli-with-docker</guid>
+      <pubDate>Sat, 09 Dec 2017 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>flask</category>
+      <category>docker</category>
+    </item>
+    <item>
+      <title>Reflecting on my web-app development process after reading The Twelve-Factor App</title>
+      <link>https://briancaffey.github.io/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/12/03/the-twelve-factor-app-and-my-experience-developing-web-apps</guid>
+      <pubDate>Sun, 03 Dec 2017 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>development</category>
+      <category>docker</category>
+    </item>
+    <item>
+      <title>Analysis of AUR and Official Arch Repository data</title>
+      <link>https://briancaffey.github.io/2017/12/02/arch-linux-package-data-analysis</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/12/02/arch-linux-package-data-analysis</guid>
+      <pubDate>Sat, 02 Dec 2017 00:00:00 GMT</pubDate>
+      <description>Arch Linux provides packages through the official Arch Linux repositories and the Arch User Repository (AUR). I recently gathered data on ~50,000 packages from these repositories on archlinux.org to better understand the makeup of the packages. In this article I will share some visualizations I made as well as some key takeaways about the data set I gathered.</description>
+      <category>arch-linux</category>
+      <category>data</category>
+      <category>python</category>
+    </item>
+    <item>
+      <title>Removing root partition bloat caused by docker</title>
+      <link>https://briancaffey.github.io/2017/11/28/remove-root-partition-bloat-from-docker</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/11/28/remove-root-partition-bloat-from-docker</guid>
+      <pubDate>Tue, 28 Nov 2017 00:00:00 GMT</pubDate>
+      <description>Recently I&apos;ve been having storage issues in the root partitions of both my desktop and laptop computers. These issues came up soon after I started playing around with docker. In this article I&apos;ll talk briefly about how I fixed this problem, the resources and tools I picked up along the way, and anything else I have learned along the way.</description>
+      <category>docker</category>
+      <category>linux</category>
+    </item>
+    <item>
+      <title>Using Tensorflow and Tensorboard with Docker</title>
+      <link>https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/11/20/using-tensorflow-and-tensor-board-with-docker</guid>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 GMT</pubDate>
+      <description>In my last article we set up Tensorflow with Docker. Next I want to try to get Tensorboard running.</description>
+      <category>tensorflow</category>
+      <category>docker</category>
+    </item>
+    <item>
+      <title>How to enable color emoji on Arch Linux with Emoji One Font</title>
+      <link>https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/11/24/how-to-get-color-emoji-in-arch-linux</guid>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 GMT</pubDate>
+      <description>This is a short article about how to enable color emoji on Arch Linux. I have searched for a working solution for this a few times but never found something that worked. I stumbled upon this Gist that I used to hack together a solution that enables color emoji from Emoji One on Arch Linux.</description>
+      <category>arch-linux</category>
+      <category>emoji</category>
+    </item>
+    <item>
+      <title>Installing the GPU version of Tensorflow with Docker on Arch Linux</title>
+      <link>https://briancaffey.github.io/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/11/19/tensorflow-gpu-setup-with-docker-on-arch-linux</guid>
+      <pubDate>Sun, 19 Nov 2017 00:00:00 GMT</pubDate>
+      <description>A walkthrough of Tensorflow setup and usage on Arch Linux with docker</description>
+      <category>arch-linux</category>
+      <category>tensorflow</category>
+      <category>docker</category>
+      <category>nvidia</category>
+      <category>python</category>
+    </item>
+    <item>
+      <title>A binary clock written in bash</title>
+      <link>https://briancaffey.github.io/2017/10/31/a-binary-clock-written-in-bash</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/10/31/a-binary-clock-written-in-bash</guid>
+      <pubDate>Tue, 31 Oct 2017 00:00:00 GMT</pubDate>
+      <description>A program that displays the current time as a binary representation</description>
+      <category>bash</category>
+    </item>
+    <item>
+      <title>Moving from Gnome Desktop to i3 window manager on Arch Linux</title>
+      <link>https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/10/17/moving-from-gnome-to-i3-on-arch-linux</guid>
+      <pubDate>Tue, 17 Oct 2017 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>arch-linux</category>
+      <category>i3</category>
+      <category>gnome</category>
+    </item>
+    <item>
+      <title>Reading RSS with Python</title>
+      <link>https://briancaffey.github.io/2017/10/17/reading-rss-with-python</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/10/17/reading-rss-with-python</guid>
+      <pubDate>Tue, 17 Oct 2017 00:00:00 GMT</pubDate>
+      <description>On my other personal website, briancaffey.com, I have a blog. The content on that blog has mostly mirrored what I put on this github pages site, briancaffey.github.io. I want to display my most recent blog posts from briancaffey.github.io on briancaffey.com, and to do this I will be using the RSS feed that comes with a Jekyll site. This should be pretty simple, we are going to use the requests librrary, as well as the feedparser library.</description>
+      <category>python</category>
+      <category>rss</category>
+    </item>
+    <item>
+      <title>Simple Board Games in ReactJS</title>
+      <link>https://briancaffey.github.io/2017/10/03/simple-games-in-react</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/10/03/simple-games-in-react</guid>
+      <pubDate>Tue, 03 Oct 2017 00:00:00 GMT</pubDate>
+      <description>To ease into learning ReactJS, I took a shot at implementing a simple tic-tac-toe game with React. This is covered in the official Facebook React tutorial, but I haven&apos;t actually looked at how they did this yet. Instead, I wanted to see how far I could get on my own, and then fallback to the tutorial if I needed help. I heard that there are many different ways that React components can be organized and structured in a React project, so I wanted to see how my results compared to what the official tutorial recommends.</description>
+      <category>react</category>
+    </item>
+    <item>
+      <title>Arch Linux Installation Guide</title>
+      <link>https://briancaffey.github.io/2017/08/03/arch-linux-installation-guide</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/08/03/arch-linux-installation-guide</guid>
+      <pubDate>Thu, 03 Aug 2017 00:00:00 GMT</pubDate>
+      <description>A comprehensive guide to installing Arch Linux</description>
+      <category>arch-linux</category>
+    </item>
+    <item>
+      <title>Building a 3D model from 60 photographs with VisualSFM and Meshlab</title>
+      <link>https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/05/09/my-first-attempt-at-photogrammetry</guid>
+      <pubDate>Tue, 09 May 2017 00:00:00 GMT</pubDate>
+      <description>My first attempt at photogrammetry</description>
+      <category>photogrammetry</category>
+    </item>
+    <item>
+      <title>Rendering SketchUp models with Kerkythea</title>
+      <link>https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/05/09/rendering-sketchup-models-with-kerkythea</guid>
+      <pubDate>Tue, 09 May 2017 00:00:00 GMT</pubDate>
+      <description>These are some results of an architectural model I rendered with Kerkythea. Kerkythea is an open source rendering program that has a SketchUp plugin. I worked with an architect who made the original plans by hand.</description>
+      <category>sketchup</category>
+      <category>kerkythea</category>
+      <category>3d-modeling</category>
+    </item>
+    <item>
+      <title>Python script for generating 2D n-state Langton&apos;s Ant animations</title>
+      <link>https://briancaffey.github.io/2017/04/02/langton-ant-notebook</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/04/02/langton-ant-notebook</guid>
+      <pubDate>Sun, 02 Apr 2017 00:00:00 GMT</pubDate>
+      <description>Visualizing variations of the classic Langton&apos;s Ant cellular automata</description>
+      <category>python</category>
+      <category>cellular-automata</category>
+    </item>
+    <item>
+      <title>Setting up a Django app on Heroku</title>
+      <link>https://briancaffey.github.io/2017/03/04/settinging-up-django-with-heroku</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/03/04/settinging-up-django-with-heroku</guid>
+      <pubDate>Sat, 04 Mar 2017 00:00:00 GMT</pubDate>
+      <description>This is a simple guide to setting up a Django project on Heroku.</description>
+      <category>django</category>
+      <category>heroku</category>
+    </item>
+    <item>
+      <title>Related subreddit graph exploration with NetworkX</title>
+      <link>https://briancaffey.github.io/2017/03/03/graph_subreddit</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/03/03/graph_subreddit</guid>
+      <pubDate>Fri, 03 Mar 2017 00:00:00 GMT</pubDate>
+      <description>This notebook explores some basic concepts of graph theory. A few weeks ago I set up a script to scrape data from reddit.com with the goal of visualizing the network of related subreddits (forums on specific topics) and related data.</description>
+      <category>reddit</category>
+      <category>python</category>
+      <category>scraping</category>
+      <category>data</category>
+      <category>graphs</category>
+    </item>
+    <item>
+      <title>PCPartPicker data</title>
+      <link>https://briancaffey.github.io/2017/01/01/pc-data</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2017/01/01/pc-data</guid>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 GMT</pubDate>
+      <description>In the summer of 2016 I built two high-end computers, something I haven&apos;t done since 2011. I used PCPartPicker to research the components and read about PC builds similar to the ones I had in mind. It&apos;s a relatively new site that has a strong community of builders, helpful tools to help with part compatibility as well as extensive user reviews on PC components.</description>
+      <category>python</category>
+      <category>scraping</category>
+      <category>machine-learning</category>
+      <category>data</category>
+    </item>
+    <item>
+      <title>Home media center meta-tutorial with miniDLNA, Raspberry Pi, Deluge and Apple TV</title>
+      <link>https://briancaffey.github.io/2016/04/07/home-media-setup</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2016/04/07/home-media-setup</guid>
+      <pubDate>Thu, 07 Apr 2016 00:00:00 GMT</pubDate>
+      <description></description>
+      <category>mini-dlna</category>
+      <category>raspberry-pi</category>
+      <category>deluge</category>
+      <category>media</category>
+    </item>
+  </channel>
 </rss>
