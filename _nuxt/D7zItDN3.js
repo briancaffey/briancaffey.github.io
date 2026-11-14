@@ -1,0 +1,1 @@
+import{_ as e,c as s,o as n,a as o,t as c}from"./Bpudk9pV.js";const a={},r={class:"content-container"},_={class:"text-center text-2xl py-32"};function i(t,l){return n(),s("div",r,[o("h2",_,c(t.$t("newsletter.thankYou")),1)])}const f=e(a,[["render",i]]);export{f as default};
