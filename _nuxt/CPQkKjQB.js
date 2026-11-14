@@ -1,1 +1,0 @@
-import{u as e,q as r}from"./CBW8skij.js";const s=10,n=["path","title","description","image","tags","date","draft","external"];function l(){return e("blog-listing",async()=>(await r("blog").select(...n).order("date","DESC").all()).filter(a=>!a.draft),{default:()=>[]})}function o(t){return Math.max(1,Math.ceil(t/s))}export{s as B,o as b,l as u};
