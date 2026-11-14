@@ -1,0 +1,15 @@
+slug: rocket-league-botchat
+title: "Rocket League BotChat"
+year: 2024
+summary: "A Rocket League plug-in that has the bots trash-talk in chat, written by a local language model reacting to what happens in the match."
+article: /2024/02/17/rocket-league-botchat-nvidia-generative-ai-on-rtx-pcs-developer-contest
+repo: https://github.com/briancaffey/RocketLeagueBotChat
+event: "NVIDIA Generative AI on RTX PCs Developer Contest"
+status: archived
+then:
+  stack:
+    - "TensorRT-LLM"
+    - "BakkesMod plug-in"
+    - "Windows, RTX GPU"
+  models:
+    - "Llama 2 13B Chat"

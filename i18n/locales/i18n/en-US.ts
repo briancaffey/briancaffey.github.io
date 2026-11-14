@@ -50,7 +50,19 @@ export default {
     thankYou: 'Thank you for subscribing!'
   },
   projects: {
-    projects: 'Projects'
+    projects: 'Projects',
+    intro: 'Things I have built, most of them for contests and hackathons, each with the article about it. I am bringing the older ones back to life with current models; the status shows how far each has got.',
+    then: 'Built with',
+    now: 'Runs on now',
+    source: 'Source code',
+    video: 'Video',
+    all: 'All projects',
+    updated: 'updated',
+    status: {
+      archived: 'As published',
+      reviving: 'Being rebuilt',
+      running: 'Running'
+    }
   },
   blog: {
     blogPosts: 'Blog Posts',

@@ -1,0 +1,33 @@
+slug: hnfm
+title: "hn.fm"
+year: 2025
+summary: "Hacker News turned into audio and video by local models: narrated episodes, a daily digest, and now an internet radio station with six shows a day."
+article: /2025/09/09/hnfm-openai-gpt-oss-hackathon-project-hacker-news-ai-podcast-app
+repo: https://github.com/briancaffey/hn.fm
+event: "OpenAI Open Model Hackathon"
+status: running
+updated: "2026-11-12"
+then:
+  stack:
+    - "FastAPI and Celery"
+    - "Nuxt"
+    - "InvokeAI"
+    - "Docker Compose on one PC"
+  models:
+    - "gpt-oss-20b"
+    - "Dia"
+    - "WhisperX"
+    - "FLUX.1 Krea"
+now:
+  stack:
+    - "Helm chart on a home k3s cluster"
+    - "GitOps: Forgejo Actions build, Argo CD deploys"
+    - "Postgres, Redis and an S3-compatible object store"
+    - "Liquidsoap and Icecast for the radio"
+  models:
+    - "Nemotron 3.5 Lightning"
+    - "Magpie TTS"
+    - "ACE-Step 1.5"
+    - "FLUX.3 Klein"
+    - "Nemotron ASR"
+  notes: "Rebuilt in November 2026 as a radio station. A format clock decides the shape of each hour; the model only chooses stories and writes. Every spoken line is transcribed and checked against its script before it airs."

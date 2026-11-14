@@ -25,6 +25,7 @@
           </strong>
         </p>
       </div>
+      <ProjectStatus v-if="project" :project="project" class="my-6" />
       <ContentRenderer v-if="article" :value="article" class="markdown"/>
 
       <div class="text-center pb-4 pt-8">
@@ -61,6 +62,10 @@ const { year, month, day, slug } = route.params;
 const page = `/${year}/${month}/${day}/${slug}`;
 const { data: article } = await useAsyncData(route.params.slug, () =>
   queryCollection("blog").path(page).first()
+);
+// An article about a project carries that project's status from the registry.
+const { data: project } = await useAsyncData(`project-for-${page}`, () =>
+  queryCollection("projects").where('article', '=', page).first()
 );
 const showComments = ref(false);
 const formatDate = (date, locale) => {

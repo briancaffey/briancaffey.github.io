@@ -91,6 +91,7 @@ const home: NavLink = { to: '/', label: 'nav.home', matches: path => path === '/
 const links: NavLink[] = [
   // Articles live at /YYYY/MM/DD/slug and belong to the blog section.
   { to: '/blog/1', label: 'nav.blog', matches: path => path.startsWith('/blog') || /^\/\d{4}\//.test(path) },
+  { to: '/projects', label: 'nav.projects', matches: path => path.startsWith('/projects') },
   { to: '/contact', label: 'nav.contact', matches: path => path.startsWith('/contact') }
 ]
 const isCurrent = (link: NavLink) => link.matches(route.path)

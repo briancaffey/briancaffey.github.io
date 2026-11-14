@@ -1,0 +1,18 @@
+slug: mediation-simulator
+title: "Mediation Simulator"
+year: 2025
+summary: "Simulated mediation sessions for law students: generated cases, parties played by agents, and a mediator you can practise against."
+article: /2025/05/27/mediation-simulator-project-for-nvidia-agent-intelligence-toolkit
+repo: https://github.com/briancaffey/mediation-simulator
+event: "NVIDIA Agent Intelligence Toolkit Hackathon"
+status: archived
+then:
+  stack:
+    - "NVIDIA Agent Intelligence Toolkit"
+    - "LangGraph"
+    - "NIM"
+    - "Milvus"
+  models:
+    - "Qwen3 8B"
+    - "Llama 3.1 70B Instruct"
+    - "FLUX.1-dev"

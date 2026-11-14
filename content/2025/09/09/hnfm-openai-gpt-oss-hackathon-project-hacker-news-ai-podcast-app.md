@@ -239,3 +239,45 @@ I made hnfm with AI assisted coding, but I think it would be interesting to try 
 ## Video
 
 For the OpenAI hackathon I needed to create a short video that introduces the project. I wrote this article on my blog, submitted it to Hacker News and then used hnfm to generate my submission video.
+## Update, November 2026: what hn.fm became
+
+*This section was added fourteen months after the article and was drafted by Claude, the AI agent that did the November rebuild described below. Everything above is as it was published.*
+
+hn.fm did not stay a hackathon project. The article describes a pipeline on one PC that turns a story into a narrated video. Here is what changed after it.
+
+### The models changed, the idea did not
+
+| Job | September 2025 | November 2026 |
+|---|---|---|
+| Writing | gpt-oss-20b | Nemotron 3.5 Lightning |
+| Speech | Dia | Magpie TTS, six hosts with moods, plus callers |
+| Listening | WhisperX, for subtitles | Nemotron ASR, for subtitles and for checking every spoken line |
+| Pictures | FLUX.1 Krea through InvokeAI | FLUX.3 Klein |
+| Music | none | ACE-Step 1.5: beds, jingles and songs |
+
+Every one of these still runs at home. Nothing calls a paid API.
+
+### It grew a memory and an opinion
+
+- **A database.** Stories, runs and segments moved from Redis to Postgres, and every step of every run is recorded with its inputs, so any step can be looked at and run again.
+- **Triage.** Each new story is scored for how interesting it is and how well it can be produced. Most of what reaches Hacker News never becomes anything.
+- **A research brief.** For the stories worth making, a brief is written first: the thesis, the facts, the numbers, what the comment thread added, and what the source does not establish.
+- **A daily digest.** The same briefs feed a written digest that is sent to an e-reader each morning.
+
+### It moved to a cluster
+
+The single PC became a small home cluster. hn.fm is packaged as a Helm chart. A push to the git server builds the images, and a deploy controller rolls them out. Media lives in an S3-compatible object store. The "one RTX 4090" in the section above is now several machines, each serving one model.
+
+### It became a radio station
+
+The newest part is an internet radio station. It runs six shows a day, each with two hosts and its own music, and it is made of segments: headlines, a two-host conversation about one story, a phone-in where callers voice points from the comment thread, a bulletin at the top of the hour, the front page read as a weather forecast, and one short song an hour about a story.
+
+Three decisions make it work on a small local model.
+
+1. **Code decides the shape of the hour. The model decides what goes in it.** An earlier version asked the model to plan thirty minutes of radio and then repaired the plan. Now the model is asked one question per block: which story goes in which slot.
+2. **Pieces are written from a fact sheet and a worked example.** The model follows an example far more reliably than a rule, and it repeats whatever it is shown, so it is shown only a short list of checked facts.
+3. **Every spoken line is listened to before it airs.** The speech recogniser transcribes it and the transcript is compared with the script. A line that came out wrong is spoken again.
+
+The station only makes new programming while someone is listening. The rest of the time it plays music it has already made.
+
+The "Generative Video" section above said video generation was left out because it was slow. That is still the state of things: the video model exists on the cluster and is not yet part of the station.

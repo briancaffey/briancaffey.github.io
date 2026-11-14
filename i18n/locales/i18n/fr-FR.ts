@@ -48,7 +48,19 @@ export default {
     thankYou: 'Merci de vous être abonné !'
   },
   projects: {
-    projects: 'Projets'
+    projects: 'Projets',
+    intro: 'Ce que j\'ai construit, le plus souvent pour des concours et des hackathons, avec l\'article correspondant. Je relance les plus anciens avec des modèles actuels ; le statut indique où en est chacun.',
+    then: 'Construit avec',
+    now: 'Fonctionne aujourd\'hui avec',
+    source: 'Code source',
+    video: 'Vidéo',
+    all: 'Tous les projets',
+    updated: 'mis à jour le',
+    status: {
+      archived: 'Tel que publié',
+      reviving: 'En reconstruction',
+      running: 'En service'
+    }
   },
   blog: {
     blogPosts: 'Articles du blog',
