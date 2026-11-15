@@ -22,6 +22,20 @@
       <category>local-inference</category>
     </item>
     <item>
+      <title>From Pokédex artwork to 3D models: every Pokémon, in clay, glass and chrome</title>
+      <link>https://briancaffey.github.io/2026/11/12/pokedex-to-3d-models</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2026/11/12/pokedex-to-3d-models</guid>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A 2025 side project turned 1,017 flat Pokédex drawings into 3D models and then sat on a hard drive. This is how it worked, what it took to bring it back, and what a restyle step, a review studio and a virtual film set add to it.</description>
+      <category>ai</category>
+      <category>3d</category>
+      <category>three-js</category>
+      <category>image-to-3d</category>
+      <category>flux</category>
+      <category>hyperframes</category>
+      <category>local-inference</category>
+    </item>
+    <item>
       <title>Running MMLU 5-shot on Nemotron Nano Omni with a DGX Spark</title>
       <link>https://briancaffey.github.io/2026/06/18/running-mmlu-5shot-on-nemotron-nano-omni-with-a-dgx-spark</link>
       <guid isPermaLink="true">https://briancaffey.github.io/2026/06/18/running-mmlu-5shot-on-nemotron-nano-omni-with-a-dgx-spark</guid>

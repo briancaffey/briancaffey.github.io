@@ -12,6 +12,9 @@
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
         </image:image>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mmlu/cover.png</image:loc>
         </image:image>
         <image:image>
@@ -228,6 +231,9 @@
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
         </image:image>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mmlu/cover.png</image:loc>
         </image:image>
         <image:image>
@@ -257,12 +263,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/2</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
         </image:image>
@@ -314,12 +320,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/valheim/hall.png</image:loc>
         </image:image>
@@ -347,12 +353,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/4</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
         </image:image>
@@ -380,12 +386,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/5</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flask-docker.png</image:loc>
         </image:image>
@@ -413,12 +419,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/6</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/react/wuziqi.png</image:loc>
         </image:image>
@@ -452,6 +458,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/3d</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/3d-modeling</loc>
@@ -559,6 +568,9 @@
         <loc>https://briancaffey.github.io/blog/tags/ai</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mmlu/cover.png</image:loc>
@@ -1185,6 +1197,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/flux</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
         </image:image>
         <image:image>
@@ -1370,6 +1385,9 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
         </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/i3</loc>
@@ -1385,6 +1403,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/image-to-3d</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/jwt</loc>
@@ -1528,6 +1549,9 @@
         <loc>https://briancaffey.github.io/blog/tags/local-inference</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
         </image:image>
     </url>
     <url>
@@ -2132,6 +2156,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/three-js</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/three.js</loc>
@@ -3559,6 +3586,105 @@
         </image:image>
     </url>
     <url>
+        <loc>https://briancaffey.github.io/2026/11/12/pokedex-to-3d-models</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/pokedex-3d/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/025-base.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/models-2025.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/059-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/149-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/197-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/445-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/104-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/054-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/006-bronze.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/094-glass.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/001-clay.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/007-bricks.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/039-knit.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/143-knit.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/150-chrome.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/133-wood.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/448-origami.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/025-bricks.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/006-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/006-base.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/094-legacy.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/pokedex-3d/images/094-base.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/studio-grid.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/studio-detail.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/studio-queue.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/films-v1.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/film-whos-that.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/film-wild-encounter.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/film-evolution.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/film-field-guide.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/pokedex-3d/studio-videos.webp</image:loc>
+        </image:image>
+    </url>
+    <url>
         <loc>https://briancaffey.github.io/2026/11/13/hnfm-a-year-on</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/hnfm/2026/cover.jpg</image:loc>
@@ -3586,4 +3712,4 @@
         </image:image>
     </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2026-11-15T01:26:46.034Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2026-11-15T14:47:04.188Z -->
