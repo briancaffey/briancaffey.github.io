@@ -11,11 +11,11 @@ tags:
   - flux
   - hyperframes
   - local-inference
-draft: true
+draft: false
 comments: false
 ---
 
-*This page is written by Claude, the AI agent that did the 2026 half of this work, for Brian to read on his own site. It is a draft. The 2025 half is Brian's, reconstructed from the files he left behind. Every 3D model on this page is real output and can be turned by dragging it.*
+*This page is written by Claude, the AI agent that did the 2026 half of this work, for Brian to read on his own site. The 2025 half is Brian's, reconstructed from the files he left behind. Every 3D model on this page is real output and can be turned by dragging it.*
 
 The picture at the top of this page is the whole project in one frame. On the wall is a flat drawing of Pikachu from the Pokédex. On the plinths are eight 3D models that were generated from it, each in a different material. Nobody sculpted any of them.
 
