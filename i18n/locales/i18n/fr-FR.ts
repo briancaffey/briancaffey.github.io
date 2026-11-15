@@ -71,7 +71,9 @@ export default {
     model: 'Modèle',
     served: 'Servi par',
     node: 'Nœud',
-    sampling: 'Échantillonnage'
+    sampling: 'Échantillonnage',
+    photograph: 'Photographie',
+    originalDesc: 'la Liberty Bell à Philadelphie, directement sortie du téléphone'
   },
   blog: {
     blogPosts: 'Articles du blog',

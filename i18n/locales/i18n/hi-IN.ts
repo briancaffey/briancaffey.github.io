@@ -73,7 +73,9 @@ export default {
     model: 'मॉडल',
     served: 'सर्वर',
     node: 'नोड',
-    sampling: 'सैंपलिंग'
+    sampling: 'सैंपलिंग',
+    photograph: 'तस्वीर',
+    originalDesc: 'फ़िलाडेल्फ़िया का लिबर्टी बेल, सीधे फ़ोन से'
   },
   blog: {
     blogPosts: 'वेबदैनिकी डाक',

@@ -72,7 +72,9 @@ export default {
     model: 'Модель',
     served: 'Сервер',
     node: 'Узел',
-    sampling: 'Сэмплирование'
+    sampling: 'Сэмплирование',
+    photograph: 'Фотография',
+    originalDesc: 'Колокол Свободы в Филадельфии, прямо с телефона'
   },
   blog: {
     blogPosts: 'Сообщения в блоге',

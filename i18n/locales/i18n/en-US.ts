@@ -73,7 +73,9 @@ export default {
     model: 'Model',
     served: 'Served by',
     node: 'Node',
-    sampling: 'Sampling'
+    sampling: 'Sampling',
+    photograph: 'Photograph',
+    originalDesc: 'the Liberty Bell in Philadelphia, straight off the phone'
   },
   blog: {
     blogPosts: 'Blog Posts',

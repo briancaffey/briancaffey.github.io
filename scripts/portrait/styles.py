@@ -24,7 +24,9 @@ KEEP = (
 STYLES = [
     # ---------------- confectionery ----------------
     ("cotton-candy", "Cotton Candy", "Confectionery",
-     "a sculpture spun entirely from cotton candy, his whole head and the bell built from dense tufts of pink and blue candy floss with thousands of visible sugar strands and fuzzy translucent edges, no skin and no metal anywhere, on a stick at a fairground"),
+     "a head sculpted entirely out of cotton candy, where his cheeks, nose, lips and brow are all modelled from dense matte "
+     "spun sugar in pink and blue with visible floss strands and fuzzy translucent edges -- there is no human skin anywhere "
+     "on him, only sugar -- and the bell is a second mass of candy floss, both on paper cones at a fairground"),
     ("bubblegum", "Bubblegum", "Confectionery",
      "chewed bubblegum, glossy opaque pink, his face moulded from stretched gum with a half-blown bubble and sticky strands pulling between surfaces"),
     ("gummy", "Gummy Sweets", "Confectionery",
@@ -132,7 +134,9 @@ STYLES += [
     ("devil", "Devil", "Dark",
      "a grinning devil with red skin, curling black horns, slit yellow eyes and a forked beard, lit from below by hellfire while the bell glows at welding heat"),
     ("gargoyle", "Gargoyle", "Dark",
-     "a weathered stone gargoyle on a cathedral parapet, mouth open mid-snarl, wings folded, streaked with rain and moss"),
+     "a weathered stone gargoyle that he himself has been carved into: his own face turned to pitted grey limestone with "
+     "curling horns, blank carved eyes and a snarling open mouth, stone wings folded behind his shoulders, streaked with "
+     "rain and moss on a cathedral parapet"),
     ("vampire", "Vampire", "Dark",
      "a gothic vampire with bloodless grey skin, red eyes and long fangs above a high black collar, candlelit in a decaying drawing room"),
     ("zombie", "Zombie", "Dark",

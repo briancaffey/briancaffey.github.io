@@ -73,7 +73,9 @@ export default {
     model: '模型',
     served: '服务端',
     node: '节点',
-    sampling: '采样'
+    sampling: '采样',
+    photograph: '照片',
+    originalDesc: '费城的自由钟，手机直出'
   },
   blog: {
     blogPosts: '文章',

@@ -4,7 +4,7 @@
       {{ $t('portrait.title') }}
     </h1>
     <p class="blurb mx-auto max-w-xl pt-2 pb-6">
-      {{ $t('portrait.blurb', { count: styles.length }) }}
+      {{ $t('portrait.blurb', { count: portraitStyles.length }) }}
     </p>
 
     <figure class="frame mx-auto">
@@ -13,7 +13,9 @@
           :key="current.slug"
           class="shot"
           :src="`${BASE}/${current.slug}.webp`"
-          :alt="`Brian Caffey at the Liberty Bell in Philadelphia, restyled as ${current.name}`"
+          :alt="isOriginal
+            ? 'Brian Caffey at the Liberty Bell in Philadelphia'
+            : `Brian Caffey at the Liberty Bell in Philadelphia, restyled as ${current.name}`"
           width="1024"
           height="768"
           fetchpriority="high"
@@ -52,11 +54,16 @@
         </div>
         <p class="caption-desc">{{ sentence }}</p>
 
-        <button class="disclosure" :aria-expanded="showPrompt" @click="showPrompt = !showPrompt">
+        <button
+          v-if="!isOriginal"
+          class="disclosure"
+          :aria-expanded="showPrompt"
+          @click="showPrompt = !showPrompt"
+        >
           {{ showPrompt ? $t('portrait.hidePrompt') : $t('portrait.showPrompt') }}
         </button>
 
-        <div v-if="showPrompt" class="details">
+        <div v-if="showPrompt && !isOriginal" class="details">
           <p class="prompt">{{ current.prompt }}</p>
           <dl class="meta">
             <div>
@@ -91,6 +98,7 @@
         ›
       </button>
       <button
+        v-if="!isOriginal"
         class="ctrl ctrl-toggle"
         :class="{ 'ctrl-on': compare }"
         :aria-pressed="compare"
@@ -107,22 +115,39 @@
 import { portraitStyles } from '~/data/portrait/styles'
 
 const BASE = '/static/contact/portrait'
-const styles = portraitStyles
+const { t } = useI18n()
+
+// The photo as it came off the phone leads the set, so the page opens on him
+// rather than on a restyle. It has no prompt and no model behind it, which is
+// what `prompt: null` signals to the template.
+const styles = computed(() => [
+  {
+    slug: 'original',
+    name: t('portrait.original'),
+    category: t('portrait.photograph'),
+    description: t('portrait.originalDesc'),
+    prompt: null as string | null
+  },
+  ...portraitStyles
+])
 
 const index = ref(0)
 const compare = ref(false)
 const split = ref(50)
 const showPrompt = ref(false)
 
-const current = computed(() => styles[index.value]!)
+const current = computed(() => styles.value[index.value]!)
 const sentence = computed(() => {
   const d = current.value.description
   return d.charAt(0).toUpperCase() + d.slice(1) + '.'
 })
+const isOriginal = computed(() => current.value.prompt === null)
 
 function go(next: number) {
-  index.value = (next + styles.length) % styles.length
+  index.value = (next + styles.value.length) % styles.value.length
   showPrompt.value = false
+  // comparing the photo with itself shows nothing
+  if (isOriginal.value) compare.value = false
 }
 
 function step(delta: number) {
@@ -131,14 +156,15 @@ function step(delta: number) {
 }
 
 function randomize() {
-  go(index.value + 1 + Math.floor(Math.random() * (styles.length - 1)))
+  // never lands back on the photo: the dice are for the restyles
+  go(1 + Math.floor(Math.random() * (styles.value.length - 1)))
 }
 
 // Warm the neighbours so stepping through feels instant.
 const preloaded = new Set<string>()
 function preload(at: number) {
   if (import.meta.server) return
-  const slug = styles[(at + styles.length) % styles.length]?.slug
+  const slug = styles.value[(at + styles.value.length) % styles.value.length]?.slug
   if (!slug || preloaded.has(slug)) return
   preloaded.add(slug)
   const img = new Image()

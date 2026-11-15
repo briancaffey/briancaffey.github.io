@@ -72,7 +72,9 @@ export default {
     model: 'モデル',
     served: '提供元',
     node: 'ノード',
-    sampling: 'サンプリング'
+    sampling: 'サンプリング',
+    photograph: '写真',
+    originalDesc: 'フィラデルフィアの自由の鐘、スマホで撮ったそのまま'
   },
   blog: {
     blogPosts: 'ブログ投稿',
