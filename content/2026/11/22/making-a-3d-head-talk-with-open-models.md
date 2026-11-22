@@ -18,7 +18,9 @@ comments: false
 
 The goal of this project is a 3D version of a real person that can be used in 3D software and made to speak. This article covers the first working step: type a sentence, and a 3D head says it.
 
-<video controls playsinline preload="metadata" poster="/static/talking-head/full.jpg" src="/static/talking-head/full.mp4" style="width:100%;max-width:480px;display:block;margin:1rem auto;"></video>
+<video controls playsinline preload="metadata" poster="/static/talking-head/round2.jpg" src="/static/talking-head/round2.mp4" style="width:100%;max-width:360px;display:block;margin:1rem auto;"></video>
+
+*This is the latest round. The earlier ones are in the iteration log below.*
 
 The head is not anybody yet. It is a stock character. That is on purpose, and the reason is below.
 
@@ -91,6 +93,26 @@ The two clips above. Stock character, flat grey background, three lights, camera
 - The camera should feel more like a film shot.
 
 **Next round:** skin tone and lighting first, then a room and a better camera.
+
+<video controls playsinline preload="metadata" poster="/static/talking-head/full.jpg" src="/static/talking-head/full.mp4" style="width:100%;max-width:360px;display:block;margin:1rem auto;"></video>
+
+### Round 2: a room, a shirt and a camera that moves
+
+Same sentence, same voice, same face curves. Only the look changed:
+
+- **Skin and light.** One warm, soft light from the side, like a window, with a weak cool light on the other side. The picture is also graded with more contrast. This is what fixed the pale skin: round 1 had too much flat light.
+- **A room.** A small study with a bookshelf and a lamp. It is built from plain boxes, which is enough because it is out of focus.
+- **Clothes.** A shirt from the same free MakeHuman pack.
+- **Camera.** A 50 mm lens with the background blurred, pushing in slowly on a slight arc, with a little handheld drift.
+- **Shape.** Vertical 9:16, the shape social video wants.
+
+<video controls playsinline preload="metadata" poster="/static/talking-head/round2.jpg" src="/static/talking-head/round2.mp4" style="width:100%;max-width:360px;display:block;margin:1rem auto;"></video>
+
+Each frame takes about 1.3 seconds to render, so this 9 second clip takes about six minutes.
+
+What did not change: the face. The mouth still shows too many teeth, and nothing above the mouth moves except the blinks. Those are the speech model and the stock face shapes, and they are next.
+
+**Brian's review:** *to come.*
 
 ## What is next
 
