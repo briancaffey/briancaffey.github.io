@@ -61,6 +61,14 @@ It is stiff. The mouth and the blinks move and nothing else does: no head moveme
 
 But the chain works. The same animation is also saved as a `.glb` file with all 52 shapes and their keyframes, so it opens in Blender, Unreal or Unity as a normal rigged model. That was the point of the test.
 
+### The slice in 22 seconds
+
+This clip explains the three steps, with the model, licence, hardware and time for each. The narrator is the head's own voice: Dia cloned it from the sentence above. The clip is built with [HyperFrames](https://github.com/heygen-com/hyperframes), which renders a web page to video.
+
+<video controls playsinline preload="metadata" poster="/static/talking-head/how-round-2.jpg" src="/static/talking-head/how-round-2.mp4" style="width:100%;display:block;margin:1rem auto;"></video>
+
+There will be one of these for each round. Together they will make up the main video for this article.
+
 ## How it runs
 
 Everything runs on my home cluster, which is a few PCs with GPUs running Kubernetes.
