@@ -6,7 +6,22 @@
     <atom:link href="https://briancaffey.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>Brian Caffey writes about software engineering, AI and other fun things.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 13 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 22 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Hermes Agent on Azure: traces, logs and metrics in Azure Monitor with OpenTelemetry</title>
+      <link>https://briancaffey.github.io/2026/11/22/hermes-agent-on-azure-with-opentelemetry</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2026/11/22/hermes-agent-on-azure-with-opentelemetry</guid>
+      <pubDate>Sun, 22 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Running the open-source Hermes Agent on Azure Container Apps and sending its telemetry to Application Insights and an Azure Monitor workspace with the hermes-otel plugin: what the setup is, what Azure shows, and what broke on the way</description>
+      <category>ai</category>
+      <category>agents</category>
+      <category>hermes-agent</category>
+      <category>opentelemetry</category>
+      <category>azure</category>
+      <category>observability</category>
+      <category>bicep</category>
+      <category>github-actions</category>
+    </item>
     <item>
       <title>hn.fm, a year on: Hacker News as episodes, digests, a radio station and directed video</title>
       <link>https://briancaffey.github.io/2026/11/13/hnfm-a-year-on</link>

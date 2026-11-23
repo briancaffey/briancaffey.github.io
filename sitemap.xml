@@ -3,11 +3,14 @@
     <url>
         <loc>https://briancaffey.github.io/</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
         </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
         </image:image>
@@ -228,6 +231,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/1</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
         </image:image>
         <image:image>
@@ -257,15 +263,18 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
         </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/2</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
         </image:image>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
         </image:image>
-    </url>
-    <url>
-        <loc>https://briancaffey.github.io/blog/2</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt/new-site.png</image:loc>
         </image:image>
@@ -273,16 +282,10 @@
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/aoi/aoi_title.png</image:loc>
         </image:image>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
-        </image:image>
-        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/rlbc/cover.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
-        </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/three-body-problem/cover.png</image:loc>
@@ -317,12 +320,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gha_nuxt/gha_nuxt.png</image:loc>
         </image:image>
@@ -350,12 +353,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/4</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
         </image:image>
@@ -383,12 +386,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/5</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/twisted-snakes.png</image:loc>
         </image:image>
@@ -416,12 +419,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/binaryclock.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/6</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/python_rss.png</image:loc>
         </image:image>
@@ -449,6 +452,9 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
         </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/7</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
         </image:image>
@@ -552,6 +558,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/agents</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/blog-meta/klaw.png</image:loc>
         </image:image>
         <image:image>
@@ -566,6 +575,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/ai</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
         </image:image>
@@ -697,9 +709,21 @@
         </image:image>
     </url>
     <url>
+        <loc>https://briancaffey.github.io/blog/tags/azure</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
+    </url>
+    <url>
         <loc>https://briancaffey.github.io/blog/tags/bash</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/binaryclock.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/bicep</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
         </image:image>
     </url>
     <url>
@@ -1251,6 +1275,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/tags/github-actions</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/iac_rosetta_stone_og_image.png</image:loc>
         </image:image>
         <image:image>
@@ -1370,6 +1397,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/hermes-agent</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/2026/cover.jpg</image:loc>
         </image:image>
@@ -1753,6 +1783,12 @@
         </image:image>
     </url>
     <url>
+        <loc>https://briancaffey.github.io/blog/tags/observability</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
+    </url>
+    <url>
         <loc>https://briancaffey.github.io/blog/tags/openai</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hnfm/hnfm_cover.png</image:loc>
@@ -1762,6 +1798,12 @@
         <loc>https://briancaffey.github.io/blog/tags/openclaw</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/blog-meta/klaw.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/opentelemetry</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
         </image:image>
     </url>
     <url>
@@ -3717,5 +3759,32 @@
             <image:loc>https://briancaffey.github.io/_ipx/_/static/hnfm/2026/desk.webp</image:loc>
         </image:image>
     </url>
+    <url>
+        <loc>https://briancaffey.github.io/2026/11/22/hermes-agent-on-azure-with-opentelemetry</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/azure-trace-details.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/azure-trace-search.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/azure-agents-invocations.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/azure-agents-tools-models.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/azure-agents-tokens.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/azure-prometheus-explorer.webp</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/hermes-dashboard-otel-tab.webp</image:loc>
+        </image:image>
+    </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2026-11-22T22:10:34.642Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2026-11-23T01:28:19.121Z -->
