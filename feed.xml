@@ -6,7 +6,20 @@
     <atom:link href="https://briancaffey.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>Brian Caffey writes about software engineering, AI and other fun things.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 22 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 28 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>A globe made of gems, in three.js</title>
+      <link>https://briancaffey.github.io/2026/11/28/a-globe-made-of-gems</link>
+      <guid isPermaLink="true">https://briancaffey.github.io/2026/11/28/a-globe-made-of-gems</guid>
+      <pubDate>Sat, 28 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A globe covered in about 1,700 cut stones: sapphire oceans, emerald forests, a ruby for every big city. The stones are packed so they touch without overlapping, and a custom shader follows light through each one, live in the browser.</description>
+      <category>threejs</category>
+      <category>webgl</category>
+      <category>3d</category>
+      <category>graphics</category>
+      <category>blender</category>
+      <category>shaders</category>
+    </item>
     <item>
       <title>Hermes Agent on Azure: traces, logs and metrics in Azure Monitor with OpenTelemetry</title>
       <link>https://briancaffey.github.io/2026/11/22/hermes-agent-on-azure-with-opentelemetry</link>

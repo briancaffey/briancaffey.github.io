@@ -3,11 +3,14 @@
     <url>
         <loc>https://briancaffey.github.io/</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
         </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
         </image:image>
@@ -231,6 +234,9 @@
     <url>
         <loc>https://briancaffey.github.io/blog/1</loc>
         <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/hermes-on-azure/cover.jpg</image:loc>
         </image:image>
         <image:image>
@@ -260,17 +266,17 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/flux/flux_plugin_for_project_g_assist.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/2</loc>
         <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mediation-simulator/mediation_simulator_title_image.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/x.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/redlm/title.png</image:loc>
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
@@ -317,12 +323,33 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/static/ab_cover.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/3</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/dev-sites.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/reddit.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/dev.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/medium.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hashnode.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/substack.png</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hackernoon.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/djjwt/dj_jwt.png</image:loc>
         </image:image>
@@ -350,12 +377,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec-update.jpg</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/4</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/padlocks.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/chimps.webp</image:loc>
         </image:image>
@@ -383,12 +410,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sec/sec.jpg</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/5</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/mariadb.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/poker.jpg</image:loc>
         </image:image>
@@ -416,12 +443,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/trump.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/binaryclock.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/6</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/binaryclock.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gnome-i3.png</image:loc>
         </image:image>
@@ -449,12 +476,12 @@
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/subreddits.png</image:loc>
         </image:image>
-        <image:image>
-            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
-        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/7</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pcpp/hist.png</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/media-setup.png</image:loc>
         </image:image>
@@ -464,6 +491,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/3d</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
+        </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/pokedex-3d/cover.jpg</image:loc>
         </image:image>
@@ -728,6 +758,9 @@
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/blender</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
+        </image:image>
     </url>
     <url>
         <loc>https://briancaffey.github.io/blog/tags/blog</loc>
@@ -1375,6 +1408,12 @@
         </image:image>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_50&amp;amp;f_webp/icons/hn.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/graphics</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
         </image:image>
     </url>
     <url>
@@ -2053,6 +2092,12 @@
         </image:image>
     </url>
     <url>
+        <loc>https://briancaffey.github.io/blog/tags/shaders</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
+        </image:image>
+    </url>
+    <url>
         <loc>https://briancaffey.github.io/blog/tags/sketchup</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/sketchup/sketchup_1.jpg</image:loc>
@@ -2224,6 +2269,12 @@
         </image:image>
     </url>
     <url>
+        <loc>https://briancaffey.github.io/blog/tags/threejs</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
+        </image:image>
+    </url>
+    <url>
         <loc>https://briancaffey.github.io/blog/tags/traefik</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/shark.jpg</image:loc>
@@ -2347,6 +2398,12 @@
         <loc>https://briancaffey.github.io/blog/tags/web</loc>
         <image:image>
             <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/nuxt-app.png</image:loc>
+        </image:image>
+    </url>
+    <url>
+        <loc>https://briancaffey.github.io/blog/tags/webgl</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/w_800&amp;amp;f_webp/static/gem-globe/cover.jpg</image:loc>
         </image:image>
     </url>
     <url>
@@ -3786,5 +3843,41 @@
             <image:loc>https://briancaffey.github.io/_ipx/_/static/hermes-on-azure/hermes-dashboard-otel-tab.webp</image:loc>
         </image:image>
     </url>
+    <url>
+        <loc>https://briancaffey.github.io/2026/11/28/a-globe-made-of-gems</loc>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/f_webp/static/gem-globe/cover.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/static/gem-globe/poster.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/map.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/compare.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/orbs.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/hollow.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/caustics.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/cycles-porcelain.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/versus.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/cycles-gold.jpg</image:loc>
+        </image:image>
+        <image:image>
+            <image:loc>https://briancaffey.github.io/_ipx/_/static/gem-globe/cycles-hollow.jpg</image:loc>
+        </image:image>
+    </url>
 </urlset>
-<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2026-11-23T01:28:19.121Z -->
+<!-- XML Sitemap generated by @nuxtjs/sitemap v7.4.3 at 2026-11-28T13:47:27.467Z -->
